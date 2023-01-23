@@ -1,2 +1,8 @@
-a.out
-.DS_Store
+.import
+*.d
+*.o
+*.meta
+*.obj
+*.pyc
+*.bc
+*.os
