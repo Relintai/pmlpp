@@ -78,7 +78,7 @@ void MultinomialNB::computeTheta() {
 }
 
 void MultinomialNB::Evaluate() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	for (int i = 0; i < outputSet.size(); i++) {
 		// Pr(B | A) * Pr(A)
 		double score[class_num];

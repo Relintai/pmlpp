@@ -15,7 +15,7 @@ MLPPConvolutions::MLPPConvolutions() :
 }
 
 std::vector<std::vector<double>> MLPPConvolutions::convolve(std::vector<std::vector<double>> input, std::vector<std::vector<double>> filter, int S, int P) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> featureMap;
 	int N = input.size();
 	int F = filter.size();
@@ -71,7 +71,7 @@ std::vector<std::vector<double>> MLPPConvolutions::convolve(std::vector<std::vec
 }
 
 std::vector<std::vector<std::vector<double>>> MLPPConvolutions::convolve(std::vector<std::vector<std::vector<double>>> input, std::vector<std::vector<std::vector<double>>> filter, int S, int P) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<std::vector<double>>> featureMap;
 	int N = input[0].size();
 	int F = filter[0].size();
@@ -137,7 +137,7 @@ std::vector<std::vector<std::vector<double>>> MLPPConvolutions::convolve(std::ve
 }
 
 std::vector<std::vector<double>> MLPPConvolutions::pool(std::vector<std::vector<double>> input, int F, int S, std::string type) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> pooledMap;
 	int N = input.size();
 	int mapSize = floor((N - F) / S + 1);
@@ -185,7 +185,7 @@ std::vector<std::vector<std::vector<double>>> MLPPConvolutions::pool(std::vector
 }
 
 double MLPPConvolutions::globalPool(std::vector<std::vector<double>> input, std::string type) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (type == "Average") {
 		Stat stat;
 		return stat.mean(alg.flatten(input));
@@ -272,7 +272,7 @@ std::vector<std::vector<double>> MLPPConvolutions::dy(std::vector<std::vector<do
 }
 
 std::vector<std::vector<double>> MLPPConvolutions::gradMagnitude(std::vector<std::vector<double>> input) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> xDeriv_2 = alg.hadamard_product(dx(input), dx(input));
 	std::vector<std::vector<double>> yDeriv_2 = alg.hadamard_product(dy(input), dy(input));
 	return alg.sqrt(alg.addition(xDeriv_2, yDeriv_2));
@@ -301,7 +301,7 @@ std::vector<std::vector<std::vector<double>>> MLPPConvolutions::computeM(std::ve
 
 	double const GAUSSIAN_PADDING = ((input.size() - 1) + GAUSSIAN_SIZE - input.size()) / 2; // Convs must be same.
 	std::cout << GAUSSIAN_PADDING << std::endl;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> xDeriv = dx(input);
 	std::vector<std::vector<double>> yDeriv = dy(input);
 
@@ -315,7 +315,7 @@ std::vector<std::vector<std::vector<double>>> MLPPConvolutions::computeM(std::ve
 }
 std::vector<std::vector<std::string>> MLPPConvolutions::harrisCornerDetection(std::vector<std::vector<double>> input) {
 	double const k = 0.05; // Empirically determined wherein k -> [0.04, 0.06], though conventionally 0.05 is typically used as well.
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<std::vector<double>>> M = computeM(input);
 	std::vector<std::vector<double>> det = alg.subtraction(alg.hadamard_product(M[0], M[1]), alg.hadamard_product(M[2], M[2]));
 	std::vector<std::vector<double>> trace = alg.addition(M[0], M[1]);

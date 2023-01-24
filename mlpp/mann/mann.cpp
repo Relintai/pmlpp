@@ -55,7 +55,7 @@ std::vector<double> MANN::modelTest(std::vector<double> x) {
 void MANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPActivation avn;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 
 	double cost_prev = 0;

@@ -34,7 +34,7 @@ double MLPPDualSVC::modelTest(std::vector<double> x) {
 void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPActivation avn;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -82,7 +82,7 @@ void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) 
 // void MLPPDualSVC::SGD(double learning_rate, int max_epoch, bool UI){
 //     class MLPPCost cost;
 //     MLPPActivation avn;
-//     LinAlg alg;
+//     MLPPLinAlg alg;
 //     Reg regularization;
 
 //     double cost_prev = 0;
@@ -115,7 +115,7 @@ void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) 
 // void MLPPDualSVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI){
 //     class MLPPCost cost;
 //     MLPPActivation avn;
-//     LinAlg alg;
+//     MLPPLinAlg alg;
 //     Reg regularization;
 //     double cost_prev = 0;
 //     int epoch = 1;
@@ -173,7 +173,7 @@ std::vector<double> MLPPDualSVC::Evaluate(std::vector<std::vector<double>> X) {
 }
 
 std::vector<double> MLPPDualSVC::propagate(std::vector<std::vector<double>> X) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<double> z;
 	for (int i = 0; i < X.size(); i++) {
 		double sum = 0;
@@ -194,7 +194,7 @@ double MLPPDualSVC::Evaluate(std::vector<double> x) {
 }
 
 double MLPPDualSVC::propagate(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	double z = 0;
 	for (int j = 0; j < alpha.size(); j++) {
 		if (alpha[j] != 0) {
@@ -206,7 +206,7 @@ double MLPPDualSVC::propagate(std::vector<double> x) {
 }
 
 void MLPPDualSVC::forwardPass() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 
 	z = propagate(inputSet);
@@ -224,14 +224,14 @@ void MLPPDualSVC::alphaProjection() {
 }
 
 double MLPPDualSVC::kernelFunction(std::vector<double> u, std::vector<double> v, std::string kernel) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (kernel == "Linear") {
 		return alg.dot(u, v);
 	} // warning: non-void function does not return a value in all control paths [-Wreturn-type]
 }
 
 std::vector<std::vector<double>> MLPPDualSVC::kernelFunction(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B, std::string kernel) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (kernel == "Linear") {
 		return alg.matmult(inputSet, alg.transpose(inputSet));
 	} // warning: non-void function does not return a value in all control paths [-Wreturn-type]

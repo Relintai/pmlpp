@@ -67,7 +67,7 @@ double Reg::regTerm(std::vector<std::vector<double>> weights, double lambda, dou
 }
 
 std::vector<double> Reg::regWeights(std::vector<double> weights, double lambda, double alpha, std::string reg) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (reg == "WeightClipping") {
 		return regDerivTerm(weights, lambda, alpha, reg);
 	}
@@ -79,7 +79,7 @@ std::vector<double> Reg::regWeights(std::vector<double> weights, double lambda, 
 }
 
 std::vector<std::vector<double>> Reg::regWeights(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (reg == "WeightClipping") {
 		return regDerivTerm(weights, lambda, alpha, reg);
 	}

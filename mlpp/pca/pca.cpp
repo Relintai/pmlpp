@@ -18,7 +18,7 @@ PCA::PCA(std::vector<std::vector<double>> inputSet, int k) :
 }
 
 std::vector<std::vector<double>> PCA::principalComponents() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPData data;
 
 	auto [U, S, Vt] = alg.SVD(alg.cov(inputSet));
@@ -34,7 +34,7 @@ std::vector<std::vector<double>> PCA::principalComponents() {
 }
 // Simply tells us the percentage of variance maintained.
 double PCA::score() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> X_approx = alg.matmult(U_reduce, Z);
 	double num, den = 0;
 	for (int i = 0; i < X_normalized.size(); i++) {

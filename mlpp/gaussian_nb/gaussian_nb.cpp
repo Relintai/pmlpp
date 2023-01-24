@@ -18,7 +18,7 @@ MLPPGaussianNB::MLPPGaussianNB(std::vector<std::vector<double>> inputSet, std::v
 		inputSet(inputSet), outputSet(outputSet), class_num(class_num) {
 	y_hat.resize(outputSet.size());
 	Evaluate();
-	LinAlg alg;
+	MLPPLinAlg alg;
 }
 
 std::vector<double> MLPPGaussianNB::modelSetTest(std::vector<std::vector<double>> X) {
@@ -31,7 +31,7 @@ std::vector<double> MLPPGaussianNB::modelSetTest(std::vector<std::vector<double>
 
 double MLPPGaussianNB::modelTest(std::vector<double> x) {
 	Stat stat;
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	double score[class_num];
 	double y_hat_i = 1;
@@ -49,7 +49,7 @@ double MLPPGaussianNB::score() {
 
 void MLPPGaussianNB::Evaluate() {
 	Stat stat;
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	// Computing mu_k_y and sigma_k_y
 	mu.resize(class_num);

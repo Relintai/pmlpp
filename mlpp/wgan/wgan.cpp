@@ -24,13 +24,13 @@ WGAN::~WGAN() {
 }
 
 std::vector<std::vector<double>> WGAN::generateExample(int n) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return modelSetTestGenerator(alg.gaussianNoise(n, k));
 }
 
 void WGAN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -86,7 +86,7 @@ void WGAN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 }
 
 double WGAN::score() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Utilities util;
 	forwardPass();
 	return util.performance(y_hat, alg.onevec(n));
@@ -106,7 +106,7 @@ void WGAN::save(std::string fileName) {
 }
 
 void WGAN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, double lambda, double alpha) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (network.empty()) {
 		network.push_back(MLPPHiddenLayer(n_hidden, activation, alg.gaussianNoise(n, k), weightInit, reg, lambda, alpha));
 		network[0].forwardPass();
@@ -117,7 +117,7 @@ void WGAN::addLayer(int n_hidden, std::string activation, std::string weightInit
 }
 
 void WGAN::addOutputLayer(std::string weightInit, std::string reg, double lambda, double alpha) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (!network.empty()) {
 		outputLayer = new OutputLayer(network[network.size() - 1].n_hidden, "Linear", "WassersteinLoss", network[network.size() - 1].a, weightInit, "WeightClipping", -0.01, 0.01);
 	} else { // Should never happen.
@@ -169,7 +169,7 @@ double WGAN::Cost(std::vector<double> y_hat, std::vector<double> y) {
 }
 
 void WGAN::forwardPass() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (!network.empty()) {
 		network[0].input = alg.gaussianNoise(n, k);
 		network[0].forwardPass();
@@ -187,7 +187,7 @@ void WGAN::forwardPass() {
 }
 
 void WGAN::updateDiscriminatorParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, std::vector<double> outputLayerUpdation, double learning_rate) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	outputLayer->weights = alg.subtraction(outputLayer->weights, outputLayerUpdation);
 	outputLayer->bias -= learning_rate * alg.sum_elements(outputLayer->delta) / n;
@@ -204,7 +204,7 @@ void WGAN::updateDiscriminatorParameters(std::vector<std::vector<std::vector<dou
 }
 
 void WGAN::updateGeneratorParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, double learning_rate) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	if (!network.empty()) {
 		for (int i = network.size() / 2; i >= 0; i--) {
@@ -219,7 +219,7 @@ void WGAN::updateGeneratorParameters(std::vector<std::vector<std::vector<double>
 std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> WGAN::computeDiscriminatorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
 	class MLPPCost cost;
 	MLPPActivation avn;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 
 	std::vector<std::vector<std::vector<double>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
@@ -255,7 +255,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> W
 std::vector<std::vector<std::vector<double>>> WGAN::computeGeneratorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
 	class MLPPCost cost;
 	MLPPActivation avn;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 
 	std::vector<std::vector<std::vector<double>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.

@@ -98,14 +98,14 @@ MLPPHiddenLayer::MLPPHiddenLayer(int n_hidden, std::string activation, std::vect
 }
 
 void MLPPHiddenLayer::forwardPass() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z = alg.mat_vec_add(alg.matmult(input, weights), bias);
 	a = (avn.*activation_map[activation])(z, 0);
 }
 
 void MLPPHiddenLayer::Test(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z_test = alg.addition(alg.mat_vec_mult(alg.transpose(weights), x), bias);
 	a_test = (avn.*activationTest_map[activation])(z_test, 0);

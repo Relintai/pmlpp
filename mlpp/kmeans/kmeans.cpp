@@ -23,7 +23,7 @@ MLPPKMeans::MLPPKMeans(std::vector<std::vector<double>> inputSet, int k, std::st
 }
 
 std::vector<std::vector<double>> MLPPKMeans::modelSetTest(std::vector<std::vector<double>> X) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> closestCentroids;
 	for (int i = 0; i < inputSet.size(); i++) {
 		std::vector<double> closestCentroid = mu[0];
@@ -39,7 +39,7 @@ std::vector<std::vector<double>> MLPPKMeans::modelSetTest(std::vector<std::vecto
 }
 
 std::vector<double> MLPPKMeans::modelTest(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<double> closestCentroid = mu[0];
 	for (int j = 0; j < mu.size(); j++) {
 		if (alg.euclideanDistance(x, mu[j]) < alg.euclideanDistance(x, closestCentroid)) {
@@ -85,7 +85,7 @@ double MLPPKMeans::score() {
 }
 
 std::vector<double> MLPPKMeans::silhouette_scores() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> closestCentroids = modelSetTest(inputSet);
 	std::vector<double> silhouette_scores;
 	for (int i = 0; i < inputSet.size(); i++) {
@@ -136,7 +136,7 @@ std::vector<double> MLPPKMeans::silhouette_scores() {
 
 // This simply computes r_nk
 void MLPPKMeans::Evaluate() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	r.resize(inputSet.size());
 
 	for (int i = 0; i < r.size(); i++) {
@@ -163,7 +163,7 @@ void MLPPKMeans::Evaluate() {
 
 // This simply computes or re-computes mu_k
 void MLPPKMeans::computeMu() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	for (int i = 0; i < mu.size(); i++) {
 		std::vector<double> num;
 		num.resize(r.size());
@@ -197,7 +197,7 @@ void MLPPKMeans::centroidInitialization(int k) {
 }
 
 void MLPPKMeans::kmeansppInitialization(int k) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::random_device rd;
 	std::default_random_engine generator(rd());
 	std::uniform_int_distribution<int> distribution(0, int(inputSet.size() - 1));
@@ -223,7 +223,7 @@ void MLPPKMeans::kmeansppInitialization(int k) {
 }
 
 double MLPPKMeans::Cost() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	double sum = 0;
 	for (int i = 0; i < r.size(); i++) {
 		for (int j = 0; j < r[0].size(); j++) {

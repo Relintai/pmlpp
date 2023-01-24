@@ -63,7 +63,7 @@ int MLPPKNN::determineClass(std::vector<double> knn) {
 }
 
 std::vector<double> MLPPKNN::nearestNeighbors(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	// The nearest neighbors
 	std::vector<double> knn;
 

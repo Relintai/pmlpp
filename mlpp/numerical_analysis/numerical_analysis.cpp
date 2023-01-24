@@ -226,12 +226,12 @@ double NumericalAnalysis::constantApproximation(double (*function)(std::vector<d
 }
 
 double NumericalAnalysis::linearApproximation(double (*function)(std::vector<double>), std::vector<double> c, std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return constantApproximation(function, c) + alg.matmult(alg.transpose({ jacobian(function, c) }), { alg.subtraction(x, c) })[0][0];
 }
 
 double NumericalAnalysis::quadraticApproximation(double (*function)(std::vector<double>), std::vector<double> c, std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return linearApproximation(function, c, x) + 0.5 * alg.matmult({ (alg.subtraction(x, c)) }, alg.matmult(hessian(function, c), alg.transpose({ alg.subtraction(x, c) })))[0][0];
 }
 
@@ -245,7 +245,7 @@ double NumericalAnalysis::cubicApproximation(double (*function)(std::vector<doub
 	Perform remaining multiplies as done for the 2nd order approximation.
 	Result is a scalar.
 	*/
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> resultMat = alg.tensor_vec_mult(thirdOrderTensor(function, c), alg.subtraction(x, c));
 	double resultScalar = alg.matmult({ (alg.subtraction(x, c)) }, alg.matmult(resultMat, alg.transpose({ alg.subtraction(x, c) })))[0][0];
 
@@ -253,7 +253,7 @@ double NumericalAnalysis::cubicApproximation(double (*function)(std::vector<doub
 }
 
 double NumericalAnalysis::laplacian(double (*function)(std::vector<double>), std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> hessian_matrix = hessian(function, x);
 	double laplacian = 0;
 	for (int i = 0; i < hessian_matrix.size(); i++) {
@@ -263,7 +263,7 @@ double NumericalAnalysis::laplacian(double (*function)(std::vector<double>), std
 }
 
 std::string NumericalAnalysis::secondPartialDerivativeTest(double (*function)(std::vector<double>), std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> hessianMatrix = hessian(function, x);
 	/*
 	The reason we do this is because the 2nd partial derivative test is less conclusive for functions of variables greater than

@@ -66,7 +66,7 @@ std::vector<double> Stat::mode(const std::vector<double> &x) {
 }
 
 double Stat::range(const std::vector<double> &x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.max(x) - alg.min(x);
 }
 

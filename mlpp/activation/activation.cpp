@@ -19,7 +19,7 @@ double MLPPActivation::linear(double z, bool deriv) {
 
 std::vector<double> MLPPActivation::linear(std::vector<double> z, bool deriv) {
 	if (deriv) {
-		LinAlg alg;
+		MLPPLinAlg alg;
 		return alg.onevec(z.size());
 	}
 	return z;
@@ -27,7 +27,7 @@ std::vector<double> MLPPActivation::linear(std::vector<double> z, bool deriv) {
 
 std::vector<std::vector<double>> MLPPActivation::linear(std::vector<std::vector<double>> z, bool deriv) {
 	if (deriv) {
-		LinAlg alg;
+		MLPPLinAlg alg;
 		return alg.onemat(z.size(), z[0].size());
 	}
 	return z;
@@ -41,7 +41,7 @@ double MLPPActivation::sigmoid(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::sigmoid(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), sigmoid(z)));
 	}
@@ -49,7 +49,7 @@ std::vector<double> MLPPActivation::sigmoid(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::sigmoid(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), sigmoid(z)));
 	}
@@ -57,7 +57,7 @@ std::vector<std::vector<double>> MLPPActivation::sigmoid(std::vector<std::vector
 }
 
 std::vector<double> MLPPActivation::softmax(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<double> a;
 	a.resize(z.size());
 	std::vector<double> expZ = alg.exp(z);
@@ -73,7 +73,7 @@ std::vector<double> MLPPActivation::softmax(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::softmax(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> a;
 	a.resize(z.size());
 
@@ -84,7 +84,7 @@ std::vector<std::vector<double>> MLPPActivation::softmax(std::vector<std::vector
 }
 
 std::vector<double> MLPPActivation::adjSoftmax(std::vector<double> z) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<double> a;
 	double C = -*std::max_element(z.begin(), z.end());
 	z = alg.scalarAdd(C, z);
@@ -93,7 +93,7 @@ std::vector<double> MLPPActivation::adjSoftmax(std::vector<double> z) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::adjSoftmax(std::vector<std::vector<double>> z) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> a;
 	a.resize(z.size());
 
@@ -104,7 +104,7 @@ std::vector<std::vector<double>> MLPPActivation::adjSoftmax(std::vector<std::vec
 }
 
 std::vector<std::vector<double>> MLPPActivation::softmaxDeriv(std::vector<double> z) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<double>> deriv;
 	std::vector<double> a = softmax(z);
 	deriv.resize(a.size());
@@ -124,7 +124,7 @@ std::vector<std::vector<double>> MLPPActivation::softmaxDeriv(std::vector<double
 }
 
 std::vector<std::vector<std::vector<double>>> MLPPActivation::softmaxDeriv(std::vector<std::vector<double>> z) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	std::vector<std::vector<std::vector<double>>> deriv;
 	std::vector<std::vector<double>> a = softmax(z);
 
@@ -155,7 +155,7 @@ std::vector<double> MLPPActivation::softplus(std::vector<double> z, bool deriv) 
 	if (deriv) {
 		return sigmoid(z);
 	}
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.log(alg.addition(alg.onevec(z.size()), alg.exp(z)));
 }
 
@@ -163,7 +163,7 @@ std::vector<std::vector<double>> MLPPActivation::softplus(std::vector<std::vecto
 	if (deriv) {
 		return sigmoid(z);
 	}
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.log(alg.addition(alg.onemat(z.size(), z[0].size()), alg.exp(z)));
 }
 
@@ -175,7 +175,7 @@ double MLPPActivation::softsign(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::softsign(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onevec(z.size()), alg.exponentiate(alg.addition(alg.onevec(z.size()), alg.abs(z)), 2));
 	}
@@ -183,7 +183,7 @@ std::vector<double> MLPPActivation::softsign(std::vector<double> z, bool deriv) 
 }
 
 std::vector<std::vector<double>> MLPPActivation::softsign(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.exponentiate(alg.addition(alg.onemat(z.size(), z[0].size()), alg.abs(z)), 2));
 	}
@@ -198,7 +198,7 @@ double MLPPActivation::gaussianCDF(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::gaussianCDF(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.scalarMultiply(1 / sqrt(2 * M_PI), alg.exp(alg.scalarMultiply(-1 / 2, alg.hadamard_product(z, z))));
 	}
@@ -206,7 +206,7 @@ std::vector<double> MLPPActivation::gaussianCDF(std::vector<double> z, bool deri
 }
 
 std::vector<std::vector<double>> MLPPActivation::gaussianCDF(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.scalarMultiply(1 / sqrt(2 * M_PI), alg.exp(alg.scalarMultiply(-1 / 2, alg.hadamard_product(z, z))));
 	}
@@ -221,7 +221,7 @@ double MLPPActivation::cloglog(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::cloglog(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.exp(alg.scalarMultiply(-1, alg.exp(z)));
 	}
@@ -229,7 +229,7 @@ std::vector<double> MLPPActivation::cloglog(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::cloglog(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.exp(alg.scalarMultiply(-1, alg.exp(z)));
 	}
@@ -244,7 +244,7 @@ double MLPPActivation::logit(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::logit(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.subtraction(alg.elementWiseDivision(alg.onevec(z.size()), z), alg.elementWiseDivision(alg.onevec(z.size()), alg.subtraction(z, alg.onevec(z.size()))));
 	}
@@ -252,7 +252,7 @@ std::vector<double> MLPPActivation::logit(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::logit(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.subtraction(alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), z), alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.subtraction(z, alg.onemat(z.size(), z[0].size()))));
 	}
@@ -310,7 +310,7 @@ double MLPPActivation::swish(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::swish(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		alg.addition(swish(z), alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), swish(z))));
 	}
@@ -318,7 +318,7 @@ std::vector<double> MLPPActivation::swish(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::swish(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		alg.addition(swish(z), alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), swish(z))));
 	}
@@ -333,7 +333,7 @@ double MLPPActivation::mish(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::mish(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.addition(alg.hadamard_product(alg.hadamard_product(alg.hadamard_product(sech(softplus(z)), sech(softplus(z))), z), sigmoid(z)), alg.elementWiseDivision(mish(z), z));
 	}
@@ -341,7 +341,7 @@ std::vector<double> MLPPActivation::mish(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::mish(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.addition(alg.hadamard_product(alg.hadamard_product(alg.hadamard_product(sech(softplus(z)), sech(softplus(z))), z), sigmoid(z)), alg.elementWiseDivision(mish(z), z));
 	}
@@ -356,7 +356,7 @@ double MLPPActivation::sinc(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::sinc(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.subtraction(alg.hadamard_product(z, alg.cos(z)), alg.sin(z)), alg.hadamard_product(z, z));
 	}
@@ -364,7 +364,7 @@ std::vector<double> MLPPActivation::sinc(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::sinc(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.subtraction(alg.hadamard_product(z, alg.cos(z)), alg.sin(z)), alg.hadamard_product(z, z));
 	}
@@ -662,7 +662,7 @@ std::vector<double> MLPPActivation::sinh(std::vector<double> z, bool deriv) {
 	if (deriv) {
 		return cosh(z);
 	}
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.scalarMultiply(0.5, alg.subtraction(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
 }
 
@@ -670,7 +670,7 @@ std::vector<std::vector<double>> MLPPActivation::sinh(std::vector<std::vector<do
 	if (deriv) {
 		return cosh(z);
 	}
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.scalarMultiply(0.5, alg.subtraction(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
 }
 
@@ -685,7 +685,7 @@ std::vector<double> MLPPActivation::cosh(std::vector<double> z, bool deriv) {
 	if (deriv) {
 		return sinh(z);
 	}
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.scalarMultiply(0.5, alg.addition(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
 }
 
@@ -693,7 +693,7 @@ std::vector<std::vector<double>> MLPPActivation::cosh(std::vector<std::vector<do
 	if (deriv) {
 		return sinh(z);
 	}
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.scalarMultiply(0.5, alg.addition(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
 }
 
@@ -705,7 +705,7 @@ double MLPPActivation::tanh(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::tanh(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.scalarMultiply(-1, alg.scalarAdd(-1, alg.hadamard_product(tanh(z), tanh(z))));
 	}
@@ -713,7 +713,7 @@ std::vector<double> MLPPActivation::tanh(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::tanh(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.scalarMultiply(-1, alg.scalarAdd(-1, alg.hadamard_product(tanh(z), tanh(z))));
 	}
@@ -729,7 +729,7 @@ double MLPPActivation::csch(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::csch(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), coth(z));
 	}
@@ -737,7 +737,7 @@ std::vector<double> MLPPActivation::csch(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::csch(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), coth(z));
 	}
@@ -752,7 +752,7 @@ double MLPPActivation::sech(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::sech(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, sech(z)), tanh(z));
 	}
@@ -762,7 +762,7 @@ std::vector<double> MLPPActivation::sech(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::sech(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, sech(z)), tanh(z));
 	}
@@ -779,7 +779,7 @@ double MLPPActivation::coth(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::coth(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), csch(z));
 	}
@@ -787,7 +787,7 @@ std::vector<double> MLPPActivation::coth(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::coth(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), csch(z));
 	}
@@ -802,7 +802,7 @@ double MLPPActivation::arsinh(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::arsinh(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onevec(z.size()), alg.sqrt(alg.addition(alg.hadamard_product(z, z), alg.onevec(z.size()))));
 	}
@@ -810,7 +810,7 @@ std::vector<double> MLPPActivation::arsinh(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::arsinh(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.sqrt(alg.addition(alg.hadamard_product(z, z), alg.onemat(z.size(), z[0].size()))));
 	}
@@ -825,7 +825,7 @@ double MLPPActivation::arcosh(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::arcosh(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onevec(z.size()), alg.sqrt(alg.subtraction(alg.hadamard_product(z, z), alg.onevec(z.size()))));
 	}
@@ -833,7 +833,7 @@ std::vector<double> MLPPActivation::arcosh(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::arcosh(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.sqrt(alg.subtraction(alg.hadamard_product(z, z), alg.onemat(z.size(), z[0].size()))));
 	}
@@ -848,7 +848,7 @@ double MLPPActivation::artanh(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::artanh(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onevec(z.size()), alg.subtraction(alg.onevec(z.size()), alg.hadamard_product(z, z)));
 	}
@@ -856,7 +856,7 @@ std::vector<double> MLPPActivation::artanh(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::artanh(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.subtraction(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)));
 	}
@@ -871,7 +871,7 @@ double MLPPActivation::arcsch(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::arcsch(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.full(z.size(), -1), alg.hadamard_product(alg.hadamard_product(z, z), alg.sqrt(alg.addition(alg.onevec(z.size()), alg.elementWiseDivision(alg.onevec(z.size()), alg.hadamard_product(z, z))))));
 	}
@@ -879,7 +879,7 @@ std::vector<double> MLPPActivation::arcsch(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::arcsch(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.full(z.size(), z[0].size(), -1), alg.hadamard_product(alg.hadamard_product(z, z), alg.sqrt(alg.addition(alg.onemat(z.size(), z[0].size()), alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z))))));
 	}
@@ -894,7 +894,7 @@ double MLPPActivation::arsech(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::arsech(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.full(z.size(), -1), alg.hadamard_product(z, alg.sqrt(alg.subtraction(alg.onevec(z.size()), alg.hadamard_product(z, z)))));
 	}
@@ -902,7 +902,7 @@ std::vector<double> MLPPActivation::arsech(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::arsech(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.full(z.size(), z[0].size(), -1), alg.hadamard_product(z, alg.sqrt(alg.subtraction(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)))));
 	}
@@ -917,7 +917,7 @@ double MLPPActivation::arcoth(double z, bool deriv) {
 }
 
 std::vector<double> MLPPActivation::arcoth(std::vector<double> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onevec(z.size()), alg.subtraction(alg.onevec(z.size()), alg.hadamard_product(z, z)));
 	}
@@ -925,7 +925,7 @@ std::vector<double> MLPPActivation::arcoth(std::vector<double> z, bool deriv) {
 }
 
 std::vector<std::vector<double>> MLPPActivation::arcoth(std::vector<std::vector<double>> z, bool deriv) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.subtraction(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)));
 	}

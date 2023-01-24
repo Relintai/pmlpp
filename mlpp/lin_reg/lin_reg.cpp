@@ -34,7 +34,7 @@ double LinReg::modelTest(std::vector<double> x) {
 }
 
 void LinReg::NewtonRaphson(double learning_rate, int max_epoch, bool UI) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -66,7 +66,7 @@ void LinReg::NewtonRaphson(double learning_rate, int max_epoch, bool UI) {
 }
 
 void LinReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -97,7 +97,7 @@ void LinReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 }
 
 void LinReg::SGD(double learning_rate, int max_epoch, bool UI) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -136,7 +136,7 @@ void LinReg::SGD(double learning_rate, int max_epoch, bool UI) {
 }
 
 void LinReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -174,7 +174,7 @@ void LinReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool
 }
 
 void LinReg::normalEquation() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Stat stat;
 	std::vector<double> x_means;
 	std::vector<std::vector<double>> inputSetT = alg.transpose(inputSet);
@@ -224,12 +224,12 @@ double LinReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
 }
 
 std::vector<double> LinReg::Evaluate(std::vector<std::vector<double>> X) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
 double LinReg::Evaluate(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.dot(weights, x) + bias;
 }
 

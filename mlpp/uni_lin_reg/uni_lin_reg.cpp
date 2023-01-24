@@ -24,7 +24,7 @@ UniLinReg::UniLinReg(std::vector<double> x, std::vector<double> y) :
 }
 
 std::vector<double> UniLinReg::modelSetTest(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.scalarAdd(b0, alg.scalarMultiply(b1, x));
 }
 

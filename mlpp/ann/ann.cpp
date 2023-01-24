@@ -55,7 +55,7 @@ double MLPPANN::modelTest(std::vector<double> x) {
 
 void MLPPANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -89,7 +89,7 @@ void MLPPANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 
 void MLPPANN::SGD(double learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	double cost_prev = 0;
 	int epoch = 1;
@@ -127,7 +127,7 @@ void MLPPANN::SGD(double learning_rate, int max_epoch, bool UI) {
 
 void MLPPANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	class MLPPCost cost;
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	double cost_prev = 0;
 	int epoch = 1;
@@ -165,7 +165,7 @@ void MLPPANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, boo
 
 void MLPPANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size, double gamma, bool NAG, bool UI) {
 	class MLPPCost cost;
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	double cost_prev = 0;
 	int epoch = 1;
@@ -222,7 +222,7 @@ void MLPPANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size,
 
 void MLPPANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, double e, bool UI) {
 	class MLPPCost cost;
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	double cost_prev = 0;
 	int epoch = 1;
@@ -278,7 +278,7 @@ void MLPPANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, 
 
 void MLPPANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size, double b1, double e, bool UI) {
 	class MLPPCost cost;
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	double cost_prev = 0;
 	int epoch = 1;
@@ -334,7 +334,7 @@ void MLPPANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size,
 
 void MLPPANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
 	class MLPPCost cost;
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	double cost_prev = 0;
 	int epoch = 1;
@@ -401,7 +401,7 @@ void MLPPANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, dou
 
 void MLPPANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
 	class MLPPCost cost;
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	double cost_prev = 0;
 	int epoch = 1;
@@ -466,7 +466,7 @@ void MLPPANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, d
 
 void MLPPANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
 	class MLPPCost cost;
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	double cost_prev = 0;
 	int epoch = 1;
@@ -536,7 +536,7 @@ void MLPPANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, do
 
 void MLPPANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
 	class MLPPCost cost;
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	double cost_prev = 0;
 	int epoch = 1;
@@ -661,7 +661,7 @@ void MLPPANN::addLayer(int n_hidden, std::string activation, std::string weightI
 }
 
 void MLPPANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, double lambda, double alpha) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	if (!network.empty()) {
 		outputLayer = new OutputLayer(network[network.size() - 1].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
 	} else {
@@ -701,7 +701,7 @@ void MLPPANN::forwardPass() {
 }
 
 void MLPPANN::updateParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, std::vector<double> outputLayerUpdation, double learning_rate) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 
 	outputLayer->weights = alg.subtraction(outputLayer->weights, outputLayerUpdation);
 	outputLayer->bias -= learning_rate * alg.sum_elements(outputLayer->delta) / n;
@@ -721,7 +721,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> M
 	// std::cout << "BEGIN" << std::endl;
 	class MLPPCost cost;
 	MLPPActivation avn;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 
 	std::vector<std::vector<std::vector<double>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.

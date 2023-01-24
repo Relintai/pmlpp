@@ -32,7 +32,7 @@ double TanhReg::modelTest(std::vector<double> x) {
 
 void TanhReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -65,7 +65,7 @@ void TanhReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 }
 
 void TanhReg::SGD(double learning_rate, int max_epoch, bool UI) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -105,7 +105,7 @@ void TanhReg::SGD(double learning_rate, int max_epoch, bool UI) {
 
 void TanhReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPActivation avn;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -163,30 +163,30 @@ double TanhReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
 }
 
 std::vector<double> TanhReg::Evaluate(std::vector<std::vector<double>> X) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.tanh(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
 std::vector<double> TanhReg::propagate(std::vector<std::vector<double>> X) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
 double TanhReg::Evaluate(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.tanh(alg.dot(weights, x) + bias);
 }
 
 double TanhReg::propagate(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.dot(weights, x) + bias;
 }
 
 // Tanh ( wTx + b )
 void TanhReg::forwardPass() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 
 	z = propagate(inputSet);

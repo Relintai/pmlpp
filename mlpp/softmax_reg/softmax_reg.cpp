@@ -31,7 +31,7 @@ std::vector<std::vector<double>> SoftmaxReg::modelSetTest(std::vector<std::vecto
 }
 
 void SoftmaxReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -70,7 +70,7 @@ void SoftmaxReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 }
 
 void SoftmaxReg::SGD(double learning_rate, int max_epoch, bool UI) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -113,7 +113,7 @@ void SoftmaxReg::SGD(double learning_rate, int max_epoch, bool UI) {
 }
 
 void SoftmaxReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -170,13 +170,13 @@ double SoftmaxReg::Cost(std::vector<std::vector<double>> y_hat, std::vector<std:
 }
 
 std::vector<double> SoftmaxReg::Evaluate(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.softmax(alg.addition(bias, alg.mat_vec_mult(alg.transpose(weights), x)));
 }
 
 std::vector<std::vector<double>> SoftmaxReg::Evaluate(std::vector<std::vector<double>> X) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 
 	return avn.softmax(alg.mat_vec_add(alg.matmult(X, weights), bias));
@@ -184,7 +184,7 @@ std::vector<std::vector<double>> SoftmaxReg::Evaluate(std::vector<std::vector<do
 
 // softmax ( wTx + b )
 void SoftmaxReg::forwardPass() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 
 	y_hat = avn.softmax(alg.mat_vec_add(alg.matmult(inputSet, weights), bias));

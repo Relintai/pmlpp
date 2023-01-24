@@ -31,7 +31,7 @@ double MLPPCLogLogReg::modelTest(std::vector<double> x) {
 
 void MLPPCLogLogReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -65,7 +65,7 @@ void MLPPCLogLogReg::gradientDescent(double learning_rate, int max_epoch, bool U
 
 void MLPPCLogLogReg::MLE(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -96,7 +96,7 @@ void MLPPCLogLogReg::MLE(double learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPCLogLogReg::SGD(double learning_rate, int max_epoch, bool UI) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -138,7 +138,7 @@ void MLPPCLogLogReg::SGD(double learning_rate, int max_epoch, bool UI) {
 
 void MLPPCLogLogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPActivation avn;
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -191,30 +191,30 @@ double MLPPCLogLogReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
 }
 
 std::vector<double> MLPPCLogLogReg::Evaluate(std::vector<std::vector<double>> X) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.cloglog(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
 std::vector<double> MLPPCLogLogReg::propagate(std::vector<std::vector<double>> X) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
 double MLPPCLogLogReg::Evaluate(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.cloglog(alg.dot(weights, x) + bias);
 }
 
 double MLPPCLogLogReg::propagate(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	return alg.dot(weights, x) + bias;
 }
 
 // cloglog ( wTx + b )
 void MLPPCLogLogReg::forwardPass() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 
 	z = propagate(inputSet);

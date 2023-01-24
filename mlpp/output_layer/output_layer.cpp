@@ -114,14 +114,14 @@ OutputLayer::OutputLayer(int n_hidden, std::string activation, std::string cost,
 }
 
 void OutputLayer::forwardPass() {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z = alg.scalarAdd(bias, alg.mat_vec_mult(input, weights));
 	a = (avn.*activation_map[activation])(z, 0);
 }
 
 void OutputLayer::Test(std::vector<double> x) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z_test = alg.dot(weights, x) + bias;
 	a_test = (avn.*activationTest_map[activation])(z_test, 0);

@@ -32,7 +32,7 @@ double MLPPExpReg::modelTest(std::vector<double> x) {
 }
 
 void MLPPExpReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -135,7 +135,7 @@ void MLPPExpReg::SGD(double learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPExpReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	LinAlg alg;
+	MLPPLinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;

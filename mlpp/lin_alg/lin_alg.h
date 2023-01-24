@@ -12,7 +12,7 @@
 #include <vector>
 
 
-class LinAlg {
+class MLPPLinAlg {
 public:
 	// MATRIX FUNCTIONS
 
