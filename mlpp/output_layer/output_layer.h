@@ -7,8 +7,8 @@
 #ifndef OutputLayer_hpp
 #define OutputLayer_hpp
 
-#include "Activation/Activation.hpp"
-#include "Cost/Cost.hpp"
+#include "../activation/activation.h"
+#include "../cost/cost.h"
 
 #include <vector>
 #include <map>

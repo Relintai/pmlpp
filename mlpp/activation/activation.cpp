@@ -5,8 +5,8 @@
 //
 
 #include <iostream>
-#include "LinAlg/LinAlg.hpp"
-#include "Activation.hpp"
+#include "../lin_alg/lin_alg.h"
+#include "activation.h"
 #include <cmath>
 #include <algorithm>
 

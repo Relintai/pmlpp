@@ -4,8 +4,9 @@
 //  Created by Marc Melikyan on 11/13/20.
 //
 
-#include "NumericalAnalysis.hpp"
-#include "LinAlg/LinAlg.hpp"
+#include "numerical_analysis.h"
+#include "../lin_alg/lin_alg.h"
+
 #include <iostream>
 #include <string>
 #include <cmath>

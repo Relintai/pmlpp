@@ -7,8 +7,8 @@
 #ifndef MultiOutputLayer_hpp
 #define MultiOutputLayer_hpp
 
-#include "Activation/Activation.hpp"
-#include "Cost/Cost.hpp"
+#include "../activation/activation.h"
+#include "../cost/cost.h"
 
 #include <vector>
 #include <map>

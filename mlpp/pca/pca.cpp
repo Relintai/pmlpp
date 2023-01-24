@@ -4,9 +4,9 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#include "PCA.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Data/Data.hpp"
+#include "pca.h"
+#include "../lin_alg/lin_alg.h"
+#include "../data/data.h"
 
 #include <iostream>
 #include <random>

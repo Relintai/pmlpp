@@ -4,10 +4,10 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#include "HiddenLayer.hpp"
-#include "Activation/Activation.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Utilities/Utilities.hpp"
+#include "hidden_layer.h"
+#include "../activation/activation.h"
+#include "../lin_alg/lin_alg.h"
+#include "../utilities/utilities.h"
 
 #include <iostream>
 #include <random>

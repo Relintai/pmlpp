@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/13/20.
 //
 
-#include "OutlierFinder.hpp"
-#include "Stat/Stat.hpp"
+#include "outlier_finder.h"
+#include "../stat/stat.h"
 #include <iostream>
 
 namespace MLPP{

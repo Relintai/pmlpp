@@ -7,8 +7,8 @@
 #ifndef MANN_hpp
 #define MANN_hpp
 
-#include "HiddenLayer/HiddenLayer.hpp"
-#include "MultiOutputLayer/MultiOutputLayer.hpp"
+#include "../hidden_layer/hidden_layer.h"
+#include "../multi_output_layer/multi_output_layer.h"
 
 #include <vector>
 #include <string>

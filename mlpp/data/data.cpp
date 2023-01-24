@@ -5,10 +5,10 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#include "Data.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Stat/Stat.hpp"
-#include "SoftmaxNet/SoftmaxNet.hpp"
+#include "data.hpp"
+#include "../lin_alg/lin_alg.h"
+#include "../stat/stat.h"
+#include "../softmax_net/softmax_net.h"
 #include <iostream>
 #include <random>
 #include <cmath>

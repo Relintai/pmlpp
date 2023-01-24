@@ -4,10 +4,10 @@
 //  Created by Marc Melikyan on 1/17/21.
 //
 
-#include "GaussianNB.hpp"
-#include "Stat/Stat.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Utilities/Utilities.hpp"
+#include "gaussian_nb.h"
+#include "../stat/stat.h"
+#include "../lin_alg/lin_alg.h"
+#include "../utilities/utilities.h"
 
 #include <iostream>
 #include <algorithm>

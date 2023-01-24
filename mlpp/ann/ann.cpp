@@ -4,12 +4,12 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#include "ANN.hpp"
-#include "Activation/Activation.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Regularization/Reg.hpp"
-#include "Utilities/Utilities.hpp"
-#include "Cost/Cost.hpp"
+#include "ann.h"
+#include "../activation/activation.h"
+#include "../lin_alg/lin_alg.h"
+#include "../regularization/reg.h"
+#include "../utilities/utilities.h"
+#include "../cost/cost.h"
 
 #include <iostream>
 #include <cmath>

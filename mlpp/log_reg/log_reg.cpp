@@ -4,12 +4,12 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#include "LogReg.hpp"
-#include "Activation/Activation.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Regularization/Reg.hpp"
-#include "Utilities/Utilities.hpp"
-#include "Cost/Cost.hpp"
+#include "log_reg.h"
+#include "../activation/activation.h"
+#include "../lin_alg/lin_alg.h"
+#include "../regularization/reg.h"
+#include "../utilities/utilities.h"
+#include "../cost/cost.h"
 
 #include <iostream>
 #include <random>

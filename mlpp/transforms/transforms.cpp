@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/13/20.
 //
 
-#include "Transforms.hpp"
-#include "LinAlg/LinAlg.hpp"
+#include "transforms.h"
+#include "../lin_alg/lin_alg.h"
 #include <iostream>
 #include <string>
 #include <cmath>

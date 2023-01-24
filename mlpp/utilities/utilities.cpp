@@ -8,7 +8,7 @@
 #include <string>
 #include <random>
 #include <fstream>
-#include "Utilities.hpp"
+#include "utilities.h"
 
 namespace MLPP{
 

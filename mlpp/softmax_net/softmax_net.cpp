@@ -4,13 +4,13 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#include "SoftmaxNet.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Data/Data.hpp"
-#include "Regularization/Reg.hpp"
-#include "Activation/Activation.hpp"
-#include "Utilities/Utilities.hpp"
-#include "Cost/Cost.hpp"
+#include "softmax_net.h"
+#include "../lin_alg/lin_alg.h"
+#include "../data/data.h"
+#include "../regularization/reg.h"
+#include "../activation/activation.h"
+#include "../utilities/utilities.h"
+#include "../cost/cost.h"
 
 #include <iostream>
 #include <random>

@@ -4,7 +4,7 @@
 //  Created by Marc Melikyan on 3/10/21.
 //
 
-#include "HypothesisTesting.hpp"
+#include "hypothesis_testing.h"
 
 namespace MLPP{
 

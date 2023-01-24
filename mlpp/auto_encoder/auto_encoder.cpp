@@ -4,11 +4,11 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#include "AutoEncoder.hpp"
-#include "Activation/Activation.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Utilities/Utilities.hpp"
-#include "Cost/Cost.hpp"
+#include "auto_encoder.h"
+#include "../activation/activation.h"
+#include "../lin_alg/lin_alg.h"
+#include "../utilities/utilities.h"
+#include "../cost/cost.h"
 
 #include <iostream>
 #include <random>

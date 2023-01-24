@@ -4,9 +4,9 @@
 //  Created by Marc Melikyan on 9/29/20.
 //
 
-#include "UniLinReg.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Stat/Stat.hpp"
+#include "uni_lin_reg.h"
+#include "../lin_alg/lin_alg.h"
+#include "../stat/stat.h"
 #include <iostream>
 
 

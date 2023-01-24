@@ -7,8 +7,8 @@
 #ifndef WGAN_hpp
 #define WGAN_hpp
 
-#include "HiddenLayer/HiddenLayer.hpp"
-#include "OutputLayer/OutputLayer.hpp"
+#include "../hidden_layer/hidden_layer.h"
+#include "../output_layer/output_layer.h"
 
 #include <vector>
 #include <tuple>

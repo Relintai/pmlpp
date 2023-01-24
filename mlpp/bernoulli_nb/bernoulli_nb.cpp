@@ -4,10 +4,10 @@
 //  Created by Marc Melikyan on 1/17/21.
 //
 
-#include "BernoulliNB.hpp"
-#include "Utilities/Utilities.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Data/Data.hpp"
+#include "bernoulli_nb.h"
+#include "../utilities/utilities.h"
+#include "../lin_alg/lin_alg.h"
+#include "../data/data.h"
 
 #include <iostream>
 #include <random>

@@ -6,9 +6,9 @@
 
 #include <iostream>
 #include <cmath>
-#include "Cost.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Regularization/Reg.hpp"
+#include "cost.hpp"
+#include "../lin_alg/lin_alg.h"
+#include "../regularization/reg.h"
 
 namespace MLPP{
     double Cost::MSE(std::vector <double> y_hat, std::vector<double> y){

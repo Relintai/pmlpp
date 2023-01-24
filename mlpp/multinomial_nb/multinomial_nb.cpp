@@ -4,9 +4,9 @@
 //  Created by Marc Melikyan on 1/17/21.
 //
 
-#include "MultinomialNB.hpp"
-#include "Utilities/Utilities.hpp"
-#include "LinAlg/LinAlg.hpp"
+#include "multinomial_nb.h"
+#include "../utilities/utilities.h"
+#include "../lin_alg/lin_alg.h"
 
 #include <iostream>
 #include <algorithm>

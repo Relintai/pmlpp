@@ -7,7 +7,7 @@
 #ifndef HiddenLayer_hpp
 #define HiddenLayer_hpp
 
-#include "Activation/Activation.hpp"
+#include "../activation/activation.h"
 
 #include <vector>
 #include <map>

@@ -5,9 +5,9 @@
 //
 
 #include <iostream>
-#include "Convolutions/Convolutions.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Stat/Stat.hpp"
+#include "../convolutions/convolutions.h"
+#include "../lin_alg/lin_alg.h"
+#include "../stat/stat.h"
 #include <cmath>
 
 namespace MLPP{

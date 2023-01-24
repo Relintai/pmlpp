@@ -4,10 +4,10 @@
 //  Created by Marc Melikyan on 9/29/20.
 //
 
-#include "Stat.hpp"
-#include "Activation/Activation.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Data/Data.hpp"
+#include "stat.hpp"
+#include "../activation/activation.h"
+#include "../lin_alg/lin_alg.h"
+#include "../data/data.h"
 #include <algorithm>
 #include <map>
 #include <cmath>

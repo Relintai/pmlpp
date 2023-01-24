@@ -4,9 +4,9 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#include "OutputLayer.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Utilities/Utilities.hpp"
+#include "output_layer.h"
+#include "../lin_alg/lin_alg.h"
+#include "../utilities/utilities.h"
 
 #include <iostream>
 #include <random>

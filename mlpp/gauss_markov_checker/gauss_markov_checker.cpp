@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/13/20.
 //
 
-#include "GaussMarkovChecker.hpp"
-#include "Stat/Stat.hpp"
+#include "gauss_markov_checker.h"
+#include "../stat/stat.h"
 #include <iostream>
 
 

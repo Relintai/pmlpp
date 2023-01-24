@@ -6,9 +6,9 @@
 
 #include <iostream>
 #include <random>
-#include "Reg.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Activation/Activation.hpp"
+#include "reg.h"
+#include "../lin_alg/lin_alg.h"
+#include "../activation/activation.h"
 
 namespace MLPP{
 

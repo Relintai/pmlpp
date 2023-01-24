@@ -4,12 +4,12 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#include "ExpReg.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Stat/Stat.hpp"
-#include "Regularization/Reg.hpp"
-#include "Utilities/Utilities.hpp"
-#include "Cost/Cost.hpp"
+#include "exp_reg.h"
+#include "../lin_alg/lin_alg.h"
+#include "../stat/stat.h"
+#include "../regularization/reg.h"
+#include "../utilities/utilities.h"
+#include "../cost/cost.h"
 
 #include <iostream>
 #include <random>

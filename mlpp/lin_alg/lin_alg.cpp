@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 1/8/21.
 //
 
-#include "LinAlg.hpp"
-#include "Stat/Stat.hpp"
+#include "lin_alg.hpp"
+#include "../stat/stat.h"
 #include <iostream>
 #include <random>
 #include <map>

@@ -4,9 +4,9 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#include "kNN.hpp"
-#include "LinAlg/LinAlg.hpp"
-#include "Utilities/Utilities.hpp"
+#include "knn.h"
+#include "../lin_alg/lin_alg.h"
+#include "../utilities/utilities.h"
 
 #include <iostream>
 #include <map>

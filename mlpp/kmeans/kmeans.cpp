@@ -4,9 +4,9 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#include "KMeans.hpp"
-#include "Utilities/Utilities.hpp"
-#include "LinAlg/LinAlg.hpp"
+#include "kmeans.h"
+#include "../utilities/utilities.h"
+#include "../lin_alg/lin_alg.h"
 
 #include <iostream>
 #include <random>
