@@ -1,11 +1,12 @@
+
+#ifndef MLPP_STAT_H
+#define MLPP_STAT_H
+
 //
 //  Stat.hpp
 //
 //  Created by Marc Melikyan on 9/29/20.
 //
-
-#ifndef MLPP_STAT_H
-#define MLPP_STAT_H
 
 #include <vector>
 

@@ -1,11 +1,13 @@
+
+#ifndef MLPP_COST_H
+#define MLPP_COST_H
+
 //
 //  Cost.hpp
 //
 //  Created by Marc Melikyan on 1/16/21.
 //
 
-#ifndef MLPP_COST_H
-#define MLPP_COST_H
 
 #include <vector>
 

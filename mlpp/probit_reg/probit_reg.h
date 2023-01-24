@@ -1,12 +1,12 @@
+
+#ifndef MLPP_PROBIT_REG_H
+#define MLPP_PROBIT_REG_H
+
 //
 //  ProbitReg.hpp
 //
 //  Created by Marc Melikyan on 10/2/20.
 //
-
-#ifndef MLPP_PROBIT_REG_H
-#define MLPP_PROBIT_REG_H
-
 
 #include <vector>
 #include <string>

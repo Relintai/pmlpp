@@ -1,11 +1,12 @@
+
+#ifndef MLPP_UTILITIES_H
+#define MLPP_UTILITIES_H
+
 //
 //  Utilities.hpp
 //
 //  Created by Marc Melikyan on 1/16/21.
 //
-
-#ifndef MLPP_UTILITIES_H
-#define MLPP_UTILITIES_H
 
 #include <vector>
 #include <tuple>

@@ -1,11 +1,12 @@
+
+#ifndef MLPP_HIDDEN_LAYER_H
+#define MLPP_HIDDEN_LAYER_H
+
 //
 //  HiddenLayer.hpp
 //
 //  Created by Marc Melikyan on 11/4/20.
 //
-
-#ifndef MLPP_HIDDEN_LAYER_H
-#define MLPP_HIDDEN_LAYER_H
 
 #include "../activation/activation.h"
 

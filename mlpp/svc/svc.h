@@ -1,3 +1,7 @@
+
+#ifndef MLPP_SVC_H
+#define MLPP_SVC_H
+
 //
 //  SVC.hpp
 //
@@ -7,9 +11,6 @@
 
 // https://towardsdatascience.com/svm-implementation-from-scratch-python-2db2fc52e5c2
 // Illustratd a practical definition of the Hinge Loss function and its gradient when optimizing with SGD.
-#ifndef MLPP_SVC_H
-#define MLPP_SVC_H
-
 
 #include <vector>
 #include <string>

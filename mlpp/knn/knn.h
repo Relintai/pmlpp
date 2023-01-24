@@ -1,11 +1,12 @@
+
+#ifndef MLPP_KNN_H
+#define MLPP_KNN_H
+
 //
 //  kNN.hpp
 //
 //  Created by Marc Melikyan on 10/2/20.
 //
-
-#ifndef MLPP_KNN_H
-#define MLPP_KNN_H
 
 #include <vector>
 

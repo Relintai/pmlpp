@@ -1,11 +1,13 @@
+
+#ifndef MLPP_K_MEANS_H
+#define MLPP_K_MEANS_H
+
 //
 //  KMeans.hpp
 //
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#ifndef MLPP_K_MEANS_H
-#define MLPP_K_MEANS_H
 
 #include <vector>
 #include <string>

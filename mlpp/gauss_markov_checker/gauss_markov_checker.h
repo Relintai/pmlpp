@@ -1,11 +1,12 @@
+
+#ifndef MLPP_GAUSS_MARKOV_CHECKER_H
+#define MLPP_GAUSS_MARKOV_CHECKER_H
+
 //
 //  GaussMarkovChecker.hpp
 //
 //  Created by Marc Melikyan on 11/13/20.
 //
-
-#ifndef MLPP_GAUSS_MARKOV_CHECKER_H
-#define MLPP_GAUSS_MARKOV_CHECKER_H
 
 #include <string>
 #include <vector>

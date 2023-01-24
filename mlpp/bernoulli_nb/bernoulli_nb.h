@@ -1,11 +1,12 @@
+
+#ifndef MLPP_BERNOULLI_NB_H
+#define MLPP_BERNOULLI_NB_H
+
 //
 //  BernoulliNB.hpp
 //
 //  Created by Marc Melikyan on 1/17/21.
 //
-
-#ifndef MLPP_BERNOULLI_NB_H
-#define MLPP_BERNOULLI_NB_H
 
 #include <vector>
 #include <map>

@@ -1,10 +1,11 @@
+
+#ifndef MLPP_TRANSFORMS_H
+#define MLPP_TRANSFORMS_H
+
 //
 //  Transforms.hpp
 //
 //
-
-#ifndef MLPP_TRANSFORMS_H
-#define MLPP_TRANSFORMS_H
 
 #include <vector>
 #include <string>

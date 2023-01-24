@@ -1,11 +1,12 @@
+
+#ifndef MLPP_MULTI_OUTPUT_LAYER_H
+#define MLPP_MULTI_OUTPUT_LAYER_H
+
 //
 //  MultiOutputLayer.hpp
 //
 //  Created by Marc Melikyan on 11/4/20.
 //
-
-#ifndef MLPP_MULTI_OUTPUT_LAYER_H
-#define MLPP_MULTI_OUTPUT_LAYER_H
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"

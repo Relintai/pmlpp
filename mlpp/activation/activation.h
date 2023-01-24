@@ -1,11 +1,12 @@
+
+#ifndef MLPP_ACTIVATION_H
+#define MLPP_ACTIVATION_H
+
 //
 //  Activation.hpp
 //
 //  Created by Marc Melikyan on 1/16/21.
 //
-
-#ifndef MLPP_ACTIVATION_H
-#define MLPP_ACTIVATION_H
 
 #include <vector>
 

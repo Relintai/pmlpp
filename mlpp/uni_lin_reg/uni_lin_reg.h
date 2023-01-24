@@ -1,11 +1,12 @@
+
+#ifndef MLPP_UNI_LIN_REG_H
+#define MLPP_UNI_LIN_REG_H
+
 //
 //  UniLinReg.hpp
 //
 //  Created by Marc Melikyan on 9/29/20.
 //
-
-#ifndef MLPP_UNI_LIN_REG_H
-#define MLPP_UNI_LIN_REG_H
 
 #include <vector>
 

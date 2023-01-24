@@ -1,12 +1,12 @@
+
+#ifndef MLPP_TANH_REG_H
+#define MLPP_TANH_REG_H
+
 //
 //  TanhReg.hpp
 //
 //  Created by Marc Melikyan on 10/2/20.
 //
-
-#ifndef MLPP_TANH_REG_H
-#define MLPP_TANH_REG_H
-
 
 #include <vector>
 #include <string>

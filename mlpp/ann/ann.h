@@ -1,11 +1,11 @@
+#ifndef MLPP_ANN_H
+#define MLPP_ANN_H
+
 //
 //  ANN.hpp
 //
 //  Created by Marc Melikyan on 11/4/20.
 //
-
-#ifndef MLPP_ANN_H
-#define MLPP_ANN_H
 
 #include "hidden_layer/hidden_layer.h"
 #include "output_layer/output_layer.h"

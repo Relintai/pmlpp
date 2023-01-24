@@ -1,11 +1,12 @@
+
+#ifndef MLPP_LIN_ALG_H
+#define MLPP_LIN_ALG_H
+
 //
 //  LinAlg.hpp
 //
 //  Created by Marc Melikyan on 1/8/21.
 //
-
-#ifndef MLPP_LIN_ALG_H
-#define MLPP_LIN_ALG_H
 
 #include <vector>
 #include <tuple>

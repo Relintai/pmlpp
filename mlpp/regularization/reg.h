@@ -1,11 +1,13 @@
+
+
+#ifndef MLPP_REG_H
+#define MLPP_REG_H
+
 //
 //  Reg.hpp
 //
 //  Created by Marc Melikyan on 1/16/21.
 //
-
-#ifndef MLPP_REG_H
-#define MLPP_REG_H
 
 #include <vector>
 

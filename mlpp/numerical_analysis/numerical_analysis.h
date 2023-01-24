@@ -1,10 +1,11 @@
+
+#ifndef MLPP_NUMERICAL_ANALYSIS_H
+#define MLPP_NUMERICAL_ANALYSIS_H
+
 //
 //  NumericalAnalysis.hpp
 //
 //
-
-#ifndef MLPP_NUMERICAL_ANALYSIS_H
-#define MLPP_NUMERICAL_ANALYSIS_H
 
 #include <vector>
 #include <string>

@@ -1,12 +1,12 @@
+
+#ifndef MLPP_LOG_REG_H
+#define MLPP_LOG_REG_H
+
 //
 //  LogReg.hpp
 //
 //  Created by Marc Melikyan on 10/2/20.
 //
-
-#ifndef MLPP_LOG_REG_H
-#define MLPP_LOG_REG_H
-
 
 #include <vector>
 #include <string>

@@ -1,3 +1,7 @@
+
+#ifndef MLPP_DUAL_SVC_H
+#define MLPP_DUAL_SVC_H
+
 //
 //  DualSVC.hpp
 //
@@ -6,9 +10,6 @@
 // http://disp.ee.ntu.edu.tw/~pujols/Support%20Vector%20Machine.pdf
 // http://ciml.info/dl/v0_99/ciml-v0_99-ch11.pdf
 // Were excellent for the practical intution behind the dual formulation. 
-
-#ifndef MLPP_DUAL_SVC_H
-#define MLPP_DUAL_SVC_H
 
 
 #include <vector>

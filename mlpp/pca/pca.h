@@ -1,11 +1,12 @@
+
+#ifndef MLPP_PCA_H
+#define MLPP_PCA_H
+
 //
 //  PCA.hpp
 //
 //  Created by Marc Melikyan on 10/2/20.
 //
-
-#ifndef MLPP_PCA_H
-#define MLPP_PCA_H
 
 #include <vector>
 

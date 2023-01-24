@@ -1,11 +1,12 @@
+
+#ifndef MLPP_MLP_H
+#define MLPP_MLP_H
+
 //
 //  MLP.hpp
 //
 //  Created by Marc Melikyan on 11/4/20.
 //
-
-#ifndef MLPP_MLP_H
-#define MLPP_MLP_H
 
 #include <vector>
 #include <map>

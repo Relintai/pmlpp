@@ -1,12 +1,12 @@
+
+#ifndef MLPP_SOFTMAX_NET_H
+#define MLPP_SOFTMAX_NET_H
+
 //
 //  SoftmaxNet.hpp
 //
 //  Created by Marc Melikyan on 10/2/20.
 //
-
-#ifndef MLPP_SOFTMAX_NET_H
-#define MLPP_SOFTMAX_NET_H
-
 
 #include <vector>
 #include <string>

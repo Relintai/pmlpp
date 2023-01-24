@@ -1,3 +1,7 @@
+
+#ifndef MLPP_DATA_H
+#define MLPP_DATA_H
+
 //
 //  Data.hpp
 //  MLP
@@ -5,8 +9,6 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#ifndef MLPP_DATA_H
-#define MLPP_DATA_H
 
 #include <vector>
 #include <tuple>

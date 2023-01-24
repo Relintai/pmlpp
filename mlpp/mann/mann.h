@@ -1,11 +1,12 @@
+
+#ifndef MLPP_MANN_H
+#define MLPP_MANN_H
+
 //
 //  MANN.hpp
 //
 //  Created by Marc Melikyan on 11/4/20.
 //
-
-#ifndef MLPP_MANN_H
-#define MLPP_MANN_H
 
 #include "../hidden_layer/hidden_layer.h"
 #include "../multi_output_layer/multi_output_layer.h"

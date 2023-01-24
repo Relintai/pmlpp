@@ -1,11 +1,12 @@
+
+#ifndef MLPP_GAN_hpp
+#define MLPP_GAN_hpp
+
 //
 //  GAN.hpp
 //
 //  Created by Marc Melikyan on 11/4/20.
 //
-
-#ifndef MLPP_GAN_hpp
-#define MLPP_GAN_hpp
 
 #include "../hidden_layer/hidden_layer.h"
 #include "../output_layer/output_layer.h"
