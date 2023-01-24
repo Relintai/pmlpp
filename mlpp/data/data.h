@@ -5,8 +5,8 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#ifndef Data_hpp
-#define Data_hpp
+#ifndef MLPP_DATA_H
+#define MLPP_DATA_H
 
 #include <vector>
 #include <tuple>

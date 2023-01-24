@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 1/17/21.
 //
 
-#ifndef GaussianNB_hpp
-#define GaussianNB_hpp
+#ifndef MLPP_GAUSSIAN_NB_H
+#define MLPP_GAUSSIAN_NB_H
 
 #include <vector>
 

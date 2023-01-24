@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#ifndef PCA_hpp
-#define PCA_hpp
+#ifndef MLPP_PCA_H
+#define MLPP_PCA_H
 
 #include <vector>
 

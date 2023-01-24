@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#ifndef KMeans_hpp
-#define KMeans_hpp
+#ifndef MLPP_K_MEANS_H
+#define MLPP_K_MEANS_H
 
 #include <vector>
 #include <string>

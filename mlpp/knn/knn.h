@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#ifndef kNN_hpp
-#define kNN_hpp
+#ifndef MLPP_KNN_H
+#define MLPP_KNN_H
 
 #include <vector>
 

@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#ifndef ANN_hpp
-#define ANN_hpp
+#ifndef MLPP_ANN_H
+#define MLPP_ANN_H
 
 #include "hidden_layer/hidden_layer.h"
 #include "output_layer/output_layer.h"

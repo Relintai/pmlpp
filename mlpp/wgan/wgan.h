@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#ifndef WGAN_hpp
-#define WGAN_hpp
+#ifndef MLPP_WGAN_H
+#define MLPP_WGAN_H
 
 #include "../hidden_layer/hidden_layer.h"
 #include "../output_layer/output_layer.h"

@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 9/29/20.
 //
 
-#ifndef Stat_hpp
-#define Stat_hpp
+#ifndef MLPP_STAT_H
+#define MLPP_STAT_H
 
 #include <vector>
 

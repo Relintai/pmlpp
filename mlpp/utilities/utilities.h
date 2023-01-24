@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 1/16/21.
 //
 
-#ifndef Utilities_hpp
-#define Utilities_hpp
+#ifndef MLPP_UTILITIES_H
+#define MLPP_UTILITIES_H
 
 #include <vector>
 #include <tuple>

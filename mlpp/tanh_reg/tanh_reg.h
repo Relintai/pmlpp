@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#ifndef TanhReg_hpp
-#define TanhReg_hpp
+#ifndef MLPP_TANH_REG_H
+#define MLPP_TANH_REG_H
 
 
 #include <vector>

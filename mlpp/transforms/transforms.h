@@ -3,8 +3,8 @@
 //
 //
 
-#ifndef Transforms_hpp
-#define Transforms_hpp
+#ifndef MLPP_TRANSFORMS_H
+#define MLPP_TRANSFORMS_H
 
 #include <vector>
 #include <string>

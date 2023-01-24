@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#ifndef MLP_hpp
-#define MLP_hpp
+#ifndef MLPP_MLP_H
+#define MLPP_MLP_H
 
 #include <vector>
 #include <map>

@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#ifndef LinReg_hpp
-#define LinReg_hpp
+#ifndef MLPP_LIN_REG_H
+#define MLPP_LIN_REG_H
 
 #include <vector>
 #include <string>

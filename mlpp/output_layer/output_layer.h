@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#ifndef OutputLayer_hpp
-#define OutputLayer_hpp
+#ifndef MLPP_OUTPUT_LAYER_H
+#define MLPP_OUTPUT_LAYER_H
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"

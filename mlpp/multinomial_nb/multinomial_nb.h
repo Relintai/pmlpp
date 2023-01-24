@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 1/17/21.
 //
 
-#ifndef MultinomialNB_hpp
-#define MultinomialNB_hpp
+#ifndef MLPP_MULTINOMIAL_NB_H
+#define MLPP_MULTINOMIAL_NB_H
 
 #include <vector>
 #include <map>

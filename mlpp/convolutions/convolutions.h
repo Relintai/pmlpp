@@ -1,5 +1,6 @@
-#ifndef Convolutions_hpp
-#define Convolutions_hpp
+
+#ifndef MLPP_CONVOLUTIONS_H
+#define MLPP_CONVOLUTIONS_H
 
 #include <vector>
 

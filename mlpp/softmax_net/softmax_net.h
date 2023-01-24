@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#ifndef SoftmaxNet_hpp
-#define SoftmaxNet_hpp
+#ifndef MLPP_SOFTMAX_NET_H
+#define MLPP_SOFTMAX_NET_H
 
 
 #include <vector>

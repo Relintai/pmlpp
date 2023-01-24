@@ -7,8 +7,8 @@
 // http://ciml.info/dl/v0_99/ciml-v0_99-ch11.pdf
 // Were excellent for the practical intution behind the dual formulation. 
 
-#ifndef DualSVC_hpp
-#define DualSVC_hpp
+#ifndef MLPP_DUAL_SVC_H
+#define MLPP_DUAL_SVC_H
 
 
 #include <vector>

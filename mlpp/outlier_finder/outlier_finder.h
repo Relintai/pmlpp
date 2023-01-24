@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/13/20.
 //
 
-#ifndef OutlierFinder_hpp
-#define OutlierFinder_hpp
+#ifndef MLPP_OUTLIER_FINDER_H
+#define MLPP_OUTLIER_FINDER_H
 
 #include <vector>
 

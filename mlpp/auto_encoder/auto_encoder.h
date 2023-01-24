@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#ifndef AutoEncoder_hpp
-#define AutoEncoder_hpp
+#ifndef MLPP_AUTO_ENCODER_H
+#define MLPP_AUTO_ENCODER_H
 
 #include <vector>
 #include <tuple>

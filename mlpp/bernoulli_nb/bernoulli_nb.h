@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 1/17/21.
 //
 
-#ifndef BernoulliNB_hpp
-#define BernoulliNB_hpp
+#ifndef MLPP_BERNOULLI_NB_H
+#define MLPP_BERNOULLI_NB_H
 
 #include <vector>
 #include <map>

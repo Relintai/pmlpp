@@ -3,8 +3,8 @@
 //
 //
 
-#ifndef NumericalAnalysis_hpp
-#define NumericalAnalysis_hpp
+#ifndef MLPP_NUMERICAL_ANALYSIS_H
+#define MLPP_NUMERICAL_ANALYSIS_H
 
 #include <vector>
 #include <string>

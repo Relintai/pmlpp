@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 3/10/21.
 //
 
-#ifndef HypothesisTesting_hpp
-#define HypothesisTesting_hpp
+#ifndef MLPP_HYPOTHESIS_TESTING_H
+#define MLPP_HYPOTHESIS_TESTING_H
 
 #include <vector>
 #include <tuple>

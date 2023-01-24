@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 1/16/21.
 //
 
-#ifndef Cost_hpp
-#define Cost_hpp
+#ifndef MLPP_COST_H
+#define MLPP_COST_H
 
 #include <vector>
 

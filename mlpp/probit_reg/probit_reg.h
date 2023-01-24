@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#ifndef ProbitReg_hpp
-#define ProbitReg_hpp
+#ifndef MLPP_PROBIT_REG_H
+#define MLPP_PROBIT_REG_H
 
 
 #include <vector>

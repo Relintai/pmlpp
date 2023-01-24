@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 1/8/21.
 //
 
-#ifndef LinAlg_hpp
-#define LinAlg_hpp
+#ifndef MLPP_LIN_ALG_H
+#define MLPP_LIN_ALG_H
 
 #include <vector>
 #include <tuple>

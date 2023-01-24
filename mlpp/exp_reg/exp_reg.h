@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#ifndef ExpReg_hpp
-#define ExpReg_hpp
+#ifndef MLPP_EXP_REG_H
+#define MLPP_EXP_REG_H
 
 #include <vector>
 #include <string>

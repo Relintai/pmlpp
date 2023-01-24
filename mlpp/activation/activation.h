@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 1/16/21.
 //
 
-#ifndef Activation_hpp
-#define Activation_hpp
+#ifndef MLPP_ACTIVATION_H
+#define MLPP_ACTIVATION_H
 
 #include <vector>
 

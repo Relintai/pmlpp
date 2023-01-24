@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 1/16/21.
 //
 
-#ifndef Reg_hpp
-#define Reg_hpp
+#ifndef MLPP_REG_H
+#define MLPP_REG_H
 
 #include <vector>
 

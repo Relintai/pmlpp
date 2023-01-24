@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#ifndef SoftmaxReg_hpp
-#define SoftmaxReg_hpp
+#ifndef MLPP_SOFTMAX_REG_H
+#define MLPP_SOFTMAX_REG_H
 
 
 #include <vector>

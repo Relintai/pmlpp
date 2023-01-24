@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#ifndef MANN_hpp
-#define MANN_hpp
+#ifndef MLPP_MANN_H
+#define MLPP_MANN_H
 
 #include "../hidden_layer/hidden_layer.h"
 #include "../multi_output_layer/multi_output_layer.h"

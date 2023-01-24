@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#ifndef HiddenLayer_hpp
-#define HiddenLayer_hpp
+#ifndef MLPP_HIDDEN_LAYER_H
+#define MLPP_HIDDEN_LAYER_H
 
 #include "../activation/activation.h"
 

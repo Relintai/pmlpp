@@ -4,8 +4,8 @@
 //  Created by Marc Melikyan on 11/13/20.
 //
 
-#ifndef GaussMarkovChecker_hpp
-#define GaussMarkovChecker_hpp
+#ifndef MLPP_GAUSS_MARKOV_CHECKER_H
+#define MLPP_GAUSS_MARKOV_CHECKER_H
 
 #include <string>
 #include <vector>
