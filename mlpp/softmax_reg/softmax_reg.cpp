@@ -171,13 +171,13 @@ double SoftmaxReg::Cost(std::vector<std::vector<double>> y_hat, std::vector<std:
 
 std::vector<double> SoftmaxReg::Evaluate(std::vector<double> x) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	return avn.softmax(alg.addition(bias, alg.mat_vec_mult(alg.transpose(weights), x)));
 }
 
 std::vector<std::vector<double>> SoftmaxReg::Evaluate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 
 	return avn.softmax(alg.mat_vec_add(alg.matmult(X, weights), bias));
 }
@@ -185,7 +185,7 @@ std::vector<std::vector<double>> SoftmaxReg::Evaluate(std::vector<std::vector<do
 // softmax ( wTx + b )
 void SoftmaxReg::forwardPass() {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 
 	y_hat = avn.softmax(alg.mat_vec_add(alg.matmult(inputSet, weights), bias));
 }

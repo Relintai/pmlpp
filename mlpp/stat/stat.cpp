@@ -190,7 +190,7 @@ double Stat::heinzMean(const double A, const double B, const double x) {
 }
 
 double Stat::neumanSandorMean(const double a, const double b) {
-	Activation avn;
+	MLPPActivation avn;
 	return (a - b) / 2 * avn.arsinh((a - b) / (a + b));
 }
 

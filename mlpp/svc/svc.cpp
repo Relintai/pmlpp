@@ -32,7 +32,7 @@ double SVC::modelTest(std::vector<double> x) {
 
 void SVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class Cost cost;
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -65,7 +65,7 @@ void SVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 
 void SVC::SGD(double learning_rate, int max_epoch, bool UI) {
 	class Cost cost;
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 
@@ -108,7 +108,7 @@ void SVC::SGD(double learning_rate, int max_epoch, bool UI) {
 
 void SVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	class Cost cost;
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -165,32 +165,32 @@ double SVC::Cost(std::vector<double> z, std::vector<double> y, std::vector<doubl
 
 std::vector<double> SVC::Evaluate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	return avn.sign(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
 std::vector<double> SVC::propagate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
 double SVC::Evaluate(std::vector<double> x) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	return avn.sign(alg.dot(weights, x) + bias);
 }
 
 double SVC::propagate(std::vector<double> x) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	return alg.dot(weights, x) + bias;
 }
 
 // sign ( wTx + b )
 void SVC::forwardPass() {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 
 	z = propagate(inputSet);
 	y_hat = avn.sign(z);

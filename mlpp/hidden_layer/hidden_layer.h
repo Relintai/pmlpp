@@ -30,8 +30,8 @@ public:
 	std::vector<std::vector<double>> z;
 	std::vector<std::vector<double>> a;
 
-	std::map<std::string, std::vector<std::vector<double>> (Activation::*)(std::vector<std::vector<double>>, bool)> activation_map;
-	std::map<std::string, std::vector<double> (Activation::*)(std::vector<double>, bool)> activationTest_map;
+	std::map<std::string, std::vector<std::vector<double>> (MLPPActivation::*)(std::vector<std::vector<double>>, bool)> activation_map;
+	std::map<std::string, std::vector<double> (MLPPActivation::*)(std::vector<double>, bool)> activationTest_map;
 
 	std::vector<double> z_test;
 	std::vector<double> a_test;

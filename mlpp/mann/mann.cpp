@@ -54,7 +54,7 @@ std::vector<double> MANN::modelTest(std::vector<double> x) {
 
 void MANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class Cost cost;
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 

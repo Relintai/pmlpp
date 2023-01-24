@@ -122,7 +122,7 @@ int main() {
     // // OBJECTS
     Stat stat;
     LinAlg alg;
-    Activation avn;
+    MLPPActivation avn;
     Cost cost;
     Data data; 
     Convolutions conv; 

@@ -118,7 +118,7 @@ std::vector<std::vector<double>> Reg::regDerivTerm(std::vector<std::vector<doubl
 }
 
 double Reg::regDerivTerm(std::vector<double> weights, double lambda, double alpha, std::string reg, int j) {
-	Activation act;
+	MLPPActivation act;
 	if (reg == "Ridge") {
 		return lambda * weights[j];
 	} else if (reg == "Lasso") {
@@ -141,7 +141,7 @@ double Reg::regDerivTerm(std::vector<double> weights, double lambda, double alph
 }
 
 double Reg::regDerivTerm(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg, int i, int j) {
-	Activation act;
+	MLPPActivation act;
 	if (reg == "Ridge") {
 		return lambda * weights[i][j];
 	} else if (reg == "Lasso") {

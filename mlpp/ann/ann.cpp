@@ -720,7 +720,7 @@ void ANN::updateParameters(std::vector<std::vector<std::vector<double>>> hiddenL
 std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> ANN::computeGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
 	// std::cout << "BEGIN" << std::endl;
 	class Cost cost;
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 

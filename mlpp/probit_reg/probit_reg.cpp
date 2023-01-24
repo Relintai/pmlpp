@@ -31,7 +31,7 @@ double ProbitReg::modelTest(std::vector<double> x) {
 }
 
 void ProbitReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -64,7 +64,7 @@ void ProbitReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 }
 
 void ProbitReg::MLE(double learning_rate, int max_epoch, bool UI) {
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -98,7 +98,7 @@ void ProbitReg::MLE(double learning_rate, int max_epoch, bool UI) {
 
 void ProbitReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	// NOTE: ∂y_hat/∂z is sparse
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -139,7 +139,7 @@ void ProbitReg::SGD(double learning_rate, int max_epoch, bool UI) {
 }
 
 void ProbitReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -215,7 +215,7 @@ double ProbitReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
 
 std::vector<double> ProbitReg::Evaluate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	return avn.gaussianCDF(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
@@ -226,7 +226,7 @@ std::vector<double> ProbitReg::propagate(std::vector<std::vector<double>> X) {
 
 double ProbitReg::Evaluate(std::vector<double> x) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	return avn.gaussianCDF(alg.dot(weights, x) + bias);
 }
 
@@ -238,7 +238,7 @@ double ProbitReg::propagate(std::vector<double> x) {
 // gaussianCDF ( wTx + b )
 void ProbitReg::forwardPass() {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 
 	z = propagate(inputSet);
 	y_hat = avn.gaussianCDF(z);

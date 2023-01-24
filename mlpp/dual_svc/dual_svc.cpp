@@ -33,7 +33,7 @@ double DualSVC::modelTest(std::vector<double> x) {
 
 void DualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class Cost cost;
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -81,7 +81,7 @@ void DualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 
 // void DualSVC::SGD(double learning_rate, int max_epoch, bool UI){
 //     class Cost cost;
-//     Activation avn;
+//     MLPPActivation avn;
 //     LinAlg alg;
 //     Reg regularization;
 
@@ -114,7 +114,7 @@ void DualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 
 // void DualSVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI){
 //     class Cost cost;
-//     Activation avn;
+//     MLPPActivation avn;
 //     LinAlg alg;
 //     Reg regularization;
 //     double cost_prev = 0;
@@ -168,7 +168,7 @@ double DualSVC::Cost(std::vector<double> alpha, std::vector<std::vector<double>>
 }
 
 std::vector<double> DualSVC::Evaluate(std::vector<std::vector<double>> X) {
-	Activation avn;
+	MLPPActivation avn;
 	return avn.sign(propagate(X));
 }
 
@@ -189,7 +189,7 @@ std::vector<double> DualSVC::propagate(std::vector<std::vector<double>> X) {
 }
 
 double DualSVC::Evaluate(std::vector<double> x) {
-	Activation avn;
+	MLPPActivation avn;
 	return avn.sign(propagate(x));
 }
 
@@ -207,7 +207,7 @@ double DualSVC::propagate(std::vector<double> x) {
 
 void DualSVC::forwardPass() {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 
 	z = propagate(inputSet);
 	y_hat = avn.sign(z);

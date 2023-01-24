@@ -35,7 +35,7 @@ std::vector<std::vector<double>> SoftmaxNet::modelSetTest(std::vector<std::vecto
 }
 
 void SoftmaxNet::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -91,7 +91,7 @@ void SoftmaxNet::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 }
 
 void SoftmaxNet::SGD(double learning_rate, int max_epoch, bool UI) {
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -145,7 +145,7 @@ void SoftmaxNet::SGD(double learning_rate, int max_epoch, bool UI) {
 }
 
 void SoftmaxNet::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -252,7 +252,7 @@ double SoftmaxNet::Cost(std::vector<std::vector<double>> y_hat, std::vector<std:
 
 std::vector<std::vector<double>> SoftmaxNet::Evaluate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	std::vector<std::vector<double>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
 	std::vector<std::vector<double>> a2 = avn.sigmoid(z2);
 	return avn.adjSoftmax(alg.mat_vec_add(alg.matmult(a2, weights2), bias2));
@@ -260,7 +260,7 @@ std::vector<std::vector<double>> SoftmaxNet::Evaluate(std::vector<std::vector<do
 
 std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> SoftmaxNet::propagate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	std::vector<std::vector<double>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
 	std::vector<std::vector<double>> a2 = avn.sigmoid(z2);
 	return { z2, a2 };
@@ -268,7 +268,7 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> S
 
 std::vector<double> SoftmaxNet::Evaluate(std::vector<double> x) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	std::vector<double> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
 	std::vector<double> a2 = avn.sigmoid(z2);
 	return avn.adjSoftmax(alg.addition(alg.mat_vec_mult(alg.transpose(weights2), a2), bias2));
@@ -276,7 +276,7 @@ std::vector<double> SoftmaxNet::Evaluate(std::vector<double> x) {
 
 std::tuple<std::vector<double>, std::vector<double>> SoftmaxNet::propagate(std::vector<double> x) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	std::vector<double> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
 	std::vector<double> a2 = avn.sigmoid(z2);
 	return { z2, a2 };
@@ -284,7 +284,7 @@ std::tuple<std::vector<double>, std::vector<double>> SoftmaxNet::propagate(std::
 
 void SoftmaxNet::forwardPass() {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	z2 = alg.mat_vec_add(alg.matmult(inputSet, weights1), bias1);
 	a2 = avn.sigmoid(z2);
 	y_hat = avn.adjSoftmax(alg.mat_vec_add(alg.matmult(a2, weights2), bias2));

@@ -30,7 +30,7 @@ double CLogLogReg::modelTest(std::vector<double> x) {
 }
 
 void CLogLogReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -64,7 +64,7 @@ void CLogLogReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 }
 
 void CLogLogReg::MLE(double learning_rate, int max_epoch, bool UI) {
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -137,7 +137,7 @@ void CLogLogReg::SGD(double learning_rate, int max_epoch, bool UI) {
 }
 
 void CLogLogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -192,7 +192,7 @@ double CLogLogReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
 
 std::vector<double> CLogLogReg::Evaluate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	return avn.cloglog(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
@@ -203,7 +203,7 @@ std::vector<double> CLogLogReg::propagate(std::vector<std::vector<double>> X) {
 
 double CLogLogReg::Evaluate(std::vector<double> x) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	return avn.cloglog(alg.dot(weights, x) + bias);
 }
 
@@ -215,7 +215,7 @@ double CLogLogReg::propagate(std::vector<double> x) {
 // cloglog ( wTx + b )
 void CLogLogReg::forwardPass() {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 
 	z = propagate(inputSet);
 	y_hat = avn.cloglog(z);

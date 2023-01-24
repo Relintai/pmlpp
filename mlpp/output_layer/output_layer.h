@@ -32,8 +32,8 @@ public:
 	std::vector<double> z;
 	std::vector<double> a;
 
-	std::map<std::string, std::vector<double> (Activation::*)(std::vector<double>, bool)> activation_map;
-	std::map<std::string, double (Activation::*)(double, bool)> activationTest_map;
+	std::map<std::string, std::vector<double> (MLPPActivation::*)(std::vector<double>, bool)> activation_map;
+	std::map<std::string, double (MLPPActivation::*)(double, bool)> activationTest_map;
 	std::map<std::string, double (Cost::*)(std::vector<double>, std::vector<double>)> cost_map;
 	std::map<std::string, std::vector<double> (Cost::*)(std::vector<double>, std::vector<double>)> costDeriv_map;
 

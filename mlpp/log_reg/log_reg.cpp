@@ -188,13 +188,13 @@ double LogReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
 
 std::vector<double> LogReg::Evaluate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	return avn.sigmoid(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
 double LogReg::Evaluate(std::vector<double> x) {
 	LinAlg alg;
-	Activation avn;
+	MLPPActivation avn;
 	return avn.sigmoid(alg.dot(weights, x) + bias);
 }
 

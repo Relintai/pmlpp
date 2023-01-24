@@ -209,7 +209,7 @@ void GAN::updateGeneratorParameters(std::vector<std::vector<std::vector<double>>
 
 std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> GAN::computeDiscriminatorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
 	class Cost cost;
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 
@@ -245,7 +245,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> G
 
 std::vector<std::vector<std::vector<double>>> GAN::computeGeneratorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
 	class Cost cost;
-	Activation avn;
+	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
 

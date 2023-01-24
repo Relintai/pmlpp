@@ -10,7 +10,7 @@
 
 #include <vector>
 
-class Activation {
+class MLPPActivation {
 public:
 	double linear(double z, bool deriv = 0);
 	std::vector<double> linear(std::vector<double> z, bool deriv = 0);
