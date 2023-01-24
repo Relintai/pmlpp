@@ -4,7 +4,7 @@
 //  Created by Marc Melikyan on 1/8/21.
 //
 
-#include "lin_alg.hpp"
+#include "lin_alg.h"
 #include "../stat/stat.h"
 #include <cmath>
 #include <iostream>

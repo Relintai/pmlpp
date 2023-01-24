@@ -3,6 +3,7 @@
 #define MLPP_CONVOLUTIONS_H
 
 #include <vector>
+#include <string>
 
 namespace MLPP {
 class Convolutions {

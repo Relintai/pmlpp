@@ -4,7 +4,7 @@
 //  Created by Marc Melikyan on 1/16/21.
 //
 
-#include "cost.hpp"
+#include "cost.h"
 #include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
 #include <cmath>

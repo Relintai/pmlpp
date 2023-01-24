@@ -10,6 +10,7 @@
 //
 
 #include <vector>
+#include <string>
 
 namespace MLPP {
 class Reg {

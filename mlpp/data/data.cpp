@@ -5,7 +5,7 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
-#include "data.hpp"
+#include "data.h"
 #include "../lin_alg/lin_alg.h"
 #include "../softmax_net/softmax_net.h"
 #include "../stat/stat.h"

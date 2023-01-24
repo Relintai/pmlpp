@@ -184,12 +184,13 @@ void LinReg::normalEquation() {
 		x_means[i] = (stat.mean(inputSetT[i]));
 	}
 
-	try {
+	//try {
 		std::vector<double> temp;
 		temp.resize(k);
 		temp = alg.mat_vec_mult(alg.inverse(alg.matmult(alg.transpose(inputSet), inputSet)), alg.mat_vec_mult(alg.transpose(inputSet), outputSet));
 		if (std::isnan(temp[0])) {
-			throw 99;
+			//throw 99;
+			//TODO ERR_FAIL_COND
 		} else {
 			if (reg == "Ridge") {
 				weights = alg.mat_vec_mult(alg.inverse(alg.addition(alg.matmult(alg.transpose(inputSet), inputSet), alg.scalarMultiply(lambda, alg.identity(k)))), alg.mat_vec_mult(alg.transpose(inputSet), outputSet));
@@ -201,9 +202,9 @@ void LinReg::normalEquation() {
 
 			forwardPass();
 		}
-	} catch (int err_num) {
-		std::cout << "ERR " << err_num << ": Resulting matrix was noninvertible/degenerate, and so the normal equation could not be performed. Try utilizing gradient descent." << std::endl;
-	}
+	//} catch (int err_num) {
+	//	std::cout << "ERR " << err_num << ": Resulting matrix was noninvertible/degenerate, and so the normal equation could not be performed. Try utilizing gradient descent." << std::endl;
+	//}
 }
 
 double LinReg::score() {

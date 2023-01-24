@@ -4,7 +4,7 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
-#include "svc.hpp"
+#include "svc.h"
 #include "../activation/activation.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"

@@ -4,7 +4,7 @@
 //  Created by Marc Melikyan on 9/29/20.
 //
 
-#include "stat.hpp"
+#include "stat.h"
 #include "../activation/activation.h"
 #include "../data/data.h"
 #include "../lin_alg/lin_alg.h"
