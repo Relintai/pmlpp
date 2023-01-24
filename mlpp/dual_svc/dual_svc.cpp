@@ -15,7 +15,7 @@
 #include <random>
 
 
-DualSVC::DualSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C, std::string kernel) :
+MLPPDualSVC::MLPPDualSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C, std::string kernel) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), C(C), kernel(kernel) {
 	y_hat.resize(n);
 	bias = Utilities::biasInitialization();
@@ -23,15 +23,15 @@ DualSVC::DualSVC(std::vector<std::vector<double>> inputSet, std::vector<double> 
 	K = kernelFunction(inputSet, inputSet, kernel); // For now this is unused. When non-linear kernels are added, the K will be manipulated.
 }
 
-std::vector<double> DualSVC::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPDualSVC::modelSetTest(std::vector<std::vector<double>> X) {
 	return Evaluate(X);
 }
 
-double DualSVC::modelTest(std::vector<double> x) {
+double MLPPDualSVC::modelTest(std::vector<double> x) {
 	return Evaluate(x);
 }
 
-void DualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	LinAlg alg;
@@ -79,7 +79,7 @@ void DualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-// void DualSVC::SGD(double learning_rate, int max_epoch, bool UI){
+// void MLPPDualSVC::SGD(double learning_rate, int max_epoch, bool UI){
 //     class MLPPCost cost;
 //     MLPPActivation avn;
 //     LinAlg alg;
@@ -112,7 +112,7 @@ void DualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 //     forwardPass();
 // }
 
-// void DualSVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI){
+// void MLPPDualSVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI){
 //     class MLPPCost cost;
 //     MLPPActivation avn;
 //     LinAlg alg;
@@ -152,27 +152,27 @@ void DualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 //     forwardPass();
 // }
 
-double DualSVC::score() {
+double MLPPDualSVC::score() {
 	Utilities util;
 	return util.performance(y_hat, outputSet);
 }
 
-void DualSVC::save(std::string fileName) {
+void MLPPDualSVC::save(std::string fileName) {
 	Utilities util;
 	util.saveParameters(fileName, alpha, bias);
 }
 
-double DualSVC::Cost(std::vector<double> alpha, std::vector<std::vector<double>> X, std::vector<double> y) {
+double MLPPDualSVC::Cost(std::vector<double> alpha, std::vector<std::vector<double>> X, std::vector<double> y) {
 	class MLPPCost cost;
 	return cost.dualFormSVM(alpha, X, y);
 }
 
-std::vector<double> DualSVC::Evaluate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPDualSVC::Evaluate(std::vector<std::vector<double>> X) {
 	MLPPActivation avn;
 	return avn.sign(propagate(X));
 }
 
-std::vector<double> DualSVC::propagate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPDualSVC::propagate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
 	std::vector<double> z;
 	for (int i = 0; i < X.size(); i++) {
@@ -188,12 +188,12 @@ std::vector<double> DualSVC::propagate(std::vector<std::vector<double>> X) {
 	return z;
 }
 
-double DualSVC::Evaluate(std::vector<double> x) {
+double MLPPDualSVC::Evaluate(std::vector<double> x) {
 	MLPPActivation avn;
 	return avn.sign(propagate(x));
 }
 
-double DualSVC::propagate(std::vector<double> x) {
+double MLPPDualSVC::propagate(std::vector<double> x) {
 	LinAlg alg;
 	double z = 0;
 	for (int j = 0; j < alpha.size(); j++) {
@@ -205,7 +205,7 @@ double DualSVC::propagate(std::vector<double> x) {
 	return z;
 }
 
-void DualSVC::forwardPass() {
+void MLPPDualSVC::forwardPass() {
 	LinAlg alg;
 	MLPPActivation avn;
 
@@ -213,7 +213,7 @@ void DualSVC::forwardPass() {
 	y_hat = avn.sign(z);
 }
 
-void DualSVC::alphaProjection() {
+void MLPPDualSVC::alphaProjection() {
 	for (int i = 0; i < alpha.size(); i++) {
 		if (alpha[i] > C) {
 			alpha[i] = C;
@@ -223,14 +223,14 @@ void DualSVC::alphaProjection() {
 	}
 }
 
-double DualSVC::kernelFunction(std::vector<double> u, std::vector<double> v, std::string kernel) {
+double MLPPDualSVC::kernelFunction(std::vector<double> u, std::vector<double> v, std::string kernel) {
 	LinAlg alg;
 	if (kernel == "Linear") {
 		return alg.dot(u, v);
 	} // warning: non-void function does not return a value in all control paths [-Wreturn-type]
 }
 
-std::vector<std::vector<double>> DualSVC::kernelFunction(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B, std::string kernel) {
+std::vector<std::vector<double>> MLPPDualSVC::kernelFunction(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B, std::string kernel) {
 	LinAlg alg;
 	if (kernel == "Linear") {
 		return alg.matmult(inputSet, alg.transpose(inputSet));

@@ -9,7 +9,7 @@
 #include <iostream>
 
 
-void GaussMarkovChecker::checkGMConditions(std::vector<double> eps) {
+void MLPPGaussMarkovChecker::checkGMConditions(std::vector<double> eps) {
 	bool condition1 = arithmeticMean(eps);
 	bool condition2 = homoscedasticity(eps);
 	bool condition3 = exogeneity(eps);
@@ -21,7 +21,7 @@ void GaussMarkovChecker::checkGMConditions(std::vector<double> eps) {
 	}
 }
 
-bool GaussMarkovChecker::arithmeticMean(std::vector<double> eps) {
+bool MLPPGaussMarkovChecker::arithmeticMean(std::vector<double> eps) {
 	Stat stat;
 	if (stat.mean(eps) == 0) {
 		return 1;
@@ -30,7 +30,7 @@ bool GaussMarkovChecker::arithmeticMean(std::vector<double> eps) {
 	}
 }
 
-bool GaussMarkovChecker::homoscedasticity(std::vector<double> eps) {
+bool MLPPGaussMarkovChecker::homoscedasticity(std::vector<double> eps) {
 	Stat stat;
 	double currentVar = (eps[0] - stat.mean(eps)) * (eps[0] - stat.mean(eps)) / eps.size();
 	for (int i = 0; i < eps.size(); i++) {
@@ -41,7 +41,7 @@ bool GaussMarkovChecker::homoscedasticity(std::vector<double> eps) {
 	return 1;
 }
 
-bool GaussMarkovChecker::exogeneity(std::vector<double> eps) {
+bool MLPPGaussMarkovChecker::exogeneity(std::vector<double> eps) {
 	Stat stat;
 	for (int i = 0; i < eps.size(); i++) {
 		for (int j = 0; j < eps.size(); j++) {

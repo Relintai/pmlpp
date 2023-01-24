@@ -245,7 +245,7 @@ std::vector<std::vector<double>> SoftmaxNet::getEmbeddings() {
 
 double SoftmaxNet::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
 	Reg regularization;
-	Data data;
+	MLPPData data;
 	class MLPPCost cost;
 	return cost.CrossEntropy(y_hat, y) + regularization.regTerm(weights1, lambda, alpha, reg) + regularization.regTerm(weights2, lambda, alpha, reg);
 }

@@ -75,7 +75,7 @@ double MLPPBernoulliNB::score() {
 
 void MLPPBernoulliNB::computeVocab() {
 	LinAlg alg;
-	Data data;
+	MLPPData data;
 	vocab = data.vecToSet<double>(alg.flatten(inputSet));
 }
 

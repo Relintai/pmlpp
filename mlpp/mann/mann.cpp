@@ -141,10 +141,10 @@ void MANN::save(std::string fileName) {
 
 void MANN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, double lambda, double alpha) {
 	if (network.empty()) {
-		network.push_back(HiddenLayer(n_hidden, activation, inputSet, weightInit, reg, lambda, alpha));
+		network.push_back(MLPPHiddenLayer(n_hidden, activation, inputSet, weightInit, reg, lambda, alpha));
 		network[0].forwardPass();
 	} else {
-		network.push_back(HiddenLayer(n_hidden, activation, network[network.size() - 1].a, weightInit, reg, lambda, alpha));
+		network.push_back(MLPPHiddenLayer(n_hidden, activation, network[network.size() - 1].a, weightInit, reg, lambda, alpha));
 		network[network.size() - 1].forwardPass();
 	}
 }

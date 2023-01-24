@@ -42,7 +42,7 @@ double Stat::median(std::vector<double> x) {
 }
 
 std::vector<double> Stat::mode(const std::vector<double> &x) {
-	Data data;
+	MLPPData data;
 	std::vector<double> x_set = data.vecToSet(x);
 	std::map<double, int> element_num;
 	for (int i = 0; i < x_set.size(); i++) {

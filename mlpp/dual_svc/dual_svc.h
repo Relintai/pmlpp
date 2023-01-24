@@ -16,10 +16,10 @@
 
 
 
-class DualSVC {
+class MLPPDualSVC {
 public:
-	DualSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C, std::string kernel = "Linear");
-	DualSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C, std::string kernel, double p, double c);
+	MLPPDualSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C, std::string kernel = "Linear");
+	MLPPDualSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C, std::string kernel, double p, double c);
 
 	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
 	double modelTest(std::vector<double> x);

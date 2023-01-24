@@ -14,14 +14,14 @@
 #include <random>
 
 
-GaussianNB::GaussianNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num) :
+MLPPGaussianNB::MLPPGaussianNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num) :
 		inputSet(inputSet), outputSet(outputSet), class_num(class_num) {
 	y_hat.resize(outputSet.size());
 	Evaluate();
 	LinAlg alg;
 }
 
-std::vector<double> GaussianNB::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPGaussianNB::modelSetTest(std::vector<std::vector<double>> X) {
 	std::vector<double> y_hat;
 	for (int i = 0; i < X.size(); i++) {
 		y_hat.push_back(modelTest(X[i]));
@@ -29,7 +29,7 @@ std::vector<double> GaussianNB::modelSetTest(std::vector<std::vector<double>> X)
 	return y_hat;
 }
 
-double GaussianNB::modelTest(std::vector<double> x) {
+double MLPPGaussianNB::modelTest(std::vector<double> x) {
 	Stat stat;
 	LinAlg alg;
 
@@ -42,12 +42,12 @@ double GaussianNB::modelTest(std::vector<double> x) {
 	return std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(double)));
 }
 
-double GaussianNB::score() {
+double MLPPGaussianNB::score() {
 	Utilities util;
 	return util.performance(y_hat, outputSet);
 }
 
-void GaussianNB::Evaluate() {
+void MLPPGaussianNB::Evaluate() {
 	Stat stat;
 	LinAlg alg;
 

@@ -11,9 +11,9 @@
 #include <vector>
 
 
-class GaussianNB {
+class MLPPGaussianNB {
 public:
-	GaussianNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num);
+	MLPPGaussianNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num);
 	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
 	double modelTest(std::vector<double> x);
 	double score();

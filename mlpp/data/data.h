@@ -14,7 +14,7 @@
 #include <vector>
 
 
-class Data {
+class MLPPData {
 public:
 	// Load Datasets
 	std::tuple<std::vector<std::vector<double>>, std::vector<double>> loadBreastCancer();

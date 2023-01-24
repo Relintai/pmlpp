@@ -15,7 +15,7 @@
 #include <random>
 
 
-ExpReg::ExpReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
+MLPPExpReg::MLPPExpReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
 	weights = Utilities::weightInitialization(k);
@@ -23,15 +23,15 @@ ExpReg::ExpReg(std::vector<std::vector<double>> inputSet, std::vector<double> ou
 	bias = Utilities::biasInitialization();
 }
 
-std::vector<double> ExpReg::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPExpReg::modelSetTest(std::vector<std::vector<double>> X) {
 	return Evaluate(X);
 }
 
-double ExpReg::modelTest(std::vector<double> x) {
+double MLPPExpReg::modelTest(std::vector<double> x) {
 	return Evaluate(x);
 }
 
-void ExpReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPExpReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -88,7 +88,7 @@ void ExpReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void ExpReg::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPExpReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	Reg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -134,7 +134,7 @@ void ExpReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void ExpReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPExpReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -193,23 +193,23 @@ void ExpReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool
 	forwardPass();
 }
 
-double ExpReg::score() {
+double MLPPExpReg::score() {
 	Utilities util;
 	return util.performance(y_hat, outputSet);
 }
 
-void ExpReg::save(std::string fileName) {
+void MLPPExpReg::save(std::string fileName) {
 	Utilities util;
 	util.saveParameters(fileName, weights, initial, bias);
 }
 
-double ExpReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
+double MLPPExpReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
 	Reg regularization;
 	class MLPPCost cost;
 	return cost.MSE(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 
-std::vector<double> ExpReg::Evaluate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPExpReg::Evaluate(std::vector<std::vector<double>> X) {
 	std::vector<double> y_hat;
 	y_hat.resize(X.size());
 	for (int i = 0; i < X.size(); i++) {
@@ -222,7 +222,7 @@ std::vector<double> ExpReg::Evaluate(std::vector<std::vector<double>> X) {
 	return y_hat;
 }
 
-double ExpReg::Evaluate(std::vector<double> x) {
+double MLPPExpReg::Evaluate(std::vector<double> x) {
 	double y_hat = 0;
 	for (int i = 0; i < x.size(); i++) {
 		y_hat += initial[i] * std::pow(weights[i], x[i]);
@@ -232,6 +232,6 @@ double ExpReg::Evaluate(std::vector<double> x) {
 }
 
 // a * w^x + b
-void ExpReg::forwardPass() {
+void MLPPExpReg::forwardPass() {
 	y_hat = Evaluate(inputSet);
 }

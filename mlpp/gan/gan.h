@@ -17,10 +17,10 @@
 
 
 
-class GAN {
+class MLPPGAN {
 public:
-	GAN(double k, std::vector<std::vector<double>> outputSet);
-	~GAN();
+	MLPPGAN(double k, std::vector<std::vector<double>> outputSet);
+	~MLPPGAN();
 	std::vector<std::vector<double>> generateExample(int n);
 	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);
 	double score();
@@ -46,7 +46,7 @@ private:
 	std::vector<std::vector<double>> outputSet;
 	std::vector<double> y_hat;
 
-	std::vector<HiddenLayer> network;
+	std::vector<MLPPHiddenLayer> network;
 	OutputLayer *outputLayer;
 
 	int n;

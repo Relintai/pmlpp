@@ -19,7 +19,7 @@ PCA::PCA(std::vector<std::vector<double>> inputSet, int k) :
 
 std::vector<std::vector<double>> PCA::principalComponents() {
 	LinAlg alg;
-	Data data;
+	MLPPData data;
 
 	auto [U, S, Vt] = alg.SVD(alg.cov(inputSet));
 	X_normalized = data.meanCentering(inputSet);

@@ -12,7 +12,7 @@
 #include <vector>
 
 
-class GaussMarkovChecker {
+class MLPPGaussMarkovChecker {
 public:
 	void checkGMConditions(std::vector<double> eps);
 

@@ -15,9 +15,9 @@
 #include <vector>
 
 
-class HiddenLayer {
+class MLPPHiddenLayer {
 public:
-	HiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha);
+	MLPPHiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha);
 
 	int n_hidden;
 	std::string activation;
