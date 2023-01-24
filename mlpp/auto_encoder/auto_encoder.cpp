@@ -13,7 +13,7 @@
 #include <iostream>
 #include <random>
 
-AutoEncoder::AutoEncoder(std::vector<std::vector<double>> inputSet, int n_hidden) :
+MLPPAutoEncoder::MLPPAutoEncoder(std::vector<std::vector<double>> inputSet, int n_hidden) :
 		inputSet(inputSet), n_hidden(n_hidden), n(inputSet.size()), k(inputSet[0].size()) {
 	MLPPActivation avn;
 	y_hat.resize(inputSet.size());
@@ -24,15 +24,15 @@ AutoEncoder::AutoEncoder(std::vector<std::vector<double>> inputSet, int n_hidden
 	bias2 = Utilities::biasInitialization(k);
 }
 
-std::vector<std::vector<double>> AutoEncoder::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<std::vector<double>> MLPPAutoEncoder::modelSetTest(std::vector<std::vector<double>> X) {
 	return Evaluate(X);
 }
 
-std::vector<double> AutoEncoder::modelTest(std::vector<double> x) {
+std::vector<double> MLPPAutoEncoder::modelTest(std::vector<double> x) {
 	return Evaluate(x);
 }
 
-void AutoEncoder::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPAutoEncoder::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
 	LinAlg alg;
 	double cost_prev = 0;
@@ -85,7 +85,7 @@ void AutoEncoder::gradientDescent(double learning_rate, int max_epoch, bool UI) 
 	}
 }
 
-void AutoEncoder::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPAutoEncoder::SGD(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
 	LinAlg alg;
 	double cost_prev = 0;
@@ -136,7 +136,7 @@ void AutoEncoder::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void AutoEncoder::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPAutoEncoder::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPActivation avn;
 	LinAlg alg;
 	double cost_prev = 0;
@@ -196,23 +196,23 @@ void AutoEncoder::MBGD(double learning_rate, int max_epoch, int mini_batch_size,
 	forwardPass();
 }
 
-double AutoEncoder::score() {
+double MLPPAutoEncoder::score() {
 	Utilities util;
 	return util.performance(y_hat, inputSet);
 }
 
-void AutoEncoder::save(std::string fileName) {
+void MLPPAutoEncoder::save(std::string fileName) {
 	Utilities util;
 	util.saveParameters(fileName, weights1, bias1, 0, 1);
 	util.saveParameters(fileName, weights2, bias2, 1, 2);
 }
 
-double AutoEncoder::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
+double MLPPAutoEncoder::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
 	class Cost cost;
 	return cost.MSE(y_hat, inputSet);
 }
 
-std::vector<std::vector<double>> AutoEncoder::Evaluate(std::vector<std::vector<double>> X) {
+std::vector<std::vector<double>> MLPPAutoEncoder::Evaluate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
 	MLPPActivation avn;
 	std::vector<std::vector<double>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
@@ -220,7 +220,7 @@ std::vector<std::vector<double>> AutoEncoder::Evaluate(std::vector<std::vector<d
 	return alg.mat_vec_add(alg.matmult(a2, weights2), bias2);
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> AutoEncoder::propagate(std::vector<std::vector<double>> X) {
+std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPAutoEncoder::propagate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
 	MLPPActivation avn;
 	std::vector<std::vector<double>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
@@ -228,7 +228,7 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> A
 	return { z2, a2 };
 }
 
-std::vector<double> AutoEncoder::Evaluate(std::vector<double> x) {
+std::vector<double> MLPPAutoEncoder::Evaluate(std::vector<double> x) {
 	LinAlg alg;
 	MLPPActivation avn;
 	std::vector<double> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
@@ -236,7 +236,7 @@ std::vector<double> AutoEncoder::Evaluate(std::vector<double> x) {
 	return alg.addition(alg.mat_vec_mult(alg.transpose(weights2), a2), bias2);
 }
 
-std::tuple<std::vector<double>, std::vector<double>> AutoEncoder::propagate(std::vector<double> x) {
+std::tuple<std::vector<double>, std::vector<double>> MLPPAutoEncoder::propagate(std::vector<double> x) {
 	LinAlg alg;
 	MLPPActivation avn;
 	std::vector<double> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
@@ -244,7 +244,7 @@ std::tuple<std::vector<double>, std::vector<double>> AutoEncoder::propagate(std:
 	return { z2, a2 };
 }
 
-void AutoEncoder::forwardPass() {
+void MLPPAutoEncoder::forwardPass() {
 	LinAlg alg;
 	MLPPActivation avn;
 	z2 = alg.mat_vec_add(alg.matmult(inputSet, weights1), bias1);

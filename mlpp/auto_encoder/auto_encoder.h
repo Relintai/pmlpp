@@ -12,9 +12,9 @@
 #include <tuple>
 #include <vector>
 
-class AutoEncoder {
+class MLPPAutoEncoder {
 public:
-	AutoEncoder(std::vector<std::vector<double>> inputSet, int n_hidden);
+	MLPPAutoEncoder(std::vector<std::vector<double>> inputSet, int n_hidden);
 	std::vector<std::vector<double>> modelSetTest(std::vector<std::vector<double>> X);
 	std::vector<double> modelTest(std::vector<double> x);
 	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);

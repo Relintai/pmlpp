@@ -14,22 +14,22 @@
 #include <iostream>
 #include <random>
 
-CLogLogReg::CLogLogReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
+MLPPCLogLogReg::MLPPCLogLogReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
 	weights = Utilities::weightInitialization(k);
 	bias = Utilities::biasInitialization();
 }
 
-std::vector<double> CLogLogReg::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPCLogLogReg::modelSetTest(std::vector<std::vector<double>> X) {
 	return Evaluate(X);
 }
 
-double CLogLogReg::modelTest(std::vector<double> x) {
+double MLPPCLogLogReg::modelTest(std::vector<double> x) {
 	return Evaluate(x);
 }
 
-void CLogLogReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPCLogLogReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
@@ -63,7 +63,7 @@ void CLogLogReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void CLogLogReg::MLE(double learning_rate, int max_epoch, bool UI) {
+void MLPPCLogLogReg::MLE(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
@@ -95,7 +95,7 @@ void CLogLogReg::MLE(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void CLogLogReg::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPCLogLogReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	LinAlg alg;
 	Reg regularization;
 	double cost_prev = 0;
@@ -136,7 +136,7 @@ void CLogLogReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void CLogLogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPCLogLogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
@@ -179,41 +179,41 @@ void CLogLogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, 
 	forwardPass();
 }
 
-double CLogLogReg::score() {
+double MLPPCLogLogReg::score() {
 	Utilities util;
 	return util.performance(y_hat, outputSet);
 }
 
-double CLogLogReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
+double MLPPCLogLogReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
 	Reg regularization;
 	class Cost cost;
 	return cost.MSE(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 
-std::vector<double> CLogLogReg::Evaluate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPCLogLogReg::Evaluate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
 	MLPPActivation avn;
 	return avn.cloglog(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
-std::vector<double> CLogLogReg::propagate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPCLogLogReg::propagate(std::vector<std::vector<double>> X) {
 	LinAlg alg;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
-double CLogLogReg::Evaluate(std::vector<double> x) {
+double MLPPCLogLogReg::Evaluate(std::vector<double> x) {
 	LinAlg alg;
 	MLPPActivation avn;
 	return avn.cloglog(alg.dot(weights, x) + bias);
 }
 
-double CLogLogReg::propagate(std::vector<double> x) {
+double MLPPCLogLogReg::propagate(std::vector<double> x) {
 	LinAlg alg;
 	return alg.dot(weights, x) + bias;
 }
 
 // cloglog ( wTx + b )
-void CLogLogReg::forwardPass() {
+void MLPPCLogLogReg::forwardPass() {
 	LinAlg alg;
 	MLPPActivation avn;
 

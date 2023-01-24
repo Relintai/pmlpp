@@ -14,10 +14,10 @@
 #include <tuple>
 #include <vector>
 
-class ANN {
+class MLPPANN {
 public:
-	ANN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet);
-	~ANN();
+	MLPPANN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet);
+	~MLPPANN();
 	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
 	double modelTest(std::vector<double> x);
 	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);

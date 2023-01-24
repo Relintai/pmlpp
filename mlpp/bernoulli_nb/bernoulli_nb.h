@@ -11,9 +11,9 @@
 #include <map>
 #include <vector>
 
-class BernoulliNB {
+class MLPPBernoulliNB {
 public:
-	BernoulliNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet);
+	MLPPBernoulliNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet);
 	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
 	double modelTest(std::vector<double> x);
 	double score();

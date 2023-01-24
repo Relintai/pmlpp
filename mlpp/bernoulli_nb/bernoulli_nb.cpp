@@ -12,13 +12,13 @@
 #include <iostream>
 #include <random>
 
-BernoulliNB::BernoulliNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet) :
+MLPPBernoulliNB::MLPPBernoulliNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet) :
 		inputSet(inputSet), outputSet(outputSet), class_num(2) {
 	y_hat.resize(outputSet.size());
 	Evaluate();
 }
 
-std::vector<double> BernoulliNB::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPBernoulliNB::modelSetTest(std::vector<std::vector<double>> X) {
 	std::vector<double> y_hat;
 	for (int i = 0; i < X.size(); i++) {
 		y_hat.push_back(modelTest(X[i]));
@@ -26,7 +26,7 @@ std::vector<double> BernoulliNB::modelSetTest(std::vector<std::vector<double>> X
 	return y_hat;
 }
 
-double BernoulliNB::modelTest(std::vector<double> x) {
+double MLPPBernoulliNB::modelTest(std::vector<double> x) {
 	double score_0 = 1;
 	double score_1 = 1;
 
@@ -68,18 +68,18 @@ double BernoulliNB::modelTest(std::vector<double> x) {
 	}
 }
 
-double BernoulliNB::score() {
+double MLPPBernoulliNB::score() {
 	Utilities util;
 	return util.performance(y_hat, outputSet);
 }
 
-void BernoulliNB::computeVocab() {
+void MLPPBernoulliNB::computeVocab() {
 	LinAlg alg;
 	Data data;
 	vocab = data.vecToSet<double>(alg.flatten(inputSet));
 }
 
-void BernoulliNB::computeTheta() {
+void MLPPBernoulliNB::computeTheta() {
 	// Resizing theta for the sake of ease & proper access of the elements.
 	theta.resize(class_num);
 
@@ -107,7 +107,7 @@ void BernoulliNB::computeTheta() {
 	}
 }
 
-void BernoulliNB::Evaluate() {
+void MLPPBernoulliNB::Evaluate() {
 	for (int i = 0; i < outputSet.size(); i++) {
 		// Pr(B | A) * Pr(A)
 		double score_0 = 1;

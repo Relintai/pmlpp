@@ -15,15 +15,15 @@
 #include <iostream>
 #include <random>
 
-ANN::ANN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet) :
+MLPPANN::MLPPANN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), lrScheduler("None"), decayConstant(0), dropRate(0) {
 }
 
-ANN::~ANN() {
+MLPPANN::~MLPPANN() {
 	delete outputLayer;
 }
 
-std::vector<double> ANN::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPANN::modelSetTest(std::vector<std::vector<double>> X) {
 	if (!network.empty()) {
 		network[0].input = X;
 		network[0].forwardPass();
@@ -40,7 +40,7 @@ std::vector<double> ANN::modelSetTest(std::vector<std::vector<double>> X) {
 	return outputLayer->a;
 }
 
-double ANN::modelTest(std::vector<double> x) {
+double MLPPANN::modelTest(std::vector<double> x) {
 	if (!network.empty()) {
 		network[0].Test(x);
 		for (int i = 1; i < network.size(); i++) {
@@ -53,7 +53,7 @@ double ANN::modelTest(std::vector<double> x) {
 	return outputLayer->a_test;
 }
 
-void ANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class Cost cost;
 	LinAlg alg;
 	double cost_prev = 0;
@@ -77,7 +77,7 @@ void ANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 		forwardPass();
 
 		if (UI) {
-			ANN::UI(epoch, cost_prev, y_hat, outputSet);
+			MLPPANN::UI(epoch, cost_prev, y_hat, outputSet);
 		}
 
 		epoch++;
@@ -87,7 +87,7 @@ void ANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void ANN::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPANN::SGD(double learning_rate, int max_epoch, bool UI) {
 	class Cost cost;
 	LinAlg alg;
 
@@ -114,7 +114,7 @@ void ANN::SGD(double learning_rate, int max_epoch, bool UI) {
 		y_hat = modelSetTest({ inputSet[outputIndex] });
 
 		if (UI) {
-			ANN::UI(epoch, cost_prev, y_hat, { outputSet[outputIndex] });
+			MLPPANN::UI(epoch, cost_prev, y_hat, { outputSet[outputIndex] });
 		}
 
 		epoch++;
@@ -125,7 +125,7 @@ void ANN::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void ANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	class Cost cost;
 	LinAlg alg;
 
@@ -152,7 +152,7 @@ void ANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI
 			y_hat = modelSetTest(inputMiniBatches[i]);
 
 			if (UI) {
-				ANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
+				MLPPANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
 			}
 		}
 		epoch++;
@@ -163,7 +163,7 @@ void ANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI
 	forwardPass();
 }
 
-void ANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size, double gamma, bool NAG, bool UI) {
+void MLPPANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size, double gamma, bool NAG, bool UI) {
 	class Cost cost;
 	LinAlg alg;
 
@@ -209,7 +209,7 @@ void ANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size, dou
 			y_hat = modelSetTest(inputMiniBatches[i]);
 
 			if (UI) {
-				ANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
+				MLPPANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
 			}
 		}
 		epoch++;
@@ -220,7 +220,7 @@ void ANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size, dou
 	forwardPass();
 }
 
-void ANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, double e, bool UI) {
+void MLPPANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, double e, bool UI) {
 	class Cost cost;
 	LinAlg alg;
 
@@ -265,7 +265,7 @@ void ANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, doub
 			y_hat = modelSetTest(inputMiniBatches[i]);
 
 			if (UI) {
-				ANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
+				MLPPANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
 			}
 		}
 		epoch++;
@@ -276,7 +276,7 @@ void ANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, doub
 	forwardPass();
 }
 
-void ANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size, double b1, double e, bool UI) {
+void MLPPANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size, double b1, double e, bool UI) {
 	class Cost cost;
 	LinAlg alg;
 
@@ -321,7 +321,7 @@ void ANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size, dou
 			y_hat = modelSetTest(inputMiniBatches[i]);
 
 			if (UI) {
-				ANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
+				MLPPANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
 			}
 		}
 		epoch++;
@@ -332,7 +332,7 @@ void ANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size, dou
 	forwardPass();
 }
 
-void ANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
+void MLPPANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
 	class Cost cost;
 	LinAlg alg;
 
@@ -388,7 +388,7 @@ void ANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, double 
 			y_hat = modelSetTest(inputMiniBatches[i]);
 
 			if (UI) {
-				ANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
+				MLPPANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
 			}
 		}
 		epoch++;
@@ -399,7 +399,7 @@ void ANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, double 
 	forwardPass();
 }
 
-void ANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
+void MLPPANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
 	class Cost cost;
 	LinAlg alg;
 
@@ -453,7 +453,7 @@ void ANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, doubl
 			y_hat = modelSetTest(inputMiniBatches[i]);
 
 			if (UI) {
-				ANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
+				MLPPANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
 			}
 		}
 		epoch++;
@@ -464,7 +464,7 @@ void ANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, doubl
 	forwardPass();
 }
 
-void ANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
+void MLPPANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
 	class Cost cost;
 	LinAlg alg;
 
@@ -523,7 +523,7 @@ void ANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, double
 			y_hat = modelSetTest(inputMiniBatches[i]);
 
 			if (UI) {
-				ANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
+				MLPPANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
 			}
 		}
 		epoch++;
@@ -534,7 +534,7 @@ void ANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, double
 	forwardPass();
 }
 
-void ANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
+void MLPPANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
 	class Cost cost;
 	LinAlg alg;
 
@@ -594,7 +594,7 @@ void ANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, doub
 			y_hat = modelSetTest(inputMiniBatches[i]);
 
 			if (UI) {
-				ANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
+				MLPPANN::UI(epoch, cost_prev, y_hat, outputMiniBatches[i]);
 			}
 		}
 		epoch++;
@@ -605,13 +605,13 @@ void ANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, doub
 	forwardPass();
 }
 
-double ANN::score() {
+double MLPPANN::score() {
 	Utilities util;
 	forwardPass();
 	return util.performance(y_hat, outputSet);
 }
 
-void ANN::save(std::string fileName) {
+void MLPPANN::save(std::string fileName) {
 	Utilities util;
 	if (!network.empty()) {
 		util.saveParameters(fileName, network[0].weights, network[0].bias, 0, 1);
@@ -624,20 +624,20 @@ void ANN::save(std::string fileName) {
 	}
 }
 
-void ANN::setLearningRateScheduler(std::string type, double decayConstant) {
+void MLPPANN::setLearningRateScheduler(std::string type, double decayConstant) {
 	lrScheduler = type;
-	ANN::decayConstant = decayConstant;
+	MLPPANN::decayConstant = decayConstant;
 }
 
-void ANN::setLearningRateScheduler(std::string type, double decayConstant, double dropRate) {
+void MLPPANN::setLearningRateScheduler(std::string type, double decayConstant, double dropRate) {
 	lrScheduler = type;
-	ANN::decayConstant = decayConstant;
-	ANN::dropRate = dropRate;
+	MLPPANN::decayConstant = decayConstant;
+	MLPPANN::dropRate = dropRate;
 }
 
 // https://en.wikipedia.org/wiki/Learning_rate
 // Learning Rate Decay (C2W2L09) - Andrew Ng - Deep Learning Specialization
-double ANN::applyLearningRateScheduler(double learningRate, double decayConstant, double epoch, double dropRate) {
+double MLPPANN::applyLearningRateScheduler(double learningRate, double decayConstant, double epoch, double dropRate) {
 	if (lrScheduler == "Time") {
 		return learningRate / (1 + decayConstant * epoch);
 	} else if (lrScheduler == "Epoch") {
@@ -650,7 +650,7 @@ double ANN::applyLearningRateScheduler(double learningRate, double decayConstant
 	return learningRate;
 }
 
-void ANN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, double lambda, double alpha) {
+void MLPPANN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, double lambda, double alpha) {
 	if (network.empty()) {
 		network.push_back(HiddenLayer(n_hidden, activation, inputSet, weightInit, reg, lambda, alpha));
 		network[0].forwardPass();
@@ -660,7 +660,7 @@ void ANN::addLayer(int n_hidden, std::string activation, std::string weightInit,
 	}
 }
 
-void ANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, double lambda, double alpha) {
+void MLPPANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, double lambda, double alpha) {
 	LinAlg alg;
 	if (!network.empty()) {
 		outputLayer = new OutputLayer(network[network.size() - 1].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
@@ -669,7 +669,7 @@ void ANN::addOutputLayer(std::string activation, std::string loss, std::string w
 	}
 }
 
-double ANN::Cost(std::vector<double> y_hat, std::vector<double> y) {
+double MLPPANN::Cost(std::vector<double> y_hat, std::vector<double> y) {
 	Reg regularization;
 	class Cost cost;
 	double totalRegTerm = 0;
@@ -683,7 +683,7 @@ double ANN::Cost(std::vector<double> y_hat, std::vector<double> y) {
 	return (cost.*cost_function)(y_hat, y) + totalRegTerm + regularization.regTerm(outputLayer->weights, outputLayer->lambda, outputLayer->alpha, outputLayer->reg);
 }
 
-void ANN::forwardPass() {
+void MLPPANN::forwardPass() {
 	if (!network.empty()) {
 		network[0].input = inputSet;
 		network[0].forwardPass();
@@ -700,7 +700,7 @@ void ANN::forwardPass() {
 	y_hat = outputLayer->a;
 }
 
-void ANN::updateParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, std::vector<double> outputLayerUpdation, double learning_rate) {
+void MLPPANN::updateParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, std::vector<double> outputLayerUpdation, double learning_rate) {
 	LinAlg alg;
 
 	outputLayer->weights = alg.subtraction(outputLayer->weights, outputLayerUpdation);
@@ -717,7 +717,7 @@ void ANN::updateParameters(std::vector<std::vector<std::vector<double>>> hiddenL
 	}
 }
 
-std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> ANN::computeGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
+std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> MLPPANN::computeGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
 	// std::cout << "BEGIN" << std::endl;
 	class Cost cost;
 	MLPPActivation avn;
@@ -749,7 +749,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> A
 	return { cumulativeHiddenLayerWGrad, outputWGrad };
 }
 
-void ANN::UI(int epoch, double cost_prev, std::vector<double> y_hat, std::vector<double> outputSet) {
+void MLPPANN::UI(int epoch, double cost_prev, std::vector<double> y_hat, std::vector<double> outputSet) {
 	Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
 	std::cout << "Layer " << network.size() + 1 << ": " << std::endl;
 	Utilities::UI(outputLayer->weights, outputLayer->bias);
