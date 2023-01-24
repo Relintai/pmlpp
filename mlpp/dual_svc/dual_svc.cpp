@@ -32,7 +32,7 @@ double DualSVC::modelTest(std::vector<double> x) {
 }
 
 void DualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
@@ -80,7 +80,7 @@ void DualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 }
 
 // void DualSVC::SGD(double learning_rate, int max_epoch, bool UI){
-//     class Cost cost;
+//     class MLPPCost cost;
 //     MLPPActivation avn;
 //     LinAlg alg;
 //     Reg regularization;
@@ -113,7 +113,7 @@ void DualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 // }
 
 // void DualSVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI){
-//     class Cost cost;
+//     class MLPPCost cost;
 //     MLPPActivation avn;
 //     LinAlg alg;
 //     Reg regularization;
@@ -163,7 +163,7 @@ void DualSVC::save(std::string fileName) {
 }
 
 double DualSVC::Cost(std::vector<double> alpha, std::vector<std::vector<double>> X, std::vector<double> y) {
-	class Cost cost;
+	class MLPPCost cost;
 	return cost.dualFormSVM(alpha, X, y);
 }
 

@@ -54,7 +54,7 @@ double MLPPANN::modelTest(std::vector<double> x) {
 }
 
 void MLPPANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -88,7 +88,7 @@ void MLPPANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPANN::SGD(double learning_rate, int max_epoch, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 
 	double cost_prev = 0;
@@ -126,7 +126,7 @@ void MLPPANN::SGD(double learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 
 	double cost_prev = 0;
@@ -164,7 +164,7 @@ void MLPPANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, boo
 }
 
 void MLPPANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size, double gamma, bool NAG, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 
 	double cost_prev = 0;
@@ -221,7 +221,7 @@ void MLPPANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size,
 }
 
 void MLPPANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, double e, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 
 	double cost_prev = 0;
@@ -277,7 +277,7 @@ void MLPPANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, 
 }
 
 void MLPPANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size, double b1, double e, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 
 	double cost_prev = 0;
@@ -333,7 +333,7 @@ void MLPPANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size,
 }
 
 void MLPPANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 
 	double cost_prev = 0;
@@ -400,7 +400,7 @@ void MLPPANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, dou
 }
 
 void MLPPANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 
 	double cost_prev = 0;
@@ -465,7 +465,7 @@ void MLPPANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, d
 }
 
 void MLPPANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 
 	double cost_prev = 0;
@@ -535,7 +535,7 @@ void MLPPANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, do
 }
 
 void MLPPANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 
 	double cost_prev = 0;
@@ -671,7 +671,7 @@ void MLPPANN::addOutputLayer(std::string activation, std::string loss, std::stri
 
 double MLPPANN::Cost(std::vector<double> y_hat, std::vector<double> y) {
 	Reg regularization;
-	class Cost cost;
+	class MLPPCost cost;
 	double totalRegTerm = 0;
 
 	auto cost_function = outputLayer->cost_map[outputLayer->cost];
@@ -719,7 +719,7 @@ void MLPPANN::updateParameters(std::vector<std::vector<std::vector<double>>> hid
 
 std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> MLPPANN::computeGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
 	// std::cout << "BEGIN" << std::endl;
-	class Cost cost;
+	class MLPPCost cost;
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;

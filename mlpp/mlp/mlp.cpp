@@ -227,7 +227,7 @@ void MLP::save(std::string fileName) {
 
 double MLP::Cost(std::vector<double> y_hat, std::vector<double> y) {
 	Reg regularization;
-	class Cost cost;
+	class MLPPCost cost;
 	return cost.LogLoss(y_hat, y) + regularization.regTerm(weights2, lambda, alpha, reg) + regularization.regTerm(weights1, lambda, alpha, reg);
 }
 

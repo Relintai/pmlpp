@@ -98,22 +98,22 @@ MultiOutputLayer::MultiOutputLayer(int n_output, int n_hidden, std::string activ
 	activation_map["Arcoth"] = &MLPPActivation::arcoth;
 	activationTest_map["Arcoth"] = &MLPPActivation::arcoth;
 
-	costDeriv_map["MSE"] = &Cost::MSEDeriv;
-	cost_map["MSE"] = &Cost::MSE;
-	costDeriv_map["RMSE"] = &Cost::RMSEDeriv;
-	cost_map["RMSE"] = &Cost::RMSE;
-	costDeriv_map["MAE"] = &Cost::MAEDeriv;
-	cost_map["MAE"] = &Cost::MAE;
-	costDeriv_map["MBE"] = &Cost::MBEDeriv;
-	cost_map["MBE"] = &Cost::MBE;
-	costDeriv_map["LogLoss"] = &Cost::LogLossDeriv;
-	cost_map["LogLoss"] = &Cost::LogLoss;
-	costDeriv_map["CrossEntropy"] = &Cost::CrossEntropyDeriv;
-	cost_map["CrossEntropy"] = &Cost::CrossEntropy;
-	costDeriv_map["HingeLoss"] = &Cost::HingeLossDeriv;
-	cost_map["HingeLoss"] = &Cost::HingeLoss;
-	costDeriv_map["WassersteinLoss"] = &Cost::HingeLossDeriv;
-	cost_map["WassersteinLoss"] = &Cost::HingeLoss;
+	costDeriv_map["MSE"] = &MLPPCost::MSEDeriv;
+	cost_map["MSE"] = &MLPPCost::MSE;
+	costDeriv_map["RMSE"] = &MLPPCost::RMSEDeriv;
+	cost_map["RMSE"] = &MLPPCost::RMSE;
+	costDeriv_map["MAE"] = &MLPPCost::MAEDeriv;
+	cost_map["MAE"] = &MLPPCost::MAE;
+	costDeriv_map["MBE"] = &MLPPCost::MBEDeriv;
+	cost_map["MBE"] = &MLPPCost::MBE;
+	costDeriv_map["LogLoss"] = &MLPPCost::LogLossDeriv;
+	cost_map["LogLoss"] = &MLPPCost::LogLoss;
+	costDeriv_map["CrossEntropy"] = &MLPPCost::CrossEntropyDeriv;
+	cost_map["CrossEntropy"] = &MLPPCost::CrossEntropy;
+	costDeriv_map["HingeLoss"] = &MLPPCost::HingeLossDeriv;
+	cost_map["HingeLoss"] = &MLPPCost::HingeLoss;
+	costDeriv_map["WassersteinLoss"] = &MLPPCost::HingeLossDeriv;
+	cost_map["WassersteinLoss"] = &MLPPCost::HingeLoss;
 }
 
 void MultiOutputLayer::forwardPass() {

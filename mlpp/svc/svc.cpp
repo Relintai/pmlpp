@@ -31,7 +31,7 @@ double SVC::modelTest(std::vector<double> x) {
 }
 
 void SVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
@@ -64,7 +64,7 @@ void SVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 }
 
 void SVC::SGD(double learning_rate, int max_epoch, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
@@ -107,7 +107,7 @@ void SVC::SGD(double learning_rate, int max_epoch, bool UI) {
 }
 
 void SVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
@@ -159,7 +159,7 @@ void SVC::save(std::string fileName) {
 }
 
 double SVC::Cost(std::vector<double> z, std::vector<double> y, std::vector<double> weights, double C) {
-	class Cost cost;
+	class MLPPCost cost;
 	return cost.HingeLoss(z, y, weights, C);
 }
 

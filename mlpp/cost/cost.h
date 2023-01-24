@@ -11,7 +11,7 @@
 #include <vector>
 
 
-class Cost {
+class MLPPCost {
 public:
 	// Regression Costs
 	double MSE(std::vector<double> y_hat, std::vector<double> y);

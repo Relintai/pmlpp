@@ -208,7 +208,7 @@ void MLPPAutoEncoder::save(std::string fileName) {
 }
 
 double MLPPAutoEncoder::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	class Cost cost;
+	class MLPPCost cost;
 	return cost.MSE(y_hat, inputSet);
 }
 

@@ -29,7 +29,7 @@ std::vector<std::vector<double>> GAN::generateExample(int n) {
 }
 
 void GAN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -147,7 +147,7 @@ std::vector<double> GAN::modelSetTestDiscriminator(std::vector<std::vector<doubl
 
 double GAN::Cost(std::vector<double> y_hat, std::vector<double> y) {
 	Reg regularization;
-	class Cost cost;
+	class MLPPCost cost;
 	double totalRegTerm = 0;
 
 	auto cost_function = outputLayer->cost_map[outputLayer->cost];
@@ -208,7 +208,7 @@ void GAN::updateGeneratorParameters(std::vector<std::vector<std::vector<double>>
 }
 
 std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> GAN::computeDiscriminatorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
-	class Cost cost;
+	class MLPPCost cost;
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
@@ -244,7 +244,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> G
 }
 
 std::vector<std::vector<std::vector<double>>> GAN::computeGeneratorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
-	class Cost cost;
+	class MLPPCost cost;
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;

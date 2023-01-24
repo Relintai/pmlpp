@@ -53,7 +53,7 @@ std::vector<double> MANN::modelTest(std::vector<double> x) {
 }
 
 void MANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
@@ -159,7 +159,7 @@ void MANN::addOutputLayer(std::string activation, std::string loss, std::string 
 
 double MANN::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
 	Reg regularization;
-	class Cost cost;
+	class MLPPCost cost;
 	double totalRegTerm = 0;
 
 	auto cost_function = outputLayer->cost_map[outputLayer->cost];

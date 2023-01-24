@@ -165,7 +165,7 @@ void SoftmaxReg::save(std::string fileName) {
 
 double SoftmaxReg::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
 	Reg regularization;
-	class Cost cost;
+	class MLPPCost cost;
 	return cost.CrossEntropy(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 

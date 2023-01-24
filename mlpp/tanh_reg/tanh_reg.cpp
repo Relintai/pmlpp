@@ -158,7 +158,7 @@ void TanhReg::save(std::string fileName) {
 
 double TanhReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
 	Reg regularization;
-	class Cost cost;
+	class MLPPCost cost;
 	return cost.MSE(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 

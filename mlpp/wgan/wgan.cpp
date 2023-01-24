@@ -29,7 +29,7 @@ std::vector<std::vector<double>> WGAN::generateExample(int n) {
 }
 
 void WGAN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
-	class Cost cost;
+	class MLPPCost cost;
 	LinAlg alg;
 	double cost_prev = 0;
 	int epoch = 1;
@@ -156,7 +156,7 @@ std::vector<double> WGAN::modelSetTestDiscriminator(std::vector<std::vector<doub
 
 double WGAN::Cost(std::vector<double> y_hat, std::vector<double> y) {
 	Reg regularization;
-	class Cost cost;
+	class MLPPCost cost;
 	double totalRegTerm = 0;
 
 	auto cost_function = outputLayer->cost_map[outputLayer->cost];
@@ -217,7 +217,7 @@ void WGAN::updateGeneratorParameters(std::vector<std::vector<std::vector<double>
 }
 
 std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> WGAN::computeDiscriminatorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
-	class Cost cost;
+	class MLPPCost cost;
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;
@@ -253,7 +253,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> W
 }
 
 std::vector<std::vector<std::vector<double>>> WGAN::computeGeneratorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
-	class Cost cost;
+	class MLPPCost cost;
 	MLPPActivation avn;
 	LinAlg alg;
 	Reg regularization;

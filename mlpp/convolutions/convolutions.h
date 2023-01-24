@@ -5,9 +5,9 @@
 #include <vector>
 #include <string>
 
-class Convolutions {
+class MLPPConvolutions {
 public:
-	Convolutions();
+	MLPPConvolutions();
 	std::vector<std::vector<double>> convolve(std::vector<std::vector<double>> input, std::vector<std::vector<double>> filter, int S, int P = 0);
 	std::vector<std::vector<std::vector<double>>> convolve(std::vector<std::vector<std::vector<double>>> input, std::vector<std::vector<std::vector<double>>> filter, int S, int P = 0);
 	std::vector<std::vector<double>> pool(std::vector<std::vector<double>> input, int F, int S, std::string type);

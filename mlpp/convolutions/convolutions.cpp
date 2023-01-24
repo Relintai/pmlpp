@@ -10,11 +10,11 @@
 #include <cmath>
 #include <iostream>
 
-Convolutions::Convolutions() :
+MLPPConvolutions::MLPPConvolutions() :
 		prewittHorizontal({ { 1, 1, 1 }, { 0, 0, 0 }, { -1, -1, -1 } }), prewittVertical({ { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1 } }), sobelHorizontal({ { 1, 2, 1 }, { 0, 0, 0 }, { -1, -2, -1 } }), sobelVertical({ { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } }), scharrHorizontal({ { 3, 10, 3 }, { 0, 0, 0 }, { -3, -10, -3 } }), scharrVertical({ { 3, 0, -3 }, { 10, 0, -10 }, { 3, 0, -3 } }), robertsHorizontal({ { 0, 1 }, { -1, 0 } }), robertsVertical({ { 1, 0 }, { 0, -1 } }) {
 }
 
-std::vector<std::vector<double>> Convolutions::convolve(std::vector<std::vector<double>> input, std::vector<std::vector<double>> filter, int S, int P) {
+std::vector<std::vector<double>> MLPPConvolutions::convolve(std::vector<std::vector<double>> input, std::vector<std::vector<double>> filter, int S, int P) {
 	LinAlg alg;
 	std::vector<std::vector<double>> featureMap;
 	int N = input.size();
@@ -70,7 +70,7 @@ std::vector<std::vector<double>> Convolutions::convolve(std::vector<std::vector<
 	return featureMap;
 }
 
-std::vector<std::vector<std::vector<double>>> Convolutions::convolve(std::vector<std::vector<std::vector<double>>> input, std::vector<std::vector<std::vector<double>>> filter, int S, int P) {
+std::vector<std::vector<std::vector<double>>> MLPPConvolutions::convolve(std::vector<std::vector<std::vector<double>>> input, std::vector<std::vector<std::vector<double>>> filter, int S, int P) {
 	LinAlg alg;
 	std::vector<std::vector<std::vector<double>>> featureMap;
 	int N = input[0].size();
@@ -136,7 +136,7 @@ std::vector<std::vector<std::vector<double>>> Convolutions::convolve(std::vector
 	return featureMap;
 }
 
-std::vector<std::vector<double>> Convolutions::pool(std::vector<std::vector<double>> input, int F, int S, std::string type) {
+std::vector<std::vector<double>> MLPPConvolutions::pool(std::vector<std::vector<double>> input, int F, int S, std::string type) {
 	LinAlg alg;
 	std::vector<std::vector<double>> pooledMap;
 	int N = input.size();
@@ -176,7 +176,7 @@ std::vector<std::vector<double>> Convolutions::pool(std::vector<std::vector<doub
 	return pooledMap;
 }
 
-std::vector<std::vector<std::vector<double>>> Convolutions::pool(std::vector<std::vector<std::vector<double>>> input, int F, int S, std::string type) {
+std::vector<std::vector<std::vector<double>>> MLPPConvolutions::pool(std::vector<std::vector<std::vector<double>>> input, int F, int S, std::string type) {
 	std::vector<std::vector<std::vector<double>>> pooledMap;
 	for (int i = 0; i < input.size(); i++) {
 		pooledMap.push_back(pool(input[i], F, S, type));
@@ -184,7 +184,7 @@ std::vector<std::vector<std::vector<double>>> Convolutions::pool(std::vector<std
 	return pooledMap;
 }
 
-double Convolutions::globalPool(std::vector<std::vector<double>> input, std::string type) {
+double MLPPConvolutions::globalPool(std::vector<std::vector<double>> input, std::string type) {
 	LinAlg alg;
 	if (type == "Average") {
 		Stat stat;
@@ -196,7 +196,7 @@ double Convolutions::globalPool(std::vector<std::vector<double>> input, std::str
 	}
 }
 
-std::vector<double> Convolutions::globalPool(std::vector<std::vector<std::vector<double>>> input, std::string type) {
+std::vector<double> MLPPConvolutions::globalPool(std::vector<std::vector<std::vector<double>>> input, std::string type) {
 	std::vector<double> pooledMap;
 	for (int i = 0; i < input.size(); i++) {
 		pooledMap.push_back(globalPool(input[i], type));
@@ -204,12 +204,12 @@ std::vector<double> Convolutions::globalPool(std::vector<std::vector<std::vector
 	return pooledMap;
 }
 
-double Convolutions::gaussian2D(double x, double y, double std) {
+double MLPPConvolutions::gaussian2D(double x, double y, double std) {
 	double std_sq = std * std;
 	return 1 / (2 * M_PI * std_sq) * std::exp(-(x * x + y * y) / 2 * std_sq);
 }
 
-std::vector<std::vector<double>> Convolutions::gaussianFilter2D(int size, double std) {
+std::vector<std::vector<double>> MLPPConvolutions::gaussianFilter2D(int size, double std) {
 	std::vector<std::vector<double>> filter;
 	filter.resize(size);
 	for (int i = 0; i < filter.size(); i++) {
@@ -229,7 +229,7 @@ been easier to carry out the calculation explicitly, mainly because it is more i
 and also because my convolution algorithm is only built for filters with equally sized
 heights and widths.
 */
-std::vector<std::vector<double>> Convolutions::dx(std::vector<std::vector<double>> input) {
+std::vector<std::vector<double>> MLPPConvolutions::dx(std::vector<std::vector<double>> input) {
 	std::vector<std::vector<double>> deriv; // We assume a gray scale image.
 	deriv.resize(input.size());
 	for (int i = 0; i < deriv.size(); i++) {
@@ -250,7 +250,7 @@ std::vector<std::vector<double>> Convolutions::dx(std::vector<std::vector<double
 	return deriv;
 }
 
-std::vector<std::vector<double>> Convolutions::dy(std::vector<std::vector<double>> input) {
+std::vector<std::vector<double>> MLPPConvolutions::dy(std::vector<std::vector<double>> input) {
 	std::vector<std::vector<double>> deriv;
 	deriv.resize(input.size());
 	for (int i = 0; i < deriv.size(); i++) {
@@ -271,14 +271,14 @@ std::vector<std::vector<double>> Convolutions::dy(std::vector<std::vector<double
 	return deriv;
 }
 
-std::vector<std::vector<double>> Convolutions::gradMagnitude(std::vector<std::vector<double>> input) {
+std::vector<std::vector<double>> MLPPConvolutions::gradMagnitude(std::vector<std::vector<double>> input) {
 	LinAlg alg;
 	std::vector<std::vector<double>> xDeriv_2 = alg.hadamard_product(dx(input), dx(input));
 	std::vector<std::vector<double>> yDeriv_2 = alg.hadamard_product(dy(input), dy(input));
 	return alg.sqrt(alg.addition(xDeriv_2, yDeriv_2));
 }
 
-std::vector<std::vector<double>> Convolutions::gradOrientation(std::vector<std::vector<double>> input) {
+std::vector<std::vector<double>> MLPPConvolutions::gradOrientation(std::vector<std::vector<double>> input) {
 	std::vector<std::vector<double>> deriv;
 	deriv.resize(input.size());
 	for (int i = 0; i < deriv.size(); i++) {
@@ -295,7 +295,7 @@ std::vector<std::vector<double>> Convolutions::gradOrientation(std::vector<std::
 	return deriv;
 }
 
-std::vector<std::vector<std::vector<double>>> Convolutions::computeM(std::vector<std::vector<double>> input) {
+std::vector<std::vector<std::vector<double>>> MLPPConvolutions::computeM(std::vector<std::vector<double>> input) {
 	double const SIGMA = 1;
 	double const GAUSSIAN_SIZE = 3;
 
@@ -313,7 +313,7 @@ std::vector<std::vector<std::vector<double>>> Convolutions::computeM(std::vector
 	std::vector<std::vector<std::vector<double>>> M = { xxDeriv, yyDeriv, xyDeriv };
 	return M;
 }
-std::vector<std::vector<std::string>> Convolutions::harrisCornerDetection(std::vector<std::vector<double>> input) {
+std::vector<std::vector<std::string>> MLPPConvolutions::harrisCornerDetection(std::vector<std::vector<double>> input) {
 	double const k = 0.05; // Empirically determined wherein k -> [0.04, 0.06], though conventionally 0.05 is typically used as well.
 	LinAlg alg;
 	std::vector<std::vector<std::vector<double>>> M = computeM(input);
@@ -340,34 +340,34 @@ std::vector<std::vector<std::string>> Convolutions::harrisCornerDetection(std::v
 	return imageTypes;
 }
 
-std::vector<std::vector<double>> Convolutions::getPrewittHorizontal() {
+std::vector<std::vector<double>> MLPPConvolutions::getPrewittHorizontal() {
 	return prewittHorizontal;
 }
 
-std::vector<std::vector<double>> Convolutions::getPrewittVertical() {
+std::vector<std::vector<double>> MLPPConvolutions::getPrewittVertical() {
 	return prewittVertical;
 }
 
-std::vector<std::vector<double>> Convolutions::getSobelHorizontal() {
+std::vector<std::vector<double>> MLPPConvolutions::getSobelHorizontal() {
 	return sobelHorizontal;
 }
 
-std::vector<std::vector<double>> Convolutions::getSobelVertical() {
+std::vector<std::vector<double>> MLPPConvolutions::getSobelVertical() {
 	return sobelVertical;
 }
 
-std::vector<std::vector<double>> Convolutions::getScharrHorizontal() {
+std::vector<std::vector<double>> MLPPConvolutions::getScharrHorizontal() {
 	return scharrHorizontal;
 }
 
-std::vector<std::vector<double>> Convolutions::getScharrVertical() {
+std::vector<std::vector<double>> MLPPConvolutions::getScharrVertical() {
 	return scharrVertical;
 }
 
-std::vector<std::vector<double>> Convolutions::getRobertsHorizontal() {
+std::vector<std::vector<double>> MLPPConvolutions::getRobertsHorizontal() {
 	return robertsHorizontal;
 }
 
-std::vector<std::vector<double>> Convolutions::getRobertsVertical() {
+std::vector<std::vector<double>> MLPPConvolutions::getRobertsVertical() {
 	return robertsVertical;
 }

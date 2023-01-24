@@ -123,9 +123,9 @@ int main() {
     Stat stat;
     LinAlg alg;
     MLPPActivation avn;
-    Cost cost;
+    MLPPCost cost;
     Data data; 
-    Convolutions conv; 
+    MLPPConvolutions conv; 
 
     // DATA SETS
     // std::vector<std::vector<double>> inputSet = {{1,2,3,4,5,6,7,8,9,10}, {3,5,9,12,15,18,21,24,27,30}};
