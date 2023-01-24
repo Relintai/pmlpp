@@ -12,7 +12,7 @@
 #include <iostream>
 #include <map>
 
-namespace MLPP {
+
 kNN::kNN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int k) :
 		inputSet(inputSet), outputSet(outputSet), k(k) {
 }
@@ -82,4 +82,3 @@ std::vector<double> kNN::nearestNeighbors(std::vector<double> x) {
 	}
 	return knn;
 }
-} //namespace MLPP

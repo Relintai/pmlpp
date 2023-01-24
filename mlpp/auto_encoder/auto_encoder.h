@@ -12,8 +12,6 @@
 #include <tuple>
 #include <vector>
 
-namespace MLPP {
-
 class AutoEncoder {
 public:
 	AutoEncoder(std::vector<std::vector<double>> inputSet, int n_hidden);
@@ -50,6 +48,5 @@ private:
 	int k;
 	int n_hidden;
 };
-} //namespace MLPP
 
 #endif /* AutoEncoder_hpp */

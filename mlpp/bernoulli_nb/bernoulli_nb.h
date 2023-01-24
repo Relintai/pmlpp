@@ -11,7 +11,6 @@
 #include <map>
 #include <vector>
 
-namespace MLPP {
 class BernoulliNB {
 public:
 	BernoulliNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet);
@@ -39,4 +38,3 @@ private:
 };
 
 #endif /* BernoulliNB_hpp */
-}

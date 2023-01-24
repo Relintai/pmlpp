@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace MLPP {
+
 class KMeans {
 public:
 	KMeans(std::vector<std::vector<double>> inputSet, int k, std::string init_type = "Default");
@@ -40,6 +40,6 @@ private:
 
 	std::string init_type;
 };
-} //namespace MLPP
+
 
 #endif /* KMeans_hpp */

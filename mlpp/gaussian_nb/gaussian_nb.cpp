@@ -13,7 +13,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 GaussianNB::GaussianNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num) :
 		inputSet(inputSet), outputSet(outputSet), class_num(class_num) {
 	y_hat.resize(outputSet.size());
@@ -88,4 +88,3 @@ void GaussianNB::Evaluate() {
 		std::cout << std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(double))) << std::endl;
 	}
 }
-} //namespace MLPP

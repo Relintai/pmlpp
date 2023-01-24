@@ -10,7 +10,7 @@
 #include <cmath>
 #include <iostream>
 
-namespace MLPP {
+
 double Cost::MSE(std::vector<double> y_hat, std::vector<double> y) {
 	double sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
@@ -404,4 +404,3 @@ std::vector<double> Cost::dualFormSVMDeriv(std::vector<double> alpha, std::vecto
 
 	return alg.subtraction(alphaQDeriv, one);
 }
-} //namespace MLPP

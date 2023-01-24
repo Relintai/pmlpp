@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace MLPP {
+
 class GaussianNB {
 public:
 	GaussianNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num);
@@ -34,4 +34,3 @@ private:
 };
 
 #endif /* GaussianNB_hpp */
-}

@@ -10,8 +10,6 @@
 #include <cmath>
 #include <iostream>
 
-namespace MLPP {
-
 double Activation::linear(double z, bool deriv) {
 	if (deriv) {
 		return 1;
@@ -951,4 +949,3 @@ std::vector<double> Activation::activation(std::vector<double> z, bool deriv, do
 	}
 	return a;
 }
-} //namespace MLPP

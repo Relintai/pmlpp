@@ -16,7 +16,7 @@
 #include <random>
 #include <sstream>
 
-namespace MLPP {
+
 // Loading Datasets
 std::tuple<std::vector<std::vector<double>>, std::vector<double>> Data::loadBreastCancer() {
 	const int BREAST_CANCER_SIZE = 30; // k = 30
@@ -753,4 +753,4 @@ std::vector<double> Data::reverseOneHot(std::vector<std::vector<double>> tempOut
 
 	return outputSet;
 }
-} //namespace MLPP
+

@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-namespace MLPP {
+
 
 class MANN {
 public:
@@ -44,6 +44,6 @@ private:
 	int k;
 	int n_output;
 };
-} //namespace MLPP
+
 
 #endif /* MANN_hpp */

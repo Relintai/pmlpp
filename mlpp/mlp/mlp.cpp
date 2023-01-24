@@ -15,7 +15,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 MLP::MLP(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int n_hidden, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n_hidden(n_hidden), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	Activation avn;
@@ -270,4 +270,4 @@ void MLP::forwardPass() {
 	a2 = avn.sigmoid(z2);
 	y_hat = avn.sigmoid(alg.scalarAdd(bias2, alg.mat_vec_mult(a2, weights2)));
 }
-} //namespace MLPP
+

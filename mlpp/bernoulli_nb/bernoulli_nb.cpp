@@ -12,7 +12,6 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
 BernoulliNB::BernoulliNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet) :
 		inputSet(inputSet), outputSet(outputSet), class_num(2) {
 	y_hat.resize(outputSet.size());
@@ -175,4 +174,3 @@ void BernoulliNB::Evaluate() {
 		}
 	}
 }
-} //namespace MLPP

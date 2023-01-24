@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace MLPP {
+
 class UniLinReg {
 public:
 	UniLinReg(std::vector<double> x, std::vector<double> y);
@@ -24,6 +24,6 @@ private:
 	double b0;
 	double b1;
 };
-} //namespace MLPP
+
 
 #endif /* UniLinReg_hpp */

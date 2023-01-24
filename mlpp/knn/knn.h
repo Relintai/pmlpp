@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace MLPP {
+
 class kNN {
 public:
 	kNN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int k);
@@ -28,6 +28,6 @@ private:
 	std::vector<double> outputSet;
 	int k;
 };
-} //namespace MLPP
+
 
 #endif /* kNN_hpp */

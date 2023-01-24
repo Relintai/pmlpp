@@ -11,7 +11,7 @@
 #include <map>
 #include <vector>
 
-namespace MLPP {
+
 class MultinomialNB {
 public:
 	MultinomialNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num);
@@ -37,4 +37,3 @@ private:
 };
 
 #endif /* MultinomialNB_hpp */
-}

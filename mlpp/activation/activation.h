@@ -10,7 +10,6 @@
 
 #include <vector>
 
-namespace MLPP {
 class Activation {
 public:
 	double linear(double z, bool deriv = 0);
@@ -142,6 +141,5 @@ public:
 
 private:
 };
-} //namespace MLPP
 
 #endif /* Activation_hpp */

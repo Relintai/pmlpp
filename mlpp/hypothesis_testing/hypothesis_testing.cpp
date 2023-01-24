@@ -6,7 +6,7 @@
 
 #include "hypothesis_testing.h"
 
-namespace MLPP {
+
 
 std::tuple<bool, double> HypothesisTesting::chiSquareTest(std::vector<double> observed, std::vector<double> expected) {
 	double df = observed.size() - 1; // These are our degrees of freedom
@@ -16,4 +16,3 @@ std::tuple<bool, double> HypothesisTesting::chiSquareTest(std::vector<double> ob
 	}
 }
 
-} //namespace MLPP

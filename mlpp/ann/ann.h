@@ -14,8 +14,6 @@
 #include <tuple>
 #include <vector>
 
-namespace MLPP {
-
 class ANN {
 public:
 	ANN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet);
@@ -66,6 +64,5 @@ private:
 	double decayConstant;
 	double dropRate;
 };
-} //namespace MLPP
 
 #endif /* ANN_hpp */

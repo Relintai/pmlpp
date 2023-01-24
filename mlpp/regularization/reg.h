@@ -12,7 +12,7 @@
 #include <vector>
 #include <string>
 
-namespace MLPP {
+
 class Reg {
 public:
 	double regTerm(std::vector<double> weights, double lambda, double alpha, std::string reg);
@@ -28,6 +28,6 @@ private:
 	double regDerivTerm(std::vector<double> weights, double lambda, double alpha, std::string reg, int j);
 	double regDerivTerm(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg, int i, int j);
 };
-} //namespace MLPP
+
 
 #endif /* Reg_hpp */

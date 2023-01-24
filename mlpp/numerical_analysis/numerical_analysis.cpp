@@ -12,7 +12,7 @@
 #include <iostream>
 #include <string>
 
-namespace MLPP {
+
 
 double NumericalAnalysis::numDiff(double (*function)(double), double x) {
 	double eps = 1e-10;
@@ -293,4 +293,3 @@ std::string NumericalAnalysis::secondPartialDerivativeTest(double (*function)(st
 		}
 	}
 }
-} //namespace MLPP

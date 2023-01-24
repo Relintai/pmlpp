@@ -10,7 +10,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 
 double Reg::regTerm(std::vector<double> weights, double lambda, double alpha, std::string reg) {
 	if (reg == "Ridge") {
@@ -162,4 +162,4 @@ double Reg::regDerivTerm(std::vector<std::vector<double>> weights, double lambda
 		return 0;
 	}
 }
-} //namespace MLPP
+

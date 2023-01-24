@@ -14,7 +14,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 DualSVC::DualSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C, std::string kernel) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), C(C), kernel(kernel) {
 	y_hat.resize(n);
@@ -236,4 +236,3 @@ std::vector<std::vector<double>> DualSVC::kernelFunction(std::vector<std::vector
 		return alg.matmult(inputSet, alg.transpose(inputSet));
 	} // warning: non-void function does not return a value in all control paths [-Wreturn-type]
 }
-} //namespace MLPP

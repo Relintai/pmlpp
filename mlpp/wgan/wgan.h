@@ -15,7 +15,7 @@
 #include <tuple>
 #include <vector>
 
-namespace MLPP {
+
 
 class WGAN {
 public:
@@ -52,6 +52,6 @@ private:
 	int n;
 	int k;
 };
-} //namespace MLPP
+
 
 #endif /* WGAN_hpp */

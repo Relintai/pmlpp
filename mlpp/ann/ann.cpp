@@ -15,7 +15,6 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
 ANN::ANN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), lrScheduler("None"), decayConstant(0), dropRate(0) {
 }
@@ -761,4 +760,3 @@ void ANN::UI(int epoch, double cost_prev, std::vector<double> y_hat, std::vector
 		}
 	}
 }
-} //namespace MLPP

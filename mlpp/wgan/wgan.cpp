@@ -14,7 +14,7 @@
 #include <cmath>
 #include <iostream>
 
-namespace MLPP {
+
 WGAN::WGAN(double k, std::vector<std::vector<double>> outputSet) :
 		outputSet(outputSet), n(outputSet.size()), k(k) {
 }
@@ -292,4 +292,3 @@ void WGAN::UI(int epoch, double cost_prev, std::vector<double> y_hat, std::vecto
 		}
 	}
 }
-} //namespace MLPP

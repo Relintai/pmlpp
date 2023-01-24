@@ -14,7 +14,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 SoftmaxReg::SoftmaxReg(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), n_class(outputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
@@ -189,4 +189,3 @@ void SoftmaxReg::forwardPass() {
 
 	y_hat = avn.softmax(alg.mat_vec_add(alg.matmult(inputSet, weights), bias));
 }
-} //namespace MLPP

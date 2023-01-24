@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace MLPP {
+
 class Cost {
 public:
 	// Regression Costs
@@ -81,6 +81,6 @@ public:
 
 private:
 };
-} //namespace MLPP
+
 
 #endif /* Cost_hpp */

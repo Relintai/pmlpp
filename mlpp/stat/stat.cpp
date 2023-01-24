@@ -14,7 +14,7 @@
 
 #include <iostream>
 
-namespace MLPP {
+
 double Stat::b0Estimation(const std::vector<double> &x, const std::vector<double> &y) {
 	return mean(y) - b1Estimation(x, y) * mean(x);
 }
@@ -214,4 +214,3 @@ double Stat::logMean(const double x, const double y) {
 	}
 	return (y - x) / (log(y) - std::log(x));
 }
-} //namespace MLPP

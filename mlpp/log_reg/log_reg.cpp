@@ -14,7 +14,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 LogReg::LogReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
@@ -202,4 +202,3 @@ double LogReg::Evaluate(std::vector<double> x) {
 void LogReg::forwardPass() {
 	y_hat = Evaluate(inputSet);
 }
-} //namespace MLPP

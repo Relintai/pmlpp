@@ -13,7 +13,7 @@
 
 #include <iostream>
 
-namespace MLPP {
+
 MANN::MANN(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), n_output(outputSet[0].size()) {
 }
@@ -187,4 +187,3 @@ void MANN::forwardPass() {
 	outputLayer->forwardPass();
 	y_hat = outputLayer->a;
 }
-} //namespace MLPP

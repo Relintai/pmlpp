@@ -51,8 +51,6 @@
 #include "MLPP/WGAN/WGAN.hpp"
 #include "MLPP/Transforms/Transforms.hpp"
 
-using namespace MLPP;
-
 
 // double f(double x){
 //     return x*x*x + 2*x - 2; 

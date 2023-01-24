@@ -11,7 +11,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 OutputLayer::OutputLayer(int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha) :
 		n_hidden(n_hidden), activation(activation), cost(cost), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
 	weights = Utilities::weightInitialization(n_hidden, weightInit);
@@ -126,4 +126,3 @@ void OutputLayer::Test(std::vector<double> x) {
 	z_test = alg.dot(weights, x) + bias;
 	a_test = (avn.*activationTest_map[activation])(z_test, 0);
 }
-} //namespace MLPP

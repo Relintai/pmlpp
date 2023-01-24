@@ -12,7 +12,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 KMeans::KMeans(std::vector<std::vector<double>> inputSet, int k, std::string init_type) :
 		inputSet(inputSet), k(k), init_type(init_type) {
 	if (init_type == "KMeans++") {
@@ -232,4 +232,4 @@ double KMeans::Cost() {
 	}
 	return sum;
 }
-} //namespace MLPP
+

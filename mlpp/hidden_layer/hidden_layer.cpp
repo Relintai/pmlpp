@@ -12,7 +12,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 HiddenLayer::HiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha) :
 		n_hidden(n_hidden), activation(activation), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
 	weights = Utilities::weightInitialization(input[0].size(), n_hidden, weightInit);
@@ -110,4 +110,3 @@ void HiddenLayer::Test(std::vector<double> x) {
 	z_test = alg.addition(alg.mat_vec_mult(alg.transpose(weights), x), bias);
 	a_test = (avn.*activationTest_map[activation])(z_test, 0);
 }
-} //namespace MLPP

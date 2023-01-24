@@ -11,7 +11,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 
 PCA::PCA(std::vector<std::vector<double>> inputSet, int k) :
 		inputSet(inputSet), k(k) {
@@ -51,4 +51,4 @@ double PCA::score() {
 	}
 	return 1 - num / den;
 }
-} //namespace MLPP
+

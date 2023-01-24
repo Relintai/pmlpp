@@ -10,7 +10,7 @@
 #include <iostream>
 #include <string>
 
-namespace MLPP {
+
 
 // DCT ii.
 // https://www.mathworks.com/help/images/discrete-cosine-transform.html
@@ -53,4 +53,3 @@ std::vector<std::vector<double>> Transforms::discreteCosineTransform(std::vector
 	}
 	return B;
 }
-} //namespace MLPP

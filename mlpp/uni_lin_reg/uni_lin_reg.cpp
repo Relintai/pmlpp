@@ -15,7 +15,7 @@
 // Univariate Linear Regression Model
 // ŷ = b0 + b1x1
 
-namespace MLPP {
+
 UniLinReg::UniLinReg(std::vector<double> x, std::vector<double> y) :
 		inputSet(x), outputSet(y) {
 	Stat estimator;
@@ -31,4 +31,4 @@ std::vector<double> UniLinReg::modelSetTest(std::vector<double> x) {
 double UniLinReg::modelTest(double input) {
 	return b0 + b1 * input;
 }
-} //namespace MLPP
+

@@ -11,7 +11,7 @@
 #include <tuple>
 #include <vector>
 
-namespace MLPP {
+
 class LinAlg {
 public:
 	// MATRIX FUNCTIONS
@@ -231,6 +231,6 @@ public:
 private:
 };
 
-} //namespace MLPP
+
 
 #endif /* LinAlg_hpp */

@@ -13,7 +13,7 @@
 #include <tuple>
 #include <vector>
 
-namespace MLPP {
+
 class Data {
 public:
 	// Load Datasets
@@ -94,6 +94,6 @@ public:
 
 private:
 };
-} //namespace MLPP
+
 
 #endif /* Data_hpp */

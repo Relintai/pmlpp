@@ -5,7 +5,6 @@
 #include <vector>
 #include <string>
 
-namespace MLPP {
 class Convolutions {
 public:
 	Convolutions();
@@ -47,6 +46,5 @@ private:
 	std::vector<std::vector<double>> robertsHorizontal;
 	std::vector<std::vector<double>> robertsVertical;
 };
-} //namespace MLPP
 
 #endif // Convolutions_hpp

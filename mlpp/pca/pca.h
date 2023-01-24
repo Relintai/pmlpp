@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace MLPP {
+
 class PCA {
 public:
 	PCA(std::vector<std::vector<double>> inputSet, int k);
@@ -24,6 +24,6 @@ private:
 	std::vector<std::vector<double>> Z;
 	int k;
 };
-} //namespace MLPP
+
 
 #endif /* PCA_hpp */

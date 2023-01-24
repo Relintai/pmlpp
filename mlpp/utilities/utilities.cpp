@@ -10,7 +10,7 @@
 #include <random>
 #include <string>
 
-namespace MLPP {
+
 
 std::vector<double> Utilities::weightInitialization(int n, std::string type) {
 	std::random_device rd;
@@ -380,4 +380,3 @@ double Utilities::accuracy(std::vector<double> y_hat, std::vector<double> y) {
 double Utilities::f1_score(std::vector<double> y_hat, std::vector<double> y) {
 	return 2 * precision(y_hat, y) * recall(y_hat, y) / (precision(y_hat, y) + recall(y_hat, y));
 }
-} //namespace MLPP

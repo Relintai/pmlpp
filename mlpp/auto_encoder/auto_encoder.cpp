@@ -13,7 +13,6 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
 AutoEncoder::AutoEncoder(std::vector<std::vector<double>> inputSet, int n_hidden) :
 		inputSet(inputSet), n_hidden(n_hidden), n(inputSet.size()), k(inputSet[0].size()) {
 	Activation avn;
@@ -252,4 +251,3 @@ void AutoEncoder::forwardPass() {
 	a2 = avn.sigmoid(z2);
 	y_hat = alg.mat_vec_add(alg.matmult(a2, weights2), bias2);
 }
-} //namespace MLPP

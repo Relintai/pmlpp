@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-namespace MLPP {
+
 class HiddenLayer {
 public:
 	HiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha);
@@ -48,6 +48,6 @@ public:
 	void forwardPass();
 	void Test(std::vector<double> x);
 };
-} //namespace MLPP
+
 
 #endif /* HiddenLayer_hpp */

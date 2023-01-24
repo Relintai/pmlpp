@@ -11,7 +11,7 @@
 #include <map>
 #include <random>
 
-namespace MLPP {
+
 
 std::vector<std::vector<double>> LinAlg::gramMatrix(std::vector<std::vector<double>> A) {
 	return matmult(transpose(A), A); // AtA
@@ -1226,4 +1226,3 @@ std::vector<std::vector<std::vector<double>>> LinAlg::vector_wise_tensor_product
 	}
 	return C;
 }
-} //namespace MLPP

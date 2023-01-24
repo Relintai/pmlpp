@@ -12,7 +12,7 @@
 #include <tuple>
 #include <vector>
 
-namespace MLPP {
+
 class Utilities {
 public:
 	// Weight Init
@@ -50,6 +50,6 @@ public:
 
 private:
 };
-} //namespace MLPP
+
 
 #endif /* Utilities_hpp */

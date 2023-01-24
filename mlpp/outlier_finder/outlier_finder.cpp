@@ -8,7 +8,7 @@
 #include "../stat/stat.h"
 #include <iostream>
 
-namespace MLPP {
+
 OutlierFinder::OutlierFinder(int threshold) :
 		threshold(threshold) {
 }
@@ -39,4 +39,3 @@ std::vector<double> OutlierFinder::modelTest(std::vector<double> inputSet) {
 	}
 	return outliers;
 }
-} //namespace MLPP

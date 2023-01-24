@@ -14,7 +14,7 @@
 #include <cmath>
 #include <iostream>
 
-namespace MLPP {
+
 GAN::GAN(double k, std::vector<std::vector<double>> outputSet) :
 		outputSet(outputSet), n(outputSet.size()), k(k) {
 }
@@ -283,4 +283,3 @@ void GAN::UI(int epoch, double cost_prev, std::vector<double> y_hat, std::vector
 		}
 	}
 }
-} //namespace MLPP

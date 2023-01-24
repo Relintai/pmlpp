@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace MLPP {
+
 class GaussMarkovChecker {
 public:
 	void checkGMConditions(std::vector<double> eps);
@@ -22,6 +22,6 @@ public:
 	bool exogeneity(std::vector<double> eps); // 3) Cov of any 2 non-equal eps values = 0.
 private:
 };
-} //namespace MLPP
+
 
 #endif /* GaussMarkovChecker_hpp */

@@ -8,7 +8,7 @@
 #include "../stat/stat.h"
 #include <iostream>
 
-namespace MLPP {
+
 void GaussMarkovChecker::checkGMConditions(std::vector<double> eps) {
 	bool condition1 = arithmeticMean(eps);
 	bool condition2 = homoscedasticity(eps);
@@ -54,4 +54,4 @@ bool GaussMarkovChecker::exogeneity(std::vector<double> eps) {
 	}
 	return 1;
 }
-} //namespace MLPP
+

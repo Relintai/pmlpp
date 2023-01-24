@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace MLPP {
+
 class OutlierFinder {
 public:
 	// Cnstr
@@ -22,6 +22,6 @@ public:
 	// Variables required
 	int threshold;
 };
-} //namespace MLPP
+
 
 #endif /* OutlierFinder_hpp */

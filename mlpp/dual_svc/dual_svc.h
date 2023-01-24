@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-namespace MLPP {
+
 
 class DualSVC {
 public:
@@ -65,6 +65,6 @@ private:
 	// UI Portion
 	void UI(int epoch, double cost_prev);
 };
-} //namespace MLPP
+
 
 #endif /* DualSVC_hpp */

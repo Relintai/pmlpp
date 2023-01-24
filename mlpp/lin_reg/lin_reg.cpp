@@ -15,7 +15,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 
 LinReg::LinReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
@@ -237,4 +237,3 @@ double LinReg::Evaluate(std::vector<double> x) {
 void LinReg::forwardPass() {
 	y_hat = Evaluate(inputSet);
 }
-} //namespace MLPP

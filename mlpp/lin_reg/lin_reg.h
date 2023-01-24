@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace MLPP {
+
 class LinReg {
 public:
 	LinReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
@@ -46,6 +46,6 @@ private:
 	int lambda;
 	int alpha; /* This is the controlling param for Elastic Net*/
 };
-} //namespace MLPP
+
 
 #endif /* LinReg_hpp */

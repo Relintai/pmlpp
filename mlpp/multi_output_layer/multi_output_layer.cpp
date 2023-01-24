@@ -11,7 +11,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 MultiOutputLayer::MultiOutputLayer(int n_output, int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha) :
 		n_output(n_output), n_hidden(n_hidden), activation(activation), cost(cost), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
 	weights = Utilities::weightInitialization(n_hidden, n_output, weightInit);
@@ -129,4 +129,3 @@ void MultiOutputLayer::Test(std::vector<double> x) {
 	z_test = alg.addition(alg.mat_vec_mult(alg.transpose(weights), x), bias);
 	a_test = (avn.*activationTest_map[activation])(z_test, 0);
 }
-} //namespace MLPP

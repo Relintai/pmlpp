@@ -10,7 +10,7 @@
 
 #include <vector>
 
-namespace MLPP {
+
 class Stat {
 public:
 	// These functions are for univariate lin reg module- not for users.
@@ -47,6 +47,6 @@ public:
 	double identricMean(const double x, const double y);
 	double logMean(const double x, const double y);
 };
-} //namespace MLPP
+
 
 #endif /* Stat_hpp */

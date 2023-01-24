@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-namespace MLPP {
+
 class NumericalAnalysis {
 public:
 	/* A numerical method for derivatives is used. This may be subject to change,
@@ -52,6 +52,6 @@ public:
 
 	std::string secondPartialDerivativeTest(double (*function)(std::vector<double>), std::vector<double> x);
 };
-} //namespace MLPP
+
 
 #endif /* NumericalAnalysis_hpp */

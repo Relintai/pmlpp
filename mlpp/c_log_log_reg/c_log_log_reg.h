@@ -11,8 +11,6 @@
 #include <string>
 #include <vector>
 
-namespace MLPP {
-
 class CLogLogReg {
 public:
 	CLogLogReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
@@ -50,6 +48,5 @@ private:
 	double lambda;
 	double alpha; /* This is the controlling param for Elastic Net*/
 };
-} //namespace MLPP
 
 #endif /* CLogLogReg_hpp */

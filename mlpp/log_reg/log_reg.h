@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace MLPP {
+
 
 class LogReg {
 public:
@@ -47,6 +47,6 @@ private:
 	double lambda; /* Regularization Parameter */
 	double alpha; /* This is the controlling param for Elastic Net*/
 };
-} //namespace MLPP
+
 
 #endif /* LogReg_hpp */

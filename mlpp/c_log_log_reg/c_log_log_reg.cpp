@@ -14,7 +14,6 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
 CLogLogReg::CLogLogReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
@@ -221,4 +220,3 @@ void CLogLogReg::forwardPass() {
 	z = propagate(inputSet);
 	y_hat = avn.cloglog(z);
 }
-} //namespace MLPP

@@ -10,8 +10,6 @@
 #include <cmath>
 #include <iostream>
 
-namespace MLPP {
-
 Convolutions::Convolutions() :
 		prewittHorizontal({ { 1, 1, 1 }, { 0, 0, 0 }, { -1, -1, -1 } }), prewittVertical({ { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1 } }), sobelHorizontal({ { 1, 2, 1 }, { 0, 0, 0 }, { -1, -2, -1 } }), sobelVertical({ { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } }), scharrHorizontal({ { 3, 10, 3 }, { 0, 0, 0 }, { -3, -10, -3 } }), scharrVertical({ { 3, 0, -3 }, { 10, 0, -10 }, { 3, 0, -3 } }), robertsHorizontal({ { 0, 1 }, { -1, 0 } }), robertsVertical({ { 1, 0 }, { 0, -1 } }) {
 }
@@ -373,4 +371,3 @@ std::vector<std::vector<double>> Convolutions::getRobertsHorizontal() {
 std::vector<std::vector<double>> Convolutions::getRobertsVertical() {
 	return robertsVertical;
 }
-} //namespace MLPP

@@ -15,7 +15,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 SoftmaxNet::SoftmaxNet(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, int n_hidden, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), n_hidden(n_hidden), n_class(outputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
@@ -289,4 +289,3 @@ void SoftmaxNet::forwardPass() {
 	a2 = avn.sigmoid(z2);
 	y_hat = avn.adjSoftmax(alg.mat_vec_add(alg.matmult(a2, weights2), bias2));
 }
-} //namespace MLPP

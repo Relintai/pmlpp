@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace MLPP {
+
 
 class SoftmaxNet {
 public:
@@ -57,6 +57,6 @@ private:
 	double lambda;
 	double alpha; /* This is the controlling param for Elastic Net*/
 };
-} //namespace MLPP
+
 
 #endif /* SoftmaxNet_hpp */

@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace MLPP {
+
 
 class ProbitReg {
 public:
@@ -49,6 +49,6 @@ private:
 	double lambda;
 	double alpha; /* This is the controlling param for Elastic Net*/
 };
-} //namespace MLPP
+
 
 #endif /* ProbitReg_hpp */

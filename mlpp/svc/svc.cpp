@@ -14,7 +14,7 @@
 #include <iostream>
 #include <random>
 
-namespace MLPP {
+
 SVC::SVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), C(C) {
 	y_hat.resize(n);
@@ -195,4 +195,3 @@ void SVC::forwardPass() {
 	z = propagate(inputSet);
 	y_hat = avn.sign(z);
 }
-} //namespace MLPP

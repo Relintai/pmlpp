@@ -11,13 +11,13 @@
 #include <tuple>
 #include <vector>
 
-namespace MLPP {
+
 class HypothesisTesting {
 public:
 	std::tuple<bool, double> chiSquareTest(std::vector<double> observed, std::vector<double> expected);
 
 private:
 };
-} //namespace MLPP
+
 
 #endif /* HypothesisTesting_hpp */
