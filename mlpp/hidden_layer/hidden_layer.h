@@ -10,44 +10,44 @@
 
 #include "../activation/activation.h"
 
-#include <vector>
 #include <map>
 #include <string>
+#include <vector>
 
-namespace  MLPP {
-    class HiddenLayer{
-        public:
-            HiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha);
+namespace MLPP {
+class HiddenLayer {
+public:
+	HiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha);
 
-            int n_hidden;
-            std::string activation;
+	int n_hidden;
+	std::string activation;
 
-            std::vector<std::vector<double>> input;   
+	std::vector<std::vector<double>> input;
 
-            std::vector<std::vector<double>> weights;
-            std::vector<double> bias;
-        
-            std::vector<std::vector<double>> z;
-            std::vector<std::vector<double>> a;
+	std::vector<std::vector<double>> weights;
+	std::vector<double> bias;
 
-            std::map<std::string, std::vector<std::vector<double>> (Activation::*)(std::vector<std::vector<double>>, bool)> activation_map;
-            std::map<std::string, std::vector<double> (Activation::*)(std::vector<double>, bool)> activationTest_map;
+	std::vector<std::vector<double>> z;
+	std::vector<std::vector<double>> a;
 
-            std::vector<double> z_test;
-            std::vector<double> a_test;
+	std::map<std::string, std::vector<std::vector<double>> (Activation::*)(std::vector<std::vector<double>>, bool)> activation_map;
+	std::map<std::string, std::vector<double> (Activation::*)(std::vector<double>, bool)> activationTest_map;
 
-            std::vector<std::vector<double>> delta;
+	std::vector<double> z_test;
+	std::vector<double> a_test;
 
-            // Regularization Params
-            std::string reg;
-            double lambda; /* Regularization Parameter */
-            double alpha; /* This is the controlling param for Elastic Net*/
+	std::vector<std::vector<double>> delta;
 
-            std::string weightInit;
+	// Regularization Params
+	std::string reg;
+	double lambda; /* Regularization Parameter */
+	double alpha; /* This is the controlling param for Elastic Net*/
 
-            void forwardPass();
-            void Test(std::vector<double> x);
-    };
-}
+	std::string weightInit;
+
+	void forwardPass();
+	void Test(std::vector<double> x);
+};
+} //namespace MLPP
 
 #endif /* HiddenLayer_hpp */

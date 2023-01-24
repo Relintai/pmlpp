@@ -8,18 +8,16 @@
 //  Created by Marc Melikyan on 3/10/21.
 //
 
-#include <vector>
 #include <tuple>
+#include <vector>
 
-namespace MLPP{
-    class HypothesisTesting{
-      
-        public:
-            std::tuple<bool, double> chiSquareTest(std::vector<double> observed, std::vector<double> expected);
-        
-        private:
-            
-    };
-}
+namespace MLPP {
+class HypothesisTesting {
+public:
+	std::tuple<bool, double> chiSquareTest(std::vector<double> observed, std::vector<double> expected);
+
+private:
+};
+} //namespace MLPP
 
 #endif /* HypothesisTesting_hpp */

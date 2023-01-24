@@ -10,20 +10,20 @@
 
 #include <vector>
 
-namespace MLPP{
-    class PCA{
-        
-        public:
-            PCA(std::vector<std::vector<double>> inputSet, int k);
-            std::vector<std::vector<double>> principalComponents();
-            double score(); 
-        private:
-            std::vector<std::vector<double>> inputSet;
-            std::vector<std::vector<double>> X_normalized;
-            std::vector<std::vector<double>> U_reduce;
-            std::vector<std::vector<double>> Z;  
-            int k;
-    };
-}
+namespace MLPP {
+class PCA {
+public:
+	PCA(std::vector<std::vector<double>> inputSet, int k);
+	std::vector<std::vector<double>> principalComponents();
+	double score();
+
+private:
+	std::vector<std::vector<double>> inputSet;
+	std::vector<std::vector<double>> X_normalized;
+	std::vector<std::vector<double>> U_reduce;
+	std::vector<std::vector<double>> Z;
+	int k;
+};
+} //namespace MLPP
 
 #endif /* PCA_hpp */

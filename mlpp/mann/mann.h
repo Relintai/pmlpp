@@ -11,39 +11,39 @@
 #include "../hidden_layer/hidden_layer.h"
 #include "../multi_output_layer/multi_output_layer.h"
 
-#include <vector>
 #include <string>
+#include <vector>
 
-namespace  MLPP{
+namespace MLPP {
 
-class MANN{
-        public:
-        MANN(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet);
-        ~MANN();
-        std::vector<std::vector<double>> modelSetTest(std::vector<std::vector<double>> X);
-        std::vector<double> modelTest(std::vector<double> x);
-        void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);
-        double score(); 
-        void save(std::string fileName);
+class MANN {
+public:
+	MANN(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet);
+	~MANN();
+	std::vector<std::vector<double>> modelSetTest(std::vector<std::vector<double>> X);
+	std::vector<double> modelTest(std::vector<double> x);
+	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);
+	double score();
+	void save(std::string fileName);
 
-        void addLayer(int n_hidden, std::string activation, std::string weightInit = "Default", std::string reg = "None", double lambda = 0.5, double alpha = 0.5); 
-        void addOutputLayer(std::string activation, std::string loss, std::string weightInit = "Default", std::string reg = "None", double lambda = 0.5, double alpha = 0.5); 
-        
-        private:
-            double Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y);
-            void forwardPass();
+	void addLayer(int n_hidden, std::string activation, std::string weightInit = "Default", std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
+	void addOutputLayer(std::string activation, std::string loss, std::string weightInit = "Default", std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
 
-            std::vector<std::vector<double>> inputSet;
-            std::vector<std::vector<double>> outputSet;
-            std::vector<std::vector<double>> y_hat;
+private:
+	double Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y);
+	void forwardPass();
 
-            std::vector<HiddenLayer> network;
-            MultiOutputLayer *outputLayer;
+	std::vector<std::vector<double>> inputSet;
+	std::vector<std::vector<double>> outputSet;
+	std::vector<std::vector<double>> y_hat;
 
-            int n;
-            int k;
-            int n_output;
-    };
-}
+	std::vector<HiddenLayer> network;
+	MultiOutputLayer *outputLayer;
+
+	int n;
+	int k;
+	int n_output;
+};
+} //namespace MLPP
 
 #endif /* MANN_hpp */

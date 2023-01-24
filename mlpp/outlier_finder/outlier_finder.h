@@ -10,19 +10,18 @@
 
 #include <vector>
 
-namespace MLPP{
-    class OutlierFinder{
-        public:
-            // Cnstr
-            OutlierFinder(int threshold);
+namespace MLPP {
+class OutlierFinder {
+public:
+	// Cnstr
+	OutlierFinder(int threshold);
 
-            std::vector<std::vector<double>> modelSetTest(std::vector<std::vector<double>> inputSet);
-            std::vector<double> modelTest(std::vector<double> inputSet);
+	std::vector<std::vector<double>> modelSetTest(std::vector<std::vector<double>> inputSet);
+	std::vector<double> modelTest(std::vector<double> inputSet);
 
-            // Variables required 
-            int threshold;
-        
-    };
-}
+	// Variables required
+	int threshold;
+};
+} //namespace MLPP
 
 #endif /* OutlierFinder_hpp */
