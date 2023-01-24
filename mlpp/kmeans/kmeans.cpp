@@ -13,7 +13,7 @@
 #include <random>
 
 
-KMeans::KMeans(std::vector<std::vector<double>> inputSet, int k, std::string init_type) :
+MLPPKMeans::MLPPKMeans(std::vector<std::vector<double>> inputSet, int k, std::string init_type) :
 		inputSet(inputSet), k(k), init_type(init_type) {
 	if (init_type == "KMeans++") {
 		kmeansppInitialization(k);
@@ -22,7 +22,7 @@ KMeans::KMeans(std::vector<std::vector<double>> inputSet, int k, std::string ini
 	}
 }
 
-std::vector<std::vector<double>> KMeans::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<std::vector<double>> MLPPKMeans::modelSetTest(std::vector<std::vector<double>> X) {
 	LinAlg alg;
 	std::vector<std::vector<double>> closestCentroids;
 	for (int i = 0; i < inputSet.size(); i++) {
@@ -38,7 +38,7 @@ std::vector<std::vector<double>> KMeans::modelSetTest(std::vector<std::vector<do
 	return closestCentroids;
 }
 
-std::vector<double> KMeans::modelTest(std::vector<double> x) {
+std::vector<double> MLPPKMeans::modelTest(std::vector<double> x) {
 	LinAlg alg;
 	std::vector<double> closestCentroid = mu[0];
 	for (int j = 0; j < mu.size(); j++) {
@@ -49,7 +49,7 @@ std::vector<double> KMeans::modelTest(std::vector<double> x) {
 	return closestCentroid;
 }
 
-void KMeans::train(int epoch_num, bool UI) {
+void MLPPKMeans::train(int epoch_num, bool UI) {
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -80,11 +80,11 @@ void KMeans::train(int epoch_num, bool UI) {
 	}
 }
 
-double KMeans::score() {
+double MLPPKMeans::score() {
 	return Cost();
 }
 
-std::vector<double> KMeans::silhouette_scores() {
+std::vector<double> MLPPKMeans::silhouette_scores() {
 	LinAlg alg;
 	std::vector<std::vector<double>> closestCentroids = modelSetTest(inputSet);
 	std::vector<double> silhouette_scores;
@@ -135,7 +135,7 @@ std::vector<double> KMeans::silhouette_scores() {
 }
 
 // This simply computes r_nk
-void KMeans::Evaluate() {
+void MLPPKMeans::Evaluate() {
 	LinAlg alg;
 	r.resize(inputSet.size());
 
@@ -162,7 +162,7 @@ void KMeans::Evaluate() {
 }
 
 // This simply computes or re-computes mu_k
-void KMeans::computeMu() {
+void MLPPKMeans::computeMu() {
 	LinAlg alg;
 	for (int i = 0; i < mu.size(); i++) {
 		std::vector<double> num;
@@ -183,7 +183,7 @@ void KMeans::computeMu() {
 	}
 }
 
-void KMeans::centroidInitialization(int k) {
+void MLPPKMeans::centroidInitialization(int k) {
 	mu.resize(k);
 
 	for (int i = 0; i < k; i++) {
@@ -196,7 +196,7 @@ void KMeans::centroidInitialization(int k) {
 	}
 }
 
-void KMeans::kmeansppInitialization(int k) {
+void MLPPKMeans::kmeansppInitialization(int k) {
 	LinAlg alg;
 	std::random_device rd;
 	std::default_random_engine generator(rd());
@@ -222,7 +222,7 @@ void KMeans::kmeansppInitialization(int k) {
 	}
 }
 
-double KMeans::Cost() {
+double MLPPKMeans::Cost() {
 	LinAlg alg;
 	double sum = 0;
 	for (int i = 0; i < r.size(); i++) {

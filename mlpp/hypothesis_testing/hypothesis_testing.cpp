@@ -8,7 +8,7 @@
 
 
 
-std::tuple<bool, double> HypothesisTesting::chiSquareTest(std::vector<double> observed, std::vector<double> expected) {
+std::tuple<bool, double> MLPPHypothesisTesting::chiSquareTest(std::vector<double> observed, std::vector<double> expected) {
 	double df = observed.size() - 1; // These are our degrees of freedom
 	double sum = 0;
 	for (int i = 0; i < observed.size(); i++) {

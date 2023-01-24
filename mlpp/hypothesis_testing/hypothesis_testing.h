@@ -12,7 +12,7 @@
 #include <vector>
 
 
-class HypothesisTesting {
+class MLPPHypothesisTesting {
 public:
 	std::tuple<bool, double> chiSquareTest(std::vector<double> observed, std::vector<double> expected);
 

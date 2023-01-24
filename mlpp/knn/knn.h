@@ -11,9 +11,9 @@
 #include <vector>
 
 
-class kNN {
+class MLPPKNN {
 public:
-	kNN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int k);
+	MLPPKNN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int k);
 	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
 	int modelTest(std::vector<double> x);
 	double score();

@@ -12,9 +12,9 @@
 #include <vector>
 
 
-class KMeans {
+class MLPPKMeans {
 public:
-	KMeans(std::vector<std::vector<double>> inputSet, int k, std::string init_type = "Default");
+	MLPPKMeans(std::vector<std::vector<double>> inputSet, int k, std::string init_type = "Default");
 	std::vector<std::vector<double>> modelSetTest(std::vector<std::vector<double>> X);
 	std::vector<double> modelTest(std::vector<double> x);
 	void train(int epoch_num, bool UI = 1);
