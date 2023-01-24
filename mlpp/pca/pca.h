@@ -11,9 +11,9 @@
 #include <vector>
 
 
-class PCA {
+class MLPPPCA {
 public:
-	PCA(std::vector<std::vector<double>> inputSet, int k);
+	MLPPPCA(std::vector<std::vector<double>> inputSet, int k);
 	std::vector<std::vector<double>> principalComponents();
 	double score();
 

@@ -13,7 +13,7 @@
 #include <string>
 
 
-class Reg {
+class MLPPReg {
 public:
 	double regTerm(std::vector<double> weights, double lambda, double alpha, std::string reg);
 	double regTerm(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg);

@@ -16,9 +16,9 @@
 #include <vector>
 
 
-class OutputLayer {
+class MLPPOutputLayer {
 public:
-	OutputLayer(int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha);
+	MLPPOutputLayer(int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha);
 
 	int n_hidden;
 	std::string activation;

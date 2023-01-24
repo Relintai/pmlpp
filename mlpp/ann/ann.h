@@ -55,7 +55,7 @@ private:
 	std::vector<double> y_hat;
 
 	std::vector<MLPPHiddenLayer> network;
-	OutputLayer *outputLayer;
+	MLPPOutputLayer *outputLayer;
 
 	int n;
 	int k;

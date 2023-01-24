@@ -9,11 +9,11 @@
 #include <iostream>
 
 
-OutlierFinder::OutlierFinder(int threshold) :
+MLPPOutlierFinder::MLPPOutlierFinder(int threshold) :
 		threshold(threshold) {
 }
 
-std::vector<std::vector<double>> OutlierFinder::modelSetTest(std::vector<std::vector<double>> inputSet) {
+std::vector<std::vector<double>> MLPPOutlierFinder::modelSetTest(std::vector<std::vector<double>> inputSet) {
 	Stat stat;
 	std::vector<std::vector<double>> outliers;
 	outliers.resize(inputSet.size());
@@ -28,7 +28,7 @@ std::vector<std::vector<double>> OutlierFinder::modelSetTest(std::vector<std::ve
 	return outliers;
 }
 
-std::vector<double> OutlierFinder::modelTest(std::vector<double> inputSet) {
+std::vector<double> MLPPOutlierFinder::modelTest(std::vector<double> inputSet) {
 	Stat stat;
 	std::vector<double> outliers;
 	for (int i = 0; i < inputSet.size(); i++) {

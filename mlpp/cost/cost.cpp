@@ -360,23 +360,23 @@ std::vector<std::vector<double>> MLPPCost::WassersteinLossDeriv(std::vector<std:
 
 double MLPPCost::HingeLoss(std::vector<double> y_hat, std::vector<double> y, std::vector<double> weights, double C) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	return C * HingeLoss(y_hat, y) + regularization.regTerm(weights, 1, 0, "Ridge");
 }
 double MLPPCost::HingeLoss(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y, std::vector<std::vector<double>> weights, double C) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	return C * HingeLoss(y_hat, y) + regularization.regTerm(weights, 1, 0, "Ridge");
 }
 
 std::vector<double> MLPPCost::HingeLossDeriv(std::vector<double> y_hat, std::vector<double> y, double C) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	return alg.scalarMultiply(C, HingeLossDeriv(y_hat, y));
 }
 std::vector<std::vector<double>> MLPPCost::HingeLossDeriv(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y, double C) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	return alg.scalarMultiply(C, HingeLossDeriv(y_hat, y));
 }
 

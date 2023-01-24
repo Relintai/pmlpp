@@ -15,25 +15,25 @@
 #include <random>
 
 
-ProbitReg::ProbitReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
+MLPPProbitReg::MLPPProbitReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
 	weights = Utilities::weightInitialization(k);
 	bias = Utilities::biasInitialization();
 }
 
-std::vector<double> ProbitReg::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPProbitReg::modelSetTest(std::vector<std::vector<double>> X) {
 	return Evaluate(X);
 }
 
-double ProbitReg::modelTest(std::vector<double> x) {
+double MLPPProbitReg::modelTest(std::vector<double> x) {
 	return Evaluate(x);
 }
 
-void ProbitReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPProbitReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -63,10 +63,10 @@ void ProbitReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void ProbitReg::MLE(double learning_rate, int max_epoch, bool UI) {
+void MLPPProbitReg::MLE(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -96,11 +96,11 @@ void ProbitReg::MLE(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void ProbitReg::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPProbitReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	// NOTE: ∂y_hat/∂z is sparse
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -138,10 +138,10 @@ void ProbitReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void ProbitReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPProbitReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -197,46 +197,46 @@ void ProbitReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, b
 	forwardPass();
 }
 
-double ProbitReg::score() {
+double MLPPProbitReg::score() {
 	Utilities util;
 	return util.performance(y_hat, outputSet);
 }
 
-void ProbitReg::save(std::string fileName) {
+void MLPPProbitReg::save(std::string fileName) {
 	Utilities util;
 	util.saveParameters(fileName, weights, bias);
 }
 
-double ProbitReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
-	Reg regularization;
+double MLPPProbitReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
+	MLPPReg regularization;
 	class MLPPCost cost;
 	return cost.MSE(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 
-std::vector<double> ProbitReg::Evaluate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPProbitReg::Evaluate(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.gaussianCDF(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
-std::vector<double> ProbitReg::propagate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPProbitReg::propagate(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
-double ProbitReg::Evaluate(std::vector<double> x) {
+double MLPPProbitReg::Evaluate(std::vector<double> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.gaussianCDF(alg.dot(weights, x) + bias);
 }
 
-double ProbitReg::propagate(std::vector<double> x) {
+double MLPPProbitReg::propagate(std::vector<double> x) {
 	MLPPLinAlg alg;
 	return alg.dot(weights, x) + bias;
 }
 
 // gaussianCDF ( wTx + b )
-void ProbitReg::forwardPass() {
+void MLPPProbitReg::forwardPass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 

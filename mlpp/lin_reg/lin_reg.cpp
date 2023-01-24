@@ -17,7 +17,7 @@
 
 
 
-LinReg::LinReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
+MLPPLinReg::MLPPLinReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
 
@@ -25,17 +25,17 @@ LinReg::LinReg(std::vector<std::vector<double>> inputSet, std::vector<double> ou
 	bias = Utilities::biasInitialization();
 }
 
-std::vector<double> LinReg::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPLinReg::modelSetTest(std::vector<std::vector<double>> X) {
 	return Evaluate(X);
 }
 
-double LinReg::modelTest(std::vector<double> x) {
+double MLPPLinReg::modelTest(std::vector<double> x) {
 	return Evaluate(x);
 }
 
-void LinReg::NewtonRaphson(double learning_rate, int max_epoch, bool UI) {
+void MLPPLinReg::NewtonRaphson(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -65,9 +65,9 @@ void LinReg::NewtonRaphson(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void LinReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPLinReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -96,9 +96,9 @@ void LinReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void LinReg::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPLinReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -135,9 +135,9 @@ void LinReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void LinReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPLinReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -173,7 +173,7 @@ void LinReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool
 	forwardPass();
 }
 
-void LinReg::normalEquation() {
+void MLPPLinReg::normalEquation() {
 	MLPPLinAlg alg;
 	Stat stat;
 	std::vector<double> x_means;
@@ -207,33 +207,33 @@ void LinReg::normalEquation() {
 	//}
 }
 
-double LinReg::score() {
+double MLPPLinReg::score() {
 	Utilities util;
 	return util.performance(y_hat, outputSet);
 }
 
-void LinReg::save(std::string fileName) {
+void MLPPLinReg::save(std::string fileName) {
 	Utilities util;
 	util.saveParameters(fileName, weights, bias);
 }
 
-double LinReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
-	Reg regularization;
+double MLPPLinReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
+	MLPPReg regularization;
 	class MLPPCost cost;
 	return cost.MSE(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 
-std::vector<double> LinReg::Evaluate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPLinReg::Evaluate(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
-double LinReg::Evaluate(std::vector<double> x) {
+double MLPPLinReg::Evaluate(std::vector<double> x) {
 	MLPPLinAlg alg;
 	return alg.dot(weights, x) + bias;
 }
 
 // wTx + b
-void LinReg::forwardPass() {
+void MLPPLinReg::forwardPass() {
 	y_hat = Evaluate(inputSet);
 }

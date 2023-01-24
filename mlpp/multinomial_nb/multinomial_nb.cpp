@@ -13,13 +13,13 @@
 #include <random>
 
 
-MultinomialNB::MultinomialNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num) :
+MLPPMultinomialNB::MLPPMultinomialNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num) :
 		inputSet(inputSet), outputSet(outputSet), class_num(class_num) {
 	y_hat.resize(outputSet.size());
 	Evaluate();
 }
 
-std::vector<double> MultinomialNB::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPMultinomialNB::modelSetTest(std::vector<std::vector<double>> X) {
 	std::vector<double> y_hat;
 	for (int i = 0; i < X.size(); i++) {
 		y_hat.push_back(modelTest(X[i]));
@@ -27,7 +27,7 @@ std::vector<double> MultinomialNB::modelSetTest(std::vector<std::vector<double>>
 	return y_hat;
 }
 
-double MultinomialNB::modelTest(std::vector<double> x) {
+double MLPPMultinomialNB::modelTest(std::vector<double> x) {
 	double score[class_num];
 	computeTheta();
 
@@ -48,12 +48,12 @@ double MultinomialNB::modelTest(std::vector<double> x) {
 	return std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(double)));
 }
 
-double MultinomialNB::score() {
+double MLPPMultinomialNB::score() {
 	Utilities util;
 	return util.performance(y_hat, outputSet);
 }
 
-void MultinomialNB::computeTheta() {
+void MLPPMultinomialNB::computeTheta() {
 	// Resizing theta for the sake of ease & proper access of the elements.
 	theta.resize(class_num);
 
@@ -77,7 +77,7 @@ void MultinomialNB::computeTheta() {
 	}
 }
 
-void MultinomialNB::Evaluate() {
+void MLPPMultinomialNB::Evaluate() {
 	MLPPLinAlg alg;
 	for (int i = 0; i < outputSet.size(); i++) {
 		// Pr(B | A) * Pr(A)

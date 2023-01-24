@@ -32,7 +32,7 @@ double MLPPCLogLogReg::modelTest(std::vector<double> x) {
 void MLPPCLogLogReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -66,7 +66,7 @@ void MLPPCLogLogReg::gradientDescent(double learning_rate, int max_epoch, bool U
 void MLPPCLogLogReg::MLE(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -97,7 +97,7 @@ void MLPPCLogLogReg::MLE(double learning_rate, int max_epoch, bool UI) {
 
 void MLPPCLogLogReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -139,7 +139,7 @@ void MLPPCLogLogReg::SGD(double learning_rate, int max_epoch, bool UI) {
 void MLPPCLogLogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -185,7 +185,7 @@ double MLPPCLogLogReg::score() {
 }
 
 double MLPPCLogLogReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
-	Reg regularization;
+	MLPPReg regularization;
 	class MLPPCost cost;
 	return cost.MSE(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }

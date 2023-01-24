@@ -12,9 +12,9 @@
 #include <vector>
 
 
-class MultinomialNB {
+class MLPPMultinomialNB {
 public:
-	MultinomialNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num);
+	MLPPMultinomialNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num);
 	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
 	double modelTest(std::vector<double> x);
 	double score();

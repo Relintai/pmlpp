@@ -16,7 +16,7 @@
 #include <random>
 
 
-MLP::MLP(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int n_hidden, std::string reg, double lambda, double alpha) :
+MLPPMLP::MLPPMLP(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int n_hidden, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n_hidden(n_hidden), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	MLPPActivation avn;
 	y_hat.resize(n);
@@ -27,18 +27,18 @@ MLP::MLP(std::vector<std::vector<double>> inputSet, std::vector<double> outputSe
 	bias2 = Utilities::biasInitialization();
 }
 
-std::vector<double> MLP::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPMLP::modelSetTest(std::vector<std::vector<double>> X) {
 	return Evaluate(X);
 }
 
-double MLP::modelTest(std::vector<double> x) {
+double MLPPMLP::modelTest(std::vector<double> x) {
 	return Evaluate(x);
 }
 
-void MLP::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPMLP::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -94,10 +94,10 @@ void MLP::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void MLP::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPMLP::SGD(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -148,10 +148,10 @@ void MLP::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void MLP::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPMLP::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -214,24 +214,24 @@ void MLP::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI
 	forwardPass();
 }
 
-double MLP::score() {
+double MLPPMLP::score() {
 	Utilities util;
 	return util.performance(y_hat, outputSet);
 }
 
-void MLP::save(std::string fileName) {
+void MLPPMLP::save(std::string fileName) {
 	Utilities util;
 	util.saveParameters(fileName, weights1, bias1, 0, 1);
 	util.saveParameters(fileName, weights2, bias2, 1, 2);
 }
 
-double MLP::Cost(std::vector<double> y_hat, std::vector<double> y) {
-	Reg regularization;
+double MLPPMLP::Cost(std::vector<double> y_hat, std::vector<double> y) {
+	MLPPReg regularization;
 	class MLPPCost cost;
 	return cost.LogLoss(y_hat, y) + regularization.regTerm(weights2, lambda, alpha, reg) + regularization.regTerm(weights1, lambda, alpha, reg);
 }
 
-std::vector<double> MLP::Evaluate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPMLP::Evaluate(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	std::vector<std::vector<double>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
@@ -239,7 +239,7 @@ std::vector<double> MLP::Evaluate(std::vector<std::vector<double>> X) {
 	return avn.sigmoid(alg.scalarAdd(bias2, alg.mat_vec_mult(a2, weights2)));
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLP::propagate(std::vector<std::vector<double>> X) {
+std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPMLP::propagate(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	std::vector<std::vector<double>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
@@ -247,7 +247,7 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> M
 	return { z2, a2 };
 }
 
-double MLP::Evaluate(std::vector<double> x) {
+double MLPPMLP::Evaluate(std::vector<double> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	std::vector<double> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
@@ -255,7 +255,7 @@ double MLP::Evaluate(std::vector<double> x) {
 	return avn.sigmoid(alg.dot(weights2, a2) + bias2);
 }
 
-std::tuple<std::vector<double>, std::vector<double>> MLP::propagate(std::vector<double> x) {
+std::tuple<std::vector<double>, std::vector<double>> MLPPMLP::propagate(std::vector<double> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	std::vector<double> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
@@ -263,7 +263,7 @@ std::tuple<std::vector<double>, std::vector<double>> MLP::propagate(std::vector<
 	return { z2, a2 };
 }
 
-void MLP::forwardPass() {
+void MLPPMLP::forwardPass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z2 = alg.mat_vec_add(alg.matmult(inputSet, weights1), bias1);

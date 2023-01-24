@@ -15,24 +15,24 @@
 #include <random>
 
 
-LogReg::LogReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
+MLPPLogReg::MLPPLogReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
 	weights = Utilities::weightInitialization(k);
 	bias = Utilities::biasInitialization();
 }
 
-std::vector<double> LogReg::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPLogReg::modelSetTest(std::vector<std::vector<double>> X) {
 	return Evaluate(X);
 }
 
-double LogReg::modelTest(std::vector<double> x) {
+double MLPPLogReg::modelTest(std::vector<double> x) {
 	return Evaluate(x);
 }
 
-void LogReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPLogReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -62,9 +62,9 @@ void LogReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void LogReg::MLE(double learning_rate, int max_epoch, bool UI) {
+void MLPPLogReg::MLE(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -93,9 +93,9 @@ void LogReg::MLE(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void LogReg::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPLogReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -132,9 +132,9 @@ void LogReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void LogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPLogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -170,35 +170,35 @@ void LogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool
 	forwardPass();
 }
 
-double LogReg::score() {
+double MLPPLogReg::score() {
 	Utilities util;
 	return util.performance(y_hat, outputSet);
 }
 
-void LogReg::save(std::string fileName) {
+void MLPPLogReg::save(std::string fileName) {
 	Utilities util;
 	util.saveParameters(fileName, weights, bias);
 }
 
-double LogReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
-	Reg regularization;
+double MLPPLogReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
+	MLPPReg regularization;
 	class MLPPCost cost;
 	return cost.LogLoss(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 
-std::vector<double> LogReg::Evaluate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPLogReg::Evaluate(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.sigmoid(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
-double LogReg::Evaluate(std::vector<double> x) {
+double MLPPLogReg::Evaluate(std::vector<double> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.sigmoid(alg.dot(weights, x) + bias);
 }
 
 // sigmoid ( wTx + b )
-void LogReg::forwardPass() {
+void MLPPLogReg::forwardPass() {
 	y_hat = Evaluate(inputSet);
 }

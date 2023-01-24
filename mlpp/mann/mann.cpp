@@ -14,15 +14,15 @@
 #include <iostream>
 
 
-MANN::MANN(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet) :
+MLPPMANN::MLPPMANN(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), n_output(outputSet[0].size()) {
 }
 
-MANN::~MANN() {
+MLPPMANN::~MLPPMANN() {
 	delete outputLayer;
 }
 
-std::vector<std::vector<double>> MANN::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<std::vector<double>> MLPPMANN::modelSetTest(std::vector<std::vector<double>> X) {
 	if (!network.empty()) {
 		network[0].input = X;
 		network[0].forwardPass();
@@ -39,7 +39,7 @@ std::vector<std::vector<double>> MANN::modelSetTest(std::vector<std::vector<doub
 	return outputLayer->a;
 }
 
-std::vector<double> MANN::modelTest(std::vector<double> x) {
+std::vector<double> MLPPMANN::modelTest(std::vector<double> x) {
 	if (!network.empty()) {
 		network[0].Test(x);
 		for (int i = 1; i < network.size(); i++) {
@@ -52,11 +52,11 @@ std::vector<double> MANN::modelTest(std::vector<double> x) {
 	return outputLayer->a_test;
 }
 
-void MANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPMANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 
 	double cost_prev = 0;
 	int epoch = 1;
@@ -120,13 +120,13 @@ void MANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-double MANN::score() {
+double MLPPMANN::score() {
 	Utilities util;
 	forwardPass();
 	return util.performance(y_hat, outputSet);
 }
 
-void MANN::save(std::string fileName) {
+void MLPPMANN::save(std::string fileName) {
 	Utilities util;
 	if (!network.empty()) {
 		util.saveParameters(fileName, network[0].weights, network[0].bias, 0, 1);
@@ -139,7 +139,7 @@ void MANN::save(std::string fileName) {
 	}
 }
 
-void MANN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, double lambda, double alpha) {
+void MLPPMANN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, double lambda, double alpha) {
 	if (network.empty()) {
 		network.push_back(MLPPHiddenLayer(n_hidden, activation, inputSet, weightInit, reg, lambda, alpha));
 		network[0].forwardPass();
@@ -149,16 +149,16 @@ void MANN::addLayer(int n_hidden, std::string activation, std::string weightInit
 	}
 }
 
-void MANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, double lambda, double alpha) {
+void MLPPMANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, double lambda, double alpha) {
 	if (!network.empty()) {
-		outputLayer = new MultiOutputLayer(n_output, network[0].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
+		outputLayer = new MLPPMultiOutputLayer(n_output, network[0].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
 	} else {
-		outputLayer = new MultiOutputLayer(n_output, k, activation, loss, inputSet, weightInit, reg, lambda, alpha);
+		outputLayer = new MLPPMultiOutputLayer(n_output, k, activation, loss, inputSet, weightInit, reg, lambda, alpha);
 	}
 }
 
-double MANN::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	Reg regularization;
+double MLPPMANN::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
+	MLPPReg regularization;
 	class MLPPCost cost;
 	double totalRegTerm = 0;
 
@@ -171,7 +171,7 @@ double MANN::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vecto
 	return (cost.*cost_function)(y_hat, y) + totalRegTerm + regularization.regTerm(outputLayer->weights, outputLayer->lambda, outputLayer->alpha, outputLayer->reg);
 }
 
-void MANN::forwardPass() {
+void MLPPMANN::forwardPass() {
 	if (!network.empty()) {
 		network[0].input = inputSet;
 		network[0].forwardPass();

@@ -621,11 +621,11 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::string>> MLPPData:
 		outputSet.push_back(BOW[i]);
 	}
 	MLPPLinAlg alg;
-	SoftmaxNet *model;
+	MLPPSoftmaxNet *model;
 	if (type == "Skipgram") {
-		model = new SoftmaxNet(outputSet, inputSet, dimension);
+		model = new MLPPSoftmaxNet(outputSet, inputSet, dimension);
 	} else { // else = CBOW. We maintain it is a default.
-		model = new SoftmaxNet(inputSet, outputSet, dimension);
+		model = new MLPPSoftmaxNet(inputSet, outputSet, dimension);
 	}
 	model->gradientDescent(learning_rate, max_epoch, 1);
 

@@ -119,9 +119,9 @@ void WGAN::addLayer(int n_hidden, std::string activation, std::string weightInit
 void WGAN::addOutputLayer(std::string weightInit, std::string reg, double lambda, double alpha) {
 	MLPPLinAlg alg;
 	if (!network.empty()) {
-		outputLayer = new OutputLayer(network[network.size() - 1].n_hidden, "Linear", "WassersteinLoss", network[network.size() - 1].a, weightInit, "WeightClipping", -0.01, 0.01);
+		outputLayer = new MLPPOutputLayer(network[network.size() - 1].n_hidden, "Linear", "WassersteinLoss", network[network.size() - 1].a, weightInit, "WeightClipping", -0.01, 0.01);
 	} else { // Should never happen.
-		outputLayer = new OutputLayer(k, "Linear", "WassersteinLoss", alg.gaussianNoise(n, k), weightInit, "WeightClipping", -0.01, 0.01);
+		outputLayer = new MLPPOutputLayer(k, "Linear", "WassersteinLoss", alg.gaussianNoise(n, k), weightInit, "WeightClipping", -0.01, 0.01);
 	}
 }
 
@@ -155,7 +155,7 @@ std::vector<double> WGAN::modelSetTestDiscriminator(std::vector<std::vector<doub
 }
 
 double WGAN::Cost(std::vector<double> y_hat, std::vector<double> y) {
-	Reg regularization;
+	MLPPReg regularization;
 	class MLPPCost cost;
 	double totalRegTerm = 0;
 
@@ -220,7 +220,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> W
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 
 	std::vector<std::vector<std::vector<double>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
 
@@ -256,7 +256,7 @@ std::vector<std::vector<std::vector<double>>> WGAN::computeGeneratorGradients(st
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 
 	std::vector<std::vector<std::vector<double>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
 

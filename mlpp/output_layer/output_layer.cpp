@@ -12,7 +12,7 @@
 #include <random>
 
 
-OutputLayer::OutputLayer(int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha) :
+MLPPOutputLayer::MLPPOutputLayer(int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha) :
 		n_hidden(n_hidden), activation(activation), cost(cost), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
 	weights = Utilities::weightInitialization(n_hidden, weightInit);
 	bias = Utilities::biasInitialization();
@@ -113,14 +113,14 @@ OutputLayer::OutputLayer(int n_hidden, std::string activation, std::string cost,
 	cost_map["WassersteinLoss"] = &MLPPCost::HingeLoss;
 }
 
-void OutputLayer::forwardPass() {
+void MLPPOutputLayer::forwardPass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z = alg.scalarAdd(bias, alg.mat_vec_mult(input, weights));
 	a = (avn.*activation_map[activation])(z, 0);
 }
 
-void OutputLayer::Test(std::vector<double> x) {
+void MLPPOutputLayer::Test(std::vector<double> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z_test = alg.dot(weights, x) + bias;

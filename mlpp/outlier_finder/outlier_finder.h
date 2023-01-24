@@ -11,10 +11,10 @@
 #include <vector>
 
 
-class OutlierFinder {
+class MLPPOutlierFinder {
 public:
 	// Cnstr
-	OutlierFinder(int threshold);
+	MLPPOutlierFinder(int threshold);
 
 	std::vector<std::vector<double>> modelSetTest(std::vector<std::vector<double>> inputSet);
 	std::vector<double> modelTest(std::vector<double> inputSet);

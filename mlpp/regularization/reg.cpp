@@ -12,7 +12,7 @@
 
 
 
-double Reg::regTerm(std::vector<double> weights, double lambda, double alpha, std::string reg) {
+double MLPPReg::regTerm(std::vector<double> weights, double lambda, double alpha, std::string reg) {
 	if (reg == "Ridge") {
 		double reg = 0;
 		for (int i = 0; i < weights.size(); i++) {
@@ -36,7 +36,7 @@ double Reg::regTerm(std::vector<double> weights, double lambda, double alpha, st
 	return 0;
 }
 
-double Reg::regTerm(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg) {
+double MLPPReg::regTerm(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg) {
 	if (reg == "Ridge") {
 		double reg = 0;
 		for (int i = 0; i < weights.size(); i++) {
@@ -66,7 +66,7 @@ double Reg::regTerm(std::vector<std::vector<double>> weights, double lambda, dou
 	return 0;
 }
 
-std::vector<double> Reg::regWeights(std::vector<double> weights, double lambda, double alpha, std::string reg) {
+std::vector<double> MLPPReg::regWeights(std::vector<double> weights, double lambda, double alpha, std::string reg) {
 	MLPPLinAlg alg;
 	if (reg == "WeightClipping") {
 		return regDerivTerm(weights, lambda, alpha, reg);
@@ -78,7 +78,7 @@ std::vector<double> Reg::regWeights(std::vector<double> weights, double lambda, 
 	// return weights;
 }
 
-std::vector<std::vector<double>> Reg::regWeights(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg) {
+std::vector<std::vector<double>> MLPPReg::regWeights(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg) {
 	MLPPLinAlg alg;
 	if (reg == "WeightClipping") {
 		return regDerivTerm(weights, lambda, alpha, reg);
@@ -92,7 +92,7 @@ std::vector<std::vector<double>> Reg::regWeights(std::vector<std::vector<double>
 	// return weights;
 }
 
-std::vector<double> Reg::regDerivTerm(std::vector<double> weights, double lambda, double alpha, std::string reg) {
+std::vector<double> MLPPReg::regDerivTerm(std::vector<double> weights, double lambda, double alpha, std::string reg) {
 	std::vector<double> regDeriv;
 	regDeriv.resize(weights.size());
 
@@ -102,7 +102,7 @@ std::vector<double> Reg::regDerivTerm(std::vector<double> weights, double lambda
 	return regDeriv;
 }
 
-std::vector<std::vector<double>> Reg::regDerivTerm(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg) {
+std::vector<std::vector<double>> MLPPReg::regDerivTerm(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg) {
 	std::vector<std::vector<double>> regDeriv;
 	regDeriv.resize(weights.size());
 	for (int i = 0; i < regDeriv.size(); i++) {
@@ -117,7 +117,7 @@ std::vector<std::vector<double>> Reg::regDerivTerm(std::vector<std::vector<doubl
 	return regDeriv;
 }
 
-double Reg::regDerivTerm(std::vector<double> weights, double lambda, double alpha, std::string reg, int j) {
+double MLPPReg::regDerivTerm(std::vector<double> weights, double lambda, double alpha, std::string reg, int j) {
 	MLPPActivation act;
 	if (reg == "Ridge") {
 		return lambda * weights[j];
@@ -140,7 +140,7 @@ double Reg::regDerivTerm(std::vector<double> weights, double lambda, double alph
 	}
 }
 
-double Reg::regDerivTerm(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg, int i, int j) {
+double MLPPReg::regDerivTerm(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg, int i, int j) {
 	MLPPActivation act;
 	if (reg == "Ridge") {
 		return lambda * weights[i][j];

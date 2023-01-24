@@ -35,7 +35,7 @@ void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) 
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -83,7 +83,7 @@ void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) 
 //     class MLPPCost cost;
 //     MLPPActivation avn;
 //     MLPPLinAlg alg;
-//     Reg regularization;
+//     MLPPReg regularization;
 
 //     double cost_prev = 0;
 //     int epoch = 1;
@@ -116,7 +116,7 @@ void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) 
 //     class MLPPCost cost;
 //     MLPPActivation avn;
 //     MLPPLinAlg alg;
-//     Reg regularization;
+//     MLPPReg regularization;
 //     double cost_prev = 0;
 //     int epoch = 1;
 

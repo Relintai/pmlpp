@@ -663,14 +663,14 @@ void MLPPANN::addLayer(int n_hidden, std::string activation, std::string weightI
 void MLPPANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, double lambda, double alpha) {
 	MLPPLinAlg alg;
 	if (!network.empty()) {
-		outputLayer = new OutputLayer(network[network.size() - 1].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
+		outputLayer = new MLPPOutputLayer(network[network.size() - 1].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
 	} else {
-		outputLayer = new OutputLayer(k, activation, loss, inputSet, weightInit, reg, lambda, alpha);
+		outputLayer = new MLPPOutputLayer(k, activation, loss, inputSet, weightInit, reg, lambda, alpha);
 	}
 }
 
 double MLPPANN::Cost(std::vector<double> y_hat, std::vector<double> y) {
-	Reg regularization;
+	MLPPReg regularization;
 	class MLPPCost cost;
 	double totalRegTerm = 0;
 
@@ -722,7 +722,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> M
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 
 	std::vector<std::vector<std::vector<double>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
 

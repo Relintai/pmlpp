@@ -33,7 +33,7 @@ double TanhReg::modelTest(std::vector<double> x) {
 void TanhReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -66,7 +66,7 @@ void TanhReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 
 void TanhReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -106,7 +106,7 @@ void TanhReg::SGD(double learning_rate, int max_epoch, bool UI) {
 void TanhReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -157,7 +157,7 @@ void TanhReg::save(std::string fileName) {
 }
 
 double TanhReg::Cost(std::vector<double> y_hat, std::vector<double> y) {
-	Reg regularization;
+	MLPPReg regularization;
 	class MLPPCost cost;
 	return cost.MSE(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }

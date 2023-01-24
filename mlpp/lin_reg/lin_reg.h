@@ -12,9 +12,9 @@
 #include <vector>
 
 
-class LinReg {
+class MLPPLinReg {
 public:
-	LinReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
+	MLPPLinReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
 	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
 	double modelTest(std::vector<double> x);
 	void NewtonRaphson(double learning_rate, int max_epoch, bool UI);

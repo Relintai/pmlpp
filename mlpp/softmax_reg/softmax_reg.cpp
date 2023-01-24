@@ -32,7 +32,7 @@ std::vector<std::vector<double>> SoftmaxReg::modelSetTest(std::vector<std::vecto
 
 void SoftmaxReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -71,7 +71,7 @@ void SoftmaxReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 
 void SoftmaxReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -114,7 +114,7 @@ void SoftmaxReg::SGD(double learning_rate, int max_epoch, bool UI) {
 
 void SoftmaxReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 	double cost_prev = 0;
 	int epoch = 1;
 
@@ -164,7 +164,7 @@ void SoftmaxReg::save(std::string fileName) {
 }
 
 double SoftmaxReg::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	Reg regularization;
+	MLPPReg regularization;
 	class MLPPCost cost;
 	return cost.CrossEntropy(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }

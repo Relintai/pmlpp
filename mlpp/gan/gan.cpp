@@ -110,9 +110,9 @@ void MLPPGAN::addLayer(int n_hidden, std::string activation, std::string weightI
 void MLPPGAN::addOutputLayer(std::string weightInit, std::string reg, double lambda, double alpha) {
 	MLPPLinAlg alg;
 	if (!network.empty()) {
-		outputLayer = new OutputLayer(network[network.size() - 1].n_hidden, "Sigmoid", "LogLoss", network[network.size() - 1].a, weightInit, reg, lambda, alpha);
+		outputLayer = new MLPPOutputLayer(network[network.size() - 1].n_hidden, "Sigmoid", "LogLoss", network[network.size() - 1].a, weightInit, reg, lambda, alpha);
 	} else {
-		outputLayer = new OutputLayer(k, "Sigmoid", "LogLoss", alg.gaussianNoise(n, k), weightInit, reg, lambda, alpha);
+		outputLayer = new MLPPOutputLayer(k, "Sigmoid", "LogLoss", alg.gaussianNoise(n, k), weightInit, reg, lambda, alpha);
 	}
 }
 
@@ -146,7 +146,7 @@ std::vector<double> MLPPGAN::modelSetTestDiscriminator(std::vector<std::vector<d
 }
 
 double MLPPGAN::Cost(std::vector<double> y_hat, std::vector<double> y) {
-	Reg regularization;
+	MLPPReg regularization;
 	class MLPPCost cost;
 	double totalRegTerm = 0;
 
@@ -211,7 +211,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> M
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 
 	std::vector<std::vector<std::vector<double>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
 
@@ -247,7 +247,7 @@ std::vector<std::vector<std::vector<double>>> MLPPGAN::computeGeneratorGradients
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
-	Reg regularization;
+	MLPPReg regularization;
 
 	std::vector<std::vector<std::vector<double>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
 

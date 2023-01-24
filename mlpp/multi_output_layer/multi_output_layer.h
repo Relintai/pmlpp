@@ -16,9 +16,9 @@
 #include <vector>
 
 
-class MultiOutputLayer {
+class MLPPMultiOutputLayer {
 public:
-	MultiOutputLayer(int n_output, int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha);
+	MLPPMultiOutputLayer(int n_output, int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha);
 
 	int n_output;
 	int n_hidden;

@@ -16,10 +16,10 @@
 
 
 
-class MANN {
+class MLPPMANN {
 public:
-	MANN(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet);
-	~MANN();
+	MLPPMANN(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet);
+	~MLPPMANN();
 	std::vector<std::vector<double>> modelSetTest(std::vector<std::vector<double>> X);
 	std::vector<double> modelTest(std::vector<double> x);
 	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);
@@ -38,7 +38,7 @@ private:
 	std::vector<std::vector<double>> y_hat;
 
 	std::vector<MLPPHiddenLayer> network;
-	MultiOutputLayer *outputLayer;
+	MLPPMultiOutputLayer *outputLayer;
 
 	int n;
 	int k;

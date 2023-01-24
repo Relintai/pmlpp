@@ -12,7 +12,7 @@
 #include <random>
 
 
-MultiOutputLayer::MultiOutputLayer(int n_output, int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha) :
+MLPPMultiOutputLayer::MLPPMultiOutputLayer(int n_output, int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha) :
 		n_output(n_output), n_hidden(n_hidden), activation(activation), cost(cost), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
 	weights = Utilities::weightInitialization(n_hidden, n_output, weightInit);
 	bias = Utilities::biasInitialization(n_output);
@@ -116,14 +116,14 @@ MultiOutputLayer::MultiOutputLayer(int n_output, int n_hidden, std::string activ
 	cost_map["WassersteinLoss"] = &MLPPCost::HingeLoss;
 }
 
-void MultiOutputLayer::forwardPass() {
+void MLPPMultiOutputLayer::forwardPass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z = alg.mat_vec_add(alg.matmult(input, weights), bias);
 	a = (avn.*activation_map[activation])(z, 0);
 }
 
-void MultiOutputLayer::Test(std::vector<double> x) {
+void MLPPMultiOutputLayer::Test(std::vector<double> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z_test = alg.addition(alg.mat_vec_mult(alg.transpose(weights), x), bias);

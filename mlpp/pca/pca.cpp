@@ -13,11 +13,11 @@
 
 
 
-PCA::PCA(std::vector<std::vector<double>> inputSet, int k) :
+MLPPPCA::MLPPPCA(std::vector<std::vector<double>> inputSet, int k) :
 		inputSet(inputSet), k(k) {
 }
 
-std::vector<std::vector<double>> PCA::principalComponents() {
+std::vector<std::vector<double>> MLPPPCA::principalComponents() {
 	MLPPLinAlg alg;
 	MLPPData data;
 
@@ -33,7 +33,7 @@ std::vector<std::vector<double>> PCA::principalComponents() {
 	return Z;
 }
 // Simply tells us the percentage of variance maintained.
-double PCA::score() {
+double MLPPPCA::score() {
 	MLPPLinAlg alg;
 	std::vector<std::vector<double>> X_approx = alg.matmult(U_reduce, Z);
 	double num, den = 0;
