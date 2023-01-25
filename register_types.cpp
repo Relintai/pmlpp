@@ -23,10 +23,17 @@ SOFTWARE.
 
 #include "register_types.h"
 
+#include "mlpp/data/data.h"
+
 #include "test/mlpp_tests.h"
 
 void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 	if (p_level == MODULE_REGISTRATION_LEVEL_SCENE) {
+		ClassDB::register_class<MLPPDataESimple>();
+		ClassDB::register_class<MLPPDataSimple>();
+		ClassDB::register_class<MLPPDataComplex>();
+		ClassDB::register_class<MLPPData>();
+
 		ClassDB::register_class<MLPPTests>();
 	}
 }

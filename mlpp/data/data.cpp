@@ -6,9 +6,13 @@
 //
 
 #include "data.h"
+
+#include "core/os/file_access.h"
+
 #include "../lin_alg/lin_alg.h"
 #include "../softmax_net/softmax_net.h"
 #include "../stat/stat.h"
+
 #include <algorithm>
 #include <cmath>
 #include <fstream>
@@ -16,6 +20,185 @@
 #include <random>
 #include <sstream>
 
+void MLPPDataESimple::_bind_methods() {
+}
+
+void MLPPDataSimple::_bind_methods() {
+}
+
+void MLPPDataComplex::_bind_methods() {
+}
+
+// Loading Datasets
+Ref<MLPPDataSimple> MLPPData::load_breast_cancer(const String &path) {
+	const int BREAST_CANCER_SIZE = 30; // k = 30
+
+	Ref<MLPPDataSimple> data;
+	data.instance();
+
+	set_data_supervised(BREAST_CANCER_SIZE, path, data->input, data->output);
+
+	return data;
+}
+
+Ref<MLPPDataSimple> MLPPData::load_breast_cancer_svc(const String &path) {
+	const int BREAST_CANCER_SIZE = 30; // k = 30
+
+	Ref<MLPPDataSimple> data;
+	data.instance();
+
+	set_data_supervised(BREAST_CANCER_SIZE, path, data->input, data->output);
+
+	return data;
+}
+
+Ref<MLPPDataComplex> MLPPData::load_iris(const String &path) {
+	const int IRIS_SIZE = 4;
+	const int ONE_HOT_NUM = 3;
+
+	std::vector<double> tempOutputSet;
+
+	Ref<MLPPDataComplex> data;
+	data.instance();
+
+	set_data_supervised(IRIS_SIZE, path, data->input, tempOutputSet);
+	data->output = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+
+	return data;
+}
+
+Ref<MLPPDataComplex> MLPPData::load_wine(const String &path) {
+	const int WINE_SIZE = 4;
+	const int ONE_HOT_NUM = 3;
+
+	std::vector<double> tempOutputSet;
+
+	Ref<MLPPDataComplex> data;
+	data.instance();
+
+	set_data_supervised(WINE_SIZE, path, data->input, tempOutputSet);
+	data->output = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+
+	return data;
+}
+
+Ref<MLPPDataComplex> MLPPData::load_mnist_train(const String &path) {
+	const int MNIST_SIZE = 784;
+	const int ONE_HOT_NUM = 10;
+
+	std::vector<std::vector<double>> inputSet;
+	std::vector<double> tempOutputSet;
+
+	Ref<MLPPDataComplex> data;
+	data.instance();
+
+	set_data_supervised(MNIST_SIZE, path, data->input, tempOutputSet);
+	data->output = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+
+	return data;
+}
+
+Ref<MLPPDataComplex> MLPPData::load_mnist_test(const String &path) {
+	const int MNIST_SIZE = 784;
+	const int ONE_HOT_NUM = 10;
+	std::vector<std::vector<double>> inputSet;
+	std::vector<double> tempOutputSet;
+
+	Ref<MLPPDataComplex> data;
+	data.instance();
+
+	set_data_supervised(MNIST_SIZE, path, data->input, tempOutputSet);
+	data->output = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+
+	return data;
+}
+
+Ref<MLPPDataSimple> MLPPData::load_california_housing(const String &path) {
+	const int CALIFORNIA_HOUSING_SIZE = 13; // k = 30
+
+	Ref<MLPPDataSimple> data;
+	data.instance();
+
+	set_data_supervised(CALIFORNIA_HOUSING_SIZE, path, data->input, data->output);
+
+	return data;
+}
+
+Ref<MLPPDataESimple> MLPPData::load_fires_and_crime(const String &path) {
+	// k is implicitly 1.
+
+	Ref<MLPPDataESimple> data;
+	data.instance();
+
+	set_data_simple(path, data->input, data->output);
+
+	return data;
+}
+
+// MULTIVARIATE SUPERVISED
+
+void MLPPData::set_data_supervised(int k, const String &file_name, std::vector<std::vector<double>> &inputSet, std::vector<double> &outputSet) {
+	MLPPLinAlg alg;
+
+	inputSet.resize(k);
+
+	FileAccess *file = FileAccess::open(file_name, FileAccess::READ);
+
+	ERR_FAIL_COND(!file);
+
+	while (!file->eof_reached()) {
+		Vector<String> ll = file->get_csv_line();
+
+		for (int i = 0; i < k; ++i) {
+			inputSet[i].push_back(ll[i].to_double());
+		}
+
+		outputSet.push_back(ll[k].to_double());
+	}
+
+	inputSet = alg.transpose(inputSet);
+
+	memdelete(file);
+}
+
+void MLPPData::set_data_unsupervised(int k, const String &file_name, std::vector<std::vector<double>> &inputSet) {
+	MLPPLinAlg alg;
+
+	inputSet.resize(k);
+
+	FileAccess *file = FileAccess::open(file_name, FileAccess::READ);
+
+	ERR_FAIL_COND(!file);
+
+	while (!file->eof_reached()) {
+		Vector<String> ll = file->get_csv_line();
+
+		for (int i = 0; i < k; ++i) {
+			inputSet[i].push_back(ll[i].to_double());
+		}
+	}
+
+	inputSet = alg.transpose(inputSet);
+
+	memdelete(file);
+}
+
+void MLPPData::set_data_simple(const String &file_name, std::vector<double> &inputSet, std::vector<double> &outputSet) {
+	FileAccess *file = FileAccess::open(file_name, FileAccess::READ);
+
+	ERR_FAIL_COND(!file);
+
+	while (!file->eof_reached()) {
+		Vector<String> ll = file->get_csv_line();
+
+		for (int i = 0; i < ll.size(); i += 2) {
+			inputSet.push_back(ll[i].to_double());
+			outputSet.push_back(ll[i + 1].to_double());
+		}
+	}
+
+	memdelete(file);
+}
 
 // Loading Datasets
 std::tuple<std::vector<std::vector<double>>, std::vector<double>> MLPPData::loadBreastCancer() {
@@ -699,7 +882,7 @@ std::vector<std::vector<double>> MLPPData::featureScaling(std::vector<std::vecto
 
 std::vector<std::vector<double>> MLPPData::meanNormalization(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
-	MLPPStat  stat;
+	MLPPStat stat;
 	// (X_j - mu_j) / std_j, for every j
 
 	X = meanCentering(X);
@@ -711,7 +894,7 @@ std::vector<std::vector<double>> MLPPData::meanNormalization(std::vector<std::ve
 
 std::vector<std::vector<double>> MLPPData::meanCentering(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
-	MLPPStat  stat;
+	MLPPStat stat;
 	for (int i = 0; i < X.size(); i++) {
 		double mean_i = stat.mean(X[i]);
 		for (int j = 0; j < X[i].size(); j++) {
@@ -754,3 +937,13 @@ std::vector<double> MLPPData::reverseOneHot(std::vector<std::vector<double>> tem
 	return outputSet;
 }
 
+void MLPPData::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("load_breast_cancer", "path"), &MLPPData::load_breast_cancer);
+	ClassDB::bind_method(D_METHOD("load_breast_cancer_svc", "path"), &MLPPData::load_breast_cancer_svc);
+	ClassDB::bind_method(D_METHOD("load_iris", "path"), &MLPPData::load_iris);
+	ClassDB::bind_method(D_METHOD("load_wine", "path"), &MLPPData::load_wine);
+	ClassDB::bind_method(D_METHOD("load_mnist_train", "path"), &MLPPData::load_mnist_train);
+	ClassDB::bind_method(D_METHOD("load_mnist_test", "path"), &MLPPData::load_mnist_test);
+	ClassDB::bind_method(D_METHOD("load_california_housing", "path"), &MLPPData::load_california_housing);
+	ClassDB::bind_method(D_METHOD("load_fires_and_crime", "path"), &MLPPData::load_fires_and_crime);
+}

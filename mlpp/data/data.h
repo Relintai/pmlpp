@@ -9,13 +9,65 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
+#include "core/string/ustring.h"
+
+#include "core/object/reference.h"
+
 #include <string>
 #include <tuple>
 #include <vector>
 
+class MLPPDataESimple : public Reference {
+	GDCLASS(MLPPDataESimple, Reference);
 
-class MLPPData {
 public:
+	std::vector<double> input;
+	std::vector<double> output;
+
+protected:
+	static void _bind_methods();
+};
+
+class MLPPDataSimple : public Reference {
+	GDCLASS(MLPPDataSimple, Reference);
+
+public:
+	std::vector<std::vector<double>> input;
+	std::vector<double> output;
+
+protected:
+	static void _bind_methods();
+};
+
+class MLPPDataComplex : public Reference {
+	GDCLASS(MLPPDataComplex, Reference);
+
+public:
+	std::vector<std::vector<double>> input;
+	std::vector<std::vector<double>> output;
+
+protected:
+	static void _bind_methods();
+};
+
+class MLPPData : public Reference {
+	GDCLASS(MLPPData, Reference);
+
+public:
+	// Load Datasets
+	Ref<MLPPDataSimple> load_breast_cancer(const String &path);
+	Ref<MLPPDataSimple> load_breast_cancer_svc(const String &path);
+	Ref<MLPPDataComplex> load_iris(const String &path);
+	Ref<MLPPDataComplex> load_wine(const String &path);
+	Ref<MLPPDataComplex> load_mnist_train(const String &path);
+	Ref<MLPPDataComplex> load_mnist_test(const String &path);
+	Ref<MLPPDataSimple> load_california_housing(const String &path);
+	Ref<MLPPDataESimple> load_fires_and_crime(const String &path);
+
+	void set_data_supervised(int k, const String &file_name, std::vector<std::vector<double>> &inputSet, std::vector<double> &outputSet);
+	void set_data_unsupervised(int k, const String &file_name, std::vector<std::vector<double>> &inputSet);
+	void set_data_simple(const String &file_name, std::vector<double> &inputSet, std::vector<double> &outputSet);
+
 	// Load Datasets
 	std::tuple<std::vector<std::vector<double>>, std::vector<double>> loadBreastCancer();
 	std::tuple<std::vector<std::vector<double>>, std::vector<double>> loadBreastCancerSVC();
@@ -92,8 +144,8 @@ public:
 		return setInputSet;
 	}
 
-private:
+protected:
+	static void _bind_methods();
 };
-
 
 #endif /* Data_hpp */
