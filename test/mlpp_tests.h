@@ -15,9 +15,11 @@ class MLPPTests : public Reference {
 
 public:
 	void test_statistics();
+	void test_linear_algebra();
 
 	void is_approx_equalsd(double a, double b, const String &str);
 	void is_approx_equals_dvec(const Vector<double> &a, const Vector<double> &b, const String &str);
+	void is_approx_equals_dmat(const Vector<Vector<double>> &a, const Vector<Vector<double>> &b, const String &str);
 
 	MLPPTests();
 	~MLPPTests();

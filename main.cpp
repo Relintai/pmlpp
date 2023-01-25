@@ -120,11 +120,11 @@ double f_mv(std::vector<double> x){
 int main() {
 
     // // OBJECTS
-    Stat stat;
-    LinAlg alg;
+    MLPPStat stat;
+    MLPPLinAlg alg;
     MLPPActivation avn;
     MLPPCost cost;
-    Data data; 
+    MLPPData data; 
     MLPPConvolutions conv; 
 
     // DATA SETS
