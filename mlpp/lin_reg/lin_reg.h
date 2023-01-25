@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 
-
 class MLPPLinReg {
 public:
 	MLPPLinReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
@@ -20,6 +19,15 @@ public:
 	void NewtonRaphson(double learning_rate, int max_epoch, bool UI);
 	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);
 	void SGD(double learning_rate, int max_epoch, bool UI = 1);
+
+	void Momentum(double learning_rate, int max_epoch, int mini_batch_size, double gamma, bool UI = 1);
+	void NAG(double learning_rate, int max_epoch, int mini_batch_size, double gamma, bool UI = 1);
+	void Adagrad(double learning_rate, int max_epoch, int mini_batch_size, double e, bool UI = 1);
+	void Adadelta(double learning_rate, int max_epoch, int mini_batch_size, double b1, double e, bool UI = 1);
+	void Adam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI = 1);
+	void Adamax(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI = 1);
+	void Nadam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI = 1);
+
 	void MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI = 1);
 	void normalEquation();
 	double score();
@@ -46,6 +54,5 @@ private:
 	int lambda;
 	int alpha; /* This is the controlling param for Elastic Net*/
 };
-
 
 #endif /* LinReg_hpp */
