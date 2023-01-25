@@ -18,6 +18,15 @@ public:
 	void test_linear_algebra();
 	void test_univariate_linear_regression();
 
+	void test_multivariate_linear_regression_gradient_descent(bool ui = false);
+	void test_multivariate_linear_regression_sgd(bool ui = false);
+	void test_multivariate_linear_regression_mbgd(bool ui = false);
+	void test_multivariate_linear_regression_normal_equation(bool ui = false);
+	void test_multivariate_linear_regression_adam();
+	void test_multivariate_linear_regression_score_sgd_adam(bool ui = false);
+	void test_multivariate_linear_regression_epochs_gradient_descent(bool ui = false);
+	void test_multivariate_linear_regression_newton_raphson(bool ui = false);
+
 	void is_approx_equalsd(double a, double b, const String &str);
 	void is_approx_equals_dvec(const Vector<double> &a, const Vector<double> &b, const String &str);
 	void is_approx_equals_dmat(const Vector<Vector<double>> &a, const Vector<Vector<double>> &b, const String &str);
@@ -29,6 +38,7 @@ protected:
 	static void _bind_methods();
 
 	String _load_fires_and_crime_data_path;
+	String _load_california_housing_data_path;
 };
 
 #endif
