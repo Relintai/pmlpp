@@ -68,8 +68,14 @@ public:
 protected:
 	static void _bind_methods();
 
-	String _load_fires_and_crime_data_path;
-	String _load_california_housing_data_path;
+	String _breast_cancer_data_path;
+	String _breast_cancer_svm_data_path;
+	String _california_housing_data_path;
+	String _fires_and_crime_data_path;
+	String _iris_data_path;
+	String _mnist_test_data_path;
+	String _mnist_train_data_path;
+	String _wine_data_path;
 };
 
 #endif
