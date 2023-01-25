@@ -15,22 +15,22 @@
 #include <random>
 
 
-SVC::SVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C) :
+MLPPSVC::MLPPSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), C(C) {
 	y_hat.resize(n);
-	weights = Utilities::weightInitialization(k);
-	bias = Utilities::biasInitialization();
+	weights = MLPPUtilities::weightInitialization(k);
+	bias = MLPPUtilities::biasInitialization();
 }
 
-std::vector<double> SVC::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPSVC::modelSetTest(std::vector<std::vector<double>> X) {
 	return Evaluate(X);
 }
 
-double SVC::modelTest(std::vector<double> x) {
+double MLPPSVC::modelTest(std::vector<double> x) {
 	return Evaluate(x);
 }
 
-void SVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
@@ -52,8 +52,8 @@ void SVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 
 		// UI PORTION
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet, weights, C));
-			Utilities::UI(weights, bias);
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet, weights, C));
+			MLPPUtilities::UI(weights, bias);
 		}
 		epoch++;
 
@@ -63,7 +63,7 @@ void SVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void SVC::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPSVC::SGD(double learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
@@ -94,8 +94,8 @@ void SVC::SGD(double learning_rate, int max_epoch, bool UI) {
 		y_hat = Evaluate({ inputSet[outputIndex] });
 
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost({ z }, { outputSet[outputIndex] }, weights, C));
-			Utilities::UI(weights, bias);
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost({ z }, { outputSet[outputIndex] }, weights, C));
+			MLPPUtilities::UI(weights, bias);
 		}
 		epoch++;
 
@@ -106,7 +106,7 @@ void SVC::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void SVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPSVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
@@ -116,7 +116,7 @@ void SVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -136,8 +136,8 @@ void SVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI
 			y_hat = Evaluate(inputMiniBatches[i]);
 
 			if (UI) {
-				Utilities::CostInfo(epoch, cost_prev, Cost(z, outputMiniBatches[i], weights, C));
-				Utilities::UI(weights, bias);
+				MLPPUtilities::CostInfo(epoch, cost_prev, Cost(z, outputMiniBatches[i], weights, C));
+				MLPPUtilities::UI(weights, bias);
 			}
 		}
 		epoch++;
@@ -148,47 +148,47 @@ void SVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI
 	forwardPass();
 }
 
-double SVC::score() {
-	Utilities util;
+double MLPPSVC::score() {
+	MLPPUtilities   util;
 	return util.performance(y_hat, outputSet);
 }
 
-void SVC::save(std::string fileName) {
-	Utilities util;
+void MLPPSVC::save(std::string fileName) {
+	MLPPUtilities   util;
 	util.saveParameters(fileName, weights, bias);
 }
 
-double SVC::Cost(std::vector<double> z, std::vector<double> y, std::vector<double> weights, double C) {
+double MLPPSVC::Cost(std::vector<double> z, std::vector<double> y, std::vector<double> weights, double C) {
 	class MLPPCost cost;
 	return cost.HingeLoss(z, y, weights, C);
 }
 
-std::vector<double> SVC::Evaluate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPSVC::Evaluate(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.sign(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
-std::vector<double> SVC::propagate(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPSVC::propagate(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
-double SVC::Evaluate(std::vector<double> x) {
+double MLPPSVC::Evaluate(std::vector<double> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.sign(alg.dot(weights, x) + bias);
 }
 
-double SVC::propagate(std::vector<double> x) {
+double MLPPSVC::propagate(std::vector<double> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return alg.dot(weights, x) + bias;
 }
 
 // sign ( wTx + b )
-void SVC::forwardPass() {
+void MLPPSVC::forwardPass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 

@@ -69,7 +69,7 @@ double MLPPBernoulliNB::modelTest(std::vector<double> x) {
 }
 
 double MLPPBernoulliNB::score() {
-	Utilities util;
+	MLPPUtilities   util;
 	return util.performance(y_hat, outputSet);
 }
 

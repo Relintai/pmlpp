@@ -16,19 +16,19 @@
 // ŷ = b0 + b1x1
 
 
-UniLinReg::UniLinReg(std::vector<double> x, std::vector<double> y) :
+MLPPUniLinReg::MLPPUniLinReg(std::vector<double> x, std::vector<double> y) :
 		inputSet(x), outputSet(y) {
-	Stat estimator;
+	MLPPStat  estimator;
 	b1 = estimator.b1Estimation(inputSet, outputSet);
 	b0 = estimator.b0Estimation(inputSet, outputSet);
 }
 
-std::vector<double> UniLinReg::modelSetTest(std::vector<double> x) {
+std::vector<double> MLPPUniLinReg::modelSetTest(std::vector<double> x) {
 	MLPPLinAlg alg;
 	return alg.scalarAdd(b0, alg.scalarMultiply(b1, x));
 }
 
-double UniLinReg::modelTest(double input) {
+double MLPPUniLinReg::modelTest(double input) {
 	return b0 + b1 * input;
 }
 

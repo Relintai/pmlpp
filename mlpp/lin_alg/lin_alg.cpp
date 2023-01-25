@@ -507,7 +507,7 @@ std::vector<std::vector<double>> MLPPLinAlg::identity(double d) {
 }
 
 std::vector<std::vector<double>> MLPPLinAlg::cov(std::vector<std::vector<double>> A) {
-	Stat stat;
+	MLPPStat  stat;
 	std::vector<std::vector<double>> covMat;
 	covMat.resize(A.size());
 	for (int i = 0; i < covMat.size(); i++) {

@@ -18,8 +18,8 @@
 MLPPDualSVC::MLPPDualSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C, std::string kernel) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), C(C), kernel(kernel) {
 	y_hat.resize(n);
-	bias = Utilities::biasInitialization();
-	alpha = Utilities::weightInitialization(n); // One alpha for all training examples, as per the lagrangian multipliers.
+	bias = MLPPUtilities::biasInitialization();
+	alpha = MLPPUtilities::weightInitialization(n); // One alpha for all training examples, as per the lagrangian multipliers.
 	K = kernelFunction(inputSet, inputSet, kernel); // For now this is unused. When non-linear kernels are added, the K will be manipulated.
 }
 
@@ -67,8 +67,8 @@ void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) 
 
 		// UI PORTION
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost(alpha, inputSet, outputSet));
-			Utilities::UI(alpha, bias);
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost(alpha, inputSet, outputSet));
+			MLPPUtilities::UI(alpha, bias);
 			std::cout << score() << std::endl; // TO DO: DELETE THIS.
 		}
 		epoch++;
@@ -102,8 +102,8 @@ void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) 
 //         y_hat = Evaluate({inputSet[outputIndex]});
 
 //         if(UI) {
-//             Utilities::CostInfo(epoch, cost_prev, Cost(alpha));
-//             Utilities::UI(weights, bias);
+//             MLPPUtilities::CostInfo(epoch, cost_prev, Cost(alpha));
+//             MLPPUtilities::UI(weights, bias);
 //         }
 //         epoch++;
 
@@ -122,7 +122,7 @@ void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) 
 
 //     // Creating the mini-batches
 //     int n_mini_batch = n/mini_batch_size;
-//     auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+//     auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 //     while(true){
 //         for(int i = 0; i < n_mini_batch; i++){
@@ -142,8 +142,8 @@ void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) 
 //             y_hat = Evaluate(inputMiniBatches[i]);
 
 //             if(UI) {
-//                 Utilities::CostInfo(epoch, cost_prev, Cost(z, outputMiniBatches[i], weights, C));
-//                 Utilities::UI(weights, bias);
+//                 MLPPUtilities::CostInfo(epoch, cost_prev, Cost(z, outputMiniBatches[i], weights, C));
+//                 MLPPUtilities::UI(weights, bias);
 //             }
 //         }
 //         epoch++;
@@ -153,12 +153,12 @@ void MLPPDualSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) 
 // }
 
 double MLPPDualSVC::score() {
-	Utilities util;
+	MLPPUtilities   util;
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPDualSVC::save(std::string fileName) {
-	Utilities util;
+	MLPPUtilities   util;
 	util.saveParameters(fileName, alpha, bias);
 }
 

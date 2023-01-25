@@ -15,20 +15,20 @@
 #include <iostream>
 
 
-WGAN::WGAN(double k, std::vector<std::vector<double>> outputSet) :
+MLPPWGAN::MLPPWGAN(double k, std::vector<std::vector<double>> outputSet) :
 		outputSet(outputSet), n(outputSet.size()), k(k) {
 }
 
-WGAN::~WGAN() {
+MLPPWGAN::~MLPPWGAN() {
 	delete outputLayer;
 }
 
-std::vector<std::vector<double>> WGAN::generateExample(int n) {
+std::vector<std::vector<double>> MLPPWGAN::generateExample(int n) {
 	MLPPLinAlg alg;
 	return modelSetTestGenerator(alg.gaussianNoise(n, k));
 }
 
-void WGAN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPWGAN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPLinAlg alg;
 	double cost_prev = 0;
@@ -50,7 +50,7 @@ void WGAN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 		for (int i = 0; i < CRITIC_INTERATIONS; i++) {
 			generatorInputSet = alg.gaussianNoise(n, k);
 			discriminatorInputSet = modelSetTestGenerator(generatorInputSet);
-			discriminatorInputSet.insert(discriminatorInputSet.end(), WGAN::outputSet.begin(), WGAN::outputSet.end()); // Fake + real inputs.
+			discriminatorInputSet.insert(discriminatorInputSet.end(), MLPPWGAN::outputSet.begin(), MLPPWGAN::outputSet.end()); // Fake + real inputs.
 
 			y_hat = modelSetTestDiscriminator(discriminatorInputSet);
 			outputSet = alg.scalarMultiply(-1, alg.onevec(n)); // WGAN changes y_i = 1 and y_i = 0 to y_i = 1 and y_i = -1
@@ -75,7 +75,7 @@ void WGAN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 
 		forwardPass();
 		if (UI) {
-			WGAN::UI(epoch, cost_prev, WGAN::y_hat, alg.onevec(n));
+			MLPPWGAN::UI(epoch, cost_prev, MLPPWGAN::y_hat, alg.onevec(n));
 		}
 
 		epoch++;
@@ -85,15 +85,15 @@ void WGAN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-double WGAN::score() {
+double MLPPWGAN::score() {
 	MLPPLinAlg alg;
-	Utilities util;
+	MLPPUtilities   util;
 	forwardPass();
 	return util.performance(y_hat, alg.onevec(n));
 }
 
-void WGAN::save(std::string fileName) {
-	Utilities util;
+void MLPPWGAN::save(std::string fileName) {
+	MLPPUtilities   util;
 	if (!network.empty()) {
 		util.saveParameters(fileName, network[0].weights, network[0].bias, 0, 1);
 		for (int i = 1; i < network.size(); i++) {
@@ -105,7 +105,7 @@ void WGAN::save(std::string fileName) {
 	}
 }
 
-void WGAN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, double lambda, double alpha) {
+void MLPPWGAN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, double lambda, double alpha) {
 	MLPPLinAlg alg;
 	if (network.empty()) {
 		network.push_back(MLPPHiddenLayer(n_hidden, activation, alg.gaussianNoise(n, k), weightInit, reg, lambda, alpha));
@@ -116,7 +116,7 @@ void WGAN::addLayer(int n_hidden, std::string activation, std::string weightInit
 	}
 }
 
-void WGAN::addOutputLayer(std::string weightInit, std::string reg, double lambda, double alpha) {
+void MLPPWGAN::addOutputLayer(std::string weightInit, std::string reg, double lambda, double alpha) {
 	MLPPLinAlg alg;
 	if (!network.empty()) {
 		outputLayer = new MLPPOutputLayer(network[network.size() - 1].n_hidden, "Linear", "WassersteinLoss", network[network.size() - 1].a, weightInit, "WeightClipping", -0.01, 0.01);
@@ -125,7 +125,7 @@ void WGAN::addOutputLayer(std::string weightInit, std::string reg, double lambda
 	}
 }
 
-std::vector<std::vector<double>> WGAN::modelSetTestGenerator(std::vector<std::vector<double>> X) {
+std::vector<std::vector<double>> MLPPWGAN::modelSetTestGenerator(std::vector<std::vector<double>> X) {
 	if (!network.empty()) {
 		network[0].input = X;
 		network[0].forwardPass();
@@ -138,7 +138,7 @@ std::vector<std::vector<double>> WGAN::modelSetTestGenerator(std::vector<std::ve
 	return network[network.size() / 2].a;
 }
 
-std::vector<double> WGAN::modelSetTestDiscriminator(std::vector<std::vector<double>> X) {
+std::vector<double> MLPPWGAN::modelSetTestDiscriminator(std::vector<std::vector<double>> X) {
 	if (!network.empty()) {
 		for (int i = network.size() / 2 + 1; i < network.size(); i++) {
 			if (i == network.size() / 2 + 1) {
@@ -154,7 +154,7 @@ std::vector<double> WGAN::modelSetTestDiscriminator(std::vector<std::vector<doub
 	return outputLayer->a;
 }
 
-double WGAN::Cost(std::vector<double> y_hat, std::vector<double> y) {
+double MLPPWGAN::Cost(std::vector<double> y_hat, std::vector<double> y) {
 	MLPPReg regularization;
 	class MLPPCost cost;
 	double totalRegTerm = 0;
@@ -168,7 +168,7 @@ double WGAN::Cost(std::vector<double> y_hat, std::vector<double> y) {
 	return (cost.*cost_function)(y_hat, y) + totalRegTerm + regularization.regTerm(outputLayer->weights, outputLayer->lambda, outputLayer->alpha, outputLayer->reg);
 }
 
-void WGAN::forwardPass() {
+void MLPPWGAN::forwardPass() {
 	MLPPLinAlg alg;
 	if (!network.empty()) {
 		network[0].input = alg.gaussianNoise(n, k);
@@ -186,7 +186,7 @@ void WGAN::forwardPass() {
 	y_hat = outputLayer->a;
 }
 
-void WGAN::updateDiscriminatorParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, std::vector<double> outputLayerUpdation, double learning_rate) {
+void MLPPWGAN::updateDiscriminatorParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, std::vector<double> outputLayerUpdation, double learning_rate) {
 	MLPPLinAlg alg;
 
 	outputLayer->weights = alg.subtraction(outputLayer->weights, outputLayerUpdation);
@@ -203,7 +203,7 @@ void WGAN::updateDiscriminatorParameters(std::vector<std::vector<std::vector<dou
 	}
 }
 
-void WGAN::updateGeneratorParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, double learning_rate) {
+void MLPPWGAN::updateGeneratorParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, double learning_rate) {
 	MLPPLinAlg alg;
 
 	if (!network.empty()) {
@@ -216,7 +216,7 @@ void WGAN::updateGeneratorParameters(std::vector<std::vector<std::vector<double>
 	}
 }
 
-std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> WGAN::computeDiscriminatorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
+std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> MLPPWGAN::computeDiscriminatorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
@@ -252,7 +252,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> W
 	return { cumulativeHiddenLayerWGrad, outputWGrad };
 }
 
-std::vector<std::vector<std::vector<double>>> WGAN::computeGeneratorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
+std::vector<std::vector<std::vector<double>>> MLPPWGAN::computeGeneratorGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
@@ -281,14 +281,14 @@ std::vector<std::vector<std::vector<double>>> WGAN::computeGeneratorGradients(st
 	return cumulativeHiddenLayerWGrad;
 }
 
-void WGAN::UI(int epoch, double cost_prev, std::vector<double> y_hat, std::vector<double> outputSet) {
-	Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
+void MLPPWGAN::UI(int epoch, double cost_prev, std::vector<double> y_hat, std::vector<double> outputSet) {
+	MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
 	std::cout << "Layer " << network.size() + 1 << ": " << std::endl;
-	Utilities::UI(outputLayer->weights, outputLayer->bias);
+	MLPPUtilities::UI(outputLayer->weights, outputLayer->bias);
 	if (!network.empty()) {
 		for (int i = network.size() - 1; i >= 0; i--) {
 			std::cout << "Layer " << i + 1 << ": " << std::endl;
-			Utilities::UI(network[i].weights, network[i].bias);
+			MLPPUtilities::UI(network[i].weights, network[i].bias);
 		}
 	}
 }

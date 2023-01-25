@@ -78,13 +78,13 @@ void MLPPGAN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 
 double MLPPGAN::score() {
 	MLPPLinAlg alg;
-	Utilities util;
+	MLPPUtilities   util;
 	forwardPass();
 	return util.performance(y_hat, alg.onevec(n));
 }
 
 void MLPPGAN::save(std::string fileName) {
-	Utilities util;
+	MLPPUtilities   util;
 	if (!network.empty()) {
 		util.saveParameters(fileName, network[0].weights, network[0].bias, 0, 1);
 		for (int i = 1; i < network.size(); i++) {
@@ -273,13 +273,13 @@ std::vector<std::vector<std::vector<double>>> MLPPGAN::computeGeneratorGradients
 }
 
 void MLPPGAN::UI(int epoch, double cost_prev, std::vector<double> y_hat, std::vector<double> outputSet) {
-	Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
+	MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
 	std::cout << "Layer " << network.size() + 1 << ": " << std::endl;
-	Utilities::UI(outputLayer->weights, outputLayer->bias);
+	MLPPUtilities::UI(outputLayer->weights, outputLayer->bias);
 	if (!network.empty()) {
 		for (int i = network.size() - 1; i >= 0; i--) {
 			std::cout << "Layer " << i + 1 << ": " << std::endl;
-			Utilities::UI(network[i].weights, network[i].bias);
+			MLPPUtilities::UI(network[i].weights, network[i].bias);
 		}
 	}
 }

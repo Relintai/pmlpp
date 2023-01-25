@@ -13,7 +13,7 @@
 #include <vector>
 
 
-class Utilities {
+class MLPPUtilities {
 public:
 	// Weight Init
 	static std::vector<double> weightInitialization(int n, std::string type = "Default");

@@ -12,7 +12,7 @@
 
 
 
-std::vector<double> Utilities::weightInitialization(int n, std::string type) {
+std::vector<double> MLPPUtilities::weightInitialization(int n, std::string type) {
 	std::random_device rd;
 	std::default_random_engine generator(rd());
 
@@ -47,7 +47,7 @@ std::vector<double> Utilities::weightInitialization(int n, std::string type) {
 	return weights;
 }
 
-double Utilities::biasInitialization() {
+double MLPPUtilities::biasInitialization() {
 	std::random_device rd;
 	std::default_random_engine generator(rd());
 	std::uniform_real_distribution<double> distribution(0, 1);
@@ -55,7 +55,7 @@ double Utilities::biasInitialization() {
 	return distribution(generator);
 }
 
-std::vector<std::vector<double>> Utilities::weightInitialization(int n, int m, std::string type) {
+std::vector<std::vector<double>> MLPPUtilities::weightInitialization(int n, int m, std::string type) {
 	std::random_device rd;
 	std::default_random_engine generator(rd());
 
@@ -94,7 +94,7 @@ std::vector<std::vector<double>> Utilities::weightInitialization(int n, int m, s
 	return weights;
 }
 
-std::vector<double> Utilities::biasInitialization(int n) {
+std::vector<double> MLPPUtilities::biasInitialization(int n) {
 	std::vector<double> bias;
 	std::random_device rd;
 	std::default_random_engine generator(rd());
@@ -106,7 +106,7 @@ std::vector<double> Utilities::biasInitialization(int n) {
 	return bias;
 }
 
-double Utilities::performance(std::vector<double> y_hat, std::vector<double> outputSet) {
+double MLPPUtilities::performance(std::vector<double> y_hat, std::vector<double> outputSet) {
 	double correct = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		if (std::round(y_hat[i]) == outputSet[i]) {
@@ -116,7 +116,7 @@ double Utilities::performance(std::vector<double> y_hat, std::vector<double> out
 	return correct / y_hat.size();
 }
 
-double Utilities::performance(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
+double MLPPUtilities::performance(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
 	double correct = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		int sub_correct = 0;
@@ -132,7 +132,7 @@ double Utilities::performance(std::vector<std::vector<double>> y_hat, std::vecto
 	return correct / y_hat.size();
 }
 
-void Utilities::saveParameters(std::string fileName, std::vector<double> weights, double bias, bool app, int layer) {
+void MLPPUtilities::saveParameters(std::string fileName, std::vector<double> weights, double bias, bool app, int layer) {
 	std::string layer_info = "";
 	std::ofstream saveFile;
 
@@ -160,7 +160,7 @@ void Utilities::saveParameters(std::string fileName, std::vector<double> weights
 	saveFile.close();
 }
 
-void Utilities::saveParameters(std::string fileName, std::vector<double> weights, std::vector<double> initial, double bias, bool app, int layer) {
+void MLPPUtilities::saveParameters(std::string fileName, std::vector<double> weights, std::vector<double> initial, double bias, bool app, int layer) {
 	std::string layer_info = "";
 	std::ofstream saveFile;
 
@@ -194,7 +194,7 @@ void Utilities::saveParameters(std::string fileName, std::vector<double> weights
 	saveFile.close();
 }
 
-void Utilities::saveParameters(std::string fileName, std::vector<std::vector<double>> weights, std::vector<double> bias, bool app, int layer) {
+void MLPPUtilities::saveParameters(std::string fileName, std::vector<std::vector<double>> weights, std::vector<double> bias, bool app, int layer) {
 	std::string layer_info = "";
 	std::ofstream saveFile;
 
@@ -226,7 +226,7 @@ void Utilities::saveParameters(std::string fileName, std::vector<std::vector<dou
 	saveFile.close();
 }
 
-void Utilities::UI(std::vector<double> weights, double bias) {
+void MLPPUtilities::UI(std::vector<double> weights, double bias) {
 	std::cout << "Values of the weight(s):" << std::endl;
 	for (int i = 0; i < weights.size(); i++) {
 		std::cout << weights[i] << std::endl;
@@ -235,7 +235,7 @@ void Utilities::UI(std::vector<double> weights, double bias) {
 	std::cout << bias << std::endl;
 }
 
-void Utilities::UI(std::vector<std::vector<double>> weights, std::vector<double> bias) {
+void MLPPUtilities::UI(std::vector<std::vector<double>> weights, std::vector<double> bias) {
 	std::cout << "Values of the weight(s):" << std::endl;
 	for (int i = 0; i < weights.size(); i++) {
 		for (int j = 0; j < weights[i].size(); j++) {
@@ -248,7 +248,7 @@ void Utilities::UI(std::vector<std::vector<double>> weights, std::vector<double>
 	}
 }
 
-void Utilities::UI(std::vector<double> weights, std::vector<double> initial, double bias) {
+void MLPPUtilities::UI(std::vector<double> weights, std::vector<double> initial, double bias) {
 	std::cout << "Values of the weight(s):" << std::endl;
 	for (int i = 0; i < weights.size(); i++) {
 		std::cout << weights[i] << std::endl;
@@ -261,7 +261,7 @@ void Utilities::UI(std::vector<double> weights, std::vector<double> initial, dou
 	std::cout << bias << std::endl;
 }
 
-void Utilities::CostInfo(int epoch, double cost_prev, double Cost) {
+void MLPPUtilities::CostInfo(int epoch, double cost_prev, double Cost) {
 	std::cout << "-----------------------------------" << std::endl;
 	std::cout << "This is epoch: " << epoch << std::endl;
 	std::cout << "The cost function has been minimized by " << cost_prev - Cost << std::endl;
@@ -269,7 +269,7 @@ void Utilities::CostInfo(int epoch, double cost_prev, double Cost) {
 	std::cout << Cost << std::endl;
 }
 
-std::vector<std::vector<std::vector<double>>> Utilities::createMiniBatches(std::vector<std::vector<double>> inputSet, int n_mini_batch) {
+std::vector<std::vector<std::vector<double>>> MLPPUtilities::createMiniBatches(std::vector<std::vector<double>> inputSet, int n_mini_batch) {
 	int n = inputSet.size();
 
 	std::vector<std::vector<std::vector<double>>> inputMiniBatches;
@@ -291,7 +291,7 @@ std::vector<std::vector<std::vector<double>>> Utilities::createMiniBatches(std::
 	return inputMiniBatches;
 }
 
-std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vector<double>>> Utilities::createMiniBatches(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int n_mini_batch) {
+std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vector<double>>> MLPPUtilities::createMiniBatches(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int n_mini_batch) {
 	int n = inputSet.size();
 
 	std::vector<std::vector<std::vector<double>>> inputMiniBatches;
@@ -317,7 +317,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vecto
 	return { inputMiniBatches, outputMiniBatches };
 }
 
-std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vector<std::vector<double>>>> Utilities::createMiniBatches(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, int n_mini_batch) {
+std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vector<std::vector<double>>>> MLPPUtilities::createMiniBatches(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, int n_mini_batch) {
 	int n = inputSet.size();
 
 	std::vector<std::vector<std::vector<double>>> inputMiniBatches;
@@ -343,7 +343,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vecto
 	return { inputMiniBatches, outputMiniBatches };
 }
 
-std::tuple<double, double, double, double> Utilities::TF_PN(std::vector<double> y_hat, std::vector<double> y) {
+std::tuple<double, double, double, double> MLPPUtilities::TF_PN(std::vector<double> y_hat, std::vector<double> y) {
 	double TP, FP, TN, FN = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		if (y_hat[i] == y[i]) {
@@ -363,20 +363,20 @@ std::tuple<double, double, double, double> Utilities::TF_PN(std::vector<double> 
 	return { TP, FP, TN, FN };
 }
 
-double Utilities::recall(std::vector<double> y_hat, std::vector<double> y) {
+double MLPPUtilities::recall(std::vector<double> y_hat, std::vector<double> y) {
 	auto [TP, FP, TN, FN] = TF_PN(y_hat, y);
 	return TP / (TP + FN);
 }
 
-double Utilities::precision(std::vector<double> y_hat, std::vector<double> y) {
+double MLPPUtilities::precision(std::vector<double> y_hat, std::vector<double> y) {
 	auto [TP, FP, TN, FN] = TF_PN(y_hat, y);
 	return TP / (TP + FP);
 }
 
-double Utilities::accuracy(std::vector<double> y_hat, std::vector<double> y) {
+double MLPPUtilities::accuracy(std::vector<double> y_hat, std::vector<double> y) {
 	auto [TP, FP, TN, FN] = TF_PN(y_hat, y);
 	return (TP + TN) / (TP + FP + FN + TN);
 }
-double Utilities::f1_score(std::vector<double> y_hat, std::vector<double> y) {
+double MLPPUtilities::f1_score(std::vector<double> y_hat, std::vector<double> y) {
 	return 2 * precision(y_hat, y) * recall(y_hat, y) / (precision(y_hat, y) + recall(y_hat, y));
 }

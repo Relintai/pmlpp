@@ -70,7 +70,7 @@ void MLPPKMeans::train(int epoch_num, bool UI) {
 
 		// UI PORTION
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost());
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost());
 		}
 		epoch++;
 

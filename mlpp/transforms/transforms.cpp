@@ -14,7 +14,7 @@
 
 // DCT ii.
 // https://www.mathworks.com/help/images/discrete-cosine-transform.html
-std::vector<std::vector<double>> Transforms::discreteCosineTransform(std::vector<std::vector<double>> A) {
+std::vector<std::vector<double>> MLPPTransforms::discreteCosineTransform(std::vector<std::vector<double>> A) {
 	MLPPLinAlg alg;
 	A = alg.scalarAdd(-128, A); // Center around 0.
 

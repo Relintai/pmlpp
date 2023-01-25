@@ -30,7 +30,7 @@ std::vector<double> MLPPGaussianNB::modelSetTest(std::vector<std::vector<double>
 }
 
 double MLPPGaussianNB::modelTest(std::vector<double> x) {
-	Stat stat;
+	MLPPStat  stat;
 	MLPPLinAlg alg;
 
 	double score[class_num];
@@ -43,12 +43,12 @@ double MLPPGaussianNB::modelTest(std::vector<double> x) {
 }
 
 double MLPPGaussianNB::score() {
-	Utilities util;
+	MLPPUtilities   util;
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPGaussianNB::Evaluate() {
-	Stat stat;
+	MLPPStat  stat;
 	MLPPLinAlg alg;
 
 	// Computing mu_k_y and sigma_k_y

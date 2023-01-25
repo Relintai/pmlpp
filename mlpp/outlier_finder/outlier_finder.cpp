@@ -14,7 +14,7 @@ MLPPOutlierFinder::MLPPOutlierFinder(int threshold) :
 }
 
 std::vector<std::vector<double>> MLPPOutlierFinder::modelSetTest(std::vector<std::vector<double>> inputSet) {
-	Stat stat;
+	MLPPStat  stat;
 	std::vector<std::vector<double>> outliers;
 	outliers.resize(inputSet.size());
 	for (int i = 0; i < inputSet.size(); i++) {
@@ -29,7 +29,7 @@ std::vector<std::vector<double>> MLPPOutlierFinder::modelSetTest(std::vector<std
 }
 
 std::vector<double> MLPPOutlierFinder::modelTest(std::vector<double> inputSet) {
-	Stat stat;
+	MLPPStat  stat;
 	std::vector<double> outliers;
 	for (int i = 0; i < inputSet.size(); i++) {
 		double z = (inputSet[i] - stat.mean(inputSet)) / stat.standardDeviation(inputSet);

@@ -49,7 +49,7 @@ double MLPPMultinomialNB::modelTest(std::vector<double> x) {
 }
 
 double MLPPMultinomialNB::score() {
-	Utilities util;
+	MLPPUtilities   util;
 	return util.performance(y_hat, outputSet);
 }
 

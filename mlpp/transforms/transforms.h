@@ -11,7 +11,7 @@
 #include <vector>
 
 
-class Transforms {
+class MLPPTransforms {
 public:
 	std::vector<std::vector<double>> discreteCosineTransform(std::vector<std::vector<double>> A);
 };

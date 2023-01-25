@@ -17,10 +17,10 @@
 
 
 
-class WGAN {
+class MLPPWGAN {
 public:
-	WGAN(double k, std::vector<std::vector<double>> outputSet);
-	~WGAN();
+	MLPPWGAN(double k, std::vector<std::vector<double>> outputSet);
+	~MLPPWGAN();
 	std::vector<std::vector<double>> generateExample(int n);
 	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);
 	double score();

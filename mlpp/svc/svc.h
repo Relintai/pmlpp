@@ -16,9 +16,9 @@
 
 
 
-class SVC {
+class MLPPSVC {
 public:
-	SVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C);
+	MLPPSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C);
 	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
 	double modelTest(std::vector<double> x);
 	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);

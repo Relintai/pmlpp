@@ -30,7 +30,7 @@ int MLPPKNN::modelTest(std::vector<double> x) {
 }
 
 double MLPPKNN::score() {
-	Utilities util;
+	MLPPUtilities   util;
 	return util.performance(modelSetTest(inputSet), outputSet);
 }
 

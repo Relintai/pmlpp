@@ -11,9 +11,9 @@
 #include <vector>
 
 
-class UniLinReg {
+class MLPPUniLinReg {
 public:
-	UniLinReg(std::vector<double> x, std::vector<double> y);
+	MLPPUniLinReg(std::vector<double> x, std::vector<double> y);
 	std::vector<double> modelSetTest(std::vector<double> x);
 	double modelTest(double x);
 

@@ -164,7 +164,7 @@ std::vector<std::vector<double>> MLPPConvolutions::pool(std::vector<std::vector<
 				}
 			}
 			if (type == "Average") {
-				Stat stat;
+				MLPPStat  stat;
 				pooledMap[i][j] = stat.mean(poolingInput);
 			} else if (type == "Min") {
 				pooledMap[i][j] = alg.min(poolingInput);
@@ -187,7 +187,7 @@ std::vector<std::vector<std::vector<double>>> MLPPConvolutions::pool(std::vector
 double MLPPConvolutions::globalPool(std::vector<std::vector<double>> input, std::string type) {
 	MLPPLinAlg alg;
 	if (type == "Average") {
-		Stat stat;
+		MLPPStat  stat;
 		return stat.mean(alg.flatten(input));
 	} else if (type == "Min") {
 		return alg.min(alg.flatten(input));

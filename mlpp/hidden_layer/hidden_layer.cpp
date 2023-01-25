@@ -15,8 +15,8 @@
 
 MLPPHiddenLayer::MLPPHiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha) :
 		n_hidden(n_hidden), activation(activation), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
-	weights = Utilities::weightInitialization(input[0].size(), n_hidden, weightInit);
-	bias = Utilities::biasInitialization(n_hidden);
+	weights = MLPPUtilities::weightInitialization(input[0].size(), n_hidden, weightInit);
+	bias = MLPPUtilities::biasInitialization(n_hidden);
 
 	activation_map["Linear"] = &MLPPActivation::linear;
 	activationTest_map["Linear"] = &MLPPActivation::linear;

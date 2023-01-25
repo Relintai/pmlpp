@@ -13,9 +13,9 @@
 
 
 
-class SoftmaxReg {
+class MLPPSoftmaxReg {
 public:
-	SoftmaxReg(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
+	MLPPSoftmaxReg(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
 	std::vector<double> modelTest(std::vector<double> x);
 	std::vector<std::vector<double>> modelSetTest(std::vector<std::vector<double>> X);
 	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);

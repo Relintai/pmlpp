@@ -18,8 +18,8 @@
 MLPPLogReg::MLPPLogReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
-	weights = Utilities::weightInitialization(k);
-	bias = Utilities::biasInitialization();
+	weights = MLPPUtilities::weightInitialization(k);
+	bias = MLPPUtilities::biasInitialization();
 }
 
 std::vector<double> MLPPLogReg::modelSetTest(std::vector<std::vector<double>> X) {
@@ -51,8 +51,8 @@ void MLPPLogReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 		forwardPass();
 
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
-			Utilities::UI(weights, bias);
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
+			MLPPUtilities::UI(weights, bias);
 		}
 		epoch++;
 
@@ -83,8 +83,8 @@ void MLPPLogReg::MLE(double learning_rate, int max_epoch, bool UI) {
 		forwardPass();
 
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
-			Utilities::UI(weights, bias);
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
+			MLPPUtilities::UI(weights, bias);
 		}
 		epoch++;
 		if (epoch > max_epoch) {
@@ -120,8 +120,8 @@ void MLPPLogReg::SGD(double learning_rate, int max_epoch, bool UI) {
 		y_hat = Evaluate({ inputSet[outputIndex] });
 
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost({ y_hat }, { outputSet[outputIndex] }));
-			Utilities::UI(weights, bias);
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost({ y_hat }, { outputSet[outputIndex] }));
+			MLPPUtilities::UI(weights, bias);
 		}
 		epoch++;
 
@@ -140,7 +140,7 @@ void MLPPLogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, 
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -158,8 +158,8 @@ void MLPPLogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, 
 			y_hat = Evaluate(inputMiniBatches[i]);
 
 			if (UI) {
-				Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputMiniBatches[i]));
-				Utilities::UI(weights, bias);
+				MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputMiniBatches[i]));
+				MLPPUtilities::UI(weights, bias);
 			}
 		}
 		epoch++;
@@ -171,12 +171,12 @@ void MLPPLogReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, 
 }
 
 double MLPPLogReg::score() {
-	Utilities util;
+	MLPPUtilities   util;
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPLogReg::save(std::string fileName) {
-	Utilities util;
+	MLPPUtilities   util;
 	util.saveParameters(fileName, weights, bias);
 }
 

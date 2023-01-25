@@ -11,7 +11,7 @@
 #include <vector>
 
 
-class Stat {
+class MLPPStat {
 public:
 	// These functions are for univariate lin reg module- not for users.
 	double b0Estimation(const std::vector<double> &x, const std::vector<double> &y);

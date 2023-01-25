@@ -15,22 +15,22 @@
 #include <random>
 
 
-SoftmaxReg::SoftmaxReg(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, std::string reg, double lambda, double alpha) :
+MLPPSoftmaxReg::MLPPSoftmaxReg(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, std::string reg, double lambda, double alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), n_class(outputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
-	weights = Utilities::weightInitialization(k, n_class);
-	bias = Utilities::biasInitialization(n_class);
+	weights = MLPPUtilities::weightInitialization(k, n_class);
+	bias = MLPPUtilities::biasInitialization(n_class);
 }
 
-std::vector<double> SoftmaxReg::modelTest(std::vector<double> x) {
+std::vector<double> MLPPSoftmaxReg::modelTest(std::vector<double> x) {
 	return Evaluate(x);
 }
 
-std::vector<std::vector<double>> SoftmaxReg::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<std::vector<double>> MLPPSoftmaxReg::modelSetTest(std::vector<std::vector<double>> X) {
 	return Evaluate(X);
 }
 
-void SoftmaxReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPSoftmaxReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	double cost_prev = 0;
@@ -58,8 +58,8 @@ void SoftmaxReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 
 		// UI PORTION
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
-			Utilities::UI(weights, bias);
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
+			MLPPUtilities::UI(weights, bias);
 		}
 		epoch++;
 
@@ -69,7 +69,7 @@ void SoftmaxReg::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void SoftmaxReg::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPSoftmaxReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	double cost_prev = 0;
@@ -100,8 +100,8 @@ void SoftmaxReg::SGD(double learning_rate, int max_epoch, bool UI) {
 		y_hat = Evaluate({ inputSet[outputIndex] });
 
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost({ y_hat }, { outputSet[outputIndex] }));
-			Utilities::UI(weights, bias);
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost({ y_hat }, { outputSet[outputIndex] }));
+			MLPPUtilities::UI(weights, bias);
 		}
 		epoch++;
 
@@ -112,7 +112,7 @@ void SoftmaxReg::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void SoftmaxReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPSoftmaxReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	double cost_prev = 0;
@@ -120,7 +120,7 @@ void SoftmaxReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, 
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -141,8 +141,8 @@ void SoftmaxReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, 
 			y_hat = Evaluate(inputMiniBatches[i]);
 
 			if (UI) {
-				Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputMiniBatches[i]));
-				Utilities::UI(weights, bias);
+				MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputMiniBatches[i]));
+				MLPPUtilities::UI(weights, bias);
 			}
 		}
 		epoch++;
@@ -153,29 +153,29 @@ void SoftmaxReg::MBGD(double learning_rate, int max_epoch, int mini_batch_size, 
 	forwardPass();
 }
 
-double SoftmaxReg::score() {
-	Utilities util;
+double MLPPSoftmaxReg::score() {
+	MLPPUtilities   util;
 	return util.performance(y_hat, outputSet);
 }
 
-void SoftmaxReg::save(std::string fileName) {
-	Utilities util;
+void MLPPSoftmaxReg::save(std::string fileName) {
+	MLPPUtilities   util;
 	util.saveParameters(fileName, weights, bias);
 }
 
-double SoftmaxReg::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
+double MLPPSoftmaxReg::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
 	MLPPReg regularization;
 	class MLPPCost cost;
 	return cost.CrossEntropy(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 
-std::vector<double> SoftmaxReg::Evaluate(std::vector<double> x) {
+std::vector<double> MLPPSoftmaxReg::Evaluate(std::vector<double> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.softmax(alg.addition(bias, alg.mat_vec_mult(alg.transpose(weights), x)));
 }
 
-std::vector<std::vector<double>> SoftmaxReg::Evaluate(std::vector<std::vector<double>> X) {
+std::vector<std::vector<double>> MLPPSoftmaxReg::Evaluate(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
@@ -183,7 +183,7 @@ std::vector<std::vector<double>> SoftmaxReg::Evaluate(std::vector<std::vector<do
 }
 
 // softmax ( wTx + b )
-void SoftmaxReg::forwardPass() {
+void MLPPSoftmaxReg::forwardPass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 

@@ -137,7 +137,7 @@ void MLPPANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, boo
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 	while (true) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -175,7 +175,7 @@ void MLPPANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size,
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<double>>> v_hidden;
@@ -232,7 +232,7 @@ void MLPPANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, 
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<double>>> v_hidden;
@@ -288,7 +288,7 @@ void MLPPANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size,
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<double>>> v_hidden;
@@ -344,7 +344,7 @@ void MLPPANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, dou
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<double>>> m_hidden;
@@ -411,7 +411,7 @@ void MLPPANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, d
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<double>>> m_hidden;
@@ -476,7 +476,7 @@ void MLPPANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, do
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<double>>> m_hidden;
@@ -546,7 +546,7 @@ void MLPPANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, 
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<double>>> m_hidden;
@@ -606,13 +606,13 @@ void MLPPANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, 
 }
 
 double MLPPANN::score() {
-	Utilities util;
+	MLPPUtilities   util;
 	forwardPass();
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPANN::save(std::string fileName) {
-	Utilities util;
+	MLPPUtilities   util;
 	if (!network.empty()) {
 		util.saveParameters(fileName, network[0].weights, network[0].bias, 0, 1);
 		for (int i = 1; i < network.size(); i++) {
@@ -750,13 +750,13 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> M
 }
 
 void MLPPANN::UI(int epoch, double cost_prev, std::vector<double> y_hat, std::vector<double> outputSet) {
-	Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
+	MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
 	std::cout << "Layer " << network.size() + 1 << ": " << std::endl;
-	Utilities::UI(outputLayer->weights, outputLayer->bias);
+	MLPPUtilities::UI(outputLayer->weights, outputLayer->bias);
 	if (!network.empty()) {
 		for (int i = network.size() - 1; i >= 0; i--) {
 			std::cout << "Layer " << i + 1 << ": " << std::endl;
-			Utilities::UI(network[i].weights, network[i].bias);
+			MLPPUtilities::UI(network[i].weights, network[i].bias);
 		}
 	}
 }

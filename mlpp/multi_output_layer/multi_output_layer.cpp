@@ -14,8 +14,8 @@
 
 MLPPMultiOutputLayer::MLPPMultiOutputLayer(int n_output, int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha) :
 		n_output(n_output), n_hidden(n_hidden), activation(activation), cost(cost), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
-	weights = Utilities::weightInitialization(n_hidden, n_output, weightInit);
-	bias = Utilities::biasInitialization(n_output);
+	weights = MLPPUtilities::weightInitialization(n_hidden, n_output, weightInit);
+	bias = MLPPUtilities::biasInitialization(n_output);
 
 	activation_map["Linear"] = &MLPPActivation::linear;
 	activationTest_map["Linear"] = &MLPPActivation::linear;

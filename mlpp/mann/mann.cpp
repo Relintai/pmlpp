@@ -101,14 +101,14 @@ void MLPPMANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 		forwardPass();
 
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
 			std::cout << "Layer " << network.size() + 1 << ": " << std::endl;
-			Utilities::UI(outputLayer->weights, outputLayer->bias);
+			MLPPUtilities::UI(outputLayer->weights, outputLayer->bias);
 			if (!network.empty()) {
 				std::cout << "Layer " << network.size() << ": " << std::endl;
 				for (int i = network.size() - 1; i >= 0; i--) {
 					std::cout << "Layer " << i + 1 << ": " << std::endl;
-					Utilities::UI(network[i].weights, network[i].bias);
+					MLPPUtilities::UI(network[i].weights, network[i].bias);
 				}
 			}
 		}
@@ -121,13 +121,13 @@ void MLPPMANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 }
 
 double MLPPMANN::score() {
-	Utilities util;
+	MLPPUtilities   util;
 	forwardPass();
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPMANN::save(std::string fileName) {
-	Utilities util;
+	MLPPUtilities   util;
 	if (!network.empty()) {
 		util.saveParameters(fileName, network[0].weights, network[0].bias, 0, 1);
 		for (int i = 1; i < network.size(); i++) {

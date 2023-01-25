@@ -699,7 +699,7 @@ std::vector<std::vector<double>> MLPPData::featureScaling(std::vector<std::vecto
 
 std::vector<std::vector<double>> MLPPData::meanNormalization(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
-	Stat stat;
+	MLPPStat  stat;
 	// (X_j - mu_j) / std_j, for every j
 
 	X = meanCentering(X);
@@ -711,7 +711,7 @@ std::vector<std::vector<double>> MLPPData::meanNormalization(std::vector<std::ve
 
 std::vector<std::vector<double>> MLPPData::meanCentering(std::vector<std::vector<double>> X) {
 	MLPPLinAlg alg;
-	Stat stat;
+	MLPPStat  stat;
 	for (int i = 0; i < X.size(); i++) {
 		double mean_i = stat.mean(X[i]);
 		for (int j = 0; j < X[i].size(); j++) {

@@ -21,10 +21,10 @@ MLPPMLP::MLPPMLP(std::vector<std::vector<double>> inputSet, std::vector<double> 
 	MLPPActivation avn;
 	y_hat.resize(n);
 
-	weights1 = Utilities::weightInitialization(k, n_hidden);
-	weights2 = Utilities::weightInitialization(n_hidden);
-	bias1 = Utilities::biasInitialization(n_hidden);
-	bias2 = Utilities::biasInitialization();
+	weights1 = MLPPUtilities::weightInitialization(k, n_hidden);
+	weights2 = MLPPUtilities::weightInitialization(n_hidden);
+	bias1 = MLPPUtilities::biasInitialization(n_hidden);
+	bias2 = MLPPUtilities::biasInitialization();
 }
 
 std::vector<double> MLPPMLP::modelSetTest(std::vector<std::vector<double>> X) {
@@ -80,11 +80,11 @@ void MLPPMLP::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 
 		// UI PORTION
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
 			std::cout << "Layer 1:" << std::endl;
-			Utilities::UI(weights1, bias1);
+			MLPPUtilities::UI(weights1, bias1);
 			std::cout << "Layer 2:" << std::endl;
-			Utilities::UI(weights2, bias2);
+			MLPPUtilities::UI(weights2, bias2);
 		}
 		epoch++;
 
@@ -133,11 +133,11 @@ void MLPPMLP::SGD(double learning_rate, int max_epoch, bool UI) {
 
 		y_hat = Evaluate(inputSet[outputIndex]);
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost({ y_hat }, { outputSet[outputIndex] }));
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost({ y_hat }, { outputSet[outputIndex] }));
 			std::cout << "Layer 1:" << std::endl;
-			Utilities::UI(weights1, bias1);
+			MLPPUtilities::UI(weights1, bias1);
 			std::cout << "Layer 2:" << std::endl;
-			Utilities::UI(weights2, bias2);
+			MLPPUtilities::UI(weights2, bias2);
 		}
 		epoch++;
 
@@ -157,7 +157,7 @@ void MLPPMLP::MBGD(double learning_rate, int max_epoch, int mini_batch_size, boo
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = Utilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -199,11 +199,11 @@ void MLPPMLP::MBGD(double learning_rate, int max_epoch, int mini_batch_size, boo
 			y_hat = Evaluate(inputMiniBatches[i]);
 
 			if (UI) {
-				Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputMiniBatches[i]));
+				MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputMiniBatches[i]));
 				std::cout << "Layer 1:" << std::endl;
-				Utilities::UI(weights1, bias1);
+				MLPPUtilities::UI(weights1, bias1);
 				std::cout << "Layer 2:" << std::endl;
-				Utilities::UI(weights2, bias2);
+				MLPPUtilities::UI(weights2, bias2);
 			}
 		}
 		epoch++;
@@ -215,12 +215,12 @@ void MLPPMLP::MBGD(double learning_rate, int max_epoch, int mini_batch_size, boo
 }
 
 double MLPPMLP::score() {
-	Utilities util;
+	MLPPUtilities   util;
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPMLP::save(std::string fileName) {
-	Utilities util;
+	MLPPUtilities   util;
 	util.saveParameters(fileName, weights1, bias1, 0, 1);
 	util.saveParameters(fileName, weights2, bias2, 1, 2);
 }

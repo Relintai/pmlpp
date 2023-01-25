@@ -18,10 +18,10 @@ MLPPAutoEncoder::MLPPAutoEncoder(std::vector<std::vector<double>> inputSet, int 
 	MLPPActivation avn;
 	y_hat.resize(inputSet.size());
 
-	weights1 = Utilities::weightInitialization(k, n_hidden);
-	weights2 = Utilities::weightInitialization(n_hidden, k);
-	bias1 = Utilities::biasInitialization(n_hidden);
-	bias2 = Utilities::biasInitialization(k);
+	weights1 = MLPPUtilities::weightInitialization(k, n_hidden);
+	weights2 = MLPPUtilities::weightInitialization(n_hidden, k);
+	bias1 = MLPPUtilities::biasInitialization(n_hidden);
+	bias2 = MLPPUtilities::biasInitialization(k);
 }
 
 std::vector<std::vector<double>> MLPPAutoEncoder::modelSetTest(std::vector<std::vector<double>> X) {
@@ -71,11 +71,11 @@ void MLPPAutoEncoder::gradientDescent(double learning_rate, int max_epoch, bool 
 
 		// UI PORTION
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, inputSet));
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, inputSet));
 			std::cout << "Layer 1:" << std::endl;
-			Utilities::UI(weights1, bias1);
+			MLPPUtilities::UI(weights1, bias1);
 			std::cout << "Layer 2:" << std::endl;
-			Utilities::UI(weights2, bias2);
+			MLPPUtilities::UI(weights2, bias2);
 		}
 		epoch++;
 
@@ -121,11 +121,11 @@ void MLPPAutoEncoder::SGD(double learning_rate, int max_epoch, bool UI) {
 
 		y_hat = Evaluate(inputSet[outputIndex]);
 		if (UI) {
-			Utilities::CostInfo(epoch, cost_prev, Cost({ y_hat }, { inputSet[outputIndex] }));
+			MLPPUtilities::CostInfo(epoch, cost_prev, Cost({ y_hat }, { inputSet[outputIndex] }));
 			std::cout << "Layer 1:" << std::endl;
-			Utilities::UI(weights1, bias1);
+			MLPPUtilities::UI(weights1, bias1);
 			std::cout << "Layer 2:" << std::endl;
-			Utilities::UI(weights2, bias2);
+			MLPPUtilities::UI(weights2, bias2);
 		}
 		epoch++;
 
@@ -144,7 +144,7 @@ void MLPPAutoEncoder::MBGD(double learning_rate, int max_epoch, int mini_batch_s
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	std::vector<std::vector<std::vector<double>>> inputMiniBatches = Utilities::createMiniBatches(inputSet, n_mini_batch);
+	std::vector<std::vector<std::vector<double>>> inputMiniBatches = MLPPUtilities::createMiniBatches(inputSet, n_mini_batch);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -181,11 +181,11 @@ void MLPPAutoEncoder::MBGD(double learning_rate, int max_epoch, int mini_batch_s
 			y_hat = Evaluate(inputMiniBatches[i]);
 
 			if (UI) {
-				Utilities::CostInfo(epoch, cost_prev, Cost(y_hat, inputMiniBatches[i]));
+				MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, inputMiniBatches[i]));
 				std::cout << "Layer 1:" << std::endl;
-				Utilities::UI(weights1, bias1);
+				MLPPUtilities::UI(weights1, bias1);
 				std::cout << "Layer 2:" << std::endl;
-				Utilities::UI(weights2, bias2);
+				MLPPUtilities::UI(weights2, bias2);
 			}
 		}
 		epoch++;
@@ -197,12 +197,12 @@ void MLPPAutoEncoder::MBGD(double learning_rate, int max_epoch, int mini_batch_s
 }
 
 double MLPPAutoEncoder::score() {
-	Utilities util;
+	MLPPUtilities   util;
 	return util.performance(y_hat, inputSet);
 }
 
 void MLPPAutoEncoder::save(std::string fileName) {
-	Utilities util;
+	MLPPUtilities   util;
 	util.saveParameters(fileName, weights1, bias1, 0, 1);
 	util.saveParameters(fileName, weights2, bias2, 1, 2);
 }
