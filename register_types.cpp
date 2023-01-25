@@ -27,7 +27,7 @@ SOFTWARE.
 
 void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 	if (p_level == MODULE_REGISTRATION_LEVEL_SCENE) {
-		ClassDB::register_class<MLPPTest>();
+		ClassDB::register_class<MLPPTests>();
 	}
 }
 
