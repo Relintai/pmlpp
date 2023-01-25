@@ -6,6 +6,9 @@ def configure(env):
 
 def get_doc_classes():
     return [
+
+        
+        "MLPPTest",
     ]
 
 def get_doc_path():

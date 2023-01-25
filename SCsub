@@ -46,6 +46,8 @@ sources = [
     "mlpp/uni_lin_reg/uni_lin_reg.cpp",
     "mlpp/utilities/utilities.cpp",
     "mlpp/wgan/wgan.cpp",
+
+    "test/mlpp_tests.cpp",
 ]
 
 
