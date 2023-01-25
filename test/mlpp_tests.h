@@ -16,6 +16,7 @@ class MLPPTests : public Reference {
 public:
 	void test_statistics();
 	void test_linear_algebra();
+	void test_univariate_linear_regression();
 
 	void is_approx_equalsd(double a, double b, const String &str);
 	void is_approx_equals_dvec(const Vector<double> &a, const Vector<double> &b, const String &str);
@@ -26,6 +27,8 @@ public:
 
 protected:
 	static void _bind_methods();
+
+	String _load_fires_and_crime_data_path;
 };
 
 #endif
