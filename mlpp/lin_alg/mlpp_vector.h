@@ -15,52 +15,49 @@
 class MLPPVector : public Reference {
 	GDCLASS(MLPPVector, Reference);
 
-protected:
-	int count;
-	int capacity;
-	double *data;
-
 public:
 	double *ptr() {
-		return data;
+		return _data;
 	}
 
 	const double *ptr() const {
-		return data;
+		return _data;
 	}
 
 	_FORCE_INLINE_ void push_back(double p_elem) {
-		if (unlikely(count == capacity)) {
-			if (capacity == 0) {
-				capacity = 1;
-			} else {
-				capacity <<= 1;
-			}
+		++_size;
 
-			data = (double *)memrealloc(data, capacity * sizeof(double));
-			CRASH_COND_MSG(!data, "Out of memory");
-		}
+		_data = (double *)memrealloc(_data, _size * sizeof(double));
+		CRASH_COND_MSG(!_data, "Out of memory");
 
-		data[count++] = p_elem;
+		_data[_size - 1] = p_elem;
 	}
 
 	void remove(double p_index) {
-		ERR_FAIL_INDEX(p_index, count);
-		count--;
-		for (int i = p_index; i < count; i++) {
-			data[i] = data[i + 1];
+		ERR_FAIL_INDEX(p_index, _size);
+
+		--_size;
+
+		for (int i = p_index; i < _size; i++) {
+			_data[i] = _data[i + 1];
 		}
+
+		_data = (double *)memrealloc(_data, _size * sizeof(double));
+		CRASH_COND_MSG(!_data, "Out of memory");
 	}
 
 	// Removes the item copying the last value into the position of the one to
 	// remove. It's generally faster than `remove`.
 	void remove_unordered(int p_index) {
-		ERR_FAIL_INDEX(p_index, count);
-		count--;
+		ERR_FAIL_INDEX(p_index, _size);
+		_size--;
 
-		if (count > p_index) {
-			data[p_index] = data[count];
+		if (_size > p_index) {
+			_data[p_index] = _data[_size];
 		}
+
+		_data = (double *)memrealloc(_data, _size * sizeof(double));
+		CRASH_COND_MSG(!_data, "Out of memory");
 	}
 
 	void erase(const double &p_val) {
@@ -87,106 +84,87 @@ public:
 	}
 
 	void invert() {
-		for (int i = 0; i < count / 2; i++) {
-			SWAP(data[i], data[count - i - 1]);
+		for (int i = 0; i < _size / 2; i++) {
+			SWAP(_data[i], _data[_size - i - 1]);
 		}
 	}
 
 	_FORCE_INLINE_ void clear() { resize(0); }
 	_FORCE_INLINE_ void reset() {
 		clear();
-		if (data) {
-			memfree(data);
-			data = NULL;
-			capacity = 0;
-		}
-	}
-	_FORCE_INLINE_ bool empty() const { return count == 0; }
-	_FORCE_INLINE_ int get_capacity() const { return capacity; }
-	_FORCE_INLINE_ void reserve(int p_size) {
-		p_size = nearest_power_of_2_templated(p_size);
-		if (p_size > capacity) {
-			capacity = p_size;
-			data = (double *)memrealloc(data, capacity * sizeof(double));
-			CRASH_COND_MSG(!data, "Out of memory");
+		if (_data) {
+			memfree(_data);
+			_data = NULL;
+			_size = 0;
 		}
 	}
 
-	_FORCE_INLINE_ int size() const { return count; }
+	_FORCE_INLINE_ bool empty() const { return _size == 0; }
+	_FORCE_INLINE_ int size() const { return _size; }
+
 	void resize(int p_size) {
-		if (p_size < count) {
-			count = p_size;
-		} else if (p_size > count) {
-			if (unlikely(p_size > capacity)) {
-				if (capacity == 0) {
-					capacity = 1;
-				}
-				while (capacity < p_size) {
-					capacity <<= 1;
-				}
-				data = (double *)memrealloc(data, capacity * sizeof(double));
-				CRASH_COND_MSG(!data, "Out of memory");
-			}
+		_size = p_size;
 
-			count = p_size;
-		}
+		_data = (double *)memrealloc(_data, _size * sizeof(double));
+		CRASH_COND_MSG(!_data, "Out of memory");
 	}
+
 	_FORCE_INLINE_ const double &operator[](int p_index) const {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, count);
-		return data[p_index];
+		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		return _data[p_index];
 	}
 	_FORCE_INLINE_ double &operator[](int p_index) {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, count);
-		return data[p_index];
+		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		return _data[p_index];
 	}
 
-	_FORCE_INLINE_ const double get_element(int p_index) const {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, count);
-		return data[p_index];
+	_FORCE_INLINE_ double get_element(int p_index) const {
+		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		return _data[p_index];
 	}
 	_FORCE_INLINE_ double get_element(int p_index) {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, count);
-		return data[p_index];
+		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		return _data[p_index];
 	}
 
 	_FORCE_INLINE_ real_t get_element_bind(int p_index) const {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, count);
-		return static_cast<real_t>(data[p_index]);
+		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		return static_cast<real_t>(_data[p_index]);
 	}
 
 	_FORCE_INLINE_ void set_element(int p_index, double p_val) {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, count);
-		data[p_index] = p_val;
+		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		_data[p_index] = p_val;
 	}
 
 	_FORCE_INLINE_ void set_element_bind(int p_index, real_t p_val) {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, count);
-		data[p_index] = p_val;
+		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		_data[p_index] = p_val;
 	}
 
 	void fill(double p_val) {
-		for (int i = 0; i < count; i++) {
-			data[i] = p_val;
+		for (int i = 0; i < _size; i++) {
+			_data[i] = p_val;
 		}
 	}
 
 	void insert(int p_pos, double p_val) {
-		ERR_FAIL_UNSIGNED_INDEX(p_pos, count + 1);
-		if (p_pos == count) {
+		ERR_FAIL_INDEX(p_pos, _size + 1);
+		if (p_pos == _size) {
 			push_back(p_val);
 		} else {
-			resize(count + 1);
-			for (int i = count - 1; i > p_pos; i--) {
-				data[i] = data[i - 1];
+			resize(_size + 1);
+			for (int i = _size - 1; i > p_pos; i--) {
+				_data[i] = _data[i - 1];
 			}
-			data[p_pos] = p_val;
+			_data[p_pos] = p_val;
 		}
 	}
 
-	int64_t find(const double &p_val, int p_from = 0) const {
-		for (int i = p_from; i < count; i++) {
-			if (data[i] == p_val) {
-				return int64_t(i);
+	int find(const double &p_val, int p_from = 0) const {
+		for (int i = p_from; i < _size; i++) {
+			if (_data[i] == p_val) {
+				return i;
 			}
 		}
 		return -1;
@@ -194,13 +172,13 @@ public:
 
 	template <class C>
 	void sort_custom() {
-		int len = count;
+		int len = _size;
 		if (len == 0) {
 			return;
 		}
 
 		SortArray<double, C> sorter;
-		sorter.sort(data, len);
+		sorter.sort(_data, len);
 	}
 
 	void sort() {
@@ -209,8 +187,8 @@ public:
 
 	void ordered_insert(double p_val) {
 		int i;
-		for (i = 0; i < count; i++) {
-			if (p_val < data[i]) {
+		for (i = 0; i < _size; i++) {
+			if (p_val < _data[i]) {
 				break;
 			}
 		}
@@ -221,7 +199,7 @@ public:
 		Vector<double> ret;
 		ret.resize(size());
 		double *w = ret.ptrw();
-		memcpy(w, data, sizeof(double) * count);
+		memcpy(w, _data, sizeof(double) * _size);
 		return ret;
 	}
 
@@ -233,7 +211,7 @@ public:
 			real_t *dest = w.ptr();
 
 			for (int i = 0; i < size(); ++i) {
-				dest[i] = static_cast<real_t>(data[i]);
+				dest[i] = static_cast<real_t>(_data[i]);
 			}
 		}
 		return pl;
@@ -241,9 +219,9 @@ public:
 
 	Vector<uint8_t> to_byte_array() const {
 		Vector<uint8_t> ret;
-		ret.resize(count * sizeof(double));
+		ret.resize(_size * sizeof(double));
 		uint8_t *w = ret.ptrw();
-		memcpy(w, data, sizeof(double) * count);
+		memcpy(w, _data, sizeof(double) * _size);
 		return ret;
 	}
 
@@ -258,75 +236,71 @@ public:
 
 	_FORCE_INLINE_ void set_from_mlpp_vectorr(const MLPPVector &p_from) {
 		resize(p_from.size());
-		for (int i = 0; i < p_from.count; i++) {
-			data[i] = p_from.data[i];
+		for (int i = 0; i < p_from._size; i++) {
+			_data[i] = p_from._data[i];
 		}
 	}
 
 	_FORCE_INLINE_ void set_from_mlpp_vector(const Ref<MLPPVector> &p_from) {
 		ERR_FAIL_COND(!p_from.is_valid());
 		resize(p_from->size());
-		for (int i = 0; i < p_from->count; i++) {
-			data[i] = p_from->data[i];
+		for (int i = 0; i < p_from->_size; i++) {
+			_data[i] = p_from->_data[i];
 		}
 	}
 
 	_FORCE_INLINE_ void set_from_vector(const Vector<double> &p_from) {
 		resize(p_from.size());
-		for (int i = 0; i < count; i++) {
-			data[i] = p_from[i];
+		for (int i = 0; i < _size; i++) {
+			_data[i] = p_from[i];
 		}
 	}
 
 	_FORCE_INLINE_ void set_from_pool_vector(const PoolRealArray &p_from) {
 		resize(p_from.size());
 		typename PoolRealArray::Read r = p_from.read();
-		for (int i = 0; i < count; i++) {
-			data[i] = r[i];
+		for (int i = 0; i < _size; i++) {
+			_data[i] = r[i];
 		}
 	}
 
 	_FORCE_INLINE_ MLPPVector() {
-		count = 0;
-		capacity = 0;
-		data = NULL;
+		_size = 0;
+		_data = NULL;
 	}
 	_FORCE_INLINE_ MLPPVector(const MLPPVector &p_from) {
-		count = 0;
-		capacity = 0;
-		data = NULL;
+		_size = 0;
+		_data = NULL;
 
 		resize(p_from.size());
-		for (int i = 0; i < p_from.count; i++) {
-			data[i] = p_from.data[i];
+		for (int i = 0; i < p_from._size; i++) {
+			_data[i] = p_from._data[i];
 		}
 	}
 
 	MLPPVector(const Vector<double> &p_from) {
-		count = 0;
-		capacity = 0;
-		data = NULL;
+		_size = 0;
+		_data = NULL;
 
 		resize(p_from.size());
-		for (int i = 0; i < count; i++) {
-			data[i] = p_from[i];
+		for (int i = 0; i < _size; i++) {
+			_data[i] = p_from[i];
 		}
 	}
 
 	MLPPVector(const PoolRealArray &p_from) {
-		count = 0;
-		capacity = 0;
-		data = NULL;
+		_size = 0;
+		_data = NULL;
 
 		resize(p_from.size());
 		typename PoolRealArray::Read r = p_from.read();
-		for (int i = 0; i < count; i++) {
-			data[i] = r[i];
+		for (int i = 0; i < _size; i++) {
+			_data[i] = r[i];
 		}
 	}
 
 	_FORCE_INLINE_ ~MLPPVector() {
-		if (data) {
+		if (_data) {
 			reset();
 		}
 	}
@@ -336,30 +310,33 @@ public:
 		std::vector<double> ret;
 		ret.resize(size());
 		double *w = &ret[0];
-		memcpy(w, data, sizeof(double) * count);
+		memcpy(w, _data, sizeof(double) * _size);
 		return ret;
 	}
 
 	_FORCE_INLINE_ void set_from_std_vector(const std::vector<double> &p_from) {
 		resize(p_from.size());
-		for (int i = 0; i < count; i++) {
-			data[i] = p_from[i];
+		for (int i = 0; i < _size; i++) {
+			_data[i] = p_from[i];
 		}
 	}
 
 	MLPPVector(const std::vector<double> &p_from) {
-		count = 0;
-		capacity = 0;
-		data = NULL;
+		_size = 0;
+		_data = NULL;
 
 		resize(p_from.size());
-		for (int i = 0; i < count; i++) {
-			data[i] = p_from[i];
+		for (int i = 0; i < _size; i++) {
+			_data[i] = p_from[i];
 		}
 	}
 
 protected:
 	static void _bind_methods();
+
+protected:
+	int _size;
+	double *_data;
 };
 
 #endif

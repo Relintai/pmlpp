@@ -11,9 +11,7 @@ void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("clear"), &MLPPVector::clear);
 	ClassDB::bind_method(D_METHOD("reset"), &MLPPVector::reset);
 	ClassDB::bind_method(D_METHOD("empty"), &MLPPVector::empty);
-	ClassDB::bind_method(D_METHOD("get_capacity"), &MLPPVector::get_capacity);
 
-	ClassDB::bind_method(D_METHOD("reserve", "size"), &MLPPVector::reserve);
 	ClassDB::bind_method(D_METHOD("size"), &MLPPVector::size);
 
 	ClassDB::bind_method(D_METHOD("get_element", "index"), &MLPPVector::get_element_bind);
