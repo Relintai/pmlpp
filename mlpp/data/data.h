@@ -10,6 +10,7 @@
 //
 
 #include "core/string/ustring.h"
+#include "core/variant/array.h"
 
 #include "core/object/reference.h"
 
@@ -68,6 +69,14 @@ public:
 	void set_data_unsupervised(int k, const String &file_name, std::vector<std::vector<double>> &inputSet);
 	void set_data_simple(const String &file_name, std::vector<double> &inputSet, std::vector<double> &outputSet);
 
+	struct SplitComplexData {
+		Ref<MLPPDataComplex> train;
+		Ref<MLPPDataComplex> test;
+	};
+
+	SplitComplexData train_test_split(const Ref<MLPPDataComplex> &data, double test_size);
+	Array train_test_split_bind(const Ref<MLPPDataComplex> &data, double test_size);
+
 	// Load Datasets
 	std::tuple<std::vector<std::vector<double>>, std::vector<double>> loadBreastCancer();
 	std::tuple<std::vector<std::vector<double>>, std::vector<double>> loadBreastCancerSVC();
@@ -114,7 +123,16 @@ public:
 
 	std::vector<std::vector<double>> BOW(std::vector<std::string> sentences, std::string = "Default");
 	std::vector<std::vector<double>> TFIDF(std::vector<std::string> sentences);
+
 	std::tuple<std::vector<std::vector<double>>, std::vector<std::string>> word2Vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, double learning_rate, int max_epoch);
+
+	struct WordsToVecResult {
+		std::vector<std::vector<double>> word_embeddings;
+		std::vector<std::string> word_list;
+	};
+
+	WordsToVecResult word_to_vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, double learning_rate, int max_epoch);
+
 	std::vector<std::vector<double>> LSA(std::vector<std::string> sentences, int dim);
 
 	std::vector<std::string> createWordList(std::vector<std::string> sentences);

@@ -200,6 +200,53 @@ void MLPPData::set_data_simple(const String &file_name, std::vector<double> &inp
 	memdelete(file);
 }
 
+MLPPData::SplitComplexData MLPPData::train_test_split(const Ref<MLPPDataComplex> &data, double test_size) {
+	SplitComplexData res;
+
+	res.train.instance();
+	res.test.instance();
+
+	ERR_FAIL_COND_V(!data.is_valid(), res);
+
+	int is = MIN(data->input.size(), data->output.size());
+
+	Array indices;
+	indices.resize(is);
+
+	for (int i = 0; i < is; ++i) {
+		indices[i] = i;
+	}
+
+	indices.shuffle();
+
+	int test_input_number = test_size * is; // implicit usage of floor
+
+	for (int i = 0; i < test_input_number; ++i) {
+		int index = indices[i];
+
+		res.test->input.push_back(data->input[i]);
+		res.test->output.push_back(data->output[i]);
+	}
+
+	for (int i = test_input_number; i < is; ++i) {
+		int index = indices[i];
+
+		res.train->input.push_back(data->input[i]);
+		res.train->output.push_back(data->output[i]);
+	}
+
+	return res;
+}
+Array MLPPData::train_test_split_bind(const Ref<MLPPDataComplex> &data, double test_size) {
+	SplitComplexData res = train_test_split(data, test_size);
+
+	Array arr;
+	arr.push_back(res.train);
+	arr.push_back(res.test);
+
+	return arr;
+}
+
 // Loading Datasets
 std::tuple<std::vector<std::vector<double>>, std::vector<double>> MLPPData::loadBreastCancer() {
 	const int BREAST_CANCER_SIZE = 30; // k = 30
@@ -280,6 +327,9 @@ std::tuple<std::vector<double>, std::vector<double>> MLPPData::loadFiresAndCrime
 	return { inputSet, outputSet };
 }
 
+// Note that inputs and outputs should be pairs (technically), but this
+// implementation will separate them. (My implementation keeps them tied together.)
+// Not yet sure whether this is intentional or not (or it's something like a compiler specific difference)
 std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>, std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPData::trainTestSplit(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, double testSize) {
 	std::random_device rd;
 	std::default_random_engine generator(rd());
@@ -817,6 +867,73 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::string>> MLPPData:
 	return { wordEmbeddings, wordList };
 }
 
+struct WordsToVecResult {
+	std::vector<std::vector<double>> word_embeddings;
+	std::vector<std::string> word_list;
+};
+
+MLPPData::WordsToVecResult MLPPData::word_to_vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, double learning_rate, int max_epoch) {
+	WordsToVecResult res;
+
+	res.word_list = removeNullByte(removeStopWords(createWordList(sentences)));
+
+	std::vector<std::vector<std::string>> segmented_sentences;
+	segmented_sentences.resize(sentences.size());
+
+	for (int i = 0; i < sentences.size(); i++) {
+		segmented_sentences[i] = removeStopWords(sentences[i]);
+	}
+
+	std::vector<std::string> inputStrings;
+	std::vector<std::string> outputStrings;
+
+	for (int i = 0; i < segmented_sentences.size(); i++) {
+		for (int j = 0; j < segmented_sentences[i].size(); j++) {
+			for (int k = windowSize; k > 0; k--) {
+				if (j - k >= 0) {
+					inputStrings.push_back(segmented_sentences[i][j]);
+
+					outputStrings.push_back(segmented_sentences[i][j - k]);
+				}
+				if (j + k <= segmented_sentences[i].size() - 1) {
+					inputStrings.push_back(segmented_sentences[i][j]);
+					outputStrings.push_back(segmented_sentences[i][j + k]);
+				}
+			}
+		}
+	}
+
+	int inputSize = inputStrings.size();
+
+	inputStrings.insert(inputStrings.end(), outputStrings.begin(), outputStrings.end());
+
+	std::vector<std::vector<double>> BOW = MLPPData::BOW(inputStrings, "Binary");
+
+	std::vector<std::vector<double>> inputSet;
+	std::vector<std::vector<double>> outputSet;
+
+	for (int i = 0; i < inputSize; i++) {
+		inputSet.push_back(BOW[i]);
+	}
+
+	for (int i = inputSize; i < BOW.size(); i++) {
+		outputSet.push_back(BOW[i]);
+	}
+	MLPPLinAlg alg;
+	MLPPSoftmaxNet *model;
+	if (type == "Skipgram") {
+		model = new MLPPSoftmaxNet(outputSet, inputSet, dimension);
+	} else { // else = CBOW. We maintain it is a default.
+		model = new MLPPSoftmaxNet(inputSet, outputSet, dimension);
+	}
+	model->gradientDescent(learning_rate, max_epoch, false);
+
+	res.word_embeddings = model->getEmbeddings();
+	delete model;
+
+	return res;
+}
+
 std::vector<std::vector<double>> MLPPData::LSA(std::vector<std::string> sentences, int dim) {
 	MLPPLinAlg alg;
 	std::vector<std::vector<double>> docWordData = BOW(sentences, "Binary");
@@ -946,4 +1063,6 @@ void MLPPData::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("load_mnist_test", "path"), &MLPPData::load_mnist_test);
 	ClassDB::bind_method(D_METHOD("load_california_housing", "path"), &MLPPData::load_california_housing);
 	ClassDB::bind_method(D_METHOD("load_fires_and_crime", "path"), &MLPPData::load_fires_and_crime);
+
+	ClassDB::bind_method(D_METHOD("train_test_split", "data", "test_size"), &MLPPData::train_test_split_bind);
 }

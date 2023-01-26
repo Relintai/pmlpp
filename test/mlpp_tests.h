@@ -44,7 +44,7 @@ public:
 	void test_dynamically_sized_mann(bool ui = false);
 	void test_train_test_split_mann(bool ui = false);
 
-	void test_naive_bayes(bool ui = false);
+	void test_naive_bayes();
 	void test_k_means(bool ui = false);
 	void test_knn(bool ui = false);
 

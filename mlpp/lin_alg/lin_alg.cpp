@@ -11,8 +11,6 @@
 #include <map>
 #include <random>
 
-
-
 std::vector<std::vector<double>> MLPPLinAlg::gramMatrix(std::vector<std::vector<double>> A) {
 	return matmult(transpose(A), A); // AtA
 }
@@ -507,7 +505,7 @@ std::vector<std::vector<double>> MLPPLinAlg::identity(double d) {
 }
 
 std::vector<std::vector<double>> MLPPLinAlg::cov(std::vector<std::vector<double>> A) {
-	MLPPStat  stat;
+	MLPPStat stat;
 	std::vector<std::vector<double>> covMat;
 	covMat.resize(A.size());
 	for (int i = 0; i < covMat.size(); i++) {
@@ -641,6 +639,131 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> M
 	return { eigenvectors, a_new };
 }
 
+MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<double>> A) {
+	/*
+	A (the entered parameter) in most use cases will be X'X, XX', etc. and must be symmetric.
+	That simply means that 1) X' = X and 2) X is a square matrix. This function that computes the
+	eigenvalues of a matrix is utilizing Jacobi's method.
+	*/
+
+	double diagonal = true; // Perform the iterative Jacobi algorithm unless and until we reach a diagonal matrix which yields us the eigenvals.
+
+	std::map<int, int> val_to_vec;
+	std::vector<std::vector<double>> a_new;
+	std::vector<std::vector<double>> eigenvectors = identity(A.size());
+	do {
+		double a_ij = A[0][1];
+		double sub_i = 0;
+		double sub_j = 1;
+		for (int i = 0; i < A.size(); i++) {
+			for (int j = 0; j < A[i].size(); j++) {
+				if (i != j && std::abs(A[i][j]) > a_ij) {
+					a_ij = A[i][j];
+					sub_i = i;
+					sub_j = j;
+				} else if (i != j && std::abs(A[i][j]) == a_ij) {
+					if (i < sub_i) {
+						a_ij = A[i][j];
+						sub_i = i;
+						sub_j = j;
+					}
+				}
+			}
+		}
+
+		double a_ii = A[sub_i][sub_i];
+		double a_jj = A[sub_j][sub_j];
+		double a_ji = A[sub_j][sub_i];
+		double theta;
+
+		if (a_ii == a_jj) {
+			theta = M_PI / 4;
+		} else {
+			theta = 0.5 * atan(2 * a_ij / (a_ii - a_jj));
+		}
+
+		std::vector<std::vector<double>> P = identity(A.size());
+		P[sub_i][sub_j] = -std::sin(theta);
+		P[sub_i][sub_i] = std::cos(theta);
+		P[sub_j][sub_j] = std::cos(theta);
+		P[sub_j][sub_i] = std::sin(theta);
+
+		a_new = matmult(matmult(inverse(P), A), P);
+
+		for (int i = 0; i < a_new.size(); i++) {
+			for (int j = 0; j < a_new[i].size(); j++) {
+				if (i != j && std::round(a_new[i][j]) == 0) {
+					a_new[i][j] = 0;
+				}
+			}
+		}
+
+		bool non_zero = false;
+		for (int i = 0; i < a_new.size(); i++) {
+			for (int j = 0; j < a_new[i].size(); j++) {
+				if (i != j && std::round(a_new[i][j]) != 0) {
+					non_zero = true;
+				}
+			}
+		}
+
+		if (non_zero) {
+			diagonal = false;
+		} else {
+			diagonal = true;
+		}
+
+		if (a_new == A) {
+			diagonal = true;
+			for (int i = 0; i < a_new.size(); i++) {
+				for (int j = 0; j < a_new[i].size(); j++) {
+					if (i != j) {
+						a_new[i][j] = 0;
+					}
+				}
+			}
+		}
+
+		eigenvectors = matmult(eigenvectors, P);
+		A = a_new;
+
+	} while (!diagonal);
+
+	std::vector<std::vector<double>> a_new_prior = a_new;
+
+	// Bubble Sort. Should change this later.
+	for (int i = 0; i < a_new.size() - 1; i++) {
+		for (int j = 0; j < a_new.size() - 1 - i; j++) {
+			if (a_new[j][j] < a_new[j + 1][j + 1]) {
+				double temp = a_new[j + 1][j + 1];
+				a_new[j + 1][j + 1] = a_new[j][j];
+				a_new[j][j] = temp;
+			}
+		}
+	}
+
+	for (int i = 0; i < a_new.size(); i++) {
+		for (int j = 0; j < a_new.size(); j++) {
+			if (a_new[i][i] == a_new_prior[j][j]) {
+				val_to_vec[i] = j;
+			}
+		}
+	}
+
+	std::vector<std::vector<double>> eigen_temp = eigenvectors;
+	for (int i = 0; i < eigenvectors.size(); i++) {
+		for (int j = 0; j < eigenvectors[i].size(); j++) {
+			eigenvectors[i][j] = eigen_temp[i][val_to_vec[j]];
+		}
+	}
+
+	EigenResult res;
+	res.eigen_vectors = eigenvectors;
+	res.eigen_values = a_new;
+
+	return res;
+}
+
 std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPLinAlg::SVD(std::vector<std::vector<double>> A) {
 	auto [left_eigenvecs, eigenvals] = eig(matmult(A, transpose(A)));
 	auto [right_eigenvecs, right_eigenvals] = eig(matmult(transpose(A), A));
@@ -653,6 +776,26 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>, s
 		}
 	}
 	return { left_eigenvecs, sigma, right_eigenvecs };
+}
+
+MLPPLinAlg::SDVResult MLPPLinAlg::svd(std::vector<std::vector<double>> A) {
+	EigenResult left_eigen = eigen(matmult(A, transpose(A)));
+	EigenResult right_eigen = eigen(matmult(transpose(A), A));
+
+	std::vector<std::vector<double>> singularvals = sqrt(left_eigen.eigen_values);
+	std::vector<std::vector<double>> sigma = zeromat(A.size(), A[0].size());
+	for (int i = 0; i < singularvals.size(); i++) {
+		for (int j = 0; j < singularvals[i].size(); j++) {
+			sigma[i][j] = singularvals[i][j];
+		}
+	}
+
+	SDVResult res;
+	res.U = left_eigen.eigen_vectors;
+	res.S = sigma;
+	res.Vt = right_eigen.eigen_vectors;
+
+	return res;
 }
 
 std::vector<double> MLPPLinAlg::vectorProjection(std::vector<double> a, std::vector<double> b) {
@@ -686,6 +829,15 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> M
 	return { Q, R };
 }
 
+MLPPLinAlg::QRDResult MLPPLinAlg::qrd(std::vector<std::vector<double>> A) {
+	QRDResult res;
+
+	res.Q = gramSchmidtProcess(A);
+	res.R = matmult(transpose(res.Q), A);
+
+	return res;
+}
+
 std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPLinAlg::chol(std::vector<std::vector<double>> A) {
 	std::vector<std::vector<double>> L = zeromat(A.size(), A[0].size());
 	for (int j = 0; j < L.size(); j++) { // Matrices entered must be square. No problem here.
@@ -706,6 +858,33 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> M
 		}
 	}
 	return { L, transpose(L) }; // Indeed, L.T is our upper triangular matrix.
+}
+
+MLPPLinAlg::CholeskyResult MLPPLinAlg::cholesky(std::vector<std::vector<double>> A) {
+	std::vector<std::vector<double>> L = zeromat(A.size(), A[0].size());
+	for (int j = 0; j < L.size(); j++) { // Matrices entered must be square. No problem here.
+		for (int i = j; i < L.size(); i++) {
+			if (i == j) {
+				double sum = 0;
+				for (int k = 0; k < j; k++) {
+					sum += L[i][k] * L[i][k];
+				}
+				L[i][j] = std::sqrt(A[i][j] - sum);
+			} else { // That is, i!=j
+				double sum = 0;
+				for (int k = 0; k < j; k++) {
+					sum += L[i][k] * L[j][k];
+				}
+				L[i][j] = (A[i][j] - sum) / L[j][j];
+			}
+		}
+	}
+
+	CholeskyResult res;
+	res.L = L;
+	res.Lt = transpose(L); // Indeed, L.T is our upper triangular matrix.
+
+	return res;
 }
 
 double MLPPLinAlg::sum_elements(std::vector<std::vector<double>> A) {

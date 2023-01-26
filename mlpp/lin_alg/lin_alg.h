@@ -11,7 +11,6 @@
 #include <tuple>
 #include <vector>
 
-
 class MLPPLinAlg {
 public:
 	// MATRIX FUNCTIONS
@@ -98,7 +97,22 @@ public:
 
 	std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> eig(std::vector<std::vector<double>> A);
 
+	struct EigenResult {
+		std::vector<std::vector<double>> eigen_vectors;
+		std::vector<std::vector<double>> eigen_values;
+	};
+
+	EigenResult eigen(std::vector<std::vector<double>> A);
+
 	std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>, std::vector<std::vector<double>>> SVD(std::vector<std::vector<double>> A);
+
+	struct SDVResult {
+		std::vector<std::vector<double>> U;
+		std::vector<std::vector<double>> S;
+		std::vector<std::vector<double>> Vt;
+	};
+
+	SDVResult svd(std::vector<std::vector<double>> A);
 
 	std::vector<double> vectorProjection(std::vector<double> a, std::vector<double> b);
 
@@ -106,7 +120,21 @@ public:
 
 	std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> QRD(std::vector<std::vector<double>> A);
 
+	struct QRDResult {
+		std::vector<std::vector<double>> Q;
+		std::vector<std::vector<double>> R;
+	};
+
+	QRDResult qrd(std::vector<std::vector<double>> A);
+
 	std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> chol(std::vector<std::vector<double>> A);
+
+	struct CholeskyResult {
+		std::vector<std::vector<double>> L;
+		std::vector<std::vector<double>> Lt;
+	};
+
+	CholeskyResult cholesky(std::vector<std::vector<double>> A);
 
 	double sum_elements(std::vector<std::vector<double>> A);
 
@@ -230,7 +258,5 @@ public:
 
 private:
 };
-
-
 
 #endif /* LinAlg_hpp */
