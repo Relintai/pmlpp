@@ -13,6 +13,7 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("empty"), &MLPPMatrix::empty);
 
 	ClassDB::bind_method(D_METHOD("data_size"), &MLPPMatrix::data_size);
+	ClassDB::bind_method(D_METHOD("resize_data", "size"), &MLPPMatrix::resize_data);
 
 	ClassDB::bind_method(D_METHOD("get_element", "index"), &MLPPMatrix::get_element_bind);
 	ClassDB::bind_method(D_METHOD("set_element", "index", "val"), &MLPPMatrix::set_element_bind);

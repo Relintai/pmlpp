@@ -89,7 +89,7 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void clear() { resize(0); }
+	_FORCE_INLINE_ void clear() { resize_data(0); }
 	_FORCE_INLINE_ void reset() {
 		clear();
 		if (_data) {
@@ -102,7 +102,7 @@ public:
 	_FORCE_INLINE_ bool empty() const { return _data_size == 0; }
 	_FORCE_INLINE_ int data_size() const { return _data_size; }
 
-	void resize(int p_size) {
+	void resize_data(int p_size) {
 		_data_size = p_size;
 
 		_data = (double *)memrealloc(_data, _data_size * sizeof(double));
@@ -153,7 +153,7 @@ public:
 		if (p_pos == _data_size) {
 			push_back(p_val);
 		} else {
-			resize(_data_size + 1);
+			resize_data(_data_size + 1);
 			for (int i = _data_size - 1; i > p_pos; i--) {
 				_data[i] = _data[i - 1];
 			}
@@ -235,14 +235,14 @@ public:
 	}
 
 	_FORCE_INLINE_ void set_from_mlpp_matrixr(const MLPPMatrix &p_from) {
-		resize(p_from.data_size());
+		resize_data(p_from.data_size());
 		for (int i = 0; i < p_from._data_size; i++) {
 			_data[i] = p_from._data[i];
 		}
 	}
 
 	_FORCE_INLINE_ void set_from_mlpp_vectorr(const MLPPVector &p_from) {
-		resize(p_from.size());
+		resize_data(p_from.size());
 		const double *from_ptr = p_from.ptr();
 		for (int i = 0; i < p_from.size(); i++) {
 			_data[i] = from_ptr[i];
@@ -251,7 +251,7 @@ public:
 
 	_FORCE_INLINE_ void set_from_mlpp_vector(const Ref<MLPPVector> &p_from) {
 		ERR_FAIL_COND(!p_from.is_valid());
-		resize(p_from->size());
+		resize_data(p_from->size());
 		const double *from_ptr = p_from->ptr();
 		for (int i = 0; i < p_from->size(); i++) {
 			_data[i] = from_ptr[i];
@@ -259,14 +259,14 @@ public:
 	}
 
 	_FORCE_INLINE_ void set_from_vector(const Vector<double> &p_from) {
-		resize(p_from.size());
+		resize_data(p_from.size());
 		for (int i = 0; i < _data_size; i++) {
 			_data[i] = p_from[i];
 		}
 	}
 
 	_FORCE_INLINE_ void set_from_pool_vector(const PoolRealArray &p_from) {
-		resize(p_from.size());
+		resize_data(p_from.size());
 		typename PoolRealArray::Read r = p_from.read();
 		for (int i = 0; i < _data_size; i++) {
 			_data[i] = r[i];
@@ -281,7 +281,7 @@ public:
 		_data_size = 0;
 		_data = NULL;
 
-		resize(p_from.data_size());
+		resize_data(p_from.data_size());
 		for (int i = 0; i < p_from._data_size; i++) {
 			_data[i] = p_from._data[i];
 		}
@@ -291,7 +291,7 @@ public:
 		_data_size = 0;
 		_data = NULL;
 
-		resize(p_from.size());
+		resize_data(p_from.size());
 		for (int i = 0; i < _data_size; i++) {
 			_data[i] = p_from[i];
 		}
@@ -301,7 +301,7 @@ public:
 		_data_size = 0;
 		_data = NULL;
 
-		resize(p_from.size());
+		resize_data(p_from.size());
 		typename PoolRealArray::Read r = p_from.read();
 		for (int i = 0; i < _data_size; i++) {
 			_data[i] = r[i];
@@ -324,7 +324,7 @@ public:
 	}
 
 	_FORCE_INLINE_ void set_from_std_vector(const std::vector<double> &p_from) {
-		resize(p_from.size());
+		resize_data(p_from.size());
 		for (int i = 0; i < _data_size; i++) {
 			_data[i] = p_from[i];
 		}
@@ -334,7 +334,7 @@ public:
 		_data_size = 0;
 		_data = NULL;
 
-		resize(p_from.size());
+		resize_data(p_from.size());
 		for (int i = 0; i < _data_size; i++) {
 			_data[i] = p_from[i];
 		}
