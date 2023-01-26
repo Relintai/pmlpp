@@ -100,7 +100,7 @@ public:
 	}
 
 	_FORCE_INLINE_ bool empty() const { return _data_size == 0; }
-	_FORCE_INLINE_ int size() const { return _data_size; }
+	_FORCE_INLINE_ int data_size() const { return _data_size; }
 
 	void resize(int p_size) {
 		_data_size = p_size;
@@ -197,7 +197,7 @@ public:
 
 	Vector<double> to_vector() const {
 		Vector<double> ret;
-		ret.resize(size());
+		ret.resize(data_size());
 		double *w = ret.ptrw();
 		memcpy(w, _data, sizeof(double) * _data_size);
 		return ret;
@@ -205,12 +205,12 @@ public:
 
 	PoolRealArray to_pool_vector() const {
 		PoolRealArray pl;
-		if (size()) {
-			pl.resize(size());
+		if (data_size()) {
+			pl.resize(data_size());
 			typename PoolRealArray::Write w = pl.write();
 			real_t *dest = w.ptr();
 
-			for (int i = 0; i < size(); ++i) {
+			for (int i = 0; i < data_size(); ++i) {
 				dest[i] = static_cast<real_t>(_data[i]);
 			}
 		}
@@ -235,7 +235,7 @@ public:
 	}
 
 	_FORCE_INLINE_ void set_from_mlpp_matrixr(const MLPPMatrix &p_from) {
-		resize(p_from.size());
+		resize(p_from.data_size());
 		for (int i = 0; i < p_from._data_size; i++) {
 			_data[i] = p_from._data[i];
 		}
@@ -281,7 +281,7 @@ public:
 		_data_size = 0;
 		_data = NULL;
 
-		resize(p_from.size());
+		resize(p_from.data_size());
 		for (int i = 0; i < p_from._data_size; i++) {
 			_data[i] = p_from._data[i];
 		}
@@ -317,7 +317,7 @@ public:
 	// TODO: These are temporary
 	std::vector<double> to_std_vector() const {
 		std::vector<double> ret;
-		ret.resize(size());
+		ret.resize(data_size());
 		double *w = &ret[0];
 		memcpy(w, _data, sizeof(double) * _data_size);
 		return ret;
@@ -344,6 +344,7 @@ protected:
 	static void _bind_methods();
 
 protected:
+	Size2i _size;
 	int _data_size;
 	double *_data;
 };
