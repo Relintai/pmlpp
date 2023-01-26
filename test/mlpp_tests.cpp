@@ -297,14 +297,30 @@ void MLPPTests::test_multivariate_linear_regression_newton_raphson(bool ui) {
 	alg.printVector(model2.modelSetTest(ds->input));
 }
 
-//MLPPStat stat;
-//MLPPLinAlg alg;
-//MLPPActivation avn;
-//MLPPCost cost;
-//MLPPData data;
-//MLPPConvolutions conv;
-
 void MLPPTests::test_logistic_regression(bool ui) {
+	MLPPLinAlg alg;
+	MLPPData data;
+
+	// LOGISTIC REGRESSION
+	Ref<MLPPDataSimple> dt = data.load_breast_cancer(_breast_cancer_data_path);
+	MLPPLogReg model(dt->input, dt->output);
+	model.SGD(0.001, 100000, ui);
+	alg.printVector(model.modelSetTest(dt->input));
+	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
+}
+void MLPPTests::test_probit_regression(bool ui) {
+	MLPPLinAlg alg;
+	MLPPData data;
+
+	// PROBIT REGRESSION
+	Ref<MLPPDataSimple> dt = data.load_breast_cancer(_breast_cancer_data_path);
+
+	MLPPProbitReg model(dt->input, dt->output);
+	model.SGD(0.001, 10000, ui);
+	alg.printVector(model.modelSetTest(dt->input));
+	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
+}
+void MLPPTests::test_c_log_log_regression(bool ui) {
 	//MLPPStat stat;
 	//MLPPLinAlg alg;
 	//MLPPActivation avn;
@@ -312,24 +328,6 @@ void MLPPTests::test_logistic_regression(bool ui) {
 	//MLPPData data;
 	//MLPPConvolutions conv;
 
-	// LOGISTIC REGRESSION
-	// auto [inputSet, outputSet] = data.load rastCancer();
-	// LogReg model(inputSet, outputSet);
-	// model.SGD(0.001, 100000, 0);
-	// alg.printVector(model.modelSetTest(inputSet));
-	// std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
-}
-void MLPPTests::test_probit_regression(bool ui) {
-	// // PROBIT REGRESSION
-	// std::vector<std::vector<double>> inputSet;
-	// std::vector<double> outputSet;
-	// data.setData(30, "/Users/marcmelikyan/Desktop/Data/BreastCancer.csv", inputSet, outputSet);
-	// ProbitReg model(inputSet, outputSet);
-	// model.SGD(0.001, 10000, 1);
-	// alg.printVector(model.modelSetTest(inputSet));
-	// std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
-}
-void MLPPTests::test_c_log_log_regression(bool ui) {
 	// // CLOGLOG REGRESSION
 	// std::vector<std::vector<double>> inputSet = {{1,2,3,4,5,6,7,8}, {0,0,0,0,1,1,1,1}};
 	// std::vector<double> outputSet = {0,0,0,0,1,1,1,1};
@@ -339,6 +337,13 @@ void MLPPTests::test_c_log_log_regression(bool ui) {
 	// std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_exp_reg_regression(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // EXPREG REGRESSION
 	// std::vector<std::vector<double>> inputSet = {{0,1,2,3,4}};
 	// std::vector<double> outputSet = {1,2,4,8,16};
@@ -348,6 +353,13 @@ void MLPPTests::test_exp_reg_regression(bool ui) {
 	// std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_tanh_regression(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // TANH REGRESSION
 	// std::vector<std::vector<double>> inputSet = {{4,3,0,-3,-4}, {0,0,0,1,1}};
 	// std::vector<double> outputSet = {1,1,0,-1,-1};
@@ -357,6 +369,13 @@ void MLPPTests::test_tanh_regression(bool ui) {
 	// std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_softmax_regression(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // SOFTMAX REGRESSION
 	// auto [inputSet, outputSet] = data.loadIris();
 	// SoftmaxReg model(inputSet, outputSet);
@@ -365,6 +384,13 @@ void MLPPTests::test_softmax_regression(bool ui) {
 	// std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_support_vector_classification(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // SUPPORT VECTOR CLASSIFICATION
 	// auto [inputSet, outputSet] = data.loadBreastCancerSVC();
 	// SVC model(inputSet, outputSet, 1);
@@ -378,6 +404,13 @@ void MLPPTests::test_support_vector_classification(bool ui) {
 }
 
 void MLPPTests::test_mlp(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // MLP
 	// std::vector<std::vector<double>> inputSet = {{0,0,1,1}, {0,1,0,1}};
 	// inputSet = alg.transpose(inputSet);
@@ -389,6 +422,13 @@ void MLPPTests::test_mlp(bool ui) {
 	// std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_soft_max_network(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // SOFTMAX NETWORK
 	// auto [inputSet, outputSet] = data.loadWine();
 	// SoftmaxNet model(inputSet, outputSet, 1);
@@ -397,6 +437,13 @@ void MLPPTests::test_soft_max_network(bool ui) {
 	// std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_autoencoder(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // AUTOENCODER
 	// std::vector<std::vector<double>> inputSet = {{1,2,3,4,5,6,7,8,9,10}, {3,5,9,12,15,18,21,24,27,30}};
 	// AutoEncoder model(alg.transpose(inputSet), 5);
@@ -405,6 +452,13 @@ void MLPPTests::test_autoencoder(bool ui) {
 	// std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_dynamically_sized_ann(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// DYNAMICALLY SIZED ANN
 	// Possible Weight Init Methods: Default, Uniform, HeNormal, HeUniform, XavierNormal, XavierUniform
 	// Possible Activations: Linear, Sigmoid, Swish, Softplus, Softsign, CLogLog, Ar{Sinh, Cosh, Tanh, Csch, Sech, Coth},  GaussianCDF, GELU, UnitStep
@@ -425,6 +479,13 @@ void MLPPTests::test_dynamically_sized_ann(bool ui) {
 	// std::cout << "ACCURACY: " << 100 * ann.score() << "%" << std::endl;
 }
 void MLPPTests::test_wgan(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	/*
 		std::vector<std::vector<double>> outputSet = {{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20},
 											   {2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40}};
@@ -440,6 +501,13 @@ void MLPPTests::test_wgan(bool ui) {
 	*/
 }
 void MLPPTests::test_ann(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// typedef std::vector<std::vector<double>> Matrix;
 	// typedef std::vector<double> Vector;
 
@@ -457,6 +525,13 @@ void MLPPTests::test_ann(bool ui) {
 	// std::cout << "ACCURACY: " << 100 * ann.score() << "%" << std::endl; // Accuracy.
 }
 void MLPPTests::test_dynamically_sized_mann(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // DYNAMICALLY SIZED MANN (Multidimensional Output ANN)
 	// std::vector<std::vector<double>> inputSet = {{1,2,3},{2,4,6},{3,6,9},{4,8,12}};
 	// std::vector<std::vector<double>> outputSet = {{1,5}, {2,10}, {3,15}, {4,20}};
@@ -473,6 +548,13 @@ void MLPPTests::test_dynamically_sized_mann(bool ui) {
 	// std::vector<std::vector<double>> outputSet = data.oneHotRep(tempOutputSet, 3);
 }
 void MLPPTests::test_train_test_split_mann(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// TRAIN TEST SPLIT CHECK
 	// std::vector<std::vector<double>> inputSet1 = {{1,2,3,4,5,6,7,8,9,10}, {3,5,9,12,15,18,21,24,27,30}};
 	// std::vector<std::vector<double>> outputSet1 = {{2,4,6,8,10,12,14,16,18,20}};
@@ -494,6 +576,13 @@ void MLPPTests::test_train_test_split_mann(bool ui) {
 }
 
 void MLPPTests::test_naive_bayes(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // NAIVE BAYES
 	// std::vector<std::vector<double>> inputSet = {{1,1,1,1,1}, {0,0,1,1,1}, {0,0,1,0,1}};
 	// std::vector<double> outputSet = {0,1,0,1,1};
@@ -508,6 +597,13 @@ void MLPPTests::test_naive_bayes(bool ui) {
 	// alg.printVector(GNB.modelSetTest(alg.transpose(inputSet)));
 }
 void MLPPTests::test_k_means(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // KMeans
 	// std::vector<std::vector<double>> inputSet = {{32, 0, 7}, {2, 28, 17}, {0, 9, 23}};
 	// KMeans kmeans(inputSet, 3, "KMeans++");
@@ -518,6 +614,13 @@ void MLPPTests::test_k_means(bool ui) {
 	// alg.printVector(kmeans.silhouette_scores());
 }
 void MLPPTests::test_knn(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // kNN
 	// std::vector<std::vector<double>> inputSet = {{1,2,3,4,5,6,7,8}, {0,0,0,0,1,1,1,1}};
 	// std::vector<double> outputSet = {0,0,0,0,1,1,1,1};
@@ -527,6 +630,13 @@ void MLPPTests::test_knn(bool ui) {
 }
 
 void MLPPTests::test_convolution_tensors_etc() {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // CONVOLUTION, POOLING, ETC..
 	// std::vector<std::vector<double>> input = {
 	//     {1},
@@ -566,6 +676,13 @@ void MLPPTests::test_convolution_tensors_etc() {
 	// alg.printMatrix(conv.convolve(conv.gaussianFilter2D(5, 1), laplacian, 1));
 }
 void MLPPTests::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // PCA, SVD, eigenvalues & eigenvectors
 	// std::vector<std::vector<double>> inputSet = {{1,1}, {1,1}};
 	// auto [Eigenvectors, Eigenvalues] = alg.eig(inputSet);
@@ -586,6 +703,13 @@ void MLPPTests::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
 }
 
 void MLPPTests::test_nlp_and_data(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // NLP/DATA
 	// std::string verbText = "I am appearing and thinking, as well as conducting.";
 	// std::cout << "Stemming Example:" << std::endl;
@@ -631,12 +755,26 @@ void MLPPTests::test_nlp_and_data(bool ui) {
 	// std::cout << std::endl;
 }
 void MLPPTests::test_outlier_finder(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // Outlier Finder
 	// std::vector<double> inputSet = {1,2,3,4,5,6,7,8,9,23554332523523};
 	// OutlierFinder outlierFinder(2); // Any datapoint outside of 2 stds from the mean is marked as an outlier.
 	// alg.printVector(outlierFinder.modelTest(inputSet));
 }
 void MLPPTests::test_new_math_functions() {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // Testing new Functions
 	// double z_s = 0.001;
 	// std::cout << avn.logit(z_s) << std::endl;
@@ -680,6 +818,13 @@ void MLPPTests::test_new_math_functions() {
 	//  alg.printMatrix(R);
 }
 void MLPPTests::test_positive_definiteness_checker() {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// // Checking positive-definiteness checker. For Cholesky Decomp.
 	// std::vector<std::vector<double>> A =
 	// {
@@ -695,6 +840,13 @@ void MLPPTests::test_positive_definiteness_checker() {
 	// alg.printMatrix(Lt);
 }
 void MLPPTests::test_numerical_analysis() {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	// Checks for numerical analysis class.
 	//NumericalAnalysis numAn;
 
@@ -768,6 +920,13 @@ void MLPPTests::test_numerical_analysis() {
 	// alg.printVector(alg.cross(a,b));
 }
 void MLPPTests::test_support_vector_classification_kernel(bool ui) {
+	//MLPPStat stat;
+	//MLPPLinAlg alg;
+	//MLPPActivation avn;
+	//MLPPCost cost;
+	//MLPPData data;
+	//MLPPConvolutions conv;
+
 	//SUPPORT VECTOR CLASSIFICATION (kernel method)
 	// std::vector<std::vector<double>> inputSet;
 	// std::vector<double> outputSet;
