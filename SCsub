@@ -7,6 +7,9 @@ module_env = env.Clone()
 sources = [
     "register_types.cpp",
 
+    "mlpp/lin_alg/mlpp_vector.cpp",
+    "mlpp/lin_alg/mlpp_matrix.cpp",
+
     "mlpp/activation/activation.cpp",
     "mlpp/ann/ann.cpp",
     "mlpp/auto_encoder/auto_encoder.cpp",
