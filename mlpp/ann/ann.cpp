@@ -15,7 +15,7 @@
 #include <iostream>
 #include <random>
 
-MLPPANN::MLPPANN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet) :
+MLPPANN::MLPPANN(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), lrScheduler("None"), decayConstant(0), dropRate(0) {
 }
 
@@ -23,7 +23,7 @@ MLPPANN::~MLPPANN() {
 	delete outputLayer;
 }
 
-std::vector<double> MLPPANN::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<real_t> MLPPANN::modelSetTest(std::vector<std::vector<real_t>> X) {
 	if (!network.empty()) {
 		network[0].input = X;
 		network[0].forwardPass();
@@ -40,7 +40,7 @@ std::vector<double> MLPPANN::modelSetTest(std::vector<std::vector<double>> X) {
 	return outputLayer->a;
 }
 
-double MLPPANN::modelTest(std::vector<double> x) {
+real_t MLPPANN::modelTest(std::vector<real_t> x) {
 	if (!network.empty()) {
 		network[0].Test(x);
 		for (int i = 1; i < network.size(); i++) {
@@ -53,13 +53,13 @@ double MLPPANN::modelTest(std::vector<double> x) {
 	return outputLayer->a_test;
 }
 
-void MLPPANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPANN::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPLinAlg alg;
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
-	double initial_learning_rate = learning_rate;
+	real_t initial_learning_rate = learning_rate;
 
 	alg.printMatrix(network[network.size() - 1].weights);
 	while (true) {
@@ -87,13 +87,13 @@ void MLPPANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void MLPPANN::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPANN::SGD(real_t learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPLinAlg alg;
 
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
-	double initial_learning_rate = learning_rate;
+	real_t initial_learning_rate = learning_rate;
 
 	while (true) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
@@ -103,7 +103,7 @@ void MLPPANN::SGD(double learning_rate, int max_epoch, bool UI) {
 		std::uniform_int_distribution<int> distribution(0, int(n - 1));
 		int outputIndex = distribution(generator);
 
-		std::vector<double> y_hat = modelSetTest({ inputSet[outputIndex] });
+		std::vector<real_t> y_hat = modelSetTest({ inputSet[outputIndex] });
 		cost_prev = Cost({ y_hat }, { outputSet[outputIndex] });
 
 		auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, { outputSet[outputIndex] });
@@ -125,13 +125,13 @@ void MLPPANN::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void MLPPANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPANN::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	class MLPPCost cost;
 	MLPPLinAlg alg;
 
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
-	double initial_learning_rate = learning_rate;
+	real_t initial_learning_rate = learning_rate;
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
@@ -141,7 +141,7 @@ void MLPPANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, boo
 	while (true) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<double> y_hat = modelSetTest(inputMiniBatches[i]);
+			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
 			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
@@ -163,13 +163,13 @@ void MLPPANN::MBGD(double learning_rate, int max_epoch, int mini_batch_size, boo
 	forwardPass();
 }
 
-void MLPPANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size, double gamma, bool NAG, bool UI) {
+void MLPPANN::Momentum(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool NAG, bool UI) {
 	class MLPPCost cost;
 	MLPPLinAlg alg;
 
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
-	double initial_learning_rate = learning_rate;
+	real_t initial_learning_rate = learning_rate;
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
@@ -178,13 +178,13 @@ void MLPPANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size,
 	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
-	std::vector<std::vector<std::vector<double>>> v_hidden;
+	std::vector<std::vector<std::vector<real_t>>> v_hidden;
 
-	std::vector<double> v_output;
+	std::vector<real_t> v_output;
 	while (true) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<double> y_hat = modelSetTest(inputMiniBatches[i]);
+			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
 			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
@@ -220,13 +220,13 @@ void MLPPANN::Momentum(double learning_rate, int max_epoch, int mini_batch_size,
 	forwardPass();
 }
 
-void MLPPANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, double e, bool UI) {
+void MLPPANN::Adagrad(real_t learning_rate, int max_epoch, int mini_batch_size, real_t e, bool UI) {
 	class MLPPCost cost;
 	MLPPLinAlg alg;
 
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
-	double initial_learning_rate = learning_rate;
+	real_t initial_learning_rate = learning_rate;
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
@@ -235,13 +235,13 @@ void MLPPANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, 
 	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
-	std::vector<std::vector<std::vector<double>>> v_hidden;
+	std::vector<std::vector<std::vector<real_t>>> v_hidden;
 
-	std::vector<double> v_output;
+	std::vector<real_t> v_output;
 	while (true) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<double> y_hat = modelSetTest(inputMiniBatches[i]);
+			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
 			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
@@ -258,8 +258,8 @@ void MLPPANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, 
 
 			v_output = alg.addition(v_output, alg.exponentiate(outputWGrad, 2));
 
-			std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(cumulativeHiddenLayerWGrad, alg.scalarAdd(e, alg.sqrt(v_hidden))));
-			std::vector<double> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(outputWGrad, alg.scalarAdd(e, alg.sqrt(v_output))));
+			std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(cumulativeHiddenLayerWGrad, alg.scalarAdd(e, alg.sqrt(v_hidden))));
+			std::vector<real_t> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(outputWGrad, alg.scalarAdd(e, alg.sqrt(v_output))));
 
 			updateParameters(hiddenLayerUpdations, outputLayerUpdation, learning_rate); // subject to change. may want bias to have this matrix too.
 			y_hat = modelSetTest(inputMiniBatches[i]);
@@ -276,13 +276,13 @@ void MLPPANN::Adagrad(double learning_rate, int max_epoch, int mini_batch_size, 
 	forwardPass();
 }
 
-void MLPPANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size, double b1, double e, bool UI) {
+void MLPPANN::Adadelta(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t e, bool UI) {
 	class MLPPCost cost;
 	MLPPLinAlg alg;
 
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
-	double initial_learning_rate = learning_rate;
+	real_t initial_learning_rate = learning_rate;
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
@@ -291,13 +291,13 @@ void MLPPANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size,
 	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
-	std::vector<std::vector<std::vector<double>>> v_hidden;
+	std::vector<std::vector<std::vector<real_t>>> v_hidden;
 
-	std::vector<double> v_output;
+	std::vector<real_t> v_output;
 	while (true) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<double> y_hat = modelSetTest(inputMiniBatches[i]);
+			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
 			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
@@ -314,8 +314,8 @@ void MLPPANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size,
 
 			v_output = alg.addition(v_output, alg.exponentiate(outputWGrad, 2));
 
-			std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(cumulativeHiddenLayerWGrad, alg.scalarAdd(e, alg.sqrt(v_hidden))));
-			std::vector<double> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(outputWGrad, alg.scalarAdd(e, alg.sqrt(v_output))));
+			std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(cumulativeHiddenLayerWGrad, alg.scalarAdd(e, alg.sqrt(v_hidden))));
+			std::vector<real_t> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(outputWGrad, alg.scalarAdd(e, alg.sqrt(v_output))));
 
 			updateParameters(hiddenLayerUpdations, outputLayerUpdation, learning_rate); // subject to change. may want bias to have this matrix too.
 			y_hat = modelSetTest(inputMiniBatches[i]);
@@ -332,13 +332,13 @@ void MLPPANN::Adadelta(double learning_rate, int max_epoch, int mini_batch_size,
 	forwardPass();
 }
 
-void MLPPANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
+void MLPPANN::Adam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI) {
 	class MLPPCost cost;
 	MLPPLinAlg alg;
 
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
-	double initial_learning_rate = learning_rate;
+	real_t initial_learning_rate = learning_rate;
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
@@ -347,15 +347,15 @@ void MLPPANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, dou
 	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
-	std::vector<std::vector<std::vector<double>>> m_hidden;
-	std::vector<std::vector<std::vector<double>>> v_hidden;
+	std::vector<std::vector<std::vector<real_t>>> m_hidden;
+	std::vector<std::vector<std::vector<real_t>>> v_hidden;
 
-	std::vector<double> m_output;
-	std::vector<double> v_output;
+	std::vector<real_t> m_output;
+	std::vector<real_t> v_output;
 	while (true) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<double> y_hat = modelSetTest(inputMiniBatches[i]);
+			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
 			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
@@ -375,14 +375,14 @@ void MLPPANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, dou
 			m_output = alg.addition(alg.scalarMultiply(b1, m_output), alg.scalarMultiply(1 - b1, outputWGrad));
 			v_output = alg.addition(alg.scalarMultiply(b2, v_output), alg.scalarMultiply(1 - b2, alg.exponentiate(outputWGrad, 2)));
 
-			std::vector<std::vector<std::vector<double>>> m_hidden_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_hidden);
-			std::vector<std::vector<std::vector<double>>> v_hidden_hat = alg.scalarMultiply(1 / (1 - std::pow(b2, epoch)), v_hidden);
+			std::vector<std::vector<std::vector<real_t>>> m_hidden_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_hidden);
+			std::vector<std::vector<std::vector<real_t>>> v_hidden_hat = alg.scalarMultiply(1 / (1 - std::pow(b2, epoch)), v_hidden);
 
-			std::vector<double> m_output_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_output);
-			std::vector<double> v_output_hat = alg.scalarMultiply(1 / (1 - std::pow(b2, epoch)), v_output);
+			std::vector<real_t> m_output_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_output);
+			std::vector<real_t> v_output_hat = alg.scalarMultiply(1 / (1 - std::pow(b2, epoch)), v_output);
 
-			std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_hidden_hat, alg.scalarAdd(e, alg.sqrt(v_hidden_hat))));
-			std::vector<double> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_output_hat, alg.scalarAdd(e, alg.sqrt(v_output_hat))));
+			std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_hidden_hat, alg.scalarAdd(e, alg.sqrt(v_hidden_hat))));
+			std::vector<real_t> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_output_hat, alg.scalarAdd(e, alg.sqrt(v_output_hat))));
 
 			updateParameters(hiddenLayerUpdations, outputLayerUpdation, learning_rate); // subject to change. may want bias to have this matrix too.
 			y_hat = modelSetTest(inputMiniBatches[i]);
@@ -399,13 +399,13 @@ void MLPPANN::Adam(double learning_rate, int max_epoch, int mini_batch_size, dou
 	forwardPass();
 }
 
-void MLPPANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
+void MLPPANN::Adamax(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI) {
 	class MLPPCost cost;
 	MLPPLinAlg alg;
 
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
-	double initial_learning_rate = learning_rate;
+	real_t initial_learning_rate = learning_rate;
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
@@ -414,15 +414,15 @@ void MLPPANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, d
 	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
-	std::vector<std::vector<std::vector<double>>> m_hidden;
-	std::vector<std::vector<std::vector<double>>> u_hidden;
+	std::vector<std::vector<std::vector<real_t>>> m_hidden;
+	std::vector<std::vector<std::vector<real_t>>> u_hidden;
 
-	std::vector<double> m_output;
-	std::vector<double> u_output;
+	std::vector<real_t> m_output;
+	std::vector<real_t> u_output;
 	while (true) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<double> y_hat = modelSetTest(inputMiniBatches[i]);
+			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
 			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
@@ -442,12 +442,12 @@ void MLPPANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, d
 			m_output = alg.addition(alg.scalarMultiply(b1, m_output), alg.scalarMultiply(1 - b1, outputWGrad));
 			u_output = alg.max(alg.scalarMultiply(b2, u_output), alg.abs(outputWGrad));
 
-			std::vector<std::vector<std::vector<double>>> m_hidden_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_hidden);
+			std::vector<std::vector<std::vector<real_t>>> m_hidden_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_hidden);
 
-			std::vector<double> m_output_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_output);
+			std::vector<real_t> m_output_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_output);
 
-			std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_hidden_hat, alg.scalarAdd(e, u_hidden)));
-			std::vector<double> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_output_hat, alg.scalarAdd(e, u_output)));
+			std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_hidden_hat, alg.scalarAdd(e, u_hidden)));
+			std::vector<real_t> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_output_hat, alg.scalarAdd(e, u_output)));
 
 			updateParameters(hiddenLayerUpdations, outputLayerUpdation, learning_rate); // subject to change. may want bias to have this matrix too.
 			y_hat = modelSetTest(inputMiniBatches[i]);
@@ -464,13 +464,13 @@ void MLPPANN::Adamax(double learning_rate, int max_epoch, int mini_batch_size, d
 	forwardPass();
 }
 
-void MLPPANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
+void MLPPANN::Nadam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI) {
 	class MLPPCost cost;
 	MLPPLinAlg alg;
 
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
-	double initial_learning_rate = learning_rate;
+	real_t initial_learning_rate = learning_rate;
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
@@ -479,16 +479,16 @@ void MLPPANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, do
 	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
-	std::vector<std::vector<std::vector<double>>> m_hidden;
-	std::vector<std::vector<std::vector<double>>> v_hidden;
-	std::vector<std::vector<std::vector<double>>> m_hidden_final;
+	std::vector<std::vector<std::vector<real_t>>> m_hidden;
+	std::vector<std::vector<std::vector<real_t>>> v_hidden;
+	std::vector<std::vector<std::vector<real_t>>> m_hidden_final;
 
-	std::vector<double> m_output;
-	std::vector<double> v_output;
+	std::vector<real_t> m_output;
+	std::vector<real_t> v_output;
 	while (true) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<double> y_hat = modelSetTest(inputMiniBatches[i]);
+			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
 			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
@@ -508,16 +508,16 @@ void MLPPANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, do
 			m_output = alg.addition(alg.scalarMultiply(b1, m_output), alg.scalarMultiply(1 - b1, outputWGrad));
 			v_output = alg.addition(alg.scalarMultiply(b2, v_output), alg.scalarMultiply(1 - b2, alg.exponentiate(outputWGrad, 2)));
 
-			std::vector<std::vector<std::vector<double>>> m_hidden_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_hidden);
-			std::vector<std::vector<std::vector<double>>> v_hidden_hat = alg.scalarMultiply(1 / (1 - std::pow(b2, epoch)), v_hidden);
-			std::vector<std::vector<std::vector<double>>> m_hidden_final = alg.addition(alg.scalarMultiply(b1, m_hidden_hat), alg.scalarMultiply((1 - b1) / (1 - std::pow(b1, epoch)), cumulativeHiddenLayerWGrad));
+			std::vector<std::vector<std::vector<real_t>>> m_hidden_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_hidden);
+			std::vector<std::vector<std::vector<real_t>>> v_hidden_hat = alg.scalarMultiply(1 / (1 - std::pow(b2, epoch)), v_hidden);
+			std::vector<std::vector<std::vector<real_t>>> m_hidden_final = alg.addition(alg.scalarMultiply(b1, m_hidden_hat), alg.scalarMultiply((1 - b1) / (1 - std::pow(b1, epoch)), cumulativeHiddenLayerWGrad));
 
-			std::vector<double> m_output_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_output);
-			std::vector<double> v_output_hat = alg.scalarMultiply(1 / (1 - std::pow(b2, epoch)), v_output);
-			std::vector<double> m_output_final = alg.addition(alg.scalarMultiply(b1, m_output_hat), alg.scalarMultiply((1 - b1) / (1 - std::pow(b1, epoch)), outputWGrad));
+			std::vector<real_t> m_output_hat = alg.scalarMultiply(1 / (1 - std::pow(b1, epoch)), m_output);
+			std::vector<real_t> v_output_hat = alg.scalarMultiply(1 / (1 - std::pow(b2, epoch)), v_output);
+			std::vector<real_t> m_output_final = alg.addition(alg.scalarMultiply(b1, m_output_hat), alg.scalarMultiply((1 - b1) / (1 - std::pow(b1, epoch)), outputWGrad));
 
-			std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_hidden_final, alg.scalarAdd(e, alg.sqrt(v_hidden_hat))));
-			std::vector<double> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_output_final, alg.scalarAdd(e, alg.sqrt(v_output_hat))));
+			std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_hidden_final, alg.scalarAdd(e, alg.sqrt(v_hidden_hat))));
+			std::vector<real_t> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_output_final, alg.scalarAdd(e, alg.sqrt(v_output_hat))));
 
 			updateParameters(hiddenLayerUpdations, outputLayerUpdation, learning_rate); // subject to change. may want bias to have this matrix too.
 			y_hat = modelSetTest(inputMiniBatches[i]);
@@ -534,13 +534,13 @@ void MLPPANN::Nadam(double learning_rate, int max_epoch, int mini_batch_size, do
 	forwardPass();
 }
 
-void MLPPANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI) {
+void MLPPANN::AMSGrad(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI) {
 	class MLPPCost cost;
 	MLPPLinAlg alg;
 
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
-	double initial_learning_rate = learning_rate;
+	real_t initial_learning_rate = learning_rate;
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
@@ -549,19 +549,19 @@ void MLPPANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, 
 	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
 
 	// Initializing necessary components for Adam.
-	std::vector<std::vector<std::vector<double>>> m_hidden;
-	std::vector<std::vector<std::vector<double>>> v_hidden;
+	std::vector<std::vector<std::vector<real_t>>> m_hidden;
+	std::vector<std::vector<std::vector<real_t>>> v_hidden;
 
-	std::vector<std::vector<std::vector<double>>> v_hidden_hat;
+	std::vector<std::vector<std::vector<real_t>>> v_hidden_hat;
 
-	std::vector<double> m_output;
-	std::vector<double> v_output;
+	std::vector<real_t> m_output;
+	std::vector<real_t> v_output;
 
-	std::vector<double> v_output_hat;
+	std::vector<real_t> v_output_hat;
 	while (true) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<double> y_hat = modelSetTest(inputMiniBatches[i]);
+			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
 			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
@@ -587,8 +587,8 @@ void MLPPANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, 
 
 			v_output_hat = alg.max(v_output_hat, v_output);
 
-			std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_hidden, alg.scalarAdd(e, alg.sqrt(v_hidden_hat))));
-			std::vector<double> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_output, alg.scalarAdd(e, alg.sqrt(v_output_hat))));
+			std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_hidden, alg.scalarAdd(e, alg.sqrt(v_hidden_hat))));
+			std::vector<real_t> outputLayerUpdation = alg.scalarMultiply(learning_rate / n, alg.elementWiseDivision(m_output, alg.scalarAdd(e, alg.sqrt(v_output_hat))));
 
 			updateParameters(hiddenLayerUpdations, outputLayerUpdation, learning_rate); // subject to change. may want bias to have this matrix too.
 			y_hat = modelSetTest(inputMiniBatches[i]);
@@ -605,7 +605,7 @@ void MLPPANN::AMSGrad(double learning_rate, int max_epoch, int mini_batch_size, 
 	forwardPass();
 }
 
-double MLPPANN::score() {
+real_t MLPPANN::score() {
 	MLPPUtilities   util;
 	forwardPass();
 	return util.performance(y_hat, outputSet);
@@ -624,12 +624,12 @@ void MLPPANN::save(std::string fileName) {
 	}
 }
 
-void MLPPANN::setLearningRateScheduler(std::string type, double decayConstant) {
+void MLPPANN::setLearningRateScheduler(std::string type, real_t decayConstant) {
 	lrScheduler = type;
 	MLPPANN::decayConstant = decayConstant;
 }
 
-void MLPPANN::setLearningRateScheduler(std::string type, double decayConstant, double dropRate) {
+void MLPPANN::setLearningRateScheduler(std::string type, real_t decayConstant, real_t dropRate) {
 	lrScheduler = type;
 	MLPPANN::decayConstant = decayConstant;
 	MLPPANN::dropRate = dropRate;
@@ -637,7 +637,7 @@ void MLPPANN::setLearningRateScheduler(std::string type, double decayConstant, d
 
 // https://en.wikipedia.org/wiki/Learning_rate
 // Learning Rate Decay (C2W2L09) - Andrew Ng - Deep Learning Specialization
-double MLPPANN::applyLearningRateScheduler(double learningRate, double decayConstant, double epoch, double dropRate) {
+real_t MLPPANN::applyLearningRateScheduler(real_t learningRate, real_t decayConstant, real_t epoch, real_t dropRate) {
 	if (lrScheduler == "Time") {
 		return learningRate / (1 + decayConstant * epoch);
 	} else if (lrScheduler == "Epoch") {
@@ -650,7 +650,7 @@ double MLPPANN::applyLearningRateScheduler(double learningRate, double decayCons
 	return learningRate;
 }
 
-void MLPPANN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, double lambda, double alpha) {
+void MLPPANN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
 	if (network.empty()) {
 		network.push_back(MLPPHiddenLayer(n_hidden, activation, inputSet, weightInit, reg, lambda, alpha));
 		network[0].forwardPass();
@@ -660,7 +660,7 @@ void MLPPANN::addLayer(int n_hidden, std::string activation, std::string weightI
 	}
 }
 
-void MLPPANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, double lambda, double alpha) {
+void MLPPANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
 	MLPPLinAlg alg;
 	if (!network.empty()) {
 		outputLayer = new MLPPOutputLayer(network[network.size() - 1].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
@@ -669,10 +669,10 @@ void MLPPANN::addOutputLayer(std::string activation, std::string loss, std::stri
 	}
 }
 
-double MLPPANN::Cost(std::vector<double> y_hat, std::vector<double> y) {
+real_t MLPPANN::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	MLPPReg regularization;
 	class MLPPCost cost;
-	double totalRegTerm = 0;
+	real_t totalRegTerm = 0;
 
 	auto cost_function = outputLayer->cost_map[outputLayer->cost];
 	if (!network.empty()) {
@@ -700,7 +700,7 @@ void MLPPANN::forwardPass() {
 	y_hat = outputLayer->a;
 }
 
-void MLPPANN::updateParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, std::vector<double> outputLayerUpdation, double learning_rate) {
+void MLPPANN::updateParameters(std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations, std::vector<real_t> outputLayerUpdation, real_t learning_rate) {
 	MLPPLinAlg alg;
 
 	outputLayer->weights = alg.subtraction(outputLayer->weights, outputLayerUpdation);
@@ -717,39 +717,39 @@ void MLPPANN::updateParameters(std::vector<std::vector<std::vector<double>>> hid
 	}
 }
 
-std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> MLPPANN::computeGradients(std::vector<double> y_hat, std::vector<double> outputSet) {
+std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> MLPPANN::computeGradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
 	// std::cout << "BEGIN" << std::endl;
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 
-	std::vector<std::vector<std::vector<double>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
+	std::vector<std::vector<std::vector<real_t>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
 
 	auto costDeriv = outputLayer->costDeriv_map[outputLayer->cost];
 	auto outputAvn = outputLayer->activation_map[outputLayer->activation];
 	outputLayer->delta = alg.hadamard_product((cost.*costDeriv)(y_hat, outputSet), (avn.*outputAvn)(outputLayer->z, 1));
-	std::vector<double> outputWGrad = alg.mat_vec_mult(alg.transpose(outputLayer->input), outputLayer->delta);
+	std::vector<real_t> outputWGrad = alg.mat_vec_mult(alg.transpose(outputLayer->input), outputLayer->delta);
 	outputWGrad = alg.addition(outputWGrad, regularization.regDerivTerm(outputLayer->weights, outputLayer->lambda, outputLayer->alpha, outputLayer->reg));
 
 	if (!network.empty()) {
 		auto hiddenLayerAvn = network[network.size() - 1].activation_map[network[network.size() - 1].activation];
 		network[network.size() - 1].delta = alg.hadamard_product(alg.outerProduct(outputLayer->delta, outputLayer->weights), (avn.*hiddenLayerAvn)(network[network.size() - 1].z, 1));
-		std::vector<std::vector<double>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[network.size() - 1].input), network[network.size() - 1].delta);
+		std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[network.size() - 1].input), network[network.size() - 1].delta);
 
 		cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(network[network.size() - 1].weights, network[network.size() - 1].lambda, network[network.size() - 1].alpha, network[network.size() - 1].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 
 		for (int i = network.size() - 2; i >= 0; i--) {
 			auto hiddenLayerAvn = network[i].activation_map[network[i].activation];
 			network[i].delta = alg.hadamard_product(alg.matmult(network[i + 1].delta, alg.transpose(network[i + 1].weights)), (avn.*hiddenLayerAvn)(network[i].z, 1));
-			std::vector<std::vector<double>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[i].input), network[i].delta);
+			std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[i].input), network[i].delta);
 			cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(network[i].weights, network[i].lambda, network[i].alpha, network[i].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 		}
 	}
 	return { cumulativeHiddenLayerWGrad, outputWGrad };
 }
 
-void MLPPANN::UI(int epoch, double cost_prev, std::vector<double> y_hat, std::vector<double> outputSet) {
+void MLPPANN::UI(int epoch, real_t cost_prev, std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
 	MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
 	std::cout << "Layer " << network.size() + 1 << ": " << std::endl;
 	MLPPUtilities::UI(outputLayer->weights, outputLayer->bias);

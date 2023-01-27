@@ -8,20 +8,22 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
+#include "core/math/math_defs.h"
+
 #include <vector>
 
 
 class MLPPPCA {
 public:
-	MLPPPCA(std::vector<std::vector<double>> inputSet, int k);
-	std::vector<std::vector<double>> principalComponents();
-	double score();
+	MLPPPCA(std::vector<std::vector<real_t>> inputSet, int k);
+	std::vector<std::vector<real_t>> principalComponents();
+	real_t score();
 
 private:
-	std::vector<std::vector<double>> inputSet;
-	std::vector<std::vector<double>> X_normalized;
-	std::vector<std::vector<double>> U_reduce;
-	std::vector<std::vector<double>> Z;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<std::vector<real_t>> X_normalized;
+	std::vector<std::vector<real_t>> U_reduce;
+	std::vector<std::vector<real_t>> Z;
 	int k;
 };
 

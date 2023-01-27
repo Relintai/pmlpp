@@ -13,7 +13,7 @@
 #include <random>
 
 
-MLPPKMeans::MLPPKMeans(std::vector<std::vector<double>> inputSet, int k, std::string init_type) :
+MLPPKMeans::MLPPKMeans(std::vector<std::vector<real_t>> inputSet, int k, std::string init_type) :
 		inputSet(inputSet), k(k), init_type(init_type) {
 	if (init_type == "KMeans++") {
 		kmeansppInitialization(k);
@@ -22,11 +22,11 @@ MLPPKMeans::MLPPKMeans(std::vector<std::vector<double>> inputSet, int k, std::st
 	}
 }
 
-std::vector<std::vector<double>> MLPPKMeans::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<std::vector<real_t>> MLPPKMeans::modelSetTest(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<double>> closestCentroids;
+	std::vector<std::vector<real_t>> closestCentroids;
 	for (int i = 0; i < inputSet.size(); i++) {
-		std::vector<double> closestCentroid = mu[0];
+		std::vector<real_t> closestCentroid = mu[0];
 		for (int j = 0; j < r[0].size(); j++) {
 			bool isCentroidCloser = alg.euclideanDistance(X[i], mu[j]) < alg.euclideanDistance(X[i], closestCentroid);
 			if (isCentroidCloser) {
@@ -38,9 +38,9 @@ std::vector<std::vector<double>> MLPPKMeans::modelSetTest(std::vector<std::vecto
 	return closestCentroids;
 }
 
-std::vector<double> MLPPKMeans::modelTest(std::vector<double> x) {
+std::vector<real_t> MLPPKMeans::modelTest(std::vector<real_t> x) {
 	MLPPLinAlg alg;
-	std::vector<double> closestCentroid = mu[0];
+	std::vector<real_t> closestCentroid = mu[0];
 	for (int j = 0; j < mu.size(); j++) {
 		if (alg.euclideanDistance(x, mu[j]) < alg.euclideanDistance(x, closestCentroid)) {
 			closestCentroid = mu[j];
@@ -50,7 +50,7 @@ std::vector<double> MLPPKMeans::modelTest(std::vector<double> x) {
 }
 
 void MLPPKMeans::train(int epoch_num, bool UI) {
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
 
 	Evaluate();
@@ -80,17 +80,17 @@ void MLPPKMeans::train(int epoch_num, bool UI) {
 	}
 }
 
-double MLPPKMeans::score() {
+real_t MLPPKMeans::score() {
 	return Cost();
 }
 
-std::vector<double> MLPPKMeans::silhouette_scores() {
+std::vector<real_t> MLPPKMeans::silhouette_scores() {
 	MLPPLinAlg alg;
-	std::vector<std::vector<double>> closestCentroids = modelSetTest(inputSet);
-	std::vector<double> silhouette_scores;
+	std::vector<std::vector<real_t>> closestCentroids = modelSetTest(inputSet);
+	std::vector<real_t> silhouette_scores;
 	for (int i = 0; i < inputSet.size(); i++) {
 		// COMPUTING a[i]
-		double a = 0;
+		real_t a = 0;
 		for (int j = 0; j < inputSet.size(); j++) {
 			if (i != j && r[i] == r[j]) {
 				a += alg.euclideanDistance(inputSet[i], inputSet[j]);
@@ -100,15 +100,15 @@ std::vector<double> MLPPKMeans::silhouette_scores() {
 		a /= closestCentroids[i].size() - 1;
 
 		// COMPUTING b[i]
-		double b = INT_MAX;
+		real_t b = INT_MAX;
 		for (int j = 0; j < mu.size(); j++) {
 			if (closestCentroids[i] != mu[j]) {
-				double sum = 0;
+				real_t sum = 0;
 				for (int k = 0; k < inputSet.size(); k++) {
 					sum += alg.euclideanDistance(inputSet[i], inputSet[k]);
 				}
 				// NORMALIZE b[i]
-				double k_clusterSize = 0;
+				real_t k_clusterSize = 0;
 				for (int k = 0; k < closestCentroids.size(); k++) {
 					if (closestCentroids[k] == mu[j]) {
 						k_clusterSize++;
@@ -144,7 +144,7 @@ void MLPPKMeans::Evaluate() {
 	}
 
 	for (int i = 0; i < r.size(); i++) {
-		std::vector<double> closestCentroid = mu[0];
+		std::vector<real_t> closestCentroid = mu[0];
 		for (int j = 0; j < r[0].size(); j++) {
 			bool isCentroidCloser = alg.euclideanDistance(inputSet[i], mu[j]) < alg.euclideanDistance(inputSet[i], closestCentroid);
 			if (isCentroidCloser) {
@@ -165,21 +165,21 @@ void MLPPKMeans::Evaluate() {
 void MLPPKMeans::computeMu() {
 	MLPPLinAlg alg;
 	for (int i = 0; i < mu.size(); i++) {
-		std::vector<double> num;
+		std::vector<real_t> num;
 		num.resize(r.size());
 
 		for (int i = 0; i < num.size(); i++) {
 			num[i] = 0;
 		}
 
-		double den = 0;
+		real_t den = 0;
 		for (int j = 0; j < r.size(); j++) {
 			num = alg.addition(num, alg.scalarMultiply(r[j][i], inputSet[j]));
 		}
 		for (int j = 0; j < r.size(); j++) {
 			den += r[j][i];
 		}
-		mu[i] = alg.scalarMultiply(double(1) / double(den), num);
+		mu[i] = alg.scalarMultiply(real_t(1) / real_t(den), num);
 	}
 }
 
@@ -204,12 +204,12 @@ void MLPPKMeans::kmeansppInitialization(int k) {
 	mu.push_back(inputSet[distribution(generator)]);
 
 	for (int i = 0; i < k - 1; i++) {
-		std::vector<double> farthestCentroid;
+		std::vector<real_t> farthestCentroid;
 		for (int j = 0; j < inputSet.size(); j++) {
-			double max_dist = 0;
+			real_t max_dist = 0;
 			/* SUM ALL THE SQUARED DISTANCES, CHOOSE THE ONE THAT'S FARTHEST
 			AS TO SPREAD OUT THE CLUSTER CENTROIDS. */
-			double sum = 0;
+			real_t sum = 0;
 			for (int k = 0; k < mu.size(); k++) {
 				sum += alg.euclideanDistance(inputSet[j], mu[k]);
 			}
@@ -222,9 +222,9 @@ void MLPPKMeans::kmeansppInitialization(int k) {
 	}
 }
 
-double MLPPKMeans::Cost() {
+real_t MLPPKMeans::Cost() {
 	MLPPLinAlg alg;
-	double sum = 0;
+	real_t sum = 0;
 	for (int i = 0; i < r.size(); i++) {
 		for (int j = 0; j < r[0].size(); j++) {
 			sum += r[i][j] * alg.norm_sq(alg.subtraction(inputSet[i], mu[j]));

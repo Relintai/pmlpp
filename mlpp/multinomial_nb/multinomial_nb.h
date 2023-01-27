@@ -8,32 +8,34 @@
 //  Created by Marc Melikyan on 1/17/21.
 //
 
+#include "core/math/math_defs.h"
+
 #include <map>
 #include <vector>
 
 
 class MLPPMultinomialNB {
 public:
-	MLPPMultinomialNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num);
-	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
-	double modelTest(std::vector<double> x);
-	double score();
+	MLPPMultinomialNB(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int class_num);
+	std::vector<real_t> modelSetTest(std::vector<std::vector<real_t>> X);
+	real_t modelTest(std::vector<real_t> x);
+	real_t score();
 
 private:
 	void computeTheta();
 	void Evaluate();
 
 	// Model Params
-	std::vector<double> priors;
+	std::vector<real_t> priors;
 
-	std::vector<std::map<double, int>> theta;
-	std::vector<double> vocab;
+	std::vector<std::map<real_t, int>> theta;
+	std::vector<real_t> vocab;
 	int class_num;
 
 	// Datasets
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> outputSet;
-	std::vector<double> y_hat;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> outputSet;
+	std::vector<real_t> y_hat;
 };
 
 #endif /* MultinomialNB_hpp */

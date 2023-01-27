@@ -8,6 +8,8 @@
 //  Created by Marc Melikyan on 1/8/21.
 //
 
+#include "core/math/math_defs.h"
+
 #include <tuple>
 #include <vector>
 
@@ -15,246 +17,246 @@ class MLPPLinAlg {
 public:
 	// MATRIX FUNCTIONS
 
-	std::vector<std::vector<double>> gramMatrix(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> gramMatrix(std::vector<std::vector<real_t>> A);
 
-	bool linearIndependenceChecker(std::vector<std::vector<double>> A);
+	bool linearIndependenceChecker(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> gaussianNoise(int n, int m);
+	std::vector<std::vector<real_t>> gaussianNoise(int n, int m);
 
-	std::vector<std::vector<double>> addition(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B);
+	std::vector<std::vector<real_t>> addition(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 
-	std::vector<std::vector<double>> subtraction(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B);
+	std::vector<std::vector<real_t>> subtraction(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 
-	std::vector<std::vector<double>> matmult(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B);
+	std::vector<std::vector<real_t>> matmult(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 
-	std::vector<std::vector<double>> hadamard_product(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B);
+	std::vector<std::vector<real_t>> hadamard_product(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 
-	std::vector<std::vector<double>> kronecker_product(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B);
+	std::vector<std::vector<real_t>> kronecker_product(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 
-	std::vector<std::vector<double>> elementWiseDivision(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B);
+	std::vector<std::vector<real_t>> elementWiseDivision(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 
-	std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> transpose(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> scalarMultiply(double scalar, std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> scalarMultiply(real_t scalar, std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> scalarAdd(double scalar, std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> scalarAdd(real_t scalar, std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> log(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> log(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> log10(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> log10(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> exp(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> exp(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> erf(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> erf(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> exponentiate(std::vector<std::vector<double>> A, double p);
+	std::vector<std::vector<real_t>> exponentiate(std::vector<std::vector<real_t>> A, real_t p);
 
-	std::vector<std::vector<double>> sqrt(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> sqrt(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> cbrt(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> cbrt(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> matrixPower(std::vector<std::vector<double>> A, int n);
+	std::vector<std::vector<real_t>> matrixPower(std::vector<std::vector<real_t>> A, int n);
 
-	std::vector<std::vector<double>> abs(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> abs(std::vector<std::vector<real_t>> A);
 
-	double det(std::vector<std::vector<double>> A, int d);
+	real_t det(std::vector<std::vector<real_t>> A, int d);
 
-	double trace(std::vector<std::vector<double>> A);
+	real_t trace(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> cofactor(std::vector<std::vector<double>> A, int n, int i, int j);
+	std::vector<std::vector<real_t>> cofactor(std::vector<std::vector<real_t>> A, int n, int i, int j);
 
-	std::vector<std::vector<double>> adjoint(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> adjoint(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> inverse(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> inverse(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> pinverse(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> pinverse(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> zeromat(int n, int m);
+	std::vector<std::vector<real_t>> zeromat(int n, int m);
 
-	std::vector<std::vector<double>> onemat(int n, int m);
+	std::vector<std::vector<real_t>> onemat(int n, int m);
 
-	std::vector<std::vector<double>> full(int n, int m, int k);
+	std::vector<std::vector<real_t>> full(int n, int m, int k);
 
-	std::vector<std::vector<double>> sin(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> sin(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> cos(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> cos(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> rotate(std::vector<std::vector<double>> A, double theta, int axis = -1);
+	std::vector<std::vector<real_t>> rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis = -1);
 
-	std::vector<std::vector<double>> max(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B);
+	std::vector<std::vector<real_t>> max(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 
-	double max(std::vector<std::vector<double>> A);
+	real_t max(std::vector<std::vector<real_t>> A);
 
-	double min(std::vector<std::vector<double>> A);
+	real_t min(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> round(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> round(std::vector<std::vector<real_t>> A);
 
-	double norm_2(std::vector<std::vector<double>> A);
+	real_t norm_2(std::vector<std::vector<real_t>> A);
 
-	std::vector<std::vector<double>> identity(double d);
+	std::vector<std::vector<real_t>> identity(real_t d);
 
-	std::vector<std::vector<double>> cov(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> cov(std::vector<std::vector<real_t>> A);
 
-	std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> eig(std::vector<std::vector<double>> A);
+	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> eig(std::vector<std::vector<real_t>> A);
 
 	struct EigenResult {
-		std::vector<std::vector<double>> eigen_vectors;
-		std::vector<std::vector<double>> eigen_values;
+		std::vector<std::vector<real_t>> eigen_vectors;
+		std::vector<std::vector<real_t>> eigen_values;
 	};
 
-	EigenResult eigen(std::vector<std::vector<double>> A);
+	EigenResult eigen(std::vector<std::vector<real_t>> A);
 
-	std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>, std::vector<std::vector<double>>> SVD(std::vector<std::vector<double>> A);
+	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> SVD(std::vector<std::vector<real_t>> A);
 
 	struct SDVResult {
-		std::vector<std::vector<double>> U;
-		std::vector<std::vector<double>> S;
-		std::vector<std::vector<double>> Vt;
+		std::vector<std::vector<real_t>> U;
+		std::vector<std::vector<real_t>> S;
+		std::vector<std::vector<real_t>> Vt;
 	};
 
-	SDVResult svd(std::vector<std::vector<double>> A);
+	SDVResult svd(std::vector<std::vector<real_t>> A);
 
-	std::vector<double> vectorProjection(std::vector<double> a, std::vector<double> b);
+	std::vector<real_t> vectorProjection(std::vector<real_t> a, std::vector<real_t> b);
 
-	std::vector<std::vector<double>> gramSchmidtProcess(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> gramSchmidtProcess(std::vector<std::vector<real_t>> A);
 
-	std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> QRD(std::vector<std::vector<double>> A);
+	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> QRD(std::vector<std::vector<real_t>> A);
 
 	struct QRDResult {
-		std::vector<std::vector<double>> Q;
-		std::vector<std::vector<double>> R;
+		std::vector<std::vector<real_t>> Q;
+		std::vector<std::vector<real_t>> R;
 	};
 
-	QRDResult qrd(std::vector<std::vector<double>> A);
+	QRDResult qrd(std::vector<std::vector<real_t>> A);
 
-	std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> chol(std::vector<std::vector<double>> A);
+	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> chol(std::vector<std::vector<real_t>> A);
 
 	struct CholeskyResult {
-		std::vector<std::vector<double>> L;
-		std::vector<std::vector<double>> Lt;
+		std::vector<std::vector<real_t>> L;
+		std::vector<std::vector<real_t>> Lt;
 	};
 
-	CholeskyResult cholesky(std::vector<std::vector<double>> A);
+	CholeskyResult cholesky(std::vector<std::vector<real_t>> A);
 
-	double sum_elements(std::vector<std::vector<double>> A);
+	real_t sum_elements(std::vector<std::vector<real_t>> A);
 
-	std::vector<double> flatten(std::vector<std::vector<double>> A);
+	std::vector<real_t> flatten(std::vector<std::vector<real_t>> A);
 
-	std::vector<double> solve(std::vector<std::vector<double>> A, std::vector<double> b);
+	std::vector<real_t> solve(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
 
-	bool positiveDefiniteChecker(std::vector<std::vector<double>> A);
+	bool positiveDefiniteChecker(std::vector<std::vector<real_t>> A);
 
-	bool negativeDefiniteChecker(std::vector<std::vector<double>> A);
+	bool negativeDefiniteChecker(std::vector<std::vector<real_t>> A);
 
-	bool zeroEigenvalue(std::vector<std::vector<double>> A);
+	bool zeroEigenvalue(std::vector<std::vector<real_t>> A);
 
-	void printMatrix(std::vector<std::vector<double>> A);
+	void printMatrix(std::vector<std::vector<real_t>> A);
 
 	// VECTOR FUNCTIONS
 
-	std::vector<std::vector<double>> outerProduct(std::vector<double> a, std::vector<double> b); // This multiplies a, bT
+	std::vector<std::vector<real_t>> outerProduct(std::vector<real_t> a, std::vector<real_t> b); // This multiplies a, bT
 
-	std::vector<double> hadamard_product(std::vector<double> a, std::vector<double> b);
+	std::vector<real_t> hadamard_product(std::vector<real_t> a, std::vector<real_t> b);
 
-	std::vector<double> elementWiseDivision(std::vector<double> a, std::vector<double> b);
+	std::vector<real_t> elementWiseDivision(std::vector<real_t> a, std::vector<real_t> b);
 
-	std::vector<double> scalarMultiply(double scalar, std::vector<double> a);
+	std::vector<real_t> scalarMultiply(real_t scalar, std::vector<real_t> a);
 
-	std::vector<double> scalarAdd(double scalar, std::vector<double> a);
+	std::vector<real_t> scalarAdd(real_t scalar, std::vector<real_t> a);
 
-	std::vector<double> addition(std::vector<double> a, std::vector<double> b);
+	std::vector<real_t> addition(std::vector<real_t> a, std::vector<real_t> b);
 
-	std::vector<double> subtraction(std::vector<double> a, std::vector<double> b);
+	std::vector<real_t> subtraction(std::vector<real_t> a, std::vector<real_t> b);
 
-	std::vector<double> subtractMatrixRows(std::vector<double> a, std::vector<std::vector<double>> B);
+	std::vector<real_t> subtractMatrixRows(std::vector<real_t> a, std::vector<std::vector<real_t>> B);
 
-	std::vector<double> log(std::vector<double> a);
+	std::vector<real_t> log(std::vector<real_t> a);
 
-	std::vector<double> log10(std::vector<double> a);
+	std::vector<real_t> log10(std::vector<real_t> a);
 
-	std::vector<double> exp(std::vector<double> a);
+	std::vector<real_t> exp(std::vector<real_t> a);
 
-	std::vector<double> erf(std::vector<double> a);
+	std::vector<real_t> erf(std::vector<real_t> a);
 
-	std::vector<double> exponentiate(std::vector<double> a, double p);
+	std::vector<real_t> exponentiate(std::vector<real_t> a, real_t p);
 
-	std::vector<double> sqrt(std::vector<double> a);
+	std::vector<real_t> sqrt(std::vector<real_t> a);
 
-	std::vector<double> cbrt(std::vector<double> a);
+	std::vector<real_t> cbrt(std::vector<real_t> a);
 
-	double dot(std::vector<double> a, std::vector<double> b);
+	real_t dot(std::vector<real_t> a, std::vector<real_t> b);
 
-	std::vector<double> cross(std::vector<double> a, std::vector<double> b);
+	std::vector<real_t> cross(std::vector<real_t> a, std::vector<real_t> b);
 
-	std::vector<double> abs(std::vector<double> a);
+	std::vector<real_t> abs(std::vector<real_t> a);
 
-	std::vector<double> zerovec(int n);
+	std::vector<real_t> zerovec(int n);
 
-	std::vector<double> onevec(int n);
+	std::vector<real_t> onevec(int n);
 
-	std::vector<std::vector<double>> diag(std::vector<double> a);
+	std::vector<std::vector<real_t>> diag(std::vector<real_t> a);
 
-	std::vector<double> full(int n, int k);
+	std::vector<real_t> full(int n, int k);
 
-	std::vector<double> sin(std::vector<double> a);
+	std::vector<real_t> sin(std::vector<real_t> a);
 
-	std::vector<double> cos(std::vector<double> a);
+	std::vector<real_t> cos(std::vector<real_t> a);
 
-	std::vector<double> max(std::vector<double> a, std::vector<double> b);
+	std::vector<real_t> max(std::vector<real_t> a, std::vector<real_t> b);
 
-	double max(std::vector<double> a);
+	real_t max(std::vector<real_t> a);
 
-	double min(std::vector<double> a);
+	real_t min(std::vector<real_t> a);
 
-	std::vector<double> round(std::vector<double> a);
+	std::vector<real_t> round(std::vector<real_t> a);
 
-	double euclideanDistance(std::vector<double> a, std::vector<double> b);
+	real_t euclideanDistance(std::vector<real_t> a, std::vector<real_t> b);
 
-	double norm_2(std::vector<double> a);
+	real_t norm_2(std::vector<real_t> a);
 
-	double norm_sq(std::vector<double> a);
+	real_t norm_sq(std::vector<real_t> a);
 
-	double sum_elements(std::vector<double> a);
+	real_t sum_elements(std::vector<real_t> a);
 
-	double cosineSimilarity(std::vector<double> a, std::vector<double> b);
+	real_t cosineSimilarity(std::vector<real_t> a, std::vector<real_t> b);
 
-	void printVector(std::vector<double> a);
+	void printVector(std::vector<real_t> a);
 
 	// MATRIX-VECTOR FUNCTIONS
-	std::vector<std::vector<double>> mat_vec_add(std::vector<std::vector<double>> A, std::vector<double> b);
+	std::vector<std::vector<real_t>> mat_vec_add(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
 
-	std::vector<double> mat_vec_mult(std::vector<std::vector<double>> A, std::vector<double> b);
+	std::vector<real_t> mat_vec_mult(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
 
 	// TENSOR FUNCTIONS
-	std::vector<std::vector<std::vector<double>>> addition(std::vector<std::vector<std::vector<double>>> A, std::vector<std::vector<std::vector<double>>> B);
+	std::vector<std::vector<std::vector<real_t>>> addition(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
 
-	std::vector<std::vector<std::vector<double>>> elementWiseDivision(std::vector<std::vector<std::vector<double>>> A, std::vector<std::vector<std::vector<double>>> B);
+	std::vector<std::vector<std::vector<real_t>>> elementWiseDivision(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
 
-	std::vector<std::vector<std::vector<double>>> sqrt(std::vector<std::vector<std::vector<double>>> A);
+	std::vector<std::vector<std::vector<real_t>>> sqrt(std::vector<std::vector<std::vector<real_t>>> A);
 
-	std::vector<std::vector<std::vector<double>>> exponentiate(std::vector<std::vector<std::vector<double>>> A, double p);
+	std::vector<std::vector<std::vector<real_t>>> exponentiate(std::vector<std::vector<std::vector<real_t>>> A, real_t p);
 
-	std::vector<std::vector<double>> tensor_vec_mult(std::vector<std::vector<std::vector<double>>> A, std::vector<double> b);
+	std::vector<std::vector<real_t>> tensor_vec_mult(std::vector<std::vector<std::vector<real_t>>> A, std::vector<real_t> b);
 
-	std::vector<double> flatten(std::vector<std::vector<std::vector<double>>> A);
+	std::vector<real_t> flatten(std::vector<std::vector<std::vector<real_t>>> A);
 
-	void printTensor(std::vector<std::vector<std::vector<double>>> A);
+	void printTensor(std::vector<std::vector<std::vector<real_t>>> A);
 
-	std::vector<std::vector<std::vector<double>>> scalarMultiply(double scalar, std::vector<std::vector<std::vector<double>>> A);
+	std::vector<std::vector<std::vector<real_t>>> scalarMultiply(real_t scalar, std::vector<std::vector<std::vector<real_t>>> A);
 
-	std::vector<std::vector<std::vector<double>>> scalarAdd(double scalar, std::vector<std::vector<std::vector<double>>> A);
+	std::vector<std::vector<std::vector<real_t>>> scalarAdd(real_t scalar, std::vector<std::vector<std::vector<real_t>>> A);
 
-	std::vector<std::vector<std::vector<double>>> resize(std::vector<std::vector<std::vector<double>>> A, std::vector<std::vector<std::vector<double>>> B);
+	std::vector<std::vector<std::vector<real_t>>> resize(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
 
-	std::vector<std::vector<std::vector<double>>> hadamard_product(std::vector<std::vector<std::vector<double>>> A, std::vector<std::vector<std::vector<double>>> B);
+	std::vector<std::vector<std::vector<real_t>>> hadamard_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
 
-	std::vector<std::vector<std::vector<double>>> max(std::vector<std::vector<std::vector<double>>> A, std::vector<std::vector<std::vector<double>>> B);
+	std::vector<std::vector<std::vector<real_t>>> max(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
 
-	std::vector<std::vector<std::vector<double>>> abs(std::vector<std::vector<std::vector<double>>> A);
+	std::vector<std::vector<std::vector<real_t>>> abs(std::vector<std::vector<std::vector<real_t>>> A);
 
-	double norm_2(std::vector<std::vector<std::vector<double>>> A);
+	real_t norm_2(std::vector<std::vector<std::vector<real_t>>> A);
 
-	std::vector<std::vector<std::vector<double>>> vector_wise_tensor_product(std::vector<std::vector<std::vector<double>>> A, std::vector<std::vector<double>> B);
+	std::vector<std::vector<std::vector<real_t>>> vector_wise_tensor_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<real_t>> B);
 
 private:
 };

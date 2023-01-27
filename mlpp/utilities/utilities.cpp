@@ -12,81 +12,81 @@
 
 
 
-std::vector<double> MLPPUtilities::weightInitialization(int n, std::string type) {
+std::vector<real_t> MLPPUtilities::weightInitialization(int n, std::string type) {
 	std::random_device rd;
 	std::default_random_engine generator(rd());
 
-	std::vector<double> weights;
+	std::vector<real_t> weights;
 	for (int i = 0; i < n; i++) {
 		if (type == "XavierNormal") {
-			std::normal_distribution<double> distribution(0, sqrt(2 / (n + 1)));
+			std::normal_distribution<real_t> distribution(0, sqrt(2 / (n + 1)));
 			weights.push_back(distribution(generator));
 		} else if (type == "XavierUniform") {
-			std::uniform_real_distribution<double> distribution(-sqrt(6 / (n + 1)), sqrt(6 / (n + 1)));
+			std::uniform_real_distribution<real_t> distribution(-sqrt(6 / (n + 1)), sqrt(6 / (n + 1)));
 			weights.push_back(distribution(generator));
 		} else if (type == "HeNormal") {
-			std::normal_distribution<double> distribution(0, sqrt(2 / n));
+			std::normal_distribution<real_t> distribution(0, sqrt(2 / n));
 			weights.push_back(distribution(generator));
 		} else if (type == "HeUniform") {
-			std::uniform_real_distribution<double> distribution(-sqrt(6 / n), sqrt(6 / n));
+			std::uniform_real_distribution<real_t> distribution(-sqrt(6 / n), sqrt(6 / n));
 			weights.push_back(distribution(generator));
 		} else if (type == "LeCunNormal") {
-			std::normal_distribution<double> distribution(0, sqrt(1 / n));
+			std::normal_distribution<real_t> distribution(0, sqrt(1 / n));
 			weights.push_back(distribution(generator));
 		} else if (type == "LeCunUniform") {
-			std::uniform_real_distribution<double> distribution(-sqrt(3 / n), sqrt(3 / n));
+			std::uniform_real_distribution<real_t> distribution(-sqrt(3 / n), sqrt(3 / n));
 			weights.push_back(distribution(generator));
 		} else if (type == "Uniform") {
-			std::uniform_real_distribution<double> distribution(-1 / sqrt(n), 1 / sqrt(n));
+			std::uniform_real_distribution<real_t> distribution(-1 / sqrt(n), 1 / sqrt(n));
 			weights.push_back(distribution(generator));
 		} else {
-			std::uniform_real_distribution<double> distribution(0, 1);
+			std::uniform_real_distribution<real_t> distribution(0, 1);
 			weights.push_back(distribution(generator));
 		}
 	}
 	return weights;
 }
 
-double MLPPUtilities::biasInitialization() {
+real_t MLPPUtilities::biasInitialization() {
 	std::random_device rd;
 	std::default_random_engine generator(rd());
-	std::uniform_real_distribution<double> distribution(0, 1);
+	std::uniform_real_distribution<real_t> distribution(0, 1);
 
 	return distribution(generator);
 }
 
-std::vector<std::vector<double>> MLPPUtilities::weightInitialization(int n, int m, std::string type) {
+std::vector<std::vector<real_t>> MLPPUtilities::weightInitialization(int n, int m, std::string type) {
 	std::random_device rd;
 	std::default_random_engine generator(rd());
 
-	std::vector<std::vector<double>> weights;
+	std::vector<std::vector<real_t>> weights;
 	weights.resize(n);
 
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			if (type == "XavierNormal") {
-				std::normal_distribution<double> distribution(0, sqrt(2 / (n + m)));
+				std::normal_distribution<real_t> distribution(0, sqrt(2 / (n + m)));
 				weights[i].push_back(distribution(generator));
 			} else if (type == "XavierUniform") {
-				std::uniform_real_distribution<double> distribution(-sqrt(6 / (n + m)), sqrt(6 / (n + m)));
+				std::uniform_real_distribution<real_t> distribution(-sqrt(6 / (n + m)), sqrt(6 / (n + m)));
 				weights[i].push_back(distribution(generator));
 			} else if (type == "HeNormal") {
-				std::normal_distribution<double> distribution(0, sqrt(2 / n));
+				std::normal_distribution<real_t> distribution(0, sqrt(2 / n));
 				weights[i].push_back(distribution(generator));
 			} else if (type == "HeUniform") {
-				std::uniform_real_distribution<double> distribution(-sqrt(6 / n), sqrt(6 / n));
+				std::uniform_real_distribution<real_t> distribution(-sqrt(6 / n), sqrt(6 / n));
 				weights[i].push_back(distribution(generator));
 			} else if (type == "LeCunNormal") {
-				std::normal_distribution<double> distribution(0, sqrt(1 / n));
+				std::normal_distribution<real_t> distribution(0, sqrt(1 / n));
 				weights[i].push_back(distribution(generator));
 			} else if (type == "LeCunUniform") {
-				std::uniform_real_distribution<double> distribution(-sqrt(3 / n), sqrt(3 / n));
+				std::uniform_real_distribution<real_t> distribution(-sqrt(3 / n), sqrt(3 / n));
 				weights[i].push_back(distribution(generator));
 			} else if (type == "Uniform") {
-				std::uniform_real_distribution<double> distribution(-1 / sqrt(n), 1 / sqrt(n));
+				std::uniform_real_distribution<real_t> distribution(-1 / sqrt(n), 1 / sqrt(n));
 				weights[i].push_back(distribution(generator));
 			} else {
-				std::uniform_real_distribution<double> distribution(0, 1);
+				std::uniform_real_distribution<real_t> distribution(0, 1);
 				weights[i].push_back(distribution(generator));
 			}
 		}
@@ -94,11 +94,11 @@ std::vector<std::vector<double>> MLPPUtilities::weightInitialization(int n, int 
 	return weights;
 }
 
-std::vector<double> MLPPUtilities::biasInitialization(int n) {
-	std::vector<double> bias;
+std::vector<real_t> MLPPUtilities::biasInitialization(int n) {
+	std::vector<real_t> bias;
 	std::random_device rd;
 	std::default_random_engine generator(rd());
-	std::uniform_real_distribution<double> distribution(0, 1);
+	std::uniform_real_distribution<real_t> distribution(0, 1);
 
 	for (int i = 0; i < n; i++) {
 		bias.push_back(distribution(generator));
@@ -106,8 +106,8 @@ std::vector<double> MLPPUtilities::biasInitialization(int n) {
 	return bias;
 }
 
-double MLPPUtilities::performance(std::vector<double> y_hat, std::vector<double> outputSet) {
-	double correct = 0;
+real_t MLPPUtilities::performance(std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
+	real_t correct = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		if (std::round(y_hat[i]) == outputSet[i]) {
 			correct++;
@@ -116,8 +116,8 @@ double MLPPUtilities::performance(std::vector<double> y_hat, std::vector<double>
 	return correct / y_hat.size();
 }
 
-double MLPPUtilities::performance(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	double correct = 0;
+real_t MLPPUtilities::performance(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+	real_t correct = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		int sub_correct = 0;
 		for (int j = 0; j < y_hat[i].size(); j++) {
@@ -132,7 +132,7 @@ double MLPPUtilities::performance(std::vector<std::vector<double>> y_hat, std::v
 	return correct / y_hat.size();
 }
 
-void MLPPUtilities::saveParameters(std::string fileName, std::vector<double> weights, double bias, bool app, int layer) {
+void MLPPUtilities::saveParameters(std::string fileName, std::vector<real_t> weights, real_t bias, bool app, int layer) {
 	std::string layer_info = "";
 	std::ofstream saveFile;
 
@@ -160,7 +160,7 @@ void MLPPUtilities::saveParameters(std::string fileName, std::vector<double> wei
 	saveFile.close();
 }
 
-void MLPPUtilities::saveParameters(std::string fileName, std::vector<double> weights, std::vector<double> initial, double bias, bool app, int layer) {
+void MLPPUtilities::saveParameters(std::string fileName, std::vector<real_t> weights, std::vector<real_t> initial, real_t bias, bool app, int layer) {
 	std::string layer_info = "";
 	std::ofstream saveFile;
 
@@ -194,7 +194,7 @@ void MLPPUtilities::saveParameters(std::string fileName, std::vector<double> wei
 	saveFile.close();
 }
 
-void MLPPUtilities::saveParameters(std::string fileName, std::vector<std::vector<double>> weights, std::vector<double> bias, bool app, int layer) {
+void MLPPUtilities::saveParameters(std::string fileName, std::vector<std::vector<real_t>> weights, std::vector<real_t> bias, bool app, int layer) {
 	std::string layer_info = "";
 	std::ofstream saveFile;
 
@@ -226,7 +226,7 @@ void MLPPUtilities::saveParameters(std::string fileName, std::vector<std::vector
 	saveFile.close();
 }
 
-void MLPPUtilities::UI(std::vector<double> weights, double bias) {
+void MLPPUtilities::UI(std::vector<real_t> weights, real_t bias) {
 	std::cout << "Values of the weight(s):" << std::endl;
 	for (int i = 0; i < weights.size(); i++) {
 		std::cout << weights[i] << std::endl;
@@ -235,7 +235,7 @@ void MLPPUtilities::UI(std::vector<double> weights, double bias) {
 	std::cout << bias << std::endl;
 }
 
-void MLPPUtilities::UI(std::vector<std::vector<double>> weights, std::vector<double> bias) {
+void MLPPUtilities::UI(std::vector<std::vector<real_t>> weights, std::vector<real_t> bias) {
 	std::cout << "Values of the weight(s):" << std::endl;
 	for (int i = 0; i < weights.size(); i++) {
 		for (int j = 0; j < weights[i].size(); j++) {
@@ -248,7 +248,7 @@ void MLPPUtilities::UI(std::vector<std::vector<double>> weights, std::vector<dou
 	}
 }
 
-void MLPPUtilities::UI(std::vector<double> weights, std::vector<double> initial, double bias) {
+void MLPPUtilities::UI(std::vector<real_t> weights, std::vector<real_t> initial, real_t bias) {
 	std::cout << "Values of the weight(s):" << std::endl;
 	for (int i = 0; i < weights.size(); i++) {
 		std::cout << weights[i] << std::endl;
@@ -261,7 +261,7 @@ void MLPPUtilities::UI(std::vector<double> weights, std::vector<double> initial,
 	std::cout << bias << std::endl;
 }
 
-void MLPPUtilities::CostInfo(int epoch, double cost_prev, double Cost) {
+void MLPPUtilities::CostInfo(int epoch, real_t cost_prev, real_t Cost) {
 	std::cout << "-----------------------------------" << std::endl;
 	std::cout << "This is epoch: " << epoch << std::endl;
 	std::cout << "The cost function has been minimized by " << cost_prev - Cost << std::endl;
@@ -269,21 +269,21 @@ void MLPPUtilities::CostInfo(int epoch, double cost_prev, double Cost) {
 	std::cout << Cost << std::endl;
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPUtilities::createMiniBatches(std::vector<std::vector<double>> inputSet, int n_mini_batch) {
+std::vector<std::vector<std::vector<real_t>>> MLPPUtilities::createMiniBatches(std::vector<std::vector<real_t>> inputSet, int n_mini_batch) {
 	int n = inputSet.size();
 
-	std::vector<std::vector<std::vector<double>>> inputMiniBatches;
+	std::vector<std::vector<std::vector<real_t>>> inputMiniBatches;
 
 	// Creating the mini-batches
 	for (int i = 0; i < n_mini_batch; i++) {
-		std::vector<std::vector<double>> currentInputSet;
+		std::vector<std::vector<real_t>> currentInputSet;
 		for (int j = 0; j < n / n_mini_batch; j++) {
 			currentInputSet.push_back(inputSet[n / n_mini_batch * i + j]);
 		}
 		inputMiniBatches.push_back(currentInputSet);
 	}
 
-	if (double(n) / double(n_mini_batch) - int(n / n_mini_batch) != 0) {
+	if (real_t(n) / real_t(n_mini_batch) - int(n / n_mini_batch) != 0) {
 		for (int i = 0; i < n - n / n_mini_batch * n_mini_batch; i++) {
 			inputMiniBatches[n_mini_batch - 1].push_back(inputSet[n / n_mini_batch * n_mini_batch + i]);
 		}
@@ -291,15 +291,15 @@ std::vector<std::vector<std::vector<double>>> MLPPUtilities::createMiniBatches(s
 	return inputMiniBatches;
 }
 
-std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vector<double>>> MLPPUtilities::createMiniBatches(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int n_mini_batch) {
+std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<std::vector<real_t>>> MLPPUtilities::createMiniBatches(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int n_mini_batch) {
 	int n = inputSet.size();
 
-	std::vector<std::vector<std::vector<double>>> inputMiniBatches;
-	std::vector<std::vector<double>> outputMiniBatches;
+	std::vector<std::vector<std::vector<real_t>>> inputMiniBatches;
+	std::vector<std::vector<real_t>> outputMiniBatches;
 
 	for (int i = 0; i < n_mini_batch; i++) {
-		std::vector<std::vector<double>> currentInputSet;
-		std::vector<double> currentOutputSet;
+		std::vector<std::vector<real_t>> currentInputSet;
+		std::vector<real_t> currentOutputSet;
 		for (int j = 0; j < n / n_mini_batch; j++) {
 			currentInputSet.push_back(inputSet[n / n_mini_batch * i + j]);
 			currentOutputSet.push_back(outputSet[n / n_mini_batch * i + j]);
@@ -308,7 +308,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vecto
 		outputMiniBatches.push_back(currentOutputSet);
 	}
 
-	if (double(n) / double(n_mini_batch) - int(n / n_mini_batch) != 0) {
+	if (real_t(n) / real_t(n_mini_batch) - int(n / n_mini_batch) != 0) {
 		for (int i = 0; i < n - n / n_mini_batch * n_mini_batch; i++) {
 			inputMiniBatches[n_mini_batch - 1].push_back(inputSet[n / n_mini_batch * n_mini_batch + i]);
 			outputMiniBatches[n_mini_batch - 1].push_back(outputSet[n / n_mini_batch * n_mini_batch + i]);
@@ -317,15 +317,15 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vecto
 	return { inputMiniBatches, outputMiniBatches };
 }
 
-std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vector<std::vector<double>>>> MLPPUtilities::createMiniBatches(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, int n_mini_batch) {
+std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<std::vector<std::vector<real_t>>>> MLPPUtilities::createMiniBatches(std::vector<std::vector<real_t>> inputSet, std::vector<std::vector<real_t>> outputSet, int n_mini_batch) {
 	int n = inputSet.size();
 
-	std::vector<std::vector<std::vector<double>>> inputMiniBatches;
-	std::vector<std::vector<std::vector<double>>> outputMiniBatches;
+	std::vector<std::vector<std::vector<real_t>>> inputMiniBatches;
+	std::vector<std::vector<std::vector<real_t>>> outputMiniBatches;
 
 	for (int i = 0; i < n_mini_batch; i++) {
-		std::vector<std::vector<double>> currentInputSet;
-		std::vector<std::vector<double>> currentOutputSet;
+		std::vector<std::vector<real_t>> currentInputSet;
+		std::vector<std::vector<real_t>> currentOutputSet;
 		for (int j = 0; j < n / n_mini_batch; j++) {
 			currentInputSet.push_back(inputSet[n / n_mini_batch * i + j]);
 			currentOutputSet.push_back(outputSet[n / n_mini_batch * i + j]);
@@ -334,7 +334,7 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vecto
 		outputMiniBatches.push_back(currentOutputSet);
 	}
 
-	if (double(n) / double(n_mini_batch) - int(n / n_mini_batch) != 0) {
+	if (real_t(n) / real_t(n_mini_batch) - int(n / n_mini_batch) != 0) {
 		for (int i = 0; i < n - n / n_mini_batch * n_mini_batch; i++) {
 			inputMiniBatches[n_mini_batch - 1].push_back(inputSet[n / n_mini_batch * n_mini_batch + i]);
 			outputMiniBatches[n_mini_batch - 1].push_back(outputSet[n / n_mini_batch * n_mini_batch + i]);
@@ -343,8 +343,8 @@ std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<std::vecto
 	return { inputMiniBatches, outputMiniBatches };
 }
 
-std::tuple<double, double, double, double> MLPPUtilities::TF_PN(std::vector<double> y_hat, std::vector<double> y) {
-	double TP, FP, TN, FN = 0;
+std::tuple<real_t, real_t, real_t, real_t> MLPPUtilities::TF_PN(std::vector<real_t> y_hat, std::vector<real_t> y) {
+	real_t TP, FP, TN, FN = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		if (y_hat[i] == y[i]) {
 			if (y_hat[i] == 1) {
@@ -363,20 +363,20 @@ std::tuple<double, double, double, double> MLPPUtilities::TF_PN(std::vector<doub
 	return { TP, FP, TN, FN };
 }
 
-double MLPPUtilities::recall(std::vector<double> y_hat, std::vector<double> y) {
+real_t MLPPUtilities::recall(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	auto [TP, FP, TN, FN] = TF_PN(y_hat, y);
 	return TP / (TP + FN);
 }
 
-double MLPPUtilities::precision(std::vector<double> y_hat, std::vector<double> y) {
+real_t MLPPUtilities::precision(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	auto [TP, FP, TN, FN] = TF_PN(y_hat, y);
 	return TP / (TP + FP);
 }
 
-double MLPPUtilities::accuracy(std::vector<double> y_hat, std::vector<double> y) {
+real_t MLPPUtilities::accuracy(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	auto [TP, FP, TN, FN] = TF_PN(y_hat, y);
 	return (TP + TN) / (TP + FP + FN + TN);
 }
-double MLPPUtilities::f1_score(std::vector<double> y_hat, std::vector<double> y) {
+real_t MLPPUtilities::f1_score(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	return 2 * precision(y_hat, y) * recall(y_hat, y) / (precision(y_hat, y) + recall(y_hat, y));
 }

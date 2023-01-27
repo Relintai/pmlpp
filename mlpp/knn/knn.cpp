@@ -13,28 +13,28 @@
 #include <map>
 
 
-MLPPKNN::MLPPKNN(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int k) :
+MLPPKNN::MLPPKNN(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int k) :
 		inputSet(inputSet), outputSet(outputSet), k(k) {
 }
 
-std::vector<double> MLPPKNN::modelSetTest(std::vector<std::vector<double>> X) {
-	std::vector<double> y_hat;
+std::vector<real_t> MLPPKNN::modelSetTest(std::vector<std::vector<real_t>> X) {
+	std::vector<real_t> y_hat;
 	for (int i = 0; i < X.size(); i++) {
 		y_hat.push_back(modelTest(X[i]));
 	}
 	return y_hat;
 }
 
-int MLPPKNN::modelTest(std::vector<double> x) {
+int MLPPKNN::modelTest(std::vector<real_t> x) {
 	return determineClass(nearestNeighbors(x));
 }
 
-double MLPPKNN::score() {
+real_t MLPPKNN::score() {
 	MLPPUtilities   util;
 	return util.performance(modelSetTest(inputSet), outputSet);
 }
 
-int MLPPKNN::determineClass(std::vector<double> knn) {
+int MLPPKNN::determineClass(std::vector<real_t> knn) {
 	std::map<int, int> class_nums;
 	for (int i = 0; i < outputSet.size(); i++) {
 		class_nums[outputSet[i]] = 0;
@@ -62,12 +62,12 @@ int MLPPKNN::determineClass(std::vector<double> knn) {
 	return final_class;
 }
 
-std::vector<double> MLPPKNN::nearestNeighbors(std::vector<double> x) {
+std::vector<real_t> MLPPKNN::nearestNeighbors(std::vector<real_t> x) {
 	MLPPLinAlg alg;
 	// The nearest neighbors
-	std::vector<double> knn;
+	std::vector<real_t> knn;
 
-	std::vector<std::vector<double>> inputUseSet = inputSet;
+	std::vector<std::vector<real_t>> inputUseSet = inputSet;
 	//Perfom this loop unless and until all k nearest neighbors are found, appended, and returned
 	for (int i = 0; i < k; i++) {
 		int neighbor = 0;

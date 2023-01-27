@@ -19,32 +19,32 @@
 
 class MLPPWGAN {
 public:
-	MLPPWGAN(double k, std::vector<std::vector<double>> outputSet);
+	MLPPWGAN(real_t k, std::vector<std::vector<real_t>> outputSet);
 	~MLPPWGAN();
-	std::vector<std::vector<double>> generateExample(int n);
-	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);
-	double score();
+	std::vector<std::vector<real_t>> generateExample(int n);
+	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = 1);
+	real_t score();
 	void save(std::string fileName);
 
-	void addLayer(int n_hidden, std::string activation, std::string weightInit = "Default", std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
-	void addOutputLayer(std::string weightInit = "Default", std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
+	void addLayer(int n_hidden, std::string activation, std::string weightInit = "Default", std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
+	void addOutputLayer(std::string weightInit = "Default", std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
 
 private:
-	std::vector<std::vector<double>> modelSetTestGenerator(std::vector<std::vector<double>> X); // Evaluator for the generator of the WGAN.
-	std::vector<double> modelSetTestDiscriminator(std::vector<std::vector<double>> X); // Evaluator for the discriminator of the WGAN.
+	std::vector<std::vector<real_t>> modelSetTestGenerator(std::vector<std::vector<real_t>> X); // Evaluator for the generator of the WGAN.
+	std::vector<real_t> modelSetTestDiscriminator(std::vector<std::vector<real_t>> X); // Evaluator for the discriminator of the WGAN.
 
-	double Cost(std::vector<double> y_hat, std::vector<double> y);
+	real_t Cost(std::vector<real_t> y_hat, std::vector<real_t> y);
 
 	void forwardPass();
-	void updateDiscriminatorParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, std::vector<double> outputLayerUpdation, double learning_rate);
-	void updateGeneratorParameters(std::vector<std::vector<std::vector<double>>> hiddenLayerUpdations, double learning_rate);
-	std::tuple<std::vector<std::vector<std::vector<double>>>, std::vector<double>> computeDiscriminatorGradients(std::vector<double> y_hat, std::vector<double> outputSet);
-	std::vector<std::vector<std::vector<double>>> computeGeneratorGradients(std::vector<double> y_hat, std::vector<double> outputSet);
+	void updateDiscriminatorParameters(std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations, std::vector<real_t> outputLayerUpdation, real_t learning_rate);
+	void updateGeneratorParameters(std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations, real_t learning_rate);
+	std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> computeDiscriminatorGradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet);
+	std::vector<std::vector<std::vector<real_t>>> computeGeneratorGradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet);
 
-	void UI(int epoch, double cost_prev, std::vector<double> y_hat, std::vector<double> outputSet);
+	void UI(int epoch, real_t cost_prev, std::vector<real_t> y_hat, std::vector<real_t> outputSet);
 
-	std::vector<std::vector<double>> outputSet;
-	std::vector<double> y_hat;
+	std::vector<std::vector<real_t>> outputSet;
+	std::vector<real_t> y_hat;
 
 	std::vector<MLPPHiddenLayer> network;
 	MLPPOutputLayer *outputLayer;

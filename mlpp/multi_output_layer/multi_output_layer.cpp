@@ -12,7 +12,7 @@
 #include <random>
 
 
-MLPPMultiOutputLayer::MLPPMultiOutputLayer(int n_output, int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha) :
+MLPPMultiOutputLayer::MLPPMultiOutputLayer(int n_output, int n_hidden, std::string activation, std::string cost, std::vector<std::vector<real_t>> input, std::string weightInit, std::string reg, real_t lambda, real_t alpha) :
 		n_output(n_output), n_hidden(n_hidden), activation(activation), cost(cost), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
 	weights = MLPPUtilities::weightInitialization(n_hidden, n_output, weightInit);
 	bias = MLPPUtilities::biasInitialization(n_output);
@@ -123,7 +123,7 @@ void MLPPMultiOutputLayer::forwardPass() {
 	a = (avn.*activation_map[activation])(z, 0);
 }
 
-void MLPPMultiOutputLayer::Test(std::vector<double> x) {
+void MLPPMultiOutputLayer::Test(std::vector<real_t> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z_test = alg.addition(alg.mat_vec_mult(alg.transpose(weights), x), bias);

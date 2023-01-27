@@ -8,43 +8,45 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
+#include "core/math/math_defs.h"
+
 #include <string>
 #include <vector>
 
 class MLPPLinReg {
 public:
-	MLPPLinReg(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
-	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
-	double modelTest(std::vector<double> x);
-	void NewtonRaphson(double learning_rate, int max_epoch, bool UI);
-	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);
-	void SGD(double learning_rate, int max_epoch, bool UI = 1);
+	MLPPLinReg(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
+	std::vector<real_t> modelSetTest(std::vector<std::vector<real_t>> X);
+	real_t modelTest(std::vector<real_t> x);
+	void NewtonRaphson(real_t learning_rate, int max_epoch, bool UI);
+	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = 1);
+	void SGD(real_t learning_rate, int max_epoch, bool UI = 1);
 
-	void Momentum(double learning_rate, int max_epoch, int mini_batch_size, double gamma, bool UI = 1);
-	void NAG(double learning_rate, int max_epoch, int mini_batch_size, double gamma, bool UI = 1);
-	void Adagrad(double learning_rate, int max_epoch, int mini_batch_size, double e, bool UI = 1);
-	void Adadelta(double learning_rate, int max_epoch, int mini_batch_size, double b1, double e, bool UI = 1);
-	void Adam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI = 1);
-	void Adamax(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI = 1);
-	void Nadam(double learning_rate, int max_epoch, int mini_batch_size, double b1, double b2, double e, bool UI = 1);
+	void Momentum(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool UI = 1);
+	void NAG(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool UI = 1);
+	void Adagrad(real_t learning_rate, int max_epoch, int mini_batch_size, real_t e, bool UI = 1);
+	void Adadelta(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t e, bool UI = 1);
+	void Adam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI = 1);
+	void Adamax(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI = 1);
+	void Nadam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI = 1);
 
-	void MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI = 1);
+	void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI = 1);
 	void normalEquation();
-	double score();
+	real_t score();
 	void save(std::string fileName);
 
 private:
-	double Cost(std::vector<double> y_hat, std::vector<double> y);
+	real_t Cost(std::vector<real_t> y_hat, std::vector<real_t> y);
 
-	std::vector<double> Evaluate(std::vector<std::vector<double>> X);
-	double Evaluate(std::vector<double> x);
+	std::vector<real_t> Evaluate(std::vector<std::vector<real_t>> X);
+	real_t Evaluate(std::vector<real_t> x);
 	void forwardPass();
 
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> outputSet;
-	std::vector<double> y_hat;
-	std::vector<double> weights;
-	double bias;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> outputSet;
+	std::vector<real_t> y_hat;
+	std::vector<real_t> weights;
+	real_t bias;
 
 	int n;
 	int k;

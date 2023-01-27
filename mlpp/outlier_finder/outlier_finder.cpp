@@ -13,13 +13,13 @@ MLPPOutlierFinder::MLPPOutlierFinder(int threshold) :
 		threshold(threshold) {
 }
 
-std::vector<std::vector<double>> MLPPOutlierFinder::modelSetTest(std::vector<std::vector<double>> inputSet) {
+std::vector<std::vector<real_t>> MLPPOutlierFinder::modelSetTest(std::vector<std::vector<real_t>> inputSet) {
 	MLPPStat  stat;
-	std::vector<std::vector<double>> outliers;
+	std::vector<std::vector<real_t>> outliers;
 	outliers.resize(inputSet.size());
 	for (int i = 0; i < inputSet.size(); i++) {
 		for (int j = 0; j < inputSet[i].size(); j++) {
-			double z = (inputSet[i][j] - stat.mean(inputSet[i])) / stat.standardDeviation(inputSet[i]);
+			real_t z = (inputSet[i][j] - stat.mean(inputSet[i])) / stat.standardDeviation(inputSet[i]);
 			if (abs(z) > threshold) {
 				outliers[i].push_back(inputSet[i][j]);
 			}
@@ -28,11 +28,11 @@ std::vector<std::vector<double>> MLPPOutlierFinder::modelSetTest(std::vector<std
 	return outliers;
 }
 
-std::vector<double> MLPPOutlierFinder::modelTest(std::vector<double> inputSet) {
+std::vector<real_t> MLPPOutlierFinder::modelTest(std::vector<real_t> inputSet) {
 	MLPPStat  stat;
-	std::vector<double> outliers;
+	std::vector<real_t> outliers;
 	for (int i = 0; i < inputSet.size(); i++) {
-		double z = (inputSet[i] - stat.mean(inputSet)) / stat.standardDeviation(inputSet);
+		real_t z = (inputSet[i] - stat.mean(inputSet)) / stat.standardDeviation(inputSet);
 		if (abs(z) > threshold) {
 			outliers.push_back(inputSet[i]);
 		}

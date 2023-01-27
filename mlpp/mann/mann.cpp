@@ -14,7 +14,7 @@
 #include <iostream>
 
 
-MLPPMANN::MLPPMANN(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet) :
+MLPPMANN::MLPPMANN(std::vector<std::vector<real_t>> inputSet, std::vector<std::vector<real_t>> outputSet) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), n_output(outputSet[0].size()) {
 }
 
@@ -22,7 +22,7 @@ MLPPMANN::~MLPPMANN() {
 	delete outputLayer;
 }
 
-std::vector<std::vector<double>> MLPPMANN::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<std::vector<real_t>> MLPPMANN::modelSetTest(std::vector<std::vector<real_t>> X) {
 	if (!network.empty()) {
 		network[0].input = X;
 		network[0].forwardPass();
@@ -39,7 +39,7 @@ std::vector<std::vector<double>> MLPPMANN::modelSetTest(std::vector<std::vector<
 	return outputLayer->a;
 }
 
-std::vector<double> MLPPMANN::modelTest(std::vector<double> x) {
+std::vector<real_t> MLPPMANN::modelTest(std::vector<real_t> x) {
 	if (!network.empty()) {
 		network[0].Test(x);
 		for (int i = 1; i < network.size(); i++) {
@@ -52,13 +52,13 @@ std::vector<double> MLPPMANN::modelTest(std::vector<double> x) {
 	return outputLayer->a_test;
 }
 
-void MLPPMANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPMANN::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
 
@@ -73,7 +73,7 @@ void MLPPMANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 			outputLayer->delta = alg.hadamard_product((cost.*costDeriv)(y_hat, outputSet), (avn.*outputAvn)(outputLayer->z, 1));
 		}
 
-		std::vector<std::vector<double>> outputWGrad = alg.matmult(alg.transpose(outputLayer->input), outputLayer->delta);
+		std::vector<std::vector<real_t>> outputWGrad = alg.matmult(alg.transpose(outputLayer->input), outputLayer->delta);
 
 		outputLayer->weights = alg.subtraction(outputLayer->weights, alg.scalarMultiply(learning_rate / n, outputWGrad));
 		outputLayer->weights = regularization.regWeights(outputLayer->weights, outputLayer->lambda, outputLayer->alpha, outputLayer->reg);
@@ -82,7 +82,7 @@ void MLPPMANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 		if (!network.empty()) {
 			auto hiddenLayerAvn = network[network.size() - 1].activation_map[network[network.size() - 1].activation];
 			network[network.size() - 1].delta = alg.hadamard_product(alg.matmult(outputLayer->delta, alg.transpose(outputLayer->weights)), (avn.*hiddenLayerAvn)(network[network.size() - 1].z, 1));
-			std::vector<std::vector<double>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[network.size() - 1].input), network[network.size() - 1].delta);
+			std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[network.size() - 1].input), network[network.size() - 1].delta);
 
 			network[network.size() - 1].weights = alg.subtraction(network[network.size() - 1].weights, alg.scalarMultiply(learning_rate / n, hiddenLayerWGrad));
 			network[network.size() - 1].weights = regularization.regWeights(network[network.size() - 1].weights, network[network.size() - 1].lambda, network[network.size() - 1].alpha, network[network.size() - 1].reg);
@@ -91,7 +91,7 @@ void MLPPMANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 			for (int i = network.size() - 2; i >= 0; i--) {
 				auto hiddenLayerAvn = network[i].activation_map[network[i].activation];
 				network[i].delta = alg.hadamard_product(alg.matmult(network[i + 1].delta, network[i + 1].weights), (avn.*hiddenLayerAvn)(network[i].z, 1));
-				std::vector<std::vector<double>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[i].input), network[i].delta);
+				std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[i].input), network[i].delta);
 				network[i].weights = alg.subtraction(network[i].weights, alg.scalarMultiply(learning_rate / n, hiddenLayerWGrad));
 				network[i].weights = regularization.regWeights(network[i].weights, network[i].lambda, network[i].alpha, network[i].reg);
 				network[i].bias = alg.subtractMatrixRows(network[i].bias, alg.scalarMultiply(learning_rate / n, network[i].delta));
@@ -120,7 +120,7 @@ void MLPPMANN::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-double MLPPMANN::score() {
+real_t MLPPMANN::score() {
 	MLPPUtilities   util;
 	forwardPass();
 	return util.performance(y_hat, outputSet);
@@ -139,7 +139,7 @@ void MLPPMANN::save(std::string fileName) {
 	}
 }
 
-void MLPPMANN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, double lambda, double alpha) {
+void MLPPMANN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
 	if (network.empty()) {
 		network.push_back(MLPPHiddenLayer(n_hidden, activation, inputSet, weightInit, reg, lambda, alpha));
 		network[0].forwardPass();
@@ -149,7 +149,7 @@ void MLPPMANN::addLayer(int n_hidden, std::string activation, std::string weight
 	}
 }
 
-void MLPPMANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, double lambda, double alpha) {
+void MLPPMANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
 	if (!network.empty()) {
 		outputLayer = new MLPPMultiOutputLayer(n_output, network[0].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
 	} else {
@@ -157,10 +157,10 @@ void MLPPMANN::addOutputLayer(std::string activation, std::string loss, std::str
 	}
 }
 
-double MLPPMANN::Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
+real_t MLPPMANN::Cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
 	MLPPReg regularization;
 	class MLPPCost cost;
-	double totalRegTerm = 0;
+	real_t totalRegTerm = 0;
 
 	auto cost_function = outputLayer->cost_map[outputLayer->cost];
 	if (!network.empty()) {

@@ -8,21 +8,23 @@
 //  Created by Marc Melikyan on 9/29/20.
 //
 
+#include "core/math/math_defs.h"
+
 #include <vector>
 
 
 class MLPPUniLinReg {
 public:
-	MLPPUniLinReg(std::vector<double> x, std::vector<double> y);
-	std::vector<double> modelSetTest(std::vector<double> x);
-	double modelTest(double x);
+	MLPPUniLinReg(std::vector<real_t> x, std::vector<real_t> y);
+	std::vector<real_t> modelSetTest(std::vector<real_t> x);
+	real_t modelTest(real_t x);
 
 private:
-	std::vector<double> inputSet;
-	std::vector<double> outputSet;
+	std::vector<real_t> inputSet;
+	std::vector<real_t> outputSet;
 
-	double b0;
-	double b1;
+	real_t b0;
+	real_t b1;
 };
 
 

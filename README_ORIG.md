@@ -30,7 +30,7 @@ g++ main.cpp /usr/local/lib/MLPP.so --std=c++17
 ```
 
 ## Usage
-Please note that ML++ uses the ```std::vector<double>``` data type for emulating vectors, and the ```std::vector<std::vector<double>>``` data type for emulating matrices.
+Please note that ML++ uses the ```std::vector<real_t>``` data type for emulating vectors, and the ```std::vector<std::vector<real_t>>``` data type for emulating matrices.
 
 Begin by including the respective header file of your choice.
 ```cpp

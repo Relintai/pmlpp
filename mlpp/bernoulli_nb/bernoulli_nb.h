@@ -8,15 +8,17 @@
 //  Created by Marc Melikyan on 1/17/21.
 //
 
+#include "core/math/math_defs.h"
+
 #include <map>
 #include <vector>
 
 class MLPPBernoulliNB {
 public:
-	MLPPBernoulliNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet);
-	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
-	double modelTest(std::vector<double> x);
-	double score();
+	MLPPBernoulliNB(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet);
+	std::vector<real_t> modelSetTest(std::vector<std::vector<real_t>> X);
+	real_t modelTest(std::vector<real_t> x);
+	real_t score();
 
 private:
 	void computeVocab();
@@ -24,17 +26,17 @@ private:
 	void Evaluate();
 
 	// Model Params
-	double prior_1 = 0;
-	double prior_0 = 0;
+	real_t prior_1 = 0;
+	real_t prior_0 = 0;
 
-	std::vector<std::map<double, int>> theta;
-	std::vector<double> vocab;
+	std::vector<std::map<real_t, int>> theta;
+	std::vector<real_t> vocab;
 	int class_num;
 
 	// Datasets
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> outputSet;
-	std::vector<double> y_hat;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> outputSet;
+	std::vector<real_t> y_hat;
 };
 
 #endif /* BernoulliNB_hpp */

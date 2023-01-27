@@ -11,6 +11,8 @@
 // http://ciml.info/dl/v0_99/ciml-v0_99-ch11.pdf
 // Were excellent for the practical intution behind the dual formulation.
 
+#include "core/math/math_defs.h"
+
 #include <string>
 #include <vector>
 
@@ -18,52 +20,52 @@
 
 class MLPPDualSVC {
 public:
-	MLPPDualSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C, std::string kernel = "Linear");
-	MLPPDualSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C, std::string kernel, double p, double c);
+	MLPPDualSVC(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, real_t C, std::string kernel = "Linear");
+	MLPPDualSVC(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, real_t C, std::string kernel, real_t p, real_t c);
 
-	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
-	double modelTest(std::vector<double> x);
-	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);
-	void SGD(double learning_rate, int max_epoch, bool UI = 1);
-	void MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI = 1);
-	double score();
+	std::vector<real_t> modelSetTest(std::vector<std::vector<real_t>> X);
+	real_t modelTest(std::vector<real_t> x);
+	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = 1);
+	void SGD(real_t learning_rate, int max_epoch, bool UI = 1);
+	void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI = 1);
+	real_t score();
 	void save(std::string fileName);
 
 private:
 	void init();
 
-	double Cost(std::vector<double> alpha, std::vector<std::vector<double>> X, std::vector<double> y);
+	real_t Cost(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y);
 
-	std::vector<double> Evaluate(std::vector<std::vector<double>> X);
-	std::vector<double> propagate(std::vector<std::vector<double>> X);
-	double Evaluate(std::vector<double> x);
-	double propagate(std::vector<double> x);
+	std::vector<real_t> Evaluate(std::vector<std::vector<real_t>> X);
+	std::vector<real_t> propagate(std::vector<std::vector<real_t>> X);
+	real_t Evaluate(std::vector<real_t> x);
+	real_t propagate(std::vector<real_t> x);
 	void forwardPass();
 
 	void alphaProjection();
 
-	double kernelFunction(std::vector<double> v, std::vector<double> u, std::string kernel);
-	std::vector<std::vector<double>> kernelFunction(std::vector<std::vector<double>> U, std::vector<std::vector<double>> V, std::string kernel);
+	real_t kernelFunction(std::vector<real_t> v, std::vector<real_t> u, std::string kernel);
+	std::vector<std::vector<real_t>> kernelFunction(std::vector<std::vector<real_t>> U, std::vector<std::vector<real_t>> V, std::string kernel);
 
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> outputSet;
-	std::vector<double> z;
-	std::vector<double> y_hat;
-	double bias;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> outputSet;
+	std::vector<real_t> z;
+	std::vector<real_t> y_hat;
+	real_t bias;
 
-	std::vector<double> alpha;
-	std::vector<std::vector<double>> K;
+	std::vector<real_t> alpha;
+	std::vector<std::vector<real_t>> K;
 
-	double C;
+	real_t C;
 	int n;
 	int k;
 
 	std::string kernel;
-	double p; // Poly
-	double c; // Poly
+	real_t p; // Poly
+	real_t c; // Poly
 
 	// UI Portion
-	void UI(int epoch, double cost_prev);
+	void UI(int epoch, real_t cost_prev);
 };
 
 

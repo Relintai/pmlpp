@@ -4,6 +4,8 @@
 // TODO port this class to use the test module once it's working
 // Also don't forget to remove it's bindings
 
+#include "core/math/math_defs.h"
+
 #include "core/containers/vector.h"
 
 #include "core/object/reference.h"
@@ -64,9 +66,9 @@ public:
 	void test_mlpp_vector();
 	void test_mlpp_matrix();
 
-	void is_approx_equalsd(double a, double b, const String &str);
-	void is_approx_equals_dvec(const Vector<double> &a, const Vector<double> &b, const String &str);
-	void is_approx_equals_dmat(const Vector<Vector<double>> &a, const Vector<Vector<double>> &b, const String &str);
+	void is_approx_equalsd(real_t a, real_t b, const String &str);
+	void is_approx_equals_dvec(const Vector<real_t> &a, const Vector<real_t> &b, const String &str);
+	void is_approx_equals_dmat(const Vector<Vector<real_t>> &a, const Vector<Vector<real_t>> &b, const String &str);
 
 	void is_approx_equals_mat(Ref<MLPPMatrix> a, Ref<MLPPMatrix> b, const String &str);
 	void is_approx_equals_vec(Ref<MLPPVector> a, Ref<MLPPVector> b, const String &str);

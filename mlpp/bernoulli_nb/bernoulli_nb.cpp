@@ -12,23 +12,23 @@
 #include <iostream>
 #include <random>
 
-MLPPBernoulliNB::MLPPBernoulliNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet) :
+MLPPBernoulliNB::MLPPBernoulliNB(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet) :
 		inputSet(inputSet), outputSet(outputSet), class_num(2) {
 	y_hat.resize(outputSet.size());
 	Evaluate();
 }
 
-std::vector<double> MLPPBernoulliNB::modelSetTest(std::vector<std::vector<double>> X) {
-	std::vector<double> y_hat;
+std::vector<real_t> MLPPBernoulliNB::modelSetTest(std::vector<std::vector<real_t>> X) {
+	std::vector<real_t> y_hat;
 	for (int i = 0; i < X.size(); i++) {
 		y_hat.push_back(modelTest(X[i]));
 	}
 	return y_hat;
 }
 
-double MLPPBernoulliNB::modelTest(std::vector<double> x) {
-	double score_0 = 1;
-	double score_1 = 1;
+real_t MLPPBernoulliNB::modelTest(std::vector<real_t> x) {
+	real_t score_0 = 1;
+	real_t score_1 = 1;
 
 	std::vector<int> foundIndices;
 
@@ -68,7 +68,7 @@ double MLPPBernoulliNB::modelTest(std::vector<double> x) {
 	}
 }
 
-double MLPPBernoulliNB::score() {
+real_t MLPPBernoulliNB::score() {
 	MLPPUtilities   util;
 	return util.performance(y_hat, outputSet);
 }
@@ -76,7 +76,7 @@ double MLPPBernoulliNB::score() {
 void MLPPBernoulliNB::computeVocab() {
 	MLPPLinAlg alg;
 	MLPPData data;
-	vocab = data.vecToSet<double>(alg.flatten(inputSet));
+	vocab = data.vecToSet<real_t>(alg.flatten(inputSet));
 }
 
 void MLPPBernoulliNB::computeTheta() {
@@ -110,10 +110,10 @@ void MLPPBernoulliNB::computeTheta() {
 void MLPPBernoulliNB::Evaluate() {
 	for (int i = 0; i < outputSet.size(); i++) {
 		// Pr(B | A) * Pr(A)
-		double score_0 = 1;
-		double score_1 = 1;
+		real_t score_0 = 1;
+		real_t score_1 = 1;
 
-		double sum = 0;
+		real_t sum = 0;
 		for (int i = 0; i < outputSet.size(); i++) {
 			if (outputSet[i] == 1) {
 				sum += outputSet[i];

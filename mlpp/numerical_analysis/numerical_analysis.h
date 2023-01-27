@@ -7,6 +7,8 @@
 //
 //
 
+#include "core/math/math_defs.h"
+
 #include <string>
 #include <vector>
 
@@ -17,40 +19,40 @@ public:
 	as an analytical method for calculating derivatives will most likely be used in
 	the future.
 	*/
-	double numDiff(double (*function)(double), double x);
-	double numDiff_2(double (*function)(double), double x);
-	double numDiff_3(double (*function)(double), double x);
+	real_t numDiff(real_t (*function)(real_t), real_t x);
+	real_t numDiff_2(real_t (*function)(real_t), real_t x);
+	real_t numDiff_3(real_t (*function)(real_t), real_t x);
 
-	double constantApproximation(double (*function)(double), double c);
-	double linearApproximation(double (*function)(double), double c, double x);
-	double quadraticApproximation(double (*function)(double), double c, double x);
-	double cubicApproximation(double (*function)(double), double c, double x);
+	real_t constantApproximation(real_t (*function)(real_t), real_t c);
+	real_t linearApproximation(real_t (*function)(real_t), real_t c, real_t x);
+	real_t quadraticApproximation(real_t (*function)(real_t), real_t c, real_t x);
+	real_t cubicApproximation(real_t (*function)(real_t), real_t c, real_t x);
 
-	double numDiff(double (*function)(std::vector<double>), std::vector<double> x, int axis);
-	double numDiff_2(double (*function)(std::vector<double>), std::vector<double> x, int axis1, int axis2);
-	double numDiff_3(double (*function)(std::vector<double>), std::vector<double> x, int axis1, int axis2, int axis3);
+	real_t numDiff(real_t (*function)(std::vector<real_t>), std::vector<real_t> x, int axis);
+	real_t numDiff_2(real_t (*function)(std::vector<real_t>), std::vector<real_t> x, int axis1, int axis2);
+	real_t numDiff_3(real_t (*function)(std::vector<real_t>), std::vector<real_t> x, int axis1, int axis2, int axis3);
 
-	double newtonRaphsonMethod(double (*function)(double), double x_0, double epoch_num);
-	double halleyMethod(double (*function)(double), double x_0, double epoch_num);
-	double invQuadraticInterpolation(double (*function)(double), std::vector<double> x_0, double epoch_num);
+	real_t newtonRaphsonMethod(real_t (*function)(real_t), real_t x_0, real_t epoch_num);
+	real_t halleyMethod(real_t (*function)(real_t), real_t x_0, real_t epoch_num);
+	real_t invQuadraticInterpolation(real_t (*function)(real_t), std::vector<real_t> x_0, real_t epoch_num);
 
-	double eulerianMethod(double (*derivative)(double), std::vector<double> q_0, double p, double h); // Euler's method for solving diffrential equations.
-	double eulerianMethod(double (*derivative)(std::vector<double>), std::vector<double> q_0, double p, double h); // Euler's method for solving diffrential equations.
+	real_t eulerianMethod(real_t (*derivative)(real_t), std::vector<real_t> q_0, real_t p, real_t h); // Euler's method for solving diffrential equations.
+	real_t eulerianMethod(real_t (*derivative)(std::vector<real_t>), std::vector<real_t> q_0, real_t p, real_t h); // Euler's method for solving diffrential equations.
 
-	double growthMethod(double C, double k, double t); // General growth-based diffrential equations can be solved by seperation of variables.
+	real_t growthMethod(real_t C, real_t k, real_t t); // General growth-based diffrential equations can be solved by seperation of variables.
 
-	std::vector<double> jacobian(double (*function)(std::vector<double>), std::vector<double> x); // Indeed, for functions with scalar outputs the Jacobians will be vectors.
-	std::vector<std::vector<double>> hessian(double (*function)(std::vector<double>), std::vector<double> x);
-	std::vector<std::vector<std::vector<double>>> thirdOrderTensor(double (*function)(std::vector<double>), std::vector<double> x);
+	std::vector<real_t> jacobian(real_t (*function)(std::vector<real_t>), std::vector<real_t> x); // Indeed, for functions with scalar outputs the Jacobians will be vectors.
+	std::vector<std::vector<real_t>> hessian(real_t (*function)(std::vector<real_t>), std::vector<real_t> x);
+	std::vector<std::vector<std::vector<real_t>>> thirdOrderTensor(real_t (*function)(std::vector<real_t>), std::vector<real_t> x);
 
-	double constantApproximation(double (*function)(std::vector<double>), std::vector<double> c);
-	double linearApproximation(double (*function)(std::vector<double>), std::vector<double> c, std::vector<double> x);
-	double quadraticApproximation(double (*function)(std::vector<double>), std::vector<double> c, std::vector<double> x);
-	double cubicApproximation(double (*function)(std::vector<double>), std::vector<double> c, std::vector<double> x);
+	real_t constantApproximation(real_t (*function)(std::vector<real_t>), std::vector<real_t> c);
+	real_t linearApproximation(real_t (*function)(std::vector<real_t>), std::vector<real_t> c, std::vector<real_t> x);
+	real_t quadraticApproximation(real_t (*function)(std::vector<real_t>), std::vector<real_t> c, std::vector<real_t> x);
+	real_t cubicApproximation(real_t (*function)(std::vector<real_t>), std::vector<real_t> c, std::vector<real_t> x);
 
-	double laplacian(double (*function)(std::vector<double>), std::vector<double> x); // laplacian
+	real_t laplacian(real_t (*function)(std::vector<real_t>), std::vector<real_t> x); // laplacian
 
-	std::string secondPartialDerivativeTest(double (*function)(std::vector<double>), std::vector<double> x);
+	std::string secondPartialDerivativeTest(real_t (*function)(std::vector<real_t>), std::vector<real_t> x);
 };
 
 

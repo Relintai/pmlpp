@@ -14,11 +14,11 @@
 
 // DCT ii.
 // https://www.mathworks.com/help/images/discrete-cosine-transform.html
-std::vector<std::vector<double>> MLPPTransforms::discreteCosineTransform(std::vector<std::vector<double>> A) {
+std::vector<std::vector<real_t>> MLPPTransforms::discreteCosineTransform(std::vector<std::vector<real_t>> A) {
 	MLPPLinAlg alg;
 	A = alg.scalarAdd(-128, A); // Center around 0.
 
-	std::vector<std::vector<double>> B;
+	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
 	for (int i = 0; i < B.size(); i++) {
 		B[i].resize(A[i].size());
@@ -28,18 +28,18 @@ std::vector<std::vector<double>> MLPPTransforms::discreteCosineTransform(std::ve
 
 	for (int i = 0; i < B.size(); i++) {
 		for (int j = 0; j < B[i].size(); j++) {
-			double sum = 0;
-			double alphaI;
+			real_t sum = 0;
+			real_t alphaI;
 			if (i == 0) {
 				alphaI = 1 / std::sqrt(M);
 			} else {
-				alphaI = std::sqrt(double(2) / double(M));
+				alphaI = std::sqrt(real_t(2) / real_t(M));
 			}
-			double alphaJ;
+			real_t alphaJ;
 			if (j == 0) {
 				alphaJ = 1 / std::sqrt(M);
 			} else {
-				alphaJ = std::sqrt(double(2) / double(M));
+				alphaJ = std::sqrt(real_t(2) / real_t(M));
 			}
 
 			for (int k = 0; k < B.size(); k++) {

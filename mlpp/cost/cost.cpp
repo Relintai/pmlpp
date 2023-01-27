@@ -11,16 +11,16 @@
 #include <iostream>
 
 
-double MLPPCost::MSE(std::vector<double> y_hat, std::vector<double> y) {
-	double sum = 0;
+real_t MLPPCost::MSE(std::vector<real_t> y_hat, std::vector<real_t> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		sum += (y_hat[i] - y[i]) * (y_hat[i] - y[i]);
 	}
 	return sum / 2 * y_hat.size();
 }
 
-double MLPPCost::MSE(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	double sum = 0;
+real_t MLPPCost::MSE(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		for (int j = 0; j < y_hat[i].size(); j++) {
 			sum += (y_hat[i][j] - y[i][j]) * (y_hat[i][j] - y[i][j]);
@@ -29,26 +29,26 @@ double MLPPCost::MSE(std::vector<std::vector<double>> y_hat, std::vector<std::ve
 	return sum / 2 * y_hat.size();
 }
 
-std::vector<double> MLPPCost::MSEDeriv(std::vector<double> y_hat, std::vector<double> y) {
+std::vector<real_t> MLPPCost::MSEDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	MLPPLinAlg alg;
 	return alg.subtraction(y_hat, y);
 }
 
-std::vector<std::vector<double>> MLPPCost::MSEDeriv(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
+std::vector<std::vector<real_t>> MLPPCost::MSEDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
 	MLPPLinAlg alg;
 	return alg.subtraction(y_hat, y);
 }
 
-double MLPPCost::RMSE(std::vector<double> y_hat, std::vector<double> y) {
-	double sum = 0;
+real_t MLPPCost::RMSE(std::vector<real_t> y_hat, std::vector<real_t> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		sum += (y_hat[i] - y[i]) * (y_hat[i] - y[i]);
 	}
 	return sqrt(sum / y_hat.size());
 }
 
-double MLPPCost::RMSE(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	double sum = 0;
+real_t MLPPCost::RMSE(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		for (int j = 0; j < y_hat[i].size(); j++) {
 			sum += (y_hat[i][j] - y[i][j]) * (y_hat[i][j] - y[i][j]);
@@ -57,26 +57,26 @@ double MLPPCost::RMSE(std::vector<std::vector<double>> y_hat, std::vector<std::v
 	return sqrt(sum / y_hat.size());
 }
 
-std::vector<double> MLPPCost::RMSEDeriv(std::vector<double> y_hat, std::vector<double> y) {
+std::vector<real_t> MLPPCost::RMSEDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	MLPPLinAlg alg;
 	return alg.scalarMultiply(1 / (2 * sqrt(MSE(y_hat, y))), MSEDeriv(y_hat, y));
 }
 
-std::vector<std::vector<double>> MLPPCost::RMSEDeriv(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
+std::vector<std::vector<real_t>> MLPPCost::RMSEDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
 	MLPPLinAlg alg;
 	return alg.scalarMultiply(1 / (2 / sqrt(MSE(y_hat, y))), MSEDeriv(y_hat, y));
 }
 
-double MLPPCost::MAE(std::vector<double> y_hat, std::vector<double> y) {
-	double sum = 0;
+real_t MLPPCost::MAE(std::vector<real_t> y_hat, std::vector<real_t> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		sum += abs((y_hat[i] - y[i]));
 	}
 	return sum / y_hat.size();
 }
 
-double MLPPCost::MAE(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	double sum = 0;
+real_t MLPPCost::MAE(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		for (int j = 0; j < y_hat[i].size(); j++) {
 			sum += abs((y_hat[i][j] - y[i][j]));
@@ -85,8 +85,8 @@ double MLPPCost::MAE(std::vector<std::vector<double>> y_hat, std::vector<std::ve
 	return sum / y_hat.size();
 }
 
-std::vector<double> MLPPCost::MAEDeriv(std::vector<double> y_hat, std::vector<double> y) {
-	std::vector<double> deriv;
+std::vector<real_t> MLPPCost::MAEDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
+	std::vector<real_t> deriv;
 	deriv.resize(y_hat.size());
 	for (int i = 0; i < deriv.size(); i++) {
 		if (y_hat[i] < 0) {
@@ -100,8 +100,8 @@ std::vector<double> MLPPCost::MAEDeriv(std::vector<double> y_hat, std::vector<do
 	return deriv;
 }
 
-std::vector<std::vector<double>> MLPPCost::MAEDeriv(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	std::vector<std::vector<double>> deriv;
+std::vector<std::vector<real_t>> MLPPCost::MAEDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+	std::vector<std::vector<real_t>> deriv;
 	deriv.resize(y_hat.size());
 	for (int i = 0; i < deriv.size(); i++) {
 		deriv.resize(y_hat[i].size());
@@ -120,16 +120,16 @@ std::vector<std::vector<double>> MLPPCost::MAEDeriv(std::vector<std::vector<doub
 	return deriv;
 }
 
-double MLPPCost::MBE(std::vector<double> y_hat, std::vector<double> y) {
-	double sum = 0;
+real_t MLPPCost::MBE(std::vector<real_t> y_hat, std::vector<real_t> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		sum += (y_hat[i] - y[i]);
 	}
 	return sum / y_hat.size();
 }
 
-double MLPPCost::MBE(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	double sum = 0;
+real_t MLPPCost::MBE(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		for (int j = 0; j < y_hat[i].size(); j++) {
 			sum += (y_hat[i][j] - y[i][j]);
@@ -138,19 +138,19 @@ double MLPPCost::MBE(std::vector<std::vector<double>> y_hat, std::vector<std::ve
 	return sum / y_hat.size();
 }
 
-std::vector<double> MLPPCost::MBEDeriv(std::vector<double> y_hat, std::vector<double> y) {
+std::vector<real_t> MLPPCost::MBEDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	MLPPLinAlg alg;
 	return alg.onevec(y_hat.size());
 }
 
-std::vector<std::vector<double>> MLPPCost::MBEDeriv(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
+std::vector<std::vector<real_t>> MLPPCost::MBEDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
 	MLPPLinAlg alg;
 	return alg.onemat(y_hat.size(), y_hat[0].size());
 }
 
-double MLPPCost::LogLoss(std::vector<double> y_hat, std::vector<double> y) {
-	double sum = 0;
-	double eps = 1e-8;
+real_t MLPPCost::LogLoss(std::vector<real_t> y_hat, std::vector<real_t> y) {
+	real_t sum = 0;
+	real_t eps = 1e-8;
 	for (int i = 0; i < y_hat.size(); i++) {
 		sum += -(y[i] * std::log(y_hat[i] + eps) + (1 - y[i]) * std::log(1 - y_hat[i] + eps));
 	}
@@ -158,9 +158,9 @@ double MLPPCost::LogLoss(std::vector<double> y_hat, std::vector<double> y) {
 	return sum / y_hat.size();
 }
 
-double MLPPCost::LogLoss(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	double sum = 0;
-	double eps = 1e-8;
+real_t MLPPCost::LogLoss(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+	real_t sum = 0;
+	real_t eps = 1e-8;
 	for (int i = 0; i < y_hat.size(); i++) {
 		for (int j = 0; j < y_hat[i].size(); j++) {
 			sum += -(y[i][j] * std::log(y_hat[i][j] + eps) + (1 - y[i][j]) * std::log(1 - y_hat[i][j] + eps));
@@ -170,18 +170,18 @@ double MLPPCost::LogLoss(std::vector<std::vector<double>> y_hat, std::vector<std
 	return sum / y_hat.size();
 }
 
-std::vector<double> MLPPCost::LogLossDeriv(std::vector<double> y_hat, std::vector<double> y) {
+std::vector<real_t> MLPPCost::LogLossDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	MLPPLinAlg alg;
 	return alg.addition(alg.scalarMultiply(-1, alg.elementWiseDivision(y, y_hat)), alg.elementWiseDivision(alg.scalarMultiply(-1, alg.scalarAdd(-1, y)), alg.scalarMultiply(-1, alg.scalarAdd(-1, y_hat))));
 }
 
-std::vector<std::vector<double>> MLPPCost::LogLossDeriv(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
+std::vector<std::vector<real_t>> MLPPCost::LogLossDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
 	MLPPLinAlg alg;
 	return alg.addition(alg.scalarMultiply(-1, alg.elementWiseDivision(y, y_hat)), alg.elementWiseDivision(alg.scalarMultiply(-1, alg.scalarAdd(-1, y)), alg.scalarMultiply(-1, alg.scalarAdd(-1, y_hat))));
 }
 
-double MLPPCost::CrossEntropy(std::vector<double> y_hat, std::vector<double> y) {
-	double sum = 0;
+real_t MLPPCost::CrossEntropy(std::vector<real_t> y_hat, std::vector<real_t> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		sum += y[i] * std::log(y_hat[i]);
 	}
@@ -189,8 +189,8 @@ double MLPPCost::CrossEntropy(std::vector<double> y_hat, std::vector<double> y) 
 	return -1 * sum;
 }
 
-double MLPPCost::CrossEntropy(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	double sum = 0;
+real_t MLPPCost::CrossEntropy(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		for (int j = 0; j < y_hat[i].size(); j++) {
 			sum += y[i][j] * std::log(y_hat[i][j]);
@@ -200,19 +200,19 @@ double MLPPCost::CrossEntropy(std::vector<std::vector<double>> y_hat, std::vecto
 	return -1 * sum;
 }
 
-std::vector<double> MLPPCost::CrossEntropyDeriv(std::vector<double> y_hat, std::vector<double> y) {
+std::vector<real_t> MLPPCost::CrossEntropyDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	MLPPLinAlg alg;
 	return alg.scalarMultiply(-1, alg.elementWiseDivision(y, y_hat));
 }
 
-std::vector<std::vector<double>> MLPPCost::CrossEntropyDeriv(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
+std::vector<std::vector<real_t>> MLPPCost::CrossEntropyDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
 	MLPPLinAlg alg;
 	return alg.scalarMultiply(-1, alg.elementWiseDivision(y, y_hat));
 }
 
-double MLPPCost::HuberLoss(std::vector<double> y_hat, std::vector<double> y, double delta) {
+real_t MLPPCost::HuberLoss(std::vector<real_t> y_hat, std::vector<real_t> y, real_t delta) {
 	MLPPLinAlg alg;
-	double sum = 0;
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		if (abs(y[i] - y_hat[i]) <= delta) {
 			sum += (y[i] - y_hat[i]) * (y[i] - y_hat[i]);
@@ -223,9 +223,9 @@ double MLPPCost::HuberLoss(std::vector<double> y_hat, std::vector<double> y, dou
 	return sum;
 }
 
-double MLPPCost::HuberLoss(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y, double delta) {
+real_t MLPPCost::HuberLoss(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y, real_t delta) {
 	MLPPLinAlg alg;
-	double sum = 0;
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		for (int j = 0; j < y_hat[i].size(); j++) {
 			if (abs(y[i][j] - y_hat[i][j]) <= delta) {
@@ -238,10 +238,10 @@ double MLPPCost::HuberLoss(std::vector<std::vector<double>> y_hat, std::vector<s
 	return sum;
 }
 
-std::vector<double> MLPPCost::HuberLossDeriv(std::vector<double> y_hat, std::vector<double> y, double delta) {
+std::vector<real_t> MLPPCost::HuberLossDeriv(std::vector<real_t> y_hat, std::vector<real_t> y, real_t delta) {
 	MLPPLinAlg alg;
-	double sum = 0;
-	std::vector<double> deriv;
+	real_t sum = 0;
+	std::vector<real_t> deriv;
 	deriv.resize(y_hat.size());
 
 	for (int i = 0; i < y_hat.size(); i++) {
@@ -258,10 +258,10 @@ std::vector<double> MLPPCost::HuberLossDeriv(std::vector<double> y_hat, std::vec
 	return deriv;
 }
 
-std::vector<std::vector<double>> MLPPCost::HuberLossDeriv(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y, double delta) {
+std::vector<std::vector<real_t>> MLPPCost::HuberLossDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y, real_t delta) {
 	MLPPLinAlg alg;
-	double sum = 0;
-	std::vector<std::vector<double>> deriv;
+	real_t sum = 0;
+	std::vector<std::vector<real_t>> deriv;
 	deriv.resize(y_hat.size());
 	for (int i = 0; i < deriv.size(); i++) {
 		deriv[i].resize(y_hat[i].size());
@@ -283,8 +283,8 @@ std::vector<std::vector<double>> MLPPCost::HuberLossDeriv(std::vector<std::vecto
 	return deriv;
 }
 
-double MLPPCost::HingeLoss(std::vector<double> y_hat, std::vector<double> y) {
-	double sum = 0;
+real_t MLPPCost::HingeLoss(std::vector<real_t> y_hat, std::vector<real_t> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		sum += fmax(0, 1 - y[i] * y_hat[i]);
 	}
@@ -292,8 +292,8 @@ double MLPPCost::HingeLoss(std::vector<double> y_hat, std::vector<double> y) {
 	return sum / y_hat.size();
 }
 
-double MLPPCost::HingeLoss(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	double sum = 0;
+real_t MLPPCost::HingeLoss(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		for (int j = 0; j < y_hat[i].size(); j++) {
 			sum += fmax(0, 1 - y[i][j] * y_hat[i][j]);
@@ -303,8 +303,8 @@ double MLPPCost::HingeLoss(std::vector<std::vector<double>> y_hat, std::vector<s
 	return sum / y_hat.size();
 }
 
-std::vector<double> MLPPCost::HingeLossDeriv(std::vector<double> y_hat, std::vector<double> y) {
-	std::vector<double> deriv;
+std::vector<real_t> MLPPCost::HingeLossDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
+	std::vector<real_t> deriv;
 	deriv.resize(y_hat.size());
 	for (int i = 0; i < y_hat.size(); i++) {
 		if (1 - y[i] * y_hat[i] > 0) {
@@ -316,8 +316,8 @@ std::vector<double> MLPPCost::HingeLossDeriv(std::vector<double> y_hat, std::vec
 	return deriv;
 }
 
-std::vector<std::vector<double>> MLPPCost::HingeLossDeriv(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	std::vector<std::vector<double>> deriv;
+std::vector<std::vector<real_t>> MLPPCost::HingeLossDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+	std::vector<std::vector<real_t>> deriv;
 	for (int i = 0; i < y_hat.size(); i++) {
 		for (int j = 0; j < y_hat[i].size(); j++) {
 			if (1 - y[i][j] * y_hat[i][j] > 0) {
@@ -330,16 +330,16 @@ std::vector<std::vector<double>> MLPPCost::HingeLossDeriv(std::vector<std::vecto
 	return deriv;
 }
 
-double MLPPCost::WassersteinLoss(std::vector<double> y_hat, std::vector<double> y) {
-	double sum = 0;
+real_t MLPPCost::WassersteinLoss(std::vector<real_t> y_hat, std::vector<real_t> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		sum += y_hat[i] * y[i];
 	}
 	return -sum / y_hat.size();
 }
 
-double MLPPCost::WassersteinLoss(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
-	double sum = 0;
+real_t MLPPCost::WassersteinLoss(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+	real_t sum = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
 		for (int j = 0; j < y_hat[i].size(); j++) {
 			sum += y_hat[i][j] * y[i][j];
@@ -348,59 +348,59 @@ double MLPPCost::WassersteinLoss(std::vector<std::vector<double>> y_hat, std::ve
 	return -sum / y_hat.size();
 }
 
-std::vector<double> MLPPCost::WassersteinLossDeriv(std::vector<double> y_hat, std::vector<double> y) {
+std::vector<real_t> MLPPCost::WassersteinLossDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	MLPPLinAlg alg;
 	return alg.scalarMultiply(-1, y); // Simple.
 }
 
-std::vector<std::vector<double>> MLPPCost::WassersteinLossDeriv(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y) {
+std::vector<std::vector<real_t>> MLPPCost::WassersteinLossDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
 	MLPPLinAlg alg;
 	return alg.scalarMultiply(-1, y); // Simple.
 }
 
-double MLPPCost::HingeLoss(std::vector<double> y_hat, std::vector<double> y, std::vector<double> weights, double C) {
+real_t MLPPCost::HingeLoss(std::vector<real_t> y_hat, std::vector<real_t> y, std::vector<real_t> weights, real_t C) {
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	return C * HingeLoss(y_hat, y) + regularization.regTerm(weights, 1, 0, "Ridge");
 }
-double MLPPCost::HingeLoss(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y, std::vector<std::vector<double>> weights, double C) {
+real_t MLPPCost::HingeLoss(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y, std::vector<std::vector<real_t>> weights, real_t C) {
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	return C * HingeLoss(y_hat, y) + regularization.regTerm(weights, 1, 0, "Ridge");
 }
 
-std::vector<double> MLPPCost::HingeLossDeriv(std::vector<double> y_hat, std::vector<double> y, double C) {
+std::vector<real_t> MLPPCost::HingeLossDeriv(std::vector<real_t> y_hat, std::vector<real_t> y, real_t C) {
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	return alg.scalarMultiply(C, HingeLossDeriv(y_hat, y));
 }
-std::vector<std::vector<double>> MLPPCost::HingeLossDeriv(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y, double C) {
+std::vector<std::vector<real_t>> MLPPCost::HingeLossDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y, real_t C) {
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	return alg.scalarMultiply(C, HingeLossDeriv(y_hat, y));
 }
 
-double MLPPCost::dualFormSVM(std::vector<double> alpha, std::vector<std::vector<double>> X, std::vector<double> y) {
+real_t MLPPCost::dualFormSVM(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<double>> Y = alg.diag(y); // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
-	std::vector<std::vector<double>> K = alg.matmult(X, alg.transpose(X)); // TO DO: DON'T forget to add non-linear kernelizations.
-	std::vector<std::vector<double>> Q = alg.matmult(alg.matmult(alg.transpose(Y), K), Y);
-	double alphaQ = alg.matmult(alg.matmult({ alpha }, Q), alg.transpose({ alpha }))[0][0];
-	std::vector<double> one = alg.onevec(alpha.size());
+	std::vector<std::vector<real_t>> Y = alg.diag(y); // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
+	std::vector<std::vector<real_t>> K = alg.matmult(X, alg.transpose(X)); // TO DO: DON'T forget to add non-linear kernelizations.
+	std::vector<std::vector<real_t>> Q = alg.matmult(alg.matmult(alg.transpose(Y), K), Y);
+	real_t alphaQ = alg.matmult(alg.matmult({ alpha }, Q), alg.transpose({ alpha }))[0][0];
+	std::vector<real_t> one = alg.onevec(alpha.size());
 
 	return -alg.dot(one, alpha) + 0.5 * alphaQ;
 }
 
-std::vector<double> MLPPCost::dualFormSVMDeriv(std::vector<double> alpha, std::vector<std::vector<double>> X, std::vector<double> y) {
+std::vector<real_t> MLPPCost::dualFormSVMDeriv(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<double>> Y = alg.zeromat(y.size(), y.size());
+	std::vector<std::vector<real_t>> Y = alg.zeromat(y.size(), y.size());
 	for (int i = 0; i < y.size(); i++) {
 		Y[i][i] = y[i]; // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
 	}
-	std::vector<std::vector<double>> K = alg.matmult(X, alg.transpose(X)); // TO DO: DON'T forget to add non-linear kernelizations.
-	std::vector<std::vector<double>> Q = alg.matmult(alg.matmult(alg.transpose(Y), K), Y);
-	std::vector<double> alphaQDeriv = alg.mat_vec_mult(Q, alpha);
-	std::vector<double> one = alg.onevec(alpha.size());
+	std::vector<std::vector<real_t>> K = alg.matmult(X, alg.transpose(X)); // TO DO: DON'T forget to add non-linear kernelizations.
+	std::vector<std::vector<real_t>> Q = alg.matmult(alg.matmult(alg.transpose(Y), K), Y);
+	std::vector<real_t> alphaQDeriv = alg.mat_vec_mult(Q, alpha);
+	std::vector<real_t> one = alg.onevec(alpha.size());
 
 	return alg.subtraction(alphaQDeriv, one);
 }

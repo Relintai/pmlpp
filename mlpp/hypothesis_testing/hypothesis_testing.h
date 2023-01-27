@@ -8,13 +8,15 @@
 //  Created by Marc Melikyan on 3/10/21.
 //
 
+#include "core/math/math_defs.h"
+
 #include <tuple>
 #include <vector>
 
 
 class MLPPHypothesisTesting {
 public:
-	std::tuple<bool, double> chiSquareTest(std::vector<double> observed, std::vector<double> expected);
+	std::tuple<bool, real_t> chiSquareTest(std::vector<real_t> observed, std::vector<real_t> expected);
 
 private:
 };

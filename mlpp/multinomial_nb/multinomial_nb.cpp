@@ -13,22 +13,22 @@
 #include <random>
 
 
-MLPPMultinomialNB::MLPPMultinomialNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num) :
+MLPPMultinomialNB::MLPPMultinomialNB(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int class_num) :
 		inputSet(inputSet), outputSet(outputSet), class_num(class_num) {
 	y_hat.resize(outputSet.size());
 	Evaluate();
 }
 
-std::vector<double> MLPPMultinomialNB::modelSetTest(std::vector<std::vector<double>> X) {
-	std::vector<double> y_hat;
+std::vector<real_t> MLPPMultinomialNB::modelSetTest(std::vector<std::vector<real_t>> X) {
+	std::vector<real_t> y_hat;
 	for (int i = 0; i < X.size(); i++) {
 		y_hat.push_back(modelTest(X[i]));
 	}
 	return y_hat;
 }
 
-double MLPPMultinomialNB::modelTest(std::vector<double> x) {
-	double score[class_num];
+real_t MLPPMultinomialNB::modelTest(std::vector<real_t> x) {
+	real_t score[class_num];
 	computeTheta();
 
 	for (int j = 0; j < x.size(); j++) {
@@ -45,10 +45,10 @@ double MLPPMultinomialNB::modelTest(std::vector<double> x) {
 		score[i] += std::log(priors[i]);
 	}
 
-	return std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(double)));
+	return std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(real_t)));
 }
 
-double MLPPMultinomialNB::score() {
+real_t MLPPMultinomialNB::score() {
 	MLPPUtilities   util;
 	return util.performance(y_hat, outputSet);
 }
@@ -81,14 +81,14 @@ void MLPPMultinomialNB::Evaluate() {
 	MLPPLinAlg alg;
 	for (int i = 0; i < outputSet.size(); i++) {
 		// Pr(B | A) * Pr(A)
-		double score[class_num];
+		real_t score[class_num];
 
 		// Easy computation of priors, i.e. Pr(C_k)
 		priors.resize(class_num);
 		for (int i = 0; i < outputSet.size(); i++) {
 			priors[int(outputSet[i])]++;
 		}
-		priors = alg.scalarMultiply(double(1) / double(outputSet.size()), priors);
+		priors = alg.scalarMultiply(real_t(1) / real_t(outputSet.size()), priors);
 
 		// Evaluating Theta...
 		computeTheta();
@@ -113,6 +113,6 @@ void MLPPMultinomialNB::Evaluate() {
 		}
 
 		// Assigning the traning example's y_hat to a class
-		y_hat[i] = std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(double)));
+		y_hat[i] = std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(real_t)));
 	}
 }

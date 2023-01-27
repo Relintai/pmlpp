@@ -11,35 +11,35 @@
 #include <map>
 #include <random>
 
-std::vector<std::vector<double>> MLPPLinAlg::gramMatrix(std::vector<std::vector<double>> A) {
+std::vector<std::vector<real_t>> MLPPLinAlg::gramMatrix(std::vector<std::vector<real_t>> A) {
 	return matmult(transpose(A), A); // AtA
 }
 
-bool MLPPLinAlg::linearIndependenceChecker(std::vector<std::vector<double>> A) {
+bool MLPPLinAlg::linearIndependenceChecker(std::vector<std::vector<real_t>> A) {
 	if (det(gramMatrix(A), A.size()) == 0) {
 		return false;
 	}
 	return true;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::gaussianNoise(int n, int m) {
+std::vector<std::vector<real_t>> MLPPLinAlg::gaussianNoise(int n, int m) {
 	std::random_device rd;
 	std::default_random_engine generator(rd());
 
-	std::vector<std::vector<double>> A;
+	std::vector<std::vector<real_t>> A;
 	A.resize(n);
 	for (int i = 0; i < n; i++) {
 		A[i].resize(m);
 		for (int j = 0; j < m; j++) {
-			std::normal_distribution<double> distribution(0, 1); // Standard normal distribution. Mean of 0, std of 1.
+			std::normal_distribution<real_t> distribution(0, 1); // Standard normal distribution. Mean of 0, std of 1.
 			A[i][j] = distribution(generator);
 		}
 	}
 	return A;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::addition(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B) {
-	std::vector<std::vector<double>> C;
+std::vector<std::vector<real_t>> MLPPLinAlg::addition(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B) {
+	std::vector<std::vector<real_t>> C;
 	C.resize(A.size());
 	for (int i = 0; i < C.size(); i++) {
 		C[i].resize(A[0].size());
@@ -53,8 +53,8 @@ std::vector<std::vector<double>> MLPPLinAlg::addition(std::vector<std::vector<do
 	return C;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::subtraction(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B) {
-	std::vector<std::vector<double>> C;
+std::vector<std::vector<real_t>> MLPPLinAlg::subtraction(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B) {
+	std::vector<std::vector<real_t>> C;
 	C.resize(A.size());
 	for (int i = 0; i < C.size(); i++) {
 		C[i].resize(A[0].size());
@@ -68,8 +68,8 @@ std::vector<std::vector<double>> MLPPLinAlg::subtraction(std::vector<std::vector
 	return C;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::matmult(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B) {
-	std::vector<std::vector<double>> C;
+std::vector<std::vector<real_t>> MLPPLinAlg::matmult(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B) {
+	std::vector<std::vector<real_t>> C;
 	C.resize(A.size());
 	for (int i = 0; i < C.size(); i++) {
 		C[i].resize(B[0].size());
@@ -85,8 +85,8 @@ std::vector<std::vector<double>> MLPPLinAlg::matmult(std::vector<std::vector<dou
 	return C;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::hadamard_product(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B) {
-	std::vector<std::vector<double>> C;
+std::vector<std::vector<real_t>> MLPPLinAlg::hadamard_product(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B) {
+	std::vector<std::vector<real_t>> C;
 	C.resize(A.size());
 	for (int i = 0; i < C.size(); i++) {
 		C[i].resize(A[0].size());
@@ -100,8 +100,8 @@ std::vector<std::vector<double>> MLPPLinAlg::hadamard_product(std::vector<std::v
 	return C;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::kronecker_product(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B) {
-	std::vector<std::vector<double>> C;
+std::vector<std::vector<real_t>> MLPPLinAlg::kronecker_product(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B) {
+	std::vector<std::vector<real_t>> C;
 
 	// [1,1,1,1]   [1,2,3,4,5]
 	// [1,1,1,1]   [1,2,3,4,5]
@@ -119,7 +119,7 @@ std::vector<std::vector<double>> MLPPLinAlg::kronecker_product(std::vector<std::
 
 	for (int i = 0; i < A.size(); i++) {
 		for (int j = 0; j < B.size(); j++) {
-			std::vector<std::vector<double>> row;
+			std::vector<std::vector<real_t>> row;
 			for (int k = 0; k < A[0].size(); k++) {
 				row.push_back(scalarMultiply(A[i][k], B[j]));
 			}
@@ -129,8 +129,8 @@ std::vector<std::vector<double>> MLPPLinAlg::kronecker_product(std::vector<std::
 	return C;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::elementWiseDivision(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B) {
-	std::vector<std::vector<double>> C;
+std::vector<std::vector<real_t>> MLPPLinAlg::elementWiseDivision(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B) {
+	std::vector<std::vector<real_t>> C;
 	C.resize(A.size());
 	for (int i = 0; i < C.size(); i++) {
 		C[i].resize(A[0].size());
@@ -143,8 +143,8 @@ std::vector<std::vector<double>> MLPPLinAlg::elementWiseDivision(std::vector<std
 	return C;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::transpose(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> AT;
+std::vector<std::vector<real_t>> MLPPLinAlg::transpose(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> AT;
 	AT.resize(A[0].size());
 	for (int i = 0; i < AT.size(); i++) {
 		AT[i].resize(A.size());
@@ -158,7 +158,7 @@ std::vector<std::vector<double>> MLPPLinAlg::transpose(std::vector<std::vector<d
 	return AT;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::scalarMultiply(double scalar, std::vector<std::vector<double>> A) {
+std::vector<std::vector<real_t>> MLPPLinAlg::scalarMultiply(real_t scalar, std::vector<std::vector<real_t>> A) {
 	for (int i = 0; i < A.size(); i++) {
 		for (int j = 0; j < A[i].size(); j++) {
 			A[i][j] *= scalar;
@@ -167,7 +167,7 @@ std::vector<std::vector<double>> MLPPLinAlg::scalarMultiply(double scalar, std::
 	return A;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::scalarAdd(double scalar, std::vector<std::vector<double>> A) {
+std::vector<std::vector<real_t>> MLPPLinAlg::scalarAdd(real_t scalar, std::vector<std::vector<real_t>> A) {
 	for (int i = 0; i < A.size(); i++) {
 		for (int j = 0; j < A[i].size(); j++) {
 			A[i][j] += scalar;
@@ -176,8 +176,8 @@ std::vector<std::vector<double>> MLPPLinAlg::scalarAdd(double scalar, std::vecto
 	return A;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::log(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> B;
+std::vector<std::vector<real_t>> MLPPLinAlg::log(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
 	for (int i = 0; i < B.size(); i++) {
 		B[i].resize(A[0].size());
@@ -190,8 +190,8 @@ std::vector<std::vector<double>> MLPPLinAlg::log(std::vector<std::vector<double>
 	return B;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::log10(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> B;
+std::vector<std::vector<real_t>> MLPPLinAlg::log10(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
 	for (int i = 0; i < B.size(); i++) {
 		B[i].resize(A[0].size());
@@ -204,8 +204,8 @@ std::vector<std::vector<double>> MLPPLinAlg::log10(std::vector<std::vector<doubl
 	return B;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::exp(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> B;
+std::vector<std::vector<real_t>> MLPPLinAlg::exp(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
 	for (int i = 0; i < B.size(); i++) {
 		B[i].resize(A[0].size());
@@ -218,8 +218,8 @@ std::vector<std::vector<double>> MLPPLinAlg::exp(std::vector<std::vector<double>
 	return B;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::erf(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> B;
+std::vector<std::vector<real_t>> MLPPLinAlg::erf(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
 	for (int i = 0; i < B.size(); i++) {
 		B[i].resize(A[0].size());
@@ -232,7 +232,7 @@ std::vector<std::vector<double>> MLPPLinAlg::erf(std::vector<std::vector<double>
 	return B;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::exponentiate(std::vector<std::vector<double>> A, double p) {
+std::vector<std::vector<real_t>> MLPPLinAlg::exponentiate(std::vector<std::vector<real_t>> A, real_t p) {
 	for (int i = 0; i < A.size(); i++) {
 		for (int j = 0; j < A[i].size(); j++) {
 			A[i][j] = std::pow(A[i][j], p);
@@ -241,16 +241,16 @@ std::vector<std::vector<double>> MLPPLinAlg::exponentiate(std::vector<std::vecto
 	return A;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::sqrt(std::vector<std::vector<double>> A) {
+std::vector<std::vector<real_t>> MLPPLinAlg::sqrt(std::vector<std::vector<real_t>> A) {
 	return exponentiate(A, 0.5);
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::cbrt(std::vector<std::vector<double>> A) {
-	return exponentiate(A, double(1) / double(3));
+std::vector<std::vector<real_t>> MLPPLinAlg::cbrt(std::vector<std::vector<real_t>> A) {
+	return exponentiate(A, real_t(1) / real_t(3));
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::matrixPower(std::vector<std::vector<double>> A, int n) {
-	std::vector<std::vector<double>> B = identity(A.size());
+std::vector<std::vector<real_t>> MLPPLinAlg::matrixPower(std::vector<std::vector<real_t>> A, int n) {
+	std::vector<std::vector<real_t>> B = identity(A.size());
 	if (n == 0) {
 		return identity(A.size());
 	} else if (n < 0) {
@@ -262,8 +262,8 @@ std::vector<std::vector<double>> MLPPLinAlg::matrixPower(std::vector<std::vector
 	return B;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::abs(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> B;
+std::vector<std::vector<real_t>> MLPPLinAlg::abs(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
 	for (int i = 0; i < B.size(); i++) {
 		B[i].resize(A[0].size());
@@ -276,9 +276,9 @@ std::vector<std::vector<double>> MLPPLinAlg::abs(std::vector<std::vector<double>
 	return B;
 }
 
-double MLPPLinAlg::det(std::vector<std::vector<double>> A, int d) {
-	double deter = 0;
-	std::vector<std::vector<double>> B;
+real_t MLPPLinAlg::det(std::vector<std::vector<real_t>> A, int d) {
+	real_t deter = 0;
+	std::vector<std::vector<real_t>> B;
 	B.resize(d);
 	for (int i = 0; i < d; i++) {
 		B[i].resize(d);
@@ -311,16 +311,16 @@ double MLPPLinAlg::det(std::vector<std::vector<double>> A, int d) {
 	return deter;
 }
 
-double MLPPLinAlg::trace(std::vector<std::vector<double>> A) {
-	double trace = 0;
+real_t MLPPLinAlg::trace(std::vector<std::vector<real_t>> A) {
+	real_t trace = 0;
 	for (int i = 0; i < A.size(); i++) {
 		trace += A[i][i];
 	}
 	return trace;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::cofactor(std::vector<std::vector<double>> A, int n, int i, int j) {
-	std::vector<std::vector<double>> cof;
+std::vector<std::vector<real_t>> MLPPLinAlg::cofactor(std::vector<std::vector<real_t>> A, int n, int i, int j) {
+	std::vector<std::vector<real_t>> cof;
 	cof.resize(A.size());
 	for (int i = 0; i < cof.size(); i++) {
 		cof[i].resize(A.size());
@@ -342,9 +342,9 @@ std::vector<std::vector<double>> MLPPLinAlg::cofactor(std::vector<std::vector<do
 	return cof;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::adjoint(std::vector<std::vector<double>> A) {
+std::vector<std::vector<real_t>> MLPPLinAlg::adjoint(std::vector<std::vector<real_t>> A) {
 	//Resizing the initial adjoint matrix
-	std::vector<std::vector<double>> adj;
+	std::vector<std::vector<real_t>> adj;
 	adj.resize(A.size());
 	for (int i = 0; i < adj.size(); i++) {
 		adj[i].resize(A.size());
@@ -367,7 +367,7 @@ std::vector<std::vector<double>> MLPPLinAlg::adjoint(std::vector<std::vector<dou
 
 	for (int i = 0; i < A.size(); i++) {
 		for (int j = 0; j < A.size(); j++) {
-			std::vector<std::vector<double>> cof = cofactor(A, int(A.size()), i, j);
+			std::vector<std::vector<real_t>> cof = cofactor(A, int(A.size()), i, j);
 			// 1 if even, -1 if odd
 			int sign = (i + j) % 2 == 0 ? 1 : -1;
 			adj[j][i] = sign * det(cof, int(A.size()) - 1);
@@ -377,17 +377,17 @@ std::vector<std::vector<double>> MLPPLinAlg::adjoint(std::vector<std::vector<dou
 }
 
 // The inverse can be computed as (1 / determinant(A)) * adjoint(A)
-std::vector<std::vector<double>> MLPPLinAlg::inverse(std::vector<std::vector<double>> A) {
+std::vector<std::vector<real_t>> MLPPLinAlg::inverse(std::vector<std::vector<real_t>> A) {
 	return scalarMultiply(1 / det(A, int(A.size())), adjoint(A));
 }
 
 // This is simply the Moore-Penrose least squares approximation of the inverse.
-std::vector<std::vector<double>> MLPPLinAlg::pinverse(std::vector<std::vector<double>> A) {
+std::vector<std::vector<real_t>> MLPPLinAlg::pinverse(std::vector<std::vector<real_t>> A) {
 	return matmult(inverse(matmult(transpose(A), A)), transpose(A));
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::zeromat(int n, int m) {
-	std::vector<std::vector<double>> zeromat;
+std::vector<std::vector<real_t>> MLPPLinAlg::zeromat(int n, int m) {
+	std::vector<std::vector<real_t>> zeromat;
 	zeromat.resize(n);
 	for (int i = 0; i < zeromat.size(); i++) {
 		zeromat[i].resize(m);
@@ -395,12 +395,12 @@ std::vector<std::vector<double>> MLPPLinAlg::zeromat(int n, int m) {
 	return zeromat;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::onemat(int n, int m) {
+std::vector<std::vector<real_t>> MLPPLinAlg::onemat(int n, int m) {
 	return full(n, m, 1);
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::full(int n, int m, int k) {
-	std::vector<std::vector<double>> full;
+std::vector<std::vector<real_t>> MLPPLinAlg::full(int n, int m, int k) {
+	std::vector<std::vector<real_t>> full;
 	full.resize(n);
 	for (int i = 0; i < full.size(); i++) {
 		full[i].resize(m);
@@ -413,8 +413,8 @@ std::vector<std::vector<double>> MLPPLinAlg::full(int n, int m, int k) {
 	return full;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::sin(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> B;
+std::vector<std::vector<real_t>> MLPPLinAlg::sin(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
 	for (int i = 0; i < B.size(); i++) {
 		B[i].resize(A[0].size());
@@ -427,8 +427,8 @@ std::vector<std::vector<double>> MLPPLinAlg::sin(std::vector<std::vector<double>
 	return B;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::cos(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> B;
+std::vector<std::vector<real_t>> MLPPLinAlg::cos(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
 	for (int i = 0; i < B.size(); i++) {
 		B[i].resize(A[0].size());
@@ -441,8 +441,8 @@ std::vector<std::vector<double>> MLPPLinAlg::cos(std::vector<std::vector<double>
 	return B;
 }
 
-std::vector<double> MLPPLinAlg::max(std::vector<double> a, std::vector<double> b) {
-	std::vector<double> c;
+std::vector<real_t> MLPPLinAlg::max(std::vector<real_t> a, std::vector<real_t> b) {
+	std::vector<real_t> c;
 	c.resize(a.size());
 	for (int i = 0; i < c.size(); i++) {
 		if (a[i] >= b[i]) {
@@ -454,16 +454,16 @@ std::vector<double> MLPPLinAlg::max(std::vector<double> a, std::vector<double> b
 	return c;
 }
 
-double MLPPLinAlg::max(std::vector<std::vector<double>> A) {
+real_t MLPPLinAlg::max(std::vector<std::vector<real_t>> A) {
 	return max(flatten(A));
 }
 
-double MLPPLinAlg::min(std::vector<std::vector<double>> A) {
+real_t MLPPLinAlg::min(std::vector<std::vector<real_t>> A) {
 	return min(flatten(A));
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::round(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> B;
+std::vector<std::vector<real_t>> MLPPLinAlg::round(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
 	for (int i = 0; i < B.size(); i++) {
 		B[i].resize(A[0].size());
@@ -476,8 +476,8 @@ std::vector<std::vector<double>> MLPPLinAlg::round(std::vector<std::vector<doubl
 	return B;
 }
 
-double MLPPLinAlg::norm_2(std::vector<std::vector<double>> A) {
-	double sum = 0;
+real_t MLPPLinAlg::norm_2(std::vector<std::vector<real_t>> A) {
+	real_t sum = 0;
 	for (int i = 0; i < A.size(); i++) {
 		for (int j = 0; j < A[i].size(); j++) {
 			sum += A[i][j] * A[i][j];
@@ -486,8 +486,8 @@ double MLPPLinAlg::norm_2(std::vector<std::vector<double>> A) {
 	return std::sqrt(sum);
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::identity(double d) {
-	std::vector<std::vector<double>> identityMat;
+std::vector<std::vector<real_t>> MLPPLinAlg::identity(real_t d) {
+	std::vector<std::vector<real_t>> identityMat;
 	identityMat.resize(d);
 	for (int i = 0; i < identityMat.size(); i++) {
 		identityMat[i].resize(d);
@@ -504,9 +504,9 @@ std::vector<std::vector<double>> MLPPLinAlg::identity(double d) {
 	return identityMat;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::cov(std::vector<std::vector<double>> A) {
+std::vector<std::vector<real_t>> MLPPLinAlg::cov(std::vector<std::vector<real_t>> A) {
 	MLPPStat stat;
-	std::vector<std::vector<double>> covMat;
+	std::vector<std::vector<real_t>> covMat;
 	covMat.resize(A.size());
 	for (int i = 0; i < covMat.size(); i++) {
 		covMat[i].resize(A.size());
@@ -519,22 +519,22 @@ std::vector<std::vector<double>> MLPPLinAlg::cov(std::vector<std::vector<double>
 	return covMat;
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPLinAlg::eig(std::vector<std::vector<double>> A) {
+std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPLinAlg::eig(std::vector<std::vector<real_t>> A) {
 	/*
 	A (the entered parameter) in most use cases will be X'X, XX', etc. and must be symmetric.
 	That simply means that 1) X' = X and 2) X is a square matrix. This function that computes the
 	eigenvalues of a matrix is utilizing Jacobi's method.
 	*/
 
-	double diagonal = true; // Perform the iterative Jacobi algorithm unless and until we reach a diagonal matrix which yields us the eigenvals.
+	real_t diagonal = true; // Perform the iterative Jacobi algorithm unless and until we reach a diagonal matrix which yields us the eigenvals.
 
 	std::map<int, int> val_to_vec;
-	std::vector<std::vector<double>> a_new;
-	std::vector<std::vector<double>> eigenvectors = identity(A.size());
+	std::vector<std::vector<real_t>> a_new;
+	std::vector<std::vector<real_t>> eigenvectors = identity(A.size());
 	do {
-		double a_ij = A[0][1];
-		double sub_i = 0;
-		double sub_j = 1;
+		real_t a_ij = A[0][1];
+		real_t sub_i = 0;
+		real_t sub_j = 1;
 		for (int i = 0; i < A.size(); i++) {
 			for (int j = 0; j < A[i].size(); j++) {
 				if (i != j && std::abs(A[i][j]) > a_ij) {
@@ -551,10 +551,10 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> M
 			}
 		}
 
-		double a_ii = A[sub_i][sub_i];
-		double a_jj = A[sub_j][sub_j];
-		double a_ji = A[sub_j][sub_i];
-		double theta;
+		real_t a_ii = A[sub_i][sub_i];
+		real_t a_jj = A[sub_j][sub_j];
+		real_t a_ji = A[sub_j][sub_i];
+		real_t theta;
 
 		if (a_ii == a_jj) {
 			theta = M_PI / 4;
@@ -562,7 +562,7 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> M
 			theta = 0.5 * atan(2 * a_ij / (a_ii - a_jj));
 		}
 
-		std::vector<std::vector<double>> P = identity(A.size());
+		std::vector<std::vector<real_t>> P = identity(A.size());
 		P[sub_i][sub_j] = -std::sin(theta);
 		P[sub_i][sub_i] = std::cos(theta);
 		P[sub_j][sub_j] = std::cos(theta);
@@ -609,13 +609,13 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> M
 
 	} while (!diagonal);
 
-	std::vector<std::vector<double>> a_new_prior = a_new;
+	std::vector<std::vector<real_t>> a_new_prior = a_new;
 
 	// Bubble Sort. Should change this later.
 	for (int i = 0; i < a_new.size() - 1; i++) {
 		for (int j = 0; j < a_new.size() - 1 - i; j++) {
 			if (a_new[j][j] < a_new[j + 1][j + 1]) {
-				double temp = a_new[j + 1][j + 1];
+				real_t temp = a_new[j + 1][j + 1];
 				a_new[j + 1][j + 1] = a_new[j][j];
 				a_new[j][j] = temp;
 			}
@@ -630,7 +630,7 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> M
 		}
 	}
 
-	std::vector<std::vector<double>> eigen_temp = eigenvectors;
+	std::vector<std::vector<real_t>> eigen_temp = eigenvectors;
 	for (int i = 0; i < eigenvectors.size(); i++) {
 		for (int j = 0; j < eigenvectors[i].size(); j++) {
 			eigenvectors[i][j] = eigen_temp[i][val_to_vec[j]];
@@ -639,22 +639,22 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> M
 	return { eigenvectors, a_new };
 }
 
-MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<double>> A) {
+MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<real_t>> A) {
 	/*
 	A (the entered parameter) in most use cases will be X'X, XX', etc. and must be symmetric.
 	That simply means that 1) X' = X and 2) X is a square matrix. This function that computes the
 	eigenvalues of a matrix is utilizing Jacobi's method.
 	*/
 
-	double diagonal = true; // Perform the iterative Jacobi algorithm unless and until we reach a diagonal matrix which yields us the eigenvals.
+	real_t diagonal = true; // Perform the iterative Jacobi algorithm unless and until we reach a diagonal matrix which yields us the eigenvals.
 
 	std::map<int, int> val_to_vec;
-	std::vector<std::vector<double>> a_new;
-	std::vector<std::vector<double>> eigenvectors = identity(A.size());
+	std::vector<std::vector<real_t>> a_new;
+	std::vector<std::vector<real_t>> eigenvectors = identity(A.size());
 	do {
-		double a_ij = A[0][1];
-		double sub_i = 0;
-		double sub_j = 1;
+		real_t a_ij = A[0][1];
+		real_t sub_i = 0;
+		real_t sub_j = 1;
 		for (int i = 0; i < A.size(); i++) {
 			for (int j = 0; j < A[i].size(); j++) {
 				if (i != j && std::abs(A[i][j]) > a_ij) {
@@ -671,10 +671,10 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<double>> A) {
 			}
 		}
 
-		double a_ii = A[sub_i][sub_i];
-		double a_jj = A[sub_j][sub_j];
-		double a_ji = A[sub_j][sub_i];
-		double theta;
+		real_t a_ii = A[sub_i][sub_i];
+		real_t a_jj = A[sub_j][sub_j];
+		real_t a_ji = A[sub_j][sub_i];
+		real_t theta;
 
 		if (a_ii == a_jj) {
 			theta = M_PI / 4;
@@ -682,7 +682,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<double>> A) {
 			theta = 0.5 * atan(2 * a_ij / (a_ii - a_jj));
 		}
 
-		std::vector<std::vector<double>> P = identity(A.size());
+		std::vector<std::vector<real_t>> P = identity(A.size());
 		P[sub_i][sub_j] = -std::sin(theta);
 		P[sub_i][sub_i] = std::cos(theta);
 		P[sub_j][sub_j] = std::cos(theta);
@@ -729,13 +729,13 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<double>> A) {
 
 	} while (!diagonal);
 
-	std::vector<std::vector<double>> a_new_prior = a_new;
+	std::vector<std::vector<real_t>> a_new_prior = a_new;
 
 	// Bubble Sort. Should change this later.
 	for (int i = 0; i < a_new.size() - 1; i++) {
 		for (int j = 0; j < a_new.size() - 1 - i; j++) {
 			if (a_new[j][j] < a_new[j + 1][j + 1]) {
-				double temp = a_new[j + 1][j + 1];
+				real_t temp = a_new[j + 1][j + 1];
 				a_new[j + 1][j + 1] = a_new[j][j];
 				a_new[j][j] = temp;
 			}
@@ -750,7 +750,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<double>> A) {
 		}
 	}
 
-	std::vector<std::vector<double>> eigen_temp = eigenvectors;
+	std::vector<std::vector<real_t>> eigen_temp = eigenvectors;
 	for (int i = 0; i < eigenvectors.size(); i++) {
 		for (int j = 0; j < eigenvectors[i].size(); j++) {
 			eigenvectors[i][j] = eigen_temp[i][val_to_vec[j]];
@@ -764,12 +764,12 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<double>> A) {
 	return res;
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPLinAlg::SVD(std::vector<std::vector<double>> A) {
+std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
 	auto [left_eigenvecs, eigenvals] = eig(matmult(A, transpose(A)));
 	auto [right_eigenvecs, right_eigenvals] = eig(matmult(transpose(A), A));
 
-	std::vector<std::vector<double>> singularvals = sqrt(eigenvals);
-	std::vector<std::vector<double>> sigma = zeromat(A.size(), A[0].size());
+	std::vector<std::vector<real_t>> singularvals = sqrt(eigenvals);
+	std::vector<std::vector<real_t>> sigma = zeromat(A.size(), A[0].size());
 	for (int i = 0; i < singularvals.size(); i++) {
 		for (int j = 0; j < singularvals[i].size(); j++) {
 			sigma[i][j] = singularvals[i][j];
@@ -778,12 +778,12 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>, s
 	return { left_eigenvecs, sigma, right_eigenvecs };
 }
 
-MLPPLinAlg::SDVResult MLPPLinAlg::svd(std::vector<std::vector<double>> A) {
+MLPPLinAlg::SDVResult MLPPLinAlg::svd(std::vector<std::vector<real_t>> A) {
 	EigenResult left_eigen = eigen(matmult(A, transpose(A)));
 	EigenResult right_eigen = eigen(matmult(transpose(A), A));
 
-	std::vector<std::vector<double>> singularvals = sqrt(left_eigen.eigen_values);
-	std::vector<std::vector<double>> sigma = zeromat(A.size(), A[0].size());
+	std::vector<std::vector<real_t>> singularvals = sqrt(left_eigen.eigen_values);
+	std::vector<std::vector<real_t>> sigma = zeromat(A.size(), A[0].size());
 	for (int i = 0; i < singularvals.size(); i++) {
 		for (int j = 0; j < singularvals[i].size(); j++) {
 			sigma[i][j] = singularvals[i][j];
@@ -798,14 +798,14 @@ MLPPLinAlg::SDVResult MLPPLinAlg::svd(std::vector<std::vector<double>> A) {
 	return res;
 }
 
-std::vector<double> MLPPLinAlg::vectorProjection(std::vector<double> a, std::vector<double> b) {
-	double product = dot(a, b) / dot(a, a);
+std::vector<real_t> MLPPLinAlg::vectorProjection(std::vector<real_t> a, std::vector<real_t> b) {
+	real_t product = dot(a, b) / dot(a, a);
 	return scalarMultiply(product, a); // Projection of vector a onto b. Denotated as proj_a(b).
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::gramSchmidtProcess(std::vector<std::vector<double>> A) {
+std::vector<std::vector<real_t>> MLPPLinAlg::gramSchmidtProcess(std::vector<std::vector<real_t>> A) {
 	A = transpose(A); // C++ vectors lack a mechanism to directly index columns. So, we transpose *a copy* of A for this purpose for ease of use.
-	std::vector<std::vector<double>> B;
+	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
 	for (int i = 0; i < B.size(); i++) {
 		B[i].resize(A[0].size());
@@ -823,13 +823,13 @@ std::vector<std::vector<double>> MLPPLinAlg::gramSchmidtProcess(std::vector<std:
 	return transpose(B); // We re-transpose the marix.
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPLinAlg::QRD(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> Q = gramSchmidtProcess(A);
-	std::vector<std::vector<double>> R = matmult(transpose(Q), A);
+std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPLinAlg::QRD(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> Q = gramSchmidtProcess(A);
+	std::vector<std::vector<real_t>> R = matmult(transpose(Q), A);
 	return { Q, R };
 }
 
-MLPPLinAlg::QRDResult MLPPLinAlg::qrd(std::vector<std::vector<double>> A) {
+MLPPLinAlg::QRDResult MLPPLinAlg::qrd(std::vector<std::vector<real_t>> A) {
 	QRDResult res;
 
 	res.Q = gramSchmidtProcess(A);
@@ -838,18 +838,18 @@ MLPPLinAlg::QRDResult MLPPLinAlg::qrd(std::vector<std::vector<double>> A) {
 	return res;
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPLinAlg::chol(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> L = zeromat(A.size(), A[0].size());
+std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPLinAlg::chol(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> L = zeromat(A.size(), A[0].size());
 	for (int j = 0; j < L.size(); j++) { // Matrices entered must be square. No problem here.
 		for (int i = j; i < L.size(); i++) {
 			if (i == j) {
-				double sum = 0;
+				real_t sum = 0;
 				for (int k = 0; k < j; k++) {
 					sum += L[i][k] * L[i][k];
 				}
 				L[i][j] = std::sqrt(A[i][j] - sum);
 			} else { // That is, i!=j
-				double sum = 0;
+				real_t sum = 0;
 				for (int k = 0; k < j; k++) {
 					sum += L[i][k] * L[j][k];
 				}
@@ -860,18 +860,18 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> M
 	return { L, transpose(L) }; // Indeed, L.T is our upper triangular matrix.
 }
 
-MLPPLinAlg::CholeskyResult MLPPLinAlg::cholesky(std::vector<std::vector<double>> A) {
-	std::vector<std::vector<double>> L = zeromat(A.size(), A[0].size());
+MLPPLinAlg::CholeskyResult MLPPLinAlg::cholesky(std::vector<std::vector<real_t>> A) {
+	std::vector<std::vector<real_t>> L = zeromat(A.size(), A[0].size());
 	for (int j = 0; j < L.size(); j++) { // Matrices entered must be square. No problem here.
 		for (int i = j; i < L.size(); i++) {
 			if (i == j) {
-				double sum = 0;
+				real_t sum = 0;
 				for (int k = 0; k < j; k++) {
 					sum += L[i][k] * L[i][k];
 				}
 				L[i][j] = std::sqrt(A[i][j] - sum);
 			} else { // That is, i!=j
-				double sum = 0;
+				real_t sum = 0;
 				for (int k = 0; k < j; k++) {
 					sum += L[i][k] * L[j][k];
 				}
@@ -887,8 +887,8 @@ MLPPLinAlg::CholeskyResult MLPPLinAlg::cholesky(std::vector<std::vector<double>>
 	return res;
 }
 
-double MLPPLinAlg::sum_elements(std::vector<std::vector<double>> A) {
-	double sum = 0;
+real_t MLPPLinAlg::sum_elements(std::vector<std::vector<real_t>> A) {
+	real_t sum = 0;
 	for (int i = 0; i < A.size(); i++) {
 		for (int j = 0; j < A[i].size(); j++) {
 			sum += A[i][j];
@@ -897,8 +897,8 @@ double MLPPLinAlg::sum_elements(std::vector<std::vector<double>> A) {
 	return sum;
 }
 
-std::vector<double> MLPPLinAlg::flatten(std::vector<std::vector<double>> A) {
-	std::vector<double> a;
+std::vector<real_t> MLPPLinAlg::flatten(std::vector<std::vector<real_t>> A) {
+	std::vector<real_t> a;
 	for (int i = 0; i < A.size(); i++) {
 		for (int j = 0; j < A[i].size(); j++) {
 			a.push_back(A[i][j]);
@@ -907,13 +907,13 @@ std::vector<double> MLPPLinAlg::flatten(std::vector<std::vector<double>> A) {
 	return a;
 }
 
-std::vector<double> MLPPLinAlg::solve(std::vector<std::vector<double>> A, std::vector<double> b) {
+std::vector<real_t> MLPPLinAlg::solve(std::vector<std::vector<real_t>> A, std::vector<real_t> b) {
 	return mat_vec_mult(inverse(A), b);
 }
 
-bool MLPPLinAlg::positiveDefiniteChecker(std::vector<std::vector<double>> A) {
+bool MLPPLinAlg::positiveDefiniteChecker(std::vector<std::vector<real_t>> A) {
 	auto [eigenvectors, eigenvals] = eig(A);
-	std::vector<double> eigenvals_vec;
+	std::vector<real_t> eigenvals_vec;
 	for (int i = 0; i < eigenvals.size(); i++) {
 		eigenvals_vec.push_back(eigenvals[i][i]);
 	}
@@ -925,9 +925,9 @@ bool MLPPLinAlg::positiveDefiniteChecker(std::vector<std::vector<double>> A) {
 	return true;
 }
 
-bool MLPPLinAlg::negativeDefiniteChecker(std::vector<std::vector<double>> A) {
+bool MLPPLinAlg::negativeDefiniteChecker(std::vector<std::vector<real_t>> A) {
 	auto [eigenvectors, eigenvals] = eig(A);
-	std::vector<double> eigenvals_vec;
+	std::vector<real_t> eigenvals_vec;
 	for (int i = 0; i < eigenvals.size(); i++) {
 		eigenvals_vec.push_back(eigenvals[i][i]);
 	}
@@ -939,9 +939,9 @@ bool MLPPLinAlg::negativeDefiniteChecker(std::vector<std::vector<double>> A) {
 	return true;
 }
 
-bool MLPPLinAlg::zeroEigenvalue(std::vector<std::vector<double>> A) {
+bool MLPPLinAlg::zeroEigenvalue(std::vector<std::vector<real_t>> A) {
 	auto [eigenvectors, eigenvals] = eig(A);
-	std::vector<double> eigenvals_vec;
+	std::vector<real_t> eigenvals_vec;
 	for (int i = 0; i < eigenvals.size(); i++) {
 		eigenvals_vec.push_back(eigenvals[i][i]);
 	}
@@ -953,7 +953,7 @@ bool MLPPLinAlg::zeroEigenvalue(std::vector<std::vector<double>> A) {
 	return false;
 }
 
-void MLPPLinAlg::printMatrix(std::vector<std::vector<double>> A) {
+void MLPPLinAlg::printMatrix(std::vector<std::vector<real_t>> A) {
 	for (int i = 0; i < A.size(); i++) {
 		for (int j = 0; j < A[i].size(); j++) {
 			std::cout << A[i][j] << " ";
@@ -962,8 +962,8 @@ void MLPPLinAlg::printMatrix(std::vector<std::vector<double>> A) {
 	}
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::outerProduct(std::vector<double> a, std::vector<double> b) {
-	std::vector<std::vector<double>> C;
+std::vector<std::vector<real_t>> MLPPLinAlg::outerProduct(std::vector<real_t> a, std::vector<real_t> b) {
+	std::vector<std::vector<real_t>> C;
 	C.resize(a.size());
 	for (int i = 0; i < C.size(); i++) {
 		C[i] = scalarMultiply(a[i], b);
@@ -971,8 +971,8 @@ std::vector<std::vector<double>> MLPPLinAlg::outerProduct(std::vector<double> a,
 	return C;
 }
 
-std::vector<double> MLPPLinAlg::hadamard_product(std::vector<double> a, std::vector<double> b) {
-	std::vector<double> c;
+std::vector<real_t> MLPPLinAlg::hadamard_product(std::vector<real_t> a, std::vector<real_t> b) {
+	std::vector<real_t> c;
 	c.resize(a.size());
 
 	for (int i = 0; i < a.size(); i++) {
@@ -982,8 +982,8 @@ std::vector<double> MLPPLinAlg::hadamard_product(std::vector<double> a, std::vec
 	return c;
 }
 
-std::vector<double> MLPPLinAlg::elementWiseDivision(std::vector<double> a, std::vector<double> b) {
-	std::vector<double> c;
+std::vector<real_t> MLPPLinAlg::elementWiseDivision(std::vector<real_t> a, std::vector<real_t> b) {
+	std::vector<real_t> c;
 	c.resize(a.size());
 
 	for (int i = 0; i < a.size(); i++) {
@@ -992,22 +992,22 @@ std::vector<double> MLPPLinAlg::elementWiseDivision(std::vector<double> a, std::
 	return c;
 }
 
-std::vector<double> MLPPLinAlg::scalarMultiply(double scalar, std::vector<double> a) {
+std::vector<real_t> MLPPLinAlg::scalarMultiply(real_t scalar, std::vector<real_t> a) {
 	for (int i = 0; i < a.size(); i++) {
 		a[i] *= scalar;
 	}
 	return a;
 }
 
-std::vector<double> MLPPLinAlg::scalarAdd(double scalar, std::vector<double> a) {
+std::vector<real_t> MLPPLinAlg::scalarAdd(real_t scalar, std::vector<real_t> a) {
 	for (int i = 0; i < a.size(); i++) {
 		a[i] += scalar;
 	}
 	return a;
 }
 
-std::vector<double> MLPPLinAlg::addition(std::vector<double> a, std::vector<double> b) {
-	std::vector<double> c;
+std::vector<real_t> MLPPLinAlg::addition(std::vector<real_t> a, std::vector<real_t> b) {
+	std::vector<real_t> c;
 	c.resize(a.size());
 	for (int i = 0; i < a.size(); i++) {
 		c[i] = a[i] + b[i];
@@ -1015,8 +1015,8 @@ std::vector<double> MLPPLinAlg::addition(std::vector<double> a, std::vector<doub
 	return c;
 }
 
-std::vector<double> MLPPLinAlg::subtraction(std::vector<double> a, std::vector<double> b) {
-	std::vector<double> c;
+std::vector<real_t> MLPPLinAlg::subtraction(std::vector<real_t> a, std::vector<real_t> b) {
+	std::vector<real_t> c;
 	c.resize(a.size());
 	for (int i = 0; i < a.size(); i++) {
 		c[i] = a[i] - b[i];
@@ -1024,15 +1024,15 @@ std::vector<double> MLPPLinAlg::subtraction(std::vector<double> a, std::vector<d
 	return c;
 }
 
-std::vector<double> MLPPLinAlg::subtractMatrixRows(std::vector<double> a, std::vector<std::vector<double>> B) {
+std::vector<real_t> MLPPLinAlg::subtractMatrixRows(std::vector<real_t> a, std::vector<std::vector<real_t>> B) {
 	for (int i = 0; i < B.size(); i++) {
 		a = subtraction(a, B[i]);
 	}
 	return a;
 }
 
-std::vector<double> MLPPLinAlg::log(std::vector<double> a) {
-	std::vector<double> b;
+std::vector<real_t> MLPPLinAlg::log(std::vector<real_t> a) {
+	std::vector<real_t> b;
 	b.resize(a.size());
 	for (int i = 0; i < a.size(); i++) {
 		b[i] = std::log(a[i]);
@@ -1040,8 +1040,8 @@ std::vector<double> MLPPLinAlg::log(std::vector<double> a) {
 	return b;
 }
 
-std::vector<double> MLPPLinAlg::log10(std::vector<double> a) {
-	std::vector<double> b;
+std::vector<real_t> MLPPLinAlg::log10(std::vector<real_t> a) {
+	std::vector<real_t> b;
 	b.resize(a.size());
 	for (int i = 0; i < a.size(); i++) {
 		b[i] = std::log10(a[i]);
@@ -1049,8 +1049,8 @@ std::vector<double> MLPPLinAlg::log10(std::vector<double> a) {
 	return b;
 }
 
-std::vector<double> MLPPLinAlg::exp(std::vector<double> a) {
-	std::vector<double> b;
+std::vector<real_t> MLPPLinAlg::exp(std::vector<real_t> a) {
+	std::vector<real_t> b;
 	b.resize(a.size());
 	for (int i = 0; i < a.size(); i++) {
 		b[i] = std::exp(a[i]);
@@ -1058,8 +1058,8 @@ std::vector<double> MLPPLinAlg::exp(std::vector<double> a) {
 	return b;
 }
 
-std::vector<double> MLPPLinAlg::erf(std::vector<double> a) {
-	std::vector<double> b;
+std::vector<real_t> MLPPLinAlg::erf(std::vector<real_t> a) {
+	std::vector<real_t> b;
 	b.resize(a.size());
 	for (int i = 0; i < a.size(); i++) {
 		b[i] = std::erf(a[i]);
@@ -1067,8 +1067,8 @@ std::vector<double> MLPPLinAlg::erf(std::vector<double> a) {
 	return b;
 }
 
-std::vector<double> MLPPLinAlg::exponentiate(std::vector<double> a, double p) {
-	std::vector<double> b;
+std::vector<real_t> MLPPLinAlg::exponentiate(std::vector<real_t> a, real_t p) {
+	std::vector<real_t> b;
 	b.resize(a.size());
 	for (int i = 0; i < b.size(); i++) {
 		b[i] = std::pow(a[i], p);
@@ -1076,35 +1076,35 @@ std::vector<double> MLPPLinAlg::exponentiate(std::vector<double> a, double p) {
 	return b;
 }
 
-std::vector<double> MLPPLinAlg::sqrt(std::vector<double> a) {
+std::vector<real_t> MLPPLinAlg::sqrt(std::vector<real_t> a) {
 	return exponentiate(a, 0.5);
 }
 
-std::vector<double> MLPPLinAlg::cbrt(std::vector<double> a) {
-	return exponentiate(a, double(1) / double(3));
+std::vector<real_t> MLPPLinAlg::cbrt(std::vector<real_t> a) {
+	return exponentiate(a, real_t(1) / real_t(3));
 }
 
-double MLPPLinAlg::dot(std::vector<double> a, std::vector<double> b) {
-	double c = 0;
+real_t MLPPLinAlg::dot(std::vector<real_t> a, std::vector<real_t> b) {
+	real_t c = 0;
 	for (int i = 0; i < a.size(); i++) {
 		c += a[i] * b[i];
 	}
 	return c;
 }
 
-std::vector<double> MLPPLinAlg::cross(std::vector<double> a, std::vector<double> b) {
+std::vector<real_t> MLPPLinAlg::cross(std::vector<real_t> a, std::vector<real_t> b) {
 	// Cross products exist in R^7 also. Though, I will limit it to R^3 as Wolfram does this.
-	std::vector<std::vector<double>> mat = { onevec(3), a, b };
+	std::vector<std::vector<real_t>> mat = { onevec(3), a, b };
 
-	double det1 = det({ { a[1], a[2] }, { b[1], b[2] } }, 2);
-	double det2 = -det({ { a[0], a[2] }, { b[0], b[2] } }, 2);
-	double det3 = det({ { a[0], a[1] }, { b[0], b[1] } }, 2);
+	real_t det1 = det({ { a[1], a[2] }, { b[1], b[2] } }, 2);
+	real_t det2 = -det({ { a[0], a[2] }, { b[0], b[2] } }, 2);
+	real_t det3 = det({ { a[0], a[1] }, { b[0], b[1] } }, 2);
 
 	return { det1, det2, det3 };
 }
 
-std::vector<double> MLPPLinAlg::abs(std::vector<double> a) {
-	std::vector<double> b;
+std::vector<real_t> MLPPLinAlg::abs(std::vector<real_t> a) {
+	std::vector<real_t> b;
 	b.resize(a.size());
 	for (int i = 0; i < b.size(); i++) {
 		b[i] = std::abs(a[i]);
@@ -1112,26 +1112,26 @@ std::vector<double> MLPPLinAlg::abs(std::vector<double> a) {
 	return b;
 }
 
-std::vector<double> MLPPLinAlg::zerovec(int n) {
-	std::vector<double> zerovec;
+std::vector<real_t> MLPPLinAlg::zerovec(int n) {
+	std::vector<real_t> zerovec;
 	zerovec.resize(n);
 	return zerovec;
 }
 
-std::vector<double> MLPPLinAlg::onevec(int n) {
+std::vector<real_t> MLPPLinAlg::onevec(int n) {
 	return full(n, 1);
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::diag(std::vector<double> a) {
-	std::vector<std::vector<double>> B = zeromat(a.size(), a.size());
+std::vector<std::vector<real_t>> MLPPLinAlg::diag(std::vector<real_t> a) {
+	std::vector<std::vector<real_t>> B = zeromat(a.size(), a.size());
 	for (int i = 0; i < B.size(); i++) {
 		B[i][i] = a[i];
 	}
 	return B;
 }
 
-std::vector<double> MLPPLinAlg::full(int n, int k) {
-	std::vector<double> full;
+std::vector<real_t> MLPPLinAlg::full(int n, int k) {
+	std::vector<real_t> full;
 	full.resize(n);
 	for (int i = 0; i < full.size(); i++) {
 		full[i] = k;
@@ -1139,8 +1139,8 @@ std::vector<double> MLPPLinAlg::full(int n, int k) {
 	return full;
 }
 
-std::vector<double> MLPPLinAlg::sin(std::vector<double> a) {
-	std::vector<double> b;
+std::vector<real_t> MLPPLinAlg::sin(std::vector<real_t> a) {
+	std::vector<real_t> b;
 	b.resize(a.size());
 	for (int i = 0; i < a.size(); i++) {
 		b[i] = std::sin(a[i]);
@@ -1148,8 +1148,8 @@ std::vector<double> MLPPLinAlg::sin(std::vector<double> a) {
 	return b;
 }
 
-std::vector<double> MLPPLinAlg::cos(std::vector<double> a) {
-	std::vector<double> b;
+std::vector<real_t> MLPPLinAlg::cos(std::vector<real_t> a) {
+	std::vector<real_t> b;
 	b.resize(a.size());
 	for (int i = 0; i < a.size(); i++) {
 		b[i] = std::cos(a[i]);
@@ -1157,8 +1157,8 @@ std::vector<double> MLPPLinAlg::cos(std::vector<double> a) {
 	return b;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::rotate(std::vector<std::vector<double>> A, double theta, int axis) {
-	std::vector<std::vector<double>> rotationMatrix = { { std::cos(theta), -std::sin(theta) }, { std::sin(theta), std::cos(theta) } };
+std::vector<std::vector<real_t>> MLPPLinAlg::rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis) {
+	std::vector<std::vector<real_t>> rotationMatrix = { { std::cos(theta), -std::sin(theta) }, { std::sin(theta), std::cos(theta) } };
 	if (axis == 0) {
 		rotationMatrix = { { 1, 0, 0 }, { 0, std::cos(theta), -std::sin(theta) }, { 0, std::sin(theta), std::cos(theta) } };
 	} else if (axis == 1) {
@@ -1170,8 +1170,8 @@ std::vector<std::vector<double>> MLPPLinAlg::rotate(std::vector<std::vector<doub
 	return matmult(A, rotationMatrix);
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::max(std::vector<std::vector<double>> A, std::vector<std::vector<double>> B) {
-	std::vector<std::vector<double>> C;
+std::vector<std::vector<real_t>> MLPPLinAlg::max(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B) {
+	std::vector<std::vector<real_t>> C;
 	C.resize(A.size());
 	for (int i = 0; i < C.size(); i++) {
 		C[i].resize(A[0].size());
@@ -1182,7 +1182,7 @@ std::vector<std::vector<double>> MLPPLinAlg::max(std::vector<std::vector<double>
 	return C;
 }
 
-double MLPPLinAlg::max(std::vector<double> a) {
+real_t MLPPLinAlg::max(std::vector<real_t> a) {
 	int max = a[0];
 	for (int i = 0; i < a.size(); i++) {
 		if (a[i] > max) {
@@ -1192,7 +1192,7 @@ double MLPPLinAlg::max(std::vector<double> a) {
 	return max;
 }
 
-double MLPPLinAlg::min(std::vector<double> a) {
+real_t MLPPLinAlg::min(std::vector<real_t> a) {
 	int min = a[0];
 	for (int i = 0; i < a.size(); i++) {
 		if (a[i] < min) {
@@ -1202,8 +1202,8 @@ double MLPPLinAlg::min(std::vector<double> a) {
 	return min;
 }
 
-std::vector<double> MLPPLinAlg::round(std::vector<double> a) {
-	std::vector<double> b;
+std::vector<real_t> MLPPLinAlg::round(std::vector<real_t> a) {
+	std::vector<real_t> b;
 	b.resize(a.size());
 	for (int i = 0; i < a.size(); i++) {
 		b[i] = std::round(a[i]);
@@ -1212,46 +1212,46 @@ std::vector<double> MLPPLinAlg::round(std::vector<double> a) {
 }
 
 // Multidimensional Euclidean Distance
-double MLPPLinAlg::euclideanDistance(std::vector<double> a, std::vector<double> b) {
-	double dist = 0;
+real_t MLPPLinAlg::euclideanDistance(std::vector<real_t> a, std::vector<real_t> b) {
+	real_t dist = 0;
 	for (int i = 0; i < a.size(); i++) {
 		dist += (a[i] - b[i]) * (a[i] - b[i]);
 	}
 	return std::sqrt(dist);
 }
 
-double MLPPLinAlg::norm_2(std::vector<double> a) {
+real_t MLPPLinAlg::norm_2(std::vector<real_t> a) {
 	return std::sqrt(norm_sq(a));
 }
 
-double MLPPLinAlg::norm_sq(std::vector<double> a) {
-	double n_sq = 0;
+real_t MLPPLinAlg::norm_sq(std::vector<real_t> a) {
+	real_t n_sq = 0;
 	for (int i = 0; i < a.size(); i++) {
 		n_sq += a[i] * a[i];
 	}
 	return n_sq;
 }
 
-double MLPPLinAlg::sum_elements(std::vector<double> a) {
-	double sum = 0;
+real_t MLPPLinAlg::sum_elements(std::vector<real_t> a) {
+	real_t sum = 0;
 	for (int i = 0; i < a.size(); i++) {
 		sum += a[i];
 	}
 	return sum;
 }
 
-double MLPPLinAlg::cosineSimilarity(std::vector<double> a, std::vector<double> b) {
+real_t MLPPLinAlg::cosineSimilarity(std::vector<real_t> a, std::vector<real_t> b) {
 	return dot(a, b) / (norm_2(a) * norm_2(b));
 }
 
-void MLPPLinAlg::printVector(std::vector<double> a) {
+void MLPPLinAlg::printVector(std::vector<real_t> a) {
 	for (int i = 0; i < a.size(); i++) {
 		std::cout << a[i] << " ";
 	}
 	std::cout << std::endl;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::mat_vec_add(std::vector<std::vector<double>> A, std::vector<double> b) {
+std::vector<std::vector<real_t>> MLPPLinAlg::mat_vec_add(std::vector<std::vector<real_t>> A, std::vector<real_t> b) {
 	for (int i = 0; i < A.size(); i++) {
 		for (int j = 0; j < A[i].size(); j++) {
 			A[i][j] += b[j];
@@ -1260,8 +1260,8 @@ std::vector<std::vector<double>> MLPPLinAlg::mat_vec_add(std::vector<std::vector
 	return A;
 }
 
-std::vector<double> MLPPLinAlg::mat_vec_mult(std::vector<std::vector<double>> A, std::vector<double> b) {
-	std::vector<double> c;
+std::vector<real_t> MLPPLinAlg::mat_vec_mult(std::vector<std::vector<real_t>> A, std::vector<real_t> b) {
+	std::vector<real_t> c;
 	c.resize(A.size());
 
 	for (int i = 0; i < A.size(); i++) {
@@ -1272,36 +1272,36 @@ std::vector<double> MLPPLinAlg::mat_vec_mult(std::vector<std::vector<double>> A,
 	return c;
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPLinAlg::addition(std::vector<std::vector<std::vector<double>>> A, std::vector<std::vector<std::vector<double>>> B) {
+std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::addition(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B) {
 	for (int i = 0; i < A.size(); i++) {
 		A[i] = addition(A[i], B[i]);
 	}
 	return A;
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPLinAlg::elementWiseDivision(std::vector<std::vector<std::vector<double>>> A, std::vector<std::vector<std::vector<double>>> B) {
+std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::elementWiseDivision(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B) {
 	for (int i = 0; i < A.size(); i++) {
 		A[i] = elementWiseDivision(A[i], B[i]);
 	}
 	return A;
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPLinAlg::sqrt(std::vector<std::vector<std::vector<double>>> A) {
+std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::sqrt(std::vector<std::vector<std::vector<real_t>>> A) {
 	for (int i = 0; i < A.size(); i++) {
 		A[i] = sqrt(A[i]);
 	}
 	return A;
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPLinAlg::exponentiate(std::vector<std::vector<std::vector<double>>> A, double p) {
+std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::exponentiate(std::vector<std::vector<std::vector<real_t>>> A, real_t p) {
 	for (int i = 0; i < A.size(); i++) {
 		A[i] = exponentiate(A[i], p);
 	}
 	return A;
 }
 
-std::vector<std::vector<double>> MLPPLinAlg::tensor_vec_mult(std::vector<std::vector<std::vector<double>>> A, std::vector<double> b) {
-	std::vector<std::vector<double>> C;
+std::vector<std::vector<real_t>> MLPPLinAlg::tensor_vec_mult(std::vector<std::vector<std::vector<real_t>>> A, std::vector<real_t> b) {
+	std::vector<std::vector<real_t>> C;
 	C.resize(A.size());
 	for (int i = 0; i < C.size(); i++) {
 		C[i].resize(A[0].size());
@@ -1314,16 +1314,16 @@ std::vector<std::vector<double>> MLPPLinAlg::tensor_vec_mult(std::vector<std::ve
 	return C;
 }
 
-std::vector<double> MLPPLinAlg::flatten(std::vector<std::vector<std::vector<double>>> A) {
-	std::vector<double> c;
+std::vector<real_t> MLPPLinAlg::flatten(std::vector<std::vector<std::vector<real_t>>> A) {
+	std::vector<real_t> c;
 	for (int i = 0; i < A.size(); i++) {
-		std::vector<double> flattenedVec = flatten(A[i]);
+		std::vector<real_t> flattenedVec = flatten(A[i]);
 		c.insert(c.end(), flattenedVec.begin(), flattenedVec.end());
 	}
 	return c;
 }
 
-void MLPPLinAlg::printTensor(std::vector<std::vector<std::vector<double>>> A) {
+void MLPPLinAlg::printTensor(std::vector<std::vector<std::vector<real_t>>> A) {
 	for (int i = 0; i < A.size(); i++) {
 		printMatrix(A[i]);
 		if (i != A.size() - 1) {
@@ -1332,21 +1332,21 @@ void MLPPLinAlg::printTensor(std::vector<std::vector<std::vector<double>>> A) {
 	}
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPLinAlg::scalarMultiply(double scalar, std::vector<std::vector<std::vector<double>>> A) {
+std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::scalarMultiply(real_t scalar, std::vector<std::vector<std::vector<real_t>>> A) {
 	for (int i = 0; i < A.size(); i++) {
 		A[i] = scalarMultiply(scalar, A[i]);
 	}
 	return A;
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPLinAlg::scalarAdd(double scalar, std::vector<std::vector<std::vector<double>>> A) {
+std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::scalarAdd(real_t scalar, std::vector<std::vector<std::vector<real_t>>> A) {
 	for (int i = 0; i < A.size(); i++) {
 		A[i] = scalarAdd(scalar, A[i]);
 	}
 	return A;
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPLinAlg::resize(std::vector<std::vector<std::vector<double>>> A, std::vector<std::vector<std::vector<double>>> B) {
+std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::resize(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B) {
 	A.resize(B.size());
 	for (int i = 0; i < B.size(); i++) {
 		A[i].resize(B[i].size());
@@ -1357,22 +1357,22 @@ std::vector<std::vector<std::vector<double>>> MLPPLinAlg::resize(std::vector<std
 	return A;
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPLinAlg::max(std::vector<std::vector<std::vector<double>>> A, std::vector<std::vector<std::vector<double>>> B) {
+std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::max(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B) {
 	for (int i = 0; i < A.size(); i++) {
 		A[i] = max(A[i], B[i]);
 	}
 	return A;
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPLinAlg::abs(std::vector<std::vector<std::vector<double>>> A) {
+std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::abs(std::vector<std::vector<std::vector<real_t>>> A) {
 	for (int i = 0; i < A.size(); i++) {
 		A[i] = abs(A[i]);
 	}
 	return A;
 }
 
-double MLPPLinAlg::norm_2(std::vector<std::vector<std::vector<double>>> A) {
-	double sum = 0;
+real_t MLPPLinAlg::norm_2(std::vector<std::vector<std::vector<real_t>>> A) {
+	real_t sum = 0;
 	for (int i = 0; i < A.size(); i++) {
 		for (int j = 0; j < A[i].size(); j++) {
 			for (int k = 0; k < A[i][j].size(); k++) {
@@ -1384,12 +1384,12 @@ double MLPPLinAlg::norm_2(std::vector<std::vector<std::vector<double>>> A) {
 }
 
 // Bad implementation. Change this later.
-std::vector<std::vector<std::vector<double>>> MLPPLinAlg::vector_wise_tensor_product(std::vector<std::vector<std::vector<double>>> A, std::vector<std::vector<double>> B) {
-	std::vector<std::vector<std::vector<double>>> C;
+std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::vector_wise_tensor_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<real_t>> B) {
+	std::vector<std::vector<std::vector<real_t>>> C;
 	C = resize(C, A);
 	for (int i = 0; i < A[0].size(); i++) {
 		for (int j = 0; j < A[0][i].size(); j++) {
-			std::vector<double> currentVector;
+			std::vector<real_t> currentVector;
 			currentVector.resize(A.size());
 
 			for (int k = 0; k < C.size(); k++) {

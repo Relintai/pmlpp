@@ -7,13 +7,15 @@
 //
 //
 
+#include "core/math/math_defs.h"
+
 #include <string>
 #include <vector>
 
 
 class MLPPTransforms {
 public:
-	std::vector<std::vector<double>> discreteCosineTransform(std::vector<std::vector<double>> A);
+	std::vector<std::vector<real_t>> discreteCosineTransform(std::vector<std::vector<real_t>> A);
 };
 
 

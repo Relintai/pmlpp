@@ -9,24 +9,26 @@
 //  Created by Marc Melikyan on 1/16/21.
 //
 
+#include "core/math/math_defs.h"
+
 #include <vector>
 #include <string>
 
 
 class MLPPReg {
 public:
-	double regTerm(std::vector<double> weights, double lambda, double alpha, std::string reg);
-	double regTerm(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg);
+	real_t regTerm(std::vector<real_t> weights, real_t lambda, real_t alpha, std::string reg);
+	real_t regTerm(std::vector<std::vector<real_t>> weights, real_t lambda, real_t alpha, std::string reg);
 
-	std::vector<double> regWeights(std::vector<double> weights, double lambda, double alpha, std::string reg);
-	std::vector<std::vector<double>> regWeights(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg);
+	std::vector<real_t> regWeights(std::vector<real_t> weights, real_t lambda, real_t alpha, std::string reg);
+	std::vector<std::vector<real_t>> regWeights(std::vector<std::vector<real_t>> weights, real_t lambda, real_t alpha, std::string reg);
 
-	std::vector<double> regDerivTerm(std::vector<double> weights, double lambda, double alpha, std::string reg);
-	std::vector<std::vector<double>> regDerivTerm(std::vector<std::vector<double>>, double lambda, double alpha, std::string reg);
+	std::vector<real_t> regDerivTerm(std::vector<real_t> weights, real_t lambda, real_t alpha, std::string reg);
+	std::vector<std::vector<real_t>> regDerivTerm(std::vector<std::vector<real_t>>, real_t lambda, real_t alpha, std::string reg);
 
 private:
-	double regDerivTerm(std::vector<double> weights, double lambda, double alpha, std::string reg, int j);
-	double regDerivTerm(std::vector<std::vector<double>> weights, double lambda, double alpha, std::string reg, int i, int j);
+	real_t regDerivTerm(std::vector<real_t> weights, real_t lambda, real_t alpha, std::string reg, int j);
+	real_t regDerivTerm(std::vector<std::vector<real_t>> weights, real_t lambda, real_t alpha, std::string reg, int i, int j);
 };
 
 

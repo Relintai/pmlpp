@@ -8,29 +8,31 @@
 //  Created by Marc Melikyan on 1/17/21.
 //
 
+#include "core/math/math_defs.h"
+
 #include <vector>
 
 
 class MLPPGaussianNB {
 public:
-	MLPPGaussianNB(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, int class_num);
-	std::vector<double> modelSetTest(std::vector<std::vector<double>> X);
-	double modelTest(std::vector<double> x);
-	double score();
+	MLPPGaussianNB(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int class_num);
+	std::vector<real_t> modelSetTest(std::vector<std::vector<real_t>> X);
+	real_t modelTest(std::vector<real_t> x);
+	real_t score();
 
 private:
 	void Evaluate();
 
 	int class_num;
 
-	std::vector<double> priors;
-	std::vector<double> mu;
-	std::vector<double> sigma;
+	std::vector<real_t> priors;
+	std::vector<real_t> mu;
+	std::vector<real_t> sigma;
 
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> outputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> outputSet;
 
-	std::vector<double> y_hat;
+	std::vector<real_t> y_hat;
 };
 
 #endif /* GaussianNB_hpp */

@@ -15,27 +15,27 @@
 #include <random>
 
 
-MLPPSVC::MLPPSVC(std::vector<std::vector<double>> inputSet, std::vector<double> outputSet, double C) :
+MLPPSVC::MLPPSVC(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, real_t C) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), C(C) {
 	y_hat.resize(n);
 	weights = MLPPUtilities::weightInitialization(k);
 	bias = MLPPUtilities::biasInitialization();
 }
 
-std::vector<double> MLPPSVC::modelSetTest(std::vector<std::vector<double>> X) {
+std::vector<real_t> MLPPSVC::modelSetTest(std::vector<std::vector<real_t>> X) {
 	return Evaluate(X);
 }
 
-double MLPPSVC::modelTest(std::vector<double> x) {
+real_t MLPPSVC::modelTest(std::vector<real_t> x) {
 	return Evaluate(x);
 }
 
-void MLPPSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
+void MLPPSVC::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
 
@@ -63,13 +63,13 @@ void MLPPSVC::gradientDescent(double learning_rate, int max_epoch, bool UI) {
 	}
 }
 
-void MLPPSVC::SGD(double learning_rate, int max_epoch, bool UI) {
+void MLPPSVC::SGD(real_t learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
 
 	while (true) {
@@ -78,11 +78,11 @@ void MLPPSVC::SGD(double learning_rate, int max_epoch, bool UI) {
 		std::uniform_int_distribution<int> distribution(0, int(n - 1));
 		int outputIndex = distribution(generator);
 
-		double y_hat = Evaluate(inputSet[outputIndex]);
-		double z = propagate(inputSet[outputIndex]);
+		real_t y_hat = Evaluate(inputSet[outputIndex]);
+		real_t z = propagate(inputSet[outputIndex]);
 		cost_prev = Cost({ z }, { outputSet[outputIndex] }, weights, C);
 
-		double costDeriv = cost.HingeLossDeriv(std::vector<double>({ z }), std::vector<double>({ outputSet[outputIndex] }), C)[0]; // Explicit conversion to avoid ambiguity with overloaded function. Error occured on Ubuntu.
+		real_t costDeriv = cost.HingeLossDeriv(std::vector<real_t>({ z }), std::vector<real_t>({ outputSet[outputIndex] }), C)[0]; // Explicit conversion to avoid ambiguity with overloaded function. Error occured on Ubuntu.
 
 		// Weight Updation
 		weights = alg.subtraction(weights, alg.scalarMultiply(learning_rate * costDeriv, inputSet[outputIndex]));
@@ -106,12 +106,12 @@ void MLPPSVC::SGD(double learning_rate, int max_epoch, bool UI) {
 	forwardPass();
 }
 
-void MLPPSVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI) {
+void MLPPSVC::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
-	double cost_prev = 0;
+	real_t cost_prev = 0;
 	int epoch = 1;
 
 	// Creating the mini-batches
@@ -120,8 +120,8 @@ void MLPPSVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, boo
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<double> y_hat = Evaluate(inputMiniBatches[i]);
-			std::vector<double> z = propagate(inputMiniBatches[i]);
+			std::vector<real_t> y_hat = Evaluate(inputMiniBatches[i]);
+			std::vector<real_t> z = propagate(inputMiniBatches[i]);
 			cost_prev = Cost(z, outputMiniBatches[i], weights, C);
 
 			// Calculating the weight gradients
@@ -148,7 +148,7 @@ void MLPPSVC::MBGD(double learning_rate, int max_epoch, int mini_batch_size, boo
 	forwardPass();
 }
 
-double MLPPSVC::score() {
+real_t MLPPSVC::score() {
 	MLPPUtilities   util;
 	return util.performance(y_hat, outputSet);
 }
@@ -158,30 +158,30 @@ void MLPPSVC::save(std::string fileName) {
 	util.saveParameters(fileName, weights, bias);
 }
 
-double MLPPSVC::Cost(std::vector<double> z, std::vector<double> y, std::vector<double> weights, double C) {
+real_t MLPPSVC::Cost(std::vector<real_t> z, std::vector<real_t> y, std::vector<real_t> weights, real_t C) {
 	class MLPPCost cost;
 	return cost.HingeLoss(z, y, weights, C);
 }
 
-std::vector<double> MLPPSVC::Evaluate(std::vector<std::vector<double>> X) {
+std::vector<real_t> MLPPSVC::Evaluate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.sign(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
-std::vector<double> MLPPSVC::propagate(std::vector<std::vector<double>> X) {
+std::vector<real_t> MLPPSVC::propagate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
-double MLPPSVC::Evaluate(std::vector<double> x) {
+real_t MLPPSVC::Evaluate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return avn.sign(alg.dot(weights, x) + bias);
 }
 
-double MLPPSVC::propagate(std::vector<double> x) {
+real_t MLPPSVC::propagate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	return alg.dot(weights, x) + bias;

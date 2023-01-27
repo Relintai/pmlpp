@@ -8,44 +8,46 @@
 //  Created by Marc Melikyan on 9/29/20.
 //
 
+#include "core/math/math_defs.h"
+
 #include <vector>
 
 
 class MLPPStat {
 public:
 	// These functions are for univariate lin reg module- not for users.
-	double b0Estimation(const std::vector<double> &x, const std::vector<double> &y);
-	double b1Estimation(const std::vector<double> &x, const std::vector<double> &y);
+	real_t b0Estimation(const std::vector<real_t> &x, const std::vector<real_t> &y);
+	real_t b1Estimation(const std::vector<real_t> &x, const std::vector<real_t> &y);
 
 	// Statistical Functions
-	double mean(const std::vector<double> &x);
-	double median(std::vector<double> x);
-	std::vector<double> mode(const std::vector<double> &x);
-	double range(const std::vector<double> &x);
-	double midrange(const std::vector<double> &x);
-	double absAvgDeviation(const std::vector<double> &x);
-	double standardDeviation(const std::vector<double> &x);
-	double variance(const std::vector<double> &x);
-	double covariance(const std::vector<double> &x, const std::vector<double> &y);
-	double correlation(const std::vector<double> &x, const std::vector<double> &y);
-	double R2(const std::vector<double> &x, const std::vector<double> &y);
-	double chebyshevIneq(const double k);
+	real_t mean(const std::vector<real_t> &x);
+	real_t median(std::vector<real_t> x);
+	std::vector<real_t> mode(const std::vector<real_t> &x);
+	real_t range(const std::vector<real_t> &x);
+	real_t midrange(const std::vector<real_t> &x);
+	real_t absAvgDeviation(const std::vector<real_t> &x);
+	real_t standardDeviation(const std::vector<real_t> &x);
+	real_t variance(const std::vector<real_t> &x);
+	real_t covariance(const std::vector<real_t> &x, const std::vector<real_t> &y);
+	real_t correlation(const std::vector<real_t> &x, const std::vector<real_t> &y);
+	real_t R2(const std::vector<real_t> &x, const std::vector<real_t> &y);
+	real_t chebyshevIneq(const real_t k);
 
 	// Extras
-	double weightedMean(const std::vector<double> &x, const std::vector<double> &weights);
-	double geometricMean(const std::vector<double> &x);
-	double harmonicMean(const std::vector<double> &x);
-	double RMS(const std::vector<double> &x);
-	double powerMean(const std::vector<double> &x, const double p);
-	double lehmerMean(const std::vector<double> &x, const double p);
-	double weightedLehmerMean(const std::vector<double> &x, const std::vector<double> &weights, const double p);
-	double contraHarmonicMean(const std::vector<double> &x);
-	double heronianMean(const double A, const double B);
-	double heinzMean(const double A, const double B, const double x);
-	double neumanSandorMean(const double a, const double b);
-	double stolarskyMean(const double x, const double y, const double p);
-	double identricMean(const double x, const double y);
-	double logMean(const double x, const double y);
+	real_t weightedMean(const std::vector<real_t> &x, const std::vector<real_t> &weights);
+	real_t geometricMean(const std::vector<real_t> &x);
+	real_t harmonicMean(const std::vector<real_t> &x);
+	real_t RMS(const std::vector<real_t> &x);
+	real_t powerMean(const std::vector<real_t> &x, const real_t p);
+	real_t lehmerMean(const std::vector<real_t> &x, const real_t p);
+	real_t weightedLehmerMean(const std::vector<real_t> &x, const std::vector<real_t> &weights, const real_t p);
+	real_t contraHarmonicMean(const std::vector<real_t> &x);
+	real_t heronianMean(const real_t A, const real_t B);
+	real_t heinzMean(const real_t A, const real_t B, const real_t x);
+	real_t neumanSandorMean(const real_t a, const real_t b);
+	real_t stolarskyMean(const real_t x, const real_t y, const real_t p);
+	real_t identricMean(const real_t x, const real_t y);
+	real_t logMean(const real_t x, const real_t y);
 };
 
 

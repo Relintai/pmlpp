@@ -8,6 +8,8 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
+#include "core/math/math_defs.h"
+
 #include "../activation/activation.h"
 #include "../cost/cost.h"
 
@@ -18,39 +20,39 @@
 
 class MLPPOutputLayer {
 public:
-	MLPPOutputLayer(int n_hidden, std::string activation, std::string cost, std::vector<std::vector<double>> input, std::string weightInit, std::string reg, double lambda, double alpha);
+	MLPPOutputLayer(int n_hidden, std::string activation, std::string cost, std::vector<std::vector<real_t>> input, std::string weightInit, std::string reg, real_t lambda, real_t alpha);
 
 	int n_hidden;
 	std::string activation;
 	std::string cost;
 
-	std::vector<std::vector<double>> input;
+	std::vector<std::vector<real_t>> input;
 
-	std::vector<double> weights;
-	double bias;
+	std::vector<real_t> weights;
+	real_t bias;
 
-	std::vector<double> z;
-	std::vector<double> a;
+	std::vector<real_t> z;
+	std::vector<real_t> a;
 
-	std::map<std::string, std::vector<double> (MLPPActivation::*)(std::vector<double>, bool)> activation_map;
-	std::map<std::string, double (MLPPActivation::*)(double, bool)> activationTest_map;
-	std::map<std::string, double (MLPPCost::*)(std::vector<double>, std::vector<double>)> cost_map;
-	std::map<std::string, std::vector<double> (MLPPCost::*)(std::vector<double>, std::vector<double>)> costDeriv_map;
+	std::map<std::string, std::vector<real_t> (MLPPActivation::*)(std::vector<real_t>, bool)> activation_map;
+	std::map<std::string, real_t (MLPPActivation::*)(real_t, bool)> activationTest_map;
+	std::map<std::string, real_t (MLPPCost::*)(std::vector<real_t>, std::vector<real_t>)> cost_map;
+	std::map<std::string, std::vector<real_t> (MLPPCost::*)(std::vector<real_t>, std::vector<real_t>)> costDeriv_map;
 
-	double z_test;
-	double a_test;
+	real_t z_test;
+	real_t a_test;
 
-	std::vector<double> delta;
+	std::vector<real_t> delta;
 
 	// Regularization Params
 	std::string reg;
-	double lambda; /* Regularization Parameter */
-	double alpha; /* This is the controlling param for Elastic Net*/
+	real_t lambda; /* Regularization Parameter */
+	real_t alpha; /* This is the controlling param for Elastic Net*/
 
 	std::string weightInit;
 
 	void forwardPass();
-	void Test(std::vector<double> x);
+	void Test(std::vector<real_t> x);
 };
 
 

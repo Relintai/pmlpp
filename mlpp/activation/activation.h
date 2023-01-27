@@ -8,136 +8,138 @@
 //  Created by Marc Melikyan on 1/16/21.
 //
 
+#include "core/math/math_defs.h"
+
 #include <vector>
 
 class MLPPActivation {
 public:
-	double linear(double z, bool deriv = 0);
-	std::vector<double> linear(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> linear(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t linear(real_t z, bool deriv = 0);
+	std::vector<real_t> linear(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> linear(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double sigmoid(double z, bool deriv = 0);
-	std::vector<double> sigmoid(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> sigmoid(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t sigmoid(real_t z, bool deriv = 0);
+	std::vector<real_t> sigmoid(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> sigmoid(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	std::vector<double> softmax(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> softmax(std::vector<std::vector<double>> z, bool deriv = 0);
+	std::vector<real_t> softmax(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> softmax(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	std::vector<double> adjSoftmax(std::vector<double> z);
-	std::vector<std::vector<double>> adjSoftmax(std::vector<std::vector<double>> z);
+	std::vector<real_t> adjSoftmax(std::vector<real_t> z);
+	std::vector<std::vector<real_t>> adjSoftmax(std::vector<std::vector<real_t>> z);
 
-	std::vector<std::vector<double>> softmaxDeriv(std::vector<double> z);
-	std::vector<std::vector<std::vector<double>>> softmaxDeriv(std::vector<std::vector<double>> z);
+	std::vector<std::vector<real_t>> softmaxDeriv(std::vector<real_t> z);
+	std::vector<std::vector<std::vector<real_t>>> softmaxDeriv(std::vector<std::vector<real_t>> z);
 
-	double softplus(double z, bool deriv = 0);
-	std::vector<double> softplus(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> softplus(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t softplus(real_t z, bool deriv = 0);
+	std::vector<real_t> softplus(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> softplus(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double softsign(double z, bool deriv = 0);
-	std::vector<double> softsign(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> softsign(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t softsign(real_t z, bool deriv = 0);
+	std::vector<real_t> softsign(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> softsign(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double gaussianCDF(double z, bool deriv = 0);
-	std::vector<double> gaussianCDF(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> gaussianCDF(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t gaussianCDF(real_t z, bool deriv = 0);
+	std::vector<real_t> gaussianCDF(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> gaussianCDF(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double cloglog(double z, bool deriv = 0);
-	std::vector<double> cloglog(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> cloglog(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t cloglog(real_t z, bool deriv = 0);
+	std::vector<real_t> cloglog(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> cloglog(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double logit(double z, bool deriv = 0);
-	std::vector<double> logit(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> logit(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t logit(real_t z, bool deriv = 0);
+	std::vector<real_t> logit(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> logit(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double unitStep(double z, bool deriv = 0);
-	std::vector<double> unitStep(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> unitStep(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t unitStep(real_t z, bool deriv = 0);
+	std::vector<real_t> unitStep(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> unitStep(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double swish(double z, bool deriv = 0);
-	std::vector<double> swish(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> swish(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t swish(real_t z, bool deriv = 0);
+	std::vector<real_t> swish(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> swish(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double mish(double z, bool deriv = 0);
-	std::vector<double> mish(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> mish(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t mish(real_t z, bool deriv = 0);
+	std::vector<real_t> mish(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> mish(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double sinc(double z, bool deriv = 0);
-	std::vector<double> sinc(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> sinc(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t sinc(real_t z, bool deriv = 0);
+	std::vector<real_t> sinc(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> sinc(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double RELU(double z, bool deriv = 0);
-	std::vector<double> RELU(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> RELU(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t RELU(real_t z, bool deriv = 0);
+	std::vector<real_t> RELU(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> RELU(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double leakyReLU(double z, double c, bool deriv = 0);
-	std::vector<double> leakyReLU(std::vector<double> z, double c, bool deriv = 0);
-	std::vector<std::vector<double>> leakyReLU(std::vector<std::vector<double>> z, double c, bool deriv = 0);
+	real_t leakyReLU(real_t z, real_t c, bool deriv = 0);
+	std::vector<real_t> leakyReLU(std::vector<real_t> z, real_t c, bool deriv = 0);
+	std::vector<std::vector<real_t>> leakyReLU(std::vector<std::vector<real_t>> z, real_t c, bool deriv = 0);
 
-	double ELU(double z, double c, bool deriv = 0);
-	std::vector<double> ELU(std::vector<double> z, double c, bool deriv = 0);
-	std::vector<std::vector<double>> ELU(std::vector<std::vector<double>> z, double c, bool deriv = 0);
+	real_t ELU(real_t z, real_t c, bool deriv = 0);
+	std::vector<real_t> ELU(std::vector<real_t> z, real_t c, bool deriv = 0);
+	std::vector<std::vector<real_t>> ELU(std::vector<std::vector<real_t>> z, real_t c, bool deriv = 0);
 
-	double SELU(double z, double lambda, double c, bool deriv = 0);
-	std::vector<double> SELU(std::vector<double> z, double lambda, double c, bool deriv = 0);
-	std::vector<std::vector<double>> SELU(std::vector<std::vector<double>>, double lambda, double c, bool deriv = 0);
+	real_t SELU(real_t z, real_t lambda, real_t c, bool deriv = 0);
+	std::vector<real_t> SELU(std::vector<real_t> z, real_t lambda, real_t c, bool deriv = 0);
+	std::vector<std::vector<real_t>> SELU(std::vector<std::vector<real_t>>, real_t lambda, real_t c, bool deriv = 0);
 
-	double GELU(double z, bool deriv = 0);
-	std::vector<double> GELU(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> GELU(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t GELU(real_t z, bool deriv = 0);
+	std::vector<real_t> GELU(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> GELU(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double sign(double z, bool deriv = 0);
-	std::vector<double> sign(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> sign(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t sign(real_t z, bool deriv = 0);
+	std::vector<real_t> sign(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> sign(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double sinh(double z, bool deriv = 0);
-	std::vector<double> sinh(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> sinh(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t sinh(real_t z, bool deriv = 0);
+	std::vector<real_t> sinh(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> sinh(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double cosh(double z, bool deriv = 0);
-	std::vector<double> cosh(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> cosh(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t cosh(real_t z, bool deriv = 0);
+	std::vector<real_t> cosh(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> cosh(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double tanh(double z, bool deriv = 0);
-	std::vector<double> tanh(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> tanh(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t tanh(real_t z, bool deriv = 0);
+	std::vector<real_t> tanh(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> tanh(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double csch(double z, bool deriv = 0);
-	std::vector<double> csch(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> csch(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t csch(real_t z, bool deriv = 0);
+	std::vector<real_t> csch(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> csch(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double sech(double z, bool deriv = 0);
-	std::vector<double> sech(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> sech(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t sech(real_t z, bool deriv = 0);
+	std::vector<real_t> sech(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> sech(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double coth(double z, bool deriv = 0);
-	std::vector<double> coth(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> coth(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t coth(real_t z, bool deriv = 0);
+	std::vector<real_t> coth(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> coth(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double arsinh(double z, bool deriv = 0);
-	std::vector<double> arsinh(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> arsinh(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t arsinh(real_t z, bool deriv = 0);
+	std::vector<real_t> arsinh(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> arsinh(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double arcosh(double z, bool deriv = 0);
-	std::vector<double> arcosh(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> arcosh(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t arcosh(real_t z, bool deriv = 0);
+	std::vector<real_t> arcosh(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> arcosh(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double artanh(double z, bool deriv = 0);
-	std::vector<double> artanh(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> artanh(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t artanh(real_t z, bool deriv = 0);
+	std::vector<real_t> artanh(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> artanh(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double arcsch(double z, bool deriv = 0);
-	std::vector<double> arcsch(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> arcsch(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t arcsch(real_t z, bool deriv = 0);
+	std::vector<real_t> arcsch(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> arcsch(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double arsech(double z, bool deriv = 0);
-	std::vector<double> arsech(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> arsech(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t arsech(real_t z, bool deriv = 0);
+	std::vector<real_t> arsech(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> arsech(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	double arcoth(double z, bool deriv = 0);
-	std::vector<double> arcoth(std::vector<double> z, bool deriv = 0);
-	std::vector<std::vector<double>> arcoth(std::vector<std::vector<double>> z, bool deriv = 0);
+	real_t arcoth(real_t z, bool deriv = 0);
+	std::vector<real_t> arcoth(std::vector<real_t> z, bool deriv = 0);
+	std::vector<std::vector<real_t>> arcoth(std::vector<std::vector<real_t>> z, bool deriv = 0);
 
-	std::vector<double> activation(std::vector<double> z, bool deriv, double (*function)(double, bool));
+	std::vector<real_t> activation(std::vector<real_t> z, bool deriv, real_t (*function)(real_t, bool));
 
 private:
 };

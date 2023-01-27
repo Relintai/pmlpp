@@ -8,6 +8,8 @@
 //  Created by Marc Melikyan on 10/2/20.
 //
 
+#include "core/math/math_defs.h"
+
 #include <string>
 #include <vector>
 
@@ -15,37 +17,37 @@
 
 class MLPPSoftmaxNet {
 public:
-	MLPPSoftmaxNet(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, int n_hidden, std::string reg = "None", double lambda = 0.5, double alpha = 0.5);
-	std::vector<double> modelTest(std::vector<double> x);
-	std::vector<std::vector<double>> modelSetTest(std::vector<std::vector<double>> X);
-	void gradientDescent(double learning_rate, int max_epoch, bool UI = 1);
-	void SGD(double learning_rate, int max_epoch, bool UI = 1);
-	void MBGD(double learning_rate, int max_epoch, int mini_batch_size, bool UI = 1);
-	double score();
+	MLPPSoftmaxNet(std::vector<std::vector<real_t>> inputSet, std::vector<std::vector<real_t>> outputSet, int n_hidden, std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
+	std::vector<real_t> modelTest(std::vector<real_t> x);
+	std::vector<std::vector<real_t>> modelSetTest(std::vector<std::vector<real_t>> X);
+	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = 1);
+	void SGD(real_t learning_rate, int max_epoch, bool UI = 1);
+	void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI = 1);
+	real_t score();
 	void save(std::string fileName);
 
-	std::vector<std::vector<double>> getEmbeddings(); // This class is used (mostly) for word2Vec. This function returns our embeddings.
+	std::vector<std::vector<real_t>> getEmbeddings(); // This class is used (mostly) for word2Vec. This function returns our embeddings.
 private:
-	double Cost(std::vector<std::vector<double>> y_hat, std::vector<std::vector<double>> y);
+	real_t Cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y);
 
-	std::vector<std::vector<double>> Evaluate(std::vector<std::vector<double>> X);
-	std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> propagate(std::vector<std::vector<double>> X);
-	std::vector<double> Evaluate(std::vector<double> x);
-	std::tuple<std::vector<double>, std::vector<double>> propagate(std::vector<double> x);
+	std::vector<std::vector<real_t>> Evaluate(std::vector<std::vector<real_t>> X);
+	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> propagate(std::vector<std::vector<real_t>> X);
+	std::vector<real_t> Evaluate(std::vector<real_t> x);
+	std::tuple<std::vector<real_t>, std::vector<real_t>> propagate(std::vector<real_t> x);
 	void forwardPass();
 
-	std::vector<std::vector<double>> inputSet;
-	std::vector<std::vector<double>> outputSet;
-	std::vector<std::vector<double>> y_hat;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<std::vector<real_t>> outputSet;
+	std::vector<std::vector<real_t>> y_hat;
 
-	std::vector<std::vector<double>> weights1;
-	std::vector<std::vector<double>> weights2;
+	std::vector<std::vector<real_t>> weights1;
+	std::vector<std::vector<real_t>> weights2;
 
-	std::vector<double> bias1;
-	std::vector<double> bias2;
+	std::vector<real_t> bias1;
+	std::vector<real_t> bias2;
 
-	std::vector<std::vector<double>> z2;
-	std::vector<std::vector<double>> a2;
+	std::vector<std::vector<real_t>> z2;
+	std::vector<std::vector<real_t>> a2;
 
 	int n;
 	int k;
@@ -54,8 +56,8 @@ private:
 
 	// Regularization Params
 	std::string reg;
-	double lambda;
-	double alpha; /* This is the controlling param for Elastic Net*/
+	real_t lambda;
+	real_t alpha; /* This is the controlling param for Elastic Net*/
 };
 
 

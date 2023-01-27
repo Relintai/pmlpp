@@ -56,7 +56,7 @@ Ref<MLPPDataComplex> MLPPData::load_iris(const String &path) {
 	const int IRIS_SIZE = 4;
 	const int ONE_HOT_NUM = 3;
 
-	std::vector<double> tempOutputSet;
+	std::vector<real_t> tempOutputSet;
 
 	Ref<MLPPDataComplex> data;
 	data.instance();
@@ -71,7 +71,7 @@ Ref<MLPPDataComplex> MLPPData::load_wine(const String &path) {
 	const int WINE_SIZE = 4;
 	const int ONE_HOT_NUM = 3;
 
-	std::vector<double> tempOutputSet;
+	std::vector<real_t> tempOutputSet;
 
 	Ref<MLPPDataComplex> data;
 	data.instance();
@@ -86,8 +86,8 @@ Ref<MLPPDataComplex> MLPPData::load_mnist_train(const String &path) {
 	const int MNIST_SIZE = 784;
 	const int ONE_HOT_NUM = 10;
 
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> tempOutputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> tempOutputSet;
 
 	Ref<MLPPDataComplex> data;
 	data.instance();
@@ -101,8 +101,8 @@ Ref<MLPPDataComplex> MLPPData::load_mnist_train(const String &path) {
 Ref<MLPPDataComplex> MLPPData::load_mnist_test(const String &path) {
 	const int MNIST_SIZE = 784;
 	const int ONE_HOT_NUM = 10;
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> tempOutputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> tempOutputSet;
 
 	Ref<MLPPDataComplex> data;
 	data.instance();
@@ -137,7 +137,7 @@ Ref<MLPPDataESimple> MLPPData::load_fires_and_crime(const String &path) {
 
 // MULTIVARIATE SUPERVISED
 
-void MLPPData::set_data_supervised(int k, const String &file_name, std::vector<std::vector<double>> &inputSet, std::vector<double> &outputSet) {
+void MLPPData::set_data_supervised(int k, const String &file_name, std::vector<std::vector<real_t>> &inputSet, std::vector<real_t> &outputSet) {
 	MLPPLinAlg alg;
 
 	inputSet.resize(k);
@@ -150,10 +150,10 @@ void MLPPData::set_data_supervised(int k, const String &file_name, std::vector<s
 		Vector<String> ll = file->get_csv_line();
 
 		for (int i = 0; i < k; ++i) {
-			inputSet[i].push_back(ll[i].to_double());
+			inputSet[i].push_back(static_cast<real_t>(ll[i].to_double()));
 		}
 
-		outputSet.push_back(ll[k].to_double());
+		outputSet.push_back(static_cast<real_t>(ll[k].to_double()));
 	}
 
 	inputSet = alg.transpose(inputSet);
@@ -161,7 +161,7 @@ void MLPPData::set_data_supervised(int k, const String &file_name, std::vector<s
 	memdelete(file);
 }
 
-void MLPPData::set_data_unsupervised(int k, const String &file_name, std::vector<std::vector<double>> &inputSet) {
+void MLPPData::set_data_unsupervised(int k, const String &file_name, std::vector<std::vector<real_t>> &inputSet) {
 	MLPPLinAlg alg;
 
 	inputSet.resize(k);
@@ -174,7 +174,7 @@ void MLPPData::set_data_unsupervised(int k, const String &file_name, std::vector
 		Vector<String> ll = file->get_csv_line();
 
 		for (int i = 0; i < k; ++i) {
-			inputSet[i].push_back(ll[i].to_double());
+			inputSet[i].push_back(static_cast<real_t>(ll[i].to_double()));
 		}
 	}
 
@@ -183,7 +183,7 @@ void MLPPData::set_data_unsupervised(int k, const String &file_name, std::vector
 	memdelete(file);
 }
 
-void MLPPData::set_data_simple(const String &file_name, std::vector<double> &inputSet, std::vector<double> &outputSet) {
+void MLPPData::set_data_simple(const String &file_name, std::vector<real_t> &inputSet, std::vector<real_t> &outputSet) {
 	FileAccess *file = FileAccess::open(file_name, FileAccess::READ);
 
 	ERR_FAIL_COND(!file);
@@ -192,15 +192,15 @@ void MLPPData::set_data_simple(const String &file_name, std::vector<double> &inp
 		Vector<String> ll = file->get_csv_line();
 
 		for (int i = 0; i < ll.size(); i += 2) {
-			inputSet.push_back(ll[i].to_double());
-			outputSet.push_back(ll[i + 1].to_double());
+			inputSet.push_back(static_cast<real_t>(ll[i].to_double()));
+			outputSet.push_back(static_cast<real_t>(ll[i + 1].to_double()));
 		}
 	}
 
 	memdelete(file);
 }
 
-MLPPData::SplitComplexData MLPPData::train_test_split(const Ref<MLPPDataComplex> &data, double test_size) {
+MLPPData::SplitComplexData MLPPData::train_test_split(const Ref<MLPPDataComplex> &data, real_t test_size) {
 	SplitComplexData res;
 
 	res.train.instance();
@@ -237,7 +237,7 @@ MLPPData::SplitComplexData MLPPData::train_test_split(const Ref<MLPPDataComplex>
 
 	return res;
 }
-Array MLPPData::train_test_split_bind(const Ref<MLPPDataComplex> &data, double test_size) {
+Array MLPPData::train_test_split_bind(const Ref<MLPPDataComplex> &data, real_t test_size) {
 	SplitComplexData res = train_test_split(data, test_size);
 
 	Array arr;
@@ -248,80 +248,80 @@ Array MLPPData::train_test_split_bind(const Ref<MLPPDataComplex> &data, double t
 }
 
 // Loading Datasets
-std::tuple<std::vector<std::vector<double>>, std::vector<double>> MLPPData::loadBreastCancer() {
+std::tuple<std::vector<std::vector<real_t>>, std::vector<real_t>> MLPPData::loadBreastCancer() {
 	const int BREAST_CANCER_SIZE = 30; // k = 30
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> outputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> outputSet;
 
 	setData(BREAST_CANCER_SIZE, "MLPP/Data/Datasets/BreastCancer.csv", inputSet, outputSet);
 	return { inputSet, outputSet };
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<double>> MLPPData::loadBreastCancerSVC() {
+std::tuple<std::vector<std::vector<real_t>>, std::vector<real_t>> MLPPData::loadBreastCancerSVC() {
 	const int BREAST_CANCER_SIZE = 30; // k = 30
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> outputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> outputSet;
 
 	setData(BREAST_CANCER_SIZE, "MLPP/Data/Datasets/BreastCancerSVM.csv", inputSet, outputSet);
 	return { inputSet, outputSet };
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPData::loadIris() {
+std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPData::loadIris() {
 	const int IRIS_SIZE = 4;
 	const int ONE_HOT_NUM = 3;
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> tempOutputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> tempOutputSet;
 
 	setData(IRIS_SIZE, "/Users/marcmelikyan/Desktop/Data/Iris.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<double>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	std::vector<std::vector<real_t>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
 	return { inputSet, outputSet };
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPData::loadWine() {
+std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPData::loadWine() {
 	const int WINE_SIZE = 4;
 	const int ONE_HOT_NUM = 3;
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> tempOutputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> tempOutputSet;
 
 	setData(WINE_SIZE, "MLPP/Data/Datasets/Iris.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<double>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	std::vector<std::vector<real_t>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
 	return { inputSet, outputSet };
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPData::loadMnistTrain() {
+std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPData::loadMnistTrain() {
 	const int MNIST_SIZE = 784;
 	const int ONE_HOT_NUM = 10;
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> tempOutputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> tempOutputSet;
 
 	setData(MNIST_SIZE, "MLPP/Data/Datasets/MnistTrain.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<double>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	std::vector<std::vector<real_t>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
 	return { inputSet, outputSet };
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPData::loadMnistTest() {
+std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPData::loadMnistTest() {
 	const int MNIST_SIZE = 784;
 	const int ONE_HOT_NUM = 10;
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> tempOutputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> tempOutputSet;
 
 	setData(MNIST_SIZE, "MLPP/Data/Datasets/MnistTest.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<double>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	std::vector<std::vector<real_t>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
 	return { inputSet, outputSet };
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<double>> MLPPData::loadCaliforniaHousing() {
+std::tuple<std::vector<std::vector<real_t>>, std::vector<real_t>> MLPPData::loadCaliforniaHousing() {
 	const int CALIFORNIA_HOUSING_SIZE = 13; // k = 30
-	std::vector<std::vector<double>> inputSet;
-	std::vector<double> outputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<real_t> outputSet;
 
 	setData(CALIFORNIA_HOUSING_SIZE, "MLPP/Data/Datasets/CaliforniaHousing.csv", inputSet, outputSet);
 	return { inputSet, outputSet };
 }
 
-std::tuple<std::vector<double>, std::vector<double>> MLPPData::loadFiresAndCrime() {
-	std::vector<double> inputSet; // k is implicitly 1.
-	std::vector<double> outputSet;
+std::tuple<std::vector<real_t>, std::vector<real_t>> MLPPData::loadFiresAndCrime() {
+	std::vector<real_t> inputSet; // k is implicitly 1.
+	std::vector<real_t> outputSet;
 
 	setData("MLPP/Data/Datasets/FiresAndCrime.csv", inputSet, outputSet);
 	return { inputSet, outputSet };
@@ -330,15 +330,15 @@ std::tuple<std::vector<double>, std::vector<double>> MLPPData::loadFiresAndCrime
 // Note that inputs and outputs should be pairs (technically), but this
 // implementation will separate them. (My implementation keeps them tied together.)
 // Not yet sure whether this is intentional or not (or it's something like a compiler specific difference)
-std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>, std::vector<std::vector<double>>, std::vector<std::vector<double>>> MLPPData::trainTestSplit(std::vector<std::vector<double>> inputSet, std::vector<std::vector<double>> outputSet, double testSize) {
+std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPData::trainTestSplit(std::vector<std::vector<real_t>> inputSet, std::vector<std::vector<real_t>> outputSet, real_t testSize) {
 	std::random_device rd;
 	std::default_random_engine generator(rd());
 
 	std::shuffle(inputSet.begin(), inputSet.end(), generator); // inputSet random shuffle
 	std::shuffle(outputSet.begin(), outputSet.end(), generator); // outputSet random shuffle)
 
-	std::vector<std::vector<double>> inputTestSet;
-	std::vector<std::vector<double>> outputTestSet;
+	std::vector<std::vector<real_t>> inputTestSet;
+	std::vector<std::vector<real_t>> outputTestSet;
 
 	int testInputNumber = testSize * inputSet.size(); // implicit usage of floor
 	int testOutputNumber = testSize * outputSet.size(); // implicit usage of floor
@@ -358,7 +358,7 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::vector<double>>, s
 
 // MULTIVARIATE SUPERVISED
 
-void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<double>> &inputSet, std::vector<double> &outputSet) {
+void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real_t>> &inputSet, std::vector<real_t> &outputSet) {
 	MLPPLinAlg alg;
 	std::string inputTemp;
 	std::string outputTemp;
@@ -386,7 +386,7 @@ void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<doub
 	dataFile.close();
 }
 
-void MLPPData::printData(std::vector<std::string> inputName, std::string outputName, std::vector<std::vector<double>> inputSet, std::vector<double> outputSet) {
+void MLPPData::printData(std::vector<std::string> inputName, std::string outputName, std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet) {
 	MLPPLinAlg alg;
 	inputSet = alg.transpose(inputSet);
 	for (int i = 0; i < inputSet.size(); i++) {
@@ -404,7 +404,7 @@ void MLPPData::printData(std::vector<std::string> inputName, std::string outputN
 
 // UNSUPERVISED
 
-void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<double>> &inputSet) {
+void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real_t>> &inputSet) {
 	MLPPLinAlg alg;
 	std::string inputTemp;
 
@@ -428,7 +428,7 @@ void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<doub
 	dataFile.close();
 }
 
-void MLPPData::printData(std::vector<std::string> inputName, std::vector<std::vector<double>> inputSet) {
+void MLPPData::printData(std::vector<std::string> inputName, std::vector<std::vector<real_t>> inputSet) {
 	MLPPLinAlg alg;
 	inputSet = alg.transpose(inputSet);
 	for (int i = 0; i < inputSet.size(); i++) {
@@ -441,7 +441,7 @@ void MLPPData::printData(std::vector<std::string> inputName, std::vector<std::ve
 
 // SIMPLE
 
-void MLPPData::setData(std::string fileName, std::vector<double> &inputSet, std::vector<double> &outputSet) {
+void MLPPData::setData(std::string fileName, std::vector<real_t> &inputSet, std::vector<real_t> &outputSet) {
 	std::string inputTemp, outputTemp;
 
 	std::ifstream dataFile(fileName);
@@ -464,7 +464,7 @@ void MLPPData::setData(std::string fileName, std::vector<double> &inputSet, std:
 	dataFile.close();
 }
 
-void MLPPData::printData(std::string &inputName, std::string &outputName, std::vector<double> &inputSet, std::vector<double> &outputSet) {
+void MLPPData::printData(std::string &inputName, std::string &outputName, std::vector<real_t> &inputSet, std::vector<real_t> &outputSet) {
 	std::cout << inputName << std::endl;
 	for (int i = 0; i < inputSet.size(); i++) {
 		std::cout << inputSet[i] << std::endl;
@@ -477,8 +477,8 @@ void MLPPData::printData(std::string &inputName, std::string &outputName, std::v
 }
 
 // Images
-std::vector<std::vector<double>> MLPPData::rgb2gray(std::vector<std::vector<std::vector<double>>> input) {
-	std::vector<std::vector<double>> grayScale;
+std::vector<std::vector<real_t>> MLPPData::rgb2gray(std::vector<std::vector<std::vector<real_t>>> input) {
+	std::vector<std::vector<real_t>> grayScale;
 	grayScale.resize(input[0].size());
 	for (int i = 0; i < grayScale.size(); i++) {
 		grayScale[i].resize(input[0][i].size());
@@ -491,9 +491,9 @@ std::vector<std::vector<double>> MLPPData::rgb2gray(std::vector<std::vector<std:
 	return grayScale;
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPData::rgb2ycbcr(std::vector<std::vector<std::vector<double>>> input) {
+std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2ycbcr(std::vector<std::vector<std::vector<real_t>>> input) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<std::vector<double>>> YCbCr;
+	std::vector<std::vector<std::vector<real_t>>> YCbCr;
 	YCbCr = alg.resize(YCbCr, input);
 	for (int i = 0; i < YCbCr[0].size(); i++) {
 		for (int j = 0; j < YCbCr[0][i].size(); j++) {
@@ -507,19 +507,19 @@ std::vector<std::vector<std::vector<double>>> MLPPData::rgb2ycbcr(std::vector<st
 
 // Conversion formulas available here:
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
-std::vector<std::vector<std::vector<double>>> MLPPData::rgb2hsv(std::vector<std::vector<std::vector<double>>> input) {
+std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2hsv(std::vector<std::vector<std::vector<real_t>>> input) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<std::vector<double>>> HSV;
+	std::vector<std::vector<std::vector<real_t>>> HSV;
 	HSV = alg.resize(HSV, input);
 	for (int i = 0; i < HSV[0].size(); i++) {
 		for (int j = 0; j < HSV[0][i].size(); j++) {
-			double rPrime = input[0][i][j] / 255;
-			double gPrime = input[1][i][j] / 255;
-			double bPrime = input[2][i][j] / 255;
+			real_t rPrime = input[0][i][j] / 255;
+			real_t gPrime = input[1][i][j] / 255;
+			real_t bPrime = input[2][i][j] / 255;
 
-			double cMax = alg.max({ rPrime, gPrime, bPrime });
-			double cMin = alg.min({ rPrime, gPrime, bPrime });
-			double delta = cMax - cMin;
+			real_t cMax = alg.max({ rPrime, gPrime, bPrime });
+			real_t cMin = alg.min({ rPrime, gPrime, bPrime });
+			real_t delta = cMax - cMin;
 
 			// H calculation.
 			if (delta == 0) {
@@ -549,19 +549,19 @@ std::vector<std::vector<std::vector<double>>> MLPPData::rgb2hsv(std::vector<std:
 }
 
 // http://machinethatsees.blogspot.com/2013/07/how-to-convert-rgb-to-xyz-or-vice-versa.html
-std::vector<std::vector<std::vector<double>>> MLPPData::rgb2xyz(std::vector<std::vector<std::vector<double>>> input) {
+std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2xyz(std::vector<std::vector<std::vector<real_t>>> input) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<std::vector<double>>> XYZ;
+	std::vector<std::vector<std::vector<real_t>>> XYZ;
 	XYZ = alg.resize(XYZ, input);
-	std::vector<std::vector<double>> RGB2XYZ = { { 0.4124564, 0.3575761, 0.1804375 }, { 0.2126726, 0.7151522, 0.0721750 }, { 0.0193339, 0.1191920, 0.9503041 } };
+	std::vector<std::vector<real_t>> RGB2XYZ = { { 0.4124564, 0.3575761, 0.1804375 }, { 0.2126726, 0.7151522, 0.0721750 }, { 0.0193339, 0.1191920, 0.9503041 } };
 	return alg.vector_wise_tensor_product(input, RGB2XYZ);
 }
 
-std::vector<std::vector<std::vector<double>>> MLPPData::xyz2rgb(std::vector<std::vector<std::vector<double>>> input) {
+std::vector<std::vector<std::vector<real_t>>> MLPPData::xyz2rgb(std::vector<std::vector<std::vector<real_t>>> input) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<std::vector<double>>> XYZ;
+	std::vector<std::vector<std::vector<real_t>>> XYZ;
 	XYZ = alg.resize(XYZ, input);
-	std::vector<std::vector<double>> RGB2XYZ = alg.inverse({ { 0.4124564, 0.3575761, 0.1804375 }, { 0.2126726, 0.7151522, 0.0721750 }, { 0.0193339, 0.1191920, 0.9503041 } });
+	std::vector<std::vector<real_t>> RGB2XYZ = alg.inverse({ { 0.4124564, 0.3575761, 0.1804375 }, { 0.2126726, 0.7151522, 0.0721750 }, { 0.0193339, 0.1191920, 0.9503041 } });
 	return alg.vector_wise_tensor_product(input, RGB2XYZ);
 }
 
@@ -640,11 +640,11 @@ std::vector<std::string> MLPPData::segment(std::string text) {
 	return segmented_data;
 }
 
-std::vector<double> MLPPData::tokenize(std::string text) {
+std::vector<real_t> MLPPData::tokenize(std::string text) {
 	int max_num = 0;
 	bool new_num = true;
 	std::vector<std::string> segmented_data = segment(text);
-	std::vector<double> tokenized_data;
+	std::vector<real_t> tokenized_data;
 	tokenized_data.resize(segmented_data.size());
 	for (int i = 0; i < segmented_data.size(); i++) {
 		for (int j = i - 1; j >= 0; j--) {
@@ -710,7 +710,7 @@ std::string MLPPData::stemming(std::string text) {
 	return text;
 }
 
-std::vector<std::vector<double>> MLPPData::BOW(std::vector<std::string> sentences, std::string type) {
+std::vector<std::vector<real_t>> MLPPData::BOW(std::vector<std::string> sentences, std::string type) {
 	/*
 	STEPS OF BOW:
 		1) To lowercase (done by removeStopWords function by def)
@@ -729,7 +729,7 @@ std::vector<std::vector<double>> MLPPData::BOW(std::vector<std::string> sentence
 		segmented_sentences[i] = removeStopWords(sentences[i]);
 	}
 
-	std::vector<std::vector<double>> bow;
+	std::vector<std::vector<real_t>> bow;
 
 	bow.resize(sentences.size());
 	for (int i = 0; i < bow.size(); i++) {
@@ -752,7 +752,7 @@ std::vector<std::vector<double>> MLPPData::BOW(std::vector<std::string> sentence
 	return bow;
 }
 
-std::vector<std::vector<double>> MLPPData::TFIDF(std::vector<std::string> sentences) {
+std::vector<std::vector<real_t>> MLPPData::TFIDF(std::vector<std::string> sentences) {
 	MLPPLinAlg alg;
 	std::vector<std::string> wordList = removeNullByte(removeStopWords(createWordList(sentences)));
 
@@ -763,7 +763,7 @@ std::vector<std::vector<double>> MLPPData::TFIDF(std::vector<std::string> senten
 		segmented_sentences[i] = removeStopWords(sentences[i]);
 	}
 
-	std::vector<std::vector<double>> TF;
+	std::vector<std::vector<real_t>> TF;
 	std::vector<int> frequency;
 	frequency.resize(wordList.size());
 	TF.resize(segmented_sentences.size());
@@ -783,17 +783,17 @@ std::vector<std::vector<double>> MLPPData::TFIDF(std::vector<std::string> senten
 				}
 			}
 		}
-		TF[i] = alg.scalarMultiply(double(1) / double(segmented_sentences[i].size()), TF[i]);
+		TF[i] = alg.scalarMultiply(real_t(1) / real_t(segmented_sentences[i].size()), TF[i]);
 	}
 
-	std::vector<double> IDF;
+	std::vector<real_t> IDF;
 	IDF.resize(frequency.size());
 
 	for (int i = 0; i < IDF.size(); i++) {
-		IDF[i] = std::log((double)segmented_sentences.size() / (double)frequency[i]);
+		IDF[i] = std::log((real_t)segmented_sentences.size() / (real_t)frequency[i]);
 	}
 
-	std::vector<std::vector<double>> TFIDF;
+	std::vector<std::vector<real_t>> TFIDF;
 	TFIDF.resize(segmented_sentences.size());
 	for (int i = 0; i < TFIDF.size(); i++) {
 		TFIDF[i].resize(wordList.size());
@@ -808,7 +808,7 @@ std::vector<std::vector<double>> MLPPData::TFIDF(std::vector<std::string> senten
 	return TFIDF;
 }
 
-std::tuple<std::vector<std::vector<double>>, std::vector<std::string>> MLPPData::word2Vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, double learning_rate, int max_epoch) {
+std::tuple<std::vector<std::vector<real_t>>, std::vector<std::string>> MLPPData::word2Vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, real_t learning_rate, int max_epoch) {
 	std::vector<std::string> wordList = removeNullByte(removeStopWords(createWordList(sentences)));
 
 	std::vector<std::vector<std::string>> segmented_sentences;
@@ -841,10 +841,10 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::string>> MLPPData:
 
 	inputStrings.insert(inputStrings.end(), outputStrings.begin(), outputStrings.end());
 
-	std::vector<std::vector<double>> BOW = MLPPData::BOW(inputStrings, "Binary");
+	std::vector<std::vector<real_t>> BOW = MLPPData::BOW(inputStrings, "Binary");
 
-	std::vector<std::vector<double>> inputSet;
-	std::vector<std::vector<double>> outputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<std::vector<real_t>> outputSet;
 
 	for (int i = 0; i < inputSize; i++) {
 		inputSet.push_back(BOW[i]);
@@ -862,17 +862,17 @@ std::tuple<std::vector<std::vector<double>>, std::vector<std::string>> MLPPData:
 	}
 	model->gradientDescent(learning_rate, max_epoch, 1);
 
-	std::vector<std::vector<double>> wordEmbeddings = model->getEmbeddings();
+	std::vector<std::vector<real_t>> wordEmbeddings = model->getEmbeddings();
 	delete model;
 	return { wordEmbeddings, wordList };
 }
 
 struct WordsToVecResult {
-	std::vector<std::vector<double>> word_embeddings;
+	std::vector<std::vector<real_t>> word_embeddings;
 	std::vector<std::string> word_list;
 };
 
-MLPPData::WordsToVecResult MLPPData::word_to_vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, double learning_rate, int max_epoch) {
+MLPPData::WordsToVecResult MLPPData::word_to_vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, real_t learning_rate, int max_epoch) {
 	WordsToVecResult res;
 
 	res.word_list = removeNullByte(removeStopWords(createWordList(sentences)));
@@ -907,10 +907,10 @@ MLPPData::WordsToVecResult MLPPData::word_to_vec(std::vector<std::string> senten
 
 	inputStrings.insert(inputStrings.end(), outputStrings.begin(), outputStrings.end());
 
-	std::vector<std::vector<double>> BOW = MLPPData::BOW(inputStrings, "Binary");
+	std::vector<std::vector<real_t>> BOW = MLPPData::BOW(inputStrings, "Binary");
 
-	std::vector<std::vector<double>> inputSet;
-	std::vector<std::vector<double>> outputSet;
+	std::vector<std::vector<real_t>> inputSet;
+	std::vector<std::vector<real_t>> outputSet;
 
 	for (int i = 0; i < inputSize; i++) {
 		inputSet.push_back(BOW[i]);
@@ -934,19 +934,19 @@ MLPPData::WordsToVecResult MLPPData::word_to_vec(std::vector<std::string> senten
 	return res;
 }
 
-std::vector<std::vector<double>> MLPPData::LSA(std::vector<std::string> sentences, int dim) {
+std::vector<std::vector<real_t>> MLPPData::LSA(std::vector<std::string> sentences, int dim) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<double>> docWordData = BOW(sentences, "Binary");
+	std::vector<std::vector<real_t>> docWordData = BOW(sentences, "Binary");
 
 	auto [U, S, Vt] = alg.SVD(docWordData);
-	std::vector<std::vector<double>> S_trunc = alg.zeromat(dim, dim);
-	std::vector<std::vector<double>> Vt_trunc;
+	std::vector<std::vector<real_t>> S_trunc = alg.zeromat(dim, dim);
+	std::vector<std::vector<real_t>> Vt_trunc;
 	for (int i = 0; i < dim; i++) {
 		S_trunc[i][i] = S[i][i];
 		Vt_trunc.push_back(Vt[i]);
 	}
 
-	std::vector<std::vector<double>> embeddings = alg.matmult(S_trunc, Vt_trunc);
+	std::vector<std::vector<real_t>> embeddings = alg.matmult(S_trunc, Vt_trunc);
 	return embeddings;
 }
 
@@ -977,10 +977,10 @@ void MLPPData::setInputNames(std::string fileName, std::vector<std::string> &inp
 	dataFile.close();
 }
 
-std::vector<std::vector<double>> MLPPData::featureScaling(std::vector<std::vector<double>> X) {
+std::vector<std::vector<real_t>> MLPPData::featureScaling(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
 	X = alg.transpose(X);
-	std::vector<double> max_elements, min_elements;
+	std::vector<real_t> max_elements, min_elements;
 	max_elements.resize(X.size());
 	min_elements.resize(X.size());
 
@@ -997,7 +997,7 @@ std::vector<std::vector<double>> MLPPData::featureScaling(std::vector<std::vecto
 	return alg.transpose(X);
 }
 
-std::vector<std::vector<double>> MLPPData::meanNormalization(std::vector<std::vector<double>> X) {
+std::vector<std::vector<real_t>> MLPPData::meanNormalization(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
 	MLPPStat stat;
 	// (X_j - mu_j) / std_j, for every j
@@ -1009,11 +1009,11 @@ std::vector<std::vector<double>> MLPPData::meanNormalization(std::vector<std::ve
 	return X;
 }
 
-std::vector<std::vector<double>> MLPPData::meanCentering(std::vector<std::vector<double>> X) {
+std::vector<std::vector<real_t>> MLPPData::meanCentering(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
 	MLPPStat stat;
 	for (int i = 0; i < X.size(); i++) {
-		double mean_i = stat.mean(X[i]);
+		real_t mean_i = stat.mean(X[i]);
 		for (int j = 0; j < X[i].size(); j++) {
 			X[i][j] -= mean_i;
 		}
@@ -1021,8 +1021,8 @@ std::vector<std::vector<double>> MLPPData::meanCentering(std::vector<std::vector
 	return X;
 }
 
-std::vector<std::vector<double>> MLPPData::oneHotRep(std::vector<double> tempOutputSet, int n_class) {
-	std::vector<std::vector<double>> outputSet;
+std::vector<std::vector<real_t>> MLPPData::oneHotRep(std::vector<real_t> tempOutputSet, int n_class) {
+	std::vector<std::vector<real_t>> outputSet;
 	outputSet.resize(tempOutputSet.size());
 	for (int i = 0; i < tempOutputSet.size(); i++) {
 		for (int j = 0; j <= n_class - 1; j++) {
@@ -1036,8 +1036,8 @@ std::vector<std::vector<double>> MLPPData::oneHotRep(std::vector<double> tempOut
 	return outputSet;
 }
 
-std::vector<double> MLPPData::reverseOneHot(std::vector<std::vector<double>> tempOutputSet) {
-	std::vector<double> outputSet;
+std::vector<real_t> MLPPData::reverseOneHot(std::vector<std::vector<real_t>> tempOutputSet) {
+	std::vector<real_t> outputSet;
 	int n_class = tempOutputSet[0].size();
 	for (int i = 0; i < tempOutputSet.size(); i++) {
 		int current_class = 1;
