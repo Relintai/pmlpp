@@ -110,35 +110,35 @@ public:
 	}
 
 	_FORCE_INLINE_ const double &operator[](int p_index) const {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		CRASH_BAD_INDEX(p_index, _size);
 		return _data[p_index];
 	}
 	_FORCE_INLINE_ double &operator[](int p_index) {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		CRASH_BAD_INDEX(p_index, _size);
 		return _data[p_index];
 	}
 
 	_FORCE_INLINE_ double get_element(int p_index) const {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		ERR_FAIL_INDEX_V(p_index, _size, 0);
 		return _data[p_index];
 	}
 	_FORCE_INLINE_ double get_element(int p_index) {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		ERR_FAIL_INDEX_V(p_index, _size, 0);
 		return _data[p_index];
 	}
 
 	_FORCE_INLINE_ real_t get_element_bind(int p_index) const {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		ERR_FAIL_INDEX_V(p_index, _size, 0);
 		return static_cast<real_t>(_data[p_index]);
 	}
 
 	_FORCE_INLINE_ void set_element(int p_index, double p_val) {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		ERR_FAIL_INDEX(p_index, _size);
 		_data[p_index] = p_val;
 	}
 
 	_FORCE_INLINE_ void set_element_bind(int p_index, real_t p_val) {
-		CRASH_BAD_UNSIGNED_INDEX(p_index, _size);
+		ERR_FAIL_INDEX(p_index, _size);
 		_data[p_index] = p_val;
 	}
 
