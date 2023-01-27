@@ -105,6 +105,12 @@ public:
 	void resize(int p_size) {
 		_size = p_size;
 
+		if (_size == 0) {
+			memfree(_data);
+			_data = NULL;
+			return;
+		}
+
 		_data = (double *)memrealloc(_data, _size * sizeof(double));
 		CRASH_COND_MSG(!_data, "Out of memory");
 	}
@@ -263,6 +269,8 @@ public:
 			_data[i] = r[i];
 		}
 	}
+
+	String to_string();
 
 	_FORCE_INLINE_ MLPPVector() {
 		_size = 0;

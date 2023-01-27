@@ -10,6 +10,9 @@
 
 #include "core/string/ustring.h"
 
+class MLPPMatrix;
+class MLPPVector;
+
 class MLPPTests : public Reference {
 	GDCLASS(MLPPTests, Reference);
 
@@ -58,9 +61,15 @@ public:
 	void test_numerical_analysis();
 	void test_support_vector_classification_kernel(bool ui = false);
 
+	void test_mlpp_vector();
+	void test_mlpp_matrix();
+
 	void is_approx_equalsd(double a, double b, const String &str);
 	void is_approx_equals_dvec(const Vector<double> &a, const Vector<double> &b, const String &str);
 	void is_approx_equals_dmat(const Vector<Vector<double>> &a, const Vector<Vector<double>> &b, const String &str);
+
+	void is_approx_equals_mat(Ref<MLPPMatrix> a, Ref<MLPPMatrix> b, const String &str);
+	void is_approx_equals_vec(Ref<MLPPVector> a, Ref<MLPPVector> b, const String &str);
 
 	MLPPTests();
 	~MLPPTests();

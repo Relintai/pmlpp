@@ -146,7 +146,15 @@ public:
 	void resize(const Size2i &p_size) {
 		_size = p_size;
 
-		_data = (double *)memrealloc(_data, data_size() * sizeof(double));
+		int ds = data_size();
+
+		if (ds == 0) {
+			memfree(_data);
+			_data = NULL;
+			return;
+		}
+
+		_data = (double *)memrealloc(_data, ds * sizeof(double));
 		CRASH_COND_MSG(!_data, "Out of memory");
 	}
 
@@ -397,6 +405,8 @@ public:
 			}
 		}
 	}
+
+	String to_string();
 
 	_FORCE_INLINE_ MLPPMatrix() {
 		_data = NULL;

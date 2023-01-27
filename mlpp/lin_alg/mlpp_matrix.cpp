@@ -1,6 +1,27 @@
 
 #include "mlpp_matrix.h"
 
+String MLPPMatrix::to_string() {
+	String str;
+
+	str += "[MLPPMatrix: \n";
+
+	for (int y = 0; y < _size.y; ++y) {
+		str += "  [ ";
+
+		for (int x = 0; x < _size.x; ++x) {
+			str += String::num(_data[_size.x * y + x]);
+			str += " ";
+		}
+
+		str += "]\n";
+	}
+
+	str += "]";
+
+	return str;
+}
+
 void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("add_row", "row"), &MLPPMatrix::add_row_pool_vector);
 	ClassDB::bind_method(D_METHOD("remove_row", "index"), &MLPPMatrix::remove_row);

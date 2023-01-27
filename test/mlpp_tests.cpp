@@ -9,6 +9,9 @@
 #include <iostream>
 #include <vector>
 
+#include "../mlpp/lin_alg/mlpp_matrix.h"
+#include "../mlpp/lin_alg/mlpp_vector.h"
+
 #include "../mlpp/activation/activation.h"
 #include "../mlpp/ann/ann.h"
 #include "../mlpp/auto_encoder/auto_encoder.h"
@@ -888,8 +891,8 @@ void MLPPTests::test_numerical_analysis() {
 
 	std::vector<std::vector<std::string>> h = conv.harrisCornerDetection(A);
 
-	for (int i = 0; i < h.size(); i++) {
-		for (int j = 0; j < h[i].size(); j++) {
+	for (uint32_t i = 0; i < h.size(); i++) {
+		for (uint32_t j = 0; j < h[i].size(); j++) {
 			std::cout << h[i][j] << " ";
 		}
 		std::cout << std::endl;
@@ -916,6 +919,46 @@ void MLPPTests::test_support_vector_classification_kernel(bool ui) {
 	};
 
 	std::cout << "True of false: linearly independent?: " << std::boolalpha << alg.linearIndependenceChecker(linearlyIndependentMat) << std::endl;
+}
+
+void MLPPTests::test_mlpp_vector() {
+	std::vector<double> a = { 4, 3, 1, 3 };
+
+	Ref<MLPPVector> rv;
+	rv.instance();
+	rv->set_from_std_vector(a);
+
+	Ref<MLPPVector> rv2;
+	rv2.instance();
+	rv2->set_from_std_vector(a);
+
+	is_approx_equals_vec(rv, rv2, "set_from_std_vectors test.");
+
+	rv2->set_from_std_vector(a);
+
+	is_approx_equals_vec(rv, rv2, "re-set_from_std_vectors test.");
+}
+void MLPPTests::test_mlpp_matrix() {
+	std::vector<std::vector<double>> A = {
+		{ 1, 0, 0, 0 },
+		{ 0, 1, 0, 0 },
+		{ 0, 0, 1, 0 },
+		{ 0, 0, 0, 1 }
+	};
+
+	Ref<MLPPMatrix> rmat;
+	rmat.instance();
+	rmat->set_from_std_vectors(A);
+
+	Ref<MLPPMatrix> rmat2;
+	rmat2.instance();
+	rmat2->set_from_std_vectors(A);
+
+	is_approx_equals_mat(rmat, rmat2, "set_from_std_vectors test.");
+
+	rmat2->set_from_std_vectors(A);
+
+	is_approx_equals_mat(rmat, rmat2, "re-set_from_std_vectors test.");
 }
 
 void MLPPTests::is_approx_equalsd(double a, double b, const String &str) {
@@ -1017,6 +1060,70 @@ IAEDMAT_FAILED:
 	ERR_PRINT(fail_str);
 }
 
+void MLPPTests::is_approx_equals_mat(Ref<MLPPMatrix> a, Ref<MLPPMatrix> b, const String &str) {
+	ERR_FAIL_COND(!a.is_valid());
+	ERR_FAIL_COND(!b.is_valid());
+
+	int ds = a->data_size();
+
+	const double *aa = a->ptr();
+	const double *bb = b->ptr();
+
+	if (a->size() != b->size()) {
+		goto IAEMAT_FAILED;
+	}
+
+	ERR_FAIL_COND(!aa);
+	ERR_FAIL_COND(!bb);
+
+	for (int i = 0; i < ds; ++i) {
+		if (!Math::is_equal_approx(aa[i], bb[i])) {
+			goto IAEMAT_FAILED;
+		}
+	}
+
+	return;
+
+IAEMAT_FAILED:
+
+	String fail_str = "TEST FAILED: ";
+	fail_str += str;
+	fail_str += "\nGot:\n";
+	fail_str += a->to_string();
+	fail_str += "\nShould be:\n";
+	fail_str += b->to_string();
+
+	ERR_PRINT(fail_str);
+}
+void MLPPTests::is_approx_equals_vec(Ref<MLPPVector> a, Ref<MLPPVector> b, const String &str) {
+	ERR_FAIL_COND(!a.is_valid());
+	ERR_FAIL_COND(!b.is_valid());
+
+	if (a->size() != b->size()) {
+		goto IAEDVEC_FAILED;
+	}
+
+	for (int i = 0; i < a->size(); ++i) {
+		if (!Math::is_equal_approx(a->get_element(i), b->get_element(i))) {
+			goto IAEDVEC_FAILED;
+		}
+	}
+
+	return;
+
+IAEDVEC_FAILED:
+
+	String fail_str = "TEST FAILED: ";
+	fail_str += str;
+	fail_str += "\nGot:\n";
+	fail_str += a->to_string();
+	fail_str += "\nShould be:\n";
+	fail_str += b->to_string();
+	fail_str += "\n.";
+
+	ERR_PRINT(fail_str);
+}
+
 MLPPTests::MLPPTests() {
 	_breast_cancer_data_path = "res://datasets/BreastCancer.csv";
 	_breast_cancer_svm_data_path = "res://datasets/BreastCancerSVM.csv";
@@ -1077,4 +1184,7 @@ void MLPPTests::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("test_numerical_analysis"), &MLPPTests::test_numerical_analysis);
 
 	ClassDB::bind_method(D_METHOD("test_support_vector_classification_kernel", "ui"), &MLPPTests::test_support_vector_classification_kernel, false);
+
+	ClassDB::bind_method(D_METHOD("test_mlpp_vector"), &MLPPTests::test_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("test_mlpp_matrix"), &MLPPTests::test_mlpp_matrix);
 }

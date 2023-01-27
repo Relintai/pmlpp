@@ -1,6 +1,21 @@
 
 #include "mlpp_vector.h"
 
+String MLPPVector::to_string() {
+	String str;
+
+	str += "[MLPPVector: ";
+
+	for (int x = 0; x < _size; ++x) {
+		str += String::num(_data[x]);
+		str += " ";
+	}
+
+	str += "]";
+
+	return str;
+}
+
 void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("push_back", "elem"), &MLPPVector::push_back);
 	ClassDB::bind_method(D_METHOD("remove", "index"), &MLPPVector::remove);
