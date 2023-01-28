@@ -61,10 +61,6 @@ real_t MLPPKNN::score() {
 	return util.performance_pool_int_array_vec(model_set_test(_input_set), _output_set);
 }
 
-MLPPKNN::MLPPKNN(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int k) {
-	_k = k;
-}
-
 MLPPKNN::MLPPKNN() {
 	_k = 0;
 }
@@ -171,7 +167,7 @@ void MLPPKNN::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("get_k"), &MLPPKNN::get_k);
 	ClassDB::bind_method(D_METHOD("set_k", "value"), &MLPPKNN::set_k);
-	ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "k"), "set_k", "get_k");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "k"), "set_k", "get_k");
 
 	ClassDB::bind_method(D_METHOD("model_set_test", "X"), &MLPPKNN::model_set_test);
 	ClassDB::bind_method(D_METHOD("model_test", "x"), &MLPPKNN::model_test);

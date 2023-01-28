@@ -32,8 +32,6 @@ public:
 	int model_test(const Ref<MLPPVector> &x);
 	real_t score();
 
-	MLPPKNN(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int k);
-
 	MLPPKNN();
 	~MLPPKNN();
 
