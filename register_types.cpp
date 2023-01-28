@@ -28,6 +28,7 @@ SOFTWARE.
 #include "mlpp/lin_alg/mlpp_vector.h"
 
 #include "mlpp/knn/knn.h"
+#include "mlpp/kmeans/kmeans.h"
 
 #include "test/mlpp_tests.h"
 
@@ -37,6 +38,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPMatrix>();
 
 		ClassDB::register_class<MLPPKNN>();
+		ClassDB::register_class<MLPPKMeans>();
 
 		ClassDB::register_class<MLPPDataESimple>();
 		ClassDB::register_class<MLPPDataSimple>();

@@ -10,38 +10,64 @@
 
 #include "core/math/math_defs.h"
 
-#include <string>
-#include <vector>
+#include "core/object/reference.h"
 
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
 
-class MLPPKMeans {
+class MLPPKMeans : public Reference {
+	GDCLASS(MLPPKMeans, Reference);
+
 public:
-	MLPPKMeans(std::vector<std::vector<real_t>> inputSet, int k, std::string init_type = "Default");
-	std::vector<std::vector<real_t>> modelSetTest(std::vector<std::vector<real_t>> X);
-	std::vector<real_t> modelTest(std::vector<real_t> x);
-	void train(int epoch_num, bool UI = 1);
+	enum MeanType {
+		MEAN_TYPE_CENTROID = 0,
+		MEAN_TYPE_KMEANSPP,
+	};
+
+public:
+	Ref<MLPPMatrix> get_input_set();
+	void set_input_set(const Ref<MLPPMatrix> &val);
+
+	int get_k();
+	void set_k(const int val);
+
+	MeanType get_mean_type();
+	void set_mean_type(const MeanType val);
+
+	void initialize();
+
+	Ref<MLPPMatrix> model_set_test(const Ref<MLPPMatrix> &X);
+	Ref<MLPPVector> model_test(const Ref<MLPPVector> &x);
+	void train(int epoch_num, bool UI = false);
 	real_t score();
-	std::vector<real_t> silhouette_scores();
+	Ref<MLPPVector> silhouette_scores();
 
-private:
-	void Evaluate();
-	void computeMu();
+	MLPPKMeans();
+	~MLPPKMeans();
 
-	void centroidInitialization(int k);
-	void kmeansppInitialization(int k);
-	real_t Cost();
+protected:
+	
 
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<std::vector<real_t>> mu;
-	std::vector<std::vector<real_t>> r;
+	void _evaluate();
+	void _compute_mu();
 
-	real_t euclideanDistance(std::vector<real_t> A, std::vector<real_t> B);
+	void _centroid_initialization(int k);
+	void _kmeanspp_initialization(int k);
+	real_t _cost();
 
-	real_t accuracy_threshold;
-	int k;
+	static void _bind_methods();
 
-	std::string init_type;
+	Ref<MLPPMatrix> _input_set;
+	Ref<MLPPMatrix> _mu;
+	Ref<MLPPMatrix> _r;
+
+	real_t _accuracy_threshold;
+	int _k;
+	bool _initialized;
+
+	MeanType _mean_type;
 };
 
+VARIANT_ENUM_CAST(MLPPKMeans::MeanType);
 
 #endif /* KMeans_hpp */

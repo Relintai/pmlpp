@@ -541,6 +541,7 @@ void MLPPTests::test_k_means(bool ui) {
 	MLPPLinAlg alg;
 
 	// KMeans
+	/*
 	std::vector<std::vector<real_t>> inputSet = { { 32, 0, 7 }, { 2, 28, 17 }, { 0, 9, 23 } };
 	MLPPKMeans kmeans(inputSet, 3, "KMeans++");
 	kmeans.train(3, ui);
@@ -548,6 +549,7 @@ void MLPPTests::test_k_means(bool ui) {
 	alg.printMatrix(kmeans.modelSetTest(inputSet)); // Returns the assigned centroids to each of the respective training examples
 	std::cout << std::endl;
 	alg.printVector(kmeans.silhouette_scores());
+	*/
 }
 void MLPPTests::test_knn(bool ui) {
 	MLPPLinAlg alg;

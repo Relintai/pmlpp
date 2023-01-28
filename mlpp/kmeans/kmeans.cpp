@@ -12,16 +12,101 @@
 #include <iostream>
 #include <random>
 
+Ref<MLPPMatrix> MLPPKMeans::get_input_set() {
+	return _input_set;
+}
+void MLPPKMeans::set_input_set(const Ref<MLPPMatrix> &val) {
+	_input_set = val;
+	_initialized = false;
+}
 
-MLPPKMeans::MLPPKMeans(std::vector<std::vector<real_t>> inputSet, int k, std::string init_type) :
-		inputSet(inputSet), k(k), init_type(init_type) {
-	if (init_type == "KMeans++") {
-		kmeansppInitialization(k);
+int MLPPKMeans::get_k() {
+	return _k;
+}
+void MLPPKMeans::set_k(const int val) {
+	_k = val;
+	_initialized = false;
+}
+
+MLPPKMeans::MeanType MLPPKMeans::get_mean_type() {
+	return _mean_type;
+}
+void MLPPKMeans::set_mean_type(const MLPPKMeans::MeanType val) {
+	_mean_type = val;
+	_initialized = false;
+}
+
+void MLPPKMeans::initialize() {
+	if (_mean_type == MEAN_TYPE_KMEANSPP) {
+		_kmeanspp_initialization(_k);
 	} else {
-		centroidInitialization(k);
+		_centroid_initialization(_k);
 	}
 }
 
+Ref<MLPPMatrix> MLPPKMeans::model_set_test(const Ref<MLPPMatrix> &X) {
+	return Ref<MLPPMatrix>();
+}
+Ref<MLPPVector> MLPPKMeans::model_test(const Ref<MLPPVector> &x) {
+	return Ref<MLPPVector>();
+}
+void MLPPKMeans::train(int epoch_num, bool UI) {
+}
+real_t MLPPKMeans::score() {
+	return 0;
+}
+Ref<MLPPVector> MLPPKMeans::silhouette_scores() {
+	return Ref<MLPPVector>();
+}
+
+MLPPKMeans::MLPPKMeans() {
+	_accuracy_threshold = 0;
+	_k = 0;
+	_initialized = false;
+
+	_mean_type = MEAN_TYPE_CENTROID;
+}
+MLPPKMeans::~MLPPKMeans() {
+}
+
+void MLPPKMeans::_evaluate() {
+}
+void MLPPKMeans::_compute_mu() {
+}
+
+void MLPPKMeans::_centroid_initialization(int k) {
+}
+void MLPPKMeans::_kmeanspp_initialization(int k) {
+}
+real_t MLPPKMeans::_cost() {
+	return 0;
+}
+
+void MLPPKMeans::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_input_set"), &MLPPKMeans::get_input_set);
+	ClassDB::bind_method(D_METHOD("set_input_set", "value"), &MLPPKMeans::set_input_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "input_set", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_input_set", "get_input_set");
+
+	ClassDB::bind_method(D_METHOD("get_k"), &MLPPKMeans::get_k);
+	ClassDB::bind_method(D_METHOD("set_k", "value"), &MLPPKMeans::set_k);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "k"), "set_k", "get_k");
+
+	ClassDB::bind_method(D_METHOD("get_mean_type"), &MLPPKMeans::get_mean_type);
+	ClassDB::bind_method(D_METHOD("set_mean_type", "value"), &MLPPKMeans::set_mean_type);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "mean_type", PROPERTY_HINT_ENUM, "Centroid,KMeansPP"), "set_mean_type", "get_mean_type");
+
+	ClassDB::bind_method(D_METHOD("initialize"), &MLPPKMeans::initialize);
+	ClassDB::bind_method(D_METHOD("model_set_test", "X"), &MLPPKMeans::model_set_test);
+	ClassDB::bind_method(D_METHOD("model_test", "x"), &MLPPKMeans::model_test);
+	ClassDB::bind_method(D_METHOD("train", "epoch_num", "UI"), &MLPPKMeans::train, false);
+	ClassDB::bind_method(D_METHOD("score"), &MLPPKMeans::score);
+	ClassDB::bind_method(D_METHOD("silhouette_scores"), &MLPPKMeans::silhouette_scores);
+
+	BIND_ENUM_CONSTANT(MEAN_TYPE_CENTROID);
+	BIND_ENUM_CONSTANT(MEAN_TYPE_KMEANSPP);
+}
+
+/*
 std::vector<std::vector<real_t>> MLPPKMeans::modelSetTest(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
 	std::vector<std::vector<real_t>> closestCentroids;
@@ -207,8 +292,8 @@ void MLPPKMeans::kmeansppInitialization(int k) {
 		std::vector<real_t> farthestCentroid;
 		for (int j = 0; j < inputSet.size(); j++) {
 			real_t max_dist = 0;
-			/* SUM ALL THE SQUARED DISTANCES, CHOOSE THE ONE THAT'S FARTHEST
-			AS TO SPREAD OUT THE CLUSTER CENTROIDS. */
+			// SUM ALL THE SQUARED DISTANCES, CHOOSE THE ONE THAT'S FARTHEST
+			// AS TO SPREAD OUT THE CLUSTER CENTROIDS.
 			real_t sum = 0;
 			for (int k = 0; k < mu.size(); k++) {
 				sum += alg.euclideanDistance(inputSet[j], mu[k]);
@@ -233,3 +318,4 @@ real_t MLPPKMeans::Cost() {
 	return sum;
 }
 
+*/
