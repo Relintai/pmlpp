@@ -21,7 +21,7 @@ class MLPPMatrix : public Reference {
 	GDCLASS(MLPPMatrix, Reference);
 
 public:
-	real_t *ptr() {
+	real_t *ptrw() {
 		return _data;
 	}
 
@@ -95,7 +95,7 @@ public:
 
 	// Removes the item copying the last value into the position of the one to
 	// remove. It's generally faster than `remove`.
-	void remove_unordered(int p_index) {
+	void remove_row_unordered(int p_index) {
 		ERR_FAIL_INDEX(p_index, _size.y);
 
 		--_size.y;
@@ -203,6 +203,85 @@ public:
 		_data[p_index_x * p_index_y] = p_val;
 	}
 
+	_FORCE_INLINE_ Vector<real_t> get_row_vector(int p_index_y) {
+		ERR_FAIL_INDEX_V(p_index_y, _size.y, Vector<real_t>());
+
+		Vector<real_t> ret;
+
+		if (unlikely(_size.x == 0)) {
+			return ret;
+		}
+
+		ret.resize(_size.x);
+
+		int ind_start = p_index_y * _size.x;
+
+		real_t *row_ptr = ret.ptrw();
+
+		for (int i = 0; i < _size.x; ++i) {
+			row_ptr[i] = _data[ind_start + i];
+		}
+	}
+
+	_FORCE_INLINE_ PoolRealArray get_row_pool_vector(int p_index_y) {
+		ERR_FAIL_INDEX_V(p_index_y, _size.y, PoolRealArray());
+
+		PoolRealArray ret;
+
+		if (unlikely(_size.x == 0)) {
+			return ret;
+		}
+
+		ret.resize(_size.x);
+
+		int ind_start = p_index_y * _size.x;
+
+		PoolRealArray::Write w = ret.write();
+		real_t *row_ptr = w.ptr();
+
+		for (int i = 0; i < _size.x; ++i) {
+			row_ptr[i] = _data[ind_start + i];
+		}
+	}
+
+	_FORCE_INLINE_ Ref<MLPPVector> get_row_mlpp_vector(int p_index_y) {
+		ERR_FAIL_INDEX_V(p_index_y, _size.y, Ref<MLPPVector>());
+
+		Ref<MLPPVector> ret;
+		ret.instance();
+
+		if (unlikely(_size.x == 0)) {
+			return ret;
+		}
+
+		ret->resize(_size.x);
+
+		int ind_start = p_index_y * _size.x;
+
+		real_t *row_ptr = ret->ptrw();
+
+		for (int i = 0; i < _size.x; ++i) {
+			row_ptr[i] = _data[ind_start + i];
+		}
+	}
+
+	_FORCE_INLINE_ void get_row_into_mlpp_vector(int p_index_y, Ref<MLPPVector> target) const {
+		ERR_FAIL_COND(!target.is_valid());
+		ERR_FAIL_INDEX(p_index_y, _size.y);
+
+		if (unlikely(target->size() != _size.x)) {
+			target->resize(_size.x);
+		}
+
+		int ind_start = p_index_y * _size.x;
+
+		real_t *row_ptr = target->ptrw();
+
+		for (int i = 0; i < _size.x; ++i) {
+			row_ptr[i] = _data[ind_start + i];
+		}
+	}
+
 	_FORCE_INLINE_ void set_row_vector(int p_index_y, const Vector<real_t> &p_row) {
 		ERR_FAIL_COND(p_row.size() != _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
@@ -224,6 +303,20 @@ public:
 
 		PoolRealArray::Read r = p_row.read();
 		const real_t *row_ptr = r.ptr();
+
+		for (int i = 0; i < _size.x; ++i) {
+			_data[ind_start + i] = row_ptr[i];
+		}
+	}
+
+	_FORCE_INLINE_ void set_row_mlpp_vector(int p_index_y, const Ref<MLPPVector> &p_row) {
+		ERR_FAIL_COND(!p_row.is_valid());
+		ERR_FAIL_COND(p_row->size() != _size.x);
+		ERR_FAIL_INDEX(p_index_y, _size.y);
+
+		int ind_start = p_index_y * _size.x;
+
+		const real_t *row_ptr = p_row->ptr();
 
 		for (int i = 0; i < _size.x; ++i) {
 			_data[ind_start + i] = row_ptr[i];

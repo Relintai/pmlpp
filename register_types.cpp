@@ -24,8 +24,10 @@ SOFTWARE.
 #include "register_types.h"
 
 #include "mlpp/data/data.h"
-#include "mlpp/lin_alg/mlpp_vector.h"
 #include "mlpp/lin_alg/mlpp_matrix.h"
+#include "mlpp/lin_alg/mlpp_vector.h"
+
+#include "mlpp/knn/knn.h"
 
 #include "test/mlpp_tests.h"
 
@@ -33,6 +35,8 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 	if (p_level == MODULE_REGISTRATION_LEVEL_SCENE) {
 		ClassDB::register_class<MLPPVector>();
 		ClassDB::register_class<MLPPMatrix>();
+
+		ClassDB::register_class<MLPPKNN>();
 
 		ClassDB::register_class<MLPPDataESimple>();
 		ClassDB::register_class<MLPPDataSimple>();

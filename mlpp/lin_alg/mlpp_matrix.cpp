@@ -25,7 +25,7 @@ String MLPPMatrix::to_string() {
 void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("add_row", "row"), &MLPPMatrix::add_row_pool_vector);
 	ClassDB::bind_method(D_METHOD("remove_row", "index"), &MLPPMatrix::remove_row);
-	ClassDB::bind_method(D_METHOD("remove_unordered", "index"), &MLPPMatrix::remove_unordered);
+	ClassDB::bind_method(D_METHOD("remove_row_unordered", "index"), &MLPPMatrix::remove_row_unordered);
 	ClassDB::bind_method(D_METHOD("swap_row", "index_1", "index_2"), &MLPPMatrix::swap_row);
 
 	ClassDB::bind_method(D_METHOD("clear"), &MLPPMatrix::clear);
@@ -40,7 +40,12 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_element", "index_x", "index_y"), &MLPPMatrix::get_element_bind);
 	ClassDB::bind_method(D_METHOD("set_element", "index_x", "index_y", "val"), &MLPPMatrix::set_element_bind);
 
+	ClassDB::bind_method(D_METHOD("get_row_pool_vector", "index_y"), &MLPPMatrix::get_row_pool_vector);
+	ClassDB::bind_method(D_METHOD("get_row_mlpp_vector", "index_y"), &MLPPMatrix::get_row_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("get_row_into_mlpp_vector", "index_y", "target"), &MLPPMatrix::get_row_into_mlpp_vector);
+
 	ClassDB::bind_method(D_METHOD("set_row_pool_vector", "index_y", "row"), &MLPPMatrix::set_row_pool_vector);
+	ClassDB::bind_method(D_METHOD("set_row_mlpp_vector", "index_y", "row"), &MLPPMatrix::set_row_mlpp_vector);
 
 	ClassDB::bind_method(D_METHOD("fill", "val"), &MLPPMatrix::fill);
 

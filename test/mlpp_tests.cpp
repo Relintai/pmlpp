@@ -553,11 +553,39 @@ void MLPPTests::test_knn(bool ui) {
 	MLPPLinAlg alg;
 
 	// kNN
-	std::vector<std::vector<real_t>> inputSet = { { 1, 2, 3, 4, 5, 6, 7, 8 }, { 0, 0, 0, 0, 1, 1, 1, 1 } };
+	std::vector<std::vector<real_t>> inputSet = {
+		{ 1, 2, 3, 4, 5, 6, 7, 8 },
+		{ 0, 0, 0, 0, 1, 1, 1, 1 }
+	};
 	std::vector<real_t> outputSet = { 0, 0, 0, 0, 1, 1, 1, 1 };
-	MLPPKNN knn(alg.transpose(inputSet), outputSet, 8);
-	alg.printVector(knn.modelSetTest(alg.transpose(inputSet)));
-	std::cout << "ACCURACY: " << 100 * knn.score() << "%" << std::endl;
+
+	Ref<MLPPMatrix> ism;
+	ism.instance();
+	ism->set_from_std_vectors(alg.transpose(inputSet));
+
+	//ERR_PRINT(ism->to_string());
+
+	Ref<MLPPVector> osm;
+	osm.instance();
+	osm->set_from_std_vector(outputSet);
+
+	//ERR_PRINT(osm->to_string());
+
+	Ref<MLPPKNN> knn;
+	knn.instance();
+
+	knn->set_k(7);
+	knn->set_input_set(ism);
+	knn->set_output_set(osm);
+
+	PoolIntArray res = knn->model_set_test(ism);
+
+	ERR_PRINT(String(Variant(res)));
+	ERR_PRINT("ACCURACY: " + itos(100 * knn->score()) + "%");
+
+	//(alg.transpose(inputSet), outputSet, 8);
+	//alg.printVector(knn.modelSetTest(alg.transpose(inputSet)));
+	//std::cout << "ACCURACY: " << 100 * knn.score() << "%" << std::endl;
 }
 
 void MLPPTests::test_convolution_tensors_etc() {

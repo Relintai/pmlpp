@@ -18,7 +18,7 @@ class MLPPVector : public Reference {
 	GDCLASS(MLPPVector, Reference);
 
 public:
-	real_t *ptr() {
+	real_t *ptrw() {
 		return _data;
 	}
 

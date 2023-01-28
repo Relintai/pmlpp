@@ -10,26 +10,44 @@
 
 #include "core/math/math_defs.h"
 
-#include <vector>
+#include "core/object/reference.h"
 
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
 
-class MLPPKNN {
+class MLPPKNN : public Reference {
+	GDCLASS(MLPPKNN, Reference);
+
 public:
-	MLPPKNN(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int k);
-	std::vector<real_t> modelSetTest(std::vector<std::vector<real_t>> X);
-	int modelTest(std::vector<real_t> x);
+	Ref<MLPPMatrix> get_input_set();
+	void set_input_set(const Ref<MLPPMatrix> &val);
+
+	Ref<MLPPVector> get_output_set();
+	void set_output_set(const Ref<MLPPVector> &val);
+
+	int get_k();
+	void set_k(const int val);
+
+	PoolIntArray model_set_test(const Ref<MLPPMatrix> &X);
+	int model_test(const Ref<MLPPVector> &x);
 	real_t score();
 
-private:
+	MLPPKNN(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int k);
+
+	MLPPKNN();
+	~MLPPKNN();
+
+protected:
 	// Private Model Functions
-	std::vector<real_t> nearestNeighbors(std::vector<real_t> x);
-	int determineClass(std::vector<real_t> knn);
+	PoolIntArray nearest_neighbors(const Ref<MLPPVector> &x);
+	int determine_class(const PoolIntArray &knn);
+
+	static void _bind_methods();
 
 	// Model Inputs and Parameters
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> outputSet;
-	int k;
+	Ref<MLPPMatrix> _input_set;
+	Ref<MLPPVector> _output_set;
+	int _k;
 };
-
 
 #endif /* kNN_hpp */

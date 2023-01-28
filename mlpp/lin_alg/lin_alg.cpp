@@ -5,6 +5,9 @@
 //
 
 #include "lin_alg.h"
+
+#include "core/math/math_funcs.h"
+
 #include "../stat/stat.h"
 #include <cmath>
 #include <iostream>
@@ -1218,6 +1221,43 @@ real_t MLPPLinAlg::euclideanDistance(std::vector<real_t> a, std::vector<real_t> 
 		dist += (a[i] - b[i]) * (a[i] - b[i]);
 	}
 	return std::sqrt(dist);
+}
+
+real_t MLPPLinAlg::euclidean_distance(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), 0);
+
+	int a_size = a->size();
+
+	ERR_FAIL_COND_V(a_size != b->size(), 0);
+
+	const real_t *aa = a->ptr();
+	const real_t *ba = b->ptr();
+
+	real_t dist = 0;
+
+	for (int i = 0; i < a_size; i++) {
+		dist += (aa[i] - ba[i]) * (aa[i] - ba[i]);
+	}
+
+	return Math::sqrt(dist);
+}
+real_t MLPPLinAlg::euclidean_distance_squared(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), 0);
+
+	int a_size = a->size();
+
+	ERR_FAIL_COND_V(a_size != b->size(), 0);
+
+	const real_t *aa = a->ptr();
+	const real_t *ba = b->ptr();
+
+	real_t dist = 0;
+
+	for (int i = 0; i < a_size; i++) {
+		dist += (aa[i] - ba[i]) * (aa[i] - ba[i]);
+	}
+
+	return dist;
 }
 
 real_t MLPPLinAlg::norm_2(std::vector<real_t> a) {

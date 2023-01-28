@@ -10,6 +10,9 @@
 
 #include "core/math/math_defs.h"
 
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
+
 #include <tuple>
 #include <vector>
 
@@ -211,6 +214,8 @@ public:
 	std::vector<real_t> round(std::vector<real_t> a);
 
 	real_t euclideanDistance(std::vector<real_t> a, std::vector<real_t> b);
+	real_t euclidean_distance(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	real_t euclidean_distance_squared(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	real_t norm_2(std::vector<real_t> a);
 

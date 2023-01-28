@@ -10,6 +10,11 @@
 
 
 #include "core/math/math_defs.h"
+#include "core/containers/vector.h"
+#include "core/variant/variant.h"
+
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
 
 #include <string>
 #include <tuple>
@@ -28,6 +33,10 @@ public:
 	// Cost/Performance related Functions
 	real_t performance(std::vector<real_t> y_hat, std::vector<real_t> y);
 	real_t performance(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y);
+
+	real_t performance_vec(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
+	real_t performance_mat(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+	real_t performance_pool_int_array_vec(PoolIntArray y_hat, const Ref<MLPPVector> &output_set);
 
 	// Parameter Saving Functions
 	void saveParameters(std::string fileName, std::vector<real_t> weights, real_t bias, bool app = 0, int layer = -1);
