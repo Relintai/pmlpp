@@ -46,13 +46,11 @@ public:
 	~MLPPKMeans();
 
 protected:
-	
-
 	void _evaluate();
 	void _compute_mu();
 
-	void _centroid_initialization(int k);
-	void _kmeanspp_initialization(int k);
+	void _centroid_initialization();
+	void _kmeanspp_initialization();
 	real_t _cost();
 
 	static void _bind_methods();

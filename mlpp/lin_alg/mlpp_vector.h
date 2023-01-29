@@ -2,6 +2,7 @@
 #define MLPP_VECTOR_H
 
 #include "core/math/math_defs.h"
+#include "core/math/math_funcs.h"
 
 #include "core/containers/pool_vector.h"
 #include "core/containers/sort_array.h"
@@ -243,7 +244,10 @@ public:
 	}
 
 	_FORCE_INLINE_ void set_from_mlpp_vectorr(const MLPPVector &p_from) {
-		resize(p_from.size());
+		if (_size != p_from.size()) {
+			resize(p_from.size());
+		}
+
 		for (int i = 0; i < p_from._size; i++) {
 			_data[i] = p_from._data[i];
 		}
@@ -251,13 +255,21 @@ public:
 
 	_FORCE_INLINE_ void set_from_mlpp_vector(const Ref<MLPPVector> &p_from) {
 		ERR_FAIL_COND(!p_from.is_valid());
-		resize(p_from->size());
+
+		if (_size != p_from->size()) {
+			resize(p_from->size());
+		}
+
 		for (int i = 0; i < p_from->_size; i++) {
 			_data[i] = p_from->_data[i];
 		}
 	}
 
 	_FORCE_INLINE_ void set_from_vector(const Vector<real_t> &p_from) {
+		if (_size != p_from.size()) {
+			resize(p_from.size());
+		}
+
 		resize(p_from.size());
 		for (int i = 0; i < _size; i++) {
 			_data[i] = p_from[i];
@@ -265,11 +277,34 @@ public:
 	}
 
 	_FORCE_INLINE_ void set_from_pool_vector(const PoolRealArray &p_from) {
-		resize(p_from.size());
-		typename PoolRealArray::Read r = p_from.read();
+		if (_size != p_from.size()) {
+			resize(p_from.size());
+		}
+
+		PoolRealArray::Read r = p_from.read();
 		for (int i = 0; i < _size; i++) {
 			_data[i] = r[i];
 		}
+	}
+
+	_FORCE_INLINE_ bool is_equal_approx(const Ref<MLPPVector> &p_with, real_t tolerance = static_cast<real_t>(CMP_EPSILON)) const {
+		ERR_FAIL_COND_V(!p_with.is_valid(), false);
+
+		if (unlikely(this == p_with.ptr())) {
+			return true;
+		}
+
+		if (_size != p_with->size()) {
+			return false;
+		}
+
+		for (int i = 0; i < _size; ++i) {
+			if (!Math::is_equal_approx(_data[i], p_with->_data[i], tolerance)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	String to_string();

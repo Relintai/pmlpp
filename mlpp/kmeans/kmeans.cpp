@@ -8,6 +8,8 @@
 #include "../lin_alg/lin_alg.h"
 #include "../utilities/utilities.h"
 
+#include "core/math/random_pcg.h"
+
 #include <climits>
 #include <iostream>
 #include <random>
@@ -37,29 +39,259 @@ void MLPPKMeans::set_mean_type(const MLPPKMeans::MeanType val) {
 }
 
 void MLPPKMeans::initialize() {
+	ERR_FAIL_COND(!_input_set.is_valid());
+
 	if (_mean_type == MEAN_TYPE_KMEANSPP) {
-		_kmeanspp_initialization(_k);
+		_kmeanspp_initialization();
 	} else {
-		_centroid_initialization(_k);
+		_centroid_initialization();
 	}
+
+	_initialized = true;
 }
 
 Ref<MLPPMatrix> MLPPKMeans::model_set_test(const Ref<MLPPMatrix> &X) {
-	return Ref<MLPPMatrix>();
+	ERR_FAIL_COND_V(!X.is_valid(), Ref<MLPPMatrix>());
+	ERR_FAIL_COND_V(!_initialized, Ref<MLPPMatrix>());
+
+	MLPPLinAlg alg;
+
+	int input_set_size_y = _input_set->size().y;
+
+	Ref<MLPPMatrix> closest_centroids;
+	closest_centroids.instance();
+	closest_centroids->resize(Size2i(_mu->size().x, input_set_size_y));
+
+	Ref<MLPPVector> closest_centroid;
+	closest_centroid.instance();
+	closest_centroid->resize(_mu->size().x);
+
+	Ref<MLPPVector> tmp_xiv;
+	tmp_xiv.instance();
+	tmp_xiv->resize(X->size().x);
+
+	Ref<MLPPVector> tmp_mujv;
+	tmp_mujv.instance();
+	tmp_mujv->resize(_mu->size().x);
+
+	int r0_size = _r->size().x;
+
+	for (int i = 0; i < input_set_size_y; ++i) {
+		_mu->get_row_into_mlpp_vector(0, closest_centroid);
+		X->get_row_into_mlpp_vector(i, tmp_xiv);
+
+		for (int j = 0; j < r0_size; ++j) {
+			_mu->get_row_into_mlpp_vector(j, tmp_mujv);
+
+			bool is_centroid_closer = alg.euclidean_distance(tmp_xiv, tmp_mujv) < alg.euclidean_distance(tmp_xiv, closest_centroid);
+
+			if (is_centroid_closer) {
+				closest_centroid->set_from_mlpp_vector(tmp_mujv);
+			}
+		}
+
+		closest_centroids->set_row_mlpp_vector(i, closest_centroid);
+	}
+
+	return closest_centroids;
 }
 Ref<MLPPVector> MLPPKMeans::model_test(const Ref<MLPPVector> &x) {
-	return Ref<MLPPVector>();
+	ERR_FAIL_COND_V(!x.is_valid(), Ref<MLPPVector>());
+	ERR_FAIL_COND_V(!_initialized, Ref<MLPPVector>());
+
+	MLPPLinAlg alg;
+
+	Ref<MLPPVector> closest_centroid;
+	closest_centroid.instance();
+	closest_centroid->resize(_mu->size().x);
+
+	_mu->get_row_into_mlpp_vector(0, closest_centroid);
+
+	int mu_size_y = _mu->size().y;
+
+	Ref<MLPPVector> tmp_mujv;
+	tmp_mujv.instance();
+	tmp_mujv->resize(_mu->size().x);
+
+	for (int j = 0; j < mu_size_y; ++j) {
+		_mu->get_row_into_mlpp_vector(j, tmp_mujv);
+
+		if (alg.euclidean_distance(x, tmp_mujv) < alg.euclidean_distance(x, closest_centroid)) {
+			closest_centroid->set_from_mlpp_vector(tmp_mujv);
+		}
+	}
+
+	return closest_centroid;
 }
 void MLPPKMeans::train(int epoch_num, bool UI) {
+	ERR_FAIL_COND(!_input_set.is_valid());
+
+	if (!_initialized) {
+		initialize();
+	}
+
+	real_t cost_prev = 0;
+	int epoch = 1;
+
+	_evaluate();
+
+	while (true) {
+		// STEPS OF THE ALGORITHM
+		// 1. DETERMINE r_nk
+		// 2. DETERMINE J
+		// 3. DETERMINE mu_k
+
+		// STOP IF CONVERGED, ELSE REPEAT
+
+		cost_prev = _cost();
+
+		_compute_mu();
+		_evaluate();
+
+		// UI PORTION
+		if (UI) {
+			MLPPUtilities::cost_info(epoch, cost_prev, _cost());
+		}
+
+		epoch++;
+
+		if (epoch > epoch_num) {
+			break;
+		}
+	}
 }
+
 real_t MLPPKMeans::score() {
-	return 0;
+	return _cost();
 }
+
 Ref<MLPPVector> MLPPKMeans::silhouette_scores() {
-	return Ref<MLPPVector>();
+	ERR_FAIL_COND_V(!_initialized, Ref<MLPPVector>());
+
+	MLPPLinAlg alg;
+
+	Ref<MLPPMatrix> closest_centroids = model_set_test(_input_set);
+
+	ERR_FAIL_COND_V(!closest_centroids.is_valid(), Ref<MLPPVector>());
+
+	int input_set_size_y = _input_set->size().y;
+	int input_set_size_x = _input_set->size().x;
+
+	int mu_size_y = _mu->size().y;
+
+	int closest_centroids_size_y = closest_centroids->size().y;
+
+	Ref<MLPPVector> silhouette_scores;
+	silhouette_scores.instance();
+	silhouette_scores->resize(input_set_size_y);
+
+	Ref<MLPPVector> input_set_i_tempv;
+	input_set_i_tempv.instance();
+	input_set_i_tempv->resize(input_set_size_x);
+
+	Ref<MLPPVector> input_set_j_tempv;
+	input_set_j_tempv.instance();
+	input_set_j_tempv->resize(input_set_size_x);
+
+	Ref<MLPPVector> input_set_k_tempv;
+	input_set_k_tempv.instance();
+	input_set_k_tempv->resize(input_set_size_x);
+
+	Ref<MLPPVector> r_i_tempv;
+	r_i_tempv.instance();
+	r_i_tempv->resize(_r->size().x);
+
+	Ref<MLPPVector> r_j_tempv;
+	r_j_tempv.instance();
+	r_j_tempv->resize(_r->size().x);
+
+	Ref<MLPPVector> closest_centroids_i_tempv;
+	closest_centroids_i_tempv.instance();
+	closest_centroids_i_tempv->resize(closest_centroids->size().x);
+
+	Ref<MLPPVector> closest_centroids_k_tempv;
+	closest_centroids_k_tempv.instance();
+	closest_centroids_k_tempv->resize(closest_centroids->size().x);
+
+	Ref<MLPPVector> mu_j_tempv;
+	mu_j_tempv.instance();
+	mu_j_tempv->resize(_mu->size().x);
+
+	for (int i = 0; i < input_set_size_y; ++i) {
+		_r->get_row_into_mlpp_vector(i, r_i_tempv);
+		_input_set->get_row_into_mlpp_vector(i, input_set_i_tempv);
+
+		// COMPUTING a[i]
+		real_t a = 0;
+		for (int j = 0; j < input_set_size_y; ++j) {
+			if (i == j) {
+				continue;
+			}
+
+			_r->get_row_into_mlpp_vector(j, r_j_tempv);
+
+			if (r_i_tempv->is_equal_approx(r_j_tempv)) {
+				_input_set->get_row_into_mlpp_vector(j, input_set_j_tempv);
+
+				a += alg.euclidean_distance(input_set_i_tempv, input_set_j_tempv);
+			}
+		}
+
+		// NORMALIZE a[i]
+		a /= closest_centroids->size().x - 1;
+
+		closest_centroids->get_row_into_mlpp_vector(i, closest_centroids_i_tempv);
+
+		// COMPUTING b[i]
+		real_t b = INT_MAX;
+		for (int j = 0; j < mu_size_y; ++j) {
+			_mu->get_row_into_mlpp_vector(j, mu_j_tempv);
+
+			if (!closest_centroids_i_tempv->is_equal_approx(mu_j_tempv)) {
+				real_t sum = 0;
+				for (int k = 0; k < input_set_size_y; ++k) {
+					_input_set->get_row_into_mlpp_vector(k, input_set_k_tempv);
+
+					sum += alg.euclidean_distance(input_set_i_tempv, input_set_k_tempv);
+				}
+
+				// NORMALIZE b[i]
+				real_t k_cluster_size = 0;
+				for (int k = 0; k < closest_centroids_size_y; ++k) {
+					_input_set->get_row_into_mlpp_vector(k, closest_centroids_k_tempv);
+
+					if (closest_centroids_k_tempv->is_equal_approx(mu_j_tempv)) {
+						++k_cluster_size;
+					}
+				}
+
+				if (sum / k_cluster_size < b) {
+					b = sum / k_cluster_size;
+				}
+			}
+		}
+
+		silhouette_scores->set_element(i, (b - a) / fmax(a, b));
+
+		// Or the expanded version:
+		// if(a < b) {
+		//     silhouette_scores->set_element(i, 1 - a/b);
+		// }
+		// else if(a == b){
+		//     silhouette_scores->set_element(i, 0);
+		// }
+		// else{
+		//     silhouette_scores->set_element(i, b/a - 1);
+		// }
+	}
+
+	return silhouette_scores;
 }
 
 MLPPKMeans::MLPPKMeans() {
+	_mu.instance();
+	_r.instance();
+
 	_accuracy_threshold = 0;
 	_k = 0;
 	_initialized = false;
@@ -69,17 +301,211 @@ MLPPKMeans::MLPPKMeans() {
 MLPPKMeans::~MLPPKMeans() {
 }
 
+// This simply computes r_nk
 void MLPPKMeans::_evaluate() {
-}
-void MLPPKMeans::_compute_mu() {
+	ERR_FAIL_COND(!_initialized);
+
+	MLPPLinAlg alg;
+
+	if (_r->size() != Size2i(_k, _input_set->size().y)) {
+		_r->resize(Size2i(_k, _input_set->size().y));
+	}
+
+	int r_size_y = _r->size().y;
+	int r_size_x = _r->size().x;
+
+	Ref<MLPPVector> closest_centroid;
+	closest_centroid.instance();
+	closest_centroid->resize(_mu->size().x);
+
+	Ref<MLPPVector> input_set_i_tempv;
+	input_set_i_tempv.instance();
+	input_set_i_tempv->resize(_input_set->size().x);
+
+	Ref<MLPPVector> mu_j_tempv;
+	mu_j_tempv.instance();
+	mu_j_tempv->resize(_mu->size().x);
+
+	real_t closest_centroid_current_dist = 0;
+	int closest_centroid_index = 0;
+
+	_r->fill(0);
+
+	for (int i = 0; i < r_size_y; ++i) {
+		_mu->get_row_into_mlpp_vector(0, closest_centroid);
+		_input_set->get_row_into_mlpp_vector(i, input_set_i_tempv);
+
+		closest_centroid_current_dist = alg.euclidean_distance(input_set_i_tempv, closest_centroid);
+
+		for (int j = 0; j < r_size_x; ++j) {
+			_mu->get_row_into_mlpp_vector(j, mu_j_tempv);
+
+			bool is_centroid_closer = alg.euclidean_distance(input_set_i_tempv, mu_j_tempv) < closest_centroid_current_dist;
+
+			if (is_centroid_closer) {
+				_mu->get_row_into_mlpp_vector(j, closest_centroid);
+				closest_centroid_current_dist = alg.euclidean_distance(input_set_i_tempv, closest_centroid);
+				closest_centroid_index = j;
+			}
+		}
+
+		_r->set_element(i, closest_centroid_index, 1);
+	}
 }
 
-void MLPPKMeans::_centroid_initialization(int k) {
+// This simply computes or re-computes mu_k
+void MLPPKMeans::_compute_mu() {
+	MLPPLinAlg alg;
+
+	int mu_size_y = _mu->size().y;
+	int r_size_y = _r->size().y;
+
+	Ref<MLPPVector> num;
+	num.instance();
+	num->resize(_r->size().x);
+
+	Ref<MLPPVector> input_set_j_tempv;
+	input_set_j_tempv.instance();
+	input_set_j_tempv->resize(_input_set->size().x);
+
+	Ref<MLPPVector> mat_tempv;
+	mat_tempv.instance();
+	mat_tempv->resize(_input_set->size().x);
+
+	Ref<MLPPVector> mu_tempv;
+	mu_tempv.instance();
+	mu_tempv->resize(_mu->size().x);
+
+	for (int i = 0; i < mu_size_y; ++i) {
+		num->fill(0);
+
+		real_t den = 0;
+		for (int j = 0; j < r_size_y; ++j) {
+			_input_set->get_row_into_mlpp_vector(j, input_set_j_tempv);
+
+			real_t r_j_i = _r->get_element(j, i);
+
+			alg.scalar_multiplyv(_r->get_element(j, i), input_set_j_tempv, mat_tempv);
+			alg.additionv(num, mat_tempv, num);
+
+			den += r_j_i;
+		}
+
+		alg.scalar_multiplyv(real_t(1) / real_t(den), num, mu_tempv);
+
+		_mu->set_row_mlpp_vector(i, mu_tempv);
+	}
 }
-void MLPPKMeans::_kmeanspp_initialization(int k) {
+
+void MLPPKMeans::_centroid_initialization() {
+	RandomPCG rand;
+	rand.randomize();
+
+	Size2i mu_size = Size2i(_input_set->size().x, _k);
+
+	if (_mu->size() != mu_size) {
+		_mu->resize(mu_size);
+	}
+
+	Ref<MLPPVector> mu_tempv;
+	mu_tempv.instance();
+	mu_tempv->resize(_mu->size().x);
+
+	int input_set_size_y_rand = _input_set->size().y - 1;
+
+	for (int i = 0; i < _k; ++i) {
+		int indx = rand.random(0, input_set_size_y_rand);
+
+		_input_set->get_row_into_mlpp_vector(indx, mu_tempv);
+		_mu->set_row_mlpp_vector(i, mu_tempv);
+	}
+}
+
+void MLPPKMeans::_kmeanspp_initialization() {
+	MLPPLinAlg alg;
+
+	RandomPCG rand;
+	rand.randomize();
+
+	Size2i mu_size = Size2i(_input_set->size().x, _k);
+
+	if (_mu->size() != mu_size) {
+		_mu->resize(mu_size);
+	}
+
+	int input_set_size_y = _input_set->size().y;
+
+	Ref<MLPPVector> mu_tempv;
+	mu_tempv.instance();
+	mu_tempv->resize(_mu->size().x);
+
+	_input_set->get_row_into_mlpp_vector(rand.random(0, input_set_size_y - 1), mu_tempv);
+	_mu->set_row_mlpp_vector(0, mu_tempv);
+
+	Ref<MLPPVector> input_set_j_tempv;
+	input_set_j_tempv.instance();
+	input_set_j_tempv->resize(_input_set->size().x);
+
+	Ref<MLPPVector> farthest_centroid;
+	farthest_centroid.instance();
+	farthest_centroid->resize(_input_set->size().x);
+
+	for (int i = 1; i < _k - 1; ++i) {
+		for (int j = 0; j < input_set_size_y; ++j) {
+			_input_set->get_row_into_mlpp_vector(j, input_set_j_tempv);
+
+			real_t max_dist = 0;
+			// SUM ALL THE SQUARED DISTANCES, CHOOSE THE ONE THAT'S FARTHEST
+			// AS TO SPREAD OUT THE CLUSTER CENTROIDS.
+			real_t sum = 0;
+			for (int k = 0; k < i; k++) {
+				_mu->get_row_into_mlpp_vector(k, mu_tempv);
+
+				sum += alg.euclidean_distance(input_set_j_tempv, mu_tempv);
+			}
+
+			if (sum * sum > max_dist) {
+				farthest_centroid->set_from_mlpp_vector(input_set_j_tempv);
+				max_dist = sum * sum;
+			}
+		}
+
+		_mu->set_row_mlpp_vector(i, farthest_centroid);
+	}
 }
 real_t MLPPKMeans::_cost() {
-	return 0;
+	ERR_FAIL_COND_V(!_initialized, 0);
+
+	MLPPLinAlg alg;
+
+	Ref<MLPPVector> input_set_i_tempv;
+	input_set_i_tempv.instance();
+	input_set_i_tempv->resize(_input_set->size().x);
+
+	Ref<MLPPVector> mu_j_tempv;
+	mu_j_tempv.instance();
+	mu_j_tempv->resize(_mu->size().x);
+
+	Ref<MLPPVector> sub_tempv;
+	sub_tempv.instance();
+	sub_tempv->resize(_input_set->size().x);
+
+	int r_size_y = _r->size().y;
+	int r_size_x = _r->size().x;
+
+	real_t sum = 0;
+	for (int i = 0; i < r_size_y; i++) {
+		_input_set->get_row_into_mlpp_vector(i, input_set_i_tempv);
+
+		for (int j = 0; j < r_size_x; j++) {
+			_mu->get_row_into_mlpp_vector(j, mu_j_tempv);
+
+			alg.subtractionv(input_set_i_tempv, mu_j_tempv, sub_tempv);
+			sum += _r->get_element(i, j) * alg.norm_sqv(sub_tempv);
+		}
+	}
+
+	return sum;
 }
 
 void MLPPKMeans::_bind_methods() {

@@ -164,12 +164,19 @@ public:
 	std::vector<real_t> elementWiseDivision(std::vector<real_t> a, std::vector<real_t> b);
 
 	std::vector<real_t> scalarMultiply(real_t scalar, std::vector<real_t> a);
+	Ref<MLPPVector> scalar_multiplynv(real_t scalar, const Ref<MLPPVector> &a);
+	void scalar_multiplyv(real_t scalar, const Ref<MLPPVector> &a, Ref<MLPPVector> out);
 
 	std::vector<real_t> scalarAdd(real_t scalar, std::vector<real_t> a);
 
 	std::vector<real_t> addition(std::vector<real_t> a, std::vector<real_t> b);
+	Ref<MLPPVector> additionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	void additionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
 
 	std::vector<real_t> subtraction(std::vector<real_t> a, std::vector<real_t> b);
+
+	Ref<MLPPVector> subtractionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	void subtractionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
 
 	std::vector<real_t> subtractMatrixRows(std::vector<real_t> a, std::vector<std::vector<real_t>> B);
 
@@ -220,6 +227,7 @@ public:
 	real_t norm_2(std::vector<real_t> a);
 
 	real_t norm_sq(std::vector<real_t> a);
+	real_t norm_sqv(const Ref<MLPPVector> &a);
 
 	real_t sum_elements(std::vector<real_t> a);
 

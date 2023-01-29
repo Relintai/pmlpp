@@ -12,6 +12,7 @@
 #include "core/math/math_defs.h"
 #include "core/containers/vector.h"
 #include "core/variant/variant.h"
+#include "core/string/ustring.h"
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
@@ -48,6 +49,7 @@ public:
 	static void UI(std::vector<real_t> weights, std::vector<real_t> initial, real_t bias);
 	static void UI(std::vector<std::vector<real_t>>, std::vector<real_t> bias);
 	static void CostInfo(int epoch, real_t cost_prev, real_t Cost);
+	static void cost_info(int epoch, real_t cost_prev, real_t cost);
 
 	static std::vector<std::vector<std::vector<real_t>>> createMiniBatches(std::vector<std::vector<real_t>> inputSet, int n_mini_batch);
 	static std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<std::vector<real_t>>> createMiniBatches(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int n_mini_batch);

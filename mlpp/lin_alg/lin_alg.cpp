@@ -1002,6 +1002,42 @@ std::vector<real_t> MLPPLinAlg::scalarMultiply(real_t scalar, std::vector<real_t
 	return a;
 }
 
+Ref<MLPPVector> MLPPLinAlg::scalar_multiplynv(real_t scalar, const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+
+	int size = a->size();
+
+	out->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = a_ptr[i] * scalar;
+	}
+
+	return out;
+}
+void MLPPLinAlg::scalar_multiplyv(real_t scalar, const Ref<MLPPVector> &a, Ref<MLPPVector> out) {
+	ERR_FAIL_COND(!a.is_valid() || !out.is_valid());
+
+	int size = a->size();
+
+	if (unlikely(out->size() != size)) {
+		out->resize(size);
+	}
+
+	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = a_ptr[i] * scalar;
+	}
+}
+
 std::vector<real_t> MLPPLinAlg::scalarAdd(real_t scalar, std::vector<real_t> a) {
 	for (int i = 0; i < a.size(); i++) {
 		a[i] += scalar;
@@ -1018,6 +1054,47 @@ std::vector<real_t> MLPPLinAlg::addition(std::vector<real_t> a, std::vector<real
 	return c;
 }
 
+Ref<MLPPVector> MLPPLinAlg::additionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPVector>());
+
+	int size = a->size();
+
+	ERR_FAIL_COND_V(size != b->size(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+	out->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = a_ptr[i] + b_ptr[i];
+	}
+
+	return out;
+}
+void MLPPLinAlg::additionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out) {
+	ERR_FAIL_COND(!a.is_valid() || !b.is_valid() || !out.is_valid());
+
+	int size = a->size();
+
+	ERR_FAIL_COND(size != b->size());
+
+	if (unlikely(out->size() != size)) {
+		out->resize(size);
+	}
+
+	const real_t *a_ptr = a->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = a_ptr[i] + b_ptr[i];
+	}
+}
+
 std::vector<real_t> MLPPLinAlg::subtraction(std::vector<real_t> a, std::vector<real_t> b) {
 	std::vector<real_t> c;
 	c.resize(a.size());
@@ -1025,6 +1102,52 @@ std::vector<real_t> MLPPLinAlg::subtraction(std::vector<real_t> a, std::vector<r
 		c[i] = a[i] - b[i];
 	}
 	return c;
+}
+
+Ref<MLPPVector> MLPPLinAlg::subtractionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPVector>());
+
+	int size = a->size();
+
+	ERR_FAIL_COND_V(size != b->size(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+
+	if (unlikely(size == 0)) {
+		return out;
+	}
+
+	out->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = a_ptr[i] - b_ptr[i];
+	}
+
+	return out;
+}
+void MLPPLinAlg::subtractionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out) {
+	ERR_FAIL_COND(!a.is_valid() || !b.is_valid() || !out.is_valid());
+
+	int size = a->size();
+
+	ERR_FAIL_COND(size != b->size());
+
+	if (unlikely(out->size() != size)) {
+		out->resize(size);
+	}
+
+	const real_t *a_ptr = a->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = a_ptr[i] - b_ptr[i];
+	}
 }
 
 std::vector<real_t> MLPPLinAlg::subtractMatrixRows(std::vector<real_t> a, std::vector<std::vector<real_t>> B) {
@@ -1268,6 +1391,18 @@ real_t MLPPLinAlg::norm_sq(std::vector<real_t> a) {
 	real_t n_sq = 0;
 	for (int i = 0; i < a.size(); i++) {
 		n_sq += a[i] * a[i];
+	}
+	return n_sq;
+}
+real_t MLPPLinAlg::norm_sqv(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND_V(!a.is_valid(), 0);
+
+	int size = a->size();
+	const real_t *a_ptr = a->ptr();
+
+	real_t n_sq = 0;
+	for (int i = 0; i < size; ++i) {
+		n_sq += a_ptr[i] * a_ptr[i];
 	}
 	return n_sq;
 }

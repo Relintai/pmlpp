@@ -3,6 +3,8 @@
 
 #include "core/math/math_funcs.h"
 
+#include "core/log/logger.h"
+
 //TODO remove
 #include <cmath>
 #include <ctime>
@@ -538,18 +540,23 @@ void MLPPTests::test_naive_bayes() {
 	alg.printVector(GNB.modelSetTest(alg.transpose(inputSet)));
 }
 void MLPPTests::test_k_means(bool ui) {
-	MLPPLinAlg alg;
-
 	// KMeans
-	/*
 	std::vector<std::vector<real_t>> inputSet = { { 32, 0, 7 }, { 2, 28, 17 }, { 0, 9, 23 } };
-	MLPPKMeans kmeans(inputSet, 3, "KMeans++");
-	kmeans.train(3, ui);
-	std::cout << std::endl;
-	alg.printMatrix(kmeans.modelSetTest(inputSet)); // Returns the assigned centroids to each of the respective training examples
-	std::cout << std::endl;
-	alg.printVector(kmeans.silhouette_scores());
-	*/
+
+	Ref<MLPPMatrix> input_set;
+	input_set.instance();
+	input_set->set_from_std_vectors(inputSet);
+
+	Ref<MLPPKMeans> kmeans;
+	kmeans.instance();
+	kmeans->set_input_set(input_set);
+	kmeans->set_k(3);
+	kmeans->set_mean_type(MLPPKMeans::MEAN_TYPE_KMEANSPP);
+
+	kmeans->train(3, ui);
+
+	PLOG_MSG(kmeans->model_set_test(input_set)->to_string());
+	PLOG_MSG(kmeans->silhouette_scores()->to_string());
 }
 void MLPPTests::test_knn(bool ui) {
 	MLPPLinAlg alg;

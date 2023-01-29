@@ -7,6 +7,7 @@
 #include "utilities.h"
 
 #include "core/math/math_funcs.h"
+#include "core/log/logger.h"
 
 #include <fstream>
 #include <iostream>
@@ -312,6 +313,14 @@ void MLPPUtilities::CostInfo(int epoch, real_t cost_prev, real_t Cost) {
 	std::cout << "The cost function has been minimized by " << cost_prev - Cost << std::endl;
 	std::cout << "Current Cost:" << std::endl;
 	std::cout << Cost << std::endl;
+}
+
+void MLPPUtilities::cost_info(int epoch, real_t cost_prev, real_t cost) {
+	String str = "This is epoch: " + itos(epoch) + ",";
+	str += "The cost function has been minimized by " + String::num(cost_prev - cost);
+	str += ", Current Cost:" + String::num(cost);
+
+	PLOG_MSG(str);
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPUtilities::createMiniBatches(std::vector<std::vector<real_t>> inputSet, int n_mini_batch) {
