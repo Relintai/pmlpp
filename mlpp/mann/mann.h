@@ -39,7 +39,7 @@ private:
 	std::vector<std::vector<real_t>> outputSet;
 	std::vector<std::vector<real_t>> y_hat;
 
-	std::vector<MLPPHiddenLayer> network;
+	std::vector<MLPPOldHiddenLayer> network;
 	MLPPMultiOutputLayer *outputLayer;
 
 	int n;

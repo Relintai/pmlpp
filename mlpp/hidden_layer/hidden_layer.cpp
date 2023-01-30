@@ -13,7 +13,7 @@
 #include <random>
 
 
-MLPPHiddenLayer::MLPPHiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<real_t>> input, std::string weightInit, std::string reg, real_t lambda, real_t alpha) :
+MLPPOldHiddenLayer::MLPPOldHiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<real_t>> input, std::string weightInit, std::string reg, real_t lambda, real_t alpha) :
 		n_hidden(n_hidden), activation(activation), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
 	weights = MLPPUtilities::weightInitialization(input[0].size(), n_hidden, weightInit);
 	bias = MLPPUtilities::biasInitialization(n_hidden);
@@ -97,14 +97,14 @@ MLPPHiddenLayer::MLPPHiddenLayer(int n_hidden, std::string activation, std::vect
 	activationTest_map["Arcoth"] = &MLPPActivation::arcoth;
 }
 
-void MLPPHiddenLayer::forwardPass() {
+void MLPPOldHiddenLayer::forwardPass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z = alg.mat_vec_add(alg.matmult(input, weights), bias);
 	a = (avn.*activation_map[activation])(z, 0);
 }
 
-void MLPPHiddenLayer::Test(std::vector<real_t> x) {
+void MLPPOldHiddenLayer::Test(std::vector<real_t> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z_test = alg.addition(alg.mat_vec_mult(alg.transpose(weights), x), bias);

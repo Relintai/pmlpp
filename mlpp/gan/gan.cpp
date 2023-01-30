@@ -99,10 +99,10 @@ void MLPPGAN::save(std::string fileName) {
 void MLPPGAN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
 	MLPPLinAlg alg;
 	if (network.empty()) {
-		network.push_back(MLPPHiddenLayer(n_hidden, activation, alg.gaussianNoise(n, k), weightInit, reg, lambda, alpha));
+		network.push_back(MLPPOldHiddenLayer(n_hidden, activation, alg.gaussianNoise(n, k), weightInit, reg, lambda, alpha));
 		network[0].forwardPass();
 	} else {
-		network.push_back(MLPPHiddenLayer(n_hidden, activation, network[network.size() - 1].a, weightInit, reg, lambda, alpha));
+		network.push_back(MLPPOldHiddenLayer(n_hidden, activation, network[network.size() - 1].a, weightInit, reg, lambda, alpha));
 		network[network.size() - 1].forwardPass();
 	}
 }
@@ -110,9 +110,9 @@ void MLPPGAN::addLayer(int n_hidden, std::string activation, std::string weightI
 void MLPPGAN::addOutputLayer(std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
 	MLPPLinAlg alg;
 	if (!network.empty()) {
-		outputLayer = new MLPPOutputLayer(network[network.size() - 1].n_hidden, "Sigmoid", "LogLoss", network[network.size() - 1].a, weightInit, reg, lambda, alpha);
+		outputLayer = new MLPPOldOutputLayer(network[network.size() - 1].n_hidden, "Sigmoid", "LogLoss", network[network.size() - 1].a, weightInit, reg, lambda, alpha);
 	} else {
-		outputLayer = new MLPPOutputLayer(k, "Sigmoid", "LogLoss", alg.gaussianNoise(n, k), weightInit, reg, lambda, alpha);
+		outputLayer = new MLPPOldOutputLayer(k, "Sigmoid", "LogLoss", alg.gaussianNoise(n, k), weightInit, reg, lambda, alpha);
 	}
 }
 
