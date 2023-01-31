@@ -66,9 +66,7 @@ public:
 	Ref<MLPPVector> run_activation_deriv_vector(const ActivationFunction func, const Ref<MLPPVector> &z);
 	Ref<MLPPMatrix> run_activation_deriv_matrix(const ActivationFunction func, const Ref<MLPPMatrix> &z);
 
-	Ref<MLPPVector> activation(const Ref<MLPPVector> &z, real_t (*function)(real_t), const bool deriv = false);
-	Ref<MLPPVector> activation_norm(const Ref<MLPPVector> &z, real_t (*function)(real_t));
-	Ref<MLPPVector> activation_deriv(const Ref<MLPPVector> &z, real_t (*function)(real_t));
+	Ref<MLPPVector> activation(const Ref<MLPPVector> &z, real_t (*function)(real_t));
 
 	//ACTIVATION FUNCTIONS
 

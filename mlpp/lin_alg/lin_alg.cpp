@@ -88,6 +88,77 @@ std::vector<std::vector<real_t>> MLPPLinAlg::matmult(std::vector<std::vector<rea
 	return C;
 }
 
+Ref<MLPPMatrix> MLPPLinAlg::additionm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
+	Size2i a_size = A->size();
+	ERR_FAIL_COND_V(a_size != B->size(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> C;
+	C.instance();
+	C->resize(a_size);
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	int data_size = A->data_size();
+
+	for (int i = 0; i < data_size; ++i) {
+		c_ptr[i] = a_ptr[i] + b_ptr[i];
+	}
+
+	return C;
+}
+Ref<MLPPMatrix> MLPPLinAlg::subtractionm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
+	Size2i a_size = A->size();
+	ERR_FAIL_COND_V(a_size != B->size(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> C;
+	C.instance();
+	C->resize(a_size);
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	int data_size = A->data_size();
+
+	for (int i = 0; i < data_size; ++i) {
+		c_ptr[i] = a_ptr[i] - b_ptr[i];
+	}
+
+	return C;
+}
+Ref<MLPPMatrix> MLPPLinAlg::matmultm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
+	Size2i a_size = A->size();
+	ERR_FAIL_COND_V(a_size != B->size(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> C;
+	C.instance();
+	C->resize(a_size);
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	for (int i = 0; i < a_size.y; i++) {
+		for (int k = 0; k < a_size.y; k++) {
+			int ind_i_k = A->calculate_index(i, k);
+
+			for (int j = 0; j < a_size.x; j++) {
+				int ind_i_j = A->calculate_index(i, j);
+				int ind_k_j = A->calculate_index(k, j);
+
+				c_ptr[ind_i_j] += a_ptr[ind_i_k] * b_ptr[ind_k_j];
+			}
+		}
+	}
+
+	return C;
+}
+
 std::vector<std::vector<real_t>> MLPPLinAlg::hadamard_product(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B) {
 	std::vector<std::vector<real_t>> C;
 	C.resize(A.size());
@@ -400,6 +471,34 @@ std::vector<std::vector<real_t>> MLPPLinAlg::zeromat(int n, int m) {
 
 std::vector<std::vector<real_t>> MLPPLinAlg::onemat(int n, int m) {
 	return full(n, m, 1);
+}
+
+Ref<MLPPMatrix> MLPPLinAlg::zeromatm(int n, int m) {
+	Ref<MLPPMatrix> mat;
+	mat.instance();
+
+	mat->resize(Size2i(n, m));
+	mat->fill(0);
+
+	return mat;
+}
+Ref<MLPPMatrix> MLPPLinAlg::onematm(int n, int m) {
+	Ref<MLPPMatrix> mat;
+	mat.instance();
+
+	mat->resize(Size2i(n, m));
+	mat->fill(1);
+
+	return mat;
+}
+Ref<MLPPMatrix> MLPPLinAlg::fullm(int n, int m, int k) {
+	Ref<MLPPMatrix> mat;
+	mat.instance();
+
+	mat->resize(Size2i(n, m));
+	mat->fill(k);
+
+	return mat;
 }
 
 std::vector<std::vector<real_t>> MLPPLinAlg::full(int n, int m, int k) {
@@ -995,6 +1094,29 @@ std::vector<real_t> MLPPLinAlg::elementWiseDivision(std::vector<real_t> a, std::
 	return c;
 }
 
+Ref<MLPPVector> MLPPLinAlg::element_wise_division(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+
+	int size = a->size();
+
+	ERR_FAIL_COND_V(size != b->size(), Ref<MLPPVector>());
+
+	out->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = a_ptr[i] / b_ptr[i];
+	}
+
+	return out;
+}
+
 std::vector<real_t> MLPPLinAlg::scalarMultiply(real_t scalar, std::vector<real_t> a) {
 	for (int i = 0; i < a.size(); i++) {
 		a[i] *= scalar;
@@ -1210,6 +1332,118 @@ std::vector<real_t> MLPPLinAlg::cbrt(std::vector<real_t> a) {
 	return exponentiate(a, real_t(1) / real_t(3));
 }
 
+Ref<MLPPVector> logv(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+
+	int size = a->size();
+	out->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = Math::log(a_ptr[i]);
+	}
+
+	return out;
+}
+Ref<MLPPVector> log10v(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+
+	int size = a->size();
+	out->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = std::log10(a_ptr[i]);
+	}
+
+	return out;
+}
+Ref<MLPPVector> expv(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+
+	int size = a->size();
+	out->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = Math::exp(a_ptr[i]);
+	}
+
+	return out;
+}
+Ref<MLPPVector> erfv(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+
+	int size = a->size();
+	out->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = std::erf(a_ptr[i]);
+	}
+
+	return out;
+}
+Ref<MLPPVector> exponentiatev(const Ref<MLPPVector> &a, real_t p) {
+	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+
+	int size = a->size();
+	out->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = Math::pow(a_ptr[i], p);
+	}
+
+	return out;
+}
+Ref<MLPPVector> sqrtv(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+
+	int size = a->size();
+	out->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < size; ++i) {
+		out_ptr[i] = Math::sqrt(a_ptr[i]);
+	}
+
+	return out;
+}
+Ref<MLPPVector> cbrtv(const Ref<MLPPVector> &a) {
+	return exponentiatev(a, static_cast<real_t>(1) / static_cast<real_t>(3));
+}
+
 real_t MLPPLinAlg::dot(std::vector<real_t> a, std::vector<real_t> b) {
 	real_t c = 0;
 	for (int i = 0; i < a.size(); i++) {
@@ -1263,6 +1497,34 @@ std::vector<real_t> MLPPLinAlg::full(int n, int k) {
 		full[i] = k;
 	}
 	return full;
+}
+
+Ref<MLPPVector> MLPPLinAlg::zerovecv(int n) {
+	Ref<MLPPVector> vec;
+	vec.instance();
+
+	vec->resize(n);
+	vec->fill(0);
+
+	return vec;
+}
+Ref<MLPPVector> MLPPLinAlg::onevecv(int n) {
+	Ref<MLPPVector> vec;
+	vec.instance();
+
+	vec->resize(n);
+	vec->fill(1);
+
+	return vec;
+}
+Ref<MLPPVector> MLPPLinAlg::fullv(int n, int k) {
+	Ref<MLPPVector> vec;
+	vec.instance();
+
+	vec->resize(n);
+	vec->fill(k);
+
+	return vec;
 }
 
 std::vector<real_t> MLPPLinAlg::sin(std::vector<real_t> a) {

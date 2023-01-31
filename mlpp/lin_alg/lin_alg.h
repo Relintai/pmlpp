@@ -27,35 +27,27 @@ public:
 	std::vector<std::vector<real_t>> gaussianNoise(int n, int m);
 
 	std::vector<std::vector<real_t>> addition(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
-
 	std::vector<std::vector<real_t>> subtraction(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
-
 	std::vector<std::vector<real_t>> matmult(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 
+	Ref<MLPPMatrix> additionm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> subtractionm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> matmultm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+
 	std::vector<std::vector<real_t>> hadamard_product(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
-
 	std::vector<std::vector<real_t>> kronecker_product(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
-
 	std::vector<std::vector<real_t>> elementWiseDivision(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 
 	std::vector<std::vector<real_t>> transpose(std::vector<std::vector<real_t>> A);
-
 	std::vector<std::vector<real_t>> scalarMultiply(real_t scalar, std::vector<std::vector<real_t>> A);
-
 	std::vector<std::vector<real_t>> scalarAdd(real_t scalar, std::vector<std::vector<real_t>> A);
 
 	std::vector<std::vector<real_t>> log(std::vector<std::vector<real_t>> A);
-
 	std::vector<std::vector<real_t>> log10(std::vector<std::vector<real_t>> A);
-
 	std::vector<std::vector<real_t>> exp(std::vector<std::vector<real_t>> A);
-
 	std::vector<std::vector<real_t>> erf(std::vector<std::vector<real_t>> A);
-
 	std::vector<std::vector<real_t>> exponentiate(std::vector<std::vector<real_t>> A, real_t p);
-
 	std::vector<std::vector<real_t>> sqrt(std::vector<std::vector<real_t>> A);
-
 	std::vector<std::vector<real_t>> cbrt(std::vector<std::vector<real_t>> A);
 
 	std::vector<std::vector<real_t>> matrixPower(std::vector<std::vector<real_t>> A, int n);
@@ -75,13 +67,14 @@ public:
 	std::vector<std::vector<real_t>> pinverse(std::vector<std::vector<real_t>> A);
 
 	std::vector<std::vector<real_t>> zeromat(int n, int m);
-
 	std::vector<std::vector<real_t>> onemat(int n, int m);
-
 	std::vector<std::vector<real_t>> full(int n, int m, int k);
 
-	std::vector<std::vector<real_t>> sin(std::vector<std::vector<real_t>> A);
+	Ref<MLPPMatrix> zeromatm(int n, int m);
+	Ref<MLPPMatrix> onematm(int n, int m);
+	Ref<MLPPMatrix> fullm(int n, int m, int k);
 
+	std::vector<std::vector<real_t>> sin(std::vector<std::vector<real_t>> A);
 	std::vector<std::vector<real_t>> cos(std::vector<std::vector<real_t>> A);
 
 	std::vector<std::vector<real_t>> rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis = -1);
@@ -162,6 +155,7 @@ public:
 	std::vector<real_t> hadamard_product(std::vector<real_t> a, std::vector<real_t> b);
 
 	std::vector<real_t> elementWiseDivision(std::vector<real_t> a, std::vector<real_t> b);
+	Ref<MLPPVector> element_wise_division(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	std::vector<real_t> scalarMultiply(real_t scalar, std::vector<real_t> a);
 	Ref<MLPPVector> scalar_multiplynv(real_t scalar, const Ref<MLPPVector> &a);
@@ -181,18 +175,20 @@ public:
 	std::vector<real_t> subtractMatrixRows(std::vector<real_t> a, std::vector<std::vector<real_t>> B);
 
 	std::vector<real_t> log(std::vector<real_t> a);
-
 	std::vector<real_t> log10(std::vector<real_t> a);
-
 	std::vector<real_t> exp(std::vector<real_t> a);
-
 	std::vector<real_t> erf(std::vector<real_t> a);
-
 	std::vector<real_t> exponentiate(std::vector<real_t> a, real_t p);
-
 	std::vector<real_t> sqrt(std::vector<real_t> a);
-
 	std::vector<real_t> cbrt(std::vector<real_t> a);
+
+	Ref<MLPPVector> logv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> log10v(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> expv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> erfv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> exponentiatev(const Ref<MLPPVector> &a, real_t p);
+	Ref<MLPPVector> sqrtv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> cbrtv(const Ref<MLPPVector> &a);
 
 	real_t dot(std::vector<real_t> a, std::vector<real_t> b);
 
@@ -201,12 +197,14 @@ public:
 	std::vector<real_t> abs(std::vector<real_t> a);
 
 	std::vector<real_t> zerovec(int n);
-
 	std::vector<real_t> onevec(int n);
+	std::vector<real_t> full(int n, int k);
+
+	Ref<MLPPVector> zerovecv(int n);
+	Ref<MLPPVector> onevecv(int n);
+	Ref<MLPPVector> fullv(int n, int k);
 
 	std::vector<std::vector<real_t>> diag(std::vector<real_t> a);
-
-	std::vector<real_t> full(int n, int k);
 
 	std::vector<real_t> sin(std::vector<real_t> a);
 
