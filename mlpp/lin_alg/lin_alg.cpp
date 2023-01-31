@@ -138,6 +138,7 @@ Ref<MLPPMatrix> MLPPLinAlg::matmultm(const Ref<MLPPMatrix> &A, const Ref<MLPPMat
 	Ref<MLPPMatrix> C;
 	C.instance();
 	C->resize(a_size);
+	C->fill(0);
 
 	const real_t *a_ptr = A->ptr();
 	const real_t *b_ptr = B->ptr();
@@ -217,6 +218,99 @@ std::vector<std::vector<real_t>> MLPPLinAlg::elementWiseDivision(std::vector<std
 	return C;
 }
 
+Ref<MLPPMatrix> MLPPLinAlg::hadamard_productm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
+	Size2i a_size = A->size();
+	ERR_FAIL_COND_V(a_size != B->size(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> C;
+	C.instance();
+	C->resize(a_size);
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	for (int i = 0; i < a_size.y; i++) {
+		for (int j = 0; j < a_size.x; j++) {
+			int ind_i_j = A->calculate_index(i, j);
+			c_ptr[ind_i_j] = a_ptr[ind_i_j] * b_ptr[ind_i_j];
+		}
+	}
+
+	return C;
+}
+Ref<MLPPMatrix> MLPPLinAlg::kronecker_productm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	// [1,1,1,1]   [1,2,3,4,5]
+	// [1,1,1,1]   [1,2,3,4,5]
+	//             [1,2,3,4,5]
+
+	// [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5]
+	// [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5]
+	// [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5]
+	// [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5]
+	// [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5]
+	// [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5] [1,2,3,4,5]
+
+	// Resulting matrix: A.size() * B.size()
+	//                   A[0].size() * B[0].size()
+
+	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
+	Size2i a_size = A->size();
+	Size2i b_size = B->size();
+
+	Ref<MLPPMatrix> C;
+	C.instance();
+	C->resize(Size2i(b_size.x * a_size.x, b_size.y * a_size.y));
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	Ref<MLPPVector> row_tmp;
+	row_tmp.instance();
+	row_tmp->resize(b_size.x);
+
+	for (int i = 0; i < a_size.y; ++i) {
+		for (int j = 0; j < b_size.y; ++j) {
+			B->get_row_into_mlpp_vector(j, row_tmp);
+
+			Vector<Ref<MLPPVector>> row;
+			for (int k = 0; k < a_size.x; ++k) {
+				row.push_back(scalar_multiplynv(a_ptr[A->calculate_index(i, k)], row_tmp));
+			}
+
+			Ref<MLPPVector> flattened_row = flattenv(row);
+
+			C->set_row_mlpp_vector(i * b_size.y + j, flattened_row);
+		}
+	}
+
+	return C;
+}
+Ref<MLPPMatrix> MLPPLinAlg::elementWise_divisionm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
+	Size2i a_size = A->size();
+	ERR_FAIL_COND_V(a_size != B->size(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> C;
+	C.instance();
+	C->resize(a_size);
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	for (int i = 0; i < a_size.y; i++) {
+		for (int j = 0; j < a_size.x; j++) {
+			int ind_i_j = A->calculate_index(i, j);
+			c_ptr[ind_i_j] = a_ptr[ind_i_j] / b_ptr[ind_i_j];
+		}
+	}
+
+	return C;
+}
+
 std::vector<std::vector<real_t>> MLPPLinAlg::transpose(std::vector<std::vector<real_t>> A) {
 	std::vector<std::vector<real_t>> AT;
 	AT.resize(A[0].size());
@@ -248,6 +342,52 @@ std::vector<std::vector<real_t>> MLPPLinAlg::scalarAdd(real_t scalar, std::vecto
 		}
 	}
 	return A;
+}
+
+Ref<MLPPMatrix> MLPPLinAlg::transposem(const Ref<MLPPMatrix> &A) {
+	Size2i a_size = A->size();
+
+	Ref<MLPPMatrix> AT;
+	AT.instance();
+	AT->resize(Size2i(a_size.y, a_size.x));
+
+	const real_t *a_ptr = A->ptr();
+	real_t *at_ptr = AT->ptrw();
+
+	for (int i = 0; i < a_size.x; ++i) {
+		for (int j = 0; j < a_size.y; ++j) {
+			at_ptr[AT->calculate_index(i, j)] = a_ptr[AT->calculate_index(j, i)];
+		}
+	}
+
+	return AT;
+}
+Ref<MLPPMatrix> MLPPLinAlg::scalar_multiplym(real_t scalar, const Ref<MLPPMatrix> &A) {
+	Ref<MLPPMatrix> AN = A->duplicate();
+	Size2i a_size = AN->size();
+	real_t *an_ptr = AN->ptrw();
+
+	for (int i = 0; i < a_size.y; ++i) {
+		for (int j = 0; j < a_size.x; ++j) {
+			an_ptr[AN->calculate_index(i, j)] *= scalar;
+		}
+	}
+
+	return AN;
+}
+
+Ref<MLPPMatrix> MLPPLinAlg::scalar_addm(real_t scalar, const Ref<MLPPMatrix> &A) {
+	Ref<MLPPMatrix> AN = A->duplicate();
+	Size2i a_size = AN->size();
+	real_t *an_ptr = AN->ptrw();
+
+	for (int i = 0; i < a_size.y; ++i) {
+		for (int j = 0; j < a_size.x; ++j) {
+			an_ptr[AN->calculate_index(i, j)] += scalar;
+		}
+	}
+
+	return AN;
 }
 
 std::vector<std::vector<real_t>> MLPPLinAlg::log(std::vector<std::vector<real_t>> A) {
@@ -1006,6 +1146,35 @@ std::vector<real_t> MLPPLinAlg::flatten(std::vector<std::vector<real_t>> A) {
 			a.push_back(A[i][j]);
 		}
 	}
+	return a;
+}
+
+Ref<MLPPVector> MLPPLinAlg::flattenv(const Vector<Ref<MLPPVector>> &A) {
+	Ref<MLPPVector> a;
+	a.instance();
+
+	int vsize = 0;
+	for (int i = 0; i < A.size(); ++i) {
+		vsize += A[i]->size();
+	}
+
+	a->resize(vsize);
+
+	int a_index = 0;
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < A.size(); ++i) {
+		const Ref<MLPPVector> &r = A[i];
+
+		int r_size = r->size();
+		const real_t *r_ptr = r->ptr();
+
+		for (int j = 0; j < r_size; ++j) {
+			a_ptr[a_index] = r_ptr[j];
+			++a_index;
+		}
+	}
+
 	return a;
 }
 

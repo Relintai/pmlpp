@@ -91,19 +91,26 @@ Ref<MLPPMatrix> MLPPActivation::sigmoid_norm(const Ref<MLPPMatrix> &z) {
 	return alg.element_wise_division(alg.onematm(z->size().x, z->size().y), alg.additionm(alg.onematm(z->size().x, z->size().y), alg.expv(alg.scalar_multiplynv(-1, z))));
 }
 
-/*
 real_t MLPPActivation::sigmoid_deriv(real_t z) {
-	return sigmoid_norm(z) * (1 - sigmoid_norm(z));
+	real_t sig_norm = sigmoid_norm(z);
+
+	return sig_norm * (1 - sig_norm);
 }
+
+/*
 Ref<MLPPVector> MLPPActivation::sigmoid_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), sigmoid(z)));
+	real_t sig_norm = sigmoid_norm(z);
+
+	return alg.subtractionv(sig_norm, alg.hadamard_productm(sig_norm, sig_norm));
 }
 Ref<MLPPMatrix> MLPPActivation::sigmoid_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), sigmoid(z)));
+	real_t sig_norm = sigmoid_norm(z);
+
+	return alg.subtractionv(sig_norm, alg.hadamard_productm(sig_norm, sig_norm));
 }
 
 //SOFTMAX
@@ -1244,7 +1251,9 @@ Ref<MLPPMatrix> MLPPActivation::arcoth_deriv(const Ref<MLPPMatrix> &z) {
 
 	return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.subtraction(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)));
 }
+
 */
+
 //======================== OLD =============================
 
 real_t MLPPActivation::linear(real_t z, bool deriv) {
