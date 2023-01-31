@@ -8,13 +8,59 @@
 //  Created by Marc Melikyan on 11/4/20.
 //
 
+#include "core/containers/hash_map.h"
 #include "core/math/math_defs.h"
+#include "core/string/ustring.h"
+
+#include "core/object/reference.h"
 
 #include "../activation/activation.h"
+
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
 
 #include <map>
 #include <string>
 #include <vector>
+
+class MLPPHiddenLayer : public Reference {
+	GDCLASS(MLPPHiddenLayer, Reference);
+
+public:
+	int n_hidden;
+	int activation;
+
+	Ref<MLPPMatrix> input;
+
+	Ref<MLPPMatrix> weights;
+	Ref<MLPPVector> bias;
+
+	Ref<MLPPMatrix> z;
+	Ref<MLPPMatrix> a;
+
+	HashMap<int, Ref<MLPPMatrix> (MLPPActivation::*)(const Ref<MLPPMatrix> &, bool)> activation_map;
+	HashMap<int, Ref<MLPPVector> (MLPPActivation::*)(const Ref<MLPPVector> &, bool)> activation_test_map;
+
+	Ref<MLPPVector> z_test;
+	Ref<MLPPVector> a_test;
+
+	Ref<MLPPMatrix> delta;
+
+	// Regularization Params
+	String reg;
+	real_t lambda; /* Regularization Parameter */
+	real_t alpha; /* This is the controlling param for Elastic Net*/
+
+	String weight_init;
+
+	void forward_pass();
+	void test(const Ref<MLPPVector> &x);
+
+	MLPPHiddenLayer(int p_n_hidden, int p_activation, Ref<MLPPMatrix> p_input, String p_weight_init, String p_reg, real_t p_lambda, real_t p_alpha);
+
+	MLPPHiddenLayer();
+	~MLPPHiddenLayer();
+};
 
 
 class MLPPOldHiddenLayer {
@@ -50,6 +96,5 @@ public:
 	void forwardPass();
 	void Test(std::vector<real_t> x);
 };
-
 
 #endif /* HiddenLayer_hpp */
