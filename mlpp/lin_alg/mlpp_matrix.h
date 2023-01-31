@@ -160,6 +160,10 @@ public:
 		CRASH_COND_MSG(!_data, "Out of memory");
 	}
 
+	_FORCE_INLINE_ int calculate_index(int p_index_x, int p_index_y) const {
+		return p_index_y * _size.y + p_index_x;
+	}
+
 	_FORCE_INLINE_ const real_t &operator[](int p_index) const {
 		CRASH_BAD_INDEX(p_index, data_size());
 		return _data[p_index];
@@ -173,34 +177,34 @@ public:
 		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
 
-		return _data[p_index_x * p_index_y];
+		return _data[p_index_y * _size.y + p_index_x];
 	}
 	_FORCE_INLINE_ real_t get_element(int p_index_x, int p_index_y) {
 		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
 
-		return _data[p_index_x * p_index_y];
+		return _data[p_index_y * _size.y + p_index_x];
 	}
 
 	_FORCE_INLINE_ real_t get_element_bind(int p_index_x, int p_index_y) const {
 		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
 
-		return static_cast<real_t>(_data[p_index_x * p_index_y]);
+		return static_cast<real_t>(_data[p_index_y * _size.y + p_index_x]);
 	}
 
 	_FORCE_INLINE_ void set_element(int p_index_x, int p_index_y, real_t p_val) {
 		ERR_FAIL_INDEX(p_index_x, _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
 
-		_data[p_index_x * p_index_y] = p_val;
+		_data[p_index_y * _size.y + p_index_x] = p_val;
 	}
 
 	_FORCE_INLINE_ void set_element_bind(int p_index_x, int p_index_y, real_t p_val) {
 		ERR_FAIL_INDEX(p_index_x, _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
 
-		_data[p_index_x * p_index_y] = p_val;
+		_data[p_index_y * _size.y + p_index_x] = p_val;
 	}
 
 	_FORCE_INLINE_ Vector<real_t> get_row_vector(int p_index_y) {
