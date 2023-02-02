@@ -10,8 +10,8 @@
 
 #include "core/math/math_defs.h"
 
-#include "core/object/reference.h"
 #include "core/object/func_ref.h"
+#include "core/object/reference.h"
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
@@ -76,317 +76,317 @@ public:
 
 	//LINEAR
 
-	real_t linear_norm(real_t z);
-	Ref<MLPPVector> linear_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> linear_norm(const Ref<MLPPMatrix> &z);
+	real_t linear_normr(real_t z);
+	Ref<MLPPVector> linear_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> linear_normm(const Ref<MLPPMatrix> &z);
 
-	real_t linear_deriv(real_t z);
-	Ref<MLPPVector> linear_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> linear_deriv(const Ref<MLPPMatrix> &z);
+	real_t linear_derivr(real_t z);
+	Ref<MLPPVector> linear_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> linear_derivm(const Ref<MLPPMatrix> &z);
 
 	//SIGMOID
 
-	real_t sigmoid_norm(real_t z);
-	Ref<MLPPVector> sigmoid_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> sigmoid_norm(const Ref<MLPPMatrix> &z);
+	real_t sigmoid_normr(real_t z);
+	Ref<MLPPVector> sigmoid_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> sigmoid_normm(const Ref<MLPPMatrix> &z);
 
-	real_t sigmoid_deriv(real_t z);
-	Ref<MLPPVector> sigmoid_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> sigmoid_deriv(const Ref<MLPPMatrix> &z);
+	real_t sigmoid_derivr(real_t z);
+	Ref<MLPPVector> sigmoid_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> sigmoid_derivm(const Ref<MLPPMatrix> &z);
 
 	//SOFTMAX
 
-	Ref<MLPPVector> softmax_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> softmax_norm(const Ref<MLPPMatrix> &z);
+	Ref<MLPPVector> softmax_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> softmax_normm(const Ref<MLPPMatrix> &z);
 
-	Ref<MLPPVector> softmax_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> softmax_deriv(const Ref<MLPPMatrix> &z);
+	Ref<MLPPVector> softmax_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> softmax_derivm(const Ref<MLPPMatrix> &z);
 
 	//ADJ_SOFTMAX
 
-	Ref<MLPPVector> adj_softmax_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> adj_softmax_norm(const Ref<MLPPMatrix> &z);
+	Ref<MLPPVector> adj_softmax_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> adj_softmax_normm(const Ref<MLPPMatrix> &z);
 
-	Ref<MLPPVector> adj_softmax_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> adj_softmax_deriv(const Ref<MLPPMatrix> &z);
+	Ref<MLPPVector> adj_softmax_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> adj_softmax_derivm(const Ref<MLPPMatrix> &z);
 
 	//SOFTMAX DERIV
 
-	Ref<MLPPMatrix> softmax_deriv_norm(const Ref<MLPPVector> &z);
-	Vector<Ref<MLPPMatrix>> softmax_deriv_norm(const Ref<MLPPMatrix> &z);
+	Ref<MLPPMatrix> softmax_deriv_normv(const Ref<MLPPVector> &z);
+	Vector<Ref<MLPPMatrix>> softmax_deriv_normm(const Ref<MLPPMatrix> &z);
 
-	Ref<MLPPMatrix> softmax_deriv_deriv(const Ref<MLPPVector> &z);
-	Vector<Ref<MLPPMatrix>> softmax_deriv_deriv(const Ref<MLPPMatrix> &z);
+	Ref<MLPPMatrix> softmax_deriv_derivv(const Ref<MLPPVector> &z);
+	Vector<Ref<MLPPMatrix>> softmax_deriv_derivm(const Ref<MLPPMatrix> &z);
 
 	//SOFTPLUS
 
-	real_t softplus_norm(real_t z);
-	Ref<MLPPVector> softplus_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> softplus_norm(const Ref<MLPPMatrix> &z);
+	real_t softplus_normr(real_t z);
+	Ref<MLPPVector> softplus_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> softplus_normm(const Ref<MLPPMatrix> &z);
 
-	real_t softplus_deriv(real_t z);
-	Ref<MLPPVector> softplus_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> softplus_deriv(const Ref<MLPPMatrix> &z);
+	real_t softplus_derivr(real_t z);
+	Ref<MLPPVector> softplus_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> softplus_derivm(const Ref<MLPPMatrix> &z);
 
 	//SOFTSIGN
 
-	real_t softsign_norm(real_t z);
-	Ref<MLPPVector> softsign_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> softsign_norm(const Ref<MLPPMatrix> &z);
+	real_t softsign_normr(real_t z);
+	Ref<MLPPVector> softsign_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> softsign_normm(const Ref<MLPPMatrix> &z);
 
-	real_t softsign_deriv(real_t z);
-	Ref<MLPPVector> softsign_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> softsign_deriv(const Ref<MLPPMatrix> &z);
+	real_t softsign_derivr(real_t z);
+	Ref<MLPPVector> softsign_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> softsign_derivm(const Ref<MLPPMatrix> &z);
 
 	//GAUSSIANCDF
 
-	real_t gaussian_cdf_norm(real_t z);
-	Ref<MLPPVector> gaussian_cdf_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> gaussian_cdf_norm(const Ref<MLPPMatrix> &z);
+	real_t gaussian_cdf_normr(real_t z);
+	Ref<MLPPVector> gaussian_cdf_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> gaussian_cdf_normm(const Ref<MLPPMatrix> &z);
 
-	real_t gaussian_cdf_deriv(real_t z);
-	Ref<MLPPVector> gaussian_cdf_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> gaussian_cdf_deriv(const Ref<MLPPMatrix> &z);
+	real_t gaussian_cdf_derivr(real_t z);
+	Ref<MLPPVector> gaussian_cdf_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> gaussian_cdf_derivm(const Ref<MLPPMatrix> &z);
 
 	//CLOGLOG
 
-	real_t cloglog_norm(real_t z);
-	Ref<MLPPVector> cloglog_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> cloglog_norm(const Ref<MLPPMatrix> &z);
+	real_t cloglog_normr(real_t z);
+	Ref<MLPPVector> cloglog_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> cloglog_normm(const Ref<MLPPMatrix> &z);
 
-	real_t cloglog_deriv(real_t z);
-	Ref<MLPPVector> cloglog_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> cloglog_deriv(const Ref<MLPPMatrix> &z);
+	real_t cloglog_derivr(real_t z);
+	Ref<MLPPVector> cloglog_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> cloglog_derivm(const Ref<MLPPMatrix> &z);
 
 	//LOGIT
 
-	real_t logit_norm(real_t z);
-	Ref<MLPPVector> logit_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> logit_norm(const Ref<MLPPMatrix> &z);
+	real_t logit_normr(real_t z);
+	Ref<MLPPVector> logit_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> logit_normm(const Ref<MLPPMatrix> &z);
 
-	real_t logit_deriv(real_t z);
-	Ref<MLPPVector> logit_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> logit_deriv(const Ref<MLPPMatrix> &z);
+	real_t logit_derivr(real_t z);
+	Ref<MLPPVector> logit_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> logit_derivm(const Ref<MLPPMatrix> &z);
 
 	//UNITSTEP
 
-	real_t unit_step_norm(real_t z);
-	Ref<MLPPVector> unit_step_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> unit_step_norm(const Ref<MLPPMatrix> &z);
+	real_t unit_step_normr(real_t z);
+	Ref<MLPPVector> unit_step_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> unit_step_normm(const Ref<MLPPMatrix> &z);
 
-	real_t unit_step_deriv(real_t z);
-	Ref<MLPPVector> unit_step_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> unit_step_deriv(const Ref<MLPPMatrix> &z);
+	real_t unit_step_derivr(real_t z);
+	Ref<MLPPVector> unit_step_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> unit_step_derivm(const Ref<MLPPMatrix> &z);
 
 	//SWISH
 
-	real_t swish_norm(real_t z);
-	Ref<MLPPVector> swish_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> swish_norm(const Ref<MLPPMatrix> &z);
+	real_t swish_normr(real_t z);
+	Ref<MLPPVector> swish_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> swish_normm(const Ref<MLPPMatrix> &z);
 
-	real_t swish_deriv(real_t z);
-	Ref<MLPPVector> swish_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> swish_deriv(const Ref<MLPPMatrix> &z);
+	real_t swish_derivr(real_t z);
+	Ref<MLPPVector> swish_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> swish_derivm(const Ref<MLPPMatrix> &z);
 
 	//MISH
 
-	real_t mish_norm(real_t z);
-	Ref<MLPPVector> mish_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> mish_norm(const Ref<MLPPMatrix> &z);
+	real_t mish_normr(real_t z);
+	Ref<MLPPVector> mish_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> mish_normm(const Ref<MLPPMatrix> &z);
 
-	real_t mish_deriv(real_t z);
-	Ref<MLPPVector> mish_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> mish_deriv(const Ref<MLPPMatrix> &z);
+	real_t mish_derivr(real_t z);
+	Ref<MLPPVector> mish_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> mish_derivm(const Ref<MLPPMatrix> &z);
 
 	//SINC
 
-	real_t sinc_norm(real_t z);
-	Ref<MLPPVector> sinc_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> sinc_norm(const Ref<MLPPMatrix> &z);
+	real_t sinc_normr(real_t z);
+	Ref<MLPPVector> sinc_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> sinc_normm(const Ref<MLPPMatrix> &z);
 
-	real_t sinc_deriv(real_t z);
-	Ref<MLPPVector> sinc_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> sinc_deriv(const Ref<MLPPMatrix> &z);
+	real_t sinc_derivr(real_t z);
+	Ref<MLPPVector> sinc_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> sinc_derivm(const Ref<MLPPMatrix> &z);
 
 	//RELU
 
-	real_t relu_norm(real_t z);
-	Ref<MLPPVector> relu_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> relu_norm(const Ref<MLPPMatrix> &z);
+	real_t relu_normr(real_t z);
+	Ref<MLPPVector> relu_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> relu_normm(const Ref<MLPPMatrix> &z);
 
-	real_t relu_deriv(real_t z);
-	Ref<MLPPVector> relu_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> relu_deriv(const Ref<MLPPMatrix> &z);
+	real_t relu_derivr(real_t z);
+	Ref<MLPPVector> relu_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> relu_derivm(const Ref<MLPPMatrix> &z);
 
 	//LEAKYRELU
 
-	real_t leaky_relu_norm(real_t z, real_t c);
-	Ref<MLPPVector> leaky_relu_norm(const Ref<MLPPVector> &z, real_t c);
-	Ref<MLPPMatrix> leaky_relu_norm(const Ref<MLPPMatrix> &z, real_t c);
+	real_t leaky_relu_normr(real_t z, real_t c);
+	Ref<MLPPVector> leaky_relu_normv(const Ref<MLPPVector> &z, real_t c);
+	Ref<MLPPMatrix> leaky_relu_normm(const Ref<MLPPMatrix> &z, real_t c);
 
-	real_t leaky_relu_deriv(real_t z, real_t c);
-	Ref<MLPPVector> leaky_relu_deriv(const Ref<MLPPVector> &z, real_t c);
-	Ref<MLPPMatrix> leaky_relu_deriv(const Ref<MLPPMatrix> &z, real_t c);
+	real_t leaky_relu_derivr(real_t z, real_t c);
+	Ref<MLPPVector> leaky_relu_derivv(const Ref<MLPPVector> &z, real_t c);
+	Ref<MLPPMatrix> leaky_relu_derivm(const Ref<MLPPMatrix> &z, real_t c);
 
 	//ELU
 
-	real_t elu_norm(real_t z, real_t c);
-	Ref<MLPPVector> elu_norm(const Ref<MLPPVector> &z, real_t c);
-	Ref<MLPPMatrix> elu_norm(const Ref<MLPPMatrix> &z, real_t c);
+	real_t elu_normr(real_t z, real_t c);
+	Ref<MLPPVector> elu_normv(const Ref<MLPPVector> &z, real_t c);
+	Ref<MLPPMatrix> elu_normm(const Ref<MLPPMatrix> &z, real_t c);
 
-	real_t elu_deriv(real_t z, real_t c);
-	Ref<MLPPVector> elu_deriv(const Ref<MLPPVector> &z, real_t c);
-	Ref<MLPPMatrix> elu_deriv(const Ref<MLPPMatrix> &z, real_t c);
+	real_t elu_derivr(real_t z, real_t c);
+	Ref<MLPPVector> elu_derivv(const Ref<MLPPVector> &z, real_t c);
+	Ref<MLPPMatrix> elu_derivm(const Ref<MLPPMatrix> &z, real_t c);
 
 	//SELU
 
-	real_t selu_norm(real_t z, real_t lambda, real_t c);
-	Ref<MLPPVector> selu_norm(const Ref<MLPPVector> &z, real_t lambda, real_t c);
-	Ref<MLPPMatrix> selu_norm(const Ref<MLPPMatrix> &z, real_t lambda, real_t c);
+	real_t selu_normr(real_t z, real_t lambda, real_t c);
+	Ref<MLPPVector> selu_normv(const Ref<MLPPVector> &z, real_t lambda, real_t c);
+	Ref<MLPPMatrix> selu_normm(const Ref<MLPPMatrix> &z, real_t lambda, real_t c);
 
-	real_t selu_deriv(real_t z, real_t lambda, real_t c);
-	Ref<MLPPVector> selu_deriv(const Ref<MLPPVector> &z, real_t lambda, real_t c);
-	Ref<MLPPMatrix> selu_deriv(const Ref<MLPPMatrix> &z, real_t lambda, real_t c);
+	real_t selu_derivr(real_t z, real_t lambda, real_t c);
+	Ref<MLPPVector> selu_derivv(const Ref<MLPPVector> &z, real_t lambda, real_t c);
+	Ref<MLPPMatrix> selu_derivm(const Ref<MLPPMatrix> &z, real_t lambda, real_t c);
 
 	//GELU
 
-	real_t gelu_norm(real_t z);
-	Ref<MLPPVector> gelu_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> gelu_norm(const Ref<MLPPMatrix> &z);
+	real_t gelu_normr(real_t z);
+	Ref<MLPPVector> gelu_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> gelu_normm(const Ref<MLPPMatrix> &z);
 
-	real_t gelu_deriv(real_t z);
-	Ref<MLPPVector> gelu_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> gelu_deriv(const Ref<MLPPMatrix> &z);
+	real_t gelu_derivr(real_t z);
+	Ref<MLPPVector> gelu_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> gelu_derivm(const Ref<MLPPMatrix> &z);
 
 	//SIGN
 
-	real_t sign_norm(real_t z);
-	Ref<MLPPVector> sign_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> sign_norm(const Ref<MLPPMatrix> &z);
+	real_t sign_normr(real_t z);
+	Ref<MLPPVector> sign_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> sign_normm(const Ref<MLPPMatrix> &z);
 
-	real_t sign_deriv(real_t z);
-	Ref<MLPPVector> sign_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> sign_deriv(const Ref<MLPPMatrix> &z);
+	real_t sign_derivr(real_t z);
+	Ref<MLPPVector> sign_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> sign_derivm(const Ref<MLPPMatrix> &z);
 
 	//SINH
 
-	real_t sinh_norm(real_t z);
-	Ref<MLPPVector> sinh_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> sinh_norm(const Ref<MLPPMatrix> &z);
+	real_t sinh_normr(real_t z);
+	Ref<MLPPVector> sinh_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> sinh_normm(const Ref<MLPPMatrix> &z);
 
-	real_t sinh_deriv(real_t z);
-	Ref<MLPPVector> sinh_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> sinh_deriv(const Ref<MLPPMatrix> &z);
+	real_t sinh_derivr(real_t z);
+	Ref<MLPPVector> sinh_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> sinh_derivm(const Ref<MLPPMatrix> &z);
 
 	//COSH
 
-	real_t cosh_norm(real_t z);
-	Ref<MLPPVector> cosh_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> cosh_norm(const Ref<MLPPMatrix> &z);
+	real_t cosh_normr(real_t z);
+	Ref<MLPPVector> cosh_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> cosh_normm(const Ref<MLPPMatrix> &z);
 
-	real_t cosh_deriv(real_t z);
-	Ref<MLPPVector> cosh_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> cosh_deriv(const Ref<MLPPMatrix> &z);
+	real_t cosh_derivr(real_t z);
+	Ref<MLPPVector> cosh_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> cosh_derivm(const Ref<MLPPMatrix> &z);
 
 	//TANH
 
-	real_t tanh_norm(real_t z);
-	Ref<MLPPVector> tanh_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> tanh_norm(const Ref<MLPPMatrix> &z);
+	real_t tanh_normr(real_t z);
+	Ref<MLPPVector> tanh_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> tanh_normm(const Ref<MLPPMatrix> &z);
 
-	real_t tanh_deriv(real_t z);
-	Ref<MLPPVector> tanh_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> tanh_deriv(const Ref<MLPPMatrix> &z);
+	real_t tanh_derivr(real_t z);
+	Ref<MLPPVector> tanh_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> tanh_derivm(const Ref<MLPPMatrix> &z);
 
 	//CSCH
 
-	real_t csch_norm(real_t z);
-	Ref<MLPPVector> csch_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> csch_norm(const Ref<MLPPMatrix> &z);
+	real_t csch_normr(real_t z);
+	Ref<MLPPVector> csch_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> csch_normm(const Ref<MLPPMatrix> &z);
 
-	real_t csch_deriv(real_t z);
-	Ref<MLPPVector> csch_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> csch_deriv(const Ref<MLPPMatrix> &z);
+	real_t csch_derivr(real_t z);
+	Ref<MLPPVector> csch_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> csch_derivm(const Ref<MLPPMatrix> &z);
 
 	//SECH
 
-	real_t sech_norm(real_t z);
-	Ref<MLPPVector> sech_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> sech_norm(const Ref<MLPPMatrix> &z);
+	real_t sech_normr(real_t z);
+	Ref<MLPPVector> sech_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> sech_normm(const Ref<MLPPMatrix> &z);
 
-	real_t sech_deriv(real_t z);
-	Ref<MLPPVector> sech_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> sech_deriv(const Ref<MLPPMatrix> &z);
+	real_t sech_derivr(real_t z);
+	Ref<MLPPVector> sech_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> sech_derivm(const Ref<MLPPMatrix> &z);
 
 	//COTH
 
-	real_t coth_norm(real_t z);
-	Ref<MLPPVector> coth_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> coth_norm(const Ref<MLPPMatrix> &z);
+	real_t coth_normr(real_t z);
+	Ref<MLPPVector> coth_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> coth_normm(const Ref<MLPPMatrix> &z);
 
-	real_t coth_deriv(real_t z);
-	Ref<MLPPVector> coth_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> coth_deriv(const Ref<MLPPMatrix> &z);
+	real_t coth_derivr(real_t z);
+	Ref<MLPPVector> coth_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> coth_derivm(const Ref<MLPPMatrix> &z);
 
 	//ARSINH
 
-	real_t arsinh_norm(real_t z);
-	Ref<MLPPVector> arsinh_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> arsinh_norm(const Ref<MLPPMatrix> &z);
+	real_t arsinh_normr(real_t z);
+	Ref<MLPPVector> arsinh_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> arsinh_normm(const Ref<MLPPMatrix> &z);
 
-	real_t arsinh_deriv(real_t z);
-	Ref<MLPPVector> arsinh_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> arsinh_deriv(const Ref<MLPPMatrix> &z);
+	real_t arsinh_derivr(real_t z);
+	Ref<MLPPVector> arsinh_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> arsinh_derivm(const Ref<MLPPMatrix> &z);
 
 	//ARCOSH
 
-	real_t arcosh_norm(real_t z);
-	Ref<MLPPVector> arcosh_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> arcosh_norm(const Ref<MLPPMatrix> &z);
+	real_t arcosh_normr(real_t z);
+	Ref<MLPPVector> arcosh_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> arcosh_normm(const Ref<MLPPMatrix> &z);
 
-	real_t arcosh_deriv(real_t z);
-	Ref<MLPPVector> arcosh_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> arcosh_deriv(const Ref<MLPPMatrix> &z);
+	real_t arcosh_derivr(real_t z);
+	Ref<MLPPVector> arcosh_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> arcosh_derivm(const Ref<MLPPMatrix> &z);
 
 	//ARTANH
 
-	real_t artanh_norm(real_t z);
-	Ref<MLPPVector> artanh_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> artanh_norm(const Ref<MLPPMatrix> &z);
+	real_t artanh_normr(real_t z);
+	Ref<MLPPVector> artanh_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> artanh_normm(const Ref<MLPPMatrix> &z);
 
-	real_t artanh_deriv(real_t z);
-	Ref<MLPPVector> artanh_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> artanh_deriv(const Ref<MLPPMatrix> &z);
+	real_t artanh_derivr(real_t z);
+	Ref<MLPPVector> artanh_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> artanh_derivm(const Ref<MLPPMatrix> &z);
 
 	//ARCSCH
 
-	real_t arcsch_norm(real_t z);
-	Ref<MLPPVector> arcsch_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> arcsch_norm(const Ref<MLPPMatrix> &z);
+	real_t arcsch_normr(real_t z);
+	Ref<MLPPVector> arcsch_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> arcsch_normm(const Ref<MLPPMatrix> &z);
 
-	real_t arcsch_deriv(real_t z);
-	Ref<MLPPVector> arcsch_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> arcsch_deriv(const Ref<MLPPMatrix> &z);
+	real_t arcsch_derivr(real_t z);
+	Ref<MLPPVector> arcsch_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> arcsch_derivm(const Ref<MLPPMatrix> &z);
 
 	//ARSECH
 
-	real_t arsech_norm(real_t z);
-	Ref<MLPPVector> arsech_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> arsech_norm(const Ref<MLPPMatrix> &z);
+	real_t arsech_normr(real_t z);
+	Ref<MLPPVector> arsech_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> arsech_normm(const Ref<MLPPMatrix> &z);
 
-	real_t arsech_deriv(real_t z);
-	Ref<MLPPVector> arsech_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> arsech_deriv(const Ref<MLPPMatrix> &z);
+	real_t arsech_derivr(real_t z);
+	Ref<MLPPVector> arsech_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> arsech_derivm(const Ref<MLPPMatrix> &z);
 
 	//ARCOTH
 
-	real_t arcoth_norm(real_t z);
-	Ref<MLPPVector> arcoth_norm(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> arcoth_norm(const Ref<MLPPMatrix> &z);
+	real_t arcoth_normr(real_t z);
+	Ref<MLPPVector> arcoth_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> arcoth_normm(const Ref<MLPPMatrix> &z);
 
-	real_t arcoth_deriv(real_t z);
-	Ref<MLPPVector> arcoth_deriv(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> arcoth_deriv(const Ref<MLPPMatrix> &z);
+	real_t arcoth_derivr(real_t z);
+	Ref<MLPPVector> arcoth_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> arcoth_derivm(const Ref<MLPPMatrix> &z);
 
 	// =========    OLD    ===========
 
