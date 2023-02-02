@@ -599,26 +599,43 @@ Ref<MLPPMatrix> MLPPActivation::logit_deriv(const Ref<MLPPMatrix> &z) {
 
 //UNITSTEP
 
-/*
 real_t MLPPActivation::unit_step_norm(real_t z) {
 	return z < 0 ? 0 : 1;
 }
 Ref<MLPPVector> MLPPActivation::unit_step_norm(const Ref<MLPPVector> &z) {
-	std::vector<real_t> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = unit_step_norm(z[i]);
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = unit_step_norm(z_ptr[i]);
 	}
+
 	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::unit_step_norm(const Ref<MLPPMatrix> &z) {
-	std::vector<std::vector<real_t>> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = unit_step_norm(z[i]);
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = unit_step_norm(z_ptr[i]);
 	}
+
 	return a;
 }
 
@@ -626,50 +643,50 @@ real_t MLPPActivation::unit_step_deriv(real_t z) {
 	return 0;
 }
 Ref<MLPPVector> MLPPActivation::unit_step_deriv(const Ref<MLPPVector> &z) {
-	std::vector<real_t> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = unitStep(z[i], 1);
-	}
-	return deriv;
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+	a->fill(0);
+
+	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::unit_step_deriv(const Ref<MLPPMatrix> &z) {
-	std::vector<std::vector<real_t>> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = unitStep(z[i], 1);
-	}
-	return deriv;
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+	a->fill(0);
+
+	return a;
 }
 
 //SWISH
 
 real_t MLPPActivation::swish_norm(real_t z) {
-	return z * sigmoid(z);
+	return z * sigmoid_norm(z);
 }
 Ref<MLPPVector> MLPPActivation::swish_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.hadamard_product(z, sigmoid(z));
+	return alg.hadamard_productnv(z, sigmoid_norm(z));
 }
 Ref<MLPPMatrix> MLPPActivation::swish_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.hadamard_product(z, sigmoid(z));
+	return alg.hadamard_productnv(z, sigmoid_norm(z));
 }
 
 real_t MLPPActivation::swish_deriv(real_t z) {
-	return swish(z) + sigmoid(z) * (1 - swish(z));
+	return swish_norm(z) + sigmoid_norm(z) * (1 - swish_norm(z));
 }
 Ref<MLPPVector> MLPPActivation::swish_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	alg.addition(swish(z), alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), swish(z))));
+	alg.additionnv(swish_norm(z), alg.subtractionnv(sigmoid_norm(z), alg.hadamard_productnv(sigmoid_norm(z), swish_norm(z))));
 }
 Ref<MLPPMatrix> MLPPActivation::swish_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	alg.addition(swish(z), alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), swish(z))));
+	alg.additionnv(swish_norm(z), alg.subtractionnv(sigmoid_norm(z), alg.hadamard_productm(sigmoid_norm(z), swish_norm(z))));
 }
 
 //MISH
@@ -680,26 +697,40 @@ real_t MLPPActivation::mish_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::mish_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.hadamard_product(z, tanh(softplus(z)));
+	return alg.hadamard_productnv(z, tanh_norm(softplus_norm(z)));
 }
 Ref<MLPPMatrix> MLPPActivation::mish_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.hadamard_product(z, tanh(softplus(z)));
+	return alg.hadamard_productm(z, tanh_norm(softplus_norm(z)));
 }
 
 real_t MLPPActivation::mish_deriv(real_t z) {
-	return sech(softplus(z)) * sech(softplus(z)) * z * sigmoid(z) + mish(z) / z;
+	return sech(softplus_norm(z)) * sech(softplus_norm(z)) * z * sigmoid_norm(z) + mish_norm(z) / z;
 }
 Ref<MLPPVector> MLPPActivation::mish_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.addition(alg.hadamard_product(alg.hadamard_product(alg.hadamard_product(sech(softplus(z)), sech(softplus(z))), z), sigmoid(z)), alg.elementWiseDivision(mish(z), z));
+	return alg.additionnv(
+			alg.hadamard_productnv(
+					alg.hadamard_productnv(
+							alg.hadamard_productnv(
+									sech_norm(softplus_norm(z)), sech_norm(softplus_norm(z))),
+							z),
+					sigmoid_norm(z)),
+			alg.element_wise_division(mish_norm(z), z));
 }
 Ref<MLPPMatrix> MLPPActivation::mish_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.addition(alg.hadamard_product(alg.hadamard_product(alg.hadamard_product(sech(softplus(z)), sech(softplus(z))), z), sigmoid(z)), alg.elementWiseDivision(mish(z), z));
+	return alg.additionnv(
+			alg.hadamard_productm(
+					alg.hadamard_productm(
+							alg.hadamard_productm(
+									sech_norm(softplus_norm(z)), sech_norm(softplus_norm(z))),
+							z),
+					sigmoid_norm(z)),
+			alg.element_wise_divisionm(mish_norm(z), z));
 }
 
 //SINC
@@ -710,12 +741,12 @@ real_t MLPPActivation::sinc_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::sinc_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.sin(z), z);
+	return alg.element_wise_division(alg.sinv(z), z);
 }
 Ref<MLPPMatrix> MLPPActivation::sinc_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.sin(z), z);
+	return alg.element_wise_divisionm(alg.sinm(z), z);
 }
 
 real_t MLPPActivation::sinc_deriv(real_t z) {
@@ -724,12 +755,12 @@ real_t MLPPActivation::sinc_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::sinc_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.subtraction(alg.hadamard_product(z, alg.cos(z)), alg.sin(z)), alg.hadamard_product(z, z));
+	return alg.element_wise_division(alg.subtractionnv(alg.hadamard_productnv(z, alg.cosv(z)), alg.sinv(z)), alg.hadamard_productnv(z, z));
 }
 Ref<MLPPMatrix> MLPPActivation::sinc_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.subtraction(alg.hadamard_product(z, alg.cos(z)), alg.sin(z)), alg.hadamard_product(z, z));
+	return alg.element_wise_divisionm(alg.subtractionm(alg.hadamard_productm(z, alg.cosm(z)), alg.sinm(z)), alg.hadamard_productm(z, z));
 }
 
 //RELU
@@ -738,21 +769,39 @@ real_t MLPPActivation::relu_norm(real_t z) {
 	return fmax(0, z);
 }
 Ref<MLPPVector> MLPPActivation::relu_norm(const Ref<MLPPVector> &z) {
-	std::vector<real_t> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = RELU(z[i]);
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = relu_norm(z_ptr[i]);
 	}
+
 	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::relu_norm(const Ref<MLPPMatrix> &z) {
-	std::vector<std::vector<real_t>> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = RELU(z[i]);
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = relu_norm(z_ptr[i]);
 	}
+
 	return a;
 }
 
@@ -764,20 +813,40 @@ real_t MLPPActivation::relu_deriv(real_t z) {
 	}
 }
 Ref<MLPPVector> MLPPActivation::relu_deriv(const Ref<MLPPVector> &z) {
-	std::vector<real_t> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = RELU(z[i], 1);
+	MLPPLinAlg alg;
+
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = relu_deriv(z_ptr[i]);
 	}
-	return deriv;
+
+	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::relu_deriv(const Ref<MLPPMatrix> &z) {
-	std::vector<std::vector<real_t>> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = RELU(z[i], 1);
+	MLPPLinAlg alg;
+
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = relu_deriv(z_ptr[i]);
 	}
-	return deriv;
+
+	return a;
 }
 
 //LEAKYRELU
@@ -786,21 +855,39 @@ real_t MLPPActivation::leaky_relu_norm(real_t z, real_t c) {
 	return fmax(c * z, z);
 }
 Ref<MLPPVector> MLPPActivation::leaky_relu_norm(const Ref<MLPPVector> &z, real_t c) {
-	std::vector<real_t> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = leakyReLU(z[i], c);
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = leaky_relu_norm(z_ptr[i], c);
 	}
+
 	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::leaky_relu_norm(const Ref<MLPPMatrix> &z, real_t c) {
-	std::vector<std::vector<real_t>> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = leakyReLU(z[i], c);
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = leaky_relu_norm(z_ptr[i], c);
 	}
+
 	return a;
 }
 
@@ -812,20 +899,40 @@ real_t MLPPActivation::leaky_relu_deriv(real_t z, real_t c) {
 	}
 }
 Ref<MLPPVector> MLPPActivation::leaky_relu_deriv(const Ref<MLPPVector> &z, real_t c) {
-	std::vector<real_t> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = leakyReLU(z[i], c, 1);
+	MLPPLinAlg alg;
+
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = leaky_relu_deriv(z_ptr[i], c);
 	}
-	return deriv;
+
+	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::leaky_relu_deriv(const Ref<MLPPMatrix> &z, real_t c) {
-	std::vector<std::vector<real_t>> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = leakyReLU(z[i], c, 1);
+	MLPPLinAlg alg;
+
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = leaky_relu_deriv(z_ptr[i], c);
 	}
-	return deriv;
+
+	return a;
 }
 
 //ELU
@@ -838,21 +945,39 @@ real_t MLPPActivation::elu_norm(real_t z, real_t c) {
 	}
 }
 Ref<MLPPVector> MLPPActivation::elu_norm(const Ref<MLPPVector> &z, real_t c) {
-	std::vector<real_t> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = ELU(z[i], c);
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = elu_norm(z_ptr[i], c);
 	}
+
 	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::elu_norm(const Ref<MLPPMatrix> &z, real_t c) {
-	std::vector<std::vector<real_t>> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = ELU(z[i], c);
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = elu_norm(z_ptr[i], c);
 	}
+
 	return a;
 }
 
@@ -864,20 +989,40 @@ real_t MLPPActivation::elu_deriv(real_t z, real_t c) {
 	}
 }
 Ref<MLPPVector> MLPPActivation::elu_deriv(const Ref<MLPPVector> &z, real_t c) {
-	std::vector<real_t> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = ELU(z[i], c, 1);
+	MLPPLinAlg alg;
+
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = elu_deriv(z_ptr[i], c);
 	}
-	return deriv;
+
+	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::elu_deriv(const Ref<MLPPMatrix> &z, real_t c) {
-	std::vector<std::vector<real_t>> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = ELU(z[i], c, 1);
+	MLPPLinAlg alg;
+
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = elu_deriv(z_ptr[i], c);
 	}
-	return deriv;
+
+	return a;
 }
 
 //SELU
@@ -886,65 +1031,121 @@ real_t MLPPActivation::selu_norm(real_t z, real_t lambda, real_t c) {
 	return lambda * ELU(z, c);
 }
 Ref<MLPPVector> MLPPActivation::selu_norm(const Ref<MLPPVector> &z, real_t lambda, real_t c) {
-	std::vector<real_t> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = SELU(z[i], lambda, c);
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = selu_norm(z_ptr[i], lambda, c);
 	}
+
 	return a;
 }
-Ref<MLPPMatrix> MLPPActivation::selu_norm(Ref<MLPPMatrix>, real_t lambda, real_t c) {
-	std::vector<std::vector<real_t>> a;
-	a.resize(z.size());
+Ref<MLPPMatrix> MLPPActivation::selu_norm(const Ref<MLPPMatrix> &z, real_t lambda, real_t c) {
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = SELU(z[i], lambda, c);
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = selu_norm(z_ptr[i], lambda, c);
 	}
+
 	return a;
 }
 
 real_t MLPPActivation::selu_deriv(real_t z, real_t lambda, real_t c) {
-	return ELU(z, c, 1);
+	return elu_deriv(z, c);
 }
 Ref<MLPPVector> MLPPActivation::selu_deriv(const Ref<MLPPVector> &z, real_t lambda, real_t c) {
-	std::vector<real_t> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = SELU(z[i], lambda, c, 1);
+	MLPPLinAlg alg;
+
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = selu_deriv(z_ptr[i], lambda, c);
 	}
-	return deriv;
+
+	return a;
 }
-Ref<MLPPMatrix> MLPPActivation::selu_deriv(Ref<MLPPMatrix>, real_t lambda, real_t c) {
-	std::vector<std::vector<real_t>> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = SELU(z[i], lambda, c, 1);
+Ref<MLPPMatrix> MLPPActivation::selu_deriv(const Ref<MLPPMatrix> &z, real_t lambda, real_t c) {
+	MLPPLinAlg alg;
+
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = selu_deriv(z_ptr[i], lambda, c);
 	}
-	return deriv;
+
+	return a;
 }
 
 //GELU
 
 real_t MLPPActivation::gelu_norm(real_t z) {
-	return 0.5 * z * (1 + tanh(sqrt(2 / M_PI) * (z + 0.044715 * std::pow(z, 3))));
+	return 0.5 * z * (1 + tanh(sqrt(2 / M_PI) * (z + 0.044715 * Math::pow(z, 3))));
 }
 Ref<MLPPVector> MLPPActivation::gelu_norm(const Ref<MLPPVector> &z) {
-	std::vector<real_t> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = GELU(z[i]);
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = gelu_norm(z_ptr[i]);
 	}
+
 	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::gelu_norm(const Ref<MLPPMatrix> &z) {
-	std::vector<std::vector<real_t>> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = GELU(z[i]);
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = gelu_norm(z_ptr[i]);
 	}
+
 	return a;
 }
 
@@ -952,20 +1153,40 @@ real_t MLPPActivation::gelu_deriv(real_t z) {
 	return 0.5 * tanh(0.0356774 * std::pow(z, 3) + 0.797885 * z) + (0.0535161 * std::pow(z, 3) + 0.398942 * z) * std::pow(sech(0.0356774 * std::pow(z, 3) + 0.797885 * z), 2) + 0.5;
 }
 Ref<MLPPVector> MLPPActivation::gelu_deriv(const Ref<MLPPVector> &z) {
-	std::vector<real_t> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = GELU(z[i], 1);
+	MLPPLinAlg alg;
+
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = gelu_deriv(z_ptr[i]);
 	}
-	return deriv;
+
+	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::gelu_deriv(const Ref<MLPPMatrix> &z) {
-	std::vector<std::vector<real_t>> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = GELU(z[i], 1);
+	MLPPLinAlg alg;
+
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = gelu_deriv(z_ptr[i]);
 	}
-	return deriv;
+
+	return a;
 }
 
 //SIGN
@@ -980,21 +1201,39 @@ real_t MLPPActivation::sign_norm(real_t z) {
 	}
 }
 Ref<MLPPVector> MLPPActivation::sign_norm(const Ref<MLPPVector> &z) {
-	std::vector<real_t> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = sign(z[i]);
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = sign_norm(z_ptr[i]);
 	}
+
 	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::sign_norm(const Ref<MLPPMatrix> &z) {
-	std::vector<std::vector<real_t>> a;
-	a.resize(z.size());
+	MLPPLinAlg alg;
 
-	for (int i = 0; i < a.size(); i++) {
-		a[i] = sign(z[i]);
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = sign_norm(z_ptr[i]);
 	}
+
 	return a;
 }
 
@@ -1002,84 +1241,104 @@ real_t MLPPActivation::sign_deriv(real_t z) {
 	return 0;
 }
 Ref<MLPPVector> MLPPActivation::sign_deriv(const Ref<MLPPVector> &z) {
-	std::vector<real_t> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = sign(z[i], 1);
+	MLPPLinAlg alg;
+
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_size = z->size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = sign_deriv(z_ptr[i]);
 	}
-	return deriv;
+
+	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::sign_deriv(const Ref<MLPPMatrix> &z) {
-	std::vector<std::vector<real_t>> deriv;
-	deriv.resize(z.size());
-	for (int i = 0; i < z.size(); i++) {
-		deriv[i] = sign(z[i], 1);
+	MLPPLinAlg alg;
+
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z->size());
+
+	int z_data_size = z->data_size();
+
+	const real_t *z_ptr = z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_data_size; ++i) {
+		a_ptr[i] = sign_deriv(z_ptr[i]);
 	}
-	return deriv;
+
+	return a;
 }
 
 //SINH
 
 real_t MLPPActivation::sinh_norm(real_t z) {
-	return 0.5 * (exp(z) - exp(-z));
+	return 0.5 * (Math::exp(z) - Math::exp(-z));
 }
 Ref<MLPPVector> MLPPActivation::sinh_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
-	return alg.scalarMultiply(0.5, alg.subtraction(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
+	return alg.scalar_multiplynv(0.5, alg.subtractionnv(alg.expv(z), alg.expv(alg.scalar_multiplynv(-1, z))));
 }
 Ref<MLPPMatrix> MLPPActivation::sinh_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
-	return alg.scalarMultiply(0.5, alg.subtraction(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
+	return alg.scalar_multiplym(0.5, alg.subtractionm(alg.expm(z), alg.expm(alg.scalar_multiplym(-1, z))));
 }
 
 real_t MLPPActivation::sinh_deriv(real_t z) {
-	return cosh(z);
+	return cosh_norm(z);
 }
 Ref<MLPPVector> MLPPActivation::sinh_deriv(const Ref<MLPPVector> &z) {
-	return cosh(z);
+	return cosh_norm(z);
 }
 Ref<MLPPMatrix> MLPPActivation::sinh_deriv(const Ref<MLPPMatrix> &z) {
-	return cosh(z);
+	return cosh_norm(z);
 }
 
 //COSH
 
 real_t MLPPActivation::cosh_norm(real_t z) {
-	return 0.5 * (exp(z) + exp(-z));
+	return 0.5 * (Math::exp(z) + Math::exp(-z));
 }
 Ref<MLPPVector> MLPPActivation::cosh_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
-	return alg.scalarMultiply(0.5, alg.addition(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
+	return alg.scalar_multiplynv(0.5, alg.additionnv(alg.expv(z), alg.expv(alg.scalar_multiplynv(-1, z))));
 }
 Ref<MLPPMatrix> MLPPActivation::cosh_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
-	return alg.scalarMultiply(0.5, alg.addition(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
+	return alg.scalar_multiplym(0.5, alg.additionnv(alg.expm(z), alg.expm(alg.scalar_multiplym(-1, z))));
 }
 
 real_t MLPPActivation::cosh_deriv(real_t z) {
-	return sinh(z);
+	return sinh_norm(z);
 }
 Ref<MLPPVector> MLPPActivation::cosh_deriv(const Ref<MLPPVector> &z) {
-	return sinh(z);
+	return sinh_norm(z);
 }
 Ref<MLPPMatrix> MLPPActivation::cosh_deriv(const Ref<MLPPMatrix> &z) {
-	return sinh(z);
+	return sinh_norm(z);
 }
 
 //TANH
 
 real_t MLPPActivation::tanh_norm(real_t z) {
-	return (exp(z) - exp(-z)) / (exp(z) + exp(-z));
+	return (Math::exp(z) - Math::exp(-z)) / (Math::exp(z) + Math::exp(-z));
 }
 Ref<MLPPVector> MLPPActivation::tanh_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.subtraction(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))), alg.addition(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
+	return alg.element_wise_division(alg.subtractionnv(alg.expv(z), alg.expv(alg.scalar_multiplynv(-1, z))), alg.additionnv(alg.expv(z), alg.expv(alg.scalar_multiplynv(-1, z))));
 }
 Ref<MLPPMatrix> MLPPActivation::tanh_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.subtraction(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))), alg.addition(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
+	return alg.element_wise_divisionm(alg.subtractionm(alg.expm(z), alg.expm(alg.scalar_multiplym(-1, z))), alg.additionm(alg.expm(z), alg.expm(alg.scalar_multiplym(-1, z))));
 }
 
 real_t MLPPActivation::tanh_deriv(real_t z) {
@@ -1088,12 +1347,12 @@ real_t MLPPActivation::tanh_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::tanh_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(-1, alg.scalarAdd(-1, alg.hadamard_product(tanh(z), tanh(z))));
+	return alg.scalar_multiplynv(-1, alg.scalar_addnv(-1, alg.hadamard_productnv(tanh_norm(z), tanh_norm(z))));
 }
 Ref<MLPPMatrix> MLPPActivation::tanh_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(-1, alg.scalarAdd(-1, alg.hadamard_product(tanh(z), tanh(z))));
+	return alg.scalar_multiplym(-1, alg.scalar_addm(-1, alg.hadamard_productm(tanh_norm(z), tanh_norm(z))));
 }
 
 //CSCH
@@ -1104,13 +1363,13 @@ real_t MLPPActivation::csch_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::csch_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onevec(z.size()), sinh(z));
+	return alg.element_wise_division(alg.onevecv(z->size()), sinh_norm(z));
 }
 
 Ref<MLPPMatrix> MLPPActivation::csch_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), sinh(z));
+	return alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), sinh_norm(z));
 }
 
 real_t MLPPActivation::csch_deriv(real_t z) {
@@ -1119,13 +1378,13 @@ real_t MLPPActivation::csch_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::csch_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), coth(z));
+	return alg.hadamard_productnv(alg.scalar_multiplynv(-1, csch_norm(z)), coth_norm(z));
 }
 
 Ref<MLPPMatrix> MLPPActivation::csch_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), coth(z));
+	return alg.hadamard_productm(alg.scalar_multiplym(-1, csch_norm(z)), coth_norm(z));
 }
 
 //SECH
@@ -1137,14 +1396,14 @@ real_t MLPPActivation::sech_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::sech_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onevec(z.size()), cosh(z));
+	return alg.element_wise_division(alg.onevecv(z->size()), cosh_norm(z));
 
 	// return activation(z, deriv, static_cast<void (*)(real_t, bool)>(&sech));
 }
 Ref<MLPPMatrix> MLPPActivation::sech_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), cosh(z));
+	return alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), cosh_norm(z));
 
 	// return activation(z, deriv, static_cast<void (*)(real_t, bool)>(&sech));
 }
@@ -1156,12 +1415,12 @@ real_t MLPPActivation::sech_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::sech_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.hadamard_product(alg.scalarMultiply(-1, sech(z)), tanh(z));
+	return alg.hadamard_productnv(alg.scalar_multiplynv(-1, sech_norm(z)), tanh_norm(z));
 }
 Ref<MLPPMatrix> MLPPActivation::sech_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.hadamard_product(alg.scalarMultiply(-1, sech(z)), tanh(z));
+	return alg.hadamard_productm(alg.scalar_multiplym(-1, sech_norm(z)), tanh_norm(z));
 }
 
 //COTH
@@ -1172,26 +1431,26 @@ real_t MLPPActivation::coth_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::coth_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onevec(z.size()), tanh(z));
+	return alg.element_wise_division(alg.onevecv(z->size()), tanh_norm(z));
 }
 Ref<MLPPMatrix> MLPPActivation::coth_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), tanh(z));
+	return alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), tanh_norm(z));
 }
 
 real_t MLPPActivation::coth_deriv(real_t z) {
-	return -csch(z) * csch(z);
+	return -csch_norm(z) * csch_norm(z);
 }
 Ref<MLPPVector> MLPPActivation::coth_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), csch(z));
+	return alg.hadamard_productnv(alg.scalar_multiplynv(-1, csch_norm(z)), csch_norm(z));
 }
 Ref<MLPPMatrix> MLPPActivation::coth_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), csch(z));
+	return alg.hadamard_productm(alg.scalar_multiplym(-1, csch_norm(z)), csch_norm(z));
 }
 
 //ARSINH
@@ -1203,13 +1462,13 @@ real_t MLPPActivation::arsinh_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::arsinh_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.log(alg.addition(z, alg.sqrt(alg.addition(alg.hadamard_product(z, z), alg.onevec(z.size())))));
+	return alg.logv(alg.additionnv(z, alg.sqrtv(alg.additionnv(alg.hadamard_productnv(z, z), alg.onevecv(z->size())))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::arsinh_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.log(alg.addition(z, alg.sqrt(alg.addition(alg.hadamard_product(z, z), alg.onemat(z.size(), z[0].size())))));
+	return alg.logm(alg.additionm(z, alg.sqrtm(alg.additionm(alg.hadamard_productm(z, z), alg.onematm(z->size().x, z->size().y)))));
 }
 
 real_t MLPPActivation::arsinh_deriv(real_t z) {
@@ -1219,13 +1478,13 @@ real_t MLPPActivation::arsinh_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::arsinh_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onevec(z.size()), alg.sqrt(alg.addition(alg.hadamard_product(z, z), alg.onevec(z.size()))));
+	return alg.element_wise_division(alg.onevecv(z->size()), alg.sqrtv(alg.additionnv(alg.hadamard_productnv(z, z), alg.onevecv(z->size()))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::arsinh_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.sqrt(alg.addition(alg.hadamard_product(z, z), alg.onemat(z.size(), z[0].size()))));
+	return alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), alg.sqrtm(alg.additionm(alg.hadamard_productm(z, z), alg.onematm(z->size().x, z->size().y))));
 }
 
 //ARCOSH
@@ -1236,13 +1495,13 @@ real_t MLPPActivation::arcosh_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::arcosh_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.log(alg.addition(z, alg.sqrt(alg.subtraction(alg.hadamard_product(z, z), alg.onevec(z.size())))));
+	return alg.logv(alg.additionnv(z, alg.sqrtv(alg.subtractionnv(alg.hadamard_productnv(z, z), alg.onevecv(z->size())))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::arcosh_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.log(alg.addition(z, alg.sqrt(alg.subtraction(alg.hadamard_product(z, z), alg.onemat(z.size(), z[0].size())))));
+	return alg.logm(alg.additionm(z, alg.sqrtm(alg.subtractionm(alg.hadamard_productm(z, z), alg.onematm(z->size().x, z->size().y)))));
 }
 
 real_t MLPPActivation::arcosh_deriv(real_t z) {
@@ -1251,13 +1510,13 @@ real_t MLPPActivation::arcosh_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::arcosh_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onevec(z.size()), alg.sqrt(alg.subtraction(alg.hadamard_product(z, z), alg.onevec(z.size()))));
+	return alg.element_wise_division(alg.onevecv(z->size()), alg.sqrtv(alg.subtractionnv(alg.hadamard_productnv(z, z), alg.onevecv(z->size()))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::arcosh_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.sqrt(alg.subtraction(alg.hadamard_product(z, z), alg.onemat(z.size(), z[0].size()))));
+	return alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), alg.sqrtm(alg.subtractionm(alg.hadamard_productm(z, z), alg.onematm(z->size().x, z->size().y))));
 }
 
 //ARTANH
@@ -1268,13 +1527,13 @@ real_t MLPPActivation::artanh_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::artanh_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(0.5, alg.log(alg.elementWiseDivision(alg.addition(alg.onevec(z.size()), z), alg.subtraction(alg.onevec(z.size()), z))));
+	return alg.scalar_multiplynv(0.5, alg.logv(alg.element_wise_division(alg.additionnv(alg.onevecv(z->size()), z), alg.subtractionnv(alg.onevecv(z->size()), z))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::artanh_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(0.5, alg.log(alg.elementWiseDivision(alg.addition(alg.onemat(z.size(), z[0].size()), z), alg.subtraction(alg.onemat(z.size(), z[0].size()), z))));
+	return alg.scalar_multiplym(0.5, alg.logm(alg.element_wise_divisionm(alg.additionm(alg.onematm(z->size().x, z->size().y), z), alg.subtractionm(alg.onematm(z->size().x, z->size().y), z))));
 }
 
 real_t MLPPActivation::artanh_deriv(real_t z) {
@@ -1283,13 +1542,13 @@ real_t MLPPActivation::artanh_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::artanh_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onevec(z.size()), alg.subtraction(alg.onevec(z.size()), alg.hadamard_product(z, z)));
+	return alg.element_wise_division(alg.onevecv(z->size()), alg.subtractionnv(alg.onevecv(z->size()), alg.hadamard_productnv(z, z)));
 }
 
 Ref<MLPPMatrix> MLPPActivation::artanh_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.subtraction(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)));
+	return alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), alg.subtractionnv(alg.onematm(z->size().x, z->size().y), alg.hadamard_productm(z, z)));
 }
 
 //ARCSCH
@@ -1300,12 +1559,23 @@ real_t MLPPActivation::arcsch_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::arcsch_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.log(alg.addition(alg.sqrt(alg.addition(alg.onevec(z.size()), alg.elementWiseDivision(alg.onevec(z.size()), alg.hadamard_product(z, z)))), alg.elementWiseDivision(alg.onevec(z.size()), z)));
+	return alg.logv(
+			alg.additionnv(
+					alg.sqrtv(
+							alg.additionnv(
+									alg.onevecv(z->size()),
+									alg.element_wise_division(alg.onevecv(z->size()), alg.hadamard_productnv(z, z)))),
+					alg.element_wise_division(alg.onevecv(z->size()), z)));
 }
 Ref<MLPPMatrix> MLPPActivation::arcsch_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.log(alg.addition(alg.sqrt(alg.addition(alg.onemat(z.size(), z[0].size()), alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)))), alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), z)));
+	return alg.logm(
+			alg.additionm(
+					alg.sqrtm(
+							alg.additionm(alg.onematm(z->size().x, z->size().y),
+									alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), alg.hadamard_productm(z, z)))),
+					alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), z)));
 }
 
 real_t MLPPActivation::arcsch_deriv(real_t z) {
@@ -1314,12 +1584,20 @@ real_t MLPPActivation::arcsch_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::arcsch_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.full(z.size(), -1), alg.hadamard_product(alg.hadamard_product(z, z), alg.sqrt(alg.addition(alg.onevec(z.size()), alg.elementWiseDivision(alg.onevec(z.size()), alg.hadamard_product(z, z))))));
+	return alg.element_wise_division(
+			alg.fullv(z->size(), -1),
+			alg.hadamard_productm(
+					alg.hadamard_productnv(z, z),
+					alg.sqrtv(alg.additionnv(alg.onevecv(z->size()), alg.element_wise_division(alg.onevecv(z->size()), alg.hadamard_productnv(z, z))))));
 }
 Ref<MLPPMatrix> MLPPActivation::arcsch_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.full(z.size(), z[0].size(), -1), alg.hadamard_product(alg.hadamard_product(z, z), alg.sqrt(alg.addition(alg.onemat(z.size(), z[0].size()), alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z))))));
+	return alg.element_wise_divisionm(
+			alg.fullm(z->size().x, z->size().y, -1),
+			alg.hadamard_productm(alg.hadamard_productm(z, z),
+					alg.sqrtm(alg.additionm(alg.onematm(z->size().x, z->size().y),
+							alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), alg.hadamard_productm(z, z))))));
 }
 
 //ARSECH
@@ -1331,13 +1609,31 @@ real_t MLPPActivation::arsech_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::arsech_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.log(alg.addition(alg.elementWiseDivision(alg.onevec(z.size()), z), alg.hadamard_product(alg.addition(alg.elementWiseDivision(alg.onevec(z.size()), z), alg.onevec(z.size())), alg.subtraction(alg.elementWiseDivision(alg.onevec(z.size()), z), alg.onevec(z.size())))));
+	return alg.logv(
+			alg.additionnv(
+					alg.element_wise_division(
+							alg.onevecv(z->size()), z),
+					alg.hadamard_productnv(
+							alg.additionnv(alg.element_wise_division(alg.onevecv(z->size()), z), alg.onevecv(z->size())),
+							alg.subtractionnv(alg.element_wise_division(alg.onevecv(z->size()), z), alg.onevecv(z->size())))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::arsech_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.log(alg.addition(alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), z), alg.hadamard_product(alg.addition(alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), z), alg.onemat(z.size(), z[0].size())), alg.subtraction(alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), z), alg.onemat(z.size(), z[0].size())))));
+	return alg.logm(
+			alg.additionm(
+					alg.element_wise_divisionm(
+							alg.onematm(z->size().x, z->size().y), z),
+					alg.hadamard_productm(
+							alg.additionm(
+									alg.element_wise_divisionm(
+											alg.onematm(z->size().x, z->size().y), z),
+									alg.onematm(z->size().x, z->size().y)),
+							alg.subtractionm(
+									alg.element_wise_divisionm(
+											alg.onematm(z->size().x, z->size().y), z),
+									alg.onematm(z->size().x, z->size().y)))));
 }
 
 real_t MLPPActivation::arsech_deriv(real_t z) {
@@ -1347,13 +1643,22 @@ real_t MLPPActivation::arsech_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::arsech_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.full(z.size(), -1), alg.hadamard_product(z, alg.sqrt(alg.subtraction(alg.onevec(z.size()), alg.hadamard_product(z, z)))));
+	return alg.element_wise_division(
+			alg.fullv(z->size(), -1),
+			alg.hadamard_productnv(
+					z,
+					alg.sqrtv(
+							alg.subtractionnv(alg.onevecv(z->size()), alg.hadamard_productnv(z, z)))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::arsech_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.full(z.size(), z[0].size(), -1), alg.hadamard_product(z, alg.sqrt(alg.subtraction(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)))));
+	return alg.element_wise_divisionm(
+			alg.fullm(z->size().x, z->size().y, -1),
+			alg.hadamard_productm(
+					z,
+					alg.sqrtm(alg.subtractionm(alg.onematm(z->size().x, z->size().y), alg.hadamard_productm(z, z)))));
 }
 
 //ARCOTH
@@ -1364,13 +1669,17 @@ real_t MLPPActivation::arcoth_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::arcoth_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(0.5, alg.log(alg.elementWiseDivision(alg.addition(alg.onevec(z.size()), z), alg.subtraction(z, alg.onevec(z.size())))));
+	return alg.scalar_multiplynv(
+			0.5,
+			alg.logv(alg.element_wise_division(alg.additionnv(alg.onevecv(z->size()), z), alg.subtractionnv(z, alg.onevecv(z->size())))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::arcoth_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(0.5, alg.log(alg.elementWiseDivision(alg.addition(alg.onemat(z.size(), z[0].size()), z), alg.subtraction(z, alg.onemat(z.size(), z[0].size())))));
+	return alg.scalar_multiplym(
+			0.5,
+			alg.logm(alg.element_wise_divisionm(alg.additionm(alg.onematm(z->size().x, z->size().y), z), alg.subtractionm(z, alg.onematm(z->size().x, z->size().y)))));
 }
 
 real_t MLPPActivation::arcoth_deriv(real_t z) {
@@ -1379,15 +1688,15 @@ real_t MLPPActivation::arcoth_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::arcoth_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onevec(z.size()), alg.subtraction(alg.onevec(z.size()), alg.hadamard_product(z, z)));
+	return alg.element_wise_division(alg.onevecv(z->size()), alg.subtractionnv(alg.onevecv(z->size()), alg.hadamard_productnv(z, z)));
 }
 
 Ref<MLPPMatrix> MLPPActivation::arcoth_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.subtraction(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)));
+	return alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), alg.subtractionm(alg.onematm(z->size().x, z->size().y), alg.hadamard_productm(z, z)));
 }
-*/
+
 //======================== OLD =============================
 
 real_t MLPPActivation::linear(real_t z, bool deriv) {

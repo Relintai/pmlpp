@@ -242,11 +242,11 @@ public:
 
 	real_t selu_norm(real_t z, real_t lambda, real_t c);
 	Ref<MLPPVector> selu_norm(const Ref<MLPPVector> &z, real_t lambda, real_t c);
-	Ref<MLPPMatrix> selu_norm(Ref<MLPPMatrix>, real_t lambda, real_t c);
+	Ref<MLPPMatrix> selu_norm(const Ref<MLPPMatrix> &z, real_t lambda, real_t c);
 
 	real_t selu_deriv(real_t z, real_t lambda, real_t c);
 	Ref<MLPPVector> selu_deriv(const Ref<MLPPVector> &z, real_t lambda, real_t c);
-	Ref<MLPPMatrix> selu_deriv(Ref<MLPPMatrix>, real_t lambda, real_t c);
+	Ref<MLPPMatrix> selu_deriv(const Ref<MLPPMatrix> &z, real_t lambda, real_t c);
 
 	//GELU
 

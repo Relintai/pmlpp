@@ -94,6 +94,9 @@ public:
 	std::vector<std::vector<real_t>> sin(std::vector<std::vector<real_t>> A);
 	std::vector<std::vector<real_t>> cos(std::vector<std::vector<real_t>> A);
 
+	Ref<MLPPMatrix> sinm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> cosm(const Ref<MLPPMatrix> &A);
+
 	std::vector<std::vector<real_t>> rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis = -1);
 
 	std::vector<std::vector<real_t>> max(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
@@ -228,8 +231,10 @@ public:
 	std::vector<std::vector<real_t>> diag(std::vector<real_t> a);
 
 	std::vector<real_t> sin(std::vector<real_t> a);
-
 	std::vector<real_t> cos(std::vector<real_t> a);
+
+	Ref<MLPPVector> sinv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> cosv(const Ref<MLPPVector> &a);
 
 	std::vector<real_t> max(std::vector<real_t> a, std::vector<real_t> b);
 
