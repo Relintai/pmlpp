@@ -8,6 +8,8 @@
 //  Created by Marc Melikyan on 1/8/21.
 //
 
+//TODO Methods here should probably use error macros in a way where they get disabled in non-tools(?) (maybe release?) builds
+
 #include "core/math/math_defs.h"
 
 #include "../lin_alg/mlpp_matrix.h"
@@ -40,7 +42,7 @@ public:
 
 	Ref<MLPPMatrix> hadamard_productm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 	Ref<MLPPMatrix> kronecker_productm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> elementWise_divisionm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> element_wise_divisionm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	std::vector<std::vector<real_t>> transpose(std::vector<std::vector<real_t>> A);
 	std::vector<std::vector<real_t>> scalarMultiply(real_t scalar, std::vector<std::vector<real_t>> A);
@@ -58,20 +60,27 @@ public:
 	std::vector<std::vector<real_t>> sqrt(std::vector<std::vector<real_t>> A);
 	std::vector<std::vector<real_t>> cbrt(std::vector<std::vector<real_t>> A);
 
+	Ref<MLPPMatrix> logm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> log10m(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> expm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> erfm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> exponentiatem(const Ref<MLPPMatrix> &A, real_t p);
+	Ref<MLPPMatrix> sqrtm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> cbrtm(const Ref<MLPPMatrix> &A);
+
 	std::vector<std::vector<real_t>> matrixPower(std::vector<std::vector<real_t>> A, int n);
 
 	std::vector<std::vector<real_t>> abs(std::vector<std::vector<real_t>> A);
+
+	Ref<MLPPMatrix> absm(const Ref<MLPPMatrix> &A);
 
 	real_t det(std::vector<std::vector<real_t>> A, int d);
 
 	real_t trace(std::vector<std::vector<real_t>> A);
 
 	std::vector<std::vector<real_t>> cofactor(std::vector<std::vector<real_t>> A, int n, int i, int j);
-
 	std::vector<std::vector<real_t>> adjoint(std::vector<std::vector<real_t>> A);
-
 	std::vector<std::vector<real_t>> inverse(std::vector<std::vector<real_t>> A);
-
 	std::vector<std::vector<real_t>> pinverse(std::vector<std::vector<real_t>> A);
 
 	std::vector<std::vector<real_t>> zeromat(int n, int m);
@@ -88,9 +97,7 @@ public:
 	std::vector<std::vector<real_t>> rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis = -1);
 
 	std::vector<std::vector<real_t>> max(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
-
 	real_t max(std::vector<std::vector<real_t>> A);
-
 	real_t min(std::vector<std::vector<real_t>> A);
 
 	std::vector<std::vector<real_t>> round(std::vector<std::vector<real_t>> A);
@@ -162,6 +169,8 @@ public:
 	std::vector<std::vector<real_t>> outerProduct(std::vector<real_t> a, std::vector<real_t> b); // This multiplies a, bT
 
 	std::vector<real_t> hadamard_product(std::vector<real_t> a, std::vector<real_t> b);
+	Ref<MLPPVector> hadamard_productnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	void hadamard_productv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
 
 	std::vector<real_t> elementWiseDivision(std::vector<real_t> a, std::vector<real_t> b);
 	Ref<MLPPVector> element_wise_division(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
@@ -171,13 +180,14 @@ public:
 	void scalar_multiplyv(real_t scalar, const Ref<MLPPVector> &a, Ref<MLPPVector> out);
 
 	std::vector<real_t> scalarAdd(real_t scalar, std::vector<real_t> a);
+	Ref<MLPPVector> scalar_addnv(real_t scalar, const Ref<MLPPVector> &a);
+	void scalar_addv(real_t scalar, const Ref<MLPPVector> &a, Ref<MLPPVector> out);
 
 	std::vector<real_t> addition(std::vector<real_t> a, std::vector<real_t> b);
 	Ref<MLPPVector> additionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 	void additionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
 
 	std::vector<real_t> subtraction(std::vector<real_t> a, std::vector<real_t> b);
-
 	Ref<MLPPVector> subtractionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 	void subtractionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
 
@@ -208,6 +218,8 @@ public:
 	std::vector<real_t> zerovec(int n);
 	std::vector<real_t> onevec(int n);
 	std::vector<real_t> full(int n, int k);
+
+	Ref<MLPPVector> absv(const Ref<MLPPVector> &a);
 
 	Ref<MLPPVector> zerovecv(int n);
 	Ref<MLPPVector> onevecv(int n);

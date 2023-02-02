@@ -97,47 +97,66 @@ real_t MLPPActivation::sigmoid_deriv(real_t z) {
 	return sig_norm * (1 - sig_norm);
 }
 
-/*
 Ref<MLPPVector> MLPPActivation::sigmoid_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	real_t sig_norm = sigmoid_norm(z);
+	Ref<MLPPVector> sig_norm = sigmoid_norm(z);
 
-	return alg.subtractionv(sig_norm, alg.hadamard_productm(sig_norm, sig_norm));
+	return alg.subtractionnv(sig_norm, alg.hadamard_productnv(sig_norm, sig_norm));
 }
 Ref<MLPPMatrix> MLPPActivation::sigmoid_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	real_t sig_norm = sigmoid_norm(z);
+	Ref<MLPPVector> sig_norm = sigmoid_norm(z);
 
-	return alg.subtractionv(sig_norm, alg.hadamard_productm(sig_norm, sig_norm));
+	return alg.subtractionnv(sig_norm, alg.hadamard_productnv(sig_norm, sig_norm));
 }
 
 //SOFTMAX
 Ref<MLPPVector> MLPPActivation::softmax_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
-	std::vector<real_t> a;
-	a.resize(z.size());
-	std::vector<real_t> expZ = alg.exp(z);
+
+	int z_size = z->size();
+
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z_size);
+
+	Ref<MLPPVector> exp_z = alg.expv(z);
 	real_t sum = 0;
 
-	for (int i = 0; i < z.size(); i++) {
-		sum += expZ[i];
+	const real_t *exp_z_ptr = exp_z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		sum += exp_z_ptr[i];
 	}
 
-	for (int i = 0; i < z.size(); i++) {
-		a[i] = expZ[i] / sum;
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = exp_z_ptr[i] / sum;
 	}
 
 	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::softmax_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<real_t>> a;
-	a.resize(z.size());
 
-	for (int i = 0; i < z.size(); i++) {
-		a[i] = softmax(z[i]);
+	Size2i z_size = z->size();
+
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z_size);
+
+	Ref<MLPPVector> row_tmp;
+	row_tmp.instance();
+	row_tmp->resize(z_size.x);
+
+	for (int i = 0; i < z_size.y; ++i) {
+		z->get_row_into_mlpp_vector(i, row_tmp);
+
+		Ref<MLPPVector> sfn = softmax_norm(z);
+
+		a->set_row_mlpp_vector(i, sfn);
 	}
 
 	return a;
@@ -145,28 +164,48 @@ Ref<MLPPMatrix> MLPPActivation::softmax_norm(const Ref<MLPPMatrix> &z) {
 
 Ref<MLPPVector> MLPPActivation::softmax_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
-	std::vector<real_t> a;
-	a.resize(z.size());
-	std::vector<real_t> expZ = alg.exp(z);
+
+	int z_size = z->size();
+
+	Ref<MLPPVector> a;
+	a.instance();
+	a->resize(z_size);
+
+	Ref<MLPPVector> exp_z = alg.expv(z);
 	real_t sum = 0;
 
-	for (int i = 0; i < z.size(); i++) {
-		sum += expZ[i];
+	const real_t *exp_z_ptr = exp_z->ptr();
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < z_size; ++i) {
+		sum += exp_z_ptr[i];
 	}
 
-	for (int i = 0; i < z.size(); i++) {
-		a[i] = expZ[i] / sum;
+	for (int i = 0; i < z_size; ++i) {
+		a_ptr[i] = exp_z_ptr[i] / sum;
 	}
 
 	return a;
 }
 Ref<MLPPMatrix> MLPPActivation::softmax_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<real_t>> a;
-	a.resize(z.size());
 
-	for (int i = 0; i < z.size(); i++) {
-		a[i] = softmax(z[i]);
+	Size2i z_size = z->size();
+
+	Ref<MLPPMatrix> a;
+	a.instance();
+	a->resize(z_size);
+
+	Ref<MLPPVector> row_tmp;
+	row_tmp.instance();
+	row_tmp->resize(z_size.x);
+
+	for (int i = 0; i < z_size.y; ++i) {
+		z->get_row_into_mlpp_vector(i, row_tmp);
+
+		Ref<MLPPVector> sfn = softmax_deriv(z);
+
+		a->set_row_mlpp_vector(i, sfn);
 	}
 
 	return a;
@@ -177,45 +216,87 @@ Ref<MLPPMatrix> MLPPActivation::softmax_deriv(const Ref<MLPPMatrix> &z) {
 Ref<MLPPVector> MLPPActivation::adj_softmax_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	std::vector<real_t> a;
-	real_t C = -*std::max_element(z.begin(), z.end());
-	z = alg.scalarAdd(C, z);
+	int size = z->size();
+	const real_t *z_ptr = z->ptr();
+	real_t c = -Math_INF;
 
-	return softmax(z);
+	for (int i = 0; i < size; ++i) {
+		int zpi = z_ptr[i];
+
+		if (c < zpi) {
+			c = zpi;
+		}
+	}
+
+	c = -c;
+
+	Ref<MLPPVector> n = alg.scalar_addnv(c, z);
+
+	return softmax_norm(n);
 }
 Ref<MLPPMatrix> MLPPActivation::adj_softmax_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	std::vector<std::vector<real_t>> a;
-	a.resize(z.size());
+	Ref<MLPPMatrix> n = z->duplicate();
 
-	for (int i = 0; i < z.size(); i++) {
-		a[i] = adjSoftmax(z[i]);
+	Size2i size = z->size();
+
+	Ref<MLPPVector> row_rmp;
+	row_rmp.instance();
+	row_rmp->resize(size.x);
+
+	for (int i = 0; i < size.y; ++i) {
+		z->get_row_into_mlpp_vector(i, row_rmp);
+
+		Ref<MLPPVector> nv = adj_softmax_norm(row_rmp);
+
+		n->set_row_mlpp_vector(i, nv);
 	}
 
-	return a;
+	return n;
 }
 
-Ref<MLPPVector> MLPPActivation::adj_softmax(const Ref<MLPPVector> &z) {
+Ref<MLPPVector> MLPPActivation::adj_softmax_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	std::vector<real_t> a;
-	real_t C = -*std::max_element(z.begin(), z.end());
-	z = alg.scalarAdd(C, z);
+	int size = z->size();
+	const real_t *z_ptr = z->ptr();
+	real_t c = -Math_INF;
 
-	return softmax(z);
-}
-Ref<MLPPMatrix> MLPPActivation::adj_softmax(const Ref<MLPPMatrix> &z) {
-	MLPPLinAlg alg;
+	for (int i = 0; i < size; ++i) {
+		int zpi = z_ptr[i];
 
-	std::vector<std::vector<real_t>> a;
-	a.resize(z.size());
-
-	for (int i = 0; i < z.size(); i++) {
-		a[i] = adjSoftmax(z[i]);
+		if (c < zpi) {
+			c = zpi;
+		}
 	}
 
-	return a;
+	c = -c;
+
+	Ref<MLPPVector> n = alg.scalar_addnv(c, z);
+
+	return adj_softmax_deriv(n);
+}
+Ref<MLPPMatrix> MLPPActivation::adj_softmax_deriv(const Ref<MLPPMatrix> &z) {
+	MLPPLinAlg alg;
+
+	Ref<MLPPMatrix> n = z->duplicate();
+
+	Size2i size = z->size();
+
+	Ref<MLPPVector> row_rmp;
+	row_rmp.instance();
+	row_rmp->resize(size.x);
+
+	for (int i = 0; i < size.y; ++i) {
+		z->get_row_into_mlpp_vector(i, row_rmp);
+
+		Ref<MLPPVector> nv = adj_softmax_deriv(row_rmp);
+
+		n->set_row_mlpp_vector(i, nv);
+	}
+
+	return n;
 }
 
 //SOFTMAX DERIV
@@ -223,45 +304,68 @@ Ref<MLPPMatrix> MLPPActivation::adj_softmax(const Ref<MLPPMatrix> &z) {
 Ref<MLPPMatrix> MLPPActivation::softmax_deriv_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	std::vector<std::vector<real_t>> deriv;
-	std::vector<real_t> a = softmax(z);
-	deriv.resize(a.size());
+	Ref<MLPPVector> a = softmax_norm(z);
 
-	for (int i = 0; i < deriv.size(); i++) {
-		deriv[i].resize(a.size());
-	}
+	int z_size = z->size();
+	int a_size = a->size();
 
-	for (int i = 0; i < a.size(); i++) {
-		for (int j = 0; j < z.size(); j++) {
+	Ref<MLPPMatrix> deriv;
+	deriv.instance();
+	deriv->resize(Size2i(a_size, a_size));
+
+	const real_t *a_ptr = a->ptr();
+
+	for (int i = 0; i < z_size; ++i) {
+		for (int j = 0; j < z_size; ++j) {
 			if (i == j) {
-				deriv[i][j] = a[i] * (1 - a[i]);
+				deriv->set_element(i, j, a_ptr[i] * (1 - a_ptr[i]));
 			} else {
-				deriv[i][j] = -a[i] * a[j];
+				deriv->set_element(i, j, -a_ptr[i] * a_ptr[j]);
 			}
 		}
 	}
 
 	return deriv;
 }
-std::vector<Ref<MLPPMatrix>> MLPPActivation::softmax_deriv_norm(const Ref<MLPPMatrix> &z) {
+Vector<Ref<MLPPMatrix>> MLPPActivation::softmax_deriv_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	std::vector<std::vector<std::vector<real_t>>> deriv;
-	std::vector<std::vector<real_t>> a = softmax(z);
+	int z_size_y = z->size().y;
 
-	deriv.resize(a.size());
-	for (int i = 0; i < deriv.size(); i++) {
-		deriv[i].resize(a.size());
-	}
+	Ref<MLPPMatrix> a = softmax_norm(z);
+	int a_size_y = a->size().y;
+	int a_size_x = a->size().x;
 
-	for (int i = 0; i < a.size(); i++) {
-		for (int j = 0; j < z.size(); j++) {
+	Vector<Ref<MLPPMatrix>> deriv;
+	deriv.resize(a_size_y);
+
+	Ref<MLPPVector> a_i_tmp;
+	a_i_tmp.instance();
+	a_i_tmp->resize(a_size_x);
+
+	Ref<MLPPVector> a_j_tmp;
+	a_j_tmp.instance();
+	a_j_tmp->resize(a_size_x);
+
+	for (int i = 0; i < deriv.size(); ++i) {
+		Ref<MLPPMatrix> d;
+		d.instance();
+		d->resize(Size2i(a_size_x, z_size_y));
+
+		for (int j = 0; j < z_size_y; ++j) {
+			a->get_row_into_mlpp_vector(i, a_i_tmp);
+
 			if (i == j) {
-				deriv[i][j] = alg.subtraction(a[i], alg.hadamard_product(a[i], a[i]));
+				Ref<MLPPVector> d_j = alg.subtractionnv(a_i_tmp, alg.hadamard_productnv(a_i_tmp, a_i_tmp));
+				d->set_row_mlpp_vector(j, d_j);
 			} else {
-				deriv[i][j] = alg.scalarMultiply(-1, alg.hadamard_product(a[i], a[j]));
+				a->get_row_into_mlpp_vector(j, a_j_tmp);
+				Ref<MLPPVector> d_j = alg.scalar_multiplynv(-1, alg.hadamard_productnv(a_i_tmp, a_j_tmp));
+				d->set_row_mlpp_vector(j, d_j);
 			}
 		}
+
+		deriv.write[i] = d;
 	}
 
 	return deriv;
@@ -270,45 +374,68 @@ std::vector<Ref<MLPPMatrix>> MLPPActivation::softmax_deriv_norm(const Ref<MLPPMa
 Ref<MLPPMatrix> MLPPActivation::softmax_deriv_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	std::vector<std::vector<real_t>> deriv;
-	std::vector<real_t> a = softmax(z);
-	deriv.resize(a.size());
+	Ref<MLPPVector> a = softmax_norm(z);
 
-	for (int i = 0; i < deriv.size(); i++) {
-		deriv[i].resize(a.size());
-	}
+	int z_size = z->size();
+	int a_size = a->size();
 
-	for (int i = 0; i < a.size(); i++) {
-		for (int j = 0; j < z.size(); j++) {
+	Ref<MLPPMatrix> deriv;
+	deriv.instance();
+	deriv->resize(Size2i(a_size, a_size));
+
+	const real_t *a_ptr = a->ptr();
+
+	for (int i = 0; i < z_size; ++i) {
+		for (int j = 0; j < z_size; ++j) {
 			if (i == j) {
-				deriv[i][j] = a[i] * (1 - a[i]);
+				deriv->set_element(i, j, a_ptr[i] * (1 - a_ptr[i]));
 			} else {
-				deriv[i][j] = -a[i] * a[j];
+				deriv->set_element(i, j, -a_ptr[i] * a_ptr[j]);
 			}
 		}
 	}
 
 	return deriv;
 }
-std::vector<Ref<MLPPMatrix>> MLPPActivation::softmax_deriv_deriv(const Ref<MLPPMatrix> &z) {
+Vector<Ref<MLPPMatrix>> MLPPActivation::softmax_deriv_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	std::vector<std::vector<std::vector<real_t>>> deriv;
-	std::vector<std::vector<real_t>> a = softmax(z);
+	int z_size_y = z->size().y;
 
-	deriv.resize(a.size());
-	for (int i = 0; i < deriv.size(); i++) {
-		deriv[i].resize(a.size());
-	}
+	Ref<MLPPMatrix> a = softmax_norm(z);
+	int a_size_y = a->size().y;
+	int a_size_x = a->size().x;
 
-	for (int i = 0; i < a.size(); i++) {
-		for (int j = 0; j < z.size(); j++) {
+	Vector<Ref<MLPPMatrix>> deriv;
+	deriv.resize(a_size_y);
+
+	Ref<MLPPVector> a_i_tmp;
+	a_i_tmp.instance();
+	a_i_tmp->resize(a_size_x);
+
+	Ref<MLPPVector> a_j_tmp;
+	a_j_tmp.instance();
+	a_j_tmp->resize(a_size_x);
+
+	for (int i = 0; i < deriv.size(); ++i) {
+		Ref<MLPPMatrix> d;
+		d.instance();
+		d->resize(Size2i(a_size_x, z_size_y));
+
+		for (int j = 0; j < z_size_y; ++j) {
+			a->get_row_into_mlpp_vector(i, a_i_tmp);
+
 			if (i == j) {
-				deriv[i][j] = alg.subtraction(a[i], alg.hadamard_product(a[i], a[i]));
+				Ref<MLPPVector> d_j = alg.subtractionnv(a_i_tmp, alg.hadamard_productnv(a_i_tmp, a_i_tmp));
+				d->set_row_mlpp_vector(j, d_j);
 			} else {
-				deriv[i][j] = alg.scalarMultiply(-1, alg.hadamard_product(a[i], a[j]));
+				a->get_row_into_mlpp_vector(j, a_j_tmp);
+				Ref<MLPPVector> d_j = alg.scalar_multiplynv(-1, alg.hadamard_productnv(a_i_tmp, a_j_tmp));
+				d->set_row_mlpp_vector(j, d_j);
 			}
 		}
+
+		deriv.write[i] = d;
 	}
 
 	return deriv;
@@ -321,21 +448,23 @@ real_t MLPPActivation::softplus_norm(real_t z) {
 }
 Ref<MLPPVector> MLPPActivation::softplus_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
-	return alg.log(alg.addition(alg.onevec(z.size()), alg.exp(z)));
+
+	return alg.logv(alg.additionnv(alg.onevecv(z->size()), alg.expv(z)));
 }
 Ref<MLPPMatrix> MLPPActivation::softplus_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
-	return alg.log(alg.addition(alg.onemat(z.size(), z[0].size()), alg.exp(z)));
+
+	return alg.logv(alg.additionnv(alg.onematm(z->size().x, z->size().y), alg.expv(z)));
 }
 
 real_t MLPPActivation::softplus_deriv(real_t z) {
-	return sigmoid(z);
+	return sigmoid_norm(z);
 }
 Ref<MLPPVector> MLPPActivation::softplus_deriv(const Ref<MLPPVector> &z) {
-	return sigmoid(z);
+	return sigmoid_norm(z);
 }
 Ref<MLPPMatrix> MLPPActivation::softplus_deriv(const Ref<MLPPMatrix> &z) {
-	return sigmoid(z);
+	return sigmoid_norm(z);
 }
 
 //SOFTSIGN
@@ -346,12 +475,12 @@ real_t MLPPActivation::softsign_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::softsign_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(z, alg.addition(alg.onevec(z.size()), alg.abs(z)));
+	return alg.element_wise_division(z, alg.additionnv(alg.onevecv(z->size()), alg.absv(z)));
 }
 Ref<MLPPMatrix> MLPPActivation::softsign_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(z, alg.addition(alg.onemat(z.size(), z[0].size()), alg.abs(z)));
+	return alg.element_wise_divisionm(z, alg.additionnv(alg.onematm(z->size().x, z->size().y), alg.absm(z)));
 }
 
 real_t MLPPActivation::softsign_deriv(real_t z) {
@@ -360,12 +489,12 @@ real_t MLPPActivation::softsign_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::softsign_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onevec(z.size()), alg.exponentiate(alg.addition(alg.onevec(z.size()), alg.abs(z)), 2));
+	return alg.element_wise_division(alg.onevecv(z->size()), alg.exponentiatev(alg.additionnv(alg.onevecv(z->size()), alg.absv(z)), 2));
 }
 Ref<MLPPMatrix> MLPPActivation::softsign_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.exponentiate(alg.addition(alg.onemat(z.size(), z[0].size()), alg.abs(z)), 2));
+	return alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), alg.exponentiatev(alg.additionm(alg.onematm(z->size().x, z->size().y), alg.absm(z)), 2));
 }
 
 //GAUSSIANCDF
@@ -376,13 +505,13 @@ real_t MLPPActivation::gaussian_cdf_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::gaussian_cdf_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(0.5, alg.addition(alg.onevec(z.size()), alg.erf(alg.scalarMultiply(1 / sqrt(2), z))));
+	return alg.scalar_multiplynv(0.5, alg.additionnv(alg.onevecv(z->size()), alg.erfv(alg.scalar_multiplynv(1 / sqrt(2), z))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::gaussian_cdf_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(0.5, alg.addition(alg.onemat(z.size(), z[0].size()), alg.erf(alg.scalarMultiply(1 / sqrt(2), z))));
+	return alg.scalar_multiplym(0.5, alg.additionm(alg.onematm(z->size().x, z->size().y), alg.erfm(alg.scalar_multiplym(1 / sqrt(2), z))));
 }
 
 real_t MLPPActivation::gaussian_cdf_deriv(real_t z) {
@@ -391,13 +520,13 @@ real_t MLPPActivation::gaussian_cdf_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::gaussian_cdf_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(1 / sqrt(2 * M_PI), alg.exp(alg.scalarMultiply(-1 / 2, alg.hadamard_product(z, z))));
+	return alg.scalar_multiplynv(1 / Math::sqrt(2 * M_PI), alg.expv(alg.scalar_multiplynv(-1 / 2.0, alg.hadamard_productnv(z, z))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::gaussian_cdf_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(1 / sqrt(2 * M_PI), alg.exp(alg.scalarMultiply(-1 / 2, alg.hadamard_product(z, z))));
+	return alg.scalar_multiplym(1 / Math::sqrt(2 * M_PI), alg.expm(alg.scalar_multiplym(-1 / 2.0, alg.hadamard_productm(z, z))));
 }
 
 //CLOGLOG
@@ -408,13 +537,13 @@ real_t MLPPActivation::cloglog_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::cloglog_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(-1, alg.scalarAdd(-1, alg.exp(alg.scalarMultiply(-1, alg.exp(z)))));
+	return alg.scalar_multiplynv(-1, alg.scalar_addnv(-1, alg.expv(alg.scalar_multiplynv(-1, alg.expv(z)))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::cloglog_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalarMultiply(-1, alg.scalarAdd(-1, alg.exp(alg.scalarMultiply(-1, alg.exp(z)))));
+	return alg.scalar_multiplym(-1, alg.scalar_addm(-1, alg.expm(alg.scalar_multiplym(-1, alg.expm(z)))));
 }
 
 real_t MLPPActivation::cloglog_deriv(real_t z) {
@@ -423,13 +552,13 @@ real_t MLPPActivation::cloglog_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::cloglog_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.exp(alg.scalarMultiply(-1, alg.exp(z)));
+	return alg.expv(alg.scalar_multiplynv(-1, alg.expv(z)));
 }
 
 Ref<MLPPMatrix> MLPPActivation::cloglog_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.exp(alg.scalarMultiply(-1, alg.exp(z)));
+	return alg.expm(alg.scalar_multiplym(-1, alg.expm(z)));
 }
 
 //LOGIT
@@ -440,12 +569,12 @@ real_t MLPPActivation::logit_norm(real_t z) {
 Ref<MLPPVector> MLPPActivation::logit_norm(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.log(alg.elementWiseDivision(z, alg.subtraction(alg.onevec(z.size()), z)));
+	return alg.logv(alg.element_wise_division(z, alg.subtractionnv(alg.onevecv(z->size()), z)));
 }
 Ref<MLPPMatrix> MLPPActivation::logit_norm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.log(alg.elementWiseDivision(z, alg.subtraction(alg.onemat(z.size(), z[0].size()), z)));
+	return alg.logm(alg.element_wise_divisionm(z, alg.subtractionm(alg.onematm(z->size().x, z->size().y), z)));
 }
 
 real_t MLPPActivation::logit_deriv(real_t z) {
@@ -454,16 +583,23 @@ real_t MLPPActivation::logit_deriv(real_t z) {
 Ref<MLPPVector> MLPPActivation::logit_deriv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.subtraction(alg.elementWiseDivision(alg.onevec(z.size()), z), alg.elementWiseDivision(alg.onevec(z.size()), alg.subtraction(z, alg.onevec(z.size()))));
+	return alg.subtractionnv(
+			alg.element_wise_division(alg.onevecv(z->size()), z),
+			alg.element_wise_division(alg.onevecv(z->size()), alg.subtractionnv(z, alg.onevecv(z->size()))));
 }
 Ref<MLPPMatrix> MLPPActivation::logit_deriv(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.subtraction(alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), z), alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.subtraction(z, alg.onemat(z.size(), z[0].size()))));
+	return alg.subtractionm(
+			alg.element_wise_divisionm(
+					alg.onematm(z->size().x, z->size().y), z),
+			alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y),
+					alg.subtractionm(z, alg.onematm(z->size().x, z->size().y))));
 }
 
 //UNITSTEP
 
+/*
 real_t MLPPActivation::unit_step_norm(real_t z) {
 	return z < 0 ? 0 : 1;
 }
@@ -472,7 +608,7 @@ Ref<MLPPVector> MLPPActivation::unit_step_norm(const Ref<MLPPVector> &z) {
 	a.resize(z.size());
 
 	for (int i = 0; i < a.size(); i++) {
-		a[i] = unitStep(z[i]);
+		a[i] = unit_step_norm(z[i]);
 	}
 	return a;
 }
@@ -481,7 +617,7 @@ Ref<MLPPMatrix> MLPPActivation::unit_step_norm(const Ref<MLPPMatrix> &z) {
 	a.resize(z.size());
 
 	for (int i = 0; i < a.size(); i++) {
-		a[i] = unitStep(z[i]);
+		a[i] = unit_step_norm(z[i]);
 	}
 	return a;
 }
@@ -1251,9 +1387,7 @@ Ref<MLPPMatrix> MLPPActivation::arcoth_deriv(const Ref<MLPPMatrix> &z) {
 
 	return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.subtraction(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)));
 }
-
 */
-
 //======================== OLD =============================
 
 real_t MLPPActivation::linear(real_t z, bool deriv) {

@@ -11,6 +11,7 @@
 #include "core/math/math_defs.h"
 
 #include "core/object/reference.h"
+#include "core/object/func_ref.h"
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
@@ -19,6 +20,7 @@
 
 //TODO this should probably be a singleton
 //TODO Activation functions should either have a variant which does not allocate, or they should just be reworked altogether
+//TODO Methods here should probably use error macros, in a way where they get disabled in non-tools(?) (maybe release?) builds
 
 class MLPPActivation : public Reference {
 	GDCLASS(MLPPActivation, Reference);
@@ -54,8 +56,10 @@ public:
 	};
 
 public:
+	//TODO add override for vec, and real_t
 	typedef Ref<MLPPMatrix> (MLPPActivation::*ActivationFunctionPointer)(const Ref<MLPPMatrix> &);
 	ActivationFunctionPointer get_activation_function_ptr(const ActivationFunction func, const bool deriv = false);
+	Ref<FuncRef> get_activation_function_funcref(const ActivationFunction func, const bool deriv = false);
 
 	Ref<MLPPVector> run_activation_vector(const ActivationFunction func, const Ref<MLPPVector> &z, const bool deriv = false);
 	Ref<MLPPMatrix> run_activation_matrix(const ActivationFunction func, const Ref<MLPPMatrix> &z, const bool deriv = false);
@@ -71,6 +75,7 @@ public:
 	//ACTIVATION FUNCTIONS
 
 	//LINEAR
+
 	real_t linear_norm(real_t z);
 	Ref<MLPPVector> linear_norm(const Ref<MLPPVector> &z);
 	Ref<MLPPMatrix> linear_norm(const Ref<MLPPMatrix> &z);
@@ -80,6 +85,7 @@ public:
 	Ref<MLPPMatrix> linear_deriv(const Ref<MLPPMatrix> &z);
 
 	//SIGMOID
+
 	real_t sigmoid_norm(real_t z);
 	Ref<MLPPVector> sigmoid_norm(const Ref<MLPPVector> &z);
 	Ref<MLPPMatrix> sigmoid_norm(const Ref<MLPPMatrix> &z);
@@ -89,6 +95,7 @@ public:
 	Ref<MLPPMatrix> sigmoid_deriv(const Ref<MLPPMatrix> &z);
 
 	//SOFTMAX
+
 	Ref<MLPPVector> softmax_norm(const Ref<MLPPVector> &z);
 	Ref<MLPPMatrix> softmax_norm(const Ref<MLPPMatrix> &z);
 
@@ -100,16 +107,16 @@ public:
 	Ref<MLPPVector> adj_softmax_norm(const Ref<MLPPVector> &z);
 	Ref<MLPPMatrix> adj_softmax_norm(const Ref<MLPPMatrix> &z);
 
-	Ref<MLPPVector> adj_softmax(const Ref<MLPPVector> &z);
-	Ref<MLPPMatrix> adj_softmax(const Ref<MLPPMatrix> &z);
+	Ref<MLPPVector> adj_softmax_deriv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> adj_softmax_deriv(const Ref<MLPPMatrix> &z);
 
 	//SOFTMAX DERIV
 
 	Ref<MLPPMatrix> softmax_deriv_norm(const Ref<MLPPVector> &z);
-	std::vector<Ref<MLPPMatrix>> softmax_deriv_norm(const Ref<MLPPMatrix> &z);
+	Vector<Ref<MLPPMatrix>> softmax_deriv_norm(const Ref<MLPPMatrix> &z);
 
 	Ref<MLPPMatrix> softmax_deriv_deriv(const Ref<MLPPVector> &z);
-	std::vector<Ref<MLPPMatrix>> softmax_deriv_deriv(const Ref<MLPPMatrix> &z);
+	Vector<Ref<MLPPMatrix>> softmax_deriv_deriv(const Ref<MLPPMatrix> &z);
 
 	//SOFTPLUS
 
