@@ -2496,6 +2496,316 @@ void MLPPActivation::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("run_activation_deriv_vector", "func", "z"), &MLPPActivation::run_activation_deriv_vector);
 	ClassDB::bind_method(D_METHOD("run_activation_deriv_matrix", "func", "z"), &MLPPActivation::run_activation_deriv_matrix);
 
+	//LINEAR
+
+	ClassDB::bind_method(D_METHOD("linear_normr", "z"), &MLPPActivation::linear_normr);
+	ClassDB::bind_method(D_METHOD("linear_normv", "z"), &MLPPActivation::linear_normv);
+	ClassDB::bind_method(D_METHOD("linear_normm", "z"), &MLPPActivation::linear_normm);
+
+	ClassDB::bind_method(D_METHOD("linear_derivr", "z"), &MLPPActivation::linear_derivr);
+	ClassDB::bind_method(D_METHOD("linear_derivv", "z"), &MLPPActivation::linear_derivv);
+	ClassDB::bind_method(D_METHOD("linear_derivm", "z"), &MLPPActivation::linear_derivm);
+
+	//SIGMOID
+
+	ClassDB::bind_method(D_METHOD("sigmoid_normr", "z"), &MLPPActivation::sigmoid_normr);
+	ClassDB::bind_method(D_METHOD("sigmoid_normv", "z"), &MLPPActivation::sigmoid_normv);
+	ClassDB::bind_method(D_METHOD("sigmoid_normm", "z"), &MLPPActivation::sigmoid_normm);
+
+	ClassDB::bind_method(D_METHOD("sigmoid_derivr", "z"), &MLPPActivation::sigmoid_derivr);
+	ClassDB::bind_method(D_METHOD("sigmoid_derivv", "z"), &MLPPActivation::sigmoid_derivv);
+	ClassDB::bind_method(D_METHOD("sigmoid_derivm", "z"), &MLPPActivation::sigmoid_derivm);
+
+	//SOFTMAX
+
+	ClassDB::bind_method(D_METHOD("softmax_normr", "z"), &MLPPActivation::softmax_normr);
+	ClassDB::bind_method(D_METHOD("softmax_normv", "z"), &MLPPActivation::softmax_normv);
+	ClassDB::bind_method(D_METHOD("softmax_normm", "z"), &MLPPActivation::softmax_normm);
+
+	ClassDB::bind_method(D_METHOD("softmax_derivr", "z"), &MLPPActivation::softmax_derivr);
+	ClassDB::bind_method(D_METHOD("softmax_derivv", "z"), &MLPPActivation::softmax_derivv);
+	ClassDB::bind_method(D_METHOD("softmax_derivm", "z"), &MLPPActivation::softmax_derivm);
+
+	//ADJ_SOFTMAX
+
+	real_t adj_softmax_normr(real_t z);
+	Ref<MLPPVector> adj_softmax_normv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> adj_softmax_normm(const Ref<MLPPMatrix> &z);
+
+	real_t adj_softmax_derivr(real_t z);
+	Ref<MLPPVector> adj_softmax_derivv(const Ref<MLPPVector> &z);
+	Ref<MLPPMatrix> adj_softmax_derivm(const Ref<MLPPMatrix> &z);
+
+	//SOFTPLUS
+
+	ClassDB::bind_method(D_METHOD("softplus_normr", "z"), &MLPPActivation::softplus_normr);
+	ClassDB::bind_method(D_METHOD("softplus_normv", "z"), &MLPPActivation::softplus_normv);
+	ClassDB::bind_method(D_METHOD("softplus_normm", "z"), &MLPPActivation::softplus_normm);
+
+	ClassDB::bind_method(D_METHOD("softplus_derivr", "z"), &MLPPActivation::softplus_derivr);
+	ClassDB::bind_method(D_METHOD("softplus_derivv", "z"), &MLPPActivation::softplus_derivv);
+	ClassDB::bind_method(D_METHOD("softplus_derivm", "z"), &MLPPActivation::softplus_derivm);
+
+	//SOFTSIGN
+
+	ClassDB::bind_method(D_METHOD("softsign_normr", "z"), &MLPPActivation::softsign_normr);
+	ClassDB::bind_method(D_METHOD("softsign_normv", "z"), &MLPPActivation::softsign_normv);
+	ClassDB::bind_method(D_METHOD("softsign_normm", "z"), &MLPPActivation::softsign_normm);
+
+	ClassDB::bind_method(D_METHOD("softsign_derivr", "z"), &MLPPActivation::softsign_derivr);
+	ClassDB::bind_method(D_METHOD("softsign_derivv", "z"), &MLPPActivation::softsign_derivv);
+	ClassDB::bind_method(D_METHOD("softsign_derivm", "z"), &MLPPActivation::softsign_derivm);
+
+	//GAUSSIANCDF
+
+	ClassDB::bind_method(D_METHOD("gaussian_cdf_normr", "z"), &MLPPActivation::gaussian_cdf_normr);
+	ClassDB::bind_method(D_METHOD("gaussian_cdf_normv", "z"), &MLPPActivation::gaussian_cdf_normv);
+	ClassDB::bind_method(D_METHOD("gaussian_cdf_normm", "z"), &MLPPActivation::gaussian_cdf_normm);
+
+	ClassDB::bind_method(D_METHOD("gaussian_cdf_derivr", "z"), &MLPPActivation::gaussian_cdf_derivr);
+	ClassDB::bind_method(D_METHOD("gaussian_cdf_derivv", "z"), &MLPPActivation::gaussian_cdf_derivv);
+	ClassDB::bind_method(D_METHOD("gaussian_cdf_derivm", "z"), &MLPPActivation::gaussian_cdf_derivm);
+
+	//CLOGLOG
+
+	ClassDB::bind_method(D_METHOD("cloglog_normr", "z"), &MLPPActivation::cloglog_normr);
+	ClassDB::bind_method(D_METHOD("cloglog_normv", "z"), &MLPPActivation::cloglog_normv);
+	ClassDB::bind_method(D_METHOD("cloglog_normm", "z"), &MLPPActivation::cloglog_normm);
+
+	ClassDB::bind_method(D_METHOD("cloglog_derivr", "z"), &MLPPActivation::cloglog_derivr);
+	ClassDB::bind_method(D_METHOD("cloglog_derivv", "z"), &MLPPActivation::cloglog_derivv);
+	ClassDB::bind_method(D_METHOD("cloglog_derivm", "z"), &MLPPActivation::cloglog_derivm);
+
+	//LOGIT
+
+	ClassDB::bind_method(D_METHOD("logit_normr", "z"), &MLPPActivation::logit_normr);
+	ClassDB::bind_method(D_METHOD("logit_normv", "z"), &MLPPActivation::logit_normv);
+	ClassDB::bind_method(D_METHOD("logit_normm", "z"), &MLPPActivation::logit_normm);
+
+	ClassDB::bind_method(D_METHOD("logit_derivr", "z"), &MLPPActivation::logit_derivr);
+	ClassDB::bind_method(D_METHOD("logit_derivv", "z"), &MLPPActivation::logit_derivv);
+	ClassDB::bind_method(D_METHOD("logit_derivm", "z"), &MLPPActivation::logit_derivm);
+
+	//UNITSTEP
+
+	ClassDB::bind_method(D_METHOD("unit_step_normr", "z"), &MLPPActivation::unit_step_normr);
+	ClassDB::bind_method(D_METHOD("unit_step_normv", "z"), &MLPPActivation::unit_step_normv);
+	ClassDB::bind_method(D_METHOD("unit_step_normm", "z"), &MLPPActivation::unit_step_normm);
+
+	ClassDB::bind_method(D_METHOD("unit_step_derivr", "z"), &MLPPActivation::unit_step_derivr);
+	ClassDB::bind_method(D_METHOD("unit_step_derivv", "z"), &MLPPActivation::unit_step_derivv);
+	ClassDB::bind_method(D_METHOD("unit_step_derivm", "z"), &MLPPActivation::unit_step_derivm);
+
+	//SWISH
+
+	ClassDB::bind_method(D_METHOD("swish_normr", "z"), &MLPPActivation::swish_normr);
+	ClassDB::bind_method(D_METHOD("swish_normv", "z"), &MLPPActivation::swish_normv);
+	ClassDB::bind_method(D_METHOD("swish_normm", "z"), &MLPPActivation::swish_normm);
+
+	ClassDB::bind_method(D_METHOD("swish_derivr", "z"), &MLPPActivation::swish_derivr);
+	ClassDB::bind_method(D_METHOD("swish_derivv", "z"), &MLPPActivation::swish_derivv);
+	ClassDB::bind_method(D_METHOD("swish_derivm", "z"), &MLPPActivation::swish_derivm);
+
+	//MISH
+
+	ClassDB::bind_method(D_METHOD("mish_normr", "z"), &MLPPActivation::mish_normr);
+	ClassDB::bind_method(D_METHOD("mish_normv", "z"), &MLPPActivation::mish_normv);
+	ClassDB::bind_method(D_METHOD("mish_normm", "z"), &MLPPActivation::mish_normm);
+
+	ClassDB::bind_method(D_METHOD("mish_derivr", "z"), &MLPPActivation::mish_derivr);
+	ClassDB::bind_method(D_METHOD("mish_derivv", "z"), &MLPPActivation::mish_derivv);
+	ClassDB::bind_method(D_METHOD("mish_derivm", "z"), &MLPPActivation::mish_derivm);
+
+	//SINC
+
+	ClassDB::bind_method(D_METHOD("sinc_normr", "z"), &MLPPActivation::sinc_normr);
+	ClassDB::bind_method(D_METHOD("sinc_normv", "z"), &MLPPActivation::sinc_normv);
+	ClassDB::bind_method(D_METHOD("sinc_normm", "z"), &MLPPActivation::sinc_normm);
+
+	ClassDB::bind_method(D_METHOD("sinc_derivr", "z"), &MLPPActivation::sinc_derivr);
+	ClassDB::bind_method(D_METHOD("sinc_derivv", "z"), &MLPPActivation::sinc_derivv);
+	ClassDB::bind_method(D_METHOD("sinc_derivm", "z"), &MLPPActivation::sinc_derivm);
+
+	//RELU
+
+	ClassDB::bind_method(D_METHOD("relu_normr", "z"), &MLPPActivation::relu_normr);
+	ClassDB::bind_method(D_METHOD("relu_normv", "z"), &MLPPActivation::relu_normv);
+	ClassDB::bind_method(D_METHOD("relu_normm", "z"), &MLPPActivation::relu_normm);
+
+	ClassDB::bind_method(D_METHOD("relu_derivr", "z"), &MLPPActivation::relu_derivr);
+	ClassDB::bind_method(D_METHOD("relu_derivv", "z"), &MLPPActivation::relu_derivv);
+	ClassDB::bind_method(D_METHOD("relu_derivm", "z"), &MLPPActivation::relu_derivm);
+
+	//LEAKYRELU
+
+	ClassDB::bind_method(D_METHOD("leaky_relu_normr", "z"), &MLPPActivation::leaky_relu_normr);
+	ClassDB::bind_method(D_METHOD("leaky_relu_normv", "z"), &MLPPActivation::leaky_relu_normv);
+	ClassDB::bind_method(D_METHOD("leaky_relu_normm", "z"), &MLPPActivation::leaky_relu_normm);
+
+	ClassDB::bind_method(D_METHOD("leaky_relu_derivr", "z"), &MLPPActivation::leaky_relu_derivr);
+	ClassDB::bind_method(D_METHOD("leaky_relu_derivv", "z"), &MLPPActivation::leaky_relu_derivv);
+	ClassDB::bind_method(D_METHOD("leaky_relu_derivm", "z"), &MLPPActivation::leaky_relu_derivm);
+
+	//ELU
+
+	ClassDB::bind_method(D_METHOD("elu_normr", "z"), &MLPPActivation::elu_normr);
+	ClassDB::bind_method(D_METHOD("elu_normv", "z"), &MLPPActivation::elu_normv);
+	ClassDB::bind_method(D_METHOD("elu_normm", "z"), &MLPPActivation::elu_normm);
+
+	ClassDB::bind_method(D_METHOD("elu_derivr", "z"), &MLPPActivation::elu_derivr);
+	ClassDB::bind_method(D_METHOD("elu_derivv", "z"), &MLPPActivation::elu_derivv);
+	ClassDB::bind_method(D_METHOD("elu_derivm", "z"), &MLPPActivation::elu_derivm);
+
+	//SELU
+
+	ClassDB::bind_method(D_METHOD("selu_normr", "z"), &MLPPActivation::selu_normr);
+	ClassDB::bind_method(D_METHOD("selu_normv", "z"), &MLPPActivation::selu_normv);
+	ClassDB::bind_method(D_METHOD("selu_normm", "z"), &MLPPActivation::selu_normm);
+
+	ClassDB::bind_method(D_METHOD("selu_derivr", "z"), &MLPPActivation::selu_derivr);
+	ClassDB::bind_method(D_METHOD("selu_derivv", "z"), &MLPPActivation::selu_derivv);
+	ClassDB::bind_method(D_METHOD("selu_derivm", "z"), &MLPPActivation::selu_derivm);
+
+	//GELU
+
+	ClassDB::bind_method(D_METHOD("gelu_normr", "z"), &MLPPActivation::gelu_normr);
+	ClassDB::bind_method(D_METHOD("gelu_normv", "z"), &MLPPActivation::gelu_normv);
+	ClassDB::bind_method(D_METHOD("gelu_normm", "z"), &MLPPActivation::gelu_normm);
+
+	ClassDB::bind_method(D_METHOD("gelu_derivr", "z"), &MLPPActivation::gelu_derivr);
+	ClassDB::bind_method(D_METHOD("gelu_derivv", "z"), &MLPPActivation::gelu_derivv);
+	ClassDB::bind_method(D_METHOD("gelu_derivm", "z"), &MLPPActivation::gelu_derivm);
+
+	//SIGN
+
+	ClassDB::bind_method(D_METHOD("sign_normr", "z"), &MLPPActivation::sign_normr);
+	ClassDB::bind_method(D_METHOD("sign_normv", "z"), &MLPPActivation::sign_normv);
+	ClassDB::bind_method(D_METHOD("sign_normm", "z"), &MLPPActivation::sign_normm);
+
+	ClassDB::bind_method(D_METHOD("sign_derivr", "z"), &MLPPActivation::sign_derivr);
+	ClassDB::bind_method(D_METHOD("sign_derivv", "z"), &MLPPActivation::sign_derivv);
+	ClassDB::bind_method(D_METHOD("sign_derivm", "z"), &MLPPActivation::sign_derivm);
+
+	//SINH
+
+	ClassDB::bind_method(D_METHOD("sinh_normr", "z"), &MLPPActivation::sinh_normr);
+	ClassDB::bind_method(D_METHOD("sinh_normv", "z"), &MLPPActivation::sinh_normv);
+	ClassDB::bind_method(D_METHOD("sinh_normm", "z"), &MLPPActivation::sinh_normm);
+
+	ClassDB::bind_method(D_METHOD("sinh_derivr", "z"), &MLPPActivation::sinh_derivr);
+	ClassDB::bind_method(D_METHOD("sinh_derivv", "z"), &MLPPActivation::sinh_derivv);
+	ClassDB::bind_method(D_METHOD("sinh_derivm", "z"), &MLPPActivation::sinh_derivm);
+
+	//COSH
+
+	ClassDB::bind_method(D_METHOD("cosh_normr", "z"), &MLPPActivation::cosh_normr);
+	ClassDB::bind_method(D_METHOD("cosh_normv", "z"), &MLPPActivation::cosh_normv);
+	ClassDB::bind_method(D_METHOD("cosh_normm", "z"), &MLPPActivation::cosh_normm);
+
+	ClassDB::bind_method(D_METHOD("cosh_derivr", "z"), &MLPPActivation::cosh_derivr);
+	ClassDB::bind_method(D_METHOD("cosh_derivv", "z"), &MLPPActivation::cosh_derivv);
+	ClassDB::bind_method(D_METHOD("cosh_derivm", "z"), &MLPPActivation::cosh_derivm);
+
+	//TANH
+
+	ClassDB::bind_method(D_METHOD("tanh_normr", "z"), &MLPPActivation::tanh_normr);
+	ClassDB::bind_method(D_METHOD("tanh_normv", "z"), &MLPPActivation::tanh_normv);
+	ClassDB::bind_method(D_METHOD("tanh_normm", "z"), &MLPPActivation::tanh_normm);
+
+	ClassDB::bind_method(D_METHOD("tanh_derivr", "z"), &MLPPActivation::tanh_derivr);
+	ClassDB::bind_method(D_METHOD("tanh_derivv", "z"), &MLPPActivation::tanh_derivv);
+	ClassDB::bind_method(D_METHOD("tanh_derivm", "z"), &MLPPActivation::tanh_derivm);
+
+	//CSCH
+
+	ClassDB::bind_method(D_METHOD("csch_normr", "z"), &MLPPActivation::csch_normr);
+	ClassDB::bind_method(D_METHOD("csch_normv", "z"), &MLPPActivation::csch_normv);
+	ClassDB::bind_method(D_METHOD("csch_normm", "z"), &MLPPActivation::csch_normm);
+
+	ClassDB::bind_method(D_METHOD("csch_derivr", "z"), &MLPPActivation::csch_derivr);
+	ClassDB::bind_method(D_METHOD("csch_derivv", "z"), &MLPPActivation::csch_derivv);
+	ClassDB::bind_method(D_METHOD("csch_derivm", "z"), &MLPPActivation::csch_derivm);
+
+	//SECH
+
+	ClassDB::bind_method(D_METHOD("sech_normr", "z"), &MLPPActivation::sech_normr);
+	ClassDB::bind_method(D_METHOD("sech_normv", "z"), &MLPPActivation::sech_normv);
+	ClassDB::bind_method(D_METHOD("sech_normm", "z"), &MLPPActivation::sech_normm);
+
+	ClassDB::bind_method(D_METHOD("sech_derivr", "z"), &MLPPActivation::sech_derivr);
+	ClassDB::bind_method(D_METHOD("sech_derivv", "z"), &MLPPActivation::sech_derivv);
+	ClassDB::bind_method(D_METHOD("sech_derivm", "z"), &MLPPActivation::sech_derivm);
+
+	//COTH
+
+	ClassDB::bind_method(D_METHOD("coth_normr", "z"), &MLPPActivation::coth_normr);
+	ClassDB::bind_method(D_METHOD("coth_normv", "z"), &MLPPActivation::coth_normv);
+	ClassDB::bind_method(D_METHOD("coth_normm", "z"), &MLPPActivation::coth_normm);
+
+	ClassDB::bind_method(D_METHOD("coth_derivr", "z"), &MLPPActivation::coth_derivr);
+	ClassDB::bind_method(D_METHOD("coth_derivv", "z"), &MLPPActivation::coth_derivv);
+	ClassDB::bind_method(D_METHOD("coth_derivm", "z"), &MLPPActivation::coth_derivm);
+
+	//ARSINH
+
+	ClassDB::bind_method(D_METHOD("arsinh_normr", "z"), &MLPPActivation::arsinh_normr);
+	ClassDB::bind_method(D_METHOD("arsinh_normv", "z"), &MLPPActivation::arsinh_normv);
+	ClassDB::bind_method(D_METHOD("arsinh_normm", "z"), &MLPPActivation::arsinh_normm);
+
+	ClassDB::bind_method(D_METHOD("arsinh_derivr", "z"), &MLPPActivation::arsinh_derivr);
+	ClassDB::bind_method(D_METHOD("arsinh_derivv", "z"), &MLPPActivation::arsinh_derivv);
+	ClassDB::bind_method(D_METHOD("arsinh_derivm", "z"), &MLPPActivation::arsinh_derivm);
+
+	//ARCOSH
+
+	ClassDB::bind_method(D_METHOD("arcosh_normr", "z"), &MLPPActivation::arcosh_normr);
+	ClassDB::bind_method(D_METHOD("arcosh_normv", "z"), &MLPPActivation::arcosh_normv);
+	ClassDB::bind_method(D_METHOD("arcosh_normm", "z"), &MLPPActivation::arcosh_normm);
+
+	ClassDB::bind_method(D_METHOD("arcosh_derivr", "z"), &MLPPActivation::arcosh_derivr);
+	ClassDB::bind_method(D_METHOD("arcosh_derivv", "z"), &MLPPActivation::arcosh_derivv);
+	ClassDB::bind_method(D_METHOD("arcosh_derivm", "z"), &MLPPActivation::arcosh_derivm);
+
+	//ARTANH
+
+	ClassDB::bind_method(D_METHOD("artanh_normr", "z"), &MLPPActivation::artanh_normr);
+	ClassDB::bind_method(D_METHOD("artanh_normv", "z"), &MLPPActivation::artanh_normv);
+	ClassDB::bind_method(D_METHOD("artanh_normm", "z"), &MLPPActivation::artanh_normm);
+
+	ClassDB::bind_method(D_METHOD("artanh_derivr", "z"), &MLPPActivation::artanh_derivr);
+	ClassDB::bind_method(D_METHOD("artanh_derivv", "z"), &MLPPActivation::artanh_derivv);
+	ClassDB::bind_method(D_METHOD("artanh_derivm", "z"), &MLPPActivation::artanh_derivm);
+
+	//ARCSCH
+
+	ClassDB::bind_method(D_METHOD("arcsch_normr", "z"), &MLPPActivation::arcsch_normr);
+	ClassDB::bind_method(D_METHOD("arcsch_normv", "z"), &MLPPActivation::arcsch_normv);
+	ClassDB::bind_method(D_METHOD("arcsch_normm", "z"), &MLPPActivation::arcsch_normm);
+
+	ClassDB::bind_method(D_METHOD("arcsch_derivr", "z"), &MLPPActivation::arcsch_derivr);
+	ClassDB::bind_method(D_METHOD("arcsch_derivv", "z"), &MLPPActivation::arcsch_derivv);
+	ClassDB::bind_method(D_METHOD("arcsch_derivm", "z"), &MLPPActivation::arcsch_derivm);
+
+	//ARSECH
+
+	ClassDB::bind_method(D_METHOD("arsech_normr", "z"), &MLPPActivation::arsech_normr);
+	ClassDB::bind_method(D_METHOD("arsech_normv", "z"), &MLPPActivation::arsech_normv);
+	ClassDB::bind_method(D_METHOD("arsech_normm", "z"), &MLPPActivation::arsech_normm);
+
+	ClassDB::bind_method(D_METHOD("arsech_derivr", "z"), &MLPPActivation::arsech_derivr);
+	ClassDB::bind_method(D_METHOD("arsech_derivv", "z"), &MLPPActivation::arsech_derivv);
+	ClassDB::bind_method(D_METHOD("arsech_derivm", "z"), &MLPPActivation::arsech_derivm);
+
+	//ARCOTH
+
+	ClassDB::bind_method(D_METHOD("arcoth_normr", "z"), &MLPPActivation::arcoth_normr);
+	ClassDB::bind_method(D_METHOD("arcoth_normv", "z"), &MLPPActivation::arcoth_normv);
+	ClassDB::bind_method(D_METHOD("arcoth_normm", "z"), &MLPPActivation::arcoth_normm);
+
+	ClassDB::bind_method(D_METHOD("arcoth_derivr", "z"), &MLPPActivation::arcoth_derivr);
+	ClassDB::bind_method(D_METHOD("arcoth_derivv", "z"), &MLPPActivation::arcoth_derivv);
+	ClassDB::bind_method(D_METHOD("arcoth_derivm", "z"), &MLPPActivation::arcoth_derivm);
+
 	BIND_ENUM_CONSTANT(ACTIVATION_FUNCTION_LINEAR);
 	BIND_ENUM_CONSTANT(ACTIVATION_FUNCTION_SIGMOID);
 	BIND_ENUM_CONSTANT(ACTIVATION_FUNCTION_SWISH);
