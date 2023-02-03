@@ -139,6 +139,27 @@ Ref<MLPPMatrix> MLPPReg::reg_deriv_termm(const Ref<MLPPMatrix> &weights, real_t 
 	return reg_driv;
 }
 
+MLPPReg::MLPPReg() {
+}
+MLPPReg::~MLPPReg() {
+}
+
+void MLPPReg::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("reg_termv", "weights", "lambda", "alpha", "reg"), &MLPPReg::reg_termv);
+	ClassDB::bind_method(D_METHOD("reg_termm", "weights", "lambda", "alpha", "reg"), &MLPPReg::reg_termm);
+
+	ClassDB::bind_method(D_METHOD("reg_weightsv", "weights", "lambda", "alpha", "reg"), &MLPPReg::reg_weightsv);
+	ClassDB::bind_method(D_METHOD("reg_weightsm", "weights", "lambda", "alpha", "reg"), &MLPPReg::reg_weightsm);
+
+	ClassDB::bind_method(D_METHOD("reg_deriv_termv", "weights", "lambda", "alpha", "reg"), &MLPPReg::reg_deriv_termv);
+	ClassDB::bind_method(D_METHOD("reg_deriv_termm", "weights", "lambda", "alpha", "reg"), &MLPPReg::reg_deriv_termm);
+
+	BIND_ENUM_CONSTANT(REGULARIZATION_TYPE_RIDGE);
+	BIND_ENUM_CONSTANT(REGULARIZATION_TYPE_LASSO);
+	BIND_ENUM_CONSTANT(REGULARIZATION_TYPE_ELASTIC_NET);
+	BIND_ENUM_CONSTANT(REGULARIZATION_TYPE_WEIGHT_CLIPPING);
+}
+
 real_t MLPPReg::reg_deriv_termvr(const Ref<MLPPVector> &weights, real_t lambda, real_t alpha, MLPPReg::RegularizationType reg, int j) {
 	MLPPActivation act;
 
