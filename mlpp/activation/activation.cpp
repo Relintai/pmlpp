@@ -1057,7 +1057,7 @@ Ref<MLPPVector> MLPPActivation::adj_softmax_derivv(const Ref<MLPPVector> &z) {
 
 	Ref<MLPPVector> n = alg.scalar_addnv(c, z);
 
-	return adj_softmax_derivv(n);
+	return adj_softmax_normv(n);
 }
 Ref<MLPPMatrix> MLPPActivation::adj_softmax_derivm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
