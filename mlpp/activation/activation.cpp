@@ -3096,12 +3096,12 @@ real_t MLPPActivation::unitStep(real_t z, bool deriv) {
 
 std::vector<real_t> MLPPActivation::unitStep(std::vector<real_t> z, bool deriv) {
 	if (deriv) {
-		std::vector<real_t> deriv;
-		deriv.resize(z.size());
+		std::vector<real_t> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = unitStep(z[i], true);
+			lderiv[i] = unitStep(z[i], true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<real_t> a;
 	a.resize(z.size());
@@ -3114,12 +3114,12 @@ std::vector<real_t> MLPPActivation::unitStep(std::vector<real_t> z, bool deriv) 
 
 std::vector<std::vector<real_t>> MLPPActivation::unitStep(std::vector<std::vector<real_t>> z, bool deriv) {
 	if (deriv) {
-		std::vector<std::vector<real_t>> deriv;
-		deriv.resize(z.size());
+		std::vector<std::vector<real_t>> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = unitStep(z[i], true);
+			lderiv[i] = unitStep(z[i], true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<std::vector<real_t>> a;
 	a.resize(z.size());
@@ -3212,12 +3212,12 @@ real_t MLPPActivation::RELU(real_t z, bool deriv) {
 
 std::vector<real_t> MLPPActivation::RELU(std::vector<real_t> z, bool deriv) {
 	if (deriv) {
-		std::vector<real_t> deriv;
-		deriv.resize(z.size());
+		std::vector<real_t> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = RELU(z[i], true);
+			lderiv[i] = RELU(z[i], true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<real_t> a;
 	a.resize(z.size());
@@ -3230,12 +3230,12 @@ std::vector<real_t> MLPPActivation::RELU(std::vector<real_t> z, bool deriv) {
 
 std::vector<std::vector<real_t>> MLPPActivation::RELU(std::vector<std::vector<real_t>> z, bool deriv) {
 	if (deriv) {
-		std::vector<std::vector<real_t>> deriv;
-		deriv.resize(z.size());
+		std::vector<std::vector<real_t>> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = RELU(z[i], true);
+			lderiv[i] = RELU(z[i], true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<std::vector<real_t>> a;
 	a.resize(z.size());
@@ -3259,12 +3259,12 @@ real_t MLPPActivation::leakyReLU(real_t z, real_t c, bool deriv) {
 
 std::vector<real_t> MLPPActivation::leakyReLU(std::vector<real_t> z, real_t c, bool deriv) {
 	if (deriv) {
-		std::vector<real_t> deriv;
-		deriv.resize(z.size());
+		std::vector<real_t> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = leakyReLU(z[i], c, true);
+			lderiv[i] = leakyReLU(z[i], c, true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<real_t> a;
 	a.resize(z.size());
@@ -3277,12 +3277,12 @@ std::vector<real_t> MLPPActivation::leakyReLU(std::vector<real_t> z, real_t c, b
 
 std::vector<std::vector<real_t>> MLPPActivation::leakyReLU(std::vector<std::vector<real_t>> z, real_t c, bool deriv) {
 	if (deriv) {
-		std::vector<std::vector<real_t>> deriv;
-		deriv.resize(z.size());
+		std::vector<std::vector<real_t>> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = leakyReLU(z[i], c, true);
+			lderiv[i] = leakyReLU(z[i], c, true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<std::vector<real_t>> a;
 	a.resize(z.size());
@@ -3310,12 +3310,12 @@ real_t MLPPActivation::ELU(real_t z, real_t c, bool deriv) {
 
 std::vector<real_t> MLPPActivation::ELU(std::vector<real_t> z, real_t c, bool deriv) {
 	if (deriv) {
-		std::vector<real_t> deriv;
-		deriv.resize(z.size());
+		std::vector<real_t> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = ELU(z[i], c, true);
+			lderiv[i] = ELU(z[i], c, true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<real_t> a;
 	a.resize(z.size());
@@ -3328,12 +3328,12 @@ std::vector<real_t> MLPPActivation::ELU(std::vector<real_t> z, real_t c, bool de
 
 std::vector<std::vector<real_t>> MLPPActivation::ELU(std::vector<std::vector<real_t>> z, real_t c, bool deriv) {
 	if (deriv) {
-		std::vector<std::vector<real_t>> deriv;
-		deriv.resize(z.size());
+		std::vector<std::vector<real_t>> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = ELU(z[i], c, true);
+			lderiv[i] = ELU(z[i], c, true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<std::vector<real_t>> a;
 	a.resize(z.size());
@@ -3353,12 +3353,12 @@ real_t MLPPActivation::SELU(real_t z, real_t lambda, real_t c, bool deriv) {
 
 std::vector<real_t> MLPPActivation::SELU(std::vector<real_t> z, real_t lambda, real_t c, bool deriv) {
 	if (deriv) {
-		std::vector<real_t> deriv;
-		deriv.resize(z.size());
+		std::vector<real_t> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = SELU(z[i], lambda, c, true);
+			lderiv[i] = SELU(z[i], lambda, c, true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<real_t> a;
 	a.resize(z.size());
@@ -3371,12 +3371,12 @@ std::vector<real_t> MLPPActivation::SELU(std::vector<real_t> z, real_t lambda, r
 
 std::vector<std::vector<real_t>> MLPPActivation::SELU(std::vector<std::vector<real_t>> z, real_t lambda, real_t c, bool deriv) {
 	if (deriv) {
-		std::vector<std::vector<real_t>> deriv;
-		deriv.resize(z.size());
+		std::vector<std::vector<real_t>> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = SELU(z[i], lambda, c, true);
+			lderiv[i] = SELU(z[i], lambda, c, true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<std::vector<real_t>> a;
 	a.resize(z.size());
@@ -3396,12 +3396,12 @@ real_t MLPPActivation::GELU(real_t z, bool deriv) {
 
 std::vector<real_t> MLPPActivation::GELU(std::vector<real_t> z, bool deriv) {
 	if (deriv) {
-		std::vector<real_t> deriv;
-		deriv.resize(z.size());
+		std::vector<real_t> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = GELU(z[i], true);
+			lderiv[i] = GELU(z[i], true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<real_t> a;
 	a.resize(z.size());
@@ -3414,12 +3414,12 @@ std::vector<real_t> MLPPActivation::GELU(std::vector<real_t> z, bool deriv) {
 
 std::vector<std::vector<real_t>> MLPPActivation::GELU(std::vector<std::vector<real_t>> z, bool deriv) {
 	if (deriv) {
-		std::vector<std::vector<real_t>> deriv;
-		deriv.resize(z.size());
+		std::vector<std::vector<real_t>> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = GELU(z[i], true);
+			lderiv[i] = GELU(z[i], true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<std::vector<real_t>> a;
 	a.resize(z.size());
@@ -3445,12 +3445,12 @@ real_t MLPPActivation::sign(real_t z, bool deriv) {
 
 std::vector<real_t> MLPPActivation::sign(std::vector<real_t> z, bool deriv) {
 	if (deriv) {
-		std::vector<real_t> deriv;
-		deriv.resize(z.size());
+		std::vector<real_t> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = sign(z[i], true);
+			lderiv[i] = sign(z[i], true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<real_t> a;
 	a.resize(z.size());
@@ -3463,12 +3463,12 @@ std::vector<real_t> MLPPActivation::sign(std::vector<real_t> z, bool deriv) {
 
 std::vector<std::vector<real_t>> MLPPActivation::sign(std::vector<std::vector<real_t>> z, bool deriv) {
 	if (deriv) {
-		std::vector<std::vector<real_t>> deriv;
-		deriv.resize(z.size());
+		std::vector<std::vector<real_t>> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = sign(z[i], true);
+			lderiv[i] = sign(z[i], true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<std::vector<real_t>> a;
 	a.resize(z.size());
@@ -3763,12 +3763,12 @@ std::vector<std::vector<real_t>> MLPPActivation::arcoth(std::vector<std::vector<
 // TO DO: Implement this template activation
 std::vector<real_t> MLPPActivation::activation(std::vector<real_t> z, bool deriv, real_t (*function)(real_t, bool)) {
 	if (deriv) {
-		std::vector<real_t> deriv;
-		deriv.resize(z.size());
+		std::vector<real_t> lderiv;
+		lderiv.resize(z.size());
 		for (uint32_t i = 0; i < z.size(); i++) {
-			deriv[i] = function(z[i], true);
+			lderiv[i] = function(z[i], true);
 		}
-		return deriv;
+		return lderiv;
 	}
 	std::vector<real_t> a;
 	a.resize(z.size());
