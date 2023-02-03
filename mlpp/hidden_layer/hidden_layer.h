@@ -16,6 +16,7 @@
 
 #include "../activation/activation.h"
 #include "../utilities/utilities.h"
+#include "../regularization/reg.h"
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
@@ -45,7 +46,7 @@ public:
 	Ref<MLPPMatrix> delta;
 
 	// Regularization Params
-	String reg;
+	MLPPReg::RegularizationType reg;
 	real_t lambda; /* Regularization Parameter */
 	real_t alpha; /* This is the controlling param for Elastic Net*/
 
@@ -54,7 +55,7 @@ public:
 	void forward_pass();
 	void test(const Ref<MLPPVector> &x);
 
-	MLPPHiddenLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, String p_reg, real_t p_lambda, real_t p_alpha);
+	MLPPHiddenLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha);
 
 	MLPPHiddenLayer();
 	~MLPPHiddenLayer();

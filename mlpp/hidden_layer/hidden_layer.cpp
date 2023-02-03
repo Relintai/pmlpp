@@ -27,7 +27,7 @@ void MLPPHiddenLayer::test(const Ref<MLPPVector> &x) {
 	a_test = avn.run_activation_norm_matrix(activation, z_test);
 }
 
-MLPPHiddenLayer::MLPPHiddenLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, String p_reg, real_t p_lambda, real_t p_alpha) {
+MLPPHiddenLayer::MLPPHiddenLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
 	n_hidden = p_n_hidden;
 	activation = p_activation;
 
