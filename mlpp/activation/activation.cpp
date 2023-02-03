@@ -2742,7 +2742,7 @@ std::vector<real_t> MLPPActivation::unitStep(std::vector<real_t> z, bool deriv) 
 		std::vector<real_t> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = unitStep(z[i], 1);
+			deriv[i] = unitStep(z[i], true);
 		}
 		return deriv;
 	}
@@ -2760,7 +2760,7 @@ std::vector<std::vector<real_t>> MLPPActivation::unitStep(std::vector<std::vecto
 		std::vector<std::vector<real_t>> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = unitStep(z[i], 1);
+			deriv[i] = unitStep(z[i], true);
 		}
 		return deriv;
 	}
@@ -2858,7 +2858,7 @@ std::vector<real_t> MLPPActivation::RELU(std::vector<real_t> z, bool deriv) {
 		std::vector<real_t> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = RELU(z[i], 1);
+			deriv[i] = RELU(z[i], true);
 		}
 		return deriv;
 	}
@@ -2876,7 +2876,7 @@ std::vector<std::vector<real_t>> MLPPActivation::RELU(std::vector<std::vector<re
 		std::vector<std::vector<real_t>> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = RELU(z[i], 1);
+			deriv[i] = RELU(z[i], true);
 		}
 		return deriv;
 	}
@@ -2905,7 +2905,7 @@ std::vector<real_t> MLPPActivation::leakyReLU(std::vector<real_t> z, real_t c, b
 		std::vector<real_t> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = leakyReLU(z[i], c, 1);
+			deriv[i] = leakyReLU(z[i], c, true);
 		}
 		return deriv;
 	}
@@ -2923,7 +2923,7 @@ std::vector<std::vector<real_t>> MLPPActivation::leakyReLU(std::vector<std::vect
 		std::vector<std::vector<real_t>> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = leakyReLU(z[i], c, 1);
+			deriv[i] = leakyReLU(z[i], c, true);
 		}
 		return deriv;
 	}
@@ -2956,7 +2956,7 @@ std::vector<real_t> MLPPActivation::ELU(std::vector<real_t> z, real_t c, bool de
 		std::vector<real_t> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = ELU(z[i], c, 1);
+			deriv[i] = ELU(z[i], c, true);
 		}
 		return deriv;
 	}
@@ -2974,7 +2974,7 @@ std::vector<std::vector<real_t>> MLPPActivation::ELU(std::vector<std::vector<rea
 		std::vector<std::vector<real_t>> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = ELU(z[i], c, 1);
+			deriv[i] = ELU(z[i], c, true);
 		}
 		return deriv;
 	}
@@ -2999,7 +2999,7 @@ std::vector<real_t> MLPPActivation::SELU(std::vector<real_t> z, real_t lambda, r
 		std::vector<real_t> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = SELU(z[i], lambda, c, 1);
+			deriv[i] = SELU(z[i], lambda, c, true);
 		}
 		return deriv;
 	}
@@ -3017,7 +3017,7 @@ std::vector<std::vector<real_t>> MLPPActivation::SELU(std::vector<std::vector<re
 		std::vector<std::vector<real_t>> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = SELU(z[i], lambda, c, 1);
+			deriv[i] = SELU(z[i], lambda, c, true);
 		}
 		return deriv;
 	}
@@ -3042,7 +3042,7 @@ std::vector<real_t> MLPPActivation::GELU(std::vector<real_t> z, bool deriv) {
 		std::vector<real_t> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = GELU(z[i], 1);
+			deriv[i] = GELU(z[i], true);
 		}
 		return deriv;
 	}
@@ -3060,7 +3060,7 @@ std::vector<std::vector<real_t>> MLPPActivation::GELU(std::vector<std::vector<re
 		std::vector<std::vector<real_t>> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = GELU(z[i], 1);
+			deriv[i] = GELU(z[i], true);
 		}
 		return deriv;
 	}
@@ -3091,7 +3091,7 @@ std::vector<real_t> MLPPActivation::sign(std::vector<real_t> z, bool deriv) {
 		std::vector<real_t> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = sign(z[i], 1);
+			deriv[i] = sign(z[i], true);
 		}
 		return deriv;
 	}
@@ -3109,7 +3109,7 @@ std::vector<std::vector<real_t>> MLPPActivation::sign(std::vector<std::vector<re
 		std::vector<std::vector<real_t>> deriv;
 		deriv.resize(z.size());
 		for (int i = 0; i < z.size(); i++) {
-			deriv[i] = sign(z[i], 1);
+			deriv[i] = sign(z[i], true);
 		}
 		return deriv;
 	}
