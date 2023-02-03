@@ -8,11 +8,10 @@
 //  Created by Marc Melikyan on 1/16/21.
 //
 
-
-#include "core/math/math_defs.h"
 #include "core/containers/vector.h"
-#include "core/variant/variant.h"
+#include "core/math/math_defs.h"
 #include "core/string/ustring.h"
+#include "core/variant/variant.h"
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
@@ -20,7 +19,6 @@
 #include <string>
 #include <tuple>
 #include <vector>
-
 
 class MLPPUtilities {
 public:
@@ -30,6 +28,22 @@ public:
 
 	static std::vector<std::vector<real_t>> weightInitialization(int n, int m, std::string type = "Default");
 	static std::vector<real_t> biasInitialization(int n);
+
+	enum WeightDistributionType {
+		WEIGHT_DISTRIBUTION_TYPE_DEFAULT = 0,
+		WEIGHT_DISTRIBUTION_TYPE_XAVIER_NORMAL,
+		WEIGHT_DISTRIBUTION_TYPE_XAVIER_UNIFORM,
+		WEIGHT_DISTRIBUTION_TYPE_HE_NORMAL,
+		WEIGHT_DISTRIBUTION_TYPE_HE_UNIFORM,
+		WEIGHT_DISTRIBUTION_TYPE_LE_CUN_NORMAL,
+		WEIGHT_DISTRIBUTION_TYPE_LE_CUN_UNIFORM,
+		WEIGHT_DISTRIBUTION_TYPE_UNIFORM,
+	};
+
+	static void weight_initializationv(Ref<MLPPVector> weights, WeightDistributionType type = WEIGHT_DISTRIBUTION_TYPE_DEFAULT);
+	static void weight_initializationm(Ref<MLPPMatrix> weights, WeightDistributionType type = WEIGHT_DISTRIBUTION_TYPE_DEFAULT);
+	static real_t bias_initializationr();
+	static void bias_initializationv(Ref<MLPPVector> z);
 
 	// Cost/Performance related Functions
 	real_t performance(std::vector<real_t> y_hat, std::vector<real_t> y);
@@ -64,6 +78,5 @@ public:
 
 private:
 };
-
 
 #endif /* Utilities_hpp */

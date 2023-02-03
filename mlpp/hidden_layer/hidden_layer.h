@@ -15,6 +15,7 @@
 #include "core/object/reference.h"
 
 #include "../activation/activation.h"
+#include "../utilities/utilities.h"
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
@@ -28,7 +29,7 @@ class MLPPHiddenLayer : public Reference {
 
 public:
 	int n_hidden;
-	int activation;
+	MLPPActivation::ActivationFunction activation;
 
 	Ref<MLPPMatrix> input;
 
@@ -37,9 +38,6 @@ public:
 
 	Ref<MLPPMatrix> z;
 	Ref<MLPPMatrix> a;
-
-	HashMap<int, Ref<MLPPMatrix> (MLPPActivation::*)(const Ref<MLPPMatrix> &, bool)> activation_map;
-	HashMap<int, Ref<MLPPVector> (MLPPActivation::*)(const Ref<MLPPVector> &, bool)> activation_test_map;
 
 	Ref<MLPPVector> z_test;
 	Ref<MLPPVector> a_test;
@@ -51,12 +49,12 @@ public:
 	real_t lambda; /* Regularization Parameter */
 	real_t alpha; /* This is the controlling param for Elastic Net*/
 
-	String weight_init;
+	MLPPUtilities::WeightDistributionType weight_init;
 
 	void forward_pass();
 	void test(const Ref<MLPPVector> &x);
 
-	MLPPHiddenLayer(int p_n_hidden, int p_activation, Ref<MLPPMatrix> p_input, String p_weight_init, String p_reg, real_t p_lambda, real_t p_alpha);
+	MLPPHiddenLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, String p_reg, real_t p_lambda, real_t p_alpha);
 
 	MLPPHiddenLayer();
 	~MLPPHiddenLayer();

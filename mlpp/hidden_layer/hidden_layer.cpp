@@ -7,112 +7,81 @@
 #include "hidden_layer.h"
 #include "../activation/activation.h"
 #include "../lin_alg/lin_alg.h"
-#include "../utilities/utilities.h"
 
 #include <iostream>
 #include <random>
 
-/*
-
 void MLPPHiddenLayer::forward_pass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
-	z = alg.mat_vec_add(alg.matmult(input, weights), bias);
-	a = (avn.*activation_map[activation])(z, false);
+
+	z = alg.mat_vec_addv(alg.matmultm(input, weights), bias);
+	a = avn.run_activation_norm_matrix(activation, z);
 }
 
-void MLPPHiddenLayer::test(std::vector<real_t> x) {
+void MLPPHiddenLayer::test(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
-	z_test = alg.addition(alg.mat_vec_mult(alg.transpose(weights), x), bias);
-	a_test = (avn.*activationTest_map[activation])(z_test, 0);
+
+	z_test = alg.additionm(alg.mat_vec_multv(alg.transposem(weights), x), bias);
+	a_test = avn.run_activation_norm_matrix(activation, z_test);
 }
 
-MLPPHiddenLayer::MLPPHiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<real_t>> input, std::string weightInit, std::string reg, real_t lambda, real_t alpha) :
-		n_hidden(n_hidden), activation(activation), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
-	weights = MLPPUtilities::weightInitialization(input[0].size(), n_hidden, weightInit);
-	bias = MLPPUtilities::biasInitialization(n_hidden);
+MLPPHiddenLayer::MLPPHiddenLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, String p_reg, real_t p_lambda, real_t p_alpha) {
+	n_hidden = p_n_hidden;
+	activation = p_activation;
 
-	activation_map["Linear"] = &MLPPActivation::linear;
-	activationTest_map["Linear"] = &MLPPActivation::linear;
+	input = p_input;
 
-	activation_map["Sigmoid"] = &MLPPActivation::sigmoid;
-	activationTest_map["Sigmoid"] = &MLPPActivation::sigmoid;
+	// Regularization Params
+	reg = p_reg;
+	lambda = p_lambda; /* Regularization Parameter */
+	alpha = p_alpha; /* This is the controlling param for Elastic Net*/
 
-	activation_map["Swish"] = &MLPPActivation::swish;
-	activationTest_map["Swish"] = &MLPPActivation::swish;
+	weight_init = p_weight_init;
 
-	activation_map["Mish"] = &MLPPActivation::mish;
-	activationTest_map["Mish"] = &MLPPActivation::mish;
+	z.instance();
+	a.instance();
 
-	activation_map["SinC"] = &MLPPActivation::sinc;
-	activationTest_map["SinC"] = &MLPPActivation::sinc;
+	z_test.instance();
+	a_test.instance();
 
-	activation_map["Softplus"] = &MLPPActivation::softplus;
-	activationTest_map["Softplus"] = &MLPPActivation::softplus;
+	delta.instance();
 
-	activation_map["Softsign"] = &MLPPActivation::softsign;
-	activationTest_map["Softsign"] = &MLPPActivation::softsign;
+	weights.instance();
+	bias.instance();
 
-	activation_map["CLogLog"] = &MLPPActivation::cloglog;
-	activationTest_map["CLogLog"] = &MLPPActivation::cloglog;
+	weights->resize(Size2i(input->size().x, n_hidden));
+	bias->resize(n_hidden);
 
-	activation_map["Logit"] = &MLPPActivation::logit;
-	activationTest_map["Logit"] = &MLPPActivation::logit;
-
-	activation_map["GaussianCDF"] = &MLPPActivation::gaussianCDF;
-	activationTest_map["GaussianCDF"] = &MLPPActivation::gaussianCDF;
-
-	activation_map["RELU"] = &MLPPActivation::RELU;
-	activationTest_map["RELU"] = &MLPPActivation::RELU;
-
-	activation_map["GELU"] = &MLPPActivation::GELU;
-	activationTest_map["GELU"] = &MLPPActivation::GELU;
-
-	activation_map["Sign"] = &MLPPActivation::sign;
-	activationTest_map["Sign"] = &MLPPActivation::sign;
-
-	activation_map["UnitStep"] = &MLPPActivation::unitStep;
-	activationTest_map["UnitStep"] = &MLPPActivation::unitStep;
-
-	activation_map["Sinh"] = &MLPPActivation::sinh;
-	activationTest_map["Sinh"] = &MLPPActivation::sinh;
-
-	activation_map["Cosh"] = &MLPPActivation::cosh;
-	activationTest_map["Cosh"] = &MLPPActivation::cosh;
-
-	activation_map["Tanh"] = &MLPPActivation::tanh;
-	activationTest_map["Tanh"] = &MLPPActivation::tanh;
-
-	activation_map["Csch"] = &MLPPActivation::csch;
-	activationTest_map["Csch"] = &MLPPActivation::csch;
-
-	activation_map["Sech"] = &MLPPActivation::sech;
-	activationTest_map["Sech"] = &MLPPActivation::sech;
-
-	activation_map["Coth"] = &MLPPActivation::coth;
-	activationTest_map["Coth"] = &MLPPActivation::coth;
-
-	activation_map["Arsinh"] = &MLPPActivation::arsinh;
-	activationTest_map["Arsinh"] = &MLPPActivation::arsinh;
-
-	activation_map["Arcosh"] = &MLPPActivation::arcosh;
-	activationTest_map["Arcosh"] = &MLPPActivation::arcosh;
-
-	activation_map["Artanh"] = &MLPPActivation::artanh;
-	activationTest_map["Artanh"] = &MLPPActivation::artanh;
-
-	activation_map["Arcsch"] = &MLPPActivation::arcsch;
-	activationTest_map["Arcsch"] = &MLPPActivation::arcsch;
-
-	activation_map["Arsech"] = &MLPPActivation::arsech;
-	activationTest_map["Arsech"] = &MLPPActivation::arsech;
-
-	activation_map["Arcoth"] = &MLPPActivation::arcoth;
-	activationTest_map["Arcoth"] = &MLPPActivation::arcoth;
+	MLPPUtilities::weight_initializationm(weights, weight_init);
+	MLPPUtilities::bias_initializationv(bias);
 }
 
-*/
+MLPPHiddenLayer::MLPPHiddenLayer() {
+	n_hidden = 0;
+	activation = MLPPActivation::ACTIVATION_FUNCTION_LINEAR;
+
+	// Regularization Params
+	//reg = 0;
+	lambda = 0; /* Regularization Parameter */
+	alpha = 0; /* This is the controlling param for Elastic Net*/
+
+	weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT;
+
+	z.instance();
+	a.instance();
+
+	z_test.instance();
+	a_test.instance();
+
+	delta.instance();
+
+	weights.instance();
+	bias.instance();
+}
+MLPPHiddenLayer::~MLPPHiddenLayer() {
+}
 
 MLPPOldHiddenLayer::MLPPOldHiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<real_t>> input, std::string weightInit, std::string reg, real_t lambda, real_t alpha) :
 		n_hidden(n_hidden), activation(activation), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
@@ -202,12 +171,12 @@ void MLPPOldHiddenLayer::forwardPass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z = alg.mat_vec_add(alg.matmult(input, weights), bias);
-	a = (avn.*activation_map[activation])(z, 0);
+	a = (avn.*activation_map[activation])(z, false);
 }
 
 void MLPPOldHiddenLayer::Test(std::vector<real_t> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z_test = alg.addition(alg.mat_vec_mult(alg.transpose(weights), x), bias);
-	a_test = (avn.*activationTest_map[activation])(z_test, 0);
+	a_test = (avn.*activationTest_map[activation])(z_test, false);
 }

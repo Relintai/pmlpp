@@ -261,8 +261,10 @@ public:
 
 	// MATRIX-VECTOR FUNCTIONS
 	std::vector<std::vector<real_t>> mat_vec_add(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
-
 	std::vector<real_t> mat_vec_mult(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
+
+	Ref<MLPPMatrix> mat_vec_addv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
+	Ref<MLPPVector> mat_vec_multv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
 
 	// TENSOR FUNCTIONS
 	std::vector<std::vector<std::vector<real_t>>> addition(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);

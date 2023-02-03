@@ -2180,6 +2180,50 @@ std::vector<real_t> MLPPLinAlg::mat_vec_mult(std::vector<std::vector<real_t>> A,
 	return c;
 }
 
+Ref<MLPPMatrix> MLPPLinAlg::mat_vec_addv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
+	Ref<MLPPMatrix> ret;
+	ret.instance();
+	ret->resize(A->size());
+
+	Size2i a_size = A->size();
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *ret_ptr = ret->ptrw();
+
+	for (int i = 0; i < a_size.y; ++i) {
+		for (int j = 0; j < a_size.x; ++j) {
+			int mat_index = A->calculate_index(i, j);
+
+			ret_ptr[mat_index] = a_ptr[mat_index] + b_ptr[j];
+		}
+	}
+
+	return ret;
+}
+Ref<MLPPVector> MLPPLinAlg::mat_vec_multv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
+	Ref<MLPPVector> c;
+	c.instance();
+
+	Size2i a_size = A->size();
+	int b_size = b->size();
+
+	c->resize(a_size.y);
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *c_ptr = c->ptrw();
+
+	for (int i = 0; i < a_size.y; ++i) {
+		for (int k = 0; k < b_size; ++k) {
+			int mat_index = A->calculate_index(i, k);
+
+			c_ptr[i] = a_ptr[mat_index] * b_ptr[k];
+		}
+	}
+
+	return c;
+}
+
 std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::addition(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B) {
 	for (int i = 0; i < A.size(); i++) {
 		A[i] = addition(A[i], B[i]);

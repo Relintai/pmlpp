@@ -6,8 +6,9 @@
 
 #include "utilities.h"
 
-#include "core/math/math_funcs.h"
 #include "core/log/logger.h"
+#include "core/math/math_funcs.h"
+#include "core/math/random_pcg.h"
 
 #include <fstream>
 #include <iostream>
@@ -106,6 +107,176 @@ std::vector<real_t> MLPPUtilities::biasInitialization(int n) {
 		bias.push_back(distribution(generator));
 	}
 	return bias;
+}
+
+void MLPPUtilities::weight_initializationv(Ref<MLPPVector> weights, WeightDistributionType type) {
+	ERR_FAIL_COND(!weights.is_valid());
+
+	int n = weights->size();
+	real_t *weights_ptr = weights->ptrw();
+
+	RandomPCG rnd;
+	rnd.randomize();
+
+	std::random_device rd;
+	std::default_random_engine generator(rd());
+
+	switch (type) {
+		case WEIGHT_DISTRIBUTION_TYPE_DEFAULT: {
+			std::uniform_real_distribution<real_t> distribution(0, 1);
+
+			for (int i = 0; i < n; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_XAVIER_NORMAL: {
+			std::normal_distribution<real_t> distribution(0, Math::sqrt(2.0 / (n + 1.0)));
+
+			for (int i = 0; i < n; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_XAVIER_UNIFORM: {
+			std::uniform_real_distribution<real_t> distribution(-Math::sqrt(6.0 / (n + 1.0)), Math::sqrt(6.0 / (n + 1.0)));
+
+			for (int i = 0; i < n; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_HE_NORMAL: {
+			std::normal_distribution<real_t> distribution(0, Math::sqrt(2.0 / n));
+
+			for (int i = 0; i < n; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_HE_UNIFORM: {
+			std::uniform_real_distribution<real_t> distribution(-Math::sqrt(6.0 / n), Math::sqrt(6.0 / n));
+
+			for (int i = 0; i < n; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_LE_CUN_NORMAL: {
+			std::normal_distribution<real_t> distribution(0, Math::sqrt(1.0 / n));
+
+			for (int i = 0; i < n; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_LE_CUN_UNIFORM: {
+			std::uniform_real_distribution<real_t> distribution(-Math::sqrt(3.0 / n), Math::sqrt(3.0 / n));
+
+			for (int i = 0; i < n; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_UNIFORM: {
+			std::uniform_real_distribution<real_t> distribution(-1.0 / Math::sqrt(static_cast<real_t>(n)), 1.0 / Math::sqrt(static_cast<real_t>(n)));
+
+			for (int i = 0; i < n; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		default:
+			break;
+	}
+}
+void MLPPUtilities::weight_initializationm(Ref<MLPPMatrix> weights, WeightDistributionType type) {
+	ERR_FAIL_COND(!weights.is_valid());
+
+	int n = weights->size().x;
+	int m = weights->size().y;
+	int data_size = weights->data_size();
+	real_t *weights_ptr = weights->ptrw();
+
+	RandomPCG rnd;
+	rnd.randomize();
+
+	std::random_device rd;
+	std::default_random_engine generator(rd());
+
+	switch (type) {
+		case WEIGHT_DISTRIBUTION_TYPE_DEFAULT: {
+			std::uniform_real_distribution<real_t> distribution(0, 1);
+
+			for (int i = 0; i < data_size; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_XAVIER_NORMAL: {
+			std::normal_distribution<real_t> distribution(0, sqrt(2 / (n + m)));
+
+			for (int i = 0; i < data_size; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_XAVIER_UNIFORM: {
+			std::uniform_real_distribution<real_t> distribution(-sqrt(6 / (n + m)), sqrt(6 / (n + m)));
+
+			for (int i = 0; i < data_size; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_HE_NORMAL: {
+			std::normal_distribution<real_t> distribution(0, sqrt(2 / n));
+
+			for (int i = 0; i < data_size; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_HE_UNIFORM: {
+			std::uniform_real_distribution<real_t> distribution(-sqrt(6 / n), sqrt(6 / n));
+
+			for (int i = 0; i < data_size; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_LE_CUN_NORMAL: {
+			std::normal_distribution<real_t> distribution(0, sqrt(1 / n));
+
+			for (int i = 0; i < data_size; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_LE_CUN_UNIFORM: {
+			std::uniform_real_distribution<real_t> distribution(-sqrt(3 / n), sqrt(3 / n));
+
+			for (int i = 0; i < data_size; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		case WEIGHT_DISTRIBUTION_TYPE_UNIFORM: {
+			std::uniform_real_distribution<real_t> distribution(-1 / sqrt(n), 1 / sqrt(n));
+
+			for (int i = 0; i < data_size; ++i) {
+				weights_ptr[i] = distribution(generator);
+			}
+		} break;
+		default:
+			break;
+	}
+}
+real_t MLPPUtilities::bias_initializationr() {
+	std::random_device rd;
+	std::default_random_engine generator(rd());
+	std::uniform_real_distribution<real_t> distribution(0, 1);
+
+	return distribution(generator);
+}
+void MLPPUtilities::bias_initializationv(Ref<MLPPVector> z) {
+	ERR_FAIL_COND(!z.is_valid());
+
+	std::vector<real_t> bias;
+	std::random_device rd;
+	std::default_random_engine generator(rd());
+	std::uniform_real_distribution<real_t> distribution(0, 1);
+
+	int n = z->size();
+
+	for (int i = 0; i < n; i++) {
+		bias.push_back(distribution(generator));
+	}
 }
 
 real_t MLPPUtilities::performance(std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
