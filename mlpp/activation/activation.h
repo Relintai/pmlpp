@@ -18,7 +18,6 @@
 
 #include <vector>
 
-//TODO this should probably be a singleton
 //TODO Activation functions should either have a variant which does not allocate, or they should just be reworked altogether
 //TODO Methods here should probably use error macros, in a way where they get disabled in non-tools(?) (maybe release?) builds
 
@@ -537,7 +536,8 @@ public:
 
 	std::vector<real_t> activation(std::vector<real_t> z, bool deriv, real_t (*function)(real_t, bool));
 
-private:
+protected:
+	static void _bind_methods();
 };
 
 VARIANT_ENUM_CAST(MLPPActivation::ActivationFunction);
