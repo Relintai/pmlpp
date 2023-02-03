@@ -32,8 +32,10 @@ public:
 		ACTIVATION_FUNCTION_SWISH,
 		ACTIVATION_FUNCTION_MISH,
 		ACTIVATION_FUNCTION_SIN_C,
+		ACTIVATION_FUNCTION_SOFTMAX,
 		ACTIVATION_FUNCTION_SOFTPLUS,
 		ACTIVATION_FUNCTION_SOFTSIGN,
+		ACTIVATION_FUNCTION_ADJ_SOFTMAX,
 		ACTIVATION_FUNCTION_C_LOG_LOG,
 		ACTIVATION_FUNCTION_LOGIT,
 		ACTIVATION_FUNCTION_GAUSSIAN_CDF,
@@ -56,21 +58,35 @@ public:
 	};
 
 public:
-	//TODO add override for vec, and real_t
-	typedef Ref<MLPPMatrix> (MLPPActivation::*ActivationFunctionPointer)(const Ref<MLPPMatrix> &);
-	ActivationFunctionPointer get_activation_function_ptr(const ActivationFunction func, const bool deriv = false);
-	Ref<FuncRef> get_activation_function_funcref(const ActivationFunction func, const bool deriv = false);
+	typedef real_t (MLPPActivation::*RealActivationFunctionPointer)(real_t);
+	typedef Ref<MLPPVector> (MLPPActivation::*VectorActivationFunctionPointer)(const Ref<MLPPVector> &);
+	typedef Ref<MLPPMatrix> (MLPPActivation::*MatrixActivationFunctionPointer)(const Ref<MLPPMatrix> &);
 
+	RealActivationFunctionPointer get_activation_function_ptr_real(const ActivationFunction func, const bool deriv = false);
+	VectorActivationFunctionPointer get_activation_function_ptr_vector(const ActivationFunction func, const bool deriv = false);
+	MatrixActivationFunctionPointer get_activation_function_ptr_matrix(const ActivationFunction func, const bool deriv = false);
+
+	RealActivationFunctionPointer get_activation_function_ptr_normal_real(const ActivationFunction func);
+	VectorActivationFunctionPointer get_activation_function_ptr_normal_vector(const ActivationFunction func);
+	MatrixActivationFunctionPointer get_activation_function_ptr_normal_matrix(const ActivationFunction func);
+
+	RealActivationFunctionPointer get_activation_function_ptr_deriv_real(const ActivationFunction func);
+	VectorActivationFunctionPointer get_activation_function_ptr_deriv_vector(const ActivationFunction func);
+	MatrixActivationFunctionPointer get_activation_function_ptr_deriv_matrix(const ActivationFunction func);
+
+	real_t run_activation_real(const ActivationFunction func, const real_t z, const bool deriv = false);
 	Ref<MLPPVector> run_activation_vector(const ActivationFunction func, const Ref<MLPPVector> &z, const bool deriv = false);
 	Ref<MLPPMatrix> run_activation_matrix(const ActivationFunction func, const Ref<MLPPMatrix> &z, const bool deriv = false);
 
+	real_t run_activation_norm_real(const ActivationFunction func, const real_t z);
 	Ref<MLPPVector> run_activation_norm_vector(const ActivationFunction func, const Ref<MLPPVector> &z);
 	Ref<MLPPMatrix> run_activation_norm_matrix(const ActivationFunction func, const Ref<MLPPMatrix> &z);
 
+	real_t run_activation_deriv_real(const ActivationFunction func, const real_t z);
 	Ref<MLPPVector> run_activation_deriv_vector(const ActivationFunction func, const Ref<MLPPVector> &z);
 	Ref<MLPPMatrix> run_activation_deriv_matrix(const ActivationFunction func, const Ref<MLPPMatrix> &z);
 
-	Ref<MLPPVector> activation(const Ref<MLPPVector> &z, real_t (*function)(real_t));
+	Ref<MLPPVector> activationr(const Ref<MLPPVector> &z, real_t (*function)(real_t));
 
 	//ACTIVATION FUNCTIONS
 
@@ -96,17 +112,21 @@ public:
 
 	//SOFTMAX
 
+	real_t softmax_normr(real_t z);
 	Ref<MLPPVector> softmax_normv(const Ref<MLPPVector> &z);
 	Ref<MLPPMatrix> softmax_normm(const Ref<MLPPMatrix> &z);
 
+	real_t softmax_derivr(real_t z);
 	Ref<MLPPVector> softmax_derivv(const Ref<MLPPVector> &z);
 	Ref<MLPPMatrix> softmax_derivm(const Ref<MLPPMatrix> &z);
 
 	//ADJ_SOFTMAX
 
+	real_t adj_softmax_normr(real_t z);
 	Ref<MLPPVector> adj_softmax_normv(const Ref<MLPPVector> &z);
 	Ref<MLPPMatrix> adj_softmax_normm(const Ref<MLPPMatrix> &z);
 
+	real_t adj_softmax_derivr(real_t z);
 	Ref<MLPPVector> adj_softmax_derivv(const Ref<MLPPVector> &z);
 	Ref<MLPPMatrix> adj_softmax_derivm(const Ref<MLPPMatrix> &z);
 
