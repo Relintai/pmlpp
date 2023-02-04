@@ -213,6 +213,7 @@ public:
 	Ref<MLPPVector> cbrtv(const Ref<MLPPVector> &a);
 
 	real_t dot(std::vector<real_t> a, std::vector<real_t> b);
+	real_t dotv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	std::vector<real_t> cross(std::vector<real_t> a, std::vector<real_t> b);
 
@@ -229,6 +230,7 @@ public:
 	Ref<MLPPVector> fullv(int n, int k);
 
 	std::vector<std::vector<real_t>> diag(std::vector<real_t> a);
+	Ref<MLPPVector> diagm(const Ref<MLPPVector> &a);
 
 	std::vector<real_t> sin(std::vector<real_t> a);
 	std::vector<real_t> cos(std::vector<real_t> a);

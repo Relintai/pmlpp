@@ -10,6 +10,582 @@
 #include <cmath>
 #include <iostream>
 
+real_t MLPPCost::msev(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	int y_hat_size = y_hat->size();
+
+	ERR_FAIL_COND_V(y_hat_size != y->size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_size; ++i) {
+		sum += (y_hat_ptr[i] - y_ptr[i]) * (y_hat_ptr[i] - y_ptr[i]);
+	}
+
+	return sum / 2 * y_hat_size;
+}
+real_t MLPPCost::msem(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	int y_hat_data_size = y_hat->data_size();
+
+	ERR_FAIL_COND_V(y_hat_data_size != y->data_size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		sum += (y_hat_ptr[i] - y_ptr[i]) * (y_hat_ptr[i] - y_ptr[i]);
+	}
+
+	return sum / 2.0 * static_cast<real_t>(y_hat_data_size);
+}
+
+Ref<MLPPVector> MLPPCost::mse_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	MLPPLinAlg alg;
+	return alg.subtractionnv(y_hat, y);
+}
+
+Ref<MLPPMatrix> MLPPCost::mse_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	MLPPLinAlg alg;
+	return alg.subtractionm(y_hat, y);
+}
+
+real_t MLPPCost::rmsev(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	int y_hat_size = y_hat->size();
+
+	ERR_FAIL_COND_V(y_hat_size != y->size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_size; ++i) {
+		sum += (y_hat_ptr[i] - y_ptr[i]) * (y_hat_ptr[i] - y_ptr[i]);
+	}
+
+	return Math::sqrt(sum / static_cast<real_t>(y_hat_size));
+}
+real_t MLPPCost::rmsem(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	int y_hat_data_size = y_hat->data_size();
+
+	ERR_FAIL_COND_V(y_hat_data_size != y->data_size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		sum += (y_hat_ptr[i] - y_ptr[i]) * (y_hat_ptr[i] - y_ptr[i]);
+	}
+
+	return Math::sqrt(sum / static_cast<real_t>(y_hat->size().y));
+}
+
+Ref<MLPPVector> MLPPCost::rmse_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	MLPPLinAlg alg;
+
+	return alg.scalar_multiplynv(1 / (2.0 * Math::sqrt(msev(y_hat, y))), mse_derivv(y_hat, y));
+}
+Ref<MLPPMatrix> MLPPCost::rmse_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	MLPPLinAlg alg;
+
+	return alg.scalar_multiplym(1 / (2.0 / Math::sqrt(msem(y_hat, y))), mse_derivm(y_hat, y));
+}
+
+real_t MLPPCost::maev(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	int y_hat_size = y_hat->size();
+
+	ERR_FAIL_COND_V(y_hat_size != y->size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_size; i++) {
+		sum += ABS((y_hat_ptr[i] - y_ptr[i]));
+	}
+	return sum / static_cast<real_t>(y_hat_size);
+}
+real_t MLPPCost::maem(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	int y_hat_data_size = y_hat->data_size();
+
+	ERR_FAIL_COND_V(y_hat_data_size != y->data_size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		sum += ABS((y_hat_ptr[i] - y_ptr[i]));
+	}
+
+	return sum / static_cast<real_t>(y_hat_data_size);
+}
+
+Ref<MLPPVector> MLPPCost::mae_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	int y_hat_size = y_hat->size();
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+
+	Ref<MLPPVector> deriv;
+	deriv.instance();
+	deriv->resize(y_hat_size);
+	real_t *deriv_ptr = deriv->ptrw();
+
+	for (int i = 0; i < y_hat_size; ++i) {
+		int y_hat_ptr_i = y_hat_ptr[i];
+
+		if (y_hat_ptr_i < 0) {
+			deriv_ptr[i] = -1;
+		} else if (y_hat_ptr_i == 0) {
+			deriv_ptr[i] = 0;
+		} else {
+			deriv_ptr[i] = 1;
+		}
+	}
+
+	return deriv;
+}
+Ref<MLPPMatrix> MLPPCost::mae_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	int y_hat_data_size = y_hat->data_size();
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+
+	Ref<MLPPMatrix> deriv;
+	deriv.instance();
+	deriv->resize(y_hat->size());
+	real_t *deriv_ptr = deriv->ptrw();
+
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		int y_hat_ptr_i = y_hat_ptr[i];
+
+		if (y_hat_ptr_i < 0) {
+			deriv_ptr[i] = -1;
+		} else if (y_hat_ptr_i == 0) {
+			deriv_ptr[i] = 0;
+		} else {
+			deriv_ptr[i] = 1;
+		}
+	}
+
+	return deriv;
+}
+
+real_t MLPPCost::mbev(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	int y_hat_size = y_hat->size();
+
+	ERR_FAIL_COND_V(y_hat_size != y->size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_size; ++i) {
+		sum += (y_hat_ptr[i] - y_ptr[i]);
+	}
+
+	return sum / static_cast<real_t>(y_hat_size);
+}
+real_t MLPPCost::mbem(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	int y_hat_data_size = y_hat->data_size();
+
+	ERR_FAIL_COND_V(y_hat_data_size != y->data_size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		sum += (y_hat_ptr[i] - y_ptr[i]);
+	}
+
+	return sum / static_cast<real_t>(y_hat_data_size);
+}
+
+Ref<MLPPVector> MLPPCost::mbe_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	MLPPLinAlg alg;
+	return alg.onevecv(y_hat->size());
+}
+Ref<MLPPMatrix> MLPPCost::mbe_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	MLPPLinAlg alg;
+	return alg.onematm(y_hat->size().x, y_hat->size().y);
+}
+
+// Classification Costs
+real_t MLPPCost::log_lossv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	int y_hat_size = y_hat->size();
+
+	ERR_FAIL_COND_V(y_hat_size != y->size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	real_t eps = 1e-8;
+	for (int i = 0; i < y_hat_size; ++i) {
+		sum += -(y_ptr[i] * Math::log(y_hat_ptr[i] + eps) + (1 - y_ptr[i]) * Math::log(1 - y_hat_ptr[i] + eps));
+	}
+
+	return sum / static_cast<real_t>(y_hat_size);
+}
+
+real_t MLPPCost::log_lossm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	int y_hat_data_size = y_hat->data_size();
+
+	ERR_FAIL_COND_V(y_hat_data_size != y->data_size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	real_t eps = 1e-8;
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		sum += -(y_ptr[i] * Math::log(y_hat_ptr[i] + eps) + (1 - y_ptr[i]) * Math::log(1 - y_hat_ptr[i] + eps));
+	}
+
+	return sum / static_cast<real_t>(y_hat_data_size);
+}
+
+Ref<MLPPVector> MLPPCost::log_loss_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	MLPPLinAlg alg;
+	return alg.additionnv(
+			alg.scalar_multiplynv(-1, alg.element_wise_division(y, y_hat)),
+			alg.element_wise_division(alg.scalar_multiplynv(-1, alg.scalar_addnv(-1, y)), alg.scalar_multiplynv(-1, alg.scalar_addnv(-1, y_hat))));
+}
+
+Ref<MLPPMatrix> MLPPCost::log_loss_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	MLPPLinAlg alg;
+	return alg.additionm(
+			alg.scalar_multiplym(-1, alg.element_wise_divisionm(y, y_hat)),
+			alg.element_wise_divisionm(alg.scalar_multiplym(-1, alg.scalar_addm(-1, y)), alg.scalar_multiplym(-1, alg.scalar_addm(-1, y_hat))));
+}
+
+real_t MLPPCost::cross_entropyv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	int y_hat_size = y_hat->size();
+
+	ERR_FAIL_COND_V(y_hat_size != y->size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_size; ++i) {
+		sum += y_ptr[i] * Math::log(y_hat_ptr[i]);
+	}
+
+	return -1 * sum;
+}
+real_t MLPPCost::cross_entropym(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	int y_hat_data_size = y_hat->data_size();
+
+	ERR_FAIL_COND_V(y_hat_data_size != y->data_size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		sum += y_ptr[i] * Math::log(y_hat_ptr[i]);
+	}
+
+	return -1 * sum;
+}
+
+Ref<MLPPVector> MLPPCost::cross_entropy_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	MLPPLinAlg alg;
+	return alg.scalar_multiplynv(-1, alg.element_wise_division(y, y_hat));
+}
+Ref<MLPPMatrix> MLPPCost::cross_entropy_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	MLPPLinAlg alg;
+	return alg.scalar_multiplym(-1, alg.element_wise_divisionm(y, y_hat));
+}
+
+real_t MLPPCost::huber_lossv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y, real_t delta) {
+	int y_hat_size = y_hat->size();
+
+	ERR_FAIL_COND_V(y_hat_size != y->size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	MLPPLinAlg alg;
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_size; ++i) {
+		if (ABS(y_ptr[i] - y_hat_ptr[i]) <= delta) {
+			sum += (y_ptr[i] - y_hat_ptr[i]) * (y_ptr[i] - y_hat_ptr[i]);
+		} else {
+			sum += 2 * delta * ABS(y_ptr[i] - y_hat_ptr[i]) - delta * delta;
+		}
+	}
+
+	return sum;
+}
+real_t MLPPCost::huber_lossm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y, real_t delta) {
+	int y_hat_data_size = y_hat->data_size();
+
+	ERR_FAIL_COND_V(y_hat_data_size != y->data_size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	MLPPLinAlg alg;
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		if (ABS(y_ptr[i] - y_hat_ptr[i]) <= delta) {
+			sum += (y_ptr[i] - y_hat_ptr[i]) * (y_ptr[i] - y_hat_ptr[i]);
+		} else {
+			sum += 2 * delta * ABS(y_ptr[i] - y_hat_ptr[i]) - delta * delta;
+		}
+	}
+
+	return sum;
+}
+
+Ref<MLPPVector> MLPPCost::huber_loss_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y, real_t delta) {
+	int y_hat_size = y_hat->size();
+
+	ERR_FAIL_COND_V(y_hat_size != y->size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	MLPPLinAlg alg;
+	real_t sum = 0;
+
+	Ref<MLPPVector> deriv;
+	deriv.instance();
+	deriv->resize(y_hat->size());
+
+	real_t *deriv_ptr = deriv->ptrw();
+
+	for (int i = 0; i < y_hat_size; ++i) {
+		if (ABS(y_ptr[i] - y_hat_ptr[i]) <= delta) {
+			deriv_ptr[i] = (-(y_ptr[i] - y_hat_ptr[i]));
+		} else {
+			if (y_hat_ptr[i] > 0 || y_hat_ptr[i] < 0) {
+				deriv_ptr[i] = (2 * delta * (y_hat_ptr[i] / ABS(y_hat_ptr[i])));
+			} else {
+				deriv_ptr[i] = (0);
+			}
+		}
+	}
+
+	return deriv;
+}
+Ref<MLPPMatrix> MLPPCost::huber_loss_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y, real_t delta) {
+	int y_hat_data_size = y_hat->data_size();
+
+	ERR_FAIL_COND_V(y_hat_data_size != y->data_size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	MLPPLinAlg alg;
+	real_t sum = 0;
+
+	Ref<MLPPMatrix> deriv;
+	deriv.instance();
+	deriv->resize(y_hat->size());
+
+	real_t *deriv_ptr = deriv->ptrw();
+
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		if (ABS(y_ptr[i] - y_hat_ptr[i]) <= delta) {
+			deriv_ptr[i] = (-(y_ptr[i] - y_hat_ptr[i]));
+		} else {
+			if (y_hat_ptr[i] > 0 || y_hat_ptr[i] < 0) {
+				deriv_ptr[i] = (2 * delta * (y_hat_ptr[i] / ABS(y_hat_ptr[i])));
+			} else {
+				deriv_ptr[i] = (0);
+			}
+		}
+	}
+
+	return deriv;
+}
+
+real_t MLPPCost::hinge_lossv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	int y_hat_size = y_hat->size();
+
+	ERR_FAIL_COND_V(y_hat_size != y->size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_size; ++i) {
+		sum += MAX(0, 1 - y_ptr[i] * y_hat_ptr[i]);
+	}
+
+	return sum / static_cast<real_t>(y_hat_size);
+}
+real_t MLPPCost::hinge_lossm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	int y_hat_data_size = y_hat->data_size();
+
+	ERR_FAIL_COND_V(y_hat_data_size != y->data_size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		sum += MAX(0, 1 - y_ptr[i] * y_hat_ptr[i]);
+	}
+
+	return sum / static_cast<real_t>(y_hat_data_size);
+}
+
+Ref<MLPPVector> MLPPCost::hinge_loss_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	int y_hat_size = y_hat->size();
+
+	ERR_FAIL_COND_V(y_hat_size != y->size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	Ref<MLPPVector> deriv;
+	deriv.instance();
+	deriv->resize(y_hat->size());
+
+	real_t *deriv_ptr = deriv->ptrw();
+
+	for (int i = 0; i < y_hat_size; ++i) {
+		if (1 - y_ptr[i] * y_hat_ptr[i] > 0) {
+			deriv_ptr[i] = -y_ptr[i];
+		} else {
+			deriv_ptr[i] = 0;
+		}
+	}
+
+	return deriv;
+}
+Ref<MLPPMatrix> MLPPCost::hinge_loss_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	int y_hat_data_size = y_hat->data_size();
+
+	ERR_FAIL_COND_V(y_hat_data_size != y->data_size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	Ref<MLPPMatrix> deriv;
+	deriv.instance();
+	deriv->resize(y_hat->size());
+
+	real_t *deriv_ptr = deriv->ptrw();
+
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		if (1 - y_ptr[i] * y_hat_ptr[i] > 0) {
+			deriv_ptr[i] = -y_ptr[i];
+		} else {
+			deriv_ptr[i] = 0;
+		}
+	}
+
+	return deriv;
+}
+
+real_t MLPPCost::hinge_losswv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y, const Ref<MLPPVector> &weights, real_t C) {
+	MLPPLinAlg alg;
+	MLPPReg regularization;
+
+	return C * hinge_lossv(y_hat, y) + regularization.reg_termv(weights, 1, 0, MLPPReg::REGULARIZATION_TYPE_RIDGE);
+}
+real_t MLPPCost::hinge_losswm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y, const Ref<MLPPMatrix> &weights, real_t C) {
+	MLPPLinAlg alg;
+	MLPPReg regularization;
+
+	return C * hinge_lossm(y_hat, y) + regularization.reg_termv(weights, 1, 0, MLPPReg::REGULARIZATION_TYPE_RIDGE);
+}
+
+Ref<MLPPVector> MLPPCost::hinge_loss_derivwv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y, real_t C) {
+	MLPPLinAlg alg;
+	MLPPReg regularization;
+
+	return alg.scalar_multiplynv(C, hinge_loss_derivv(y_hat, y));
+}
+Ref<MLPPMatrix> MLPPCost::hinge_loss_derivwm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y, real_t C) {
+	MLPPLinAlg alg;
+	MLPPReg regularization;
+
+	return alg.scalar_multiplym(C, hinge_loss_derivm(y_hat, y));
+}
+
+real_t MLPPCost::wasserstein_lossv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	int y_hat_size = y_hat->size();
+
+	ERR_FAIL_COND_V(y_hat_size != y->size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_size; ++i) {
+		sum += y_hat_ptr[i] * y_ptr[i];
+	}
+
+	return -sum / static_cast<real_t>(y_hat_size);
+}
+real_t MLPPCost::wasserstein_lossm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	int y_hat_data_size = y_hat->data_size();
+
+	ERR_FAIL_COND_V(y_hat_data_size != y->data_size(), 0);
+
+	const real_t *y_hat_ptr = y_hat->ptr();
+	const real_t *y_ptr = y->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < y_hat_data_size; ++i) {
+		sum += y_hat_ptr[i] * y_ptr[i];
+	}
+
+	return -sum / static_cast<real_t>(y_hat_data_size);
+}
+
+Ref<MLPPVector> MLPPCost::wasserstein_loss_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	MLPPLinAlg alg;
+
+	return alg.scalar_multiplynv(-1, y); // Simple.
+}
+Ref<MLPPMatrix> MLPPCost::wasserstein_loss_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	MLPPLinAlg alg;
+
+	return alg.scalar_multiplym(-1, y); // Simple.
+}
+
+real_t MLPPCost::dual_form_svm(const Ref<MLPPVector> &alpha, const Ref<MLPPMatrix> &X, const Ref<MLPPVector> &y) {
+	MLPPLinAlg alg;
+
+	Ref<MLPPMatrix> Y = alg.diagm(y); // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
+	Ref<MLPPMatrix> K = alg.matmultm(X, alg.transposem(X)); // TO DO: DON'T forget to add non-linear kernelizations.
+	Ref<MLPPMatrix> Q = alg.matmultm(alg.matmultm(alg.transposem(Y), K), Y);
+
+	Ref<MLPPMatrix> alpha_m;
+	alpha_m.instance();
+	alpha_m->resize(Size2i(alpha->size(), 1));
+	alpha_m->set_row_mlpp_vector(0, alpha);
+
+	Ref<MLPPMatrix> alpha_m_res = alg.matmultm(alg.matmultm(alpha_m, Q), alg.transposem(alpha_m));
+
+	real_t alphaQ = alpha_m_res->get_element(0, 0);
+	Ref<MLPPVector> one = alg.onevecv(alpha->size());
+
+	return -alg.dotv(one, alpha) + 0.5 * alphaQ;
+}
+
+Ref<MLPPVector> MLPPCost::dual_form_svm_deriv(const Ref<MLPPVector> &alpha, const Ref<MLPPMatrix> &X, const Ref<MLPPVector> &y) {
+	MLPPLinAlg alg;
+
+	Ref<MLPPMatrix> Y = alg.diagm(y); // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
+	Ref<MLPPMatrix> K = alg.matmultm(X, alg.transposem(X)); // TO DO: DON'T forget to add non-linear kernelizations.
+	Ref<MLPPMatrix> Q = alg.matmultm(alg.matmultm(alg.transposem(Y), K), Y);
+	Ref<MLPPVector> alphaQDeriv = alg.mat_vec_multv(Q, alpha);
+	Ref<MLPPVector> one = alg.onevecv(alpha->size());
+
+	return alg.subtractionm(alphaQDeriv, one);
+}
+
+// ======  OLD  ======
 
 real_t MLPPCost::MSE(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	real_t sum = 0;

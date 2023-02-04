@@ -1867,6 +1867,21 @@ real_t MLPPLinAlg::dot(std::vector<real_t> a, std::vector<real_t> b) {
 	return c;
 }
 
+real_t MLPPLinAlg::dotv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	int a_size = a->size();
+
+	ERR_FAIL_COND_V(a_size != b->size(), 0);
+
+	const real_t *a_ptr = a->ptr();
+	const real_t *b_ptr = b->ptr();
+
+	real_t c = 0;
+	for (int i = 0; i < a_size; ++i) {
+		c += a_ptr[i] * b_ptr[i];
+	}
+	return c;
+}
+
 std::vector<real_t> MLPPLinAlg::cross(std::vector<real_t> a, std::vector<real_t> b) {
 	// Cross products exist in R^7 also. Though, I will limit it to R^3 as Wolfram does this.
 	std::vector<std::vector<real_t>> mat = { onevec(3), a, b };
@@ -1902,6 +1917,25 @@ std::vector<std::vector<real_t>> MLPPLinAlg::diag(std::vector<real_t> a) {
 	for (int i = 0; i < B.size(); i++) {
 		B[i][i] = a[i];
 	}
+	return B;
+}
+
+Ref<MLPPVector> MLPPLinAlg::diagm(const Ref<MLPPVector> &a) {
+	int a_size = a->size();
+
+	Ref<MLPPMatrix> B;
+	B.instance();
+
+	B->resize(Size2i(a_size, a_size));
+	B->fill(0);
+
+	const real_t *a_ptr = a->ptr();
+	real_t *b_ptr = B->ptrw();
+
+	for (int i = 0; i < a_size; ++i) {
+		b_ptr[B->calculate_index(i, i)] = a_ptr[i];
+	}
+
 	return B;
 }
 

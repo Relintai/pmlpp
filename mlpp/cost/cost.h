@@ -10,11 +10,85 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
 #include <vector>
 
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
 
-class MLPPCost {
+//void set_weights(const Ref<MLPPMatrix> &val);
+//void set_bias(const Ref<MLPPVector> &val);
+
+class MLPPCost : public Reference {
+	GDCLASS(MLPPCost, Reference);
+
 public:
+	real_t msev(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	real_t msem(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	Ref<MLPPVector> mse_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	Ref<MLPPMatrix> mse_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	real_t rmsev(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	real_t rmsem(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	Ref<MLPPVector> rmse_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	Ref<MLPPMatrix> rmse_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	real_t maev(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	real_t maem(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	Ref<MLPPVector> mae_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	Ref<MLPPMatrix> mae_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	real_t mbev(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	real_t mbem(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	Ref<MLPPVector> mbe_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	Ref<MLPPMatrix> mbe_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	// Classification Costs
+	real_t log_lossv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	real_t log_lossm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	Ref<MLPPVector> log_loss_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	Ref<MLPPMatrix> log_loss_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	real_t cross_entropyv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	real_t cross_entropym(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	Ref<MLPPVector> cross_entropy_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	Ref<MLPPMatrix> cross_entropy_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	real_t huber_lossv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y, real_t delta);
+	real_t huber_lossm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y, real_t delta);
+
+	Ref<MLPPVector> huber_loss_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y, real_t delta);
+	Ref<MLPPMatrix> huber_loss_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y, real_t delta);
+
+	real_t hinge_lossv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	real_t hinge_lossm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	Ref<MLPPVector> hinge_loss_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	Ref<MLPPMatrix> hinge_loss_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	real_t hinge_losswv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y, const Ref<MLPPVector> &weights, real_t C);
+	real_t hinge_losswm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y, const Ref<MLPPMatrix> &weights, real_t C);
+
+	Ref<MLPPVector> hinge_loss_derivwv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y, real_t C);
+	Ref<MLPPMatrix> hinge_loss_derivwm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y, real_t C);
+
+	real_t wasserstein_lossv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	real_t wasserstein_lossm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	Ref<MLPPVector> wasserstein_loss_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
+	Ref<MLPPMatrix> wasserstein_loss_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
+
+	real_t dual_form_svm(const Ref<MLPPVector> &alpha, const Ref<MLPPMatrix> &X, const Ref<MLPPVector> &y); // TO DO: DON'T forget to add non-linear kernelizations.
+
+	Ref<MLPPVector> dual_form_svm_deriv(const Ref<MLPPVector> &alpha, const Ref<MLPPMatrix> &X, const Ref<MLPPVector> &y);
+
 	// Regression Costs
 	real_t MSE(std::vector<real_t> y_hat, std::vector<real_t> y);
 	real_t MSE(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y);
@@ -80,9 +154,6 @@ public:
 	real_t dualFormSVM(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y); // TO DO: DON'T forget to add non-linear kernelizations.
 
 	std::vector<real_t> dualFormSVMDeriv(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y);
-
-private:
 };
-
 
 #endif /* Cost_hpp */
