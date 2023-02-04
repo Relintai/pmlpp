@@ -73,6 +73,24 @@ public:
 	static std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<std::vector<real_t>>> createMiniBatches(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int n_mini_batch);
 	static std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<std::vector<std::vector<real_t>>>> createMiniBatches(std::vector<std::vector<real_t>> inputSet, std::vector<std::vector<real_t>> outputSet, int n_mini_batch);
 
+	struct CreateMiniBatchMVBatch {
+		Vector<Ref<MLPPMatrix>> input_sets;
+		Vector<Ref<MLPPVector>> output_sets;
+	};
+
+	struct CreateMiniBatchMMBatch {
+		Vector<Ref<MLPPMatrix>> input_sets;
+		Vector<Ref<MLPPMatrix>> output_sets;
+	};
+
+	static Vector<Ref<MLPPMatrix>> create_mini_batchesm(const Ref<MLPPMatrix> &input_set, int n_mini_batch);
+	static CreateMiniBatchMVBatch create_mini_batchesmv(const Ref<MLPPMatrix> &input_set, const Ref<MLPPVector> &output_set, int n_mini_batch);
+	static CreateMiniBatchMMBatch create_mini_batchesmm(const Ref<MLPPMatrix> &input_set, const Ref<MLPPMatrix> &output_set, int n_mini_batch);
+
+	Array create_mini_batchesm_bind(const Ref<MLPPMatrix> &input_set, int n_mini_batch);
+	Array create_mini_batchesmv_bind(const Ref<MLPPMatrix> &input_set, const Ref<MLPPVector> &output_set, int n_mini_batch);
+	Array create_mini_batchesmm_bind(const Ref<MLPPMatrix> &input_set, const Ref<MLPPMatrix> &output_set, int n_mini_batch);
+
 	// F1 score, Precision/Recall, TP, FP, TN, FN, etc.
 	std::tuple<real_t, real_t, real_t, real_t> TF_PN(std::vector<real_t> y_hat, std::vector<real_t> y); //TF_PN = "True", "False", "Positive", "Negative"
 	real_t recall(std::vector<real_t> y_hat, std::vector<real_t> y);
