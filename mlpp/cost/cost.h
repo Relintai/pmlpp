@@ -154,6 +154,9 @@ public:
 	real_t dualFormSVM(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y); // TO DO: DON'T forget to add non-linear kernelizations.
 
 	std::vector<real_t> dualFormSVMDeriv(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y);
+
+protected:
+	static void _bind_methods();
 };
 
 #endif /* Cost_hpp */

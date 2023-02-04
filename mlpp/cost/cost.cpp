@@ -980,3 +980,68 @@ std::vector<real_t> MLPPCost::dualFormSVMDeriv(std::vector<real_t> alpha, std::v
 
 	return alg.subtraction(alphaQDeriv, one);
 }
+
+void MLPPCost::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("msev", "y_hat", "y"), &MLPPCost::msev);
+	ClassDB::bind_method(D_METHOD("msem", "y_hat", "y"), &MLPPCost::msem);
+
+	ClassDB::bind_method(D_METHOD("mse_derivv", "y_hat", "y"), &MLPPCost::mse_derivv);
+	ClassDB::bind_method(D_METHOD("mse_derivm", "y_hat", "y"), &MLPPCost::mse_derivm);
+
+	ClassDB::bind_method(D_METHOD("rmsev", "y_hat", "y"), &MLPPCost::rmsev);
+	ClassDB::bind_method(D_METHOD("rmsem", "y_hat", "y"), &MLPPCost::rmsem);
+
+	ClassDB::bind_method(D_METHOD("rmse_derivv", "y_hat", "y"), &MLPPCost::rmse_derivv);
+	ClassDB::bind_method(D_METHOD("rmse_derivm", "y_hat", "y"), &MLPPCost::rmse_derivm);
+
+	ClassDB::bind_method(D_METHOD("maev", "y_hat", "y"), &MLPPCost::maev);
+	ClassDB::bind_method(D_METHOD("maem", "y_hat", "y"), &MLPPCost::maem);
+
+	ClassDB::bind_method(D_METHOD("mae_derivv", "y_hat", "y"), &MLPPCost::mae_derivv);
+	ClassDB::bind_method(D_METHOD("mae_derivm", "y_hat", "y"), &MLPPCost::mae_derivm);
+
+	ClassDB::bind_method(D_METHOD("mbev", "y_hat", "y"), &MLPPCost::mbev);
+	ClassDB::bind_method(D_METHOD("mbem", "y_hat", "y"), &MLPPCost::mbem);
+
+	ClassDB::bind_method(D_METHOD("mbe_derivv", "y_hat", "y"), &MLPPCost::mbe_derivv);
+	ClassDB::bind_method(D_METHOD("mbe_derivm", "y_hat", "y"), &MLPPCost::mbe_derivm);
+
+	ClassDB::bind_method(D_METHOD("log_lossv", "y_hat", "y"), &MLPPCost::log_lossv);
+	ClassDB::bind_method(D_METHOD("log_lossm", "y_hat", "y"), &MLPPCost::log_lossm);
+
+	ClassDB::bind_method(D_METHOD("log_loss_derivv", "y_hat", "y"), &MLPPCost::log_loss_derivv);
+	ClassDB::bind_method(D_METHOD("log_loss_derivm", "y_hat", "y"), &MLPPCost::log_loss_derivm);
+
+	ClassDB::bind_method(D_METHOD("cross_entropyv", "y_hat", "y"), &MLPPCost::cross_entropyv);
+	ClassDB::bind_method(D_METHOD("cross_entropym", "y_hat", "y"), &MLPPCost::cross_entropym);
+
+	ClassDB::bind_method(D_METHOD("cross_entropy_derivv", "y_hat", "y"), &MLPPCost::cross_entropy_derivv);
+	ClassDB::bind_method(D_METHOD("cross_entropy_derivm", "y_hat", "y"), &MLPPCost::cross_entropy_derivm);
+
+	ClassDB::bind_method(D_METHOD("huber_lossv", "y_hat", "y"), &MLPPCost::huber_lossv);
+	ClassDB::bind_method(D_METHOD("huber_lossm", "y_hat", "y"), &MLPPCost::huber_lossm);
+
+	ClassDB::bind_method(D_METHOD("huber_loss_derivv", "y_hat", "y"), &MLPPCost::huber_loss_derivv);
+	ClassDB::bind_method(D_METHOD("huber_loss_derivm", "y_hat", "y"), &MLPPCost::huber_loss_derivm);
+
+	ClassDB::bind_method(D_METHOD("hinge_lossv", "y_hat", "y"), &MLPPCost::hinge_lossv);
+	ClassDB::bind_method(D_METHOD("hinge_lossm", "y_hat", "y"), &MLPPCost::hinge_lossm);
+
+	ClassDB::bind_method(D_METHOD("hinge_loss_derivv", "y_hat", "y"), &MLPPCost::hinge_loss_derivv);
+	ClassDB::bind_method(D_METHOD("hinge_loss_derivm", "y_hat", "y"), &MLPPCost::hinge_loss_derivm);
+
+	ClassDB::bind_method(D_METHOD("hinge_losswv", "y_hat", "y"), &MLPPCost::hinge_losswv);
+	ClassDB::bind_method(D_METHOD("hinge_losswm", "y_hat", "y"), &MLPPCost::hinge_losswm);
+
+	ClassDB::bind_method(D_METHOD("hinge_loss_derivwv", "y_hat", "y", "C"), &MLPPCost::hinge_loss_derivwv);
+	ClassDB::bind_method(D_METHOD("hinge_loss_derivwm", "y_hat", "y", "C"), &MLPPCost::hinge_loss_derivwm);
+
+	ClassDB::bind_method(D_METHOD("wasserstein_lossv", "y_hat", "y"), &MLPPCost::wasserstein_lossv);
+	ClassDB::bind_method(D_METHOD("wasserstein_lossm", "y_hat", "y"), &MLPPCost::wasserstein_lossm);
+
+	ClassDB::bind_method(D_METHOD("wasserstein_loss_derivv", "y_hat", "y"), &MLPPCost::wasserstein_loss_derivv);
+	ClassDB::bind_method(D_METHOD("wasserstein_loss_derivm", "y_hat", "y"), &MLPPCost::wasserstein_loss_derivm);
+
+	ClassDB::bind_method(D_METHOD("dual_form_svm", "alpha", "X", "y"), &MLPPCost::dual_form_svm);
+	ClassDB::bind_method(D_METHOD("dual_form_svm_deriv", "alpha", "X", "y"), &MLPPCost::dual_form_svm_deriv);
+}
