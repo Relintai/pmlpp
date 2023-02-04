@@ -585,6 +585,186 @@ Ref<MLPPVector> MLPPCost::dual_form_svm_deriv(const Ref<MLPPVector> &alpha, cons
 	return alg.subtractionm(alphaQDeriv, one);
 }
 
+MLPPCost::VectorCostFunctionPointer MLPPCost::get_cost_function_ptr_normal_vector(const MLPPCost::CostTypes cost) {
+	switch (cost) {
+		case COST_TYPE_MSE:
+			return &MLPPCost::msev;
+		case COST_TYPE_RMSE:
+			return &MLPPCost::rmsev;
+		case COST_TYPE_MAE:
+			return &MLPPCost::maev;
+		case COST_TYPE_MBE:
+			return &MLPPCost::mbev;
+		case COST_TYPE_LOGISTIC_LOSS:
+			return &MLPPCost::log_lossv;
+		case COST_TYPE_CROSS_ENTROPY:
+			return &MLPPCost::cross_entropyv;
+		case COST_TYPE_HINGE_LOSS:
+			return &MLPPCost::hinge_lossv;
+		case COST_TYPE_WASSERSTEIN_LOSS:
+			return &MLPPCost::wasserstein_lossv;
+		default:
+			return NULL;
+	}
+}
+MLPPCost::MatrixCostFunctionPointer MLPPCost::get_cost_function_ptr_normal_matrix(const MLPPCost::CostTypes cost) {
+	switch (cost) {
+		case COST_TYPE_MSE:
+			return &MLPPCost::msem;
+		case COST_TYPE_RMSE:
+			return &MLPPCost::rmsem;
+		case COST_TYPE_MAE:
+			return &MLPPCost::maem;
+		case COST_TYPE_MBE:
+			return &MLPPCost::mbem;
+		case COST_TYPE_LOGISTIC_LOSS:
+			return &MLPPCost::log_lossm;
+		case COST_TYPE_CROSS_ENTROPY:
+			return &MLPPCost::cross_entropym;
+		case COST_TYPE_HINGE_LOSS:
+			return &MLPPCost::hinge_lossm;
+		case COST_TYPE_WASSERSTEIN_LOSS:
+			return &MLPPCost::wasserstein_lossm;
+		default:
+			return NULL;
+	}
+}
+
+MLPPCost::VectorDerivCostFunctionPointer MLPPCost::get_cost_function_ptr_deriv_vector(const MLPPCost::CostTypes cost) {
+	switch (cost) {
+		case COST_TYPE_MSE:
+			return &MLPPCost::mse_derivv;
+		case COST_TYPE_RMSE:
+			return &MLPPCost::rmse_derivv;
+		case COST_TYPE_MAE:
+			return &MLPPCost::mae_derivv;
+		case COST_TYPE_MBE:
+			return &MLPPCost::mbe_derivv;
+		case COST_TYPE_LOGISTIC_LOSS:
+			return &MLPPCost::log_loss_derivv;
+		case COST_TYPE_CROSS_ENTROPY:
+			return &MLPPCost::cross_entropy_derivv;
+		case COST_TYPE_HINGE_LOSS:
+			return &MLPPCost::hinge_loss_derivv;
+		case COST_TYPE_WASSERSTEIN_LOSS:
+			return &MLPPCost::wasserstein_loss_derivv;
+		default:
+			return NULL;
+	}
+}
+MLPPCost::MatrixDerivCostFunctionPointer MLPPCost::get_cost_function_ptr_deriv_matrix(const MLPPCost::CostTypes cost) {
+	switch (cost) {
+		case COST_TYPE_MSE:
+			return &MLPPCost::mse_derivm;
+		case COST_TYPE_RMSE:
+			return &MLPPCost::rmse_derivm;
+		case COST_TYPE_MAE:
+			return &MLPPCost::mae_derivm;
+		case COST_TYPE_MBE:
+			return &MLPPCost::mbe_derivm;
+		case COST_TYPE_LOGISTIC_LOSS:
+			return &MLPPCost::log_loss_derivm;
+		case COST_TYPE_CROSS_ENTROPY:
+			return &MLPPCost::cross_entropy_derivm;
+		case COST_TYPE_HINGE_LOSS:
+			return &MLPPCost::hinge_loss_derivm;
+		case COST_TYPE_WASSERSTEIN_LOSS:
+			return &MLPPCost::wasserstein_loss_derivm;
+		default:
+			return NULL;
+	}
+}
+
+real_t MLPPCost::run_cost_norm_vector(const CostTypes cost, const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	switch (cost) {
+		case COST_TYPE_MSE:
+			return msev(y_hat, y);
+		case COST_TYPE_RMSE:
+			return rmsev(y_hat, y);
+		case COST_TYPE_MAE:
+			return maev(y_hat, y);
+		case COST_TYPE_MBE:
+			return mbev(y_hat, y);
+		case COST_TYPE_LOGISTIC_LOSS:
+			return log_lossv(y_hat, y);
+		case COST_TYPE_CROSS_ENTROPY:
+			return cross_entropyv(y_hat, y);
+		case COST_TYPE_HINGE_LOSS:
+			return hinge_lossv(y_hat, y);
+		case COST_TYPE_WASSERSTEIN_LOSS:
+			return wasserstein_lossv(y_hat, y);
+		default:
+			return 0;
+	}
+}
+real_t MLPPCost::run_cost_norm_matrix(const CostTypes cost, const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	switch (cost) {
+		case COST_TYPE_MSE:
+			return msem(y_hat, y);
+		case COST_TYPE_RMSE:
+			return rmsem(y_hat, y);
+		case COST_TYPE_MAE:
+			return maem(y_hat, y);
+		case COST_TYPE_MBE:
+			return mbem(y_hat, y);
+		case COST_TYPE_LOGISTIC_LOSS:
+			return log_lossm(y_hat, y);
+		case COST_TYPE_CROSS_ENTROPY:
+			return cross_entropym(y_hat, y);
+		case COST_TYPE_HINGE_LOSS:
+			return hinge_lossm(y_hat, y);
+		case COST_TYPE_WASSERSTEIN_LOSS:
+			return wasserstein_lossm(y_hat, y);
+		default:
+			return 0;
+	}
+}
+
+Ref<MLPPVector> MLPPCost::run_cost_deriv_vector(const CostTypes cost, const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
+	switch (cost) {
+		case COST_TYPE_MSE:
+			return mse_derivv(y_hat, y);
+		case COST_TYPE_RMSE:
+			return rmse_derivv(y_hat, y);
+		case COST_TYPE_MAE:
+			return mae_derivv(y_hat, y);
+		case COST_TYPE_MBE:
+			return mbe_derivv(y_hat, y);
+		case COST_TYPE_LOGISTIC_LOSS:
+			return log_loss_derivv(y_hat, y);
+		case COST_TYPE_CROSS_ENTROPY:
+			return cross_entropy_derivv(y_hat, y);
+		case COST_TYPE_HINGE_LOSS:
+			return hinge_loss_derivv(y_hat, y);
+		case COST_TYPE_WASSERSTEIN_LOSS:
+			return wasserstein_loss_derivv(y_hat, y);
+		default:
+			return Ref<MLPPVector>();
+	}
+}
+Ref<MLPPMatrix> MLPPCost::run_cost_deriv_matrix(const CostTypes cost, const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
+	switch (cost) {
+		case COST_TYPE_MSE:
+			return mse_derivm(y_hat, y);
+		case COST_TYPE_RMSE:
+			return rmse_derivm(y_hat, y);
+		case COST_TYPE_MAE:
+			return mae_derivm(y_hat, y);
+		case COST_TYPE_MBE:
+			return mbe_derivm(y_hat, y);
+		case COST_TYPE_LOGISTIC_LOSS:
+			return log_loss_derivm(y_hat, y);
+		case COST_TYPE_CROSS_ENTROPY:
+			return cross_entropy_derivm(y_hat, y);
+		case COST_TYPE_HINGE_LOSS:
+			return hinge_loss_derivm(y_hat, y);
+		case COST_TYPE_WASSERSTEIN_LOSS:
+			return wasserstein_loss_derivm(y_hat, y);
+		default:
+			return Ref<MLPPMatrix>();
+	}
+}
+
 // ======  OLD  ======
 
 real_t MLPPCost::MSE(std::vector<real_t> y_hat, std::vector<real_t> y) {
@@ -1044,4 +1224,19 @@ void MLPPCost::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("dual_form_svm", "alpha", "X", "y"), &MLPPCost::dual_form_svm);
 	ClassDB::bind_method(D_METHOD("dual_form_svm_deriv", "alpha", "X", "y"), &MLPPCost::dual_form_svm_deriv);
+
+	ClassDB::bind_method(D_METHOD("run_cost_norm_vector", "cost", "y_hat", "y"), &MLPPCost::run_cost_norm_vector);
+	ClassDB::bind_method(D_METHOD("run_cost_norm_matrix", "cost", "y_hat", "y"), &MLPPCost::run_cost_norm_matrix);
+
+	ClassDB::bind_method(D_METHOD("run_cost_deriv_vector", "cost", "y_hat", "y"), &MLPPCost::run_cost_deriv_vector);
+	ClassDB::bind_method(D_METHOD("run_cost_deriv_matrix", "cost", "y_hat", "y"), &MLPPCost::run_cost_deriv_matrix);
+
+	BIND_ENUM_CONSTANT(COST_TYPE_MSE);
+	BIND_ENUM_CONSTANT(COST_TYPE_RMSE);
+	BIND_ENUM_CONSTANT(COST_TYPE_MAE);
+	BIND_ENUM_CONSTANT(COST_TYPE_MBE);
+	BIND_ENUM_CONSTANT(COST_TYPE_LOGISTIC_LOSS);
+	BIND_ENUM_CONSTANT(COST_TYPE_CROSS_ENTROPY);
+	BIND_ENUM_CONSTANT(COST_TYPE_HINGE_LOSS);
+	BIND_ENUM_CONSTANT(COST_TYPE_WASSERSTEIN_LOSS);
 }
