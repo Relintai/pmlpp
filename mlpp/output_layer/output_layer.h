@@ -35,6 +35,9 @@ public:
 	MLPPActivation::ActivationFunction get_activation();
 	void set_activation(const MLPPActivation::ActivationFunction val);
 
+	MLPPCost::CostTypes get_cost();
+	void set_cost(const MLPPCost::CostTypes val);
+
 	Ref<MLPPMatrix> get_input();
 	void set_input(const Ref<MLPPMatrix> &val);
 
@@ -84,7 +87,7 @@ protected:
 
 	int n_hidden;
 	MLPPActivation::ActivationFunction activation;
-	std::string cost;
+	MLPPCost::CostTypes cost;
 
 	Ref<MLPPMatrix> input;
 
@@ -105,9 +108,6 @@ protected:
 	real_t alpha; /* This is the controlling param for Elastic Net*/
 
 	MLPPUtilities::WeightDistributionType weight_init;
-
-	//std::map<std::string, real_t (MLPPCost::*)(std::vector<real_t>, std::vector<real_t>)> cost_map;
-	//std::map<std::string, std::vector<real_t> (MLPPCost::*)(std::vector<real_t>, std::vector<real_t>)> costDeriv_map;
 };
 
 class MLPPOldOutputLayer {

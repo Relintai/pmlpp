@@ -25,6 +25,13 @@ void MLPPOutputLayer::set_activation(const MLPPActivation::ActivationFunction va
 	activation = val;
 }
 
+MLPPCost::CostTypes MLPPOutputLayer::get_cost() {
+	return cost;
+}
+void MLPPOutputLayer::set_cost(const MLPPCost::CostTypes val) {
+	cost = val;
+}
+
 Ref<MLPPMatrix> MLPPOutputLayer::get_input() {
 	return input;
 }
@@ -113,16 +120,16 @@ void MLPPOutputLayer::forward_pass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	//z = alg.mat_vec_addv(alg.matmultm(input, weights), bias);
-	//a = avn.run_activation_norm_matrix(activation, z);
+	z = alg.scalar_addnv(bias, alg.mat_vec_multv(input, weights));
+	a = avn.run_activation_norm_vector(activation, z);
 }
 
 void MLPPOutputLayer::test(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	//z_test = alg.additionm(alg.mat_vec_multv(alg.transposem(weights), x), bias);
-	//a_test = avn.run_activation_norm_matrix(activation, z_test);
+	z_test = alg.dotv(weights, x) + bias;
+	a_test = avn.run_activation_norm_vector(activation, z_test);
 }
 
 MLPPOutputLayer::MLPPOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
@@ -149,13 +156,12 @@ MLPPOutputLayer::MLPPOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunct
 	weights.instance();
 	bias = 0;
 
-	//weights->resize(Size2i(input->size().x, n_hidden));
-	//bias->resize(n_hidden);
+	weights->resize(n_hidden);
 
-	//MLPPUtilities utils;
+	MLPPUtilities utils;
 
-	//utils.weight_initializationm(weights, weight_init);
-	//utils.bias_initializationv(bias);
+	utils.weight_initializationv(weights, weight_init);
+	bias = utils.bias_initializationr();
 }
 
 MLPPOutputLayer::MLPPOutputLayer() {
@@ -191,6 +197,10 @@ void MLPPOutputLayer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_activation"), &MLPPOutputLayer::get_activation);
 	ClassDB::bind_method(D_METHOD("set_activation", "val"), &MLPPOutputLayer::set_activation);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "activation"), "set_activation", "get_activation");
+
+	ClassDB::bind_method(D_METHOD("get_cost"), &MLPPOutputLayer::get_cost);
+	ClassDB::bind_method(D_METHOD("set_cost", "val"), &MLPPOutputLayer::set_cost);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "cost"), "set_cost", "get_cost");
 
 	ClassDB::bind_method(D_METHOD("get_input"), &MLPPOutputLayer::get_input);
 	ClassDB::bind_method(D_METHOD("set_input", "val"), &MLPPOutputLayer::set_input);
@@ -244,8 +254,16 @@ void MLPPOutputLayer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("test", "x"), &MLPPOutputLayer::test);
 }
 
-MLPPOldOutputLayer::MLPPOldOutputLayer(int n_hidden, std::string activation, std::string cost, std::vector<std::vector<real_t>> input, std::string weightInit, std::string reg, real_t lambda, real_t alpha) :
-		n_hidden(n_hidden), activation(activation), cost(cost), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
+MLPPOldOutputLayer::MLPPOldOutputLayer(int p_n_hidden, std::string p_activation, std::string p_cost, std::vector<std::vector<real_t>> p_input, std::string p_weightInit, std::string p_reg, real_t p_lambda, real_t p_alpha) {
+	n_hidden = p_n_hidden;
+	activation = p_activation;
+	cost = p_cost;
+	input = p_input;
+	weightInit = p_weightInit;
+	reg = p_reg;
+	lambda = p_lambda;
+	alpha = p_alpha;
+
 	weights = MLPPUtilities::weightInitialization(n_hidden, weightInit);
 	bias = MLPPUtilities::biasInitialization();
 
@@ -349,12 +367,12 @@ void MLPPOldOutputLayer::forwardPass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z = alg.scalarAdd(bias, alg.mat_vec_mult(input, weights));
-	a = (avn.*activation_map[activation])(z, 0);
+	a = (avn.*activation_map[activation])(z, false);
 }
 
 void MLPPOldOutputLayer::Test(std::vector<real_t> x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 	z_test = alg.dot(weights, x) + bias;
-	a_test = (avn.*activationTest_map[activation])(z_test, 0);
+	a_test = (avn.*activationTest_map[activation])(z_test, false);
 }
