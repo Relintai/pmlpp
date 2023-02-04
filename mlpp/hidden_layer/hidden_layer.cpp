@@ -244,8 +244,15 @@ void MLPPHiddenLayer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("test", "x"), &MLPPHiddenLayer::test);
 }
 
-MLPPOldHiddenLayer::MLPPOldHiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<real_t>> input, std::string weightInit, std::string reg, real_t lambda, real_t alpha) :
-		n_hidden(n_hidden), activation(activation), input(input), weightInit(weightInit), reg(reg), lambda(lambda), alpha(alpha) {
+MLPPOldHiddenLayer::MLPPOldHiddenLayer(int p_n_hidden, std::string p_activation, std::vector<std::vector<real_t>> p_input, std::string p_weightInit, std::string p_reg, real_t p_lambda, real_t p_alpha) {
+	n_hidden = p_n_hidden;
+	activation = p_activation;
+	input = p_input;
+	weightInit = p_weightInit;
+	reg = p_reg;
+	lambda = p_lambda;
+	alpha = p_alpha;
+
 	weights = MLPPUtilities::weightInitialization(input[0].size(), n_hidden, weightInit);
 	bias = MLPPUtilities::biasInitialization(n_hidden);
 
