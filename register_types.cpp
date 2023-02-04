@@ -33,6 +33,7 @@ SOFTWARE.
 #include "mlpp/utilities/utilities.h"
 
 #include "mlpp/hidden_layer/hidden_layer.h"
+#include "mlpp/multi_output_layer/multi_output_layer.h"
 #include "mlpp/output_layer/output_layer.h"
 
 #include "mlpp/kmeans/kmeans.h"
@@ -52,6 +53,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 
 		ClassDB::register_class<MLPPHiddenLayer>();
 		ClassDB::register_class<MLPPOutputLayer>();
+		ClassDB::register_class<MLPPMultiOutputLayer>();
 
 		ClassDB::register_class<MLPPKNN>();
 		ClassDB::register_class<MLPPKMeans>();
