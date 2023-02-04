@@ -154,6 +154,7 @@ void MLPPReg::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("reg_deriv_termv", "weights", "lambda", "alpha", "reg"), &MLPPReg::reg_deriv_termv);
 	ClassDB::bind_method(D_METHOD("reg_deriv_termm", "weights", "lambda", "alpha", "reg"), &MLPPReg::reg_deriv_termm);
 
+	BIND_ENUM_CONSTANT(REGULARIZATION_TYPE_NONE);
 	BIND_ENUM_CONSTANT(REGULARIZATION_TYPE_RIDGE);
 	BIND_ENUM_CONSTANT(REGULARIZATION_TYPE_LASSO);
 	BIND_ENUM_CONSTANT(REGULARIZATION_TYPE_ELASTIC_NET);

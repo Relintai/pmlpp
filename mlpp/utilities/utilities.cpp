@@ -478,6 +478,36 @@ void MLPPUtilities::UI(std::vector<real_t> weights, std::vector<real_t> initial,
 	std::cout << bias << std::endl;
 }
 
+void MLPPUtilities::print_ui_vb(Ref<MLPPVector> weights, real_t bias) {
+	String str = "Values of the weight(s):\n";
+	str += weights->to_string();
+	str += "\nValue of the bias:\n";
+	str += String::num(bias);
+
+	PLOG_MSG(str);
+}
+void MLPPUtilities::print_ui_vib(Ref<MLPPVector> weights, Ref<MLPPVector> initial, real_t bias) {
+	String str = "Values of the weight(s):\n";
+	str += weights->to_string();
+
+	str += "\nValues of the initial(s):\n";
+	str += initial->to_string();
+
+	str += "\nValue of the bias:\n";
+	str += String::num(bias);
+
+	PLOG_MSG(str);
+}
+void MLPPUtilities::print_ui_mb(Ref<MLPPMatrix> weights, Ref<MLPPVector> bias) {
+	String str = "Values of the weight(s):\n";
+	str += weights->to_string();
+
+	str += "\nValue of the biased:\n";
+	str += bias->to_string();
+
+	PLOG_MSG(str);
+}
+
 void MLPPUtilities::CostInfo(int epoch, real_t cost_prev, real_t Cost) {
 	std::cout << "-----------------------------------" << std::endl;
 	std::cout << "This is epoch: " << epoch << std::endl;

@@ -1410,6 +1410,26 @@ std::vector<std::vector<real_t>> MLPPLinAlg::outerProduct(std::vector<real_t> a,
 	return C;
 }
 
+Ref<MLPPMatrix> MLPPLinAlg::outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	Ref<MLPPMatrix> C;
+	C.instance();
+	Size2i size = Size2i(a->size(), b->size());
+	C->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	const real_t *b_ptr = b->ptr();
+
+	for (int i = 0; i < size.y; ++i) {
+		real_t curr_a = a_ptr[i];
+
+		for (int j = 0; j < size.x; ++j) {
+			C->set_element(i, j, curr_a * b_ptr[j]);
+		}
+	}
+
+	return C;
+}
+
 std::vector<real_t> MLPPLinAlg::hadamard_product(std::vector<real_t> a, std::vector<real_t> b) {
 	std::vector<real_t> c;
 	c.resize(a.size());
@@ -1692,6 +1712,25 @@ std::vector<real_t> MLPPLinAlg::subtractMatrixRows(std::vector<real_t> a, std::v
 		a = subtraction(a, B[i]);
 	}
 	return a;
+}
+
+Ref<MLPPVector> MLPPLinAlg::subtract_matrix_rows(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B) {
+	Ref<MLPPVector> c = a->duplicate();
+
+	Size2i b_size = B->size();
+
+	ERR_FAIL_COND_V(b_size.x != c->size(), c);
+
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = c->ptrw();
+
+	for (int i = 0; i < b_size.y; ++i) {
+		for (int j = 0; j < b_size.x; ++j) {
+			c_ptr[j] -= b_ptr[B->calculate_index(i, j)];
+		}
+	}
+
+	return c;
 }
 
 std::vector<real_t> MLPPLinAlg::log(std::vector<real_t> a) {
@@ -2178,6 +2217,18 @@ real_t MLPPLinAlg::sum_elements(std::vector<real_t> a) {
 	real_t sum = 0;
 	for (int i = 0; i < a.size(); i++) {
 		sum += a[i];
+	}
+	return sum;
+}
+
+real_t MLPPLinAlg::sum_elementsv(const Ref<MLPPVector> &a) {
+	int a_size = a->size();
+
+	const real_t *a_ptr = a->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < a_size; ++i) {
+		sum += a_ptr[i];
 	}
 	return sum;
 }

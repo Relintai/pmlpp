@@ -373,9 +373,18 @@ public:
 		return ret;
 	}
 
+	_FORCE_INLINE_ void set_from_mlpp_matrix(const Ref<MLPPMatrix> &p_from) {
+		ERR_FAIL_COND(!p_from.is_valid());
+
+		resize(p_from->size());
+		for (int i = 0; i < p_from->data_size(); ++i) {
+			_data[i] = p_from->_data[i];
+		}
+	}
+
 	_FORCE_INLINE_ void set_from_mlpp_matrixr(const MLPPMatrix &p_from) {
 		resize(p_from.size());
-		for (int i = 0; i < p_from.data_size(); i++) {
+		for (int i = 0; i < p_from.data_size(); ++i) {
 			_data[i] = p_from._data[i];
 		}
 	}

@@ -65,7 +65,12 @@ public:
 	// Gradient Descent related
 	static void UI(std::vector<real_t> weights, real_t bias);
 	static void UI(std::vector<real_t> weights, std::vector<real_t> initial, real_t bias);
-	static void UI(std::vector<std::vector<real_t>>, std::vector<real_t> bias);
+	static void UI(std::vector<std::vector<real_t>> weights, std::vector<real_t> bias);
+
+	static void print_ui_vb(Ref<MLPPVector> weights, real_t bias);
+	static void print_ui_vib(Ref<MLPPVector> weights, Ref<MLPPVector> initial, real_t bias);
+	static void print_ui_mb(Ref<MLPPMatrix> weights, Ref<MLPPVector> bias);
+
 	static void CostInfo(int epoch, real_t cost_prev, real_t Cost);
 	static void cost_info(int epoch, real_t cost_prev, real_t cost);
 

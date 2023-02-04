@@ -170,6 +170,7 @@ public:
 	// VECTOR FUNCTIONS
 
 	std::vector<std::vector<real_t>> outerProduct(std::vector<real_t> a, std::vector<real_t> b); // This multiplies a, bT
+	Ref<MLPPMatrix> outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); // This multiplies a, bT
 
 	std::vector<real_t> hadamard_product(std::vector<real_t> a, std::vector<real_t> b);
 	Ref<MLPPVector> hadamard_productnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
@@ -195,6 +196,7 @@ public:
 	void subtractionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
 
 	std::vector<real_t> subtractMatrixRows(std::vector<real_t> a, std::vector<std::vector<real_t>> B);
+	Ref<MLPPVector> subtract_matrix_rows(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B);
 
 	std::vector<real_t> log(std::vector<real_t> a);
 	std::vector<real_t> log10(std::vector<real_t> a);
@@ -256,6 +258,7 @@ public:
 	real_t norm_sqv(const Ref<MLPPVector> &a);
 
 	real_t sum_elements(std::vector<real_t> a);
+	real_t sum_elementsv(const Ref<MLPPVector> &a);
 
 	real_t cosineSimilarity(std::vector<real_t> a, std::vector<real_t> b);
 
