@@ -11,6 +11,104 @@
 #include <iostream>
 #include <random>
 
+int MLPPHiddenLayer::get_n_hidden() {
+	return n_hidden;
+}
+void MLPPHiddenLayer::set_n_hidden(const int val) {
+	n_hidden = val;
+}
+
+MLPPActivation::ActivationFunction MLPPHiddenLayer::get_activation() {
+	return activation;
+}
+void MLPPHiddenLayer::set_activation(const MLPPActivation::ActivationFunction val) {
+	activation = val;
+}
+
+Ref<MLPPMatrix> MLPPHiddenLayer::get_input() {
+	return input;
+}
+void MLPPHiddenLayer::set_input(const Ref<MLPPMatrix> &val) {
+	input = val;
+}
+
+Ref<MLPPMatrix> MLPPHiddenLayer::get_weights() {
+	return weights;
+}
+void MLPPHiddenLayer::set_weights(const Ref<MLPPMatrix> &val) {
+	weights = val;
+}
+
+Ref<MLPPVector> MLPPHiddenLayer::MLPPHiddenLayer::get_bias() {
+	return bias;
+}
+void MLPPHiddenLayer::set_bias(const Ref<MLPPVector> &val) {
+	bias = val;
+}
+
+Ref<MLPPMatrix> MLPPHiddenLayer::get_z() {
+	return z;
+}
+void MLPPHiddenLayer::set_z(const Ref<MLPPMatrix> &val) {
+	z = val;
+}
+
+Ref<MLPPMatrix> MLPPHiddenLayer::get_a() {
+	return a;
+}
+void MLPPHiddenLayer::set_a(const Ref<MLPPMatrix> &val) {
+	a = val;
+}
+
+Ref<MLPPVector> MLPPHiddenLayer::get_z_test() {
+	return z_test;
+}
+void MLPPHiddenLayer::set_z_test(const Ref<MLPPVector> &val) {
+	z_test = val;
+}
+
+Ref<MLPPVector> MLPPHiddenLayer::get_a_test() {
+	return a_test;
+}
+void MLPPHiddenLayer::set_a_test(const Ref<MLPPVector> &val) {
+	a_test = val;
+}
+
+Ref<MLPPMatrix> MLPPHiddenLayer::get_delta() {
+	return delta;
+}
+void MLPPHiddenLayer::set_delta(const Ref<MLPPMatrix> &val) {
+	delta = val;
+}
+
+MLPPReg::RegularizationType MLPPHiddenLayer::get_reg() {
+	return reg;
+}
+void MLPPHiddenLayer::set_reg(const MLPPReg::RegularizationType val) {
+	reg = val;
+}
+
+real_t MLPPHiddenLayer::get_lambda() {
+	return lambda;
+}
+void MLPPHiddenLayer::set_lambda(const real_t val) {
+	lambda = val;
+}
+
+real_t MLPPHiddenLayer::get_alpha() {
+	return alpha;
+}
+void MLPPHiddenLayer::set_alpha(const real_t val) {
+	alpha = val;
+}
+
+MLPPUtilities::WeightDistributionType MLPPHiddenLayer::get_weight_init() {
+	return weight_init;
+}
+void MLPPHiddenLayer::set_weight_init(const MLPPUtilities::WeightDistributionType val) {
+	weight_init = val;
+}
+
 void MLPPHiddenLayer::forward_pass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
@@ -83,6 +181,67 @@ MLPPHiddenLayer::MLPPHiddenLayer() {
 	bias.instance();
 }
 MLPPHiddenLayer::~MLPPHiddenLayer() {
+}
+
+void MLPPHiddenLayer::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_n_hidden"), &MLPPHiddenLayer::get_n_hidden);
+	ClassDB::bind_method(D_METHOD("set_n_hidden", "val"), &MLPPHiddenLayer::set_n_hidden);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "n_hidden"), "set_n_hidden", "get_n_hidden");
+
+	ClassDB::bind_method(D_METHOD("get_activation"), &MLPPHiddenLayer::get_activation);
+	ClassDB::bind_method(D_METHOD("set_activation", "val"), &MLPPHiddenLayer::set_activation);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "activation"), "set_activation", "get_activation");
+
+	ClassDB::bind_method(D_METHOD("get_input"), &MLPPHiddenLayer::get_input);
+	ClassDB::bind_method(D_METHOD("set_input", "val"), &MLPPHiddenLayer::set_input);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "input", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_input", "get_input");
+
+	ClassDB::bind_method(D_METHOD("get_weights"), &MLPPHiddenLayer::get_weights);
+	ClassDB::bind_method(D_METHOD("set_weights", "val"), &MLPPHiddenLayer::set_weights);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "weights", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_weights", "get_weights");
+
+	ClassDB::bind_method(D_METHOD("get_bias"), &MLPPHiddenLayer::get_bias);
+	ClassDB::bind_method(D_METHOD("set_bias", "val"), &MLPPHiddenLayer::set_bias);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "bias", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "set_bias", "get_bias");
+
+	ClassDB::bind_method(D_METHOD("get_z"), &MLPPHiddenLayer::get_z);
+	ClassDB::bind_method(D_METHOD("set_z", "val"), &MLPPHiddenLayer::set_z);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "z", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_z", "get_z");
+
+	ClassDB::bind_method(D_METHOD("get_a"), &MLPPHiddenLayer::get_a);
+	ClassDB::bind_method(D_METHOD("set_a", "val"), &MLPPHiddenLayer::set_a);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "a", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_a", "get_a");
+
+	ClassDB::bind_method(D_METHOD("get_z_test"), &MLPPHiddenLayer::get_z_test);
+	ClassDB::bind_method(D_METHOD("set_z_test", "val"), &MLPPHiddenLayer::set_z_test);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "z_test", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "set_z_test", "get_z_test");
+
+	ClassDB::bind_method(D_METHOD("get_a_test"), &MLPPHiddenLayer::get_a_test);
+	ClassDB::bind_method(D_METHOD("set_a_test", "val"), &MLPPHiddenLayer::set_a_test);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "a_test", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "set_a_test", "get_a_test");
+
+	ClassDB::bind_method(D_METHOD("get_delta"), &MLPPHiddenLayer::get_delta);
+	ClassDB::bind_method(D_METHOD("set_delta", "val"), &MLPPHiddenLayer::set_delta);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "delta", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_delta", "get_delta");
+
+	ClassDB::bind_method(D_METHOD("get_reg"), &MLPPHiddenLayer::get_reg);
+	ClassDB::bind_method(D_METHOD("set_reg", "val"), &MLPPHiddenLayer::set_reg);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "reg"), "set_reg", "get_reg");
+
+	ClassDB::bind_method(D_METHOD("get_lambda"), &MLPPHiddenLayer::get_lambda);
+	ClassDB::bind_method(D_METHOD("set_lambda", "val"), &MLPPHiddenLayer::set_lambda);
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "lambda"), "set_lambda", "get_lambda");
+
+	ClassDB::bind_method(D_METHOD("get_alpha"), &MLPPHiddenLayer::get_alpha);
+	ClassDB::bind_method(D_METHOD("set_alpha", "val"), &MLPPHiddenLayer::set_alpha);
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "alpha"), "set_alpha", "get_alpha");
+
+	ClassDB::bind_method(D_METHOD("get_weight_init"), &MLPPHiddenLayer::get_weight_init);
+	ClassDB::bind_method(D_METHOD("set_weight_init", "val"), &MLPPHiddenLayer::set_weight_init);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "set_weight_init"), "set_weight_init", "get_weight_init");
+
+	ClassDB::bind_method(D_METHOD("forward_pass"), &MLPPHiddenLayer::forward_pass);
+	ClassDB::bind_method(D_METHOD("test", "x"), &MLPPHiddenLayer::test);
 }
 
 MLPPOldHiddenLayer::MLPPOldHiddenLayer(int n_hidden, std::string activation, std::vector<std::vector<real_t>> input, std::string weightInit, std::string reg, real_t lambda, real_t alpha) :

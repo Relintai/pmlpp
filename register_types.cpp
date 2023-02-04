@@ -29,8 +29,9 @@ SOFTWARE.
 
 #include "mlpp/regularization/reg.h"
 #include "mlpp/utilities/utilities.h"
-
 #include "mlpp/activation/activation.h"
+
+#include "mlpp/hidden_layer/hidden_layer.h"
 
 #include "mlpp/kmeans/kmeans.h"
 #include "mlpp/knn/knn.h"
@@ -44,8 +45,9 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 
 		ClassDB::register_class<MLPPUtilities>();
 		ClassDB::register_class<MLPPReg>();
-
 		ClassDB::register_class<MLPPActivation>();
+
+		ClassDB::register_class<MLPPHiddenLayer>();
 
 		ClassDB::register_class<MLPPKNN>();
 		ClassDB::register_class<MLPPKMeans>();
