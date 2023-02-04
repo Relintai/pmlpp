@@ -24,7 +24,7 @@ public:
 	~MLPPMANN();
 	std::vector<std::vector<real_t>> modelSetTest(std::vector<std::vector<real_t>> X);
 	std::vector<real_t> modelTest(std::vector<real_t> x);
-	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = 1);
+	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = false);
 	real_t score();
 	void save(std::string fileName);
 

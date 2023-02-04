@@ -58,9 +58,9 @@ public:
 	real_t performance_pool_int_array_vec(PoolIntArray y_hat, const Ref<MLPPVector> &output_set);
 
 	// Parameter Saving Functions
-	void saveParameters(std::string fileName, std::vector<real_t> weights, real_t bias, bool app = 0, int layer = -1);
-	void saveParameters(std::string fileName, std::vector<real_t> weights, std::vector<real_t> initial, real_t bias, bool app = 0, int layer = -1);
-	void saveParameters(std::string fileName, std::vector<std::vector<real_t>> weights, std::vector<real_t> bias, bool app = 0, int layer = -1);
+	void saveParameters(std::string fileName, std::vector<real_t> weights, real_t bias, bool app = false, int layer = -1);
+	void saveParameters(std::string fileName, std::vector<real_t> weights, std::vector<real_t> initial, real_t bias, bool app = false, int layer = -1);
+	void saveParameters(std::string fileName, std::vector<std::vector<real_t>> weights, std::vector<real_t> bias, bool app = false, int layer = -1);
 
 	// Gradient Descent related
 	static void UI(std::vector<real_t> weights, real_t bias);

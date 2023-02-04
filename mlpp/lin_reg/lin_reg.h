@@ -19,18 +19,18 @@ public:
 	std::vector<real_t> modelSetTest(std::vector<std::vector<real_t>> X);
 	real_t modelTest(std::vector<real_t> x);
 	void NewtonRaphson(real_t learning_rate, int max_epoch, bool UI);
-	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = 1);
-	void SGD(real_t learning_rate, int max_epoch, bool UI = 1);
+	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = false);
+	void SGD(real_t learning_rate, int max_epoch, bool UI = false);
 
-	void Momentum(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool UI = 1);
-	void NAG(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool UI = 1);
-	void Adagrad(real_t learning_rate, int max_epoch, int mini_batch_size, real_t e, bool UI = 1);
-	void Adadelta(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t e, bool UI = 1);
-	void Adam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI = 1);
-	void Adamax(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI = 1);
-	void Nadam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI = 1);
+	void Momentum(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool UI = false);
+	void NAG(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool UI = false);
+	void Adagrad(real_t learning_rate, int max_epoch, int mini_batch_size, real_t e, bool UI = false);
+	void Adadelta(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t e, bool UI = false);
+	void Adam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI = false);
+	void Adamax(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI = false);
+	void Nadam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI = false);
 
-	void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI = 1);
+	void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI = false);
 	void normalEquation();
 	real_t score();
 	void save(std::string fileName);
