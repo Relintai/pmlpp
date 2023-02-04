@@ -151,9 +151,9 @@ void MLPPMANN::addLayer(int n_hidden, std::string activation, std::string weight
 
 void MLPPMANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
 	if (!network.empty()) {
-		outputLayer = new MLPPMultiOutputLayer(n_output, network[0].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
+		outputLayer = new MLPPOldMultiOutputLayer(n_output, network[0].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
 	} else {
-		outputLayer = new MLPPMultiOutputLayer(n_output, k, activation, loss, inputSet, weightInit, reg, lambda, alpha);
+		outputLayer = new MLPPOldMultiOutputLayer(n_output, k, activation, loss, inputSet, weightInit, reg, lambda, alpha);
 	}
 }
 

@@ -9,18 +9,26 @@
 //
 
 #include "core/math/math_defs.h"
+#include "core/string/ustring.h"
+
+#include "core/object/reference.h"
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"
+#include "../regularization/reg.h"
+#include "../utilities/utilities.h"
+
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
 
 #include <map>
 #include <string>
 #include <vector>
 
 
-class MLPPMultiOutputLayer {
+class MLPPOldMultiOutputLayer {
 public:
-	MLPPMultiOutputLayer(int n_output, int n_hidden, std::string activation, std::string cost, std::vector<std::vector<real_t>> input, std::string weightInit, std::string reg, real_t lambda, real_t alpha);
+	MLPPOldMultiOutputLayer(int n_output, int n_hidden, std::string activation, std::string cost, std::vector<std::vector<real_t>> input, std::string weightInit, std::string reg, real_t lambda, real_t alpha);
 
 	int n_output;
 	int n_hidden;
