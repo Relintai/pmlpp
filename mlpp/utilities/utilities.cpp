@@ -605,3 +605,23 @@ real_t MLPPUtilities::accuracy(std::vector<real_t> y_hat, std::vector<real_t> y)
 real_t MLPPUtilities::f1_score(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	return 2 * precision(y_hat, y) * recall(y_hat, y) / (precision(y_hat, y) + recall(y_hat, y));
 }
+
+void MLPPUtilities::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("weight_initializationv", "weights", "type"), &MLPPUtilities::weight_initializationv, WEIGHT_DISTRIBUTION_TYPE_DEFAULT);
+	ClassDB::bind_method(D_METHOD("weight_initializationm", "weights", "type"), &MLPPUtilities::weight_initializationm, WEIGHT_DISTRIBUTION_TYPE_DEFAULT);
+	ClassDB::bind_method(D_METHOD("bias_initializationr"), &MLPPUtilities::bias_initializationr);
+	ClassDB::bind_method(D_METHOD("bias_initializationv", "z"), &MLPPUtilities::bias_initializationv);
+
+	ClassDB::bind_method(D_METHOD("performance_vec", "y_hat", "output_set"), &MLPPUtilities::performance_vec);
+	ClassDB::bind_method(D_METHOD("performance_mat", "y_hat", "y"), &MLPPUtilities::performance_mat);
+	ClassDB::bind_method(D_METHOD("performance_pool_int_array_vec", "y_hat", "output_set"), &MLPPUtilities::performance_pool_int_array_vec);
+
+	BIND_ENUM_CONSTANT(WEIGHT_DISTRIBUTION_TYPE_DEFAULT);
+	BIND_ENUM_CONSTANT(WEIGHT_DISTRIBUTION_TYPE_XAVIER_NORMAL);
+	BIND_ENUM_CONSTANT(WEIGHT_DISTRIBUTION_TYPE_XAVIER_UNIFORM);
+	BIND_ENUM_CONSTANT(WEIGHT_DISTRIBUTION_TYPE_HE_NORMAL);
+	BIND_ENUM_CONSTANT(WEIGHT_DISTRIBUTION_TYPE_HE_UNIFORM);
+	BIND_ENUM_CONSTANT(WEIGHT_DISTRIBUTION_TYPE_LE_CUN_NORMAL);
+	BIND_ENUM_CONSTANT(WEIGHT_DISTRIBUTION_TYPE_LE_CUN_UNIFORM);
+	BIND_ENUM_CONSTANT(WEIGHT_DISTRIBUTION_TYPE_UNIFORM);
+}

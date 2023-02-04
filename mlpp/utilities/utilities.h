@@ -13,6 +13,8 @@
 #include "core/string/ustring.h"
 #include "core/variant/variant.h"
 
+#include "core/object/reference.h"
+
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
 
@@ -20,7 +22,9 @@
 #include <tuple>
 #include <vector>
 
-class MLPPUtilities {
+class MLPPUtilities : public Reference {
+	GDCLASS(MLPPUtilities, Reference);
+
 public:
 	// Weight Init
 	static std::vector<real_t> weightInitialization(int n, std::string type = "Default");
@@ -40,10 +44,10 @@ public:
 		WEIGHT_DISTRIBUTION_TYPE_UNIFORM,
 	};
 
-	static void weight_initializationv(Ref<MLPPVector> weights, WeightDistributionType type = WEIGHT_DISTRIBUTION_TYPE_DEFAULT);
-	static void weight_initializationm(Ref<MLPPMatrix> weights, WeightDistributionType type = WEIGHT_DISTRIBUTION_TYPE_DEFAULT);
-	static real_t bias_initializationr();
-	static void bias_initializationv(Ref<MLPPVector> z);
+	void weight_initializationv(Ref<MLPPVector> weights, WeightDistributionType type = WEIGHT_DISTRIBUTION_TYPE_DEFAULT);
+	void weight_initializationm(Ref<MLPPMatrix> weights, WeightDistributionType type = WEIGHT_DISTRIBUTION_TYPE_DEFAULT);
+	real_t bias_initializationr();
+	void bias_initializationv(Ref<MLPPVector> z);
 
 	// Cost/Performance related Functions
 	real_t performance(std::vector<real_t> y_hat, std::vector<real_t> y);
@@ -76,7 +80,10 @@ public:
 	real_t accuracy(std::vector<real_t> y_hat, std::vector<real_t> y);
 	real_t f1_score(std::vector<real_t> y_hat, std::vector<real_t> y);
 
-private:
+protected:
+	static void _bind_methods();
 };
+
+VARIANT_ENUM_CAST(MLPPUtilities::WeightDistributionType);
 
 #endif /* Utilities_hpp */

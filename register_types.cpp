@@ -28,6 +28,7 @@ SOFTWARE.
 #include "mlpp/lin_alg/mlpp_vector.h"
 
 #include "mlpp/regularization/reg.h"
+#include "mlpp/utilities/utilities.h"
 
 #include "mlpp/activation/activation.h"
 
@@ -41,6 +42,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPVector>();
 		ClassDB::register_class<MLPPMatrix>();
 
+		ClassDB::register_class<MLPPUtilities>();
 		ClassDB::register_class<MLPPReg>();
 
 		ClassDB::register_class<MLPPActivation>();
