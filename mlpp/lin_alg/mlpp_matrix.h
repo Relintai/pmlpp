@@ -248,6 +248,8 @@ public:
 		for (int i = 0; i < _size.x; ++i) {
 			row_ptr[i] = _data[ind_start + i];
 		}
+
+		return ret;
 	}
 
 	_FORCE_INLINE_ Ref<MLPPVector> get_row_mlpp_vector(int p_index_y) {
@@ -269,6 +271,8 @@ public:
 		for (int i = 0; i < _size.x; ++i) {
 			row_ptr[i] = _data[ind_start + i];
 		}
+
+		return ret;
 	}
 
 	_FORCE_INLINE_ void get_row_into_mlpp_vector(int p_index_y, Ref<MLPPVector> target) const {
