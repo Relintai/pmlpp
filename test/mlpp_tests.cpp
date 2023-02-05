@@ -389,8 +389,12 @@ void MLPPTests::test_mlp(bool ui) {
 	MLPPLinAlg alg;
 
 	// MLP
-	std::vector<std::vector<real_t>> inputSet = { { 0, 0, 1, 1 }, { 0, 1, 0, 1 } };
-	inputSet = alg.transpose(inputSet);
+	std::vector<std::vector<real_t>> inputSet = {
+		{ 0, 0 },
+		{ 1, 1 },
+		{ 0, 1 },
+		{ 1, 0 }
+	};
 	std::vector<real_t> outputSet = { 0, 1, 1, 0 };
 
 	MLPPMLPOld model(inputSet, outputSet, 2);
@@ -409,7 +413,21 @@ void MLPPTests::test_mlp(bool ui) {
 	MLPPMLP model_new(input_set, output_set, 2);
 	model_new.gradient_descent(0.1, 10000, ui);
 	String res = model_new.model_set_test(input_set)->to_string();
-	res += "\nACCURACY: " + String::num(100 * model_new.score()) + "%";
+	res += "\nACCURACY (gradient_descent): " + String::num(100 * model_new.score()) + "%";
+
+	PLOG_MSG(res);
+
+	MLPPMLP model_new2(input_set, output_set, 2);
+	model_new2.sgd(0.01, 10000, ui);
+	res = model_new2.model_set_test(input_set)->to_string();
+	res += "\nACCURACY (sgd): " + String::num(100 * model_new2.score()) + "%";
+
+	PLOG_MSG(res);
+
+	MLPPMLP model_new3(input_set, output_set, 2);
+	model_new3.mbgd(0.01, 10000, 2, ui);
+	res = model_new3.model_set_test(input_set)->to_string();
+	res += "\nACCURACY (mbgd): " + String::num(100 * model_new3.score()) + "%";
 
 	PLOG_MSG(res);
 }
