@@ -397,6 +397,21 @@ void MLPPTests::test_mlp(bool ui) {
 	model.gradientDescent(0.1, 10000, ui);
 	alg.printVector(model.modelSetTest(inputSet));
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
+
+	Ref<MLPPMatrix> input_set;
+	input_set.instance();
+	input_set->set_from_std_vectors(inputSet);
+
+	Ref<MLPPVector> output_set;
+	output_set.instance();
+	output_set->set_from_std_vector(outputSet);
+
+	MLPPMLP model_new(input_set, output_set, 2);
+	model_new.gradient_descent(0.1, 10000, ui);
+	String res = model_new.model_set_test(input_set)->to_string();
+	res += "\nACCURACY: " + String::num(100 * model_new.score()) + "%";
+
+	PLOG_MSG(res);
 }
 void MLPPTests::test_soft_max_network(bool ui) {
 	MLPPLinAlg alg;
