@@ -502,7 +502,7 @@ void MLPPMLP::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("sgd", "learning_rate", "max_epoch", "UI"), &MLPPMLP::sgd, false);
 	ClassDB::bind_method(D_METHOD("mbgd", "learning_rate", "max_epoch", "mini_batch_size", "UI"), &MLPPMLP::mbgd, false);
 
-	ClassDB::bind_method(D_METHOD("score", "x"), &MLPPMLP::score);
+	ClassDB::bind_method(D_METHOD("score"), &MLPPMLP::score);
 	ClassDB::bind_method(D_METHOD("save", "file_name"), &MLPPMLP::save);
 }
 
