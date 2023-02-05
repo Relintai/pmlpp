@@ -106,12 +106,8 @@ void MLPPMLP::gradient_descent(real_t learning_rate, int max_epoch, bool UI) {
 
 		// Calculating the weight/bias for layer 1
 
-		Ref<MLPPMatrix> D1_1;
-
-		D1_1 = alg.outer_product(error, weights2);
-
-		Ref<MLPPMatrix> D1_2 = alg.hadamard_productm(D1_1, avn.sigmoid_derivm(z2));
-
+		Ref<MLPPMatrix> D1_1 = alg.outer_product(error, weights2);
+		Ref<MLPPMatrix> D1_2 = alg.hadamard_productm(alg.transposem(D1_1), avn.sigmoid_derivm(z2));
 		Ref<MLPPMatrix> D1_3 = alg.matmultm(alg.transposem(input_set), D1_2);
 
 		// weight an bias updation for layer 1
@@ -354,15 +350,15 @@ real_t MLPPMLP::cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
 	MLPPReg regularization;
 	class MLPPCost cost;
 
-	return cost.log_lossv(y_hat, y) + regularization.reg_termv(weights2, lambda, alpha, reg) + regularization.reg_termv(weights1, lambda, alpha, reg);
+	return cost.log_lossv(y_hat, y) + regularization.reg_termv(weights2, lambda, alpha, reg) + regularization.reg_termm(weights1, lambda, alpha, reg);
 }
 
 Ref<MLPPVector> MLPPMLP::evaluatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	Ref<MLPPVector> pz2 = alg.mat_vec_addv(alg.matmultm(X, weights1), bias1);
-	Ref<MLPPVector> pa2 = avn.sigmoid_normm(pz2);
+	Ref<MLPPMatrix> pz2 = alg.mat_vec_addv(alg.matmultm(X, weights1), bias1);
+	Ref<MLPPMatrix> pa2 = avn.sigmoid_normm(pz2);
 
 	return avn.sigmoid_normv(alg.scalar_addnv(bias2, alg.mat_vec_multv(pa2, weights2)));
 }
@@ -397,10 +393,10 @@ void MLPPMLP::forward_pass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	z2 = alg.mat_vec_addv(alg.matmultm(input_set, weights1), bias1);
-	a2 = avn.sigmoid_normv(z2);
+	z2->set_from_mlpp_matrix(alg.mat_vec_addv(alg.matmultm(input_set, weights1), bias1));
+	a2->set_from_mlpp_matrix(avn.sigmoid_normm(z2));
 
-	y_hat = avn.sigmoid_normv(alg.scalar_addm(bias2, alg.mat_vec_multv(a2, weights2)));
+	y_hat = avn.sigmoid_normv(alg.scalar_addnv(bias2, alg.mat_vec_multv(a2, weights2)));
 }
 
 MLPPMLP::MLPPMLP(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, int p_n_hidden, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {

@@ -851,11 +851,11 @@ real_t MLPPActivation::sigmoid_normr(real_t z) {
 }
 Ref<MLPPVector> MLPPActivation::sigmoid_normv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
-	return alg.element_wise_division(alg.onevecv(z->size()), alg.additionm(alg.onevecv(z->size()), alg.expv(alg.scalar_multiplynv(-1, z))));
+	return alg.element_wise_division(alg.onevecv(z->size()), alg.additionnv(alg.onevecv(z->size()), alg.expv(alg.scalar_multiplynv(-1, z))));
 }
 Ref<MLPPMatrix> MLPPActivation::sigmoid_normm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
-	return alg.element_wise_division(alg.onematm(z->size().x, z->size().y), alg.additionm(alg.onematm(z->size().x, z->size().y), alg.expv(alg.scalar_multiplynv(-1, z))));
+	return alg.element_wise_divisionm(alg.onematm(z->size().x, z->size().y), alg.additionm(alg.onematm(z->size().x, z->size().y), alg.expm(alg.scalar_multiplym(-1, z))));
 }
 
 real_t MLPPActivation::sigmoid_derivr(real_t z) {
@@ -874,9 +874,9 @@ Ref<MLPPVector> MLPPActivation::sigmoid_derivv(const Ref<MLPPVector> &z) {
 Ref<MLPPMatrix> MLPPActivation::sigmoid_derivm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	Ref<MLPPVector> sig_norm = sigmoid_normm(z);
+	Ref<MLPPMatrix> sig_norm = sigmoid_normm(z);
 
-	return alg.subtractionnv(sig_norm, alg.hadamard_productnv(sig_norm, sig_norm));
+	return alg.subtractionm(sig_norm, alg.hadamard_productm(sig_norm, sig_norm));
 }
 
 //SOFTMAX
