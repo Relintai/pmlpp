@@ -133,7 +133,6 @@ public:
 
 	_FORCE_INLINE_ void clear() { resize(Size2i()); }
 	_FORCE_INLINE_ void reset() {
-		clear();
 		if (_data) {
 			memfree(_data);
 			_data = NULL;
@@ -151,8 +150,11 @@ public:
 		int ds = data_size();
 
 		if (ds == 0) {
-			memfree(_data);
-			_data = NULL;
+			if (_data) {
+				memfree(_data);
+				_data = NULL;
+			}
+
 			return;
 		}
 
@@ -161,7 +163,7 @@ public:
 	}
 
 	_FORCE_INLINE_ int calculate_index(int p_index_y, int p_index_x) const {
-		return p_index_y * _size.y + p_index_x;
+		return p_index_y * _size.x + p_index_x;
 	}
 
 	_FORCE_INLINE_ const real_t &operator[](int p_index) const {
@@ -177,34 +179,34 @@ public:
 		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
 
-		return _data[p_index_y * _size.y + p_index_x];
+		return _data[p_index_y * _size.x + p_index_x];
 	}
 	_FORCE_INLINE_ real_t get_element(int p_index_y, int p_index_x) {
 		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
 
-		return _data[p_index_y * _size.y + p_index_x];
+		return _data[p_index_y * _size.x + p_index_x];
 	}
 
 	_FORCE_INLINE_ real_t get_element_bind(int p_index_y, int p_index_x) const {
 		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
 
-		return static_cast<real_t>(_data[p_index_y * _size.y + p_index_x]);
+		return static_cast<real_t>(_data[p_index_y * _size.x + p_index_x]);
 	}
 
 	_FORCE_INLINE_ void set_element(int p_index_y, int p_index_x, real_t p_val) {
 		ERR_FAIL_INDEX(p_index_x, _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
 
-		_data[p_index_y * _size.y + p_index_x] = p_val;
+		_data[p_index_y * _size.x + p_index_x] = p_val;
 	}
 
 	_FORCE_INLINE_ void set_element_bind(int p_index_y, int p_index_x, real_t p_val) {
 		ERR_FAIL_INDEX(p_index_x, _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
 
-		_data[p_index_y * _size.y + p_index_x] = p_val;
+		_data[p_index_y * _size.x + p_index_x] = p_val;
 	}
 
 	_FORCE_INLINE_ Vector<real_t> get_row_vector(int p_index_y) {
@@ -328,8 +330,12 @@ public:
 	}
 
 	void fill(real_t p_val) {
+		if (!_data) {
+			return;
+		}
+
 		int ds = data_size();
-		for (int i = 0; i < ds; i++) {
+		for (int i = 0; i < ds; ++i) {
 			_data[i] = p_val;
 		}
 	}
