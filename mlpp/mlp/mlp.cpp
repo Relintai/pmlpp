@@ -6,6 +6,8 @@
 
 #include "mlp.h"
 
+#include "core/log/logger.h"
+
 #include "../activation/activation.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"
@@ -123,9 +125,9 @@ void MLPPMLP::gradient_descent(real_t learning_rate, int max_epoch, bool UI) {
 		// UI PORTION
 		if (UI) {
 			MLPPUtilities::cost_info(epoch, cost_prev, cost(y_hat, output_set));
-			std::cout << "Layer 1:" << std::endl;
+			PLOG_MSG("Layer 1:");
 			MLPPUtilities::print_ui_mb(weights1, bias1);
-			std::cout << "Layer 2:" << std::endl;
+			PLOG_MSG("Layer 2:");
 			MLPPUtilities::print_ui_vb(weights2, bias2);
 		}
 
@@ -204,9 +206,9 @@ void MLPPMLP::sgd(real_t learning_rate, int max_epoch, bool UI) {
 
 		if (UI) {
 			MLPPUtilities::cost_info(epoch, cost_prev, cost_prev);
-			std::cout << "Layer 1:" << std::endl;
+			PLOG_MSG("Layer 1:");
 			MLPPUtilities::print_ui_mb(weights1, bias1);
-			std::cout << "Layer 2:" << std::endl;
+			PLOG_MSG("Layer 2:");
 			MLPPUtilities::print_ui_vb(weights2, bias2);
 		}
 
@@ -281,9 +283,9 @@ void MLPPMLP::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 
 			if (UI) {
 				MLPPUtilities::CostInfo(epoch, cost_prev, cost(ly_hat, current_output));
-				std::cout << "Layer 1:" << std::endl;
+				PLOG_MSG("Layer 1:");
 				MLPPUtilities::print_ui_mb(weights1, bias1);
-				std::cout << "Layer 2:" << std::endl;
+				PLOG_MSG("Layer 2:");
 				MLPPUtilities::print_ui_vb(weights2, bias2);
 			}
 		}
@@ -562,7 +564,7 @@ void MLPPMLPOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 
 		D1_1 = alg.outerProduct(error, weights2);
 
-		std::vector<std::vector<real_t>> D1_2 = alg.hadamard_product(D1_1, avn.sigmoid(z2, 1));
+		std::vector<std::vector<real_t>> D1_2 = alg.hadamard_product(D1_1, avn.sigmoid(z2, true));
 
 		std::vector<std::vector<real_t>> D1_3 = alg.matmult(alg.transpose(inputSet), D1_2);
 
@@ -620,7 +622,7 @@ void MLPPMLPOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 
 		// Weight updation for layer 1
 		std::vector<real_t> D1_1 = alg.scalarMultiply(error, weights2);
-		std::vector<real_t> D1_2 = alg.hadamard_product(D1_1, avn.sigmoid(z2, 1));
+		std::vector<real_t> D1_2 = alg.hadamard_product(D1_1, avn.sigmoid(z2, true));
 		std::vector<std::vector<real_t>> D1_3 = alg.outerProduct(inputSet[outputIndex], D1_2);
 
 		weights1 = alg.subtraction(weights1, alg.scalarMultiply(learning_rate, D1_3));
@@ -689,7 +691,7 @@ void MLPPMLPOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, 
 
 			std::vector<std::vector<real_t>> D1_1 = alg.outerProduct(error, weights2);
 
-			std::vector<std::vector<real_t>> D1_2 = alg.hadamard_product(D1_1, avn.sigmoid(z2, 1));
+			std::vector<std::vector<real_t>> D1_2 = alg.hadamard_product(D1_1, avn.sigmoid(z2, true));
 
 			std::vector<std::vector<real_t>> D1_3 = alg.matmult(alg.transpose(inputMiniBatches[i]), D1_2);
 
@@ -724,8 +726,8 @@ real_t MLPPMLPOld::score() {
 
 void MLPPMLPOld::save(std::string fileName) {
 	MLPPUtilities util;
-	util.saveParameters(fileName, weights1, bias1, 0, 1);
-	util.saveParameters(fileName, weights2, bias2, 1, 2);
+	util.saveParameters(fileName, weights1, bias1, false, 1);
+	util.saveParameters(fileName, weights2, bias2, true, 2);
 }
 
 real_t MLPPMLPOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
