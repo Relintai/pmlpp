@@ -15,8 +15,6 @@
 #include <tuple>
 #include <vector>
 
-
-
 class MLPPWGANOld {
 public:
 	MLPPWGANOld(real_t k, std::vector<std::vector<real_t>> outputSet);
@@ -52,6 +50,5 @@ private:
 	int n;
 	int k;
 };
-
 
 #endif /* WGAN_hpp */
