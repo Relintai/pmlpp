@@ -488,7 +488,7 @@ void MLPPTests::test_wgan(bool ui) {
 		{ 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40 }
 	};
 
-	MLPPWGAN gan(2, alg.transpose(outputSet)); // our gan is a wasserstein gan (wgan)
+	MLPPWGANOld gan(2, alg.transpose(outputSet)); // our gan is a wasserstein gan (wgan)
 	gan.addLayer(5, "Sigmoid");
 	gan.addLayer(2, "RELU");
 	gan.addLayer(5, "Sigmoid");

@@ -17,10 +17,10 @@
 
 
 
-class MLPPWGAN {
+class MLPPWGANOld {
 public:
-	MLPPWGAN(real_t k, std::vector<std::vector<real_t>> outputSet);
-	~MLPPWGAN();
+	MLPPWGANOld(real_t k, std::vector<std::vector<real_t>> outputSet);
+	~MLPPWGANOld();
 	std::vector<std::vector<real_t>> generateExample(int n);
 	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = false);
 	real_t score();
