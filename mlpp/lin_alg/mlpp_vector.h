@@ -41,6 +41,12 @@ public:
 
 		--_size;
 
+		if (_size == 0) {
+			memfree(_data);
+			_data = NULL;
+			return;
+		}
+
 		for (int i = p_index; i < _size; i++) {
 			_data[i] = _data[i + 1];
 		}
@@ -54,6 +60,12 @@ public:
 	void remove_unordered(int p_index) {
 		ERR_FAIL_INDEX(p_index, _size);
 		_size--;
+
+		if (_size == 0) {
+			memfree(_data);
+			_data = NULL;
+			return;
+		}
 
 		if (_size > p_index) {
 			_data[p_index] = _data[_size];
@@ -94,7 +106,6 @@ public:
 
 	_FORCE_INLINE_ void clear() { resize(0); }
 	_FORCE_INLINE_ void reset() {
-		clear();
 		if (_data) {
 			memfree(_data);
 			_data = NULL;
