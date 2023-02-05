@@ -508,8 +508,16 @@ void MLPPMLP::_bind_methods() {
 
 // =======    OLD    =======
 
-MLPPMLPOld::MLPPMLPOld(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int n_hidden, std::string reg, real_t lambda, real_t alpha) :
-		inputSet(inputSet), outputSet(outputSet), n_hidden(n_hidden), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
+MLPPMLPOld::MLPPMLPOld(std::vector<std::vector<real_t>> p_inputSet, std::vector<real_t> p_outputSet, int p_n_hidden, std::string p_reg, real_t p_lambda, real_t p_alpha) {
+	inputSet = p_inputSet;
+	outputSet = p_outputSet;
+	n_hidden = p_n_hidden;
+	n = p_inputSet.size();
+	k = p_inputSet[0].size();
+	reg = p_reg;
+	lambda = p_lambda;
+	alpha = p_alpha;
+
 	MLPPActivation avn;
 	y_hat.resize(n);
 
@@ -600,7 +608,9 @@ void MLPPMLPOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 		int outputIndex = distribution(generator);
 
 		real_t y_hat = Evaluate(inputSet[outputIndex]);
-		auto [z2, a2] = propagate(inputSet[outputIndex]);
+		auto propagate_result = propagate(inputSet[outputIndex]);
+		auto z2 = std::get<0>(propagate_result);
+		auto a2 = std::get<1>(propagate_result);
 		cost_prev = Cost({ y_hat }, { outputSet[outputIndex] });
 		real_t error = y_hat - outputSet[outputIndex];
 
@@ -649,12 +659,17 @@ void MLPPMLPOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, 
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto minibatches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(minibatches);
+	auto outputMiniBatches = std::get<1>(minibatches);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
 			std::vector<real_t> y_hat = Evaluate(inputMiniBatches[i]);
-			auto [z2, a2] = propagate(inputMiniBatches[i]);
+			auto propagate_result = propagate(inputMiniBatches[i]);
+			auto z2 = std::get<0>(propagate_result);
+			auto a2 = std::get<1>(propagate_result);
+
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
 			// Calculating the errors
@@ -669,7 +684,7 @@ void MLPPMLPOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			weights2 = regularization.regWeights(weights2, lambda, alpha, reg);
 
 			// Calculating the bias gradients for layer 2
-			real_t b_gradient = alg.sum_elements(error);
+			//real_t b_gradient = alg.sum_elements(error);
 
 			// Bias Updation for layer 2
 			bias2 -= learning_rate * alg.sum_elements(error) / outputMiniBatches[i].size();
