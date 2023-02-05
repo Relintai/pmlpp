@@ -397,6 +397,11 @@ void MLPPMLP::forward_pass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
+	//TODO
+
+	//ERR_PRINT(Variant(input_set->size()).operator String());
+	//ERR_PRINT(Variant(weights1->size()).operator String());
+
 	z2 = alg.mat_vec_addv(alg.matmultm(input_set, weights1), bias1);
 	a2 = avn.sigmoid_normv(z2);
 

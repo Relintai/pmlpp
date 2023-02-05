@@ -133,7 +133,10 @@ Ref<MLPPMatrix> MLPPLinAlg::subtractionm(const Ref<MLPPMatrix> &A, const Ref<MLP
 Ref<MLPPMatrix> MLPPLinAlg::matmultm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
 	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
 	Size2i a_size = A->size();
-	ERR_FAIL_COND_V(a_size != B->size(), Ref<MLPPMatrix>());
+	Size2i b_size = B->size();
+
+	//TODO double check the formula for this
+	ERR_FAIL_COND_V(a_size.y != b_size.x || a_size.x != b_size.y, Ref<MLPPMatrix>());
 
 	Ref<MLPPMatrix> C;
 	C.instance();
@@ -149,8 +152,8 @@ Ref<MLPPMatrix> MLPPLinAlg::matmultm(const Ref<MLPPMatrix> &A, const Ref<MLPPMat
 			int ind_i_k = A->calculate_index(i, k);
 
 			for (int j = 0; j < a_size.x; j++) {
-				int ind_i_j = A->calculate_index(i, j);
-				int ind_k_j = A->calculate_index(k, j);
+				int ind_i_j = C->calculate_index(i, j);
+				int ind_k_j = B->calculate_index(k, j);
 
 				c_ptr[ind_i_j] += a_ptr[ind_i_k] * b_ptr[ind_k_j];
 			}
