@@ -16,6 +16,7 @@ int MLPPHiddenLayer::get_n_hidden() const {
 }
 void MLPPHiddenLayer::set_n_hidden(const int val) {
 	n_hidden = val;
+	_initialized = false;
 }
 
 MLPPActivation::ActivationFunction MLPPHiddenLayer::get_activation() const {
@@ -23,6 +24,7 @@ MLPPActivation::ActivationFunction MLPPHiddenLayer::get_activation() const {
 }
 void MLPPHiddenLayer::set_activation(const MLPPActivation::ActivationFunction val) {
 	activation = val;
+	_initialized = false;
 }
 
 Ref<MLPPMatrix> MLPPHiddenLayer::get_input() {
@@ -30,6 +32,7 @@ Ref<MLPPMatrix> MLPPHiddenLayer::get_input() {
 }
 void MLPPHiddenLayer::set_input(const Ref<MLPPMatrix> &val) {
 	input = val;
+	_initialized = false;
 }
 
 Ref<MLPPMatrix> MLPPHiddenLayer::get_weights() {
@@ -37,6 +40,7 @@ Ref<MLPPMatrix> MLPPHiddenLayer::get_weights() {
 }
 void MLPPHiddenLayer::set_weights(const Ref<MLPPMatrix> &val) {
 	weights = val;
+	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPHiddenLayer::MLPPHiddenLayer::get_bias() {
@@ -44,6 +48,7 @@ Ref<MLPPVector> MLPPHiddenLayer::MLPPHiddenLayer::get_bias() {
 }
 void MLPPHiddenLayer::set_bias(const Ref<MLPPVector> &val) {
 	bias = val;
+	_initialized = false;
 }
 
 Ref<MLPPMatrix> MLPPHiddenLayer::get_z() {
@@ -51,6 +56,7 @@ Ref<MLPPMatrix> MLPPHiddenLayer::get_z() {
 }
 void MLPPHiddenLayer::set_z(const Ref<MLPPMatrix> &val) {
 	z = val;
+	_initialized = false;
 }
 
 Ref<MLPPMatrix> MLPPHiddenLayer::get_a() {
@@ -58,6 +64,7 @@ Ref<MLPPMatrix> MLPPHiddenLayer::get_a() {
 }
 void MLPPHiddenLayer::set_a(const Ref<MLPPMatrix> &val) {
 	a = val;
+	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPHiddenLayer::get_z_test() {
@@ -65,6 +72,7 @@ Ref<MLPPVector> MLPPHiddenLayer::get_z_test() {
 }
 void MLPPHiddenLayer::set_z_test(const Ref<MLPPVector> &val) {
 	z_test = val;
+	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPHiddenLayer::get_a_test() {
@@ -72,6 +80,7 @@ Ref<MLPPVector> MLPPHiddenLayer::get_a_test() {
 }
 void MLPPHiddenLayer::set_a_test(const Ref<MLPPVector> &val) {
 	a_test = val;
+	_initialized = false;
 }
 
 Ref<MLPPMatrix> MLPPHiddenLayer::get_delta() {
@@ -79,6 +88,7 @@ Ref<MLPPMatrix> MLPPHiddenLayer::get_delta() {
 }
 void MLPPHiddenLayer::set_delta(const Ref<MLPPMatrix> &val) {
 	delta = val;
+	_initialized = false;
 }
 
 MLPPReg::RegularizationType MLPPHiddenLayer::get_reg() const {
@@ -86,6 +96,7 @@ MLPPReg::RegularizationType MLPPHiddenLayer::get_reg() const {
 }
 void MLPPHiddenLayer::set_reg(const MLPPReg::RegularizationType val) {
 	reg = val;
+	_initialized = false;
 }
 
 real_t MLPPHiddenLayer::get_lambda() const {
@@ -93,6 +104,7 @@ real_t MLPPHiddenLayer::get_lambda() const {
 }
 void MLPPHiddenLayer::set_lambda(const real_t val) {
 	lambda = val;
+	_initialized = false;
 }
 
 real_t MLPPHiddenLayer::get_alpha() const {
@@ -100,6 +112,7 @@ real_t MLPPHiddenLayer::get_alpha() const {
 }
 void MLPPHiddenLayer::set_alpha(const real_t val) {
 	alpha = val;
+	_initialized = false;
 }
 
 MLPPUtilities::WeightDistributionType MLPPHiddenLayer::get_weight_init() const {
@@ -107,9 +120,33 @@ MLPPUtilities::WeightDistributionType MLPPHiddenLayer::get_weight_init() const {
 }
 void MLPPHiddenLayer::set_weight_init(const MLPPUtilities::WeightDistributionType val) {
 	weight_init = val;
+	_initialized = false;
+}
+
+bool MLPPHiddenLayer::is_initialized() {
+	return _initialized;
+}
+void MLPPHiddenLayer::initialize() {
+	if (_initialized) {
+		return;
+	}
+
+	weights->resize(Size2i(n_hidden, input->size().x));
+	bias->resize(n_hidden);
+
+	MLPPUtilities utils;
+
+	utils.weight_initializationm(weights, weight_init);
+	utils.bias_initializationv(bias);
+
+	_initialized = true;
 }
 
 void MLPPHiddenLayer::forward_pass() {
+	if (!_initialized) {
+		initialize();
+	}
+
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
@@ -118,6 +155,10 @@ void MLPPHiddenLayer::forward_pass() {
 }
 
 void MLPPHiddenLayer::test(const Ref<MLPPVector> &x) {
+	if (!_initialized) {
+		initialize();
+	}
+
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
@@ -149,13 +190,15 @@ MLPPHiddenLayer::MLPPHiddenLayer(int p_n_hidden, MLPPActivation::ActivationFunct
 	weights.instance();
 	bias.instance();
 
-	weights->resize(Size2i(input->size().x, n_hidden));
+	weights->resize(Size2i(n_hidden, input->size().x));
 	bias->resize(n_hidden);
 
 	MLPPUtilities utils;
 
 	utils.weight_initializationm(weights, weight_init);
 	utils.bias_initializationv(bias);
+
+	_initialized = true;
 }
 
 MLPPHiddenLayer::MLPPHiddenLayer() {
@@ -179,6 +222,8 @@ MLPPHiddenLayer::MLPPHiddenLayer() {
 
 	weights.instance();
 	bias.instance();
+
+	_initialized = false;
 }
 MLPPHiddenLayer::~MLPPHiddenLayer() {
 }
@@ -239,6 +284,9 @@ void MLPPHiddenLayer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_weight_init"), &MLPPHiddenLayer::get_weight_init);
 	ClassDB::bind_method(D_METHOD("set_weight_init", "val"), &MLPPHiddenLayer::set_weight_init);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "set_weight_init"), "set_weight_init", "get_weight_init");
+
+	ClassDB::bind_method(D_METHOD("is_initialized"), &MLPPHiddenLayer::is_initialized);
+	ClassDB::bind_method(D_METHOD("initialize"), &MLPPHiddenLayer::initialize);
 
 	ClassDB::bind_method(D_METHOD("forward_pass"), &MLPPHiddenLayer::forward_pass);
 	ClassDB::bind_method(D_METHOD("test", "x"), &MLPPHiddenLayer::test);
@@ -338,6 +386,7 @@ MLPPOldHiddenLayer::MLPPOldHiddenLayer(int p_n_hidden, std::string p_activation,
 void MLPPOldHiddenLayer::forwardPass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
+
 	z = alg.mat_vec_add(alg.matmult(input, weights), bias);
 	a = (avn.*activation_map[activation])(z, false);
 }

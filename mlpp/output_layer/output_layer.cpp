@@ -16,6 +16,7 @@ int MLPPOutputLayer::get_n_hidden() {
 }
 void MLPPOutputLayer::set_n_hidden(const int val) {
 	n_hidden = val;
+	_initialized = false;
 }
 
 MLPPActivation::ActivationFunction MLPPOutputLayer::get_activation() {
@@ -23,6 +24,7 @@ MLPPActivation::ActivationFunction MLPPOutputLayer::get_activation() {
 }
 void MLPPOutputLayer::set_activation(const MLPPActivation::ActivationFunction val) {
 	activation = val;
+	_initialized = false;
 }
 
 MLPPCost::CostTypes MLPPOutputLayer::get_cost() {
@@ -30,6 +32,7 @@ MLPPCost::CostTypes MLPPOutputLayer::get_cost() {
 }
 void MLPPOutputLayer::set_cost(const MLPPCost::CostTypes val) {
 	cost = val;
+	_initialized = false;
 }
 
 Ref<MLPPMatrix> MLPPOutputLayer::get_input() {
@@ -37,6 +40,7 @@ Ref<MLPPMatrix> MLPPOutputLayer::get_input() {
 }
 void MLPPOutputLayer::set_input(const Ref<MLPPMatrix> &val) {
 	input = val;
+	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_weights() {
@@ -44,6 +48,7 @@ Ref<MLPPVector> MLPPOutputLayer::get_weights() {
 }
 void MLPPOutputLayer::set_weights(const Ref<MLPPVector> &val) {
 	weights = val;
+	_initialized = false;
 }
 
 real_t MLPPOutputLayer::MLPPOutputLayer::get_bias() {
@@ -51,6 +56,7 @@ real_t MLPPOutputLayer::MLPPOutputLayer::get_bias() {
 }
 void MLPPOutputLayer::set_bias(const real_t val) {
 	bias = val;
+	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_z() {
@@ -58,6 +64,7 @@ Ref<MLPPVector> MLPPOutputLayer::get_z() {
 }
 void MLPPOutputLayer::set_z(const Ref<MLPPVector> &val) {
 	z = val;
+	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_a() {
@@ -65,6 +72,7 @@ Ref<MLPPVector> MLPPOutputLayer::get_a() {
 }
 void MLPPOutputLayer::set_a(const Ref<MLPPVector> &val) {
 	a = val;
+	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_z_test() {
@@ -72,6 +80,7 @@ Ref<MLPPVector> MLPPOutputLayer::get_z_test() {
 }
 void MLPPOutputLayer::set_z_test(const Ref<MLPPVector> &val) {
 	z_test = val;
+	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_a_test() {
@@ -79,6 +88,7 @@ Ref<MLPPVector> MLPPOutputLayer::get_a_test() {
 }
 void MLPPOutputLayer::set_a_test(const Ref<MLPPVector> &val) {
 	a_test = val;
+	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_delta() {
@@ -86,6 +96,7 @@ Ref<MLPPVector> MLPPOutputLayer::get_delta() {
 }
 void MLPPOutputLayer::set_delta(const Ref<MLPPVector> &val) {
 	delta = val;
+	_initialized = false;
 }
 
 MLPPReg::RegularizationType MLPPOutputLayer::get_reg() {
@@ -100,6 +111,7 @@ real_t MLPPOutputLayer::get_lambda() {
 }
 void MLPPOutputLayer::set_lambda(const real_t val) {
 	lambda = val;
+	_initialized = false;
 }
 
 real_t MLPPOutputLayer::get_alpha() {
@@ -107,6 +119,7 @@ real_t MLPPOutputLayer::get_alpha() {
 }
 void MLPPOutputLayer::set_alpha(const real_t val) {
 	alpha = val;
+	_initialized = false;
 }
 
 MLPPUtilities::WeightDistributionType MLPPOutputLayer::get_weight_init() {
@@ -114,9 +127,32 @@ MLPPUtilities::WeightDistributionType MLPPOutputLayer::get_weight_init() {
 }
 void MLPPOutputLayer::set_weight_init(const MLPPUtilities::WeightDistributionType val) {
 	weight_init = val;
+	_initialized = false;
+}
+
+bool MLPPOutputLayer::is_initialized() {
+	return _initialized;
+}
+void MLPPOutputLayer::initialize() {
+	if (_initialized) {
+		return;
+	}
+
+	weights->resize(n_hidden);
+
+	MLPPUtilities utils;
+
+	utils.weight_initializationv(weights, weight_init);
+	bias = utils.bias_initializationr();
+
+	_initialized = true;
 }
 
 void MLPPOutputLayer::forward_pass() {
+	if (!_initialized) {
+		initialize();
+	}
+
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
@@ -125,6 +161,10 @@ void MLPPOutputLayer::forward_pass() {
 }
 
 void MLPPOutputLayer::test(const Ref<MLPPVector> &x) {
+	if (!_initialized) {
+		initialize();
+	}
+
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
@@ -162,6 +202,8 @@ MLPPOutputLayer::MLPPOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunct
 
 	utils.weight_initializationv(weights, weight_init);
 	bias = utils.bias_initializationr();
+
+	_initialized = true;
 }
 
 MLPPOutputLayer::MLPPOutputLayer() {
@@ -185,6 +227,8 @@ MLPPOutputLayer::MLPPOutputLayer() {
 
 	weights.instance();
 	bias = 0;
+
+	_initialized = false;
 }
 MLPPOutputLayer::~MLPPOutputLayer() {
 }
@@ -249,6 +293,9 @@ void MLPPOutputLayer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_weight_init"), &MLPPOutputLayer::get_weight_init);
 	ClassDB::bind_method(D_METHOD("set_weight_init", "val"), &MLPPOutputLayer::set_weight_init);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "set_weight_init"), "set_weight_init", "get_weight_init");
+
+	ClassDB::bind_method(D_METHOD("is_initialized"), &MLPPOutputLayer::is_initialized);
+	ClassDB::bind_method(D_METHOD("initialize"), &MLPPOutputLayer::initialize);
 
 	ClassDB::bind_method(D_METHOD("forward_pass"), &MLPPOutputLayer::forward_pass);
 	ClassDB::bind_method(D_METHOD("test", "x"), &MLPPOutputLayer::test);

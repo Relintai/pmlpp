@@ -70,6 +70,9 @@ public:
 	MLPPUtilities::WeightDistributionType get_weight_init() const;
 	void set_weight_init(const MLPPUtilities::WeightDistributionType val);
 
+	bool is_initialized();
+	void initialize();
+
 	void forward_pass();
 	void test(const Ref<MLPPVector> &x);
 
@@ -103,6 +106,8 @@ protected:
 	real_t alpha; /* This is the controlling param for Elastic Net*/
 
 	MLPPUtilities::WeightDistributionType weight_init;
+
+	bool _initialized;
 };
 
 class MLPPOldHiddenLayer {
