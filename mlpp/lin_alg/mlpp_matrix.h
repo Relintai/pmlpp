@@ -30,6 +30,10 @@ public:
 	}
 
 	_FORCE_INLINE_ void add_row(const Vector<real_t> &p_row) {
+		if (p_row.size() == 0) {
+			return;
+		}
+
 		if (_size.x == 0) {
 			_size.x = p_row.size();
 		}
@@ -51,6 +55,10 @@ public:
 	}
 
 	_FORCE_INLINE_ void add_row_pool_vector(const PoolRealArray &p_row) {
+		if (p_row.size() == 0) {
+			return;
+		}
+
 		if (_size.x == 0) {
 			_size.x = p_row.size();
 		}
@@ -69,6 +77,66 @@ public:
 
 		for (int i = 0; i < p_row.size(); ++i) {
 			_data[ci + i] = row_arr[i];
+		}
+	}
+
+	_FORCE_INLINE_ void add_row_mlpp_vector(const Ref<MLPPVector> &p_row) {
+		ERR_FAIL_COND(!p_row.is_valid());
+
+		int p_row_size = p_row->size();
+
+		if (p_row_size == 0) {
+			return;
+		}
+
+		if (_size.x == 0) {
+			_size.x = p_row_size;
+		}
+
+		ERR_FAIL_COND(_size.x != p_row_size);
+
+		int ci = data_size();
+
+		++_size.y;
+
+		_data = (real_t *)memrealloc(_data, data_size() * sizeof(real_t));
+		CRASH_COND_MSG(!_data, "Out of memory");
+
+		const real_t *row_ptr = p_row->ptr();
+
+		for (int i = 0; i < p_row_size; ++i) {
+			_data[ci + i] = row_ptr[i];
+		}
+	}
+
+	_FORCE_INLINE_ void add_rows_mlpp_matrix(const Ref<MLPPMatrix> &p_other) {
+		ERR_FAIL_COND(!p_other.is_valid());
+
+		int other_data_size = p_other->data_size();
+
+		if (other_data_size == 0) {
+			return;
+		}
+
+		Size2i other_size = p_other->size();
+
+		if (_size.x == 0) {
+			_size.x = other_size.x;
+		}
+
+		ERR_FAIL_COND(other_size.x != _size.x);
+
+		int start_offset = data_size();
+
+		_size.y += other_size.y;
+
+		_data = (real_t *)memrealloc(_data, data_size() * sizeof(real_t));
+		CRASH_COND_MSG(!_data, "Out of memory");
+
+		const real_t *other_ptr = p_other->ptr();
+
+		for (int i = 0; i < other_data_size; ++i) {
+			_data[start_offset + i] = other_ptr[i];
 		}
 	}
 

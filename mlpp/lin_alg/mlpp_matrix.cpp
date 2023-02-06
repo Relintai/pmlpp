@@ -24,6 +24,9 @@ String MLPPMatrix::to_string() {
 
 void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("add_row", "row"), &MLPPMatrix::add_row_pool_vector);
+	ClassDB::bind_method(D_METHOD("add_row_mlpp_vector", "row"), &MLPPMatrix::add_row_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("add_rows_mlpp_matrix", "other"), &MLPPMatrix::add_rows_mlpp_matrix);
+
 	ClassDB::bind_method(D_METHOD("remove_row", "index"), &MLPPMatrix::remove_row);
 	ClassDB::bind_method(D_METHOD("remove_row_unordered", "index"), &MLPPMatrix::remove_row_unordered);
 	ClassDB::bind_method(D_METHOD("swap_row", "index_1", "index_2"), &MLPPMatrix::swap_row);

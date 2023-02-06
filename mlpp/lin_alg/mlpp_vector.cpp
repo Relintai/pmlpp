@@ -18,6 +18,7 @@ String MLPPVector::to_string() {
 
 void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("push_back", "elem"), &MLPPVector::push_back);
+	ClassDB::bind_method(D_METHOD("add_mlpp_vector", "other"), &MLPPVector::push_back);
 	ClassDB::bind_method(D_METHOD("remove", "index"), &MLPPVector::remove);
 	ClassDB::bind_method(D_METHOD("remove_unordered", "index"), &MLPPVector::remove_unordered);
 	ClassDB::bind_method(D_METHOD("erase", "val"), &MLPPVector::erase);

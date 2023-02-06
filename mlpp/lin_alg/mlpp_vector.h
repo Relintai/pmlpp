@@ -36,6 +36,29 @@ public:
 		_data[_size - 1] = p_elem;
 	}
 
+	_FORCE_INLINE_ void add_mlpp_vector(const Ref<MLPPVector> &p_other) {
+		ERR_FAIL_COND(!p_other.is_valid());
+
+		int other_size = p_other->size();
+
+		if (other_size == 0) {
+			return;
+		}
+
+		int start_offset = _size;
+
+		_size += other_size;
+
+		_data = (real_t *)memrealloc(_data, _size * sizeof(real_t));
+		CRASH_COND_MSG(!_data, "Out of memory");
+
+		const real_t *other_ptr = p_other->ptr();
+
+		for (int i = 0; i < other_size; ++i) {
+			_data[start_offset + i] = other_ptr[i];
+		}
+	}
+
 	void remove(real_t p_index) {
 		ERR_FAIL_INDEX(p_index, _size);
 
