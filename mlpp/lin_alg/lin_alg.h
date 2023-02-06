@@ -288,8 +288,10 @@ public:
 	void printTensor(std::vector<std::vector<std::vector<real_t>>> A);
 
 	std::vector<std::vector<std::vector<real_t>>> scalarMultiply(real_t scalar, std::vector<std::vector<std::vector<real_t>>> A);
-
 	std::vector<std::vector<std::vector<real_t>>> scalarAdd(real_t scalar, std::vector<std::vector<std::vector<real_t>>> A);
+
+	Vector<Ref<MLPPMatrix>> scalar_multiply_vm(real_t scalar, Vector<Ref<MLPPMatrix>> A);
+	Vector<Ref<MLPPMatrix>> scalar_add_vm(real_t scalar, Vector<Ref<MLPPMatrix>> A);
 
 	std::vector<std::vector<std::vector<real_t>>> resize(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
 

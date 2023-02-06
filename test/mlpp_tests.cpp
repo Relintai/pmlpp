@@ -488,14 +488,29 @@ void MLPPTests::test_wgan(bool ui) {
 		{ 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40 }
 	};
 
-	MLPPWGANOld gan(2, alg.transpose(outputSet)); // our gan is a wasserstein gan (wgan)
-	gan.addLayer(5, "Sigmoid");
-	gan.addLayer(2, "RELU");
-	gan.addLayer(5, "Sigmoid");
-	gan.addOutputLayer(); // User can specify weight init- if necessary.
-	gan.gradientDescent(0.1, 55000, ui);
+	MLPPWGANOld gan_old(2, alg.transpose(outputSet)); // our gan is a wasserstein gan (wgan)
+	gan_old.addLayer(5, "Sigmoid");
+	gan_old.addLayer(2, "RELU");
+	gan_old.addLayer(5, "Sigmoid");
+	gan_old.addOutputLayer(); // User can specify weight init- if necessary.
+	gan_old.gradientDescent(0.1, 55000, ui);
 	std::cout << "GENERATED INPUT: (Gaussian-sampled noise):" << std::endl;
-	alg.printMatrix(gan.generateExample(100));
+	alg.printMatrix(gan_old.generateExample(100));
+
+	Ref<MLPPMatrix> output_set;
+	output_set.instance();
+	output_set->set_from_std_vectors(alg.transpose(outputSet));
+
+	MLPPWGAN gan(2, output_set); // our gan is a wasserstein gan (wgan)
+	gan.add_layer(5, MLPPActivation::ACTIVATION_FUNCTION_SIGMOID);
+	gan.add_layer(2, MLPPActivation::ACTIVATION_FUNCTION_RELU);
+	gan.add_layer(5, MLPPActivation::ACTIVATION_FUNCTION_SIGMOID);
+	gan.add_output_layer(); // User can specify weight init- if necessary.
+	gan.gradient_descent(0.1, 55000, ui);
+
+	String str = "GENERATED INPUT: (Gaussian-sampled noise):\n";
+	str += gan.generate_example(100)->to_string();
+	PLOG_MSG(str);
 }
 void MLPPTests::test_ann(bool ui) {
 	MLPPLinAlg alg;

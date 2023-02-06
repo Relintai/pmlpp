@@ -2416,6 +2416,19 @@ std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::scalarAdd(real_t scala
 	return A;
 }
 
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::scalar_multiply_vm(real_t scalar, Vector<Ref<MLPPMatrix>> A) {
+	for (int i = 0; i < A.size(); i++) {
+		A.write[i] = scalar_multiplym(scalar, A[i]);
+	}
+	return A;
+}
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::scalar_add_vm(real_t scalar, Vector<Ref<MLPPMatrix>> A) {
+	for (int i = 0; i < A.size(); i++) {
+		A.write[i] = scalar_addm(scalar, A[i]);
+	}
+	return A;
+}
+
 std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::resize(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B) {
 	A.resize(B.size());
 	for (int i = 0; i < B.size(); i++) {

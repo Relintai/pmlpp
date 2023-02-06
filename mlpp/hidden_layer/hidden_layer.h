@@ -31,7 +31,7 @@ public:
 	int get_n_hidden() const;
 	void set_n_hidden(const int val);
 
-	MLPPActivation::ActivationFunction get_activation();
+	MLPPActivation::ActivationFunction get_activation() const;
 	void set_activation(const MLPPActivation::ActivationFunction val);
 
 	Ref<MLPPMatrix> get_input();

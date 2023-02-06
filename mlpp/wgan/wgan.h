@@ -33,6 +33,12 @@ class MLPPWGAN : public Reference {
 	GDCLASS(MLPPWGAN, Reference);
 
 public:
+	Ref<MLPPMatrix> get_output_set();
+	void set_output_set(const Ref<MLPPMatrix> &val);
+
+	int get_k() const;
+	void set_k(const int val);
+
 	Ref<MLPPMatrix> generate_example(int n);
 	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
 	real_t score();
