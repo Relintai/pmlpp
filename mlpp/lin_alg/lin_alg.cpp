@@ -378,9 +378,9 @@ Ref<MLPPMatrix> MLPPLinAlg::transposem(const Ref<MLPPMatrix> &A) {
 	const real_t *a_ptr = A->ptr();
 	real_t *at_ptr = AT->ptrw();
 
-	for (int i = 0; i < a_size.x; ++i) {
-		for (int j = 0; j < a_size.y; ++j) {
-			at_ptr[AT->calculate_index(i, j)] = a_ptr[AT->calculate_index(j, i)];
+	for (int i = 0; i < a_size.y; ++i) {
+		for (int j = 0; j < a_size.x; ++j) {
+			at_ptr[AT->calculate_index(j, i)] = a_ptr[A->calculate_index(i, j)];
 		}
 	}
 
