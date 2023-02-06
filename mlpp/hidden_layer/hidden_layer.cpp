@@ -11,14 +11,14 @@
 #include <iostream>
 #include <random>
 
-int MLPPHiddenLayer::get_n_hidden() {
+int MLPPHiddenLayer::get_n_hidden() const {
 	return n_hidden;
 }
 void MLPPHiddenLayer::set_n_hidden(const int val) {
 	n_hidden = val;
 }
 
-MLPPActivation::ActivationFunction MLPPHiddenLayer::get_activation() {
+MLPPActivation::ActivationFunction MLPPHiddenLayer::get_activation() const {
 	return activation;
 }
 void MLPPHiddenLayer::set_activation(const MLPPActivation::ActivationFunction val) {
@@ -81,28 +81,28 @@ void MLPPHiddenLayer::set_delta(const Ref<MLPPMatrix> &val) {
 	delta = val;
 }
 
-MLPPReg::RegularizationType MLPPHiddenLayer::get_reg() {
+MLPPReg::RegularizationType MLPPHiddenLayer::get_reg() const {
 	return reg;
 }
 void MLPPHiddenLayer::set_reg(const MLPPReg::RegularizationType val) {
 	reg = val;
 }
 
-real_t MLPPHiddenLayer::get_lambda() {
+real_t MLPPHiddenLayer::get_lambda() const {
 	return lambda;
 }
 void MLPPHiddenLayer::set_lambda(const real_t val) {
 	lambda = val;
 }
 
-real_t MLPPHiddenLayer::get_alpha() {
+real_t MLPPHiddenLayer::get_alpha() const {
 	return alpha;
 }
 void MLPPHiddenLayer::set_alpha(const real_t val) {
 	alpha = val;
 }
 
-MLPPUtilities::WeightDistributionType MLPPHiddenLayer::get_weight_init() {
+MLPPUtilities::WeightDistributionType MLPPHiddenLayer::get_weight_init() const {
 	return weight_init;
 }
 void MLPPHiddenLayer::set_weight_init(const MLPPUtilities::WeightDistributionType val) {

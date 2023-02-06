@@ -28,7 +28,7 @@ class MLPPHiddenLayer : public Reference {
 	GDCLASS(MLPPHiddenLayer, Reference);
 
 public:
-	int get_n_hidden();
+	int get_n_hidden() const;
 	void set_n_hidden(const int val);
 
 	MLPPActivation::ActivationFunction get_activation();
@@ -58,16 +58,16 @@ public:
 	Ref<MLPPMatrix> get_delta();
 	void set_delta(const Ref<MLPPMatrix> &val);
 
-	MLPPReg::RegularizationType get_reg();
+	MLPPReg::RegularizationType get_reg() const;
 	void set_reg(const MLPPReg::RegularizationType val);
 
-	real_t get_lambda();
+	real_t get_lambda() const;
 	void set_lambda(const real_t val);
 
-	real_t get_alpha();
+	real_t get_alpha() const;
 	void set_alpha(const real_t val);
 
-	MLPPUtilities::WeightDistributionType get_weight_init();
+	MLPPUtilities::WeightDistributionType get_weight_init() const;
 	void set_weight_init(const MLPPUtilities::WeightDistributionType val);
 
 	void forward_pass();

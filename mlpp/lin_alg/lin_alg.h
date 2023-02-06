@@ -27,6 +27,7 @@ public:
 	bool linearIndependenceChecker(std::vector<std::vector<real_t>> A);
 
 	std::vector<std::vector<real_t>> gaussianNoise(int n, int m);
+	Ref<MLPPMatrix> gaussian_noise(int n, int m);
 
 	std::vector<std::vector<real_t>> addition(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 	std::vector<std::vector<real_t>> subtraction(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
