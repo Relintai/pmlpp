@@ -636,18 +636,6 @@ std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> M
 
 	if (!network.empty()) {
 		auto hiddenLayerAvn = network[network.size() - 1].activation_map[network[network.size() - 1].activation];
-
-		//std::cout << "=-------=--==-=-=-=" << std::endl;
-		//alg.printVector(outputLayer->delta);
-		//std::cout << "=-------=--==-=-=-=" << std::endl;
-		//alg.printVector(outputLayer->weights);
-
-		//std::cout << "=-------=--==-=-=-=" << std::endl;
-		//alg.printMatrix(alg.outerProduct(outputLayer->delta, outputLayer->weights));
-		//std::cout << "=-------=--==-=-=-=" << std::endl;
-		//alg.printMatrix((avn.*hiddenLayerAvn)(network[network.size() - 1].z, 1));
-		//CRASH_NOW();
-
 		network[network.size() - 1].delta = alg.hadamard_product(alg.outerProduct(outputLayer->delta, outputLayer->weights), (avn.*hiddenLayerAvn)(network[network.size() - 1].z, 1));
 		std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[network.size() - 1].input), network[network.size() - 1].delta);
 

@@ -44,6 +44,7 @@ public:
 	void test_soft_max_network(bool ui = false);
 	void test_autoencoder(bool ui = false);
 	void test_dynamically_sized_ann(bool ui = false);
+	void test_wgan_old(bool ui = false);
 	void test_wgan(bool ui = false);
 	void test_ann(bool ui = false);
 	void test_dynamically_sized_mann(bool ui = false);
