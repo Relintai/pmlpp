@@ -1437,7 +1437,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::outerProduct(std::vector<real_t> a,
 Ref<MLPPMatrix> MLPPLinAlg::outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
 	Ref<MLPPMatrix> C;
 	C.instance();
-	Size2i size = Size2i(a->size(), b->size());
+	Size2i size = Size2i(b->size(), a->size());
 	C->resize(size);
 
 	const real_t *a_ptr = a->ptr();
