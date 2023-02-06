@@ -464,7 +464,7 @@ void MLPPWGANOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) 
 		updateGeneratorParameters(cumulativeGeneratorHiddenLayerWGrad, learning_rate);
 
 		forwardPass();
-		
+
 		if (UI) {
 			MLPPWGANOld::UI(epoch, cost_prev, MLPPWGANOld::y_hat, alg.onevec(n));
 		}
@@ -598,7 +598,9 @@ void MLPPWGANOld::updateGeneratorParameters(std::vector<std::vector<std::vector<
 	MLPPLinAlg alg;
 
 	if (!network.empty()) {
-		for (uint32_t i = network.size() / 2; i >= 0; i--) {
+		for (int ii = network.size() / 2; ii >= 0; ii--) {
+			uint32_t i = static_cast<uint32_t>(ii);
+
 			//std::cout << network[i].weights.size() << "x" << network[i].weights[0].size() << std::endl;
 			//std::cout << hiddenLayerUpdations[(network.size() - 2) - i + 1].size() << "x" << hiddenLayerUpdations[(network.size() - 2) - i + 1][0].size() << std::endl;
 			network[i].weights = alg.subtraction(network[i].weights, hiddenLayerUpdations[(network.size() - 2) - i + 1]);
@@ -662,7 +664,8 @@ std::vector<std::vector<std::vector<real_t>>> MLPPWGANOld::computeGeneratorGradi
 		std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[network.size() - 1].input), network[network.size() - 1].delta);
 		cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(network[network.size() - 1].weights, network[network.size() - 1].lambda, network[network.size() - 1].alpha, network[network.size() - 1].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 
-		for (uint32_t i = network.size() - 2; i >= 0; i--) {
+		for (int ii = network.size() - 2; ii >= 0; ii--) {
+			uint32_t i = static_cast<uint32_t>(ii);
 			auto hiddenLayerAvnl = network[i].activation_map[network[i].activation];
 			network[i].delta = alg.hadamard_product(alg.matmult(network[i + 1].delta, alg.transpose(network[i + 1].weights)), (avn.*hiddenLayerAvnl)(network[i].z, 1));
 			std::vector<std::vector<real_t>> hiddenLayerWGradl = alg.matmult(alg.transpose(network[i].input), network[i].delta);
@@ -677,7 +680,9 @@ void MLPPWGANOld::UI(int epoch, real_t cost_prev, std::vector<real_t> y_hat, std
 	std::cout << "Layer " << network.size() + 1 << ": " << std::endl;
 	MLPPUtilities::UI(outputLayer->weights, outputLayer->bias);
 	if (!network.empty()) {
-		for (uint32_t i = network.size() - 1; i >= 0; i--) {
+		for (int ii = network.size() - 1; ii >= 0; ii--) {
+			uint32_t i = static_cast<uint32_t>(ii);
+
 			std::cout << "Layer " << i + 1 << ": " << std::endl;
 			MLPPUtilities::UI(network[i].weights, network[i].bias);
 		}
