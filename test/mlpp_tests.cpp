@@ -49,6 +49,7 @@
 
 #include "../mlpp/mlp/mlp_old.h"
 #include "../mlpp/wgan/wgan_old.h"
+#include "../mlpp/pca/pca_old.h"
 
 Vector<real_t> dstd_vec_to_vec(const std::vector<real_t> &in) {
 	Vector<real_t> r;
@@ -732,7 +733,7 @@ void MLPPTests::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
 	std::cout << "PCA" << std::endl;
 
 	// PCA done using Jacobi's method to approximate eigenvalues and eigenvectors.
-	MLPPPCA dr(inputSet, 1); // 1 dimensional representation.
+	MLPPPCAOld dr(inputSet, 1); // 1 dimensional representation.
 	std::cout << std::endl;
 	std::cout << "Dimensionally reduced representation:" << std::endl;
 	alg.printMatrix(dr.principalComponents());
