@@ -50,6 +50,8 @@ sources = [
     "mlpp/utilities/utilities.cpp",
     "mlpp/wgan/wgan.cpp",
 
+    "mlpp/wgan/wgan_old.cpp",
+
     "test/mlpp_tests.cpp",
 ]
 

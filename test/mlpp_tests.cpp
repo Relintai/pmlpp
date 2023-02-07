@@ -47,6 +47,8 @@
 #include "../mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "../mlpp/wgan/wgan.h"
 
+#include "../mlpp/wgan/wgan_old.h"
+
 Vector<real_t> dstd_vec_to_vec(const std::vector<real_t> &in) {
 	Vector<real_t> r;
 
