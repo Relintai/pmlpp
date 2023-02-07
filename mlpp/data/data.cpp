@@ -938,12 +938,12 @@ std::vector<std::vector<real_t>> MLPPData::LSA(std::vector<std::string> sentence
 	MLPPLinAlg alg;
 	std::vector<std::vector<real_t>> docWordData = BOW(sentences, "Binary");
 
-	auto [U, S, Vt] = alg.SVD(docWordData);
+	MLPPLinAlg::SDVResult svr_res = alg.SVD(docWordData);
 	std::vector<std::vector<real_t>> S_trunc = alg.zeromat(dim, dim);
 	std::vector<std::vector<real_t>> Vt_trunc;
 	for (int i = 0; i < dim; i++) {
-		S_trunc[i][i] = S[i][i];
-		Vt_trunc.push_back(Vt[i]);
+		S_trunc[i][i] = svr_res.S[i][i];
+		Vt_trunc.push_back(svr_res.Vt[i]);
 	}
 
 	std::vector<std::vector<real_t>> embeddings = alg.matmult(S_trunc, Vt_trunc);

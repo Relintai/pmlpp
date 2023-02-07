@@ -1198,18 +1198,24 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<real_t>> A) {
 	return res;
 }
 
-std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
-	auto [left_eigenvecs, eigenvals] = eig(matmult(A, transpose(A)));
-	auto [right_eigenvecs, right_eigenvals] = eig(matmult(transpose(A), A));
+MLPPLinAlg::SDVResult MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
+	EigenResult left_eigen = eigen(matmult(A, transpose(A)));
+	EigenResult right_eigen = eigen(matmult(transpose(A), A));
 
-	std::vector<std::vector<real_t>> singularvals = sqrt(eigenvals);
+	std::vector<std::vector<real_t>> singularvals = sqrt(left_eigen.eigen_values);
 	std::vector<std::vector<real_t>> sigma = zeromat(A.size(), A[0].size());
 	for (int i = 0; i < singularvals.size(); i++) {
 		for (int j = 0; j < singularvals[i].size(); j++) {
 			sigma[i][j] = singularvals[i][j];
 		}
 	}
-	return { left_eigenvecs, sigma, right_eigenvecs };
+
+	SDVResult res;
+	res.U = left_eigen.eigen_vectors;
+	res.S = sigma;
+	res.Vt = right_eigen.eigen_vectors;
+
+	return res;
 }
 
 MLPPLinAlg::SDVResult MLPPLinAlg::svd(std::vector<std::vector<real_t>> A) {

@@ -21,12 +21,12 @@ std::vector<std::vector<real_t>> MLPPPCA::principalComponents() {
 	MLPPLinAlg alg;
 	MLPPData data;
 
-	auto [U, S, Vt] = alg.SVD(alg.cov(inputSet));
+	MLPPLinAlg::SDVResult svr_res = alg.SVD(alg.cov(inputSet));
 	X_normalized = data.meanCentering(inputSet);
-	U_reduce.resize(U.size());
+	U_reduce.resize(svr_res.U.size());
 	for (int i = 0; i < k; i++) {
-		for (int j = 0; j < U.size(); j++) {
-			U_reduce[j].push_back(U[j][i]);
+		for (int j = 0; j < svr_res.U.size(); j++) {
+			U_reduce[j].push_back(svr_res.U[j][i]);
 		}
 	}
 	Z = alg.matmult(alg.transpose(U_reduce), X_normalized);

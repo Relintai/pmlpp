@@ -121,13 +121,13 @@ public:
 
 	EigenResult eigen(std::vector<std::vector<real_t>> A);
 
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> SVD(std::vector<std::vector<real_t>> A);
-
 	struct SDVResult {
 		std::vector<std::vector<real_t>> U;
 		std::vector<std::vector<real_t>> S;
 		std::vector<std::vector<real_t>> Vt;
 	};
+
+	SDVResult SVD(std::vector<std::vector<real_t>> A);
 
 	SDVResult svd(std::vector<std::vector<real_t>> A);
 

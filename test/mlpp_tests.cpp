@@ -721,7 +721,7 @@ void MLPPTests::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
 
 	std::cout << "SVD" << std::endl;
 
-	MLPPLinAlg::SDVResult svd = alg.svd(inputSet);
+	MLPPLinAlg::SDVResult svd = alg.SVD(inputSet);
 
 	std::cout << "U:" << std::endl;
 	alg.printMatrix(svd.U);
