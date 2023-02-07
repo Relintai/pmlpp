@@ -12,6 +12,9 @@
 #include "../hidden_layer/hidden_layer.h"
 #include "../output_layer/output_layer.h"
 
+#include "../hidden_layer/hidden_layer_old.h"
+#include "../output_layer/output_layer_old.h"
+
 #include <string>
 #include <tuple>
 #include <vector>

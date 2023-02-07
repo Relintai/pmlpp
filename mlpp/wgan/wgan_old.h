@@ -17,8 +17,8 @@
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
 
-#include "../hidden_layer/hidden_layer.h"
-#include "../output_layer/output_layer.h"
+#include "../hidden_layer/hidden_layer_old.h"
+#include "../output_layer/output_layer_old.h"
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"

@@ -13,10 +13,11 @@
 #include "../hidden_layer/hidden_layer.h"
 #include "../multi_output_layer/multi_output_layer.h"
 
+#include "../hidden_layer/hidden_layer_old.h"
+#include "../multi_output_layer/multi_output_layer_old.h"
+
 #include <string>
 #include <vector>
-
-
 
 class MLPPMANN {
 public:
@@ -46,6 +47,5 @@ private:
 	int k;
 	int n_output;
 };
-
 
 #endif /* MANN_hpp */
