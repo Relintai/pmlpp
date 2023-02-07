@@ -114,13 +114,21 @@ public:
 
 	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> eig(std::vector<std::vector<real_t>> A);
 
-	struct EigenResult {
+	struct EigenResultOld {
 		std::vector<std::vector<real_t>> eigen_vectors;
 		std::vector<std::vector<real_t>> eigen_values;
 	};
 
-	EigenResult eigen(std::vector<std::vector<real_t>> A);
+	EigenResultOld eigen_old(std::vector<std::vector<real_t>> A);
 
+/*
+	struct EigenResult {
+		Ref<MLPPMatrix> eigen_vectors;
+		Ref<MLPPMatrix> eigen_values;
+	};
+
+	EigenResult eigen(const Ref<MLPPMatrix> &A);
+*/
 	struct SDVResultOld {
 		std::vector<std::vector<real_t>> U;
 		std::vector<std::vector<real_t>> S;
@@ -129,7 +137,13 @@ public:
 
 	SDVResultOld SVD(std::vector<std::vector<real_t>> A);
 
-	SDVResultOld svd(std::vector<std::vector<real_t>> A);
+	struct SDVResult {
+		Ref<MLPPMatrix> U;
+		Ref<MLPPMatrix> S;
+		Ref<MLPPMatrix> Vt;
+	};
+
+	SDVResult svd(const Ref<MLPPMatrix> &A);
 
 	std::vector<real_t> vectorProjection(std::vector<real_t> a, std::vector<real_t> b);
 

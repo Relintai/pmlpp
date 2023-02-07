@@ -711,7 +711,7 @@ void MLPPTests::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
 	// PCA, SVD, eigenvalues & eigenvectors
 	std::vector<std::vector<real_t>> inputSet = { { 1, 1 }, { 1, 1 } };
 
-	MLPPLinAlg::EigenResult eigen = alg.eigen(inputSet);
+	MLPPLinAlg::EigenResultOld eigen = alg.eigen_old(inputSet);
 
 	std::cout << "Eigenvectors:" << std::endl;
 	alg.printMatrix(eigen.eigen_vectors);

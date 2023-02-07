@@ -1073,7 +1073,7 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 	return { eigenvectors, a_new };
 }
 
-MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<real_t>> A) {
+MLPPLinAlg::EigenResultOld MLPPLinAlg::eigen_old(std::vector<std::vector<real_t>> A) {
 	/*
 	A (the entered parameter) in most use cases will be X'X, XX', etc. and must be symmetric.
 	That simply means that 1) X' = X and 2) X is a square matrix. This function that computes the
@@ -1191,7 +1191,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<real_t>> A) {
 		}
 	}
 
-	EigenResult res;
+	EigenResultOld res;
 	res.eigen_vectors = eigenvectors;
 	res.eigen_values = a_new;
 
@@ -1199,8 +1199,8 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<real_t>> A) {
 }
 
 MLPPLinAlg::SDVResultOld MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
-	EigenResult left_eigen = eigen(matmult(A, transpose(A)));
-	EigenResult right_eigen = eigen(matmult(transpose(A), A));
+	EigenResultOld left_eigen = eigen_old(matmult(A, transpose(A)));
+	EigenResultOld right_eigen = eigen_old(matmult(transpose(A), A));
 
 	std::vector<std::vector<real_t>> singularvals = sqrt(left_eigen.eigen_values);
 	std::vector<std::vector<real_t>> sigma = zeromat(A.size(), A[0].size());
@@ -1218,9 +1218,10 @@ MLPPLinAlg::SDVResultOld MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
 	return res;
 }
 
-MLPPLinAlg::SDVResultOld MLPPLinAlg::svd(std::vector<std::vector<real_t>> A) {
-	EigenResult left_eigen = eigen(matmult(A, transpose(A)));
-	EigenResult right_eigen = eigen(matmult(transpose(A), A));
+MLPPLinAlg::SDVResult MLPPLinAlg::svd(const Ref<MLPPMatrix> &A) {
+	/*
+	EigenResultOld left_eigen = eigen(matmult(A, transpose(A)));
+	EigenResultOld right_eigen = eigen(matmult(transpose(A), A));
 
 	std::vector<std::vector<real_t>> singularvals = sqrt(left_eigen.eigen_values);
 	std::vector<std::vector<real_t>> sigma = zeromat(A.size(), A[0].size());
@@ -1230,12 +1231,15 @@ MLPPLinAlg::SDVResultOld MLPPLinAlg::svd(std::vector<std::vector<real_t>> A) {
 		}
 	}
 
-	SDVResultOld res;
+	SDVResult res;
 	res.U = left_eigen.eigen_vectors;
 	res.S = sigma;
 	res.Vt = right_eigen.eigen_vectors;
 
 	return res;
+	*/
+
+	return SDVResult();
 }
 
 std::vector<real_t> MLPPLinAlg::vectorProjection(std::vector<real_t> a, std::vector<real_t> b) {
