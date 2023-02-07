@@ -54,6 +54,7 @@ sources = [
     "mlpp/output_layer/output_layer_old.cpp",
     "mlpp/multi_output_layer/multi_output_layer_old.cpp",
     "mlpp/hidden_layer/hidden_layer_old.cpp",
+    "mlpp/mlp/mlp_old.cpp",
 
     "test/mlpp_tests.cpp",
 ]
