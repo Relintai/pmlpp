@@ -12,12 +12,12 @@
 
 #include <vector>
 
-
 class MLPPPCA {
 public:
-	MLPPPCA(std::vector<std::vector<real_t>> inputSet, int k);
 	std::vector<std::vector<real_t>> principalComponents();
 	real_t score();
+
+	MLPPPCA(std::vector<std::vector<real_t>> inputSet, int k);
 
 private:
 	std::vector<std::vector<real_t>> inputSet;
@@ -26,6 +26,5 @@ private:
 	std::vector<std::vector<real_t>> Z;
 	int k;
 };
-
 
 #endif /* PCA_hpp */

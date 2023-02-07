@@ -680,6 +680,43 @@ real_t MLPPLinAlg::det(std::vector<std::vector<real_t>> A, int d) {
 	return deter;
 }
 
+real_t MLPPLinAlg::detm(const Ref<MLPPMatrix> &A, int d) {
+	ERR_FAIL_COND_V(!A.is_valid(), 0);
+
+	real_t deter = 0;
+	Ref<MLPPMatrix> B;
+	B.instance();
+	B->resize(Size2i(d, d));
+	B->fill(0);
+
+	/* This is the base case in which the input is a 2x2 square matrix.
+	Recursion is performed unless and until we reach this base case,
+	such that we recieve a scalar as the result. */
+	if (d == 2) {
+		return A->get_element(0, 0) * A->get_element(1, 1) - A->get_element(0, 1) * A->get_element(1, 0);
+	} else {
+		for (int i = 0; i < d; i++) {
+			int sub_i = 0;
+			for (int j = 1; j < d; j++) {
+				int sub_j = 0;
+				for (int k = 0; k < d; k++) {
+					if (k == i) {
+						continue;
+					}
+
+					B->set_element(sub_i, sub_j, A->get_element(j, k));
+					sub_j++;
+				}
+				sub_i++;
+			}
+
+			deter += Math::pow(static_cast<real_t>(-1), static_cast<real_t>(i)) * A->get_element(0, i) * detm(B, d - 1);
+		}
+	}
+
+	return deter;
+}
+
 real_t MLPPLinAlg::trace(std::vector<std::vector<real_t>> A) {
 	real_t trace = 0;
 	for (int i = 0; i < A.size(); i++) {
@@ -755,6 +792,76 @@ std::vector<std::vector<real_t>> MLPPLinAlg::pinverse(std::vector<std::vector<re
 	return matmult(inverse(matmult(transpose(A), A)), transpose(A));
 }
 
+Ref<MLPPMatrix> MLPPLinAlg::cofactorm(const Ref<MLPPMatrix> &A, int n, int i, int j) {
+	Ref<MLPPMatrix> cof;
+	cof.instance();
+	cof->resize(A->size());
+
+	int sub_i = 0;
+	int sub_j = 0;
+
+	for (int row = 0; row < n; row++) {
+		for (int col = 0; col < n; col++) {
+			if (row != i && col != j) {
+				cof->set_element(sub_i, sub_j++, A->get_element(row, col));
+
+				if (sub_j == n - 1) {
+					sub_j = 0;
+					sub_i++;
+				}
+			}
+		}
+	}
+
+	return cof;
+}
+Ref<MLPPMatrix> MLPPLinAlg::adjointm(const Ref<MLPPMatrix> &A) {
+	Ref<MLPPMatrix> adj;
+
+	ERR_FAIL_COND_V(!A.is_valid(), adj);
+
+	Size2i a_size = A->size();
+
+	ERR_FAIL_COND_V(a_size.x != a_size.y, adj);
+
+	//Resizing the initial adjoint matrix
+
+	adj.instance();
+	adj->resize(a_size);
+
+	// Checking for the case where the given N x N matrix is a scalar
+	if (a_size.y == 1) {
+		adj->set_element(0, 0, 1);
+		return adj;
+	}
+
+	if (a_size.y == 2) {
+		adj->set_element(0, 0, A->get_element(1, 1));
+		adj->set_element(1, 1, A->get_element(0, 0));
+
+		adj->set_element(0, 1, -A->get_element(0, 1));
+		adj->set_element(1, 0, -A->get_element(1, 0));
+
+		return adj;
+	}
+
+	for (int i = 0; i < a_size.y; i++) {
+		for (int j = 0; j < a_size.x; j++) {
+			Ref<MLPPMatrix> cof = cofactorm(A, a_size.y, i, j);
+			// 1 if even, -1 if odd
+			int sign = (i + j) % 2 == 0 ? 1 : -1;
+			adj->set_element(j, i, sign * detm(cof, int(a_size.y) - 1));
+		}
+	}
+	return adj;
+}
+Ref<MLPPMatrix> MLPPLinAlg::inversem(const Ref<MLPPMatrix> &A) {
+	return scalar_multiplym(1 / detm(A, int(A->size().y)), adjointm(A));
+}
+Ref<MLPPMatrix> MLPPLinAlg::pinversem(const Ref<MLPPMatrix> &A) {
+	return matmultm(inversem(matmultm(transposem(A), A)), transposem(A));
+}
+
 std::vector<std::vector<real_t>> MLPPLinAlg::zeromat(int n, int m) {
 	std::vector<std::vector<real_t>> zeromat;
 	zeromat.resize(n);
@@ -772,7 +879,7 @@ Ref<MLPPMatrix> MLPPLinAlg::zeromatm(int n, int m) {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
-	mat->resize(Size2i(n, m));
+	mat->resize(Size2i(m, n));
 	mat->fill(0);
 
 	return mat;
@@ -781,7 +888,7 @@ Ref<MLPPMatrix> MLPPLinAlg::onematm(int n, int m) {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
-	mat->resize(Size2i(n, m));
+	mat->resize(Size2i(m, n));
 	mat->fill(1);
 
 	return mat;
@@ -790,7 +897,7 @@ Ref<MLPPMatrix> MLPPLinAlg::fullm(int n, int m, int k) {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
-	mat->resize(Size2i(n, m));
+	mat->resize(Size2i(m, n));
 	mat->fill(k);
 
 	return mat;
@@ -936,6 +1043,21 @@ std::vector<std::vector<real_t>> MLPPLinAlg::identity(real_t d) {
 		}
 	}
 	return identityMat;
+}
+
+Ref<MLPPMatrix> MLPPLinAlg::identitym(int d) {
+	Ref<MLPPMatrix> identity_mat;
+	identity_mat.instance();
+	identity_mat->resize(Size2i(d, d));
+	identity_mat->fill(0);
+
+	real_t *im_ptr = identity_mat->ptrw();
+
+	for (int i = 0; i < d; i++) {
+		im_ptr[identity_mat->calculate_index(i, i)] = 1;
+	}
+
+	return identity_mat;
 }
 
 std::vector<std::vector<real_t>> MLPPLinAlg::cov(std::vector<std::vector<real_t>> A) {
@@ -1198,6 +1320,146 @@ MLPPLinAlg::EigenResultOld MLPPLinAlg::eigen_old(std::vector<std::vector<real_t>
 	return res;
 }
 
+MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
+	EigenResult res;
+
+	ERR_FAIL_COND_V(!A.is_valid(), res);
+
+	/*
+	A (the entered parameter) in most use cases will be X'X, XX', etc. and must be symmetric.
+	That simply means that 1) X' = X and 2) X is a square matrix. This function that computes the
+	eigenvalues of a matrix is utilizing Jacobi's method.
+	*/
+
+	real_t diagonal = true; // Perform the iterative Jacobi algorithm unless and until we reach a diagonal matrix which yields us the eigenvals.
+
+	HashMap<int, int> val_to_vec;
+	Ref<MLPPMatrix> a_new;
+	Ref<MLPPMatrix> eigenvectors = identitym(A->size().y);
+	Size2i a_size = A->size();
+
+	do {
+		real_t a_ij = A->get_element(0, 1);
+		real_t sub_i = 0;
+		real_t sub_j = 1;
+		for (int i = 0; i < a_size.y; ++i) {
+			for (int j = 0; j < a_size.x; ++j) {
+				real_t ca_ij = A->get_element(i, j);
+				real_t abs_ca_ij = ABS(ca_ij);
+
+				if (i != j && abs_ca_ij > a_ij) {
+					a_ij = ca_ij;
+					sub_i = i;
+					sub_j = j;
+				} else if (i != j && abs_ca_ij == a_ij) {
+					if (i < sub_i) {
+						a_ij = ca_ij;
+						sub_i = i;
+						sub_j = j;
+					}
+				}
+			}
+		}
+
+		real_t a_ii = A->get_element(sub_i, sub_i);
+		real_t a_jj = A->get_element(sub_j, sub_j);
+		real_t a_ji = A->get_element(sub_j, sub_i);
+		real_t theta;
+
+		if (a_ii == a_jj) {
+			theta = M_PI / 4;
+		} else {
+			theta = 0.5 * atan(2 * a_ij / (a_ii - a_jj));
+		}
+
+		Ref<MLPPMatrix> P = identitym(A->size().y);
+		P->set_element(sub_i, sub_j, -Math::sin(theta));
+		P->set_element(sub_i, sub_i, Math::cos(theta));
+		P->set_element(sub_j, sub_j, Math::cos(theta));
+		P->set_element(sub_j, sub_i, Math::sin(theta));
+
+		a_new = matmultm(matmultm(inversem(P), A), P);
+
+		Size2i a_new_size = a_new->size();
+
+		for (int i = 0; i < a_new_size.y; ++i) {
+			for (int j = 0; j < a_new_size.x; ++j) {
+				if (i != j && Math::round(a_new->get_element(i, j)) == 0) {
+					a_new->set_element(i, j, 0);
+				}
+			}
+		}
+
+		bool non_zero = false;
+		for (int i = 0; i < a_new_size.y; ++i) {
+			for (int j = 0; j < a_new_size.x; ++j) {
+				if (i != j && Math::round(a_new->get_element(i, j)) == 0) {
+					non_zero = true;
+				}
+			}
+		}
+
+		if (non_zero) {
+			diagonal = false;
+		} else {
+			diagonal = true;
+		}
+
+		if (a_new == A) {
+			diagonal = true;
+			for (int i = 0; i < a_new_size.y; ++i) {
+				for (int j = 0; j < a_new_size.x; ++j) {
+					if (i != j) {
+						a_new->set_element(i, j, 0);
+					}
+				}
+			}
+		}
+
+		eigenvectors = matmultm(eigenvectors, P);
+		A = a_new;
+
+	} while (!diagonal);
+
+	Ref<MLPPMatrix> a_new_prior = a_new;
+
+	Size2i a_new_size = a_new->size();
+
+	// Bubble Sort. Should change this later.
+	for (int i = 0; i < a_new_size.y - 1; ++i) {
+		for (int j = 0; j < a_new_size.x - 1 - i; ++j) {
+			if (a_new->get_element(j, j) < a_new->get_element(j + 1, j + 1)) {
+				real_t temp = a_new->get_element(j + 1, j + 1);
+				a_new->set_element(j + 1, j + 1, a_new->get_element(j, j));
+				a_new->set_element(j, j, temp);
+			}
+		}
+	}
+
+	for (int i = 0; i < a_new_size.y; ++i) {
+		for (int j = 0; j < a_new_size.x; ++j) {
+			if (a_new->get_element(i, i) == a_new_prior->get_element(j, j)) {
+				val_to_vec[i] = j;
+			}
+		}
+	}
+
+	Ref<MLPPMatrix> eigen_temp = eigenvectors->duplicate();
+
+	Size2i eigenvectors_size = eigenvectors->size();
+
+	for (int i = 0; i < eigenvectors_size.y; ++i) {
+		for (int j = 0; j < eigenvectors_size.x; ++j) {
+			eigenvectors->set_element(i, j, eigen_temp->get_element(i, val_to_vec[j]));
+		}
+	}
+
+	res.eigen_vectors = eigenvectors;
+	res.eigen_values = a_new;
+
+	return res;
+}
+
 MLPPLinAlg::SDVResultOld MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
 	EigenResultOld left_eigen = eigen_old(matmult(A, transpose(A)));
 	EigenResultOld right_eigen = eigen_old(matmult(transpose(A), A));
@@ -1219,27 +1481,31 @@ MLPPLinAlg::SDVResultOld MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
 }
 
 MLPPLinAlg::SDVResult MLPPLinAlg::svd(const Ref<MLPPMatrix> &A) {
-	/*
-	EigenResultOld left_eigen = eigen(matmult(A, transpose(A)));
-	EigenResultOld right_eigen = eigen(matmult(transpose(A), A));
+	SDVResult res;
 
-	std::vector<std::vector<real_t>> singularvals = sqrt(left_eigen.eigen_values);
-	std::vector<std::vector<real_t>> sigma = zeromat(A.size(), A[0].size());
-	for (int i = 0; i < singularvals.size(); i++) {
-		for (int j = 0; j < singularvals[i].size(); j++) {
-			sigma[i][j] = singularvals[i][j];
+	ERR_FAIL_COND_V(!A.is_valid(), res);
+
+	Size2i a_size = A->size();
+
+	EigenResult left_eigen = eigen(matmultm(A, transposem(A)));
+	EigenResult right_eigen = eigen(matmultm(transposem(A), A));
+
+	Ref<MLPPMatrix> singularvals = sqrtm(left_eigen.eigen_values);
+	Ref<MLPPMatrix> sigma = zeromatm(a_size.y, a_size.x);
+
+	Size2i singularvals_size = singularvals->size();
+
+	for (int i = 0; i < singularvals_size.y; ++i) {
+		for (int j = 0; j < singularvals_size.x; ++j) {
+			sigma->set_element(i, j, singularvals->get_element(i, j));
 		}
 	}
 
-	SDVResult res;
 	res.U = left_eigen.eigen_vectors;
 	res.S = sigma;
 	res.Vt = right_eigen.eigen_vectors;
 
 	return res;
-	*/
-
-	return SDVResult();
 }
 
 std::vector<real_t> MLPPLinAlg::vectorProjection(std::vector<real_t> a, std::vector<real_t> b) {

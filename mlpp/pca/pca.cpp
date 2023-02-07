@@ -11,12 +11,6 @@
 #include <iostream>
 #include <random>
 
-
-
-MLPPPCA::MLPPPCA(std::vector<std::vector<real_t>> inputSet, int k) :
-		inputSet(inputSet), k(k) {
-}
-
 std::vector<std::vector<real_t>> MLPPPCA::principalComponents() {
 	MLPPLinAlg alg;
 	MLPPData data;
@@ -52,3 +46,6 @@ real_t MLPPPCA::score() {
 	return 1 - num / den;
 }
 
+MLPPPCA::MLPPPCA(std::vector<std::vector<real_t>> inputSet, int k) :
+		inputSet(inputSet), k(k) {
+}

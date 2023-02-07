@@ -76,6 +76,7 @@ public:
 	Ref<MLPPMatrix> absm(const Ref<MLPPMatrix> &A);
 
 	real_t det(std::vector<std::vector<real_t>> A, int d);
+	real_t detm(const Ref<MLPPMatrix> &A, int d);
 
 	real_t trace(std::vector<std::vector<real_t>> A);
 
@@ -83,6 +84,11 @@ public:
 	std::vector<std::vector<real_t>> adjoint(std::vector<std::vector<real_t>> A);
 	std::vector<std::vector<real_t>> inverse(std::vector<std::vector<real_t>> A);
 	std::vector<std::vector<real_t>> pinverse(std::vector<std::vector<real_t>> A);
+
+	Ref<MLPPMatrix> cofactorm(const Ref<MLPPMatrix> &A, int n, int i, int j);
+	Ref<MLPPMatrix> adjointm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> inversem(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> pinversem(const Ref<MLPPMatrix> &A);
 
 	std::vector<std::vector<real_t>> zeromat(int n, int m);
 	std::vector<std::vector<real_t>> onemat(int n, int m);
@@ -109,6 +115,7 @@ public:
 	real_t norm_2(std::vector<std::vector<real_t>> A);
 
 	std::vector<std::vector<real_t>> identity(real_t d);
+	Ref<MLPPMatrix> identitym(int d);
 
 	std::vector<std::vector<real_t>> cov(std::vector<std::vector<real_t>> A);
 
@@ -121,14 +128,13 @@ public:
 
 	EigenResultOld eigen_old(std::vector<std::vector<real_t>> A);
 
-/*
 	struct EigenResult {
 		Ref<MLPPMatrix> eigen_vectors;
 		Ref<MLPPMatrix> eigen_values;
 	};
 
-	EigenResult eigen(const Ref<MLPPMatrix> &A);
-*/
+	EigenResult eigen(Ref<MLPPMatrix> A);
+
 	struct SDVResultOld {
 		std::vector<std::vector<real_t>> U;
 		std::vector<std::vector<real_t>> S;
