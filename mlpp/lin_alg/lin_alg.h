@@ -121,15 +121,15 @@ public:
 
 	EigenResult eigen(std::vector<std::vector<real_t>> A);
 
-	struct SDVResult {
+	struct SDVResultOld {
 		std::vector<std::vector<real_t>> U;
 		std::vector<std::vector<real_t>> S;
 		std::vector<std::vector<real_t>> Vt;
 	};
 
-	SDVResult SVD(std::vector<std::vector<real_t>> A);
+	SDVResultOld SVD(std::vector<std::vector<real_t>> A);
 
-	SDVResult svd(std::vector<std::vector<real_t>> A);
+	SDVResultOld svd(std::vector<std::vector<real_t>> A);
 
 	std::vector<real_t> vectorProjection(std::vector<real_t> a, std::vector<real_t> b);
 

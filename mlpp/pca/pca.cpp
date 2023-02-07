@@ -21,7 +21,7 @@ std::vector<std::vector<real_t>> MLPPPCA::principalComponents() {
 	MLPPLinAlg alg;
 	MLPPData data;
 
-	MLPPLinAlg::SDVResult svr_res = alg.SVD(alg.cov(inputSet));
+	MLPPLinAlg::SDVResultOld svr_res = alg.SVD(alg.cov(inputSet));
 	X_normalized = data.meanCentering(inputSet);
 	U_reduce.resize(svr_res.U.size());
 	for (int i = 0; i < k; i++) {

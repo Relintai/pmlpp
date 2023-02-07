@@ -1198,7 +1198,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(std::vector<std::vector<real_t>> A) {
 	return res;
 }
 
-MLPPLinAlg::SDVResult MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
+MLPPLinAlg::SDVResultOld MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
 	EigenResult left_eigen = eigen(matmult(A, transpose(A)));
 	EigenResult right_eigen = eigen(matmult(transpose(A), A));
 
@@ -1210,7 +1210,7 @@ MLPPLinAlg::SDVResult MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
 		}
 	}
 
-	SDVResult res;
+	SDVResultOld res;
 	res.U = left_eigen.eigen_vectors;
 	res.S = sigma;
 	res.Vt = right_eigen.eigen_vectors;
@@ -1218,7 +1218,7 @@ MLPPLinAlg::SDVResult MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
 	return res;
 }
 
-MLPPLinAlg::SDVResult MLPPLinAlg::svd(std::vector<std::vector<real_t>> A) {
+MLPPLinAlg::SDVResultOld MLPPLinAlg::svd(std::vector<std::vector<real_t>> A) {
 	EigenResult left_eigen = eigen(matmult(A, transpose(A)));
 	EigenResult right_eigen = eigen(matmult(transpose(A), A));
 
@@ -1230,7 +1230,7 @@ MLPPLinAlg::SDVResult MLPPLinAlg::svd(std::vector<std::vector<real_t>> A) {
 		}
 	}
 
-	SDVResult res;
+	SDVResultOld res;
 	res.U = left_eigen.eigen_vectors;
 	res.S = sigma;
 	res.Vt = right_eigen.eigen_vectors;
