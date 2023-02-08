@@ -14,9 +14,6 @@
 
 #include "mlpp_vector.h"
 
-// Matrices are stored as rows first
-// [x][y]
-
 class MLPPMatrix : public Reference {
 	GDCLASS(MLPPMatrix, Reference);
 
