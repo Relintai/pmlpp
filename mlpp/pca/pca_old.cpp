@@ -25,23 +25,27 @@ std::vector<std::vector<real_t>> MLPPPCAOld::principalComponents() {
 	X_normalized = data.meanCentering(inputSet);
 	U_reduce.resize(svr_res.U.size());
 	for (int i = 0; i < k; i++) {
-		for (int j = 0; j < svr_res.U.size(); j++) {
+		for (uint32_t j = 0; j < svr_res.U.size(); j++) {
 			U_reduce[j].push_back(svr_res.U[j][i]);
 		}
 	}
 	Z = alg.matmult(alg.transpose(U_reduce), X_normalized);
 	return Z;
 }
+
 // Simply tells us the percentage of variance maintained.
 real_t MLPPPCAOld::score() {
 	MLPPLinAlg alg;
 	std::vector<std::vector<real_t>> X_approx = alg.matmult(U_reduce, Z);
-	real_t num, den = 0;
-	for (int i = 0; i < X_normalized.size(); i++) {
+	real_t num = 0;
+	real_t den = 0;
+
+	for (uint32_t i = 0; i < X_normalized.size(); i++) {
 		num += alg.norm_sq(alg.subtraction(X_normalized[i], X_approx[i]));
 	}
+
 	num /= X_normalized.size();
-	for (int i = 0; i < X_normalized.size(); i++) {
+	for (uint32_t i = 0; i < X_normalized.size(); i++) {
 		den += alg.norm_sq(X_normalized[i]);
 	}
 
@@ -49,6 +53,7 @@ real_t MLPPPCAOld::score() {
 	if (den == 0) {
 		den += 1e-10; // For numerical sanity as to not recieve a domain error
 	}
+
 	return 1 - num / den;
 }
 
