@@ -60,4 +60,6 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_from_mlpp_vectors_array", "from"), &MLPPMatrix::set_from_mlpp_vectors_array);
 	ClassDB::bind_method(D_METHOD("set_from_arrays", "from"), &MLPPMatrix::set_from_arrays);
 	ClassDB::bind_method(D_METHOD("set_from_mlpp_matrix", "from"), &MLPPMatrix::set_from_mlpp_matrix);
+
+	ClassDB::bind_method(D_METHOD("is_equal_approx", "with", "tolerance"), &MLPPMatrix::is_equal_approx, CMP_EPSILON);
 }
