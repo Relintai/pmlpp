@@ -592,6 +592,28 @@ public:
 		}
 	}
 
+	_FORCE_INLINE_ bool is_equal_approx(const Ref<MLPPMatrix> &p_with, real_t tolerance = static_cast<real_t>(CMP_EPSILON)) const {
+		ERR_FAIL_COND_V(!p_with.is_valid(), false);
+
+		if (unlikely(this == p_with.ptr())) {
+			return true;
+		}
+
+		if (_size != p_with->size()) {
+			return false;
+		}
+
+		int ds = data_size();
+
+		for (int i = 0; i < ds; ++i) {
+			if (!Math::is_equal_approx(_data[i], p_with->_data[i], tolerance)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	String to_string();
 
 	_FORCE_INLINE_ MLPPMatrix() {

@@ -10,8 +10,10 @@
 
 #include "core/math/math_defs.h"
 
-#include <vector>
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
 
+#include <vector>
 
 class MLPPStat {
 public:
@@ -33,6 +35,9 @@ public:
 	real_t R2(const std::vector<real_t> &x, const std::vector<real_t> &y);
 	real_t chebyshevIneq(const real_t k);
 
+	real_t meanv(const Ref<MLPPVector> &x);
+	real_t covariancev(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
+
 	// Extras
 	real_t weightedMean(const std::vector<real_t> &x, const std::vector<real_t> &weights);
 	real_t geometricMean(const std::vector<real_t> &x);
@@ -49,6 +54,5 @@ public:
 	real_t identricMean(const real_t x, const real_t y);
 	real_t logMean(const real_t x, const real_t y);
 };
-
 
 #endif /* Stat_hpp */

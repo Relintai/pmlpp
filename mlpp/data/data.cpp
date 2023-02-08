@@ -938,7 +938,7 @@ std::vector<std::vector<real_t>> MLPPData::LSA(std::vector<std::string> sentence
 	MLPPLinAlg alg;
 	std::vector<std::vector<real_t>> docWordData = BOW(sentences, "Binary");
 
-	MLPPLinAlg::SDVResultOld svr_res = alg.SVD(docWordData);
+	MLPPLinAlg::SVDResultOld svr_res = alg.SVD(docWordData);
 	std::vector<std::vector<real_t>> S_trunc = alg.zeromat(dim, dim);
 	std::vector<std::vector<real_t>> Vt_trunc;
 	for (int i = 0; i < dim; i++) {
@@ -1052,6 +1052,33 @@ std::vector<real_t> MLPPData::reverseOneHot(std::vector<std::vector<real_t>> tem
 	}
 
 	return outputSet;
+}
+
+Ref<MLPPMatrix> MLPPData::mean_centering(const Ref<MLPPMatrix> &p_X) {
+	MLPPLinAlg alg;
+	MLPPStat stat;
+
+	Ref<MLPPMatrix> X;
+	X.instance();
+	X->resize(p_X->size());
+
+	Size2i x_size = X->size();
+
+	Ref<MLPPVector> x_row_tmp;
+	x_row_tmp.instance();
+	x_row_tmp->resize(x_size.x);
+
+	for (int i = 0; i < x_size.y; ++i) {
+		X->get_row_into_mlpp_vector(i, x_row_tmp);
+
+		real_t mean_i = stat.meanv(x_row_tmp);
+
+		for (int j = 0; j < x_size.x; ++j) {
+			X->set_element(i, j, p_X->get_element(i, j) - mean_i);
+		}
+	}
+
+	return X;
 }
 
 void MLPPData::_bind_methods() {

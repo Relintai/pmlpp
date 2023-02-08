@@ -10,21 +10,38 @@
 
 #include "core/math/math_defs.h"
 
-#include <vector>
+#include "core/object/reference.h"
 
-class MLPPPCA {
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
+
+class MLPPPCA : public Reference {
+	GDCLASS(MLPPPCA, Reference);
+
 public:
-	std::vector<std::vector<real_t>> principalComponents();
+	Ref<MLPPMatrix> get_input_set();
+	void set_input_set(const Ref<MLPPMatrix> &val);
+
+	int get_k();
+	void set_k(const int val);
+
+	Ref<MLPPMatrix> principal_components();
 	real_t score();
 
-	MLPPPCA(std::vector<std::vector<real_t>> inputSet, int k);
+	MLPPPCA(const Ref<MLPPMatrix> &p_input_set, int p_k);
 
-private:
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<std::vector<real_t>> X_normalized;
-	std::vector<std::vector<real_t>> U_reduce;
-	std::vector<std::vector<real_t>> Z;
-	int k;
+	MLPPPCA();
+	~MLPPPCA();
+
+protected:
+	static void _bind_methods();
+
+	Ref<MLPPMatrix> _input_set;
+	int _k;
+
+	Ref<MLPPMatrix> _x_normalized;
+	Ref<MLPPMatrix> _u_reduce;
+	Ref<MLPPMatrix> _z;
 };
 
 #endif /* PCA_hpp */

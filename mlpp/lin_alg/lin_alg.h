@@ -118,6 +118,7 @@ public:
 	Ref<MLPPMatrix> identitym(int d);
 
 	std::vector<std::vector<real_t>> cov(std::vector<std::vector<real_t>> A);
+	Ref<MLPPMatrix> covm(const Ref<MLPPMatrix> &A);
 
 	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> eig(std::vector<std::vector<real_t>> A);
 
@@ -135,21 +136,21 @@ public:
 
 	EigenResult eigen(Ref<MLPPMatrix> A);
 
-	struct SDVResultOld {
+	struct SVDResultOld {
 		std::vector<std::vector<real_t>> U;
 		std::vector<std::vector<real_t>> S;
 		std::vector<std::vector<real_t>> Vt;
 	};
 
-	SDVResultOld SVD(std::vector<std::vector<real_t>> A);
+	SVDResultOld SVD(std::vector<std::vector<real_t>> A);
 
-	struct SDVResult {
+	struct SVDResult {
 		Ref<MLPPMatrix> U;
 		Ref<MLPPMatrix> S;
 		Ref<MLPPMatrix> Vt;
 	};
 
-	SDVResult svd(const Ref<MLPPMatrix> &A);
+	SVDResult svd(const Ref<MLPPMatrix> &A);
 
 	std::vector<real_t> vectorProjection(std::vector<real_t> a, std::vector<real_t> b);
 

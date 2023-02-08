@@ -16,6 +16,9 @@
 
 #include "core/object/reference.h"
 
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
+
 #include <string>
 #include <tuple>
 #include <vector>
@@ -146,6 +149,8 @@ public:
 	std::vector<std::vector<real_t>> meanCentering(std::vector<std::vector<real_t>> X);
 	std::vector<std::vector<real_t>> oneHotRep(std::vector<real_t> tempOutputSet, int n_class);
 	std::vector<real_t> reverseOneHot(std::vector<std::vector<real_t>> tempOutputSet);
+
+	Ref<MLPPMatrix> mean_centering(const Ref<MLPPMatrix> &X);
 
 	template <class T>
 	std::vector<T> vecToSet(std::vector<T> inputSet) {

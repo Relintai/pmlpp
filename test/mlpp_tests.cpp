@@ -48,8 +48,8 @@
 #include "../mlpp/wgan/wgan.h"
 
 #include "../mlpp/mlp/mlp_old.h"
-#include "../mlpp/wgan/wgan_old.h"
 #include "../mlpp/pca/pca_old.h"
+#include "../mlpp/wgan/wgan_old.h"
 
 Vector<real_t> dstd_vec_to_vec(const std::vector<real_t> &in) {
 	Vector<real_t> r;
@@ -719,25 +719,53 @@ void MLPPTests::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
 	std::cout << "Eigenvalues:" << std::endl;
 	alg.printMatrix(eigen.eigen_values);
 
-	std::cout << "SVD" << std::endl;
+	std::cout << "SVD OLD START" << std::endl;
 
-	MLPPLinAlg::SDVResultOld svd = alg.SVD(inputSet);
+	MLPPLinAlg::SVDResultOld svd_old = alg.SVD(inputSet);
 
 	std::cout << "U:" << std::endl;
-	alg.printMatrix(svd.U);
+	alg.printMatrix(svd_old.U);
 	std::cout << "S:" << std::endl;
-	alg.printMatrix(svd.S);
+	alg.printMatrix(svd_old.S);
 	std::cout << "Vt:" << std::endl;
-	alg.printMatrix(svd.Vt);
+	alg.printMatrix(svd_old.Vt);
+
+	std::cout << "SVD OLD FIN" << std::endl;
+
+	Ref<MLPPMatrix> input_set;
+	input_set.instance();
+	input_set->set_from_std_vectors(inputSet);
+
+	String str_svd = "SVD\n";
+
+	MLPPLinAlg::SVDResult svd = alg.svd(input_set);
+
+	str_svd += "U:\n";
+	str_svd += svd.U->to_string();
+	str_svd += "\nS:\n";
+	str_svd += svd.S->to_string();
+	str_svd += "\nVt:\n";
+	str_svd += svd.Vt->to_string();
+	str_svd += "\n";
+
+	PLOG_MSG(str_svd);
 
 	std::cout << "PCA" << std::endl;
 
 	// PCA done using Jacobi's method to approximate eigenvalues and eigenvectors.
-	MLPPPCAOld dr(inputSet, 1); // 1 dimensional representation.
+	MLPPPCAOld dr_old(inputSet, 1); // 1 dimensional representation.
 	std::cout << std::endl;
-	std::cout << "Dimensionally reduced representation:" << std::endl;
-	alg.printMatrix(dr.principalComponents());
-	std::cout << "SCORE: " << dr.score() << std::endl;
+	std::cout << "OLD Dimensionally reduced representation:" << std::endl;
+	alg.printMatrix(dr_old.principalComponents());
+	std::cout << "SCORE: " << dr_old.score() << std::endl;
+
+	// PCA done using Jacobi's method to approximate eigenvalues and eigenvectors.
+	MLPPPCA dr(input_set, 1); // 1 dimensional representation.
+
+	String str = "\nDimensionally reduced representation:\n";
+	str += dr.principal_components()->to_string();
+	str += "\nSCORE: " + String::num(dr.score()) + "\n";
+	PLOG_MSG(str);
 }
 
 void MLPPTests::test_nlp_and_data(bool ui) {

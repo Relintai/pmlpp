@@ -1075,6 +1075,37 @@ std::vector<std::vector<real_t>> MLPPLinAlg::cov(std::vector<std::vector<real_t>
 	return covMat;
 }
 
+Ref<MLPPMatrix> MLPPLinAlg::covm(const Ref<MLPPMatrix> &A) {
+	MLPPStat stat;
+
+	Ref<MLPPMatrix> cov_mat;
+	cov_mat.instance();
+
+	Size2i a_size = A->size();
+
+	cov_mat->resize(a_size);
+
+	Ref<MLPPVector> a_i_row_tmp;
+	a_i_row_tmp.instance();
+	a_i_row_tmp->resize(a_size.x);
+
+	Ref<MLPPVector> a_j_row_tmp;
+	a_j_row_tmp.instance();
+	a_j_row_tmp->resize(a_size.x);
+
+	for (int i = 0; i < a_size.y; ++i) {
+		A->get_row_into_mlpp_vector(i, a_i_row_tmp);
+
+		for (int j = 0; j < a_size.x; ++j) {
+			A->get_row_into_mlpp_vector(j, a_j_row_tmp);
+
+			cov_mat->set_element(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
+		}
+	}
+
+	return cov_mat;
+}
+
 std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPLinAlg::eig(std::vector<std::vector<real_t>> A) {
 	/*
 	A (the entered parameter) in most use cases will be X'X, XX', etc. and must be symmetric.
@@ -1384,7 +1415,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 
 		for (int i = 0; i < a_new_size.y; ++i) {
 			for (int j = 0; j < a_new_size.x; ++j) {
-				if (i != j && Math::round(a_new->get_element(i, j)) == 0) {
+				if (i != j && Math::is_zero_approx(Math::round(a_new->get_element(i, j)))) {
 					a_new->set_element(i, j, 0);
 				}
 			}
@@ -1393,7 +1424,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 		bool non_zero = false;
 		for (int i = 0; i < a_new_size.y; ++i) {
 			for (int j = 0; j < a_new_size.x; ++j) {
-				if (i != j && Math::round(a_new->get_element(i, j)) == 0) {
+				if (i != j && Math::is_zero_approx(Math::round(a_new->get_element(i, j)))) {
 					non_zero = true;
 				}
 			}
@@ -1405,7 +1436,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 			diagonal = true;
 		}
 
-		if (a_new == A) {
+		if (a_new->is_equal_approx(A)) {
 			diagonal = true;
 			for (int i = 0; i < a_new_size.y; ++i) {
 				for (int j = 0; j < a_new_size.x; ++j) {
@@ -1421,7 +1452,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 
 	} while (!diagonal);
 
-	Ref<MLPPMatrix> a_new_prior = a_new;
+	Ref<MLPPMatrix> a_new_prior = a_new->duplicate();
 
 	Size2i a_new_size = a_new->size();
 
@@ -1460,7 +1491,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 	return res;
 }
 
-MLPPLinAlg::SDVResultOld MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
+MLPPLinAlg::SVDResultOld MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
 	EigenResultOld left_eigen = eigen_old(matmult(A, transpose(A)));
 	EigenResultOld right_eigen = eigen_old(matmult(transpose(A), A));
 
@@ -1472,7 +1503,7 @@ MLPPLinAlg::SDVResultOld MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
 		}
 	}
 
-	SDVResultOld res;
+	SVDResultOld res;
 	res.U = left_eigen.eigen_vectors;
 	res.S = sigma;
 	res.Vt = right_eigen.eigen_vectors;
@@ -1480,8 +1511,8 @@ MLPPLinAlg::SDVResultOld MLPPLinAlg::SVD(std::vector<std::vector<real_t>> A) {
 	return res;
 }
 
-MLPPLinAlg::SDVResult MLPPLinAlg::svd(const Ref<MLPPMatrix> &A) {
-	SDVResult res;
+MLPPLinAlg::SVDResult MLPPLinAlg::svd(const Ref<MLPPMatrix> &A) {
+	SVDResult res;
 
 	ERR_FAIL_COND_V(!A.is_valid(), res);
 
