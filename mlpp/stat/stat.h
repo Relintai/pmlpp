@@ -39,6 +39,7 @@ public:
 	real_t chebyshevIneq(const real_t k);
 
 	real_t meanv(const Ref<MLPPVector> &x);
+	real_t standard_deviationv(const Ref<MLPPVector> &x);
 	real_t variancev(const Ref<MLPPVector> &x);
 	real_t covariancev(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
 

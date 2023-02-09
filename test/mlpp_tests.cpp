@@ -48,6 +48,7 @@
 #include "../mlpp/wgan/wgan.h"
 
 #include "../mlpp/mlp/mlp_old.h"
+#include "../mlpp/outlier_finder/outlier_finder_old.h"
 #include "../mlpp/pca/pca_old.h"
 #include "../mlpp/uni_lin_reg/uni_lin_reg_old.h"
 #include "../mlpp/wgan/wgan_old.h"
@@ -855,8 +856,15 @@ void MLPPTests::test_outlier_finder(bool ui) {
 	// Outlier Finder
 	//std::vector<real_t> inputSet = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 23554332523523 };
 	std::vector<real_t> inputSet = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 23554332 };
-	MLPPOutlierFinder outlierFinder(2); // Any datapoint outside of 2 stds from the mean is marked as an outlier.
-	alg.printVector(outlierFinder.modelTest(inputSet));
+	MLPPOutlierFinderOld outlierFinderOld(2); // Any datapoint outside of 2 stds from the mean is marked as an outlier.
+	alg.printVector(outlierFinderOld.modelTest(inputSet));
+
+	Ref<MLPPVector> input_set;
+	input_set.instance();
+	input_set->set_from_std_vector(inputSet);
+
+	MLPPOutlierFinder outlier_finder(2); // Any datapoint outside of 2 stds from the mean is marked as an outlier.
+	PLOG_MSG(Variant(outlier_finder.model_test(input_set)));
 }
 void MLPPTests::test_new_math_functions() {
 	MLPPLinAlg alg;

@@ -38,6 +38,7 @@ SOFTWARE.
 
 #include "mlpp/kmeans/kmeans.h"
 #include "mlpp/knn/knn.h"
+#include "mlpp/outlier_finder/outlier_finder.h"
 #include "mlpp/pca/pca.h"
 #include "mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "mlpp/wgan/wgan.h"
@@ -67,6 +68,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPWGAN>();
 		ClassDB::register_class<MLPPPCA>();
 		ClassDB::register_class<MLPPUniLinReg>();
+		ClassDB::register_class<MLPPOutlierFinder>();
 
 		ClassDB::register_class<MLPPDataESimple>();
 		ClassDB::register_class<MLPPDataSimple>();

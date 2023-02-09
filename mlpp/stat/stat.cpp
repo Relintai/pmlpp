@@ -133,6 +133,10 @@ real_t MLPPStat::meanv(const Ref<MLPPVector> &x) {
 	return sum / x_size;
 }
 
+real_t MLPPStat::standard_deviationv(const Ref<MLPPVector> &x) {
+	return Math::sqrt(variancev(x));
+}
+
 real_t MLPPStat::variancev(const Ref<MLPPVector> &x) {
 	real_t x_mean = meanv(x);
 

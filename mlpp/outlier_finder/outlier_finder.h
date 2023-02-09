@@ -10,20 +10,34 @@
 
 #include "core/math/math_defs.h"
 
-#include <vector>
+#include "core/object/reference.h"
 
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
 
-class MLPPOutlierFinder {
+class MLPPOutlierFinder : public Reference {
+	GDCLASS(MLPPOutlierFinder, Reference);
+
 public:
-	// Cnstr
-	MLPPOutlierFinder(int threshold);
+	real_t get_threshold();
+	void set_threshold(real_t val);
 
-	std::vector<std::vector<real_t>> modelSetTest(std::vector<std::vector<real_t>> inputSet);
-	std::vector<real_t> modelTest(std::vector<real_t> inputSet);
+	Vector<Vector<real_t>> model_set_test(const Ref<MLPPMatrix> &input_set);
+	Array model_set_test_bind(const Ref<MLPPMatrix> &input_set);
 
-	// Variables required
-	int threshold;
+	PoolVector2iArray model_set_test_indices(const Ref<MLPPMatrix> &input_set);
+
+	PoolRealArray model_test(const Ref<MLPPVector> &input_set);
+
+	MLPPOutlierFinder(real_t threshold);
+
+	MLPPOutlierFinder();
+	~MLPPOutlierFinder();
+
+protected:
+	static void _bind_methods();
+
+	real_t _threshold;
 };
-
 
 #endif /* OutlierFinder_hpp */
