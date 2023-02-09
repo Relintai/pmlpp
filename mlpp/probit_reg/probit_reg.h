@@ -13,8 +13,6 @@
 #include <string>
 #include <vector>
 
-
-
 class MLPPProbitReg {
 public:
 	MLPPProbitReg(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
@@ -51,6 +49,5 @@ private:
 	real_t lambda;
 	real_t alpha; /* This is the controlling param for Elastic Net*/
 };
-
 
 #endif /* ProbitReg_hpp */
