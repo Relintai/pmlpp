@@ -182,7 +182,7 @@ void MLPPTests::test_univariate_linear_regression() {
 
 	Ref<MLPPDataESimple> ds = data.load_fires_and_crime(_fires_and_crime_data_path);
 
-	MLPPUniLinRegOld model_old(ds->input, ds->output);
+	MLPPUniLinRegOld model_old(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector());
 
 	std::vector<real_t> slr_res = {
 		24.1095, 28.4829, 29.8082, 26.0974, 27.2902, 61.0851, 30.4709, 25.0372, 25.5673, 35.9046,
@@ -191,17 +191,9 @@ void MLPPTests::test_univariate_linear_regression() {
 		27.8203, 20.6637, 22.5191, 53.796, 38.9527, 30.8685, 20.3986
 	};
 
-	is_approx_equals_dvec(dstd_vec_to_vec(model_old.modelSetTest(ds->input)), dstd_vec_to_vec(slr_res), "stat.mode(x)");
+	is_approx_equals_dvec(dstd_vec_to_vec(model_old.modelSetTest(ds->get_input()->to_std_vector())), dstd_vec_to_vec(slr_res), "stat.mode(x)");
 
-	Ref<MLPPVector> input;
-	input.instance();
-	input->set_from_std_vector(ds->input);
-
-	Ref<MLPPVector> output;
-	output.instance();
-	output->set_from_std_vector(ds->output);
-
-	MLPPUniLinReg model(input, output);
+	MLPPUniLinReg model(ds->get_input(), ds->get_output());
 
 	std::vector<real_t> slr_res_n = {
 		24.109467, 28.482935, 29.808228, 26.097408, 27.290173, 61.085152, 30.470875, 25.037172, 25.567291,
@@ -215,7 +207,7 @@ void MLPPTests::test_univariate_linear_regression() {
 	slr_res_v.instance();
 	slr_res_v->set_from_std_vector(slr_res_n);
 
-	Ref<MLPPVector> res = model.model_set_test(input);
+	Ref<MLPPVector> res = model.model_set_test(ds->get_input());
 
 	if (!slr_res_v->is_equal_approx(res)) {
 		ERR_PRINT("!slr_res_v->is_equal_approx(res)");
@@ -230,10 +222,10 @@ void MLPPTests::test_multivariate_linear_regression_gradient_descent(bool ui) {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	MLPPLinReg model(ds->input, ds->output); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
 
 	model.gradientDescent(0.001, 30, ui);
-	alg.printVector(model.modelSetTest(ds->input));
+	alg.printVector(model.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_multivariate_linear_regression_sgd(bool ui) {
@@ -242,10 +234,10 @@ void MLPPTests::test_multivariate_linear_regression_sgd(bool ui) {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	MLPPLinReg model(ds->input, ds->output); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
 
 	model.SGD(0.00000001, 300000, ui);
-	alg.printVector(model.modelSetTest(ds->input));
+	alg.printVector(model.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_multivariate_linear_regression_mbgd(bool ui) {
@@ -254,10 +246,10 @@ void MLPPTests::test_multivariate_linear_regression_mbgd(bool ui) {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	MLPPLinReg model(ds->input, ds->output); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
 
 	model.MBGD(0.001, 10000, 2, ui);
-	alg.printVector(model.modelSetTest(ds->input));
+	alg.printVector(model.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_multivariate_linear_regression_normal_equation(bool ui) {
@@ -266,10 +258,10 @@ void MLPPTests::test_multivariate_linear_regression_normal_equation(bool ui) {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	MLPPLinReg model(ds->input, ds->output); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
 
 	model.normalEquation();
-	alg.printVector(model.modelSetTest(ds->input));
+	alg.printVector(model.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_multivariate_linear_regression_adam() {
@@ -278,8 +270,8 @@ void MLPPTests::test_multivariate_linear_regression_adam() {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	MLPPLinReg adamModel(alg.transpose(ds->input), ds->output);
-	alg.printVector(adamModel.modelSetTest(ds->input));
+	MLPPLinReg adamModel(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
+	alg.printVector(adamModel.modelSetTest(ds->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * adamModel.score() << "%" << std::endl;
 }
 
@@ -294,11 +286,11 @@ void MLPPTests::test_multivariate_linear_regression_score_sgd_adam(bool ui) {
 	real_t scoreSGD = 0;
 	real_t scoreADAM = 0;
 	for (int i = 0; i < TRIAL_NUM; i++) {
-		MLPPLinReg modelf(alg.transpose(ds->input), ds->output);
+		MLPPLinReg modelf(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
 		modelf.MBGD(0.001, 5, 1, ui);
 		scoreSGD += modelf.score();
 
-		MLPPLinReg adamModelf(alg.transpose(ds->input), ds->output);
+		MLPPLinReg adamModelf(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
 		adamModelf.Adam(0.1, 5, 1, 0.9, 0.999, 1e-8, ui); // Change batch size = sgd, bgd
 		scoreADAM += adamModelf.score();
 	}
@@ -317,9 +309,9 @@ void MLPPTests::test_multivariate_linear_regression_epochs_gradient_descent(bool
 	std::cout << "Total epoch num: 300" << std::endl;
 	std::cout << "Method: 1st Order w/ Jacobians" << std::endl;
 
-	MLPPLinReg model3(alg.transpose(ds->input), ds->output); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinReg model3(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
 	model3.gradientDescent(0.001, 300, ui);
-	alg.printVector(model3.modelSetTest(ds->input));
+	alg.printVector(model3.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_multivariate_linear_regression_newton_raphson(bool ui) {
@@ -331,10 +323,10 @@ void MLPPTests::test_multivariate_linear_regression_newton_raphson(bool ui) {
 	std::cout << "--------------------------------------------" << std::endl;
 	std::cout << "Total epoch num: 300" << std::endl;
 	std::cout << "Method: Newtonian 2nd Order w/ Hessians" << std::endl;
-	MLPPLinReg model2(alg.transpose(ds->input), ds->output);
+	MLPPLinReg model2(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
 
 	model2.NewtonRaphson(1.5, 300, ui);
-	alg.printVector(model2.modelSetTest(ds->input));
+	alg.printVector(model2.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_logistic_regression(bool ui) {
@@ -343,9 +335,9 @@ void MLPPTests::test_logistic_regression(bool ui) {
 
 	// LOGISTIC REGRESSION
 	Ref<MLPPDataSimple> dt = data.load_breast_cancer(_breast_cancer_data_path);
-	MLPPLogReg model(dt->input, dt->output);
+	MLPPLogReg model(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
 	model.SGD(0.001, 100000, ui);
-	alg.printVector(model.modelSetTest(dt->input));
+	alg.printVector(model.modelSetTest(dt->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_probit_regression(bool ui) {
@@ -355,9 +347,9 @@ void MLPPTests::test_probit_regression(bool ui) {
 	// PROBIT REGRESSION
 	Ref<MLPPDataSimple> dt = data.load_breast_cancer(_breast_cancer_data_path);
 
-	MLPPProbitReg model(dt->input, dt->output);
+	MLPPProbitReg model(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
 	model.SGD(0.001, 10000, ui);
-	alg.printVector(model.modelSetTest(dt->input));
+	alg.printVector(model.modelSetTest(dt->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_c_log_log_regression(bool ui) {
@@ -399,9 +391,9 @@ void MLPPTests::test_softmax_regression(bool ui) {
 
 	// SOFTMAX REGRESSION
 	Ref<MLPPDataComplex> dt = data.load_iris(_iris_data_path);
-	MLPPSoftmaxReg model(dt->input, dt->output);
+	MLPPSoftmaxReg model(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
 	model.SGD(0.1, 10000, ui);
-	alg.printMatrix(model.modelSetTest(dt->input));
+	alg.printMatrix(model.modelSetTest(dt->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_support_vector_classification(bool ui) {
@@ -414,9 +406,9 @@ void MLPPTests::test_support_vector_classification(bool ui) {
 
 	// SUPPORT VECTOR CLASSIFICATION
 	Ref<MLPPDataSimple> dt = data.load_breast_cancer_svc(_breast_cancer_svm_data_path);
-	MLPPSVC model(dt->input, dt->output, ui);
+	MLPPSVC model(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), ui);
 	model.SGD(0.00001, 100000, ui);
-	alg.printVector(model.modelSetTest(dt->input));
+	alg.printVector(model.modelSetTest(dt->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 
@@ -473,9 +465,9 @@ void MLPPTests::test_soft_max_network(bool ui) {
 	// SOFTMAX NETWORK
 	Ref<MLPPDataComplex> dt = data.load_wine(_wine_data_path);
 
-	MLPPSoftmaxNet model(dt->input, dt->output, 1);
+	MLPPSoftmaxNet model(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), 1);
 	model.gradientDescent(0.01, 100000, ui);
-	alg.printMatrix(model.modelSetTest(dt->input));
+	alg.printMatrix(model.modelSetTest(dt->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_autoencoder(bool ui) {
@@ -598,24 +590,32 @@ void MLPPTests::test_train_test_split_mann(bool ui) {
 	std::vector<std::vector<real_t>> inputSet1 = { { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, { 3, 5, 9, 12, 15, 18, 21, 24, 27, 30 } };
 	std::vector<std::vector<real_t>> outputSet1 = { { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 } };
 
+	Ref<MLPPMatrix> input_set_1;
+	input_set_1.instance();
+	input_set_1->set_from_std_vectors(inputSet1);
+
+	Ref<MLPPMatrix> output_set_1;
+	output_set_1.instance();
+	output_set_1->set_from_std_vectors(outputSet1);
+
 	Ref<MLPPDataComplex> d;
 	d.instance();
 
-	d->input = alg.transpose(inputSet1);
-	d->output = alg.transpose(outputSet1);
+	d->set_input(alg.transposem(input_set_1));
+	d->set_output(alg.transposem(output_set_1));
 
 	MLPPData::SplitComplexData split_data = data.train_test_split(d, 0.2);
 
-	alg.printMatrix(split_data.train->input);
-	alg.printMatrix(split_data.train->output);
-	alg.printMatrix(split_data.test->input);
-	alg.printMatrix(split_data.test->output);
+	PLOG_MSG(split_data.train->get_input()->to_string());
+	PLOG_MSG(split_data.train->get_output()->to_string());
+	PLOG_MSG(split_data.test->get_input()->to_string());
+	PLOG_MSG(split_data.test->get_output()->to_string());
 
-	MLPPMANN mann(split_data.train->input, split_data.train->output);
+	MLPPMANN mann(split_data.train->get_input()->to_std_vector(), split_data.train->get_output()->to_std_vector());
 	mann.addLayer(100, "RELU", "XavierNormal");
 	mann.addOutputLayer("Softmax", "CrossEntropy", "XavierNormal");
-	mann.gradientDescent(0.1, 80000, 1);
-	alg.printMatrix(mann.modelSetTest(split_data.test->input));
+	mann.gradientDescent(0.1, 80000, ui);
+	alg.printMatrix(mann.modelSetTest(split_data.test->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * mann.score() << "%" << std::endl;
 }
 
@@ -866,7 +866,7 @@ void MLPPTests::test_new_math_functions() {
 	// Testing new Functions
 	real_t z_s = 0.001;
 	std::cout << avn.logit(z_s) << std::endl;
-	std::cout << avn.logit(z_s, 1) << std::endl;
+	std::cout << avn.logit(z_s, true) << std::endl;
 
 	std::vector<real_t> z_v = { 0.001 };
 	alg.printVector(avn.logit(z_v));
@@ -1071,7 +1071,7 @@ void MLPPTests::test_support_vector_classification_kernel(bool ui) {
 	//SUPPORT VECTOR CLASSIFICATION (kernel method)
 	Ref<MLPPDataSimple> dt = data.load_breast_cancer_svc(_breast_cancer_svm_data_path);
 
-	MLPPDualSVC kernelSVM(dt->input, dt->output, 1000);
+	MLPPDualSVC kernelSVM(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), 1000);
 	kernelSVM.gradientDescent(0.0001, 20, ui);
 	std::cout << "SCORE: " << kernelSVM.score() << std::endl;
 

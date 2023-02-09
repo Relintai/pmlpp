@@ -27,33 +27,57 @@ class MLPPDataESimple : public Reference {
 	GDCLASS(MLPPDataESimple, Reference);
 
 public:
-	std::vector<real_t> input;
-	std::vector<real_t> output;
+	Ref<MLPPVector> get_input();
+	void set_input(const Ref<MLPPVector> &val);
+
+	Ref<MLPPVector> get_output();
+	void set_output(const Ref<MLPPVector> &val);
+
+	void instance_data();
 
 protected:
 	static void _bind_methods();
+
+	Ref<MLPPVector> _input;
+	Ref<MLPPVector> _output;
 };
 
 class MLPPDataSimple : public Reference {
 	GDCLASS(MLPPDataSimple, Reference);
 
 public:
-	std::vector<std::vector<real_t>> input;
-	std::vector<real_t> output;
+	Ref<MLPPMatrix> get_input();
+	void set_input(const Ref<MLPPMatrix> &val);
+
+	Ref<MLPPVector> get_output();
+	void set_output(const Ref<MLPPVector> &val);
+
+	void instance_data();
 
 protected:
 	static void _bind_methods();
+
+	Ref<MLPPMatrix> _input;
+	Ref<MLPPVector> _output;
 };
 
 class MLPPDataComplex : public Reference {
 	GDCLASS(MLPPDataComplex, Reference);
 
 public:
-	std::vector<std::vector<real_t>> input;
-	std::vector<std::vector<real_t>> output;
+	Ref<MLPPMatrix> get_input();
+	void set_input(const Ref<MLPPMatrix> &val);
+
+	Ref<MLPPMatrix> get_output();
+	void set_output(const Ref<MLPPMatrix> &val);
+
+	void instance_data();
 
 protected:
 	static void _bind_methods();
+
+	Ref<MLPPMatrix> _input;
+	Ref<MLPPMatrix> _output;
 };
 
 class MLPPData : public Reference {
@@ -70,16 +94,16 @@ public:
 	Ref<MLPPDataSimple> load_california_housing(const String &path);
 	Ref<MLPPDataESimple> load_fires_and_crime(const String &path);
 
-	void set_data_supervised(int k, const String &file_name, std::vector<std::vector<real_t>> &inputSet, std::vector<real_t> &outputSet);
-	void set_data_unsupervised(int k, const String &file_name, std::vector<std::vector<real_t>> &inputSet);
-	void set_data_simple(const String &file_name, std::vector<real_t> &inputSet, std::vector<real_t> &outputSet);
+	void set_data_supervised(int k, const String &file_name, Ref<MLPPMatrix> input_set, Ref<MLPPVector> output_set);
+	void set_data_unsupervised(int k, const String &file_name, Ref<MLPPMatrix> input_set);
+	void set_data_simple(const String &file_name, Ref<MLPPVector> input_set, Ref<MLPPVector> output_set);
 
 	struct SplitComplexData {
 		Ref<MLPPDataComplex> train;
 		Ref<MLPPDataComplex> test;
 	};
 
-	SplitComplexData train_test_split(const Ref<MLPPDataComplex> &data, real_t test_size);
+	SplitComplexData train_test_split(Ref<MLPPDataComplex> data, real_t test_size);
 	Array train_test_split_bind(const Ref<MLPPDataComplex> &data, real_t test_size);
 
 	// Load Datasets
@@ -151,6 +175,7 @@ public:
 	std::vector<real_t> reverseOneHot(std::vector<std::vector<real_t>> tempOutputSet);
 
 	Ref<MLPPMatrix> mean_centering(const Ref<MLPPMatrix> &X);
+	Ref<MLPPMatrix> one_hot_rep(const Ref<MLPPVector> &temp_output_set, int n_class);
 
 	template <class T>
 	std::vector<T> vecToSet(std::vector<T> inputSet) {

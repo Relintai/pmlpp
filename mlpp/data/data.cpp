@@ -20,13 +20,97 @@
 #include <random>
 #include <sstream>
 
+Ref<MLPPVector> MLPPDataESimple::get_input() {
+	return _input;
+}
+void MLPPDataESimple::set_input(const Ref<MLPPVector> &val) {
+	_input = val;
+}
+
+Ref<MLPPVector> MLPPDataESimple::get_output() {
+	return _output;
+}
+void MLPPDataESimple::set_output(const Ref<MLPPVector> &val) {
+	_output = val;
+}
+
+void MLPPDataESimple::instance_data() {
+	_input.instance();
+	_output.instance();
+}
+
 void MLPPDataESimple::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_input"), &MLPPDataESimple::get_input);
+	ClassDB::bind_method(D_METHOD("set_input", "val"), &MLPPDataESimple::set_input);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "input", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "set_input", "get_input");
+
+	ClassDB::bind_method(D_METHOD("get_output"), &MLPPDataESimple::get_input);
+	ClassDB::bind_method(D_METHOD("set_output", "val"), &MLPPDataESimple::set_output);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "output", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "set_output", "get_output");
+
+	ClassDB::bind_method(D_METHOD("instance_data"), &MLPPDataESimple::instance_data);
+}
+
+Ref<MLPPMatrix> MLPPDataSimple::get_input() {
+	return _input;
+}
+void MLPPDataSimple::set_input(const Ref<MLPPMatrix> &val) {
+	_input = val;
+}
+
+Ref<MLPPVector> MLPPDataSimple::get_output() {
+	return _output;
+}
+void MLPPDataSimple::set_output(const Ref<MLPPVector> &val) {
+	_output = val;
+}
+
+void MLPPDataSimple::instance_data() {
+	_input.instance();
+	_output.instance();
 }
 
 void MLPPDataSimple::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_input"), &MLPPDataSimple::get_input);
+	ClassDB::bind_method(D_METHOD("set_input", "val"), &MLPPDataSimple::set_input);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "input", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_input", "get_input");
+
+	ClassDB::bind_method(D_METHOD("get_output"), &MLPPDataSimple::get_input);
+	ClassDB::bind_method(D_METHOD("set_output", "val"), &MLPPDataSimple::set_output);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "output", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "set_output", "get_output");
+
+	ClassDB::bind_method(D_METHOD("instance_data"), &MLPPDataSimple::instance_data);
+}
+
+Ref<MLPPMatrix> MLPPDataComplex::get_input() {
+	return _input;
+}
+void MLPPDataComplex::set_input(const Ref<MLPPMatrix> &val) {
+	_input = val;
+}
+
+Ref<MLPPMatrix> MLPPDataComplex::get_output() {
+	return _output;
+}
+void MLPPDataComplex::set_output(const Ref<MLPPMatrix> &val) {
+	_output = val;
+}
+
+void MLPPDataComplex::instance_data() {
+	_input.instance();
+	_output.instance();
 }
 
 void MLPPDataComplex::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_input"), &MLPPDataComplex::get_input);
+	ClassDB::bind_method(D_METHOD("set_input", "val"), &MLPPDataComplex::set_input);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "input", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_input", "get_input");
+
+	ClassDB::bind_method(D_METHOD("get_output"), &MLPPDataComplex::get_input);
+	ClassDB::bind_method(D_METHOD("set_output", "val"), &MLPPDataComplex::set_output);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "output", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_output", "get_output");
+
+	ClassDB::bind_method(D_METHOD("instance_data"), &MLPPDataComplex::instance_data);
 }
 
 // Loading Datasets
@@ -35,8 +119,9 @@ Ref<MLPPDataSimple> MLPPData::load_breast_cancer(const String &path) {
 
 	Ref<MLPPDataSimple> data;
 	data.instance();
+	data->instance_data();
 
-	set_data_supervised(BREAST_CANCER_SIZE, path, data->input, data->output);
+	set_data_supervised(BREAST_CANCER_SIZE, path, data->get_input(), data->get_output());
 
 	return data;
 }
@@ -46,8 +131,9 @@ Ref<MLPPDataSimple> MLPPData::load_breast_cancer_svc(const String &path) {
 
 	Ref<MLPPDataSimple> data;
 	data.instance();
+	data->instance_data();
 
-	set_data_supervised(BREAST_CANCER_SIZE, path, data->input, data->output);
+	set_data_supervised(BREAST_CANCER_SIZE, path, data->get_input(), data->get_output());
 
 	return data;
 }
@@ -56,13 +142,15 @@ Ref<MLPPDataComplex> MLPPData::load_iris(const String &path) {
 	const int IRIS_SIZE = 4;
 	const int ONE_HOT_NUM = 3;
 
-	std::vector<real_t> tempOutputSet;
+	Ref<MLPPVector> temp_output_set;
+	temp_output_set.instance();
 
 	Ref<MLPPDataComplex> data;
 	data.instance();
+	data->instance_data();
 
-	set_data_supervised(IRIS_SIZE, path, data->input, tempOutputSet);
-	data->output = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	set_data_supervised(IRIS_SIZE, path, data->get_input(), temp_output_set);
+	data->set_output(one_hot_rep(temp_output_set, ONE_HOT_NUM));
 
 	return data;
 }
@@ -71,13 +159,15 @@ Ref<MLPPDataComplex> MLPPData::load_wine(const String &path) {
 	const int WINE_SIZE = 4;
 	const int ONE_HOT_NUM = 3;
 
-	std::vector<real_t> tempOutputSet;
+	Ref<MLPPVector> temp_output_set;
+	temp_output_set.instance();
 
 	Ref<MLPPDataComplex> data;
 	data.instance();
+	data->instance_data();
 
-	set_data_supervised(WINE_SIZE, path, data->input, tempOutputSet);
-	data->output = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	set_data_supervised(WINE_SIZE, path, data->get_input(), temp_output_set);
+	data->set_output(one_hot_rep(temp_output_set, ONE_HOT_NUM));
 
 	return data;
 }
@@ -86,14 +176,15 @@ Ref<MLPPDataComplex> MLPPData::load_mnist_train(const String &path) {
 	const int MNIST_SIZE = 784;
 	const int ONE_HOT_NUM = 10;
 
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> tempOutputSet;
+	Ref<MLPPVector> temp_output_set;
+	temp_output_set.instance();
 
 	Ref<MLPPDataComplex> data;
 	data.instance();
+	data->instance_data();
 
-	set_data_supervised(MNIST_SIZE, path, data->input, tempOutputSet);
-	data->output = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	set_data_supervised(MNIST_SIZE, path, data->get_input(), temp_output_set);
+	data->set_output(one_hot_rep(temp_output_set, ONE_HOT_NUM));
 
 	return data;
 }
@@ -101,14 +192,16 @@ Ref<MLPPDataComplex> MLPPData::load_mnist_train(const String &path) {
 Ref<MLPPDataComplex> MLPPData::load_mnist_test(const String &path) {
 	const int MNIST_SIZE = 784;
 	const int ONE_HOT_NUM = 10;
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> tempOutputSet;
+
+	Ref<MLPPVector> temp_output_set;
+	temp_output_set.instance();
 
 	Ref<MLPPDataComplex> data;
 	data.instance();
+	data->instance_data();
 
-	set_data_supervised(MNIST_SIZE, path, data->input, tempOutputSet);
-	data->output = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	set_data_supervised(MNIST_SIZE, path, data->get_input(), temp_output_set);
+	data->set_output(one_hot_rep(temp_output_set, ONE_HOT_NUM));
 
 	return data;
 }
@@ -118,8 +211,9 @@ Ref<MLPPDataSimple> MLPPData::load_california_housing(const String &path) {
 
 	Ref<MLPPDataSimple> data;
 	data.instance();
+	data->instance_data();
 
-	set_data_supervised(CALIFORNIA_HOUSING_SIZE, path, data->input, data->output);
+	set_data_supervised(CALIFORNIA_HOUSING_SIZE, path, data->get_input(), data->get_output());
 
 	return data;
 }
@@ -129,18 +223,24 @@ Ref<MLPPDataESimple> MLPPData::load_fires_and_crime(const String &path) {
 
 	Ref<MLPPDataESimple> data;
 	data.instance();
+	data->instance_data();
 
-	set_data_simple(path, data->input, data->output);
+	set_data_simple(path, data->get_input(), data->get_output());
 
 	return data;
 }
 
 // MULTIVARIATE SUPERVISED
 
-void MLPPData::set_data_supervised(int k, const String &file_name, std::vector<std::vector<real_t>> &inputSet, std::vector<real_t> &outputSet) {
+void MLPPData::set_data_supervised(int k, const String &file_name, Ref<MLPPMatrix> input_set, Ref<MLPPVector> output_set) {
+	ERR_FAIL_COND(!input_set.is_valid() || !output_set.is_valid());
+
 	MLPPLinAlg alg;
 
-	inputSet.resize(k);
+	Vector<Vector<real_t>> input_set_tmp;
+	input_set_tmp.resize(k);
+
+	Vector<real_t> output_set_tmp;
 
 	FileAccess *file = FileAccess::open(file_name, FileAccess::READ);
 
@@ -150,21 +250,28 @@ void MLPPData::set_data_supervised(int k, const String &file_name, std::vector<s
 		Vector<String> ll = file->get_csv_line();
 
 		for (int i = 0; i < k; ++i) {
-			inputSet[i].push_back(static_cast<real_t>(ll[i].to_double()));
+			input_set_tmp.write[i].push_back(static_cast<real_t>(ll[i].to_double()));
 		}
 
-		outputSet.push_back(static_cast<real_t>(ll[k].to_double()));
+		output_set_tmp.push_back(static_cast<real_t>(ll[k].to_double()));
 	}
 
-	inputSet = alg.transpose(inputSet);
-
+	file->close();
 	memdelete(file);
+
+	output_set->set_from_vector(output_set_tmp);
+
+	input_set->set_from_vectors(input_set_tmp);
+	input_set = alg.transposem(input_set);
 }
 
-void MLPPData::set_data_unsupervised(int k, const String &file_name, std::vector<std::vector<real_t>> &inputSet) {
+void MLPPData::set_data_unsupervised(int k, const String &file_name, Ref<MLPPMatrix> input_set) {
+	ERR_FAIL_COND(!input_set.is_valid());
+
 	MLPPLinAlg alg;
 
-	inputSet.resize(k);
+	Vector<Vector<real_t>> input_set_tmp;
+	input_set_tmp.resize(k);
 
 	FileAccess *file = FileAccess::open(file_name, FileAccess::READ);
 
@@ -174,41 +281,60 @@ void MLPPData::set_data_unsupervised(int k, const String &file_name, std::vector
 		Vector<String> ll = file->get_csv_line();
 
 		for (int i = 0; i < k; ++i) {
-			inputSet[i].push_back(static_cast<real_t>(ll[i].to_double()));
+			input_set_tmp.write[i].push_back(static_cast<real_t>(ll[i].to_double()));
 		}
 	}
 
-	inputSet = alg.transpose(inputSet);
-
+	file->close();
 	memdelete(file);
+
+	input_set->set_from_vectors(input_set_tmp);
+	input_set = alg.transposem(input_set);
 }
 
-void MLPPData::set_data_simple(const String &file_name, std::vector<real_t> &inputSet, std::vector<real_t> &outputSet) {
+void MLPPData::set_data_simple(const String &file_name, Ref<MLPPVector> input_set, Ref<MLPPVector> output_set) {
+	ERR_FAIL_COND(!input_set.is_valid() || !output_set.is_valid());
+
 	FileAccess *file = FileAccess::open(file_name, FileAccess::READ);
 
 	ERR_FAIL_COND(!file);
+
+	Vector<real_t> input_set_tmp;
+	Vector<real_t> output_set_tmp;
 
 	while (!file->eof_reached()) {
 		Vector<String> ll = file->get_csv_line();
 
 		for (int i = 0; i < ll.size(); i += 2) {
-			inputSet.push_back(static_cast<real_t>(ll[i].to_double()));
-			outputSet.push_back(static_cast<real_t>(ll[i + 1].to_double()));
+			input_set_tmp.push_back(static_cast<real_t>(ll[i].to_double()));
+			output_set_tmp.push_back(static_cast<real_t>(ll[i + 1].to_double()));
 		}
 	}
 
+	file->close();
 	memdelete(file);
+
+	input_set->set_from_vector(input_set_tmp);
+	output_set->set_from_vector(output_set_tmp);
 }
 
-MLPPData::SplitComplexData MLPPData::train_test_split(const Ref<MLPPDataComplex> &data, real_t test_size) {
+MLPPData::SplitComplexData MLPPData::train_test_split(Ref<MLPPDataComplex> data, real_t test_size) {
 	SplitComplexData res;
 
 	res.train.instance();
+	res.train->instance_data();
 	res.test.instance();
+	res.test->instance_data();
 
 	ERR_FAIL_COND_V(!data.is_valid(), res);
 
-	int is = MIN(data->input.size(), data->output.size());
+	Ref<MLPPMatrix> orig_input = data->get_input();
+	Ref<MLPPMatrix> orig_output = data->get_output();
+
+	Size2i orig_input_size = orig_input->size();
+	Size2i orig_output_size = orig_output->size();
+
+	int is = MIN(orig_input_size.y, orig_output_size.y);
 
 	Array indices;
 	indices.resize(is);
@@ -219,20 +345,48 @@ MLPPData::SplitComplexData MLPPData::train_test_split(const Ref<MLPPDataComplex>
 
 	indices.shuffle();
 
+	Ref<MLPPVector> orig_input_row_tmp;
+	orig_input_row_tmp.instance();
+	orig_input_row_tmp->resize(orig_input_size.x);
+
+	Ref<MLPPVector> orig_output_row_tmp;
+	orig_output_row_tmp.instance();
+	orig_output_row_tmp->resize(orig_output_size.x);
+
 	int test_input_number = test_size * is; // implicit usage of floor
+
+	Ref<MLPPMatrix> res_test_input = res.test->get_input();
+	Ref<MLPPMatrix> res_test_output = res.test->get_output();
+
+	res_test_input->resize(Size2i(orig_input_size.x, test_input_number));
+	res_test_output->resize(Size2i(orig_output_size.x, test_input_number));
 
 	for (int i = 0; i < test_input_number; ++i) {
 		int index = indices[i];
 
-		res.test->input.push_back(data->input[i]);
-		res.test->output.push_back(data->output[i]);
+		orig_input->get_row_into_mlpp_vector(index, orig_input_row_tmp);
+		orig_output->get_row_into_mlpp_vector(index, orig_output_row_tmp);
+
+		res_test_input->set_row_mlpp_vector(i, orig_input);
+		res_test_output->set_row_mlpp_vector(i, orig_output);
 	}
 
-	for (int i = test_input_number; i < is; ++i) {
-		int index = indices[i];
+	Ref<MLPPMatrix> res_train_input = res.train->get_input();
+	Ref<MLPPMatrix> res_train_output = res.train->get_output();
 
-		res.train->input.push_back(data->input[i]);
-		res.train->output.push_back(data->output[i]);
+	int train_input_number = is - test_input_number;
+
+	res_train_input->resize(Size2i(orig_input_size.x, train_input_number));
+	res_train_output->resize(Size2i(orig_output_size.x, train_input_number));
+
+	for (int i = 0; i < train_input_number; ++i) {
+		int index = indices[train_input_number + i];
+
+		orig_input->get_row_into_mlpp_vector(index, orig_input_row_tmp);
+		orig_output->get_row_into_mlpp_vector(index, orig_output_row_tmp);
+
+		res_train_input->set_row_mlpp_vector(i, orig_input);
+		res_train_output->set_row_mlpp_vector(i, orig_output);
 	}
 
 	return res;
@@ -1079,6 +1233,30 @@ Ref<MLPPMatrix> MLPPData::mean_centering(const Ref<MLPPMatrix> &p_X) {
 	}
 
 	return X;
+}
+
+Ref<MLPPMatrix> MLPPData::one_hot_rep(const Ref<MLPPVector> &temp_output_set, int n_class) {
+	ERR_FAIL_COND_V(!temp_output_set.is_valid(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> output_set;
+	output_set.instance();
+
+	int temp_output_set_size = temp_output_set->size();
+	const real_t *temp_output_set_ptr = temp_output_set->ptr();
+
+	output_set->resize(Size2i(n_class, temp_output_set_size));
+
+	for (int i = 0; i < temp_output_set_size; ++i) {
+		for (int j = 0; j <= n_class - 1; ++j) {
+			if (static_cast<int>(temp_output_set_ptr[i]) == j) {
+				output_set->set_element(i, j, 1);
+			} else {
+				output_set->set_element(i, j, 0);
+			}
+		}
+	}
+
+	return output_set;
 }
 
 void MLPPData::_bind_methods() {

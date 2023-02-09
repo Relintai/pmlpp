@@ -16,6 +16,31 @@ String MLPPVector::to_string() {
 	return str;
 }
 
+std::vector<real_t> MLPPVector::to_std_vector() const {
+	std::vector<real_t> ret;
+	ret.resize(size());
+	real_t *w = &ret[0];
+	memcpy(w, _data, sizeof(real_t) * _size);
+	return ret;
+}
+
+void MLPPVector::set_from_std_vector(const std::vector<real_t> &p_from) {
+	resize(p_from.size());
+	for (int i = 0; i < _size; i++) {
+		_data[i] = p_from[i];
+	}
+}
+
+MLPPVector::MLPPVector(const std::vector<real_t> &p_from) {
+	_size = 0;
+	_data = NULL;
+
+	resize(p_from.size());
+	for (int i = 0; i < _size; i++) {
+		_data[i] = p_from[i];
+	}
+}
+
 void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("push_back", "elem"), &MLPPVector::push_back);
 	ClassDB::bind_method(D_METHOD("add_mlpp_vector", "other"), &MLPPVector::push_back);

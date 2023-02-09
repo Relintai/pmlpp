@@ -385,30 +385,9 @@ public:
 	}
 
 	// TODO: These are temporary
-	std::vector<real_t> to_std_vector() const {
-		std::vector<real_t> ret;
-		ret.resize(size());
-		real_t *w = &ret[0];
-		memcpy(w, _data, sizeof(real_t) * _size);
-		return ret;
-	}
-
-	_FORCE_INLINE_ void set_from_std_vector(const std::vector<real_t> &p_from) {
-		resize(p_from.size());
-		for (int i = 0; i < _size; i++) {
-			_data[i] = p_from[i];
-		}
-	}
-
-	MLPPVector(const std::vector<real_t> &p_from) {
-		_size = 0;
-		_data = NULL;
-
-		resize(p_from.size());
-		for (int i = 0; i < _size; i++) {
-			_data[i] = p_from[i];
-		}
-	}
+	std::vector<real_t> to_std_vector() const;
+	void set_from_std_vector(const std::vector<real_t> &p_from);
+	MLPPVector(const std::vector<real_t> &p_from);
 
 protected:
 	static void _bind_methods();
