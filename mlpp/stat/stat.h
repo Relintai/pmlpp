@@ -21,6 +21,9 @@ public:
 	real_t b0Estimation(const std::vector<real_t> &x, const std::vector<real_t> &y);
 	real_t b1Estimation(const std::vector<real_t> &x, const std::vector<real_t> &y);
 
+	real_t b0_estimation(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
+	real_t b1_estimation(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
+
 	// Statistical Functions
 	real_t mean(const std::vector<real_t> &x);
 	real_t median(std::vector<real_t> x);
@@ -36,6 +39,7 @@ public:
 	real_t chebyshevIneq(const real_t k);
 
 	real_t meanv(const Ref<MLPPVector> &x);
+	real_t variancev(const Ref<MLPPVector> &x);
 	real_t covariancev(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
 
 	// Extras

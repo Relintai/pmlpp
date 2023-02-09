@@ -10,20 +10,42 @@
 
 #include "core/math/math_defs.h"
 
-#include <vector>
+#include "core/object/reference.h"
 
-class MLPPUniLinReg {
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
+
+class MLPPUniLinReg : public Reference {
+	GDCLASS(MLPPUniLinReg, Reference);
+
 public:
-	MLPPUniLinReg(std::vector<real_t> x, std::vector<real_t> y);
-	std::vector<real_t> modelSetTest(std::vector<real_t> x);
-	real_t modelTest(real_t x);
+	Ref<MLPPVector> get_input_set();
+	void set_input_set(const Ref<MLPPVector> &val);
 
-private:
-	std::vector<real_t> inputSet;
-	std::vector<real_t> outputSet;
+	Ref<MLPPVector> get_output_set();
+	void set_output_set(const Ref<MLPPVector> &val);
 
-	real_t b0;
-	real_t b1;
+	real_t get_b0();
+	real_t get_b1();
+
+	void initialize();
+
+	Ref<MLPPVector> model_set_test(const Ref<MLPPVector> &x);
+	real_t model_test(real_t x);
+
+	MLPPUniLinReg(const Ref<MLPPVector> &p_input_set, const Ref<MLPPVector> &p_output_set);
+
+	MLPPUniLinReg();
+	~MLPPUniLinReg();
+
+protected:
+	static void _bind_methods();
+
+	Ref<MLPPVector> _input_set;
+	Ref<MLPPVector> _output_set;
+
+	real_t _b0;
+	real_t _b1;
 };
 
 #endif /* UniLinReg_hpp */

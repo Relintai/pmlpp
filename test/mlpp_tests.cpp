@@ -49,6 +49,7 @@
 
 #include "../mlpp/mlp/mlp_old.h"
 #include "../mlpp/pca/pca_old.h"
+#include "../mlpp/uni_lin_reg/uni_lin_reg_old.h"
 #include "../mlpp/wgan/wgan_old.h"
 
 Vector<real_t> dstd_vec_to_vec(const std::vector<real_t> &in) {
@@ -181,7 +182,7 @@ void MLPPTests::test_univariate_linear_regression() {
 
 	Ref<MLPPDataESimple> ds = data.load_fires_and_crime(_fires_and_crime_data_path);
 
-	MLPPUniLinReg model(ds->input, ds->output);
+	MLPPUniLinRegOld model_old(ds->input, ds->output);
 
 	std::vector<real_t> slr_res = {
 		24.1095, 28.4829, 29.8082, 26.0974, 27.2902, 61.0851, 30.4709, 25.0372, 25.5673, 35.9046,
@@ -190,7 +191,37 @@ void MLPPTests::test_univariate_linear_regression() {
 		27.8203, 20.6637, 22.5191, 53.796, 38.9527, 30.8685, 20.3986
 	};
 
-	is_approx_equals_dvec(dstd_vec_to_vec(model.modelSetTest(ds->input)), dstd_vec_to_vec(slr_res), "stat.mode(x)");
+	is_approx_equals_dvec(dstd_vec_to_vec(model_old.modelSetTest(ds->input)), dstd_vec_to_vec(slr_res), "stat.mode(x)");
+
+	Ref<MLPPVector> input;
+	input.instance();
+	input->set_from_std_vector(ds->input);
+
+	Ref<MLPPVector> output;
+	output.instance();
+	output->set_from_std_vector(ds->output);
+
+	MLPPUniLinReg model(input, output);
+
+	std::vector<real_t> slr_res_n = {
+		24.109467, 28.482935, 29.808228, 26.097408, 27.290173, 61.085152, 30.470875, 25.037172, 25.567291,
+		35.904579, 54.458687, 18.808294, 23.446819, 18.543236, 19.205883, 21.193821, 23.049232, 18.808294,
+		25.434761, 35.904579, 37.759987, 40.278046, 63.868271, 68.50679, 40.410576, 46.77198, 32.061226,
+		23.314291, 44.784042, 44.518982, 27.82029, 20.663704, 22.519115, 53.796036, 38.952751,
+		30.868464, 20.398645
+	};
+
+	Ref<MLPPVector> slr_res_v;
+	slr_res_v.instance();
+	slr_res_v->set_from_std_vector(slr_res_n);
+
+	Ref<MLPPVector> res = model.model_set_test(input);
+
+	if (!slr_res_v->is_equal_approx(res)) {
+		ERR_PRINT("!slr_res_v->is_equal_approx(res)");
+		ERR_PRINT(res->to_string());
+		ERR_PRINT(slr_res_v->to_string());
+	}
 }
 
 void MLPPTests::test_multivariate_linear_regression_gradient_descent(bool ui) {

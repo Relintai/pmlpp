@@ -22,6 +22,13 @@ real_t MLPPStat::b1Estimation(const std::vector<real_t> &x, const std::vector<re
 	return covariance(x, y) / variance(x);
 }
 
+real_t MLPPStat::b0_estimation(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y) {
+	return meanv(y) - b1_estimation(x, y) * meanv(x);
+}
+real_t MLPPStat::b1_estimation(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y) {
+	return covariancev(x, y) / variancev(x);
+}
+
 real_t MLPPStat::mean(const std::vector<real_t> &x) {
 	real_t sum = 0;
 	for (int i = 0; i < x.size(); i++) {
@@ -124,6 +131,21 @@ real_t MLPPStat::meanv(const Ref<MLPPVector> &x) {
 	}
 
 	return sum / x_size;
+}
+
+real_t MLPPStat::variancev(const Ref<MLPPVector> &x) {
+	real_t x_mean = meanv(x);
+
+	int x_size = x->size();
+	const real_t *x_ptr = x->ptr();
+
+	real_t sum = 0;
+	for (int i = 0; i < x_size; ++i) {
+		real_t xi = x_ptr[i];
+
+		sum += (xi - x_mean) * (xi - x_mean);
+	}
+	return sum / (x_size - 1);
 }
 
 real_t MLPPStat::covariancev(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y) {
