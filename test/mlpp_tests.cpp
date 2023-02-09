@@ -52,6 +52,7 @@
 #include "../mlpp/pca/pca_old.h"
 #include "../mlpp/uni_lin_reg/uni_lin_reg_old.h"
 #include "../mlpp/wgan/wgan_old.h"
+#include "../mlpp/probit_reg/probit_reg_old.h"
 
 Vector<real_t> dstd_vec_to_vec(const std::vector<real_t> &in) {
 	Vector<real_t> r;
@@ -348,10 +349,10 @@ void MLPPTests::test_probit_regression(bool ui) {
 	// PROBIT REGRESSION
 	Ref<MLPPDataSimple> dt = data.load_breast_cancer(_breast_cancer_data_path);
 
-	MLPPProbitReg model(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
-	model.SGD(0.001, 10000, ui);
-	alg.printVector(model.modelSetTest(dt->get_input()->to_std_vector()));
-	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
+	MLPPProbitRegOld model_old(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
+	model_old.SGD(0.001, 10000, ui);
+	alg.printVector(model_old.modelSetTest(dt->get_input()->to_std_vector()));
+	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
 }
 void MLPPTests::test_c_log_log_regression(bool ui) {
 	MLPPLinAlg alg;
