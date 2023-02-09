@@ -50,9 +50,9 @@
 #include "../mlpp/mlp/mlp_old.h"
 #include "../mlpp/outlier_finder/outlier_finder_old.h"
 #include "../mlpp/pca/pca_old.h"
+#include "../mlpp/probit_reg/probit_reg_old.h"
 #include "../mlpp/uni_lin_reg/uni_lin_reg_old.h"
 #include "../mlpp/wgan/wgan_old.h"
-#include "../mlpp/probit_reg/probit_reg_old.h"
 
 Vector<real_t> dstd_vec_to_vec(const std::vector<real_t> &in) {
 	Vector<real_t> r;
@@ -353,6 +353,11 @@ void MLPPTests::test_probit_regression(bool ui) {
 	model_old.SGD(0.001, 10000, ui);
 	alg.printVector(model_old.modelSetTest(dt->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
+
+	MLPPProbitReg model(dt->get_input(), dt->get_output());
+	model.sgd(0.001, 10000, ui);
+	PLOG_MSG(model.model_set_test(dt->get_input())->to_string());
+	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
 void MLPPTests::test_c_log_log_regression(bool ui) {
 	MLPPLinAlg alg;

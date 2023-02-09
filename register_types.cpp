@@ -42,6 +42,7 @@ SOFTWARE.
 #include "mlpp/pca/pca.h"
 #include "mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "mlpp/wgan/wgan.h"
+#include "mlpp/probit_reg/probit_reg.h"
 
 #include "mlpp/mlp/mlp.h"
 
@@ -69,6 +70,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPPCA>();
 		ClassDB::register_class<MLPPUniLinReg>();
 		ClassDB::register_class<MLPPOutlierFinder>();
+		ClassDB::register_class<MLPPProbitReg>();
 
 		ClassDB::register_class<MLPPDataESimple>();
 		ClassDB::register_class<MLPPDataSimple>();
