@@ -59,6 +59,7 @@ sources = [
     "mlpp/uni_lin_reg/uni_lin_reg_old.cpp",
     "mlpp/outlier_finder/outlier_finder_old.cpp",
     "mlpp/probit_reg/probit_reg_old.cpp",
+    "mlpp/svc/svc_old.cpp",
 
     "test/mlpp_tests.cpp",
 ]
