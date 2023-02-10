@@ -47,6 +47,7 @@
 #include "../mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "../mlpp/wgan/wgan.h"
 
+#include "../mlpp/auto_encoder/auto_encoder_old.h"
 #include "../mlpp/mlp/mlp_old.h"
 #include "../mlpp/outlier_finder/outlier_finder_old.h"
 #include "../mlpp/pca/pca_old.h"
@@ -495,12 +496,13 @@ void MLPPTests::test_soft_max_network(bool ui) {
 void MLPPTests::test_autoencoder(bool ui) {
 	MLPPLinAlg alg;
 
-	// AUTOENCODER
 	std::vector<std::vector<real_t>> inputSet = { { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, { 3, 5, 9, 12, 15, 18, 21, 24, 27, 30 } };
-	MLPPAutoEncoder model(alg.transpose(inputSet), 5);
-	model.SGD(0.001, 300000, ui);
-	alg.printMatrix(model.modelSetTest(alg.transpose(inputSet)));
-	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
+
+	// AUTOENCODER
+	MLPPAutoEncoderOld model_old(alg.transpose(inputSet), 5);
+	model_old.SGD(0.001, 300000, ui);
+	alg.printMatrix(model_old.modelSetTest(alg.transpose(inputSet)));
+	std::cout << "ACCURACY (Old): " << 100 * model_old.score() << "%" << std::endl;
 }
 void MLPPTests::test_dynamically_sized_ann(bool ui) {
 	MLPPLinAlg alg;

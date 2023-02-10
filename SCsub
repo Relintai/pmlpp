@@ -61,6 +61,7 @@ sources = [
     "mlpp/probit_reg/probit_reg_old.cpp",
     "mlpp/svc/svc_old.cpp",
     "mlpp/softmax_reg/softmax_reg_old.cpp",
+    "mlpp/auto_encoder/auto_encoder_old.cpp",
 
     "test/mlpp_tests.cpp",
 ]
