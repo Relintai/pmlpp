@@ -14,14 +14,6 @@
 #include <iostream>
 #include <random>
 
-
-MLPPSVC::MLPPSVC(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, real_t C) :
-		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), C(C) {
-	y_hat.resize(n);
-	weights = MLPPUtilities::weightInitialization(k);
-	bias = MLPPUtilities::biasInitialization();
-}
-
 std::vector<real_t> MLPPSVC::modelSetTest(std::vector<std::vector<real_t>> X) {
 	return Evaluate(X);
 }
@@ -78,7 +70,7 @@ void MLPPSVC::SGD(real_t learning_rate, int max_epoch, bool UI) {
 		std::uniform_int_distribution<int> distribution(0, int(n - 1));
 		int outputIndex = distribution(generator);
 
-		real_t y_hat = Evaluate(inputSet[outputIndex]);
+		//real_t y_hat = Evaluate(inputSet[outputIndex]);
 		real_t z = propagate(inputSet[outputIndex]);
 		cost_prev = Cost({ z }, { outputSet[outputIndex] }, weights, C);
 
@@ -91,12 +83,13 @@ void MLPPSVC::SGD(real_t learning_rate, int max_epoch, bool UI) {
 		// Bias updation
 		bias -= learning_rate * costDeriv;
 
-		y_hat = Evaluate({ inputSet[outputIndex] });
+		//y_hat = Evaluate({ inputSet[outputIndex] });
 
 		if (UI) {
 			MLPPUtilities::CostInfo(epoch, cost_prev, Cost({ z }, { outputSet[outputIndex] }, weights, C));
 			MLPPUtilities::UI(weights, bias);
 		}
+
 		epoch++;
 
 		if (epoch > max_epoch) {
@@ -116,7 +109,9 @@ void MLPPSVC::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -149,13 +144,25 @@ void MLPPSVC::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 }
 
 real_t MLPPSVC::score() {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPSVC::save(std::string fileName) {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	util.saveParameters(fileName, weights, bias);
+}
+
+MLPPSVC::MLPPSVC(std::vector<std::vector<real_t>> p_inputSet, std::vector<real_t> p_outputSet, real_t p_C) {
+	inputSet = p_inputSet;
+	outputSet = p_outputSet;
+	n = inputSet.size();
+	k = inputSet[0].size();
+	C = p_C;
+
+	y_hat.resize(n);
+	weights = MLPPUtilities::weightInitialization(k);
+	bias = MLPPUtilities::biasInitialization();
 }
 
 real_t MLPPSVC::Cost(std::vector<real_t> z, std::vector<real_t> y, std::vector<real_t> weights, real_t C) {
@@ -189,7 +196,6 @@ real_t MLPPSVC::propagate(std::vector<real_t> x) {
 
 // sign ( wTx + b )
 void MLPPSVC::forwardPass() {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
 	z = propagate(inputSet);
