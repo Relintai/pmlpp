@@ -15,9 +15,17 @@
 #include <iostream>
 #include <random>
 
+MLPPSoftmaxNet::MLPPSoftmaxNet(std::vector<std::vector<real_t>> pinputSet, std::vector<std::vector<real_t>> poutputSet, int pn_hidden, std::string preg, real_t plambda, real_t palpha) {
+	inputSet = pinputSet;
+	outputSet = poutputSet;
+	n = pinputSet.size();
+	k = pinputSet[0].size();
+	n_hidden = pn_hidden;
+	n_class = poutputSet[0].size();
+	reg = preg;
+	lambda = plambda;
+	alpha = palpha;
 
-MLPPSoftmaxNet::MLPPSoftmaxNet(std::vector<std::vector<real_t>> inputSet, std::vector<std::vector<real_t>> outputSet, int n_hidden, std::string reg, real_t lambda, real_t alpha) :
-		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), n_hidden(n_hidden), n_class(outputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
 
 	weights1 = MLPPUtilities::weightInitialization(k, n_hidden);
@@ -104,7 +112,11 @@ void MLPPSoftmaxNet::SGD(real_t learning_rate, int max_epoch, bool UI) {
 		int outputIndex = distribution(generator);
 
 		std::vector<real_t> y_hat = Evaluate(inputSet[outputIndex]);
-		auto [z2, a2] = propagate(inputSet[outputIndex]);
+
+		auto prop_res = propagate(inputSet[outputIndex]);
+		auto z2 = std::get<0>(prop_res);
+		auto a2 = std::get<1>(prop_res);
+
 		cost_prev = Cost({ y_hat }, { outputSet[outputIndex] });
 		std::vector<real_t> error = alg.subtraction(y_hat, outputSet[outputIndex]);
 
@@ -118,7 +130,7 @@ void MLPPSoftmaxNet::SGD(real_t learning_rate, int max_epoch, bool UI) {
 
 		// Weight updation for layer 1
 		std::vector<real_t> D1_1 = alg.mat_vec_mult(weights2, error);
-		std::vector<real_t> D1_2 = alg.hadamard_product(D1_1, avn.sigmoid(z2, 1));
+		std::vector<real_t> D1_2 = alg.hadamard_product(D1_1, avn.sigmoid(z2, true));
 		std::vector<std::vector<real_t>> D1_3 = alg.outerProduct(inputSet[outputIndex], D1_2);
 
 		weights1 = alg.subtraction(weights1, alg.scalarMultiply(learning_rate, D1_3));
@@ -153,7 +165,10 @@ void MLPPSoftmaxNet::MBGD(real_t learning_rate, int max_epoch, int mini_batch_si
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Creating the mini-batches
 	for (int i = 0; i < n_mini_batch; i++) {
@@ -177,7 +192,11 @@ void MLPPSoftmaxNet::MBGD(real_t learning_rate, int max_epoch, int mini_batch_si
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
 			std::vector<std::vector<real_t>> y_hat = Evaluate(inputMiniBatches[i]);
-			auto [z2, a2] = propagate(inputMiniBatches[i]);
+
+			auto propagate_res = propagate(inputMiniBatches[i]);
+			auto z2 = std::get<0>(propagate_res);
+			auto a2 = std::get<1>(propagate_res);
+
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
 			// Calculating the errors
@@ -227,16 +246,14 @@ void MLPPSoftmaxNet::MBGD(real_t learning_rate, int max_epoch, int mini_batch_si
 }
 
 real_t MLPPSoftmaxNet::score() {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPSoftmaxNet::save(std::string fileName) {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	util.saveParameters(fileName, weights1, bias1, 0, 1);
 	util.saveParameters(fileName, weights2, bias2, 1, 2);
-
-	MLPPLinAlg alg;
 }
 
 std::vector<std::vector<real_t>> MLPPSoftmaxNet::getEmbeddings() {

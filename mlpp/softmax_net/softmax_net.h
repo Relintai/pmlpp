@@ -1,4 +1,3 @@
-
 #ifndef MLPP_SOFTMAX_NET_H
 #define MLPP_SOFTMAX_NET_H
 
@@ -12,8 +11,6 @@
 
 #include <string>
 #include <vector>
-
-
 
 class MLPPSoftmaxNet {
 public:
@@ -59,6 +56,5 @@ private:
 	real_t lambda;
 	real_t alpha; /* This is the controlling param for Elastic Net*/
 };
-
 
 #endif /* SoftmaxNet_hpp */
