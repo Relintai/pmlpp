@@ -145,7 +145,9 @@ void MLPPCLogLogReg::MBGD(real_t learning_rate, int max_epoch, int mini_batch_si
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -180,7 +182,7 @@ void MLPPCLogLogReg::MBGD(real_t learning_rate, int max_epoch, int mini_batch_si
 }
 
 real_t MLPPCLogLogReg::score() {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	return util.performance(y_hat, outputSet);
 }
 
@@ -214,7 +216,6 @@ real_t MLPPCLogLogReg::propagate(std::vector<real_t> x) {
 
 // cloglog ( wTx + b )
 void MLPPCLogLogReg::forwardPass() {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
 	z = propagate(inputSet);
