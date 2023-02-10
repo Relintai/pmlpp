@@ -54,6 +54,7 @@
 #include "../mlpp/probit_reg/probit_reg_old.h"
 #include "../mlpp/softmax_reg/softmax_reg_old.h"
 #include "../mlpp/svc/svc_old.h"
+#include "../mlpp/tanh_reg/tanh_reg_old.h"
 #include "../mlpp/uni_lin_reg/uni_lin_reg_old.h"
 #include "../mlpp/wgan/wgan_old.h"
 
@@ -390,10 +391,11 @@ void MLPPTests::test_tanh_regression(bool ui) {
 	// TANH REGRESSION
 	std::vector<std::vector<real_t>> inputSet = { { 4, 3, 0, -3, -4 }, { 0, 0, 0, 1, 1 } };
 	std::vector<real_t> outputSet = { 1, 1, 0, -1, -1 };
-	MLPPTanhReg model(alg.transpose(inputSet), outputSet);
-	model.SGD(0.1, 10000, ui);
-	alg.printVector(model.modelSetTest(alg.transpose(inputSet)));
-	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
+
+	MLPPTanhRegOld model_old(alg.transpose(inputSet), outputSet);
+	model_old.SGD(0.1, 10000, ui);
+	alg.printVector(model_old.modelSetTest(alg.transpose(inputSet)));
+	std::cout << "ACCURACY (Old): " << 100 * model_old.score() << "%" << std::endl;
 }
 void MLPPTests::test_softmax_regression(bool ui) {
 	MLPPLinAlg alg;
