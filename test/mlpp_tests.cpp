@@ -398,12 +398,19 @@ void MLPPTests::test_softmax_regression(bool ui) {
 	MLPPLinAlg alg;
 	MLPPData data;
 
-	// SOFTMAX REGRESSION
 	Ref<MLPPDataComplex> dt = data.load_iris(_iris_data_path);
+
+	// SOFTMAX REGRESSION
+
 	MLPPSoftmaxRegOld model_old(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
 	model_old.SGD(0.1, 10000, ui);
 	alg.printMatrix(model_old.modelSetTest(dt->get_input()->to_std_vector()));
-	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
+	std::cout << "ACCURACY (Old): " << 100 * model_old.score() << "%" << std::endl;
+
+	MLPPSoftmaxReg model(dt->get_input(), dt->get_output());
+	model.sgd(0.1, 10000, ui);
+	PLOG_MSG(model.model_set_test(dt->get_input())->to_string());
+	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
 void MLPPTests::test_support_vector_classification(bool ui) {
 	//MLPPStat stat;

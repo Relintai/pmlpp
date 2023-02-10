@@ -96,7 +96,8 @@ void MLPPSoftmaxRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 		// Bias updation
 		bias = alg.subtraction(bias, alg.scalarMultiply(learning_rate, b_gradient));
 
-		y_hat = Evaluate({ inputSet[outputIndex] });
+		//y_hat = Evaluate({ inputSet[outputIndex] });
+		y_hat = Evaluate(inputSet[outputIndex]);
 
 		if (UI) {
 			MLPPUtilities::CostInfo(epoch, cost_prev, Cost({ y_hat }, { outputSet[outputIndex] }));
