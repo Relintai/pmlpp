@@ -20,8 +20,6 @@
 #include <tuple>
 #include <vector>
 
-
-
 class MLPPGAN {
 public:
 	MLPPGAN(real_t k, std::vector<std::vector<real_t>> outputSet);
@@ -57,6 +55,5 @@ private:
 	int n;
 	int k;
 };
-
 
 #endif /* GAN_hpp */
