@@ -12,7 +12,6 @@
 
 #include <vector>
 
-
 class MLPPGaussianNB {
 public:
 	MLPPGaussianNB(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int class_num);
