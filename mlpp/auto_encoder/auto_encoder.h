@@ -10,18 +10,34 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
+
+#include "../regularization/reg.h"
+
+//REMOVE
+#include <iostream>
 #include <string>
-#include <tuple>
 #include <vector>
 
-class MLPPAutoEncoder {
-public:
-	std::vector<std::vector<real_t>> modelSetTest(std::vector<std::vector<real_t>> X);
-	std::vector<real_t> modelTest(std::vector<real_t> x);
+class MLPPAutoEncoder : public Reference {
+	GDCLASS(MLPPAutoEncoder, Reference);
 
-	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = false);
-	void SGD(real_t learning_rate, int max_epoch, bool UI = false);
-	void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI = false);
+public:
+	Ref<MLPPMatrix> get_input_set();
+	void set_input_set(const Ref<MLPPMatrix> &val);
+
+	int get_n_hidden();
+	void set_n_hidden(const int val);
+
+	std::vector<std::vector<real_t>> model_set_test(std::vector<std::vector<real_t>> X);
+	std::vector<real_t> model_test(std::vector<real_t> x);
+
+	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
+	void sgd(real_t learning_rate, int max_epoch, bool ui = false);
+	void mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui = false);
 
 	real_t score();
 
@@ -29,30 +45,39 @@ public:
 
 	MLPPAutoEncoder(std::vector<std::vector<real_t>> inputSet, int n_hidden);
 
-private:
-	real_t Cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y);
+	MLPPAutoEncoder();
+	~MLPPAutoEncoder();
 
-	std::vector<std::vector<real_t>> Evaluate(std::vector<std::vector<real_t>> X);
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> propagate(std::vector<std::vector<real_t>> X);
-	std::vector<real_t> Evaluate(std::vector<real_t> x);
-	std::tuple<std::vector<real_t>, std::vector<real_t>> propagate(std::vector<real_t> x);
-	void forwardPass();
+protected:
+	real_t cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y);
 
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<std::vector<real_t>> y_hat;
+	std::vector<real_t> evaluatev(std::vector<real_t> x);
+	std::tuple<std::vector<real_t>, std::vector<real_t>> propagatev(std::vector<real_t> x);
 
-	std::vector<std::vector<real_t>> weights1;
-	std::vector<std::vector<real_t>> weights2;
+	std::vector<std::vector<real_t>> evaluatem(std::vector<std::vector<real_t>> X);
+	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> propagatem(std::vector<std::vector<real_t>> X);
 
-	std::vector<real_t> bias1;
-	std::vector<real_t> bias2;
+	void forward_pass();
 
-	std::vector<std::vector<real_t>> z2;
-	std::vector<std::vector<real_t>> a2;
+	static void _bind_methods();
 
-	int n;
-	int k;
-	int n_hidden;
+	std::vector<std::vector<real_t>> _input_set;
+	std::vector<std::vector<real_t>> _y_hat;
+
+	std::vector<std::vector<real_t>> _weights1;
+	std::vector<std::vector<real_t>> _weights2;
+
+	std::vector<real_t> _bias1;
+	std::vector<real_t> _bias2;
+
+	std::vector<std::vector<real_t>> _z2;
+	std::vector<std::vector<real_t>> _a2;
+
+	int _n;
+	int _k;
+	int _n_hidden;
+
+	bool _initialized;
 };
 
 #endif /* AutoEncoder_hpp */

@@ -503,6 +503,11 @@ void MLPPTests::test_autoencoder(bool ui) {
 	model_old.SGD(0.001, 300000, ui);
 	alg.printMatrix(model_old.modelSetTest(alg.transpose(inputSet)));
 	std::cout << "ACCURACY (Old): " << 100 * model_old.score() << "%" << std::endl;
+
+	MLPPAutoEncoder model(alg.transpose(inputSet), 5);
+	model.sgd(0.001, 300000, ui);
+	alg.printMatrix(model.model_set_test(alg.transpose(inputSet)));
+	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_dynamically_sized_ann(bool ui) {
 	MLPPLinAlg alg;
