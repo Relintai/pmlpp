@@ -16,8 +16,6 @@
 #include <string>
 #include <vector>
 
-
-
 class MLPPDualSVC {
 public:
 	MLPPDualSVC(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, real_t C, std::string kernel = "Linear");
@@ -67,6 +65,5 @@ private:
 	// UI Portion
 	void UI(int epoch, real_t cost_prev);
 };
-
 
 #endif /* DualSVC_hpp */

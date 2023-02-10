@@ -14,9 +14,14 @@
 #include <iostream>
 #include <random>
 
+MLPPDualSVC::MLPPDualSVC(std::vector<std::vector<real_t>> p_inputSet, std::vector<real_t> p_outputSet, real_t p_C, std::string p_kernel) {
+	inputSet = p_inputSet;
+	outputSet = p_outputSet;
+	n = p_inputSet.size();
+	k = p_inputSet[0].size();
+	C = p_C;
+	kernel = p_kernel;
 
-MLPPDualSVC::MLPPDualSVC(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, real_t C, std::string kernel) :
-		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), C(C), kernel(kernel) {
 	y_hat.resize(n);
 	bias = MLPPUtilities::biasInitialization();
 	alpha = MLPPUtilities::weightInitialization(n); // One alpha for all training examples, as per the lagrangian multipliers.
@@ -49,10 +54,10 @@ void MLPPDualSVC::gradientDescent(real_t learning_rate, int max_epoch, bool UI) 
 
 		// Calculating the bias
 		real_t biasGradient = 0;
-		for (int i = 0; i < alpha.size(); i++) {
+		for (uint32_t i = 0; i < alpha.size(); i++) {
 			real_t sum = 0;
 			if (alpha[i] < C && alpha[i] > 0) {
-				for (int j = 0; j < alpha.size(); j++) {
+				for (uint32_t j = 0; j < alpha.size(); j++) {
 					if (alpha[j] > 0) {
 						sum += alpha[j] * outputSet[j] * alg.dot(inputSet[j], inputSet[i]); // TO DO: DON'T forget to add non-linear kernelizations.
 					}
@@ -153,12 +158,12 @@ void MLPPDualSVC::gradientDescent(real_t learning_rate, int max_epoch, bool UI) 
 // }
 
 real_t MLPPDualSVC::score() {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPDualSVC::save(std::string fileName) {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	util.saveParameters(fileName, alpha, bias);
 }
 
@@ -175,9 +180,9 @@ std::vector<real_t> MLPPDualSVC::Evaluate(std::vector<std::vector<real_t>> X) {
 std::vector<real_t> MLPPDualSVC::propagate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
 	std::vector<real_t> z;
-	for (int i = 0; i < X.size(); i++) {
+	for (uint32_t i = 0; i < X.size(); i++) {
 		real_t sum = 0;
-		for (int j = 0; j < alpha.size(); j++) {
+		for (uint32_t j = 0; j < alpha.size(); j++) {
 			if (alpha[j] != 0) {
 				sum += alpha[j] * outputSet[j] * alg.dot(inputSet[j], X[i]); // TO DO: DON'T forget to add non-linear kernelizations.
 			}
@@ -196,7 +201,7 @@ real_t MLPPDualSVC::Evaluate(std::vector<real_t> x) {
 real_t MLPPDualSVC::propagate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
 	real_t z = 0;
-	for (int j = 0; j < alpha.size(); j++) {
+	for (uint32_t j = 0; j < alpha.size(); j++) {
 		if (alpha[j] != 0) {
 			z += alpha[j] * outputSet[j] * alg.dot(inputSet[j], x); // TO DO: DON'T forget to add non-linear kernelizations.
 		}
@@ -206,7 +211,6 @@ real_t MLPPDualSVC::propagate(std::vector<real_t> x) {
 }
 
 void MLPPDualSVC::forwardPass() {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
 	z = propagate(inputSet);
@@ -214,7 +218,7 @@ void MLPPDualSVC::forwardPass() {
 }
 
 void MLPPDualSVC::alphaProjection() {
-	for (int i = 0; i < alpha.size(); i++) {
+	for (uint32_t i = 0; i < alpha.size(); i++) {
 		if (alpha[i] > C) {
 			alpha[i] = C;
 		} else if (alpha[i] < 0) {
@@ -227,12 +231,16 @@ real_t MLPPDualSVC::kernelFunction(std::vector<real_t> u, std::vector<real_t> v,
 	MLPPLinAlg alg;
 	if (kernel == "Linear") {
 		return alg.dot(u, v);
-	} // warning: non-void function does not return a value in all control paths [-Wreturn-type]
+	}
+
+	return 0;
 }
 
 std::vector<std::vector<real_t>> MLPPDualSVC::kernelFunction(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B, std::string kernel) {
 	MLPPLinAlg alg;
 	if (kernel == "Linear") {
 		return alg.matmult(inputSet, alg.transpose(inputSet));
-	} // warning: non-void function does not return a value in all control paths [-Wreturn-type]
+	}
+
+	return std::vector<std::vector<real_t>>();
 }
