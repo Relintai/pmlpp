@@ -14,9 +14,15 @@
 #include <iostream>
 #include <random>
 
+MLPPExpReg::MLPPExpReg(std::vector<std::vector<real_t>> p_inputSet, std::vector<real_t> p_outputSet, std::string p_reg, real_t p_lambda, real_t p_alpha) {
+	inputSet = p_inputSet;
+	outputSet = p_outputSet;
+	n = p_inputSet.size();
+	k = p_inputSet[0].size();
+	reg = p_reg;
+	lambda = p_lambda;
+	alpha = p_alpha;
 
-MLPPExpReg::MLPPExpReg(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, std::string reg, real_t lambda, real_t alpha) :
-		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
 	weights = MLPPUtilities::weightInitialization(k);
 	initial = MLPPUtilities::weightInitialization(k);
@@ -142,7 +148,9 @@ void MLPPExpReg::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, 
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -153,14 +161,14 @@ void MLPPExpReg::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			for (int j = 0; j < k; j++) {
 				// Calculating the weight gradient
 				real_t sum = 0;
-				for (int k = 0; k < outputMiniBatches[i].size(); k++) {
+				for (uint32_t k = 0; k < outputMiniBatches[i].size(); k++) {
 					sum += error[k] * inputMiniBatches[i][k][j] * std::pow(weights[j], inputMiniBatches[i][k][j] - 1);
 				}
 				real_t w_gradient = sum / outputMiniBatches[i].size();
 
 				// Calculating the initial gradient
 				real_t sum2 = 0;
-				for (int k = 0; k < outputMiniBatches[i].size(); k++) {
+				for (uint32_t k = 0; k < outputMiniBatches[i].size(); k++) {
 					sum2 += error[k] * std::pow(weights[j], inputMiniBatches[i][k][j]);
 				}
 
@@ -174,10 +182,11 @@ void MLPPExpReg::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, 
 
 			// Calculating the bias gradient
 			real_t sum = 0;
-			for (int j = 0; j < outputMiniBatches[i].size(); j++) {
+			for (uint32_t j = 0; j < outputMiniBatches[i].size(); j++) {
 				sum += (y_hat[j] - outputMiniBatches[i][j]);
 			}
-			real_t b_gradient = sum / outputMiniBatches[i].size();
+
+			//real_t b_gradient = sum / outputMiniBatches[i].size();
 			y_hat = Evaluate(inputMiniBatches[i]);
 
 			if (UI) {
@@ -194,12 +203,12 @@ void MLPPExpReg::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, 
 }
 
 real_t MLPPExpReg::score() {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPExpReg::save(std::string fileName) {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	util.saveParameters(fileName, weights, initial, bias);
 }
 
@@ -212,9 +221,9 @@ real_t MLPPExpReg::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
 std::vector<real_t> MLPPExpReg::Evaluate(std::vector<std::vector<real_t>> X) {
 	std::vector<real_t> y_hat;
 	y_hat.resize(X.size());
-	for (int i = 0; i < X.size(); i++) {
+	for (uint32_t i = 0; i < X.size(); i++) {
 		y_hat[i] = 0;
-		for (int j = 0; j < X[i].size(); j++) {
+		for (uint32_t j = 0; j < X[i].size(); j++) {
 			y_hat[i] += initial[j] * std::pow(weights[j], X[i][j]);
 		}
 		y_hat[i] += bias;
@@ -224,7 +233,7 @@ std::vector<real_t> MLPPExpReg::Evaluate(std::vector<std::vector<real_t>> X) {
 
 real_t MLPPExpReg::Evaluate(std::vector<real_t> x) {
 	real_t y_hat = 0;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		y_hat += initial[i] * std::pow(weights[i], x[i]);
 	}
 
