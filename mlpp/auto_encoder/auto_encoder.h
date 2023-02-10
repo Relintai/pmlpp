@@ -16,14 +16,18 @@
 
 class MLPPAutoEncoder {
 public:
-	MLPPAutoEncoder(std::vector<std::vector<real_t>> inputSet, int n_hidden);
 	std::vector<std::vector<real_t>> modelSetTest(std::vector<std::vector<real_t>> X);
 	std::vector<real_t> modelTest(std::vector<real_t> x);
+
 	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = false);
 	void SGD(real_t learning_rate, int max_epoch, bool UI = false);
 	void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI = false);
+
 	real_t score();
+
 	void save(std::string fileName);
+
+	MLPPAutoEncoder(std::vector<std::vector<real_t>> inputSet, int n_hidden);
 
 private:
 	real_t Cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y);

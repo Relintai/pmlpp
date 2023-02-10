@@ -13,17 +13,6 @@
 #include <iostream>
 #include <random>
 
-MLPPAutoEncoder::MLPPAutoEncoder(std::vector<std::vector<real_t>> inputSet, int n_hidden) :
-		inputSet(inputSet), n_hidden(n_hidden), n(inputSet.size()), k(inputSet[0].size()) {
-	MLPPActivation avn;
-	y_hat.resize(inputSet.size());
-
-	weights1 = MLPPUtilities::weightInitialization(k, n_hidden);
-	weights2 = MLPPUtilities::weightInitialization(n_hidden, k);
-	bias1 = MLPPUtilities::biasInitialization(n_hidden);
-	bias2 = MLPPUtilities::biasInitialization(k);
-}
-
 std::vector<std::vector<real_t>> MLPPAutoEncoder::modelSetTest(std::vector<std::vector<real_t>> X) {
 	return Evaluate(X);
 }
@@ -98,7 +87,10 @@ void MLPPAutoEncoder::SGD(real_t learning_rate, int max_epoch, bool UI) {
 		int outputIndex = distribution(generator);
 
 		std::vector<real_t> y_hat = Evaluate(inputSet[outputIndex]);
-		auto [z2, a2] = propagate(inputSet[outputIndex]);
+		auto prop_res = propagate(inputSet[outputIndex]);
+		auto z2 = std::get<0>(prop_res);
+		auto a2 = std::get<1>(prop_res);
+
 		cost_prev = Cost({ y_hat }, { inputSet[outputIndex] });
 		std::vector<real_t> error = alg.subtraction(y_hat, inputSet[outputIndex]);
 
@@ -149,7 +141,11 @@ void MLPPAutoEncoder::MBGD(real_t learning_rate, int max_epoch, int mini_batch_s
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
 			std::vector<std::vector<real_t>> y_hat = Evaluate(inputMiniBatches[i]);
-			auto [z2, a2] = propagate(inputMiniBatches[i]);
+
+			auto prop_res = propagate(inputMiniBatches[i]);
+			auto z2 = std::get<0>(prop_res);
+			auto a2 = std::get<1>(prop_res);
+
 			cost_prev = Cost(y_hat, inputMiniBatches[i]);
 
 			// Calculating the errors
@@ -197,14 +193,29 @@ void MLPPAutoEncoder::MBGD(real_t learning_rate, int max_epoch, int mini_batch_s
 }
 
 real_t MLPPAutoEncoder::score() {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	return util.performance(y_hat, inputSet);
 }
 
 void MLPPAutoEncoder::save(std::string fileName) {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	util.saveParameters(fileName, weights1, bias1, 0, 1);
 	util.saveParameters(fileName, weights2, bias2, 1, 2);
+}
+
+MLPPAutoEncoder::MLPPAutoEncoder(std::vector<std::vector<real_t>> pinputSet, int pn_hidden) {
+	inputSet = pinputSet;
+	n_hidden = pn_hidden;
+	n = inputSet.size();
+	k = inputSet[0].size();
+
+	MLPPActivation avn;
+	y_hat.resize(inputSet.size());
+
+	weights1 = MLPPUtilities::weightInitialization(k, n_hidden);
+	weights2 = MLPPUtilities::weightInitialization(n_hidden, k);
+	bias1 = MLPPUtilities::biasInitialization(n_hidden);
+	bias2 = MLPPUtilities::biasInitialization(k);
 }
 
 real_t MLPPAutoEncoder::Cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
