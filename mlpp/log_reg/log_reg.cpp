@@ -14,9 +14,15 @@
 #include <iostream>
 #include <random>
 
+MLPPLogReg::MLPPLogReg(std::vector<std::vector<real_t>> pinputSet, std::vector<real_t> poutputSet, std::string preg, real_t plambda, real_t palpha) {
+	inputSet = pinputSet;
+	outputSet = poutputSet;
+	n = pinputSet.size();
+	k = pinputSet[0].size();
+	reg = preg;
+	lambda = plambda;
+	alpha = palpha;
 
-MLPPLogReg::MLPPLogReg(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, std::string reg, real_t lambda, real_t alpha) :
-		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
 	weights = MLPPUtilities::weightInitialization(k);
 	bias = MLPPUtilities::biasInitialization();
@@ -140,7 +146,9 @@ void MLPPLogReg::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, 
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto bacthes = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(bacthes);
+	auto outputMiniBatches = std::get<1>(bacthes);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -171,12 +179,12 @@ void MLPPLogReg::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, 
 }
 
 real_t MLPPLogReg::score() {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPLogReg::save(std::string fileName) {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	util.saveParameters(fileName, weights, bias);
 }
 
