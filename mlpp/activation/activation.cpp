@@ -923,7 +923,7 @@ Ref<MLPPMatrix> MLPPActivation::softmax_normm(const Ref<MLPPMatrix> &z) {
 	for (int i = 0; i < z_size.y; ++i) {
 		z->get_row_into_mlpp_vector(i, row_tmp);
 
-		Ref<MLPPVector> sfn = softmax_normv(z);
+		Ref<MLPPVector> sfn = softmax_normv(row_tmp);
 
 		a->set_row_mlpp_vector(i, sfn);
 	}
