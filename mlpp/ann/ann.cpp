@@ -15,8 +15,15 @@
 #include <iostream>
 #include <random>
 
-MLPPANN::MLPPANN(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet) :
-		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), lrScheduler("None"), decayConstant(0), dropRate(0) {
+MLPPANN::MLPPANN(std::vector<std::vector<real_t>> p_inputSet, std::vector<real_t> p_outputSet) {
+	inputSet = p_inputSet;
+	outputSet = p_outputSet;
+
+	n = inputSet.size();
+	k = inputSet[0].size();
+	lrScheduler = "None";
+	decayConstant = 0;
+	dropRate = 0;
 }
 
 MLPPANN::~MLPPANN() {
@@ -28,7 +35,7 @@ std::vector<real_t> MLPPANN::modelSetTest(std::vector<std::vector<real_t>> X) {
 		network[0].input = X;
 		network[0].forwardPass();
 
-		for (int i = 1; i < network.size(); i++) {
+		for (uint32_t i = 1; i < network.size(); i++) {
 			network[i].input = network[i - 1].a;
 			network[i].forwardPass();
 		}
@@ -43,7 +50,7 @@ std::vector<real_t> MLPPANN::modelSetTest(std::vector<std::vector<real_t>> X) {
 real_t MLPPANN::modelTest(std::vector<real_t> x) {
 	if (!network.empty()) {
 		network[0].Test(x);
-		for (int i = 1; i < network.size(); i++) {
+		for (uint32_t i = 1; i < network.size(); i++) {
 			network[i].Test(network[i - 1].a_test);
 		}
 		outputLayer->Test(network[network.size() - 1].a_test);
@@ -66,7 +73,9 @@ void MLPPANN::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
 		cost_prev = Cost(y_hat, outputSet);
 
-		auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputSet);
+		auto grads = computeGradients(y_hat, outputSet);
+		auto cumulativeHiddenLayerWGrad = std::get<0>(grads);
+		auto outputWGrad = std::get<1>(grads);
 
 		cumulativeHiddenLayerWGrad = alg.scalarMultiply(learning_rate / n, cumulativeHiddenLayerWGrad);
 		outputWGrad = alg.scalarMultiply(learning_rate / n, outputWGrad);
@@ -106,7 +115,10 @@ void MLPPANN::SGD(real_t learning_rate, int max_epoch, bool UI) {
 		std::vector<real_t> y_hat = modelSetTest({ inputSet[outputIndex] });
 		cost_prev = Cost({ y_hat }, { outputSet[outputIndex] });
 
-		auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, { outputSet[outputIndex] });
+		auto grads = computeGradients(y_hat, { outputSet[outputIndex] });
+		auto cumulativeHiddenLayerWGrad = std::get<0>(grads);
+		auto outputWGrad = std::get<1>(grads);
+
 		cumulativeHiddenLayerWGrad = alg.scalarMultiply(learning_rate / n, cumulativeHiddenLayerWGrad);
 		outputWGrad = alg.scalarMultiply(learning_rate / n, outputWGrad);
 
@@ -137,14 +149,21 @@ void MLPPANN::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
+
 	while (true) {
 		learning_rate = applyLearningRateScheduler(initial_learning_rate, decayConstant, epoch, dropRate);
 		for (int i = 0; i < n_mini_batch; i++) {
 			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
-			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
+			auto grads = computeGradients(y_hat, outputMiniBatches[i]);
+			auto cumulativeHiddenLayerWGrad = std::get<0>(grads);
+			auto outputWGrad = std::get<1>(grads);
+
 			cumulativeHiddenLayerWGrad = alg.scalarMultiply(learning_rate / n, cumulativeHiddenLayerWGrad);
 			outputWGrad = alg.scalarMultiply(learning_rate / n, outputWGrad);
 
@@ -175,7 +194,10 @@ void MLPPANN::Momentum(real_t learning_rate, int max_epoch, int mini_batch_size,
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<real_t>>> v_hidden;
@@ -187,7 +209,9 @@ void MLPPANN::Momentum(real_t learning_rate, int max_epoch, int mini_batch_size,
 			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
-			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
+			auto grads = computeGradients(y_hat, outputMiniBatches[i]);
+			auto cumulativeHiddenLayerWGrad = std::get<0>(grads);
+			auto outputWGrad = std::get<1>(grads);
 
 			if (!network.empty() && v_hidden.empty()) { // Initing our tensor
 				v_hidden = alg.resize(v_hidden, cumulativeHiddenLayerWGrad);
@@ -232,7 +256,10 @@ void MLPPANN::Adagrad(real_t learning_rate, int max_epoch, int mini_batch_size, 
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<real_t>>> v_hidden;
@@ -244,7 +271,9 @@ void MLPPANN::Adagrad(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
-			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
+			auto grads = computeGradients(y_hat, outputMiniBatches[i]);
+			auto cumulativeHiddenLayerWGrad = std::get<0>(grads);
+			auto outputWGrad = std::get<1>(grads);
 
 			if (!network.empty() && v_hidden.empty()) { // Initing our tensor
 				v_hidden = alg.resize(v_hidden, cumulativeHiddenLayerWGrad);
@@ -288,7 +317,10 @@ void MLPPANN::Adadelta(real_t learning_rate, int max_epoch, int mini_batch_size,
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<real_t>>> v_hidden;
@@ -300,7 +332,9 @@ void MLPPANN::Adadelta(real_t learning_rate, int max_epoch, int mini_batch_size,
 			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
-			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
+			auto grads = computeGradients(y_hat, outputMiniBatches[i]);
+			auto cumulativeHiddenLayerWGrad = std::get<0>(grads);
+			auto outputWGrad = std::get<1>(grads);
 
 			if (!network.empty() && v_hidden.empty()) { // Initing our tensor
 				v_hidden = alg.resize(v_hidden, cumulativeHiddenLayerWGrad);
@@ -344,7 +378,10 @@ void MLPPANN::Adam(real_t learning_rate, int max_epoch, int mini_batch_size, rea
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<real_t>>> m_hidden;
@@ -358,7 +395,10 @@ void MLPPANN::Adam(real_t learning_rate, int max_epoch, int mini_batch_size, rea
 			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
-			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
+			auto grads = computeGradients(y_hat, outputMiniBatches[i]);
+			auto cumulativeHiddenLayerWGrad = std::get<0>(grads);
+			auto outputWGrad = std::get<1>(grads);
+
 			if (!network.empty() && m_hidden.empty() && v_hidden.empty()) { // Initing our tensor
 				m_hidden = alg.resize(m_hidden, cumulativeHiddenLayerWGrad);
 				v_hidden = alg.resize(v_hidden, cumulativeHiddenLayerWGrad);
@@ -411,7 +451,10 @@ void MLPPANN::Adamax(real_t learning_rate, int max_epoch, int mini_batch_size, r
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<real_t>>> m_hidden;
@@ -425,7 +468,10 @@ void MLPPANN::Adamax(real_t learning_rate, int max_epoch, int mini_batch_size, r
 			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
-			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
+			auto grads = computeGradients(y_hat, outputMiniBatches[i]);
+			auto cumulativeHiddenLayerWGrad = std::get<0>(grads);
+			auto outputWGrad = std::get<1>(grads);
+
 			if (!network.empty() && m_hidden.empty() && u_hidden.empty()) { // Initing our tensor
 				m_hidden = alg.resize(m_hidden, cumulativeHiddenLayerWGrad);
 				u_hidden = alg.resize(u_hidden, cumulativeHiddenLayerWGrad);
@@ -476,12 +522,14 @@ void MLPPANN::Nadam(real_t learning_rate, int max_epoch, int mini_batch_size, re
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<real_t>>> m_hidden;
 	std::vector<std::vector<std::vector<real_t>>> v_hidden;
-	std::vector<std::vector<std::vector<real_t>>> m_hidden_final;
 
 	std::vector<real_t> m_output;
 	std::vector<real_t> v_output;
@@ -491,7 +539,10 @@ void MLPPANN::Nadam(real_t learning_rate, int max_epoch, int mini_batch_size, re
 			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
-			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
+			auto grads = computeGradients(y_hat, outputMiniBatches[i]);
+			auto cumulativeHiddenLayerWGrad = std::get<0>(grads);
+			auto outputWGrad = std::get<1>(grads);
+
 			if (!network.empty() && m_hidden.empty() && v_hidden.empty()) { // Initing our tensor
 				m_hidden = alg.resize(m_hidden, cumulativeHiddenLayerWGrad);
 				v_hidden = alg.resize(v_hidden, cumulativeHiddenLayerWGrad);
@@ -546,7 +597,10 @@ void MLPPANN::AMSGrad(real_t learning_rate, int max_epoch, int mini_batch_size, 
 	int n_mini_batch = n / mini_batch_size;
 	// always evaluate the result
 	// always do forward pass only ONCE at end.
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Adam.
 	std::vector<std::vector<std::vector<real_t>>> m_hidden;
@@ -564,7 +618,10 @@ void MLPPANN::AMSGrad(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			std::vector<real_t> y_hat = modelSetTest(inputMiniBatches[i]);
 			cost_prev = Cost(y_hat, outputMiniBatches[i]);
 
-			auto [cumulativeHiddenLayerWGrad, outputWGrad] = computeGradients(y_hat, outputMiniBatches[i]);
+			auto grads = computeGradients(y_hat, outputMiniBatches[i]);
+			auto cumulativeHiddenLayerWGrad = std::get<0>(grads);
+			auto outputWGrad = std::get<1>(grads);
+
 			if (!network.empty() && m_hidden.empty() && v_hidden.empty()) { // Initing our tensor
 				m_hidden = alg.resize(m_hidden, cumulativeHiddenLayerWGrad);
 				v_hidden = alg.resize(v_hidden, cumulativeHiddenLayerWGrad);
@@ -606,21 +663,21 @@ void MLPPANN::AMSGrad(real_t learning_rate, int max_epoch, int mini_batch_size, 
 }
 
 real_t MLPPANN::score() {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	forwardPass();
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPANN::save(std::string fileName) {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	if (!network.empty()) {
-		util.saveParameters(fileName, network[0].weights, network[0].bias, 0, 1);
-		for (int i = 1; i < network.size(); i++) {
-			util.saveParameters(fileName, network[i].weights, network[i].bias, 1, i + 1);
+		util.saveParameters(fileName, network[0].weights, network[0].bias, false, 1);
+		for (uint32_t i = 1; i < network.size(); i++) {
+			util.saveParameters(fileName, network[i].weights, network[i].bias, true, i + 1);
 		}
-		util.saveParameters(fileName, outputLayer->weights, outputLayer->bias, 1, network.size() + 1);
+		util.saveParameters(fileName, outputLayer->weights, outputLayer->bias, true, network.size() + 1);
 	} else {
-		util.saveParameters(fileName, outputLayer->weights, outputLayer->bias, 0, network.size() + 1);
+		util.saveParameters(fileName, outputLayer->weights, outputLayer->bias, false, network.size() + 1);
 	}
 }
 
@@ -661,7 +718,6 @@ void MLPPANN::addLayer(int n_hidden, std::string activation, std::string weightI
 }
 
 void MLPPANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
-	MLPPLinAlg alg;
 	if (!network.empty()) {
 		outputLayer = new MLPPOldOutputLayer(network[network.size() - 1].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
 	} else {
@@ -676,7 +732,7 @@ real_t MLPPANN::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
 
 	auto cost_function = outputLayer->cost_map[outputLayer->cost];
 	if (!network.empty()) {
-		for (int i = 0; i < network.size() - 1; i++) {
+		for (uint32_t i = 0; i < network.size() - 1; i++) {
 			totalRegTerm += regularization.regTerm(network[i].weights, network[i].lambda, network[i].alpha, network[i].reg);
 		}
 	}
@@ -688,7 +744,7 @@ void MLPPANN::forwardPass() {
 		network[0].input = inputSet;
 		network[0].forwardPass();
 
-		for (int i = 1; i < network.size(); i++) {
+		for (uint32_t i = 1; i < network.size(); i++) {
 			network[i].input = network[i - 1].a;
 			network[i].forwardPass();
 		}
@@ -740,9 +796,9 @@ std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> M
 		cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(network[network.size() - 1].weights, network[network.size() - 1].lambda, network[network.size() - 1].alpha, network[network.size() - 1].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 
 		for (int i = network.size() - 2; i >= 0; i--) {
-			auto hiddenLayerAvn = network[i].activation_map[network[i].activation];
+			hiddenLayerAvn = network[i].activation_map[network[i].activation];
 			network[i].delta = alg.hadamard_product(alg.matmult(network[i + 1].delta, alg.transpose(network[i + 1].weights)), (avn.*hiddenLayerAvn)(network[i].z, 1));
-			std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[i].input), network[i].delta);
+			hiddenLayerWGrad = alg.matmult(alg.transpose(network[i].input), network[i].delta);
 			cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(network[i].weights, network[i].lambda, network[i].alpha, network[i].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 		}
 	}
