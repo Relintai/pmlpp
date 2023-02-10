@@ -15,8 +15,15 @@
 #include <iostream>
 #include <random>
 
-MLPPLinReg::MLPPLinReg(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, std::string reg, real_t lambda, real_t alpha) :
-		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
+MLPPLinReg::MLPPLinReg(std::vector<std::vector<real_t>> p_inputSet, std::vector<real_t> p_outputSet, std::string p_reg, real_t p_lambda, real_t p_alpha) {
+	inputSet = p_inputSet;
+	outputSet = p_outputSet;
+	n = p_inputSet.size();
+	k = p_inputSet[0].size();
+	reg = p_reg;
+	lambda = p_lambda;
+	alpha = p_alpha;
+
 	y_hat.resize(n);
 
 	weights = MLPPUtilities::weightInitialization(k);
@@ -141,7 +148,9 @@ void MLPPLinReg::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, 
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -179,7 +188,9 @@ void MLPPLinReg::Momentum(real_t learning_rate, int max_epoch, int mini_batch_si
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Momentum.
 	std::vector<real_t> v = alg.zerovec(weights.size());
@@ -224,7 +235,9 @@ void MLPPLinReg::NAG(real_t learning_rate, int max_epoch, int mini_batch_size, r
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Momentum.
 	std::vector<real_t> v = alg.zerovec(weights.size());
@@ -271,7 +284,9 @@ void MLPPLinReg::Adagrad(real_t learning_rate, int max_epoch, int mini_batch_siz
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Adagrad.
 	std::vector<real_t> v = alg.zerovec(weights.size());
@@ -317,7 +332,9 @@ void MLPPLinReg::Adadelta(real_t learning_rate, int max_epoch, int mini_batch_si
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Adagrad.
 	std::vector<real_t> v = alg.zerovec(weights.size());
@@ -362,7 +379,9 @@ void MLPPLinReg::Adam(real_t learning_rate, int max_epoch, int mini_batch_size, 
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Adam.
 	std::vector<real_t> m = alg.zerovec(weights.size());
@@ -413,7 +432,9 @@ void MLPPLinReg::Adamax(real_t learning_rate, int max_epoch, int mini_batch_size
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	std::vector<real_t> m = alg.zerovec(weights.size());
 
@@ -462,7 +483,9 @@ void MLPPLinReg::Nadam(real_t learning_rate, int max_epoch, int mini_batch_size,
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	// Initializing necessary components for Adam.
 	std::vector<real_t> m = alg.zerovec(weights.size());
@@ -513,7 +536,7 @@ void MLPPLinReg::normalEquation() {
 	std::vector<std::vector<real_t>> inputSetT = alg.transpose(inputSet);
 
 	x_means.resize(inputSetT.size());
-	for (int i = 0; i < inputSetT.size(); i++) {
+	for (uint32_t i = 0; i < inputSetT.size(); i++) {
 		x_means[i] = (stat.mean(inputSetT[i]));
 	}
 
