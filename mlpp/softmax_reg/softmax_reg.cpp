@@ -14,7 +14,6 @@
 #include <iostream>
 #include <random>
 
-
 MLPPSoftmaxReg::MLPPSoftmaxReg(std::vector<std::vector<real_t>> inputSet, std::vector<std::vector<real_t>> outputSet, std::string reg, real_t lambda, real_t alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), n_class(outputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);
@@ -120,7 +119,9 @@ void MLPPSoftmaxReg::MBGD(real_t learning_rate, int max_epoch, int mini_batch_si
 
 	// Creating the mini-batches
 	int n_mini_batch = n / mini_batch_size;
-	auto [inputMiniBatches, outputMiniBatches] = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto batches = MLPPUtilities::createMiniBatches(inputSet, outputSet, n_mini_batch);
+	auto inputMiniBatches = std::get<0>(batches);
+	auto outputMiniBatches = std::get<1>(batches);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -154,12 +155,12 @@ void MLPPSoftmaxReg::MBGD(real_t learning_rate, int max_epoch, int mini_batch_si
 }
 
 real_t MLPPSoftmaxReg::score() {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	return util.performance(y_hat, outputSet);
 }
 
 void MLPPSoftmaxReg::save(std::string fileName) {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	util.saveParameters(fileName, weights, bias);
 }
 
