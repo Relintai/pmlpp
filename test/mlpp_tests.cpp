@@ -51,9 +51,9 @@
 #include "../mlpp/outlier_finder/outlier_finder_old.h"
 #include "../mlpp/pca/pca_old.h"
 #include "../mlpp/probit_reg/probit_reg_old.h"
+#include "../mlpp/svc/svc_old.h"
 #include "../mlpp/uni_lin_reg/uni_lin_reg_old.h"
 #include "../mlpp/wgan/wgan_old.h"
-#include "../mlpp/svc/svc_old.h"
 
 Vector<real_t> dstd_vec_to_vec(const std::vector<real_t> &in) {
 	Vector<real_t> r;
@@ -414,10 +414,16 @@ void MLPPTests::test_support_vector_classification(bool ui) {
 
 	// SUPPORT VECTOR CLASSIFICATION
 	Ref<MLPPDataSimple> dt = data.load_breast_cancer_svc(_breast_cancer_svm_data_path);
+
 	MLPPSVCOld model_old(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), ui);
 	model_old.SGD(0.00001, 100000, ui);
 	alg.printVector(model_old.modelSetTest(dt->get_input()->to_std_vector()));
-	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
+	std::cout << "ACCURACY (old): " << 100 * model_old.score() << "%" << std::endl;
+
+	MLPPSVC model(dt->get_input(), dt->get_output(), ui);
+	model.sgd(0.00001, 100000, ui);
+	PLOG_MSG((model.model_set_test(dt->get_input())->to_string()));
+	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
 
 void MLPPTests::test_mlp(bool ui) {
