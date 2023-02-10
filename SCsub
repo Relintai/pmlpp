@@ -63,6 +63,18 @@ sources = [
     "mlpp/softmax_reg/softmax_reg_old.cpp",
     "mlpp/auto_encoder/auto_encoder_old.cpp",
     "mlpp/tanh_reg/tanh_reg_old.cpp",
+    "mlpp/softmax_net/softmax_net_old.cpp",
+    "mlpp/multinomial_nb/multinomial_nb_old.cpp",
+    "mlpp/mann/mann_old.cpp",
+    "mlpp/log_reg/log_reg_old.cpp",
+    "mlpp/lin_reg/lin_reg_old.cpp",
+    "mlpp/gaussian_nb/gaussian_nb_old.cpp",
+    "mlpp/gan/gan_old.cpp",
+    "mlpp/exp_reg/exp_reg_old.cpp",
+    "mlpp/dual_svc/dual_svc_old.cpp",
+    "mlpp/c_log_log_reg/c_log_log_reg_old.cpp",
+    "mlpp/bernoulli_nb/bernoulli_nb_old.cpp",
+    "mlpp/ann/ann_old.cpp",
 
     "test/mlpp_tests.cpp",
 ]

@@ -1,6 +1,6 @@
 
-#ifndef MLPP_GAN_H
-#define MLPP_GAN_H
+#ifndef MLPP_GAN_OLD_hpp
+#define MLPP_GAN_OLD_hpp
 
 //
 //  GAN.hpp
