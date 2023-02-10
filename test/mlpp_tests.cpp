@@ -51,6 +51,7 @@
 #include "../mlpp/outlier_finder/outlier_finder_old.h"
 #include "../mlpp/pca/pca_old.h"
 #include "../mlpp/probit_reg/probit_reg_old.h"
+#include "../mlpp/softmax_reg/softmax_reg_old.h"
 #include "../mlpp/svc/svc_old.h"
 #include "../mlpp/uni_lin_reg/uni_lin_reg_old.h"
 #include "../mlpp/wgan/wgan_old.h"
@@ -399,10 +400,10 @@ void MLPPTests::test_softmax_regression(bool ui) {
 
 	// SOFTMAX REGRESSION
 	Ref<MLPPDataComplex> dt = data.load_iris(_iris_data_path);
-	MLPPSoftmaxReg model(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
-	model.SGD(0.1, 10000, ui);
-	alg.printMatrix(model.modelSetTest(dt->get_input()->to_std_vector()));
-	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
+	MLPPSoftmaxRegOld model_old(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
+	model_old.SGD(0.1, 10000, ui);
+	alg.printMatrix(model_old.modelSetTest(dt->get_input()->to_std_vector()));
+	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
 }
 void MLPPTests::test_support_vector_classification(bool ui) {
 	//MLPPStat stat;
