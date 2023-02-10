@@ -13,7 +13,6 @@
 #include <map>
 #include <vector>
 
-
 class MLPPMultinomialNB {
 public:
 	MLPPMultinomialNB(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int class_num);

@@ -12,16 +12,18 @@
 #include <iostream>
 #include <random>
 
+MLPPMultinomialNB::MLPPMultinomialNB(std::vector<std::vector<real_t>> pinputSet, std::vector<real_t> poutputSet, int pclass_num) {
+	inputSet = pinputSet;
+	outputSet = poutputSet;
+	class_num = pclass_num;
 
-MLPPMultinomialNB::MLPPMultinomialNB(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, int class_num) :
-		inputSet(inputSet), outputSet(outputSet), class_num(class_num) {
 	y_hat.resize(outputSet.size());
 	Evaluate();
 }
 
 std::vector<real_t> MLPPMultinomialNB::modelSetTest(std::vector<std::vector<real_t>> X) {
 	std::vector<real_t> y_hat;
-	for (int i = 0; i < X.size(); i++) {
+	for (uint32_t i = 0; i < X.size(); i++) {
 		y_hat.push_back(modelTest(X[i]));
 	}
 	return y_hat;
@@ -31,8 +33,8 @@ real_t MLPPMultinomialNB::modelTest(std::vector<real_t> x) {
 	real_t score[class_num];
 	computeTheta();
 
-	for (int j = 0; j < x.size(); j++) {
-		for (int k = 0; k < vocab.size(); k++) {
+	for (uint32_t j = 0; j < x.size(); j++) {
+		for (uint32_t k = 0; k < vocab.size(); k++) {
 			if (x[j] == vocab[k]) {
 				for (int p = class_num - 1; p >= 0; p--) {
 					score[p] += std::log(theta[p][vocab[k]]);
@@ -41,7 +43,7 @@ real_t MLPPMultinomialNB::modelTest(std::vector<real_t> x) {
 		}
 	}
 
-	for (int i = 0; i < priors.size(); i++) {
+	for (uint32_t i = 0; i < priors.size(); i++) {
 		score[i] += std::log(priors[i]);
 	}
 
@@ -49,7 +51,7 @@ real_t MLPPMultinomialNB::modelTest(std::vector<real_t> x) {
 }
 
 real_t MLPPMultinomialNB::score() {
-	MLPPUtilities   util;
+	MLPPUtilities util;
 	return util.performance(y_hat, outputSet);
 }
 
@@ -59,19 +61,19 @@ void MLPPMultinomialNB::computeTheta() {
 
 	// Setting all values in the hasmap by default to 0.
 	for (int i = class_num - 1; i >= 0; i--) {
-		for (int j = 0; j < vocab.size(); j++) {
+		for (uint32_t j = 0; j < vocab.size(); j++) {
 			theta[i][vocab[j]] = 0;
 		}
 	}
 
-	for (int i = 0; i < inputSet.size(); i++) {
-		for (int j = 0; j < inputSet[0].size(); j++) {
+	for (uint32_t i = 0; i < inputSet.size(); i++) {
+		for (uint32_t j = 0; j < inputSet[0].size(); j++) {
 			theta[outputSet[i]][inputSet[i][j]]++;
 		}
 	}
 
-	for (int i = 0; i < theta.size(); i++) {
-		for (int j = 0; j < theta[i].size(); j++) {
+	for (uint32_t i = 0; i < theta.size(); i++) {
+		for (uint32_t j = 0; j < theta[i].size(); j++) {
 			theta[i][j] /= priors[i] * y_hat.size();
 		}
 	}
@@ -79,22 +81,22 @@ void MLPPMultinomialNB::computeTheta() {
 
 void MLPPMultinomialNB::Evaluate() {
 	MLPPLinAlg alg;
-	for (int i = 0; i < outputSet.size(); i++) {
+	for (uint32_t i = 0; i < outputSet.size(); i++) {
 		// Pr(B | A) * Pr(A)
 		real_t score[class_num];
 
 		// Easy computation of priors, i.e. Pr(C_k)
 		priors.resize(class_num);
-		for (int i = 0; i < outputSet.size(); i++) {
-			priors[int(outputSet[i])]++;
+		for (uint32_t ii = 0; ii < outputSet.size(); ii++) {
+			priors[int(outputSet[ii])]++;
 		}
 		priors = alg.scalarMultiply(real_t(1) / real_t(outputSet.size()), priors);
 
 		// Evaluating Theta...
 		computeTheta();
 
-		for (int j = 0; j < inputSet.size(); j++) {
-			for (int k = 0; k < vocab.size(); k++) {
+		for (uint32_t j = 0; j < inputSet.size(); j++) {
+			for (uint32_t k = 0; k < vocab.size(); k++) {
 				if (inputSet[i][j] == vocab[k]) {
 					for (int p = class_num - 1; p >= 0; p--) {
 						score[p] += std::log(theta[i][vocab[k]]);
@@ -103,13 +105,13 @@ void MLPPMultinomialNB::Evaluate() {
 			}
 		}
 
-		for (int i = 0; i < priors.size(); i++) {
-			score[i] += std::log(priors[i]);
-			score[i] = exp(score[i]);
+		for (uint32_t ii = 0; ii < priors.size(); ii++) {
+			score[ii] += std::log(priors[ii]);
+			score[ii] = exp(score[ii]);
 		}
 
-		for (int i = 0; i < 2; i++) {
-			std::cout << score[i] << std::endl;
+		for (int ii = 0; ii < 2; ii++) {
+			std::cout << score[ii] << std::endl;
 		}
 
 		// Assigning the traning example's y_hat to a class
