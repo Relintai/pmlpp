@@ -243,10 +243,13 @@ void MLPPTests::test_multivariate_linear_regression_gradient_descent(bool ui) {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinRegOld model_old(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	model_old.gradientDescent(0.001, 30, ui);
+	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	model.gradientDescent(0.001, 30, ui);
-	alg.printVector(model.modelSetTest(ds->get_input()->to_std_vector()));
+	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	model.gradient_descent(0.001, 30, ui);
+	alg.printVector(model.model_set_test(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_multivariate_linear_regression_sgd(bool ui) {
@@ -255,10 +258,13 @@ void MLPPTests::test_multivariate_linear_regression_sgd(bool ui) {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinRegOld model_old(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	model_old.SGD(0.00000001, 300000, ui);
+	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	model.SGD(0.00000001, 300000, ui);
-	alg.printVector(model.modelSetTest(ds->get_input()->to_std_vector()));
+	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	model.sgd(0.00000001, 300000, ui);
+	alg.printVector(model.model_set_test(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_multivariate_linear_regression_mbgd(bool ui) {
@@ -267,10 +273,13 @@ void MLPPTests::test_multivariate_linear_regression_mbgd(bool ui) {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinRegOld model_old(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	model_old.MBGD(0.001, 10000, 2, ui);
+	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	model.MBGD(0.001, 10000, 2, ui);
-	alg.printVector(model.modelSetTest(ds->get_input()->to_std_vector()));
+	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	model.mbgd(0.001, 10000, 2, ui);
+	alg.printVector(model.model_set_test(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_multivariate_linear_regression_normal_equation(bool ui) {
@@ -279,10 +288,13 @@ void MLPPTests::test_multivariate_linear_regression_normal_equation(bool ui) {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinRegOld model_old(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	model_old.normalEquation();
+	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	model.normalEquation();
-	alg.printVector(model.modelSetTest(ds->get_input()->to_std_vector()));
+	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	model.normal_equation();
+	alg.printVector(model.model_set_test(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_multivariate_linear_regression_adam() {
@@ -291,9 +303,13 @@ void MLPPTests::test_multivariate_linear_regression_adam() {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	MLPPLinReg adamModel(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
-	alg.printVector(adamModel.modelSetTest(ds->get_input()->to_std_vector()));
-	std::cout << "ACCURACY: " << 100 * adamModel.score() << "%" << std::endl;
+	MLPPLinRegOld adamModelOld(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
+	alg.printVector(adamModelOld.modelSetTest(ds->get_input()->to_std_vector()));
+	std::cout << "ACCURACY: " << 100 * adamModelOld.score() << "%" << std::endl;
+
+	MLPPLinReg adam_model(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
+	alg.printVector(adam_model.model_set_test(ds->get_input()->to_std_vector()));
+	std::cout << "ACCURACY: " << 100 * adam_model.score() << "%" << std::endl;
 }
 
 void MLPPTests::test_multivariate_linear_regression_score_sgd_adam(bool ui) {
@@ -307,12 +323,20 @@ void MLPPTests::test_multivariate_linear_regression_score_sgd_adam(bool ui) {
 	real_t scoreSGD = 0;
 	real_t scoreADAM = 0;
 	for (int i = 0; i < TRIAL_NUM; i++) {
+		MLPPLinRegOld modelf_old(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
+		modelf_old.MBGD(0.001, 5, 1, ui);
+		scoreSGD += modelf_old.score();
+
 		MLPPLinReg modelf(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
-		modelf.MBGD(0.001, 5, 1, ui);
+		modelf.mbgd(0.001, 5, 1, ui);
 		scoreSGD += modelf.score();
 
+		MLPPLinRegOld adamModelf_old(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
+		adamModelf_old.Adam(0.1, 5, 1, 0.9, 0.999, 1e-8, ui); // Change batch size = sgd, bgd
+		scoreADAM += adamModelf_old.score();
+
 		MLPPLinReg adamModelf(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
-		adamModelf.Adam(0.1, 5, 1, 0.9, 0.999, 1e-8, ui); // Change batch size = sgd, bgd
+		adamModelf.adam(0.1, 5, 1, 0.9, 0.999, 1e-8, ui); // Change batch size = sgd, bgd
 		scoreADAM += adamModelf.score();
 	}
 
@@ -330,9 +354,13 @@ void MLPPTests::test_multivariate_linear_regression_epochs_gradient_descent(bool
 	std::cout << "Total epoch num: 300" << std::endl;
 	std::cout << "Method: 1st Order w/ Jacobians" << std::endl;
 
+	MLPPLinRegOld model3_old(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	model3_old.gradientDescent(0.001, 300, ui);
+	alg.printVector(model3_old.modelSetTest(ds->get_input()->to_std_vector()));
+
 	MLPPLinReg model3(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
-	model3.gradientDescent(0.001, 300, ui);
-	alg.printVector(model3.modelSetTest(ds->get_input()->to_std_vector()));
+	model3.gradient_descent(0.001, 300, ui);
+	alg.printVector(model3.model_set_test(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_multivariate_linear_regression_newton_raphson(bool ui) {
@@ -344,10 +372,14 @@ void MLPPTests::test_multivariate_linear_regression_newton_raphson(bool ui) {
 	std::cout << "--------------------------------------------" << std::endl;
 	std::cout << "Total epoch num: 300" << std::endl;
 	std::cout << "Method: Newtonian 2nd Order w/ Hessians" << std::endl;
-	MLPPLinReg model2(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
 
-	model2.NewtonRaphson(1.5, 300, ui);
-	alg.printVector(model2.modelSetTest(ds->get_input()->to_std_vector()));
+	MLPPLinRegOld model2_old(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
+	model2_old.NewtonRaphson(1.5, 300, ui);
+	alg.printVector(model2_old.modelSetTest(ds->get_input()->to_std_vector()));
+
+	MLPPLinReg model2(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
+	model2.newton_raphson(1.5, 300, ui);
+	alg.printVector(model2.model_set_test(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTests::test_logistic_regression(bool ui) {
