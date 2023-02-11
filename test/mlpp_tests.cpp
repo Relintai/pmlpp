@@ -627,10 +627,16 @@ void MLPPTests::test_dynamically_sized_mann(bool ui) {
 	std::vector<std::vector<real_t>> inputSet = { { 1, 2, 3 }, { 2, 4, 6 }, { 3, 6, 9 }, { 4, 8, 12 } };
 	std::vector<std::vector<real_t>> outputSet = { { 1, 5 }, { 2, 10 }, { 3, 15 }, { 4, 20 } };
 
+	MLPPMANNOld mann_old(inputSet, outputSet);
+	mann_old.addOutputLayer("Linear", "MSE");
+	mann_old.gradientDescent(0.001, 80000, false);
+	alg.printMatrix(mann_old.modelSetTest(inputSet));
+	std::cout << "ACCURACY (old): " << 100 * mann_old.score() << "%" << std::endl;
+
 	MLPPMANN mann(inputSet, outputSet);
-	mann.addOutputLayer("Linear", "MSE");
-	mann.gradientDescent(0.001, 80000, 0);
-	alg.printMatrix(mann.modelSetTest(inputSet));
+	mann.add_output_layer("Linear", "MSE");
+	mann.gradient_descent(0.001, 80000, false);
+	alg.printMatrix(mann.model_set_test(inputSet));
 	std::cout << "ACCURACY: " << 100 * mann.score() << "%" << std::endl;
 }
 void MLPPTests::test_train_test_split_mann(bool ui) {
@@ -662,11 +668,18 @@ void MLPPTests::test_train_test_split_mann(bool ui) {
 	PLOG_MSG(split_data.test->get_input()->to_string());
 	PLOG_MSG(split_data.test->get_output()->to_string());
 
+	MLPPMANNOld mann_old(split_data.train->get_input()->to_std_vector(), split_data.train->get_output()->to_std_vector());
+	mann_old.addLayer(100, "RELU", "XavierNormal");
+	mann_old.addOutputLayer("Softmax", "CrossEntropy", "XavierNormal");
+	mann_old.gradientDescent(0.1, 80000, ui);
+	alg.printMatrix(mann_old.modelSetTest(split_data.test->get_input()->to_std_vector()));
+	std::cout << "ACCURACY (old): " << 100 * mann_old.score() << "%" << std::endl;
+
 	MLPPMANN mann(split_data.train->get_input()->to_std_vector(), split_data.train->get_output()->to_std_vector());
-	mann.addLayer(100, "RELU", "XavierNormal");
-	mann.addOutputLayer("Softmax", "CrossEntropy", "XavierNormal");
-	mann.gradientDescent(0.1, 80000, ui);
-	alg.printMatrix(mann.modelSetTest(split_data.test->get_input()->to_std_vector()));
+	mann.add_layer(100, "RELU", "XavierNormal");
+	mann.add_output_layer("Softmax", "CrossEntropy", "XavierNormal");
+	mann.gradient_descent(0.1, 80000, ui);
+	alg.printMatrix(mann.model_set_test(split_data.test->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * mann.score() << "%" << std::endl;
 }
 

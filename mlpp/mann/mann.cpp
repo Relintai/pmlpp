@@ -13,106 +13,128 @@
 
 #include <iostream>
 
-MLPPMANN::MLPPMANN(std::vector<std::vector<real_t>> inputSet, std::vector<std::vector<real_t>> outputSet) :
-		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), n_output(outputSet[0].size()) {
+/*
+Ref<MLPPMatrix> MLPPMANN::get_input_set() {
+	return input_set;
+}
+void MLPPMANN::set_input_set(const Ref<MLPPMatrix> &val) {
+	input_set = val;
+
+	_initialized = false;
 }
 
-MLPPMANN::~MLPPMANN() {
-	delete outputLayer;
+Ref<MLPPMatrix> MLPPMANN::get_output_set() {
+	return output_set;
 }
+void MLPPMANN::set_output_set(const Ref<MLPPMatrix> &val) {
+	output_set = val;
 
-std::vector<std::vector<real_t>> MLPPMANN::modelSetTest(std::vector<std::vector<real_t>> X) {
-	if (!network.empty()) {
-		network[0].input = X;
-		network[0].forwardPass();
+	_initialized = false;
+}
+*/
 
-		for (uint32_t i = 1; i < network.size(); i++) {
-			network[i].input = network[i - 1].a;
-			network[i].forwardPass();
+std::vector<std::vector<real_t>> MLPPMANN::model_set_test(std::vector<std::vector<real_t>> X) {
+	ERR_FAIL_COND_V(!_initialized, std::vector<std::vector<real_t>>());
+
+	if (!_network.empty()) {
+		_network[0].input = X;
+		_network[0].forwardPass();
+
+		for (uint32_t i = 1; i < _network.size(); i++) {
+			_network[i].input = _network[i - 1].a;
+			_network[i].forwardPass();
 		}
-		outputLayer->input = network[network.size() - 1].a;
+		_output_layer->input = _network[_network.size() - 1].a;
 	} else {
-		outputLayer->input = X;
+		_output_layer->input = X;
 	}
-	outputLayer->forwardPass();
-	return outputLayer->a;
+
+	_output_layer->forwardPass();
+
+	return _output_layer->a;
 }
 
-std::vector<real_t> MLPPMANN::modelTest(std::vector<real_t> x) {
-	if (!network.empty()) {
-		network[0].Test(x);
-		for (uint32_t i = 1; i < network.size(); i++) {
-			network[i].Test(network[i - 1].a_test);
+std::vector<real_t> MLPPMANN::model_test(std::vector<real_t> x) {
+	ERR_FAIL_COND_V(!_initialized, std::vector<real_t>());
+
+	if (!_network.empty()) {
+		_network[0].Test(x);
+		for (uint32_t i = 1; i < _network.size(); i++) {
+			_network[i].Test(_network[i - 1].a_test);
 		}
-		outputLayer->Test(network[network.size() - 1].a_test);
+		_output_layer->Test(_network[_network.size() - 1].a_test);
 	} else {
-		outputLayer->Test(x);
+		_output_layer->Test(x);
 	}
-	return outputLayer->a_test;
+	return _output_layer->a_test;
 }
 
-void MLPPMANN::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	class MLPPCost cost;
+void MLPPMANN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
+	ERR_FAIL_COND(!_initialized);
+
+	MLPPCost mlpp_cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
-	forwardPass();
+
+	forward_pass();
 
 	while (true) {
-		cost_prev = Cost(y_hat, outputSet);
+		cost_prev = cost(_y_hat, _output_set);
 
-		if (outputLayer->activation == "Softmax") {
-			outputLayer->delta = alg.subtraction(y_hat, outputSet);
+		if (_output_layer->activation == "Softmax") {
+			_output_layer->delta = alg.subtraction(_y_hat, _output_set);
 		} else {
-			auto costDeriv = outputLayer->costDeriv_map[outputLayer->cost];
-			auto outputAvn = outputLayer->activation_map[outputLayer->activation];
-			outputLayer->delta = alg.hadamard_product((cost.*costDeriv)(y_hat, outputSet), (avn.*outputAvn)(outputLayer->z, 1));
+			auto costDeriv = _output_layer->costDeriv_map[_output_layer->cost];
+			auto outputAvn = _output_layer->activation_map[_output_layer->activation];
+			_output_layer->delta = alg.hadamard_product((mlpp_cost.*costDeriv)(_y_hat, _output_set), (avn.*outputAvn)(_output_layer->z, 1));
 		}
 
-		std::vector<std::vector<real_t>> outputWGrad = alg.matmult(alg.transpose(outputLayer->input), outputLayer->delta);
+		std::vector<std::vector<real_t>> outputWGrad = alg.matmult(alg.transpose(_output_layer->input), _output_layer->delta);
 
-		outputLayer->weights = alg.subtraction(outputLayer->weights, alg.scalarMultiply(learning_rate / n, outputWGrad));
-		outputLayer->weights = regularization.regWeights(outputLayer->weights, outputLayer->lambda, outputLayer->alpha, outputLayer->reg);
-		outputLayer->bias = alg.subtractMatrixRows(outputLayer->bias, alg.scalarMultiply(learning_rate / n, outputLayer->delta));
+		_output_layer->weights = alg.subtraction(_output_layer->weights, alg.scalarMultiply(learning_rate / _n, outputWGrad));
+		_output_layer->weights = regularization.regWeights(_output_layer->weights, _output_layer->lambda, _output_layer->alpha, _output_layer->reg);
+		_output_layer->bias = alg.subtractMatrixRows(_output_layer->bias, alg.scalarMultiply(learning_rate / _n, _output_layer->delta));
 
-		if (!network.empty()) {
-			auto hiddenLayerAvn = network[network.size() - 1].activation_map[network[network.size() - 1].activation];
-			network[network.size() - 1].delta = alg.hadamard_product(alg.matmult(outputLayer->delta, alg.transpose(outputLayer->weights)), (avn.*hiddenLayerAvn)(network[network.size() - 1].z, 1));
-			std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[network.size() - 1].input), network[network.size() - 1].delta);
+		if (!_network.empty()) {
+			auto hiddenLayerAvn = _network[_network.size() - 1].activation_map[_network[_network.size() - 1].activation];
+			_network[_network.size() - 1].delta = alg.hadamard_product(alg.matmult(_output_layer->delta, alg.transpose(_output_layer->weights)), (avn.*hiddenLayerAvn)(_network[_network.size() - 1].z, true));
+			std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(_network[_network.size() - 1].input), _network[_network.size() - 1].delta);
 
-			network[network.size() - 1].weights = alg.subtraction(network[network.size() - 1].weights, alg.scalarMultiply(learning_rate / n, hiddenLayerWGrad));
-			network[network.size() - 1].weights = regularization.regWeights(network[network.size() - 1].weights, network[network.size() - 1].lambda, network[network.size() - 1].alpha, network[network.size() - 1].reg);
-			network[network.size() - 1].bias = alg.subtractMatrixRows(network[network.size() - 1].bias, alg.scalarMultiply(learning_rate / n, network[network.size() - 1].delta));
+			_network[_network.size() - 1].weights = alg.subtraction(_network[_network.size() - 1].weights, alg.scalarMultiply(learning_rate / _n, hiddenLayerWGrad));
+			_network[_network.size() - 1].weights = regularization.regWeights(_network[_network.size() - 1].weights, _network[_network.size() - 1].lambda, _network[_network.size() - 1].alpha, _network[_network.size() - 1].reg);
+			_network[_network.size() - 1].bias = alg.subtractMatrixRows(_network[_network.size() - 1].bias, alg.scalarMultiply(learning_rate / _n, _network[_network.size() - 1].delta));
 
-			for (int i = network.size() - 2; i >= 0; i--) {
-				hiddenLayerAvn = network[i].activation_map[network[i].activation];
-				network[i].delta = alg.hadamard_product(alg.matmult(network[i + 1].delta, network[i + 1].weights), (avn.*hiddenLayerAvn)(network[i].z, 1));
-				hiddenLayerWGrad = alg.matmult(alg.transpose(network[i].input), network[i].delta);
-				network[i].weights = alg.subtraction(network[i].weights, alg.scalarMultiply(learning_rate / n, hiddenLayerWGrad));
-				network[i].weights = regularization.regWeights(network[i].weights, network[i].lambda, network[i].alpha, network[i].reg);
-				network[i].bias = alg.subtractMatrixRows(network[i].bias, alg.scalarMultiply(learning_rate / n, network[i].delta));
+			for (int i = _network.size() - 2; i >= 0; i--) {
+				hiddenLayerAvn = _network[i].activation_map[_network[i].activation];
+				_network[i].delta = alg.hadamard_product(alg.matmult(_network[i + 1].delta, _network[i + 1].weights), (avn.*hiddenLayerAvn)(_network[i].z, true));
+				hiddenLayerWGrad = alg.matmult(alg.transpose(_network[i].input), _network[i].delta);
+				_network[i].weights = alg.subtraction(_network[i].weights, alg.scalarMultiply(learning_rate / _n, hiddenLayerWGrad));
+				_network[i].weights = regularization.regWeights(_network[i].weights, _network[i].lambda, _network[i].alpha, _network[i].reg);
+				_network[i].bias = alg.subtractMatrixRows(_network[i].bias, alg.scalarMultiply(learning_rate / _n, _network[i].delta));
 			}
 		}
 
-		forwardPass();
+		forward_pass();
 
-		if (UI) {
-			MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
-			std::cout << "Layer " << network.size() + 1 << ": " << std::endl;
-			MLPPUtilities::UI(outputLayer->weights, outputLayer->bias);
-			if (!network.empty()) {
-				std::cout << "Layer " << network.size() << ": " << std::endl;
-				for (int i = network.size() - 1; i >= 0; i--) {
+		if (ui) {
+			MLPPUtilities::CostInfo(epoch, cost_prev, cost(_y_hat, _output_set));
+			std::cout << "Layer " << _network.size() + 1 << ": " << std::endl;
+			MLPPUtilities::UI(_output_layer->weights, _output_layer->bias);
+			if (!_network.empty()) {
+				std::cout << "Layer " << _network.size() << ": " << std::endl;
+				for (int i = _network.size() - 1; i >= 0; i--) {
 					std::cout << "Layer " << i + 1 << ": " << std::endl;
-					MLPPUtilities::UI(network[i].weights, network[i].bias);
+					MLPPUtilities::UI(_network[i].weights, _network[i].bias);
 				}
 			}
 		}
 
 		epoch++;
+
 		if (epoch > max_epoch) {
 			break;
 		}
@@ -120,69 +142,120 @@ void MLPPMANN::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 real_t MLPPMANN::score() {
+	ERR_FAIL_COND_V(!_initialized, 0);
+
 	MLPPUtilities util;
-	forwardPass();
-	return util.performance(y_hat, outputSet);
+
+	forward_pass();
+
+	return util.performance(_y_hat, _output_set);
 }
 
 void MLPPMANN::save(std::string fileName) {
+	ERR_FAIL_COND(!_initialized);
+
 	MLPPUtilities util;
-	if (!network.empty()) {
-		util.saveParameters(fileName, network[0].weights, network[0].bias, 0, 1);
-		for (uint32_t i = 1; i < network.size(); i++) {
-			util.saveParameters(fileName, network[i].weights, network[i].bias, 1, i + 1);
+	if (!_network.empty()) {
+		util.saveParameters(fileName, _network[0].weights, _network[0].bias, false, 1);
+		for (uint32_t i = 1; i < _network.size(); i++) {
+			util.saveParameters(fileName, _network[i].weights, _network[i].bias, true, i + 1);
 		}
-		util.saveParameters(fileName, outputLayer->weights, outputLayer->bias, 1, network.size() + 1);
+		util.saveParameters(fileName, _output_layer->weights, _output_layer->bias, true, _network.size() + 1);
 	} else {
-		util.saveParameters(fileName, outputLayer->weights, outputLayer->bias, 0, network.size() + 1);
+		util.saveParameters(fileName, _output_layer->weights, _output_layer->bias, false, _network.size() + 1);
 	}
 }
 
-void MLPPMANN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
-	if (network.empty()) {
-		network.push_back(MLPPOldHiddenLayer(n_hidden, activation, inputSet, weightInit, reg, lambda, alpha));
-		network[0].forwardPass();
+void MLPPMANN::add_layer(int n_hidden, std::string activation, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
+	if (_network.empty()) {
+		_network.push_back(MLPPOldHiddenLayer(n_hidden, activation, _input_set, weightInit, reg, lambda, alpha));
+		_network[0].forwardPass();
 	} else {
-		network.push_back(MLPPOldHiddenLayer(n_hidden, activation, network[network.size() - 1].a, weightInit, reg, lambda, alpha));
-		network[network.size() - 1].forwardPass();
+		_network.push_back(MLPPOldHiddenLayer(n_hidden, activation, _network[_network.size() - 1].a, weightInit, reg, lambda, alpha));
+		_network[_network.size() - 1].forwardPass();
 	}
 }
 
-void MLPPMANN::addOutputLayer(std::string activation, std::string loss, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
-	if (!network.empty()) {
-		outputLayer = new MLPPOldMultiOutputLayer(n_output, network[0].n_hidden, activation, loss, network[network.size() - 1].a, weightInit, reg, lambda, alpha);
+void MLPPMANN::add_output_layer(std::string activation, std::string loss, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
+	if (!_network.empty()) {
+		_output_layer = new MLPPOldMultiOutputLayer(_n_output, _network[0].n_hidden, activation, loss, _network[_network.size() - 1].a, weightInit, reg, lambda, alpha);
 	} else {
-		outputLayer = new MLPPOldMultiOutputLayer(n_output, k, activation, loss, inputSet, weightInit, reg, lambda, alpha);
+		_output_layer = new MLPPOldMultiOutputLayer(_n_output, _k, activation, loss, _input_set, weightInit, reg, lambda, alpha);
 	}
 }
 
-real_t MLPPMANN::Cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+bool MLPPMANN::is_initialized() {
+	return _initialized;
+}
+
+void MLPPMANN::initialize() {
+	if (_initialized) {
+		return;
+	}
+
+	//ERR_FAIL_COND(!input_set.is_valid() || !output_set.is_valid() || n_hidden == 0);
+
+	_initialized = true;
+}
+
+MLPPMANN::MLPPMANN(std::vector<std::vector<real_t>> p_input_set, std::vector<std::vector<real_t>> p_output_set) {
+	_input_set = p_input_set;
+	_output_set = p_output_set;
+	_n = _input_set.size();
+	_k = _input_set[0].size();
+	_n_output = _output_set[0].size();
+
+	_initialized = true;
+}
+
+MLPPMANN::MLPPMANN() {
+	_initialized = false;
+}
+
+MLPPMANN::~MLPPMANN() {
+	delete _output_layer;
+}
+
+real_t MLPPMANN::cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
 	MLPPReg regularization;
 	class MLPPCost cost;
 	real_t totalRegTerm = 0;
 
-	auto cost_function = outputLayer->cost_map[outputLayer->cost];
-	if (!network.empty()) {
-		for (uint32_t i = 0; i < network.size() - 1; i++) {
-			totalRegTerm += regularization.regTerm(network[i].weights, network[i].lambda, network[i].alpha, network[i].reg);
+	auto cost_function = _output_layer->cost_map[_output_layer->cost];
+	if (!_network.empty()) {
+		for (uint32_t i = 0; i < _network.size() - 1; i++) {
+			totalRegTerm += regularization.regTerm(_network[i].weights, _network[i].lambda, _network[i].alpha, _network[i].reg);
 		}
 	}
-	return (cost.*cost_function)(y_hat, y) + totalRegTerm + regularization.regTerm(outputLayer->weights, outputLayer->lambda, outputLayer->alpha, outputLayer->reg);
+	return (cost.*cost_function)(y_hat, y) + totalRegTerm + regularization.regTerm(_output_layer->weights, _output_layer->lambda, _output_layer->alpha, _output_layer->reg);
 }
 
-void MLPPMANN::forwardPass() {
-	if (!network.empty()) {
-		network[0].input = inputSet;
-		network[0].forwardPass();
+void MLPPMANN::forward_pass() {
+	if (!_network.empty()) {
+		_network[0].input = _input_set;
+		_network[0].forwardPass();
 
-		for (uint32_t i = 1; i < network.size(); i++) {
-			network[i].input = network[i - 1].a;
-			network[i].forwardPass();
+		for (uint32_t i = 1; i < _network.size(); i++) {
+			_network[i].input = _network[i - 1].a;
+			_network[i].forwardPass();
 		}
-		outputLayer->input = network[network.size() - 1].a;
+		_output_layer->input = _network[_network.size() - 1].a;
 	} else {
-		outputLayer->input = inputSet;
+		_output_layer->input = _input_set;
 	}
-	outputLayer->forwardPass();
-	y_hat = outputLayer->a;
+
+	_output_layer->forwardPass();
+	_y_hat = _output_layer->a;
+}
+
+void MLPPMANN::_bind_methods() {
+	/*
+	ClassDB::bind_method(D_METHOD("get_input_set"), &MLPPMANN::get_input_set);
+	ClassDB::bind_method(D_METHOD("set_input_set", "val"), &MLPPMANN::set_input_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "input_set", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_input_set", "get_input_set");
+
+	ClassDB::bind_method(D_METHOD("get_output_set"), &MLPPMANN::get_output_set);
+	ClassDB::bind_method(D_METHOD("set_output_set", "val"), &MLPPMANN::set_output_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "output_set", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_output_set", "get_output_set");
+	*/
 }

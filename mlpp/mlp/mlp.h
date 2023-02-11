@@ -99,7 +99,7 @@ protected:
 	real_t lambda; /* Regularization Parameter */
 	real_t alpha; /* This is the controlling param for Elastic Net*/
 
-	int _initialized;
+	bool _initialized;
 };
 
 #endif /* MLP_hpp */
