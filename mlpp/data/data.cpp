@@ -10,7 +10,7 @@
 #include "core/os/file_access.h"
 
 #include "../lin_alg/lin_alg.h"
-#include "../softmax_net/softmax_net.h"
+#include "../softmax_net/softmax_net_old.h"
 #include "../stat/stat.h"
 
 #include <algorithm>
@@ -1008,11 +1008,11 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::string>> MLPPData:
 		outputSet.push_back(BOW[i]);
 	}
 	MLPPLinAlg alg;
-	MLPPSoftmaxNet *model;
+	MLPPSoftmaxNetOld *model;
 	if (type == "Skipgram") {
-		model = new MLPPSoftmaxNet(outputSet, inputSet, dimension);
+		model = new MLPPSoftmaxNetOld(outputSet, inputSet, dimension);
 	} else { // else = CBOW. We maintain it is a default.
-		model = new MLPPSoftmaxNet(inputSet, outputSet, dimension);
+		model = new MLPPSoftmaxNetOld(inputSet, outputSet, dimension);
 	}
 	model->gradientDescent(learning_rate, max_epoch, 1);
 
@@ -1074,11 +1074,11 @@ MLPPData::WordsToVecResult MLPPData::word_to_vec(std::vector<std::string> senten
 		outputSet.push_back(BOW[i]);
 	}
 	MLPPLinAlg alg;
-	MLPPSoftmaxNet *model;
+	MLPPSoftmaxNetOld *model;
 	if (type == "Skipgram") {
-		model = new MLPPSoftmaxNet(outputSet, inputSet, dimension);
+		model = new MLPPSoftmaxNetOld(outputSet, inputSet, dimension);
 	} else { // else = CBOW. We maintain it is a default.
-		model = new MLPPSoftmaxNet(inputSet, outputSet, dimension);
+		model = new MLPPSoftmaxNetOld(inputSet, outputSet, dimension);
 	}
 	model->gradientDescent(learning_rate, max_epoch, false);
 

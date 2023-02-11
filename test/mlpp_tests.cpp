@@ -52,11 +52,29 @@
 #include "../mlpp/outlier_finder/outlier_finder_old.h"
 #include "../mlpp/pca/pca_old.h"
 #include "../mlpp/probit_reg/probit_reg_old.h"
+#include "../mlpp/softmax_net/softmax_net_old.h"
 #include "../mlpp/softmax_reg/softmax_reg_old.h"
 #include "../mlpp/svc/svc_old.h"
 #include "../mlpp/tanh_reg/tanh_reg_old.h"
 #include "../mlpp/uni_lin_reg/uni_lin_reg_old.h"
 #include "../mlpp/wgan/wgan_old.h"
+
+/*
+#include "../mlpp/ann/ann_old.h"
+#include "../mlpp/bernoulli_nb/bernoulli_nb_old.h"
+#include "../mlpp/c_log_log_reg/c_log_log_reg_old.h"
+#include "../mlpp/dual_svc/dual_svc_old.h"
+#include "../mlpp/exp_reg/exp_reg_old.h"
+#include "../mlpp/gan/gan_old.h"
+#include "../mlpp/gaussian_nb/gaussian_nb_old.h"
+#include "../mlpp/hidden_layer/hidden_layer_old.h"
+#include "../mlpp/lin_reg/lin_reg_old.h"
+#include "../mlpp/log_reg/log_reg_old.h"
+#include "../mlpp/mann/mann_old.h"
+#include "../mlpp/multi_output_layer/multi_output_layer_old.h"
+#include "../mlpp/multinomial_nb/multinomial_nb_old.h"
+#include "../mlpp/output_layer/output_layer_old.h"
+*/
 
 Vector<real_t> dstd_vec_to_vec(const std::vector<real_t> &in) {
 	Vector<real_t> r;
@@ -490,9 +508,14 @@ void MLPPTests::test_soft_max_network(bool ui) {
 	// SOFTMAX NETWORK
 	Ref<MLPPDataComplex> dt = data.load_wine(_wine_data_path);
 
+	MLPPSoftmaxNetOld model_old(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), 1);
+	model_old.gradientDescent(0.01, 100000, ui);
+	alg.printMatrix(model_old.modelSetTest(dt->get_input()->to_std_vector()));
+	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
+
 	MLPPSoftmaxNet model(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), 1);
-	model.gradientDescent(0.01, 100000, ui);
-	alg.printMatrix(model.modelSetTest(dt->get_input()->to_std_vector()));
+	model.gradient_descent(0.01, 100000, ui);
+	alg.printMatrix(model.model_set_test(dt->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_autoencoder(bool ui) {

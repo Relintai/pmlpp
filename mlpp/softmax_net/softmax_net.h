@@ -9,52 +9,96 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
+
+#include "../regularization/reg.h"
+
 #include <string>
 #include <vector>
 
-class MLPPSoftmaxNet {
+class MLPPSoftmaxNet : public Reference {
+	GDCLASS(MLPPSoftmaxNet, Reference);
+
 public:
-	MLPPSoftmaxNet(std::vector<std::vector<real_t>> inputSet, std::vector<std::vector<real_t>> outputSet, int n_hidden, std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
-	std::vector<real_t> modelTest(std::vector<real_t> x);
-	std::vector<std::vector<real_t>> modelSetTest(std::vector<std::vector<real_t>> X);
-	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = false);
-	void SGD(real_t learning_rate, int max_epoch, bool UI = false);
-	void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI = false);
+	/*
+	Ref<MLPPMatrix> get_input_set();
+	void set_input_set(const Ref<MLPPMatrix> &val);
+
+	Ref<MLPPMatrix> get_output_set();
+	void set_output_set(const Ref<MLPPMatrix> &val);
+
+	MLPPReg::RegularizationType get_reg();
+	void set_reg(const MLPPReg::RegularizationType val);
+
+	real_t get_lambda();
+	void set_lambda(const real_t val);
+
+	real_t get_alpha();
+	void set_alpha(const real_t val);
+	*/
+
+	std::vector<real_t> model_test(std::vector<real_t> x);
+	std::vector<std::vector<real_t>> model_set_test(std::vector<std::vector<real_t>> X);
+
+	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
+	void sgd(real_t learning_rate, int max_epoch, bool ui = false);
+	void mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui = false);
+
 	real_t score();
+
 	void save(std::string fileName);
 
-	std::vector<std::vector<real_t>> getEmbeddings(); // This class is used (mostly) for word2Vec. This function returns our embeddings.
-private:
-	real_t Cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y);
+	std::vector<std::vector<real_t>> get_embeddings(); // This class is used (mostly) for word2Vec. This function returns our embeddings.
 
-	std::vector<std::vector<real_t>> Evaluate(std::vector<std::vector<real_t>> X);
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> propagate(std::vector<std::vector<real_t>> X);
-	std::vector<real_t> Evaluate(std::vector<real_t> x);
-	std::tuple<std::vector<real_t>, std::vector<real_t>> propagate(std::vector<real_t> x);
-	void forwardPass();
+	bool is_initialized();
+	void initialize();
 
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<std::vector<real_t>> outputSet;
-	std::vector<std::vector<real_t>> y_hat;
+	MLPPSoftmaxNet(std::vector<std::vector<real_t>> p_input_set, std::vector<std::vector<real_t>> p_output_set, int p_n_hidden, MLPPReg::RegularizationType p_reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t p_lambda = 0.5, real_t p_alpha = 0.5);
+	//MLPPSoftmaxNet(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, MLPPReg::RegularizationType p_reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t p_lambda = 0.5, real_t p_alpha = 0.5);
 
-	std::vector<std::vector<real_t>> weights1;
-	std::vector<std::vector<real_t>> weights2;
+	MLPPSoftmaxNet();
+	~MLPPSoftmaxNet();
 
-	std::vector<real_t> bias1;
-	std::vector<real_t> bias2;
+protected:
+	real_t cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y);
 
-	std::vector<std::vector<real_t>> z2;
-	std::vector<std::vector<real_t>> a2;
+	std::vector<real_t> evaluatev(std::vector<real_t> x);
+	std::tuple<std::vector<real_t>, std::vector<real_t>> propagatev(std::vector<real_t> x);
 
-	int n;
-	int k;
-	int n_class;
-	int n_hidden;
+	std::vector<std::vector<real_t>> evaluatem(std::vector<std::vector<real_t>> X);
+	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> propagatem(std::vector<std::vector<real_t>> X);
+
+	void forward_pass();
+
+	static void _bind_methods();
+
+	std::vector<std::vector<real_t>> _input_set;
+	std::vector<std::vector<real_t>> _output_set;
+	std::vector<std::vector<real_t>> _y_hat;
+
+	std::vector<std::vector<real_t>> _weights1;
+	std::vector<std::vector<real_t>> _weights2;
+
+	std::vector<real_t> _bias1;
+	std::vector<real_t> _bias2;
+
+	std::vector<std::vector<real_t>> _z2;
+	std::vector<std::vector<real_t>> _a2;
+
+	int _n;
+	int _k;
+	int _n_class;
+	int _n_hidden;
 
 	// Regularization Params
-	std::string reg;
-	real_t lambda;
-	real_t alpha; /* This is the controlling param for Elastic Net*/
+	MLPPReg::RegularizationType _reg;
+	real_t _lambda;
+	real_t _alpha; /* This is the controlling param for Elastic Net*/
+
+	bool _initialized;
 };
 
 #endif /* SoftmaxNet_hpp */
