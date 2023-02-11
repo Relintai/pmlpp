@@ -20,6 +20,7 @@
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
+
 class MLPPOutputLayer : public Reference {
 	GDCLASS(MLPPOutputLayer, Reference);
 

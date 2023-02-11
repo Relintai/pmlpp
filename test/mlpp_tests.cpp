@@ -47,20 +47,8 @@
 #include "../mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "../mlpp/wgan/wgan.h"
 
-#include "../mlpp/auto_encoder/auto_encoder_old.h"
-#include "../mlpp/mlp/mlp_old.h"
-#include "../mlpp/outlier_finder/outlier_finder_old.h"
-#include "../mlpp/pca/pca_old.h"
-#include "../mlpp/probit_reg/probit_reg_old.h"
-#include "../mlpp/softmax_net/softmax_net_old.h"
-#include "../mlpp/softmax_reg/softmax_reg_old.h"
-#include "../mlpp/svc/svc_old.h"
-#include "../mlpp/tanh_reg/tanh_reg_old.h"
-#include "../mlpp/uni_lin_reg/uni_lin_reg_old.h"
-#include "../mlpp/wgan/wgan_old.h"
-
-/*
 #include "../mlpp/ann/ann_old.h"
+#include "../mlpp/auto_encoder/auto_encoder_old.h"
 #include "../mlpp/bernoulli_nb/bernoulli_nb_old.h"
 #include "../mlpp/c_log_log_reg/c_log_log_reg_old.h"
 #include "../mlpp/dual_svc/dual_svc_old.h"
@@ -71,10 +59,19 @@
 #include "../mlpp/lin_reg/lin_reg_old.h"
 #include "../mlpp/log_reg/log_reg_old.h"
 #include "../mlpp/mann/mann_old.h"
+#include "../mlpp/mlp/mlp_old.h"
 #include "../mlpp/multi_output_layer/multi_output_layer_old.h"
 #include "../mlpp/multinomial_nb/multinomial_nb_old.h"
+#include "../mlpp/outlier_finder/outlier_finder_old.h"
 #include "../mlpp/output_layer/output_layer_old.h"
-*/
+#include "../mlpp/pca/pca_old.h"
+#include "../mlpp/probit_reg/probit_reg_old.h"
+#include "../mlpp/softmax_net/softmax_net_old.h"
+#include "../mlpp/softmax_reg/softmax_reg_old.h"
+#include "../mlpp/svc/svc_old.h"
+#include "../mlpp/tanh_reg/tanh_reg_old.h"
+#include "../mlpp/uni_lin_reg/uni_lin_reg_old.h"
+#include "../mlpp/wgan/wgan_old.h"
 
 Vector<real_t> dstd_vec_to_vec(const std::vector<real_t> &in) {
 	Vector<real_t> r;
@@ -680,8 +677,11 @@ void MLPPTests::test_naive_bayes() {
 	std::vector<std::vector<real_t>> inputSet = { { 1, 1, 1, 1, 1 }, { 0, 0, 1, 1, 1 }, { 0, 0, 1, 0, 1 } };
 	std::vector<real_t> outputSet = { 0, 1, 0, 1, 1 };
 
+	MLPPMultinomialNBOld MNB_old(alg.transpose(inputSet), outputSet, 2);
+	alg.printVector(MNB_old.modelSetTest(alg.transpose(inputSet)));
+
 	MLPPMultinomialNB MNB(alg.transpose(inputSet), outputSet, 2);
-	alg.printVector(MNB.modelSetTest(alg.transpose(inputSet)));
+	alg.printVector(MNB.model_set_test(alg.transpose(inputSet)));
 
 	MLPPBernoulliNB BNB(alg.transpose(inputSet), outputSet);
 	alg.printVector(BNB.modelSetTest(alg.transpose(inputSet)));
