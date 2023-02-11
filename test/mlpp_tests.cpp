@@ -354,11 +354,18 @@ void MLPPTests::test_logistic_regression(bool ui) {
 	MLPPLinAlg alg;
 	MLPPData data;
 
-	// LOGISTIC REGRESSION
 	Ref<MLPPDataSimple> dt = data.load_breast_cancer(_breast_cancer_data_path);
+
+	// LOGISTIC REGRESSION
+
+	MLPPLogRegOld model_old(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
+	model_old.SGD(0.001, 100000, ui);
+	alg.printVector(model_old.modelSetTest(dt->get_input()->to_std_vector()));
+	std::cout << "ACCURACY (Old): " << 100 * model_old.score() << "%" << std::endl;
+
 	MLPPLogReg model(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
-	model.SGD(0.001, 100000, ui);
-	alg.printVector(model.modelSetTest(dt->get_input()->to_std_vector()));
+	model.sgd(0.001, 100000, ui);
+	alg.printVector(model.model_set_test(dt->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_probit_regression(bool ui) {
