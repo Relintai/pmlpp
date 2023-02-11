@@ -20,10 +20,10 @@
 #include <tuple>
 #include <vector>
 
-class MLPPGAN {
+class MLPPGANOld {
 public:
-	MLPPGAN(real_t k, std::vector<std::vector<real_t>> outputSet);
-	~MLPPGAN();
+	MLPPGANOld(real_t k, std::vector<std::vector<real_t>> outputSet);
+	~MLPPGANOld();
 	std::vector<std::vector<real_t>> generateExample(int n);
 	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = false);
 	real_t score();
