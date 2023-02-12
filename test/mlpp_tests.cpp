@@ -873,16 +873,16 @@ void MLPPTests::test_convolution_tensors_etc() {
 
 	alg.printMatrix(trans.discreteCosineTransform(input2));
 
-	alg.printMatrix(conv.convolve(input2, conv.getPrewittVertical(), 1)); // Can use padding
-	alg.printMatrix(conv.pool(input2, 4, 4, "Max")); // Can use Max, Min, or Average pooling.
+	alg.printMatrix(conv.convolve_2d(input2, conv.get_prewitt_vertical(), 1)); // Can use padding
+	alg.printMatrix(conv.pool_2d(input2, 4, 4, "Max")); // Can use Max, Min, or Average pooling.
 
 	std::vector<std::vector<std::vector<real_t>>> tensorSet2;
 	tensorSet2.push_back(input2);
 	tensorSet2.push_back(input2);
-	alg.printVector(conv.globalPool(tensorSet2, "Average")); // Can use Max, Min, or Average global pooling.
+	alg.printVector(conv.global_pool_3d(tensorSet2, "Average")); // Can use Max, Min, or Average global pooling.
 
 	std::vector<std::vector<real_t>> laplacian = { { 1, 1, 1 }, { 1, -4, 1 }, { 1, 1, 1 } };
-	alg.printMatrix(conv.convolve(conv.gaussianFilter2D(5, 1), laplacian, 1));
+	alg.printMatrix(conv.convolve_2d(conv.gaussian_filter_2d(5, 1), laplacian, 1));
 }
 void MLPPTests::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
 	MLPPLinAlg alg;
@@ -1204,9 +1204,9 @@ void MLPPTests::test_numerical_analysis() {
 	alg.printMatrix(conv.dx(A));
 	alg.printMatrix(conv.dy(A));
 
-	alg.printMatrix(conv.gradOrientation(A));
+	alg.printMatrix(conv.grad_orientation(A));
 
-	std::vector<std::vector<std::string>> h = conv.harrisCornerDetection(A);
+	std::vector<std::vector<std::string>> h = conv.harris_corner_detection(A);
 
 	for (uint32_t i = 0; i < h.size(); i++) {
 		for (uint32_t j = 0; j < h[i].size(); j++) {
