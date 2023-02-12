@@ -34,6 +34,7 @@ SOFTWARE.
 #include "mlpp/utilities/utilities.h"
 #include "mlpp/stat/stat.h"
 #include "mlpp/numerical_analysis/numerical_analysis.h"
+#include "mlpp/hypothesis_testing/hypothesis_testing.h"
 
 #include "mlpp/hidden_layer/hidden_layer.h"
 #include "mlpp/multi_output_layer/multi_output_layer.h"
@@ -56,7 +57,7 @@ SOFTWARE.
 #include "mlpp/mann/mann.h"
 #include "mlpp/log_reg/log_reg.h"
 #include "mlpp/lin_reg/lin_reg.h"
-#include "mlpp/hypothesis_testing/hypothesis_testing.h"
+#include "mlpp/gaussian_nb/gaussian_nb.h"
 
 #include "test/mlpp_tests.h"
 
@@ -96,6 +97,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPMANN>();
 		ClassDB::register_class<MLPPLogReg>();
 		ClassDB::register_class<MLPPLinReg>();
+		ClassDB::register_class<MLPPGaussianNB>();
 
 		ClassDB::register_class<MLPPDataESimple>();
 		ClassDB::register_class<MLPPDataSimple>();
