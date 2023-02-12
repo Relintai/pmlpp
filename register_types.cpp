@@ -60,6 +60,7 @@ SOFTWARE.
 #include "mlpp/lin_reg/lin_reg.h"
 #include "mlpp/gaussian_nb/gaussian_nb.h"
 #include "mlpp/gan/gan.h"
+#include "mlpp/exp_reg/exp_reg.h"
 
 #include "test/mlpp_tests.h"
 
@@ -102,6 +103,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPLinReg>();
 		ClassDB::register_class<MLPPGaussianNB>();
 		ClassDB::register_class<MLPPGAN>();
+		ClassDB::register_class<MLPPExpReg>();
 
 		ClassDB::register_class<MLPPDataESimple>();
 		ClassDB::register_class<MLPPDataSimple>();

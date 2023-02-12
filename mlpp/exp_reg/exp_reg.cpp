@@ -229,6 +229,11 @@ MLPPExpReg::MLPPExpReg(std::vector<std::vector<real_t>> p_input_set, std::vector
 	_bias = MLPPUtilities::biasInitialization();
 }
 
+MLPPExpReg::MLPPExpReg() {
+}
+MLPPExpReg::~MLPPExpReg() {
+}
+
 real_t MLPPExpReg::cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	MLPPReg regularization;
 	MLPPCost mlpp_cost;
@@ -264,4 +269,7 @@ std::vector<real_t> MLPPExpReg::evaluatem(std::vector<std::vector<real_t>> X) {
 // a * w^x + b
 void MLPPExpReg::forward_pass() {
 	_y_hat = evaluatem(_input_set);
+}
+
+void MLPPExpReg::_bind_methods() {
 }

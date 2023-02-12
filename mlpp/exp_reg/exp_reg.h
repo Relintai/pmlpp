@@ -10,10 +10,14 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
 #include <string>
 #include <vector>
 
-class MLPPExpReg {
+class MLPPExpReg : public Reference {
+	GDCLASS(MLPPExpReg, Reference);
+
 public:
 	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
 	real_t model_test(std::vector<real_t> x);
@@ -28,13 +32,18 @@ public:
 
 	MLPPExpReg(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, std::string p_reg = "None", real_t p_lambda = 0.5, real_t p_alpha = 0.5);
 
-private:
+	MLPPExpReg();
+	~MLPPExpReg();
+
+protected:
 	real_t cost(std::vector<real_t> y_hat, std::vector<real_t> y);
 
 	real_t evaluatev(std::vector<real_t> x);
 	std::vector<real_t> evaluatem(std::vector<std::vector<real_t>> X);
 
 	void forward_pass();
+
+	static void _bind_methods();
 
 	std::vector<std::vector<real_t>> _input_set;
 	std::vector<real_t> _output_set;
