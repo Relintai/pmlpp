@@ -126,7 +126,7 @@ real_t MLPPNumericalAnalysis::halleyMethod(real_t (*function)(real_t), real_t x_
 	return x;
 }
 
-real_t MLPPNumericalAnalysis::invQuadraticInterpolation(real_t (*function)(real_t), std::vector<real_t> x_0, real_t epoch_num) {
+real_t MLPPNumericalAnalysis::invQuadraticInterpolation(real_t (*function)(real_t), std::vector<real_t> x_0, int epoch_num) {
 	real_t x = 0;
 	std::vector<real_t> currentThree = x_0;
 	for (int i = 0; i < epoch_num; i++) {
@@ -142,7 +142,7 @@ real_t MLPPNumericalAnalysis::invQuadraticInterpolation(real_t (*function)(real_
 }
 
 real_t MLPPNumericalAnalysis::eulerianMethod(real_t (*derivative)(real_t), std::vector<real_t> q_0, real_t p, real_t h) {
-	real_t max_epoch = (p - q_0[0]) / h;
+	int max_epoch = static_cast<int>((p - q_0[0]) / h);
 	real_t x = q_0[0];
 	real_t y = q_0[1];
 	for (int i = 0; i < max_epoch; i++) {
@@ -153,7 +153,7 @@ real_t MLPPNumericalAnalysis::eulerianMethod(real_t (*derivative)(real_t), std::
 }
 
 real_t MLPPNumericalAnalysis::eulerianMethod(real_t (*derivative)(std::vector<real_t>), std::vector<real_t> q_0, real_t p, real_t h) {
-	real_t max_epoch = (p - q_0[0]) / h;
+	int max_epoch = static_cast<int>((p - q_0[0]) / h);
 	real_t x = q_0[0];
 	real_t y = q_0[1];
 	for (int i = 0; i < max_epoch; i++) {
@@ -182,7 +182,7 @@ real_t MLPPNumericalAnalysis::growthMethod(real_t C, real_t k, real_t t) {
 std::vector<real_t> MLPPNumericalAnalysis::jacobian(real_t (*function)(std::vector<real_t>), std::vector<real_t> x) {
 	std::vector<real_t> jacobian;
 	jacobian.resize(x.size());
-	for (int i = 0; i < jacobian.size(); i++) {
+	for (uint32_t i = 0; i < jacobian.size(); i++) {
 		jacobian[i] = numDiff(function, x, i); // Derivative w.r.t axis i evaluated at x. For all x_i.
 	}
 	return jacobian;
@@ -190,32 +190,38 @@ std::vector<real_t> MLPPNumericalAnalysis::jacobian(real_t (*function)(std::vect
 std::vector<std::vector<real_t>> MLPPNumericalAnalysis::hessian(real_t (*function)(std::vector<real_t>), std::vector<real_t> x) {
 	std::vector<std::vector<real_t>> hessian;
 	hessian.resize(x.size());
-	for (int i = 0; i < hessian.size(); i++) {
+
+	for (uint32_t i = 0; i < hessian.size(); i++) {
 		hessian[i].resize(x.size());
 	}
-	for (int i = 0; i < hessian.size(); i++) {
-		for (int j = 0; j < hessian[i].size(); j++) {
+
+	for (uint32_t i = 0; i < hessian.size(); i++) {
+		for (uint32_t j = 0; j < hessian[i].size(); j++) {
 			hessian[i][j] = numDiff_2(function, x, i, j);
 		}
 	}
+
 	return hessian;
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPNumericalAnalysis::thirdOrderTensor(real_t (*function)(std::vector<real_t>), std::vector<real_t> x) {
 	std::vector<std::vector<std::vector<real_t>>> tensor;
 	tensor.resize(x.size());
-	for (int i = 0; i < tensor.size(); i++) {
+
+	for (uint32_t i = 0; i < tensor.size(); i++) {
 		tensor[i].resize(x.size());
-		for (int j = 0; j < tensor[i].size(); j++) {
+		for (uint32_t j = 0; j < tensor[i].size(); j++) {
 			tensor[i][j].resize(x.size());
 		}
 	}
-	for (int i = 0; i < tensor.size(); i++) { // O(n^3) time complexity :(
-		for (int j = 0; j < tensor[i].size(); j++) {
-			for (int k = 0; k < tensor[i][j].size(); k++)
+
+	for (uint32_t i = 0; i < tensor.size(); i++) { // O(n^3) time complexity :(
+		for (uint32_t j = 0; j < tensor[i].size(); j++) {
+			for (uint32_t k = 0; k < tensor[i][j].size(); k++)
 				tensor[i][j][k] = numDiff_3(function, x, i, j, k);
 		}
 	}
+
 	return tensor;
 }
 
@@ -251,12 +257,13 @@ real_t MLPPNumericalAnalysis::cubicApproximation(real_t (*function)(std::vector<
 }
 
 real_t MLPPNumericalAnalysis::laplacian(real_t (*function)(std::vector<real_t>), std::vector<real_t> x) {
-	MLPPLinAlg alg;
 	std::vector<std::vector<real_t>> hessian_matrix = hessian(function, x);
 	real_t laplacian = 0;
-	for (int i = 0; i < hessian_matrix.size(); i++) {
+
+	for (uint32_t i = 0; i < hessian_matrix.size(); i++) {
 		laplacian += hessian_matrix[i][i]; // homogenous 2nd derivs w.r.t i, then i
 	}
+
 	return laplacian;
 }
 

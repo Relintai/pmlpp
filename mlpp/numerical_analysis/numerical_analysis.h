@@ -37,7 +37,7 @@ public:
 
 	real_t newtonRaphsonMethod(real_t (*function)(real_t), real_t x_0, real_t epoch_num);
 	real_t halleyMethod(real_t (*function)(real_t), real_t x_0, real_t epoch_num);
-	real_t invQuadraticInterpolation(real_t (*function)(real_t), std::vector<real_t> x_0, real_t epoch_num);
+	real_t invQuadraticInterpolation(real_t (*function)(real_t), std::vector<real_t> x_0, int epoch_num);
 
 	real_t eulerianMethod(real_t (*derivative)(real_t), std::vector<real_t> q_0, real_t p, real_t h); // Euler's method for solving diffrential equations.
 	real_t eulerianMethod(real_t (*derivative)(std::vector<real_t>), std::vector<real_t> q_0, real_t p, real_t h); // Euler's method for solving diffrential equations.
