@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPDataSimple" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="instance_data">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="input" type="MLPPMatrix" setter="set_input" getter="get_input">
+		</member>
+		<member name="output" type="MLPPMatrix" setter="set_output" getter="get_output">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPKNN" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="model_set_test">
+			<return type="PoolIntArray" />
+			<argument index="0" name="X" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="model_test">
+			<return type="int" />
+			<argument index="0" name="x" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="score">
+			<return type="float" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="input_set" type="MLPPMatrix" setter="set_input_set" getter="get_input_set">
+		</member>
+		<member name="k" type="int" setter="set_k" getter="get_k" default="0">
+		</member>
+		<member name="output_set" type="MLPPVector" setter="set_output_set" getter="get_output_set">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>

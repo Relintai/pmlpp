@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPTests" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="test_ann">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_autoencoder">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_c_log_log_regression">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_convolution_tensors_etc">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test_dynamically_sized_ann">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_dynamically_sized_mann">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_exp_reg_regression">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_k_means">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_knn">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_linear_algebra">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test_logistic_regression">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_mlp">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_mlpp_matrix">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test_mlpp_vector">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test_multivariate_linear_regression_adam">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test_multivariate_linear_regression_epochs_gradient_descent">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_multivariate_linear_regression_gradient_descent">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_multivariate_linear_regression_mbgd">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_multivariate_linear_regression_newton_raphson">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_multivariate_linear_regression_normal_equation">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_multivariate_linear_regression_score_sgd_adam">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_multivariate_linear_regression_sgd">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_naive_bayes">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test_new_math_functions">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test_nlp_and_data">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_numerical_analysis">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test_outlier_finder">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_pca_svd_eigenvalues_eigenvectors">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_positive_definiteness_checker">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test_probit_regression">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_soft_max_network">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_softmax_regression">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_statistics">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test_support_vector_classification">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_support_vector_classification_kernel">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_tanh_regression">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_train_test_split_mann">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_univariate_linear_regression">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test_wgan">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="test_wgan_old">
+			<return type="void" />
+			<argument index="0" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+	</constants>
+</class>

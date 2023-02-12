@@ -1,0 +1,1239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPActivation" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="arcosh_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="arcosh_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="arcosh_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="arcosh_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="arcosh_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="arcosh_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="arcoth_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="arcoth_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="arcoth_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="arcoth_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="arcoth_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="arcoth_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="arcsch_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="arcsch_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="arcsch_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="arcsch_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="arcsch_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="arcsch_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="arsech_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="arsech_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="arsech_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="arsech_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="arsech_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="arsech_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="arsinh_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="arsinh_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="arsinh_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="arsinh_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="arsinh_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="arsinh_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="artanh_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="artanh_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="artanh_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="artanh_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="artanh_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="artanh_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="cloglog_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="cloglog_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="cloglog_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="cloglog_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="cloglog_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="cloglog_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="cosh_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="cosh_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="cosh_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="cosh_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="cosh_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="cosh_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="coth_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="coth_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="coth_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="coth_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="coth_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="coth_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="csch_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="csch_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="csch_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="csch_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="csch_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="csch_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="elu_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="elu_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="elu_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="elu_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="elu_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="elu_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="gaussian_cdf_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="gaussian_cdf_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="gaussian_cdf_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="gaussian_cdf_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="gaussian_cdf_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="gaussian_cdf_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="gelu_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="gelu_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="gelu_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="gelu_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="gelu_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="gelu_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="leaky_relu_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="leaky_relu_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="leaky_relu_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="leaky_relu_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="leaky_relu_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="leaky_relu_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<argument index="1" name="arg1" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="linear_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="linear_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="linear_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="linear_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="linear_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="linear_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="logit_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="logit_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="logit_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="logit_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="logit_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="logit_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="mish_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="mish_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="mish_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="mish_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="mish_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="mish_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="relu_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="relu_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="relu_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="relu_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="relu_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="relu_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="run_activation_deriv_matrix">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="func" type="int" enum="MLPPActivation.ActivationFunction" />
+			<argument index="1" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="run_activation_deriv_real">
+			<return type="float" />
+			<argument index="0" name="func" type="int" enum="MLPPActivation.ActivationFunction" />
+			<argument index="1" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="run_activation_deriv_vector">
+			<return type="MLPPVector" />
+			<argument index="0" name="func" type="int" enum="MLPPActivation.ActivationFunction" />
+			<argument index="1" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="run_activation_matrix">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="func" type="int" enum="MLPPActivation.ActivationFunction" />
+			<argument index="1" name="z" type="MLPPMatrix" />
+			<argument index="2" name="deriv" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="run_activation_norm_matrix">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="func" type="int" enum="MLPPActivation.ActivationFunction" />
+			<argument index="1" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="run_activation_norm_real">
+			<return type="float" />
+			<argument index="0" name="func" type="int" enum="MLPPActivation.ActivationFunction" />
+			<argument index="1" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="run_activation_norm_vector">
+			<return type="MLPPVector" />
+			<argument index="0" name="func" type="int" enum="MLPPActivation.ActivationFunction" />
+			<argument index="1" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="run_activation_real">
+			<return type="float" />
+			<argument index="0" name="func" type="int" enum="MLPPActivation.ActivationFunction" />
+			<argument index="1" name="z" type="float" />
+			<argument index="2" name="deriv" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="run_activation_vector">
+			<return type="MLPPVector" />
+			<argument index="0" name="func" type="int" enum="MLPPActivation.ActivationFunction" />
+			<argument index="1" name="z" type="MLPPVector" />
+			<argument index="2" name="deriv" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="sech_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sech_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sech_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="sech_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sech_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sech_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="selu_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<argument index="1" name="arg1" type="float" />
+			<argument index="2" name="arg2" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="selu_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<argument index="1" name="arg1" type="float" />
+			<argument index="2" name="arg2" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="selu_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<argument index="1" name="arg1" type="float" />
+			<argument index="2" name="arg2" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="selu_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<argument index="1" name="arg1" type="float" />
+			<argument index="2" name="arg2" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="selu_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<argument index="1" name="arg1" type="float" />
+			<argument index="2" name="arg2" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="selu_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<argument index="1" name="arg1" type="float" />
+			<argument index="2" name="arg2" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sigmoid_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sigmoid_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sigmoid_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="sigmoid_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sigmoid_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sigmoid_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="sign_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sign_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sign_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="sign_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sign_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sign_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="sinc_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sinc_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sinc_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="sinc_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sinc_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sinc_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="sinh_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sinh_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sinh_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="sinh_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sinh_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sinh_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="softmax_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="softmax_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="softmax_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="softmax_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="softmax_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="softmax_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="softplus_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="softplus_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="softplus_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="softplus_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="softplus_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="softplus_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="softsign_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="softsign_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="softsign_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="softsign_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="softsign_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="softsign_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="swish_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="swish_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="swish_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="swish_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="swish_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="swish_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="tanh_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="tanh_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="tanh_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="tanh_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="tanh_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="tanh_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="unit_step_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="unit_step_derivr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="unit_step_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="unit_step_normm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="z" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="unit_step_normr">
+			<return type="float" />
+			<argument index="0" name="z" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="unit_step_normv">
+			<return type="MLPPVector" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+		<constant name="ACTIVATION_FUNCTION_LINEAR" value="0" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_SIGMOID" value="1" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_SWISH" value="2" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_MISH" value="3" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_SIN_C" value="4" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_SOFTMAX" value="5" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_SOFTPLUS" value="6" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_SOFTSIGN" value="7" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_ADJ_SOFTMAX" value="8" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_C_LOG_LOG" value="9" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_LOGIT" value="10" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_GAUSSIAN_CDF" value="11" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_RELU" value="12" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_GELU" value="13" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_SIGN" value="14" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_UNIT_STEP" value="15" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_SINH" value="16" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_COSH" value="17" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_TANH" value="18" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_CSCH" value="19" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_SECH" value="20" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_COTH" value="21" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_ARSINH" value="22" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_ARCOSH" value="23" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_ARTANH" value="24" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_ARCSCH" value="25" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_ARSECH" value="26" enum="ActivationFunction">
+		</constant>
+		<constant name="ACTIVATION_FUNCTION_ARCOTH" value="27" enum="ActivationFunction">
+		</constant>
+	</constants>
+</class>

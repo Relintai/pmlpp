@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPMLP" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="gradient_descent">
+			<return type="void" />
+			<argument index="0" name="learning_rate" type="float" />
+			<argument index="1" name="max_epoch" type="int" />
+			<argument index="2" name="UI" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="initialize">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="is_initialized">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="mbgd">
+			<return type="void" />
+			<argument index="0" name="learning_rate" type="float" />
+			<argument index="1" name="max_epoch" type="int" />
+			<argument index="2" name="mini_batch_size" type="int" />
+			<argument index="3" name="UI" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="model_set_test">
+			<return type="MLPPVector" />
+			<argument index="0" name="X" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="model_test">
+			<return type="float" />
+			<argument index="0" name="x" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="save">
+			<return type="void" />
+			<argument index="0" name="file_name" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="score">
+			<return type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="sgd">
+			<return type="void" />
+			<argument index="0" name="learning_rate" type="float" />
+			<argument index="1" name="max_epoch" type="int" />
+			<argument index="2" name="UI" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="alpha" type="float" setter="set_alpha" getter="get_alpha" default="0.5">
+		</member>
+		<member name="input_set" type="MLPPMatrix" setter="set_input_set" getter="get_input_set">
+		</member>
+		<member name="lambda" type="float" setter="set_lambda" getter="get_lambda" default="0.5">
+		</member>
+		<member name="n_hidden" type="int" setter="set_n_hidden" getter="get_n_hidden" default="0">
+		</member>
+		<member name="output_set" type="MLPPVector" setter="set_output_set" getter="get_output_set">
+		</member>
+		<member name="reg" type="int" setter="set_reg" getter="get_reg" enum="MLPPReg.RegularizationType" default="0">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>

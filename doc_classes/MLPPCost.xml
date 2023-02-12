@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPCost" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="cross_entropy_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="cross_entropy_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="cross_entropym">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="cross_entropyv">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="dual_form_svm">
+			<return type="float" />
+			<argument index="0" name="alpha" type="MLPPVector" />
+			<argument index="1" name="X" type="MLPPMatrix" />
+			<argument index="2" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="dual_form_svm_deriv">
+			<return type="MLPPVector" />
+			<argument index="0" name="alpha" type="MLPPVector" />
+			<argument index="1" name="X" type="MLPPMatrix" />
+			<argument index="2" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="hinge_loss_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="hinge_loss_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="hinge_loss_derivwm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<argument index="2" name="C" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="hinge_loss_derivwv">
+			<return type="MLPPVector" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<argument index="2" name="C" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="hinge_lossm">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="hinge_lossv">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="hinge_losswm">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<argument index="2" name="arg2" type="MLPPMatrix" />
+			<argument index="3" name="arg3" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="hinge_losswv">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<argument index="2" name="arg2" type="MLPPVector" />
+			<argument index="3" name="arg3" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="huber_loss_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<argument index="2" name="arg2" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="huber_loss_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<argument index="2" name="arg2" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="huber_lossm">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<argument index="2" name="arg2" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="huber_lossv">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<argument index="2" name="arg2" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="log_loss_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="log_loss_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="log_lossm">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="log_lossv">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="mae_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="mae_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="maem">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="maev">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="mbe_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="mbe_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="mbem">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="mbev">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="mse_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="mse_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="msem">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="msev">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="rmse_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="rmse_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="rmsem">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="rmsev">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="run_cost_deriv_matrix">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="cost" type="int" enum="MLPPCost.CostTypes" />
+			<argument index="1" name="y_hat" type="MLPPMatrix" />
+			<argument index="2" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="run_cost_deriv_vector">
+			<return type="MLPPVector" />
+			<argument index="0" name="cost" type="int" enum="MLPPCost.CostTypes" />
+			<argument index="1" name="y_hat" type="MLPPVector" />
+			<argument index="2" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="run_cost_norm_matrix">
+			<return type="float" />
+			<argument index="0" name="cost" type="int" enum="MLPPCost.CostTypes" />
+			<argument index="1" name="y_hat" type="MLPPMatrix" />
+			<argument index="2" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="run_cost_norm_vector">
+			<return type="float" />
+			<argument index="0" name="cost" type="int" enum="MLPPCost.CostTypes" />
+			<argument index="1" name="y_hat" type="MLPPVector" />
+			<argument index="2" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="wasserstein_loss_derivm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="wasserstein_loss_derivv">
+			<return type="MLPPVector" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="wasserstein_lossm">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="wasserstein_lossv">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="y" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+		<constant name="COST_TYPE_MSE" value="0" enum="CostTypes">
+		</constant>
+		<constant name="COST_TYPE_RMSE" value="1" enum="CostTypes">
+		</constant>
+		<constant name="COST_TYPE_MAE" value="2" enum="CostTypes">
+		</constant>
+		<constant name="COST_TYPE_MBE" value="3" enum="CostTypes">
+		</constant>
+		<constant name="COST_TYPE_LOGISTIC_LOSS" value="4" enum="CostTypes">
+		</constant>
+		<constant name="COST_TYPE_CROSS_ENTROPY" value="5" enum="CostTypes">
+		</constant>
+		<constant name="COST_TYPE_HINGE_LOSS" value="6" enum="CostTypes">
+		</constant>
+		<constant name="COST_TYPE_WASSERSTEIN_LOSS" value="7" enum="CostTypes">
+		</constant>
+	</constants>
+</class>

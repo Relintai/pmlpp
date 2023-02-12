@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPVector" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="add_mlpp_vector">
+			<return type="void" />
+			<argument index="0" name="other" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="clear">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="duplicate" qualifiers="const">
+			<return type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="empty" qualifiers="const">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="erase">
+			<return type="void" />
+			<argument index="0" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="erase_multiple_unordered">
+			<return type="int" />
+			<argument index="0" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="fill">
+			<return type="void" />
+			<argument index="0" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="find" qualifiers="const">
+			<return type="int" />
+			<argument index="0" name="val" type="float" />
+			<argument index="1" name="from" type="int" default="0" />
+			<description>
+			</description>
+		</method>
+		<method name="get_element" qualifiers="const">
+			<return type="float" />
+			<argument index="0" name="index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="insert">
+			<return type="void" />
+			<argument index="0" name="pos" type="int" />
+			<argument index="1" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="invert">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="is_equal_approx" qualifiers="const">
+			<return type="bool" />
+			<argument index="0" name="with" type="MLPPVector" />
+			<argument index="1" name="tolerance" type="float" default="1e-05" />
+			<description>
+			</description>
+		</method>
+		<method name="ordered_insert">
+			<return type="void" />
+			<argument index="0" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="push_back">
+			<return type="void" />
+			<argument index="0" name="elem" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="remove">
+			<return type="void" />
+			<argument index="0" name="index" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="remove_unordered">
+			<return type="void" />
+			<argument index="0" name="index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="reset">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="resize">
+			<return type="void" />
+			<argument index="0" name="size" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="set_element">
+			<return type="void" />
+			<argument index="0" name="index" type="int" />
+			<argument index="1" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_from_mlpp_vector">
+			<return type="void" />
+			<argument index="0" name="from" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="set_from_pool_vector">
+			<return type="void" />
+			<argument index="0" name="from" type="PoolRealArray" />
+			<description>
+			</description>
+		</method>
+		<method name="size" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="sort">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="to_byte_array" qualifiers="const">
+			<return type="PoolByteArray" />
+			<description>
+			</description>
+		</method>
+		<method name="to_pool_vector" qualifiers="const">
+			<return type="PoolRealArray" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+	</constants>
+</class>

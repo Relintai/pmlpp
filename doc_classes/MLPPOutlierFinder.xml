@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPOutlierFinder" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="model_set_test">
+			<return type="Array" />
+			<argument index="0" name="input_set" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="model_set_test_indices">
+			<return type="PoolVector2iArray" />
+			<argument index="0" name="input_set" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="model_test">
+			<return type="PoolRealArray" />
+			<argument index="0" name="input_set" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="threshold" type="float" setter="set_threshold" getter="get_threshold" default="0.0">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>

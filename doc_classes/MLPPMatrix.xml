@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPMatrix" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="add_row">
+			<return type="void" />
+			<argument index="0" name="row" type="PoolRealArray" />
+			<description>
+			</description>
+		</method>
+		<method name="add_row_mlpp_vector">
+			<return type="void" />
+			<argument index="0" name="row" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="add_rows_mlpp_matrix">
+			<return type="void" />
+			<argument index="0" name="other" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="clear">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="data_size" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="duplicate" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="empty" qualifiers="const">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="fill">
+			<return type="void" />
+			<argument index="0" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="get_element" qualifiers="const">
+			<return type="float" />
+			<argument index="0" name="index_x" type="int" />
+			<argument index="1" name="index_y" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_row_into_mlpp_vector" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="target" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="get_row_mlpp_vector">
+			<return type="MLPPVector" />
+			<argument index="0" name="index_y" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_row_pool_vector">
+			<return type="PoolRealArray" />
+			<argument index="0" name="index_y" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="is_equal_approx" qualifiers="const">
+			<return type="bool" />
+			<argument index="0" name="with" type="MLPPMatrix" />
+			<argument index="1" name="tolerance" type="float" default="1e-05" />
+			<description>
+			</description>
+		</method>
+		<method name="remove_row">
+			<return type="void" />
+			<argument index="0" name="index" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="remove_row_unordered">
+			<return type="void" />
+			<argument index="0" name="index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="reset">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="resize">
+			<return type="void" />
+			<argument index="0" name="size" type="Vector2i" />
+			<description>
+			</description>
+		</method>
+		<method name="set_element">
+			<return type="void" />
+			<argument index="0" name="index_x" type="int" />
+			<argument index="1" name="index_y" type="int" />
+			<argument index="2" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_from_arrays">
+			<return type="void" />
+			<argument index="0" name="from" type="Array" />
+			<description>
+			</description>
+		</method>
+		<method name="set_from_mlpp_matrix">
+			<return type="void" />
+			<argument index="0" name="from" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="set_from_mlpp_vectors_array">
+			<return type="void" />
+			<argument index="0" name="from" type="Array" />
+			<description>
+			</description>
+		</method>
+		<method name="set_row_mlpp_vector">
+			<return type="void" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="row" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="set_row_pool_vector">
+			<return type="void" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="row" type="PoolRealArray" />
+			<description>
+			</description>
+		</method>
+		<method name="size" qualifiers="const">
+			<return type="Vector2i" />
+			<description>
+			</description>
+		</method>
+		<method name="swap_row">
+			<return type="void" />
+			<argument index="0" name="index_1" type="int" />
+			<argument index="1" name="index_2" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="to_flat_byte_array" qualifiers="const">
+			<return type="PoolByteArray" />
+			<description>
+			</description>
+		</method>
+		<method name="to_flat_pool_vector" qualifiers="const">
+			<return type="PoolRealArray" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+	</constants>
+</class>

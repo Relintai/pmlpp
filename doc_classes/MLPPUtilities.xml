@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPUtilities" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="bias_initializationr">
+			<return type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="bias_initializationv">
+			<return type="void" />
+			<argument index="0" name="z" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="create_mini_batchesm">
+			<return type="Array" />
+			<argument index="0" name="input_set" type="MLPPMatrix" />
+			<argument index="1" name="n_mini_batch" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="create_mini_batchesmm">
+			<return type="Array" />
+			<argument index="0" name="input_set" type="MLPPMatrix" />
+			<argument index="1" name="output_set" type="MLPPMatrix" />
+			<argument index="2" name="n_mini_batch" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="create_mini_batchesmv">
+			<return type="Array" />
+			<argument index="0" name="input_set" type="MLPPMatrix" />
+			<argument index="1" name="output_set" type="MLPPVector" />
+			<argument index="2" name="n_mini_batch" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="performance_mat">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPMatrix" />
+			<argument index="1" name="y" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="performance_pool_int_array_vec">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="PoolIntArray" />
+			<argument index="1" name="output_set" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="performance_vec">
+			<return type="float" />
+			<argument index="0" name="y_hat" type="MLPPVector" />
+			<argument index="1" name="output_set" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="weight_initializationm">
+			<return type="void" />
+			<argument index="0" name="weights" type="MLPPMatrix" />
+			<argument index="1" name="type" type="int" enum="MLPPUtilities.WeightDistributionType" default="0" />
+			<description>
+			</description>
+		</method>
+		<method name="weight_initializationv">
+			<return type="void" />
+			<argument index="0" name="weights" type="MLPPVector" />
+			<argument index="1" name="type" type="int" enum="MLPPUtilities.WeightDistributionType" default="0" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+		<constant name="WEIGHT_DISTRIBUTION_TYPE_DEFAULT" value="0" enum="WeightDistributionType">
+		</constant>
+		<constant name="WEIGHT_DISTRIBUTION_TYPE_XAVIER_NORMAL" value="1" enum="WeightDistributionType">
+		</constant>
+		<constant name="WEIGHT_DISTRIBUTION_TYPE_XAVIER_UNIFORM" value="2" enum="WeightDistributionType">
+		</constant>
+		<constant name="WEIGHT_DISTRIBUTION_TYPE_HE_NORMAL" value="3" enum="WeightDistributionType">
+		</constant>
+		<constant name="WEIGHT_DISTRIBUTION_TYPE_HE_UNIFORM" value="4" enum="WeightDistributionType">
+		</constant>
+		<constant name="WEIGHT_DISTRIBUTION_TYPE_LE_CUN_NORMAL" value="5" enum="WeightDistributionType">
+		</constant>
+		<constant name="WEIGHT_DISTRIBUTION_TYPE_LE_CUN_UNIFORM" value="6" enum="WeightDistributionType">
+		</constant>
+		<constant name="WEIGHT_DISTRIBUTION_TYPE_UNIFORM" value="7" enum="WeightDistributionType">
+		</constant>
+	</constants>
+</class>

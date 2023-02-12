@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPData" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="load_breast_cancer">
+			<return type="MLPPDataSimple" />
+			<argument index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="load_breast_cancer_svc">
+			<return type="MLPPDataSimple" />
+			<argument index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="load_california_housing">
+			<return type="MLPPDataSimple" />
+			<argument index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="load_fires_and_crime">
+			<return type="MLPPDataESimple" />
+			<argument index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="load_iris">
+			<return type="MLPPDataComplex" />
+			<argument index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="load_mnist_test">
+			<return type="MLPPDataComplex" />
+			<argument index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="load_mnist_train">
+			<return type="MLPPDataComplex" />
+			<argument index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="load_wine">
+			<return type="MLPPDataComplex" />
+			<argument index="0" name="path" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="train_test_split">
+			<return type="Array" />
+			<argument index="0" name="data" type="MLPPDataComplex" />
+			<argument index="1" name="test_size" type="float" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+	</constants>
+</class>

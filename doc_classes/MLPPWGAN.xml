@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPWGAN" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="add_layer">
+			<return type="void" />
+			<argument index="0" name="activation" type="int" />
+			<argument index="1" name="weight_init" type="int" enum="MLPPActivation.ActivationFunction" />
+			<argument index="2" name="reg" type="int" enum="MLPPUtilities.WeightDistributionType" default="0" />
+			<argument index="3" name="lambda" type="int" enum="MLPPReg.RegularizationType" default="0" />
+			<argument index="4" name="alpha" type="float" default="0.5" />
+			<argument index="5" name="arg5" type="float" default="0.5" />
+			<description>
+			</description>
+		</method>
+		<method name="add_output_layer">
+			<return type="void" />
+			<argument index="0" name="weight_init" type="int" enum="MLPPUtilities.WeightDistributionType" default="0" />
+			<argument index="1" name="reg" type="int" enum="MLPPReg.RegularizationType" default="0" />
+			<argument index="2" name="lambda" type="float" default="0.5" />
+			<argument index="3" name="alpha" type="float" default="0.5" />
+			<description>
+			</description>
+		</method>
+		<method name="generate_example">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="n" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gradient_descent">
+			<return type="void" />
+			<argument index="0" name="learning_rate" type="float" />
+			<argument index="1" name="max_epoch" type="int" />
+			<argument index="2" name="ui" type="bool" default="false" />
+			<description>
+			</description>
+		</method>
+		<method name="save">
+			<return type="void" />
+			<argument index="0" name="file_name" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="score">
+			<return type="float" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="k" type="int" setter="set_k" getter="get_k" default="0">
+		</member>
+		<member name="output_set" type="MLPPMatrix" setter="set_output_set" getter="get_output_set">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>

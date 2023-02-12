@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPReg" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="reg_deriv_termm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="weights" type="MLPPMatrix" />
+			<argument index="1" name="lambda" type="float" />
+			<argument index="2" name="alpha" type="float" />
+			<argument index="3" name="reg" type="int" enum="MLPPReg.RegularizationType" />
+			<description>
+			</description>
+		</method>
+		<method name="reg_deriv_termv">
+			<return type="MLPPVector" />
+			<argument index="0" name="weights" type="MLPPVector" />
+			<argument index="1" name="lambda" type="float" />
+			<argument index="2" name="alpha" type="float" />
+			<argument index="3" name="reg" type="int" enum="MLPPReg.RegularizationType" />
+			<description>
+			</description>
+		</method>
+		<method name="reg_termm">
+			<return type="float" />
+			<argument index="0" name="weights" type="MLPPMatrix" />
+			<argument index="1" name="lambda" type="float" />
+			<argument index="2" name="alpha" type="float" />
+			<argument index="3" name="reg" type="int" enum="MLPPReg.RegularizationType" />
+			<description>
+			</description>
+		</method>
+		<method name="reg_termv">
+			<return type="float" />
+			<argument index="0" name="weights" type="MLPPVector" />
+			<argument index="1" name="lambda" type="float" />
+			<argument index="2" name="alpha" type="float" />
+			<argument index="3" name="reg" type="int" enum="MLPPReg.RegularizationType" />
+			<description>
+			</description>
+		</method>
+		<method name="reg_weightsm">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="weights" type="MLPPMatrix" />
+			<argument index="1" name="lambda" type="float" />
+			<argument index="2" name="alpha" type="float" />
+			<argument index="3" name="reg" type="int" enum="MLPPReg.RegularizationType" />
+			<description>
+			</description>
+		</method>
+		<method name="reg_weightsv">
+			<return type="MLPPVector" />
+			<argument index="0" name="weights" type="MLPPVector" />
+			<argument index="1" name="lambda" type="float" />
+			<argument index="2" name="alpha" type="float" />
+			<argument index="3" name="reg" type="int" enum="MLPPReg.RegularizationType" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+		<constant name="REGULARIZATION_TYPE_NONE" value="0" enum="RegularizationType">
+		</constant>
+		<constant name="REGULARIZATION_TYPE_RIDGE" value="1" enum="RegularizationType">
+		</constant>
+		<constant name="REGULARIZATION_TYPE_LASSO" value="2" enum="RegularizationType">
+		</constant>
+		<constant name="REGULARIZATION_TYPE_ELASTIC_NET" value="3" enum="RegularizationType">
+		</constant>
+		<constant name="REGULARIZATION_TYPE_WEIGHT_CLIPPING" value="4" enum="RegularizationType">
+		</constant>
+	</constants>
+</class>

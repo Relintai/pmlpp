@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPMultiOutputLayer" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="forward_pass">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="test">
+			<return type="void" />
+			<argument index="0" name="x" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="a" type="MLPPMatrix" setter="set_a" getter="get_a">
+		</member>
+		<member name="a_test" type="MLPPVector" setter="set_a_test" getter="get_a_test">
+		</member>
+		<member name="activation" type="int" setter="set_activation" getter="get_activation" enum="MLPPActivation.ActivationFunction" default="0">
+		</member>
+		<member name="alpha" type="float" setter="set_alpha" getter="get_alpha" default="0.0">
+		</member>
+		<member name="bias" type="MLPPVector" setter="set_bias" getter="get_bias">
+		</member>
+		<member name="cost" type="int" setter="set_cost" getter="get_cost" enum="MLPPCost.CostTypes" default="0">
+		</member>
+		<member name="delta" type="MLPPMatrix" setter="set_delta" getter="get_delta">
+		</member>
+		<member name="input" type="MLPPMatrix" setter="set_input" getter="get_input">
+		</member>
+		<member name="lambda" type="float" setter="set_lambda" getter="get_lambda" default="0.0">
+		</member>
+		<member name="n_hidden" type="int" setter="set_n_hidden" getter="get_n_hidden" default="0">
+		</member>
+		<member name="n_output" type="int" setter="set_n_output" getter="get_n_output" default="0">
+		</member>
+		<member name="reg" type="int" setter="set_reg" getter="get_reg" enum="MLPPReg.RegularizationType" default="0">
+		</member>
+		<member name="set_weight_init" type="int" setter="set_weight_init" getter="get_weight_init" enum="MLPPUtilities.WeightDistributionType" default="0">
+		</member>
+		<member name="weights" type="MLPPMatrix" setter="set_weights" getter="get_weights">
+		</member>
+		<member name="z" type="MLPPMatrix" setter="set_z" getter="get_z">
+		</member>
+		<member name="z_test" type="MLPPVector" setter="set_z_test" getter="get_z_test">
+		</member>
+	</members>
+	<constants>
+	</constants>
+</class>
