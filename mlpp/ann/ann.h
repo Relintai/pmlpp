@@ -48,37 +48,37 @@ public:
 	void add_layer(int n_hidden, std::string activation, std::string weight_init = "Default", std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
 	void add_output_layer(std::string activation, std::string loss, std::string weight_init = "Default", std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
 
-	MLPPANN(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet);
+	MLPPANN(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set);
 
 	MLPPANN();
 	~MLPPANN();
 
 protected:
-	real_t apply_learning_rate_scheduler(real_t learningRate, real_t decayConstant, real_t epoch, real_t dropRate);
+	real_t apply_learning_rate_scheduler(real_t learning_rate, real_t decay_constant, real_t epoch, real_t drop_rate);
 
 	real_t cost(std::vector<real_t> y_hat, std::vector<real_t> y);
 
 	void forward_pass();
-	void update_parameters(std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations, std::vector<real_t> outputLayerUpdation, real_t learning_rate);
-	std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> compute_gradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet);
+	void update_parameters(std::vector<std::vector<std::vector<real_t>>> hidden_layer_updations, std::vector<real_t> output_layer_updation, real_t learning_rate);
+	std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> compute_gradients(std::vector<real_t> y_hat, std::vector<real_t> _output_set);
 
-	void print_ui(int epoch, real_t cost_prev, std::vector<real_t> y_hat, std::vector<real_t> outputSet);
+	void print_ui(int epoch, real_t cost_prev, std::vector<real_t> y_hat, std::vector<real_t> p_output_set);
 
 	static void _bind_methods();
 
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> outputSet;
-	std::vector<real_t> y_hat;
+	std::vector<std::vector<real_t>> _input_set;
+	std::vector<real_t> _output_set;
+	std::vector<real_t> _y_hat;
 
-	std::vector<MLPPOldHiddenLayer> network;
-	MLPPOldOutputLayer *outputLayer;
+	std::vector<MLPPOldHiddenLayer> _network;
+	MLPPOldOutputLayer *_output_layer;
 
-	int n;
-	int k;
+	int _n;
+	int _k;
 
-	std::string lrScheduler;
-	real_t decayConstant;
-	real_t dropRate;
+	std::string _lr_scheduler;
+	real_t _decay_constant;
+	real_t _drop_rate;
 };
 
 #endif /* ANN_hpp */
