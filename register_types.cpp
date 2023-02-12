@@ -55,6 +55,7 @@ SOFTWARE.
 #include "mlpp/multinomial_nb/multinomial_nb.h"
 #include "mlpp/mann/mann.h"
 #include "mlpp/log_reg/log_reg.h"
+#include "mlpp/lin_reg/lin_reg.h"
 
 #include "test/mlpp_tests.h"
 
@@ -92,6 +93,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPMultinomialNB>();
 		ClassDB::register_class<MLPPMANN>();
 		ClassDB::register_class<MLPPLogReg>();
+		ClassDB::register_class<MLPPLinReg>();
 
 		ClassDB::register_class<MLPPDataESimple>();
 		ClassDB::register_class<MLPPDataSimple>();
