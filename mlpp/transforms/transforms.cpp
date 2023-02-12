@@ -18,14 +18,14 @@ std::vector<std::vector<real_t>> MLPPTransforms::discreteCosineTransform(std::ve
 
 	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
-	for (int i = 0; i < B.size(); i++) {
+	for (uint32_t i = 0; i < B.size(); i++) {
 		B[i].resize(A[i].size());
 	}
 
 	int M = A.size();
 
-	for (int i = 0; i < B.size(); i++) {
-		for (int j = 0; j < B[i].size(); j++) {
+	for (uint32_t i = 0; i < B.size(); i++) {
+		for (uint32_t j = 0; j < B[i].size(); j++) {
 			real_t sum = 0;
 			real_t alphaI;
 			if (i == 0) {
@@ -40,8 +40,8 @@ std::vector<std::vector<real_t>> MLPPTransforms::discreteCosineTransform(std::ve
 				alphaJ = std::sqrt(real_t(2) / real_t(M));
 			}
 
-			for (int k = 0; k < B.size(); k++) {
-				for (int f = 0; f < B[k].size(); f++) {
+			for (uint32_t k = 0; k < B.size(); k++) {
+				for (uint32_t f = 0; f < B[k].size(); f++) {
 					sum += A[k][f] * std::cos((M_PI * i * (2 * k + 1)) / (2 * M)) * std::cos((M_PI * j * (2 * f + 1)) / (2 * M));
 				}
 			}
