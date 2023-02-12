@@ -1,6 +1,6 @@
 
-#ifndef MLPP_C_LOG_LOG_REG_H
-#define MLPP_C_LOG_LOG_REG_H
+#ifndef MLPP_C_LOG_LOG_REG_OLD_H
+#define MLPP_C_LOG_LOG_REG_OLD_H
 
 //
 //  CLogLogReg.hpp

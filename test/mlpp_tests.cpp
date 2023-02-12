@@ -423,9 +423,15 @@ void MLPPTests::test_c_log_log_regression(bool ui) {
 	// CLOGLOG REGRESSION
 	std::vector<std::vector<real_t>> inputSet = { { 1, 2, 3, 4, 5, 6, 7, 8 }, { 0, 0, 0, 0, 1, 1, 1, 1 } };
 	std::vector<real_t> outputSet = { 0, 0, 0, 0, 1, 1, 1, 1 };
+
+	MLPPCLogLogRegOld model_old(alg.transpose(inputSet), outputSet);
+	model_old.SGD(0.1, 10000, ui);
+	alg.printVector(model_old.modelSetTest(alg.transpose(inputSet)));
+	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
+
 	MLPPCLogLogReg model(alg.transpose(inputSet), outputSet);
-	model.SGD(0.1, 10000, ui);
-	alg.printVector(model.modelSetTest(alg.transpose(inputSet)));
+	model.sgd(0.1, 10000, ui);
+	alg.printVector(model.model_set_test(alg.transpose(inputSet)));
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_exp_reg_regression(bool ui) {

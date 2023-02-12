@@ -15,25 +15,34 @@
 
 class MLPPCLogLogReg {
 public:
-	MLPPCLogLogReg(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
-	std::vector<real_t> modelSetTest(std::vector<std::vector<real_t>> X);
-	real_t modelTest(std::vector<real_t> x);
-	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = false);
-	void MLE(real_t learning_rate, int max_epoch, bool UI = false);
-	void SGD(real_t learning_rate, int max_epoch, bool UI = false);
-	void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI = false);
+	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
+	real_t model_test(std::vector<real_t> x);
+
+	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
+	void mle(real_t learning_rate, int max_epoch, bool ui = false);
+	void sgd(real_t learning_rate, int max_epoch, bool ui = false);
+	void mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui = false);
+
 	real_t score();
 
-private:
-	void weightInitialization(int k);
-	void biasInitialization();
-	real_t Cost(std::vector<real_t> y_hat, std::vector<real_t> y);
+	MLPPCLogLogReg(std::vector<std::vector<real_t>> pinputSet, std::vector<real_t> poutputSet, std::string p_reg = "None", real_t p_lambda = 0.5, real_t p_alpha = 0.5);
 
-	std::vector<real_t> Evaluate(std::vector<std::vector<real_t>> X);
-	std::vector<real_t> propagate(std::vector<std::vector<real_t>> X);
-	real_t Evaluate(std::vector<real_t> x);
-	real_t propagate(std::vector<real_t> x);
-	void forwardPass();
+	MLPPCLogLogReg();
+	~MLPPCLogLogReg();
+
+private:
+	void weight_initialization(int k);
+	void bias_initialization();
+
+	real_t cost(std::vector<real_t> y_hat, std::vector<real_t> y);
+
+	real_t evaluatev(std::vector<real_t> x);
+	real_t propagatev(std::vector<real_t> x);
+
+	std::vector<real_t> evaluatem(std::vector<std::vector<real_t>> X);
+	std::vector<real_t> propagatem(std::vector<std::vector<real_t>> X);
+
+	void forward_pass();
 
 	std::vector<std::vector<real_t>> inputSet;
 	std::vector<real_t> outputSet;
