@@ -738,8 +738,11 @@ void MLPPTests::test_naive_bayes() {
 	MLPPBernoulliNB BNB(alg.transpose(inputSet), outputSet);
 	alg.printVector(BNB.modelSetTest(alg.transpose(inputSet)));
 
+	MLPPGaussianNBOld GNBOld(alg.transpose(inputSet), outputSet, 2);
+	alg.printVector(GNBOld.modelSetTest(alg.transpose(inputSet)));
+
 	MLPPGaussianNB GNB(alg.transpose(inputSet), outputSet, 2);
-	alg.printVector(GNB.modelSetTest(alg.transpose(inputSet)));
+	alg.printVector(GNB.model_set_test(alg.transpose(inputSet)));
 }
 void MLPPTests::test_k_means(bool ui) {
 	// KMeans
