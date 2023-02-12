@@ -25,7 +25,7 @@ public:
 
 	real_t score();
 
-	MLPPCLogLogReg(std::vector<std::vector<real_t>> pinputSet, std::vector<real_t> poutputSet, std::string p_reg = "None", real_t p_lambda = 0.5, real_t p_alpha = 0.5);
+	MLPPCLogLogReg(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, std::string p_reg = "None", real_t p_lambda = 0.5, real_t p_alpha = 0.5);
 
 	MLPPCLogLogReg();
 	~MLPPCLogLogReg();
@@ -44,20 +44,20 @@ private:
 
 	void forward_pass();
 
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> outputSet;
-	std::vector<real_t> y_hat;
-	std::vector<real_t> z;
-	std::vector<real_t> weights;
+	std::vector<std::vector<real_t>> _input_set;
+	std::vector<real_t> _output_set;
+	std::vector<real_t> _y_hat;
+	std::vector<real_t> _z;
+	std::vector<real_t> _weights;
 	real_t bias;
 
-	int n;
-	int k;
+	int _n;
+	int _k;
 
 	// Regularization Params
-	std::string reg;
-	real_t lambda;
-	real_t alpha; /* This is the controlling param for Elastic Net*/
+	std::string _reg;
+	real_t _lambda;
+	real_t _alpha; /* This is the controlling param for Elastic Net*/
 };
 
 #endif /* CLogLogReg_hpp */
