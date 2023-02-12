@@ -42,7 +42,10 @@ SOFTWARE.
 #include "mlpp/multi_output_layer/multi_output_layer.h"
 #include "mlpp/output_layer/output_layer.h"
 
+#include "mlpp/ann/ann.h"
 #include "mlpp/auto_encoder/auto_encoder.h"
+#include "mlpp/bernoulli_nb/bernoulli_nb.h"
+#include "mlpp/c_log_log_reg/c_log_log_reg.h"
 #include "mlpp/dual_svc/dual_svc.h"
 #include "mlpp/exp_reg/exp_reg.h"
 #include "mlpp/gan/gan.h"
@@ -63,8 +66,6 @@ SOFTWARE.
 #include "mlpp/tanh_reg/tanh_reg.h"
 #include "mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "mlpp/wgan/wgan.h"
-#include "mlpp/c_log_log_reg/c_log_log_reg.h"
-#include "mlpp/bernoulli_nb/bernoulli_nb.h"
 
 #include "test/mlpp_tests.h"
 
@@ -112,6 +113,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPDualSVC>();
 		ClassDB::register_class<MLPPCLogLogReg>();
 		ClassDB::register_class<MLPPBernoulliNB>();
+		ClassDB::register_class<MLPPANN>();
 
 		ClassDB::register_class<MLPPDataESimple>();
 		ClassDB::register_class<MLPPDataSimple>();

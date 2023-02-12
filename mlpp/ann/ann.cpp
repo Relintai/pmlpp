@@ -848,3 +848,6 @@ void MLPPANN::print_ui(int epoch, real_t cost_prev, std::vector<real_t> y_hat, s
 		}
 	}
 }
+
+void MLPPANN::_bind_methods() {
+}

@@ -9,6 +9,8 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
 #include "../hidden_layer/hidden_layer.h"
 #include "../output_layer/output_layer.h"
 
@@ -19,7 +21,9 @@
 #include <tuple>
 #include <vector>
 
-class MLPPANN {
+class MLPPANN : public Reference {
+	GDCLASS(MLPPANN, Reference);
+
 public:
 	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
 	real_t model_test(std::vector<real_t> x);
@@ -49,7 +53,7 @@ public:
 	MLPPANN();
 	~MLPPANN();
 
-private:
+protected:
 	real_t apply_learning_rate_scheduler(real_t learningRate, real_t decayConstant, real_t epoch, real_t dropRate);
 
 	real_t cost(std::vector<real_t> y_hat, std::vector<real_t> y);
@@ -59,6 +63,8 @@ private:
 	std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> compute_gradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet);
 
 	void print_ui(int epoch, real_t cost_prev, std::vector<real_t> y_hat, std::vector<real_t> outputSet);
+
+	static void _bind_methods();
 
 	std::vector<std::vector<real_t>> inputSet;
 	std::vector<real_t> outputSet;
