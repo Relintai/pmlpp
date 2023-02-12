@@ -9,11 +9,14 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
 #include <string>
 #include <vector>
 
+class MLPPNumericalAnalysis : public Reference {
+	GDCLASS(MLPPNumericalAnalysis, Reference);
 
-class MLPPNumericalAnalysis {
 public:
 	/* A numerical method for derivatives is used. This may be subject to change,
 	as an analytical method for calculating derivatives will most likely be used in
@@ -53,7 +56,9 @@ public:
 	real_t laplacian(real_t (*function)(std::vector<real_t>), std::vector<real_t> x); // laplacian
 
 	std::string secondPartialDerivativeTest(real_t (*function)(std::vector<real_t>), std::vector<real_t> x);
-};
 
+protected:
+	static void _bind_methods();
+};
 
 #endif /* NumericalAnalysis_hpp */

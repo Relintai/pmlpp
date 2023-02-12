@@ -12,8 +12,6 @@
 #include <iostream>
 #include <string>
 
-
-
 real_t MLPPNumericalAnalysis::numDiff(real_t (*function)(real_t), real_t x) {
 	real_t eps = 1e-10;
 	return (function(x + eps) - function(x)) / eps; // This is just the formal def. of the derivative.
@@ -292,4 +290,7 @@ std::string MLPPNumericalAnalysis::secondPartialDerivativeTest(real_t (*function
 			return "test was inconclusive";
 		}
 	}
+}
+
+void MLPPNumericalAnalysis::_bind_methods() {
 }
