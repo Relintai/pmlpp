@@ -10,10 +10,14 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
 #include <map>
 #include <vector>
 
-class MLPPBernoulliNB {
+class MLPPBernoulliNB : public Reference {
+	GDCLASS(MLPPBernoulliNB, Reference);
+
 public:
 	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
 	real_t model_test(std::vector<real_t> x);
@@ -25,10 +29,12 @@ public:
 	MLPPBernoulliNB();
 	~MLPPBernoulliNB();
 
-private:
+protected:
 	void compute_vocab();
 	void compute_theta();
 	void evaluate();
+
+	static void _bind_methods();
 
 	// Model Params
 	real_t _prior_1;

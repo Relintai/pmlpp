@@ -187,3 +187,6 @@ void MLPPBernoulliNB::evaluate() {
 		}
 	}
 }
+
+void MLPPBernoulliNB::_bind_methods() {
+}
