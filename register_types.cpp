@@ -32,6 +32,7 @@ SOFTWARE.
 #include "mlpp/cost/cost.h"
 #include "mlpp/gauss_markov_checker/gauss_markov_checker.h"
 #include "mlpp/hypothesis_testing/hypothesis_testing.h"
+#include "mlpp/lin_alg/lin_alg.h"
 #include "mlpp/numerical_analysis/numerical_analysis.h"
 #include "mlpp/regularization/reg.h"
 #include "mlpp/stat/stat.h"
@@ -84,6 +85,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPHypothesisTesting>();
 		ClassDB::register_class<MLPPGaussMarkovChecker>();
 		ClassDB::register_class<MLPPConvolutions>();
+		ClassDB::register_class<MLPPLinAlg>();
 
 		ClassDB::register_class<MLPPHiddenLayer>();
 		ClassDB::register_class<MLPPOutputLayer>();

@@ -12,13 +12,17 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
 
 #include <tuple>
 #include <vector>
 
-class MLPPLinAlg {
+class MLPPLinAlg : public Reference {
+	GDCLASS(MLPPLinAlg, Reference);
+
 public:
 	// MATRIX FUNCTIONS
 
@@ -326,7 +330,8 @@ public:
 
 	std::vector<std::vector<std::vector<real_t>>> vector_wise_tensor_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<real_t>> B);
 
-private:
+protected:
+	static void _bind_methods();
 };
 
 #endif /* LinAlg_hpp */
