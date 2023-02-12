@@ -70,14 +70,14 @@ protected:
 
 	static void _bind_methods();
 
-	Ref<MLPPMatrix> output_set;
-	Ref<MLPPVector> y_hat;
+	Ref<MLPPMatrix> _output_set;
+	Ref<MLPPVector> _y_hat;
 
-	Vector<Ref<MLPPHiddenLayer>> network;
-	Ref<MLPPOutputLayer> output_layer;
+	Vector<Ref<MLPPHiddenLayer>> _network;
+	Ref<MLPPOutputLayer> _output_layer;
 
-	int n;
-	int k;
+	int _n;
+	int _k;
 };
 
 #endif /* WGAN_hpp */

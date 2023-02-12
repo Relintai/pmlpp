@@ -9,121 +9,121 @@
 #include "../utilities/utilities.h"
 
 int MLPPOutputLayer::get_n_hidden() {
-	return n_hidden;
+	return _n_hidden;
 }
 void MLPPOutputLayer::set_n_hidden(const int val) {
-	n_hidden = val;
+	_n_hidden = val;
 	_initialized = false;
 }
 
 MLPPActivation::ActivationFunction MLPPOutputLayer::get_activation() {
-	return activation;
+	return _activation;
 }
 void MLPPOutputLayer::set_activation(const MLPPActivation::ActivationFunction val) {
-	activation = val;
+	_activation = val;
 	_initialized = false;
 }
 
 MLPPCost::CostTypes MLPPOutputLayer::get_cost() {
-	return cost;
+	return _cost;
 }
 void MLPPOutputLayer::set_cost(const MLPPCost::CostTypes val) {
-	cost = val;
+	_cost = val;
 	_initialized = false;
 }
 
 Ref<MLPPMatrix> MLPPOutputLayer::get_input() {
-	return input;
+	return _input;
 }
 void MLPPOutputLayer::set_input(const Ref<MLPPMatrix> &val) {
-	input = val;
+	_input = val;
 	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_weights() {
-	return weights;
+	return _weights;
 }
 void MLPPOutputLayer::set_weights(const Ref<MLPPVector> &val) {
-	weights = val;
+	_weights = val;
 	_initialized = false;
 }
 
 real_t MLPPOutputLayer::MLPPOutputLayer::get_bias() {
-	return bias;
+	return _bias;
 }
 void MLPPOutputLayer::set_bias(const real_t val) {
-	bias = val;
+	_bias = val;
 	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_z() {
-	return z;
+	return _z;
 }
 void MLPPOutputLayer::set_z(const Ref<MLPPVector> &val) {
-	z = val;
+	_z = val;
 	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_a() {
-	return a;
+	return _a;
 }
 void MLPPOutputLayer::set_a(const Ref<MLPPVector> &val) {
-	a = val;
+	_a = val;
 	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_z_test() {
-	return z_test;
+	return _z_test;
 }
 void MLPPOutputLayer::set_z_test(const Ref<MLPPVector> &val) {
-	z_test = val;
+	_z_test = val;
 	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_a_test() {
-	return a_test;
+	return _a_test;
 }
 void MLPPOutputLayer::set_a_test(const Ref<MLPPVector> &val) {
-	a_test = val;
+	_a_test = val;
 	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPOutputLayer::get_delta() {
-	return delta;
+	return _delta;
 }
 void MLPPOutputLayer::set_delta(const Ref<MLPPVector> &val) {
-	delta = val;
+	_delta = val;
 	_initialized = false;
 }
 
 MLPPReg::RegularizationType MLPPOutputLayer::get_reg() {
-	return reg;
+	return _reg;
 }
 void MLPPOutputLayer::set_reg(const MLPPReg::RegularizationType val) {
-	reg = val;
+	_reg = val;
 }
 
 real_t MLPPOutputLayer::get_lambda() {
-	return lambda;
+	return _lambda;
 }
 void MLPPOutputLayer::set_lambda(const real_t val) {
-	lambda = val;
+	_lambda = val;
 	_initialized = false;
 }
 
 real_t MLPPOutputLayer::get_alpha() {
-	return alpha;
+	return _alpha;
 }
 void MLPPOutputLayer::set_alpha(const real_t val) {
-	alpha = val;
+	_alpha = val;
 	_initialized = false;
 }
 
 MLPPUtilities::WeightDistributionType MLPPOutputLayer::get_weight_init() {
-	return weight_init;
+	return _weight_init;
 }
 void MLPPOutputLayer::set_weight_init(const MLPPUtilities::WeightDistributionType val) {
-	weight_init = val;
+	_weight_init = val;
 	_initialized = false;
 }
 
@@ -135,12 +135,12 @@ void MLPPOutputLayer::initialize() {
 		return;
 	}
 
-	weights->resize(n_hidden);
+	_weights->resize(_n_hidden);
 
 	MLPPUtilities utils;
 
-	utils.weight_initializationv(weights, weight_init);
-	bias = utils.bias_initializationr();
+	utils.weight_initializationv(_weights, _weight_init);
+	_bias = utils.bias_initializationr();
 
 	_initialized = true;
 }
@@ -153,8 +153,8 @@ void MLPPOutputLayer::forward_pass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	z = alg.scalar_addnv(bias, alg.mat_vec_multv(input, weights));
-	a = avn.run_activation_norm_vector(activation, z);
+	_z = alg.scalar_addnv(_bias, alg.mat_vec_multv(_input, _weights));
+	_a = avn.run_activation_norm_vector(_activation, _z);
 }
 
 void MLPPOutputLayer::test(const Ref<MLPPVector> &x) {
@@ -165,65 +165,65 @@ void MLPPOutputLayer::test(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	z_test = alg.dotv(weights, x) + bias;
-	a_test = avn.run_activation_norm_vector(activation, z_test);
+	_z_test = alg.dotv(_weights, x) + _bias;
+	_a_test = avn.run_activation_norm_vector(_activation, _z_test);
 }
 
 MLPPOutputLayer::MLPPOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
-	n_hidden = p_n_hidden;
-	activation = p_activation;
+	_n_hidden = p_n_hidden;
+	_activation = p_activation;
 
-	input = p_input;
+	_input = p_input;
 
 	// Regularization Params
-	reg = p_reg;
-	lambda = p_lambda; /* Regularization Parameter */
-	alpha = p_alpha; /* This is the controlling param for Elastic Net*/
+	_reg = p_reg;
+	_lambda = p_lambda; /* Regularization Parameter */
+	_alpha = p_alpha; /* This is the controlling param for Elastic Net*/
 
-	weight_init = p_weight_init;
+	_weight_init = p_weight_init;
 
-	z.instance();
-	a.instance();
+	_z.instance();
+	_a.instance();
 
-	z_test.instance();
-	a_test.instance();
+	_z_test.instance();
+	_a_test.instance();
 
-	delta.instance();
+	_delta.instance();
 
-	weights.instance();
-	bias = 0;
+	_weights.instance();
+	_bias = 0;
 
-	weights->resize(n_hidden);
+	_weights->resize(_n_hidden);
 
 	MLPPUtilities utils;
 
-	utils.weight_initializationv(weights, weight_init);
-	bias = utils.bias_initializationr();
+	utils.weight_initializationv(_weights, _weight_init);
+	_bias = utils.bias_initializationr();
 
 	_initialized = true;
 }
 
 MLPPOutputLayer::MLPPOutputLayer() {
-	n_hidden = 0;
-	activation = MLPPActivation::ACTIVATION_FUNCTION_LINEAR;
+	_n_hidden = 0;
+	_activation = MLPPActivation::ACTIVATION_FUNCTION_LINEAR;
 
 	// Regularization Params
 	//reg = 0;
-	lambda = 0; /* Regularization Parameter */
-	alpha = 0; /* This is the controlling param for Elastic Net*/
+	_lambda = 0; /* Regularization Parameter */
+	_alpha = 0; /* This is the controlling param for Elastic Net*/
 
-	weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT;
+	_weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT;
 
-	z.instance();
-	a.instance();
+	_z.instance();
+	_a.instance();
 
-	z_test.instance();
-	a_test.instance();
+	_z_test.instance();
+	_a_test.instance();
 
-	delta.instance();
+	_delta.instance();
 
-	weights.instance();
-	bias = 0;
+	_weights.instance();
+	_bias = 0;
 
 	_initialized = false;
 }

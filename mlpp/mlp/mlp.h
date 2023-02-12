@@ -77,27 +77,27 @@ protected:
 
 	static void _bind_methods();
 
-	Ref<MLPPMatrix> input_set;
-	Ref<MLPPVector> output_set;
-	Ref<MLPPVector> y_hat;
+	Ref<MLPPMatrix> _input_set;
+	Ref<MLPPVector> _output_set;
+	Ref<MLPPVector> _y_hat;
 
-	Ref<MLPPMatrix> weights1;
-	Ref<MLPPVector> weights2;
+	Ref<MLPPMatrix> _weights1;
+	Ref<MLPPVector> _weights2;
 
-	Ref<MLPPVector> bias1;
-	real_t bias2;
+	Ref<MLPPVector> _bias1;
+	real_t _bias2;
 
-	Ref<MLPPMatrix> z2;
-	Ref<MLPPMatrix> a2;
+	Ref<MLPPMatrix> _z2;
+	Ref<MLPPMatrix> _a2;
 
-	int n;
-	int k;
-	int n_hidden;
+	int _n;
+	int _k;
+	int _n_hidden;
 
 	// Regularization Params
-	MLPPReg::RegularizationType reg;
-	real_t lambda; /* Regularization Parameter */
-	real_t alpha; /* This is the controlling param for Elastic Net*/
+	MLPPReg::RegularizationType _reg;
+	real_t _lambda; /* Regularization Parameter */
+	real_t _alpha; /* This is the controlling param for Elastic Net*/
 
 	bool _initialized;
 };

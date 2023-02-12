@@ -9,187 +9,187 @@
 #include "../utilities/utilities.h"
 
 int MLPPMultiOutputLayer::get_n_output() {
-	return n_output;
+	return _n_output;
 }
 void MLPPMultiOutputLayer::set_n_output(const int val) {
-	n_output = val;
+	_n_output = val;
 }
 
 int MLPPMultiOutputLayer::get_n_hidden() {
-	return n_hidden;
+	return _n_hidden;
 }
 void MLPPMultiOutputLayer::set_n_hidden(const int val) {
-	n_hidden = val;
+	_n_hidden = val;
 }
 
 MLPPActivation::ActivationFunction MLPPMultiOutputLayer::get_activation() {
-	return activation;
+	return _activation;
 }
 void MLPPMultiOutputLayer::set_activation(const MLPPActivation::ActivationFunction val) {
-	activation = val;
+	_activation = val;
 }
 
 MLPPCost::CostTypes MLPPMultiOutputLayer::get_cost() {
-	return cost;
+	return _cost;
 }
 void MLPPMultiOutputLayer::set_cost(const MLPPCost::CostTypes val) {
-	cost = val;
+	_cost = val;
 }
 
 Ref<MLPPMatrix> MLPPMultiOutputLayer::get_input() {
-	return input;
+	return _input;
 }
 void MLPPMultiOutputLayer::set_input(const Ref<MLPPMatrix> &val) {
-	input = val;
+	_input = val;
 }
 
 Ref<MLPPMatrix> MLPPMultiOutputLayer::get_weights() {
-	return weights;
+	return _weights;
 }
 void MLPPMultiOutputLayer::set_weights(const Ref<MLPPMatrix> &val) {
-	weights = val;
+	_weights = val;
 }
 
 Ref<MLPPVector> MLPPMultiOutputLayer::get_bias() {
-	return bias;
+	return _bias;
 }
 void MLPPMultiOutputLayer::set_bias(const Ref<MLPPVector> &val) {
-	bias = val;
+	_bias = val;
 }
 
 Ref<MLPPMatrix> MLPPMultiOutputLayer::get_z() {
-	return z;
+	return _z;
 }
 void MLPPMultiOutputLayer::set_z(const Ref<MLPPMatrix> &val) {
-	z = val;
+	_z = val;
 }
 
 Ref<MLPPMatrix> MLPPMultiOutputLayer::get_a() {
-	return a;
+	return _a;
 }
 void MLPPMultiOutputLayer::set_a(const Ref<MLPPMatrix> &val) {
-	a = val;
+	_a = val;
 }
 
 Ref<MLPPVector> MLPPMultiOutputLayer::get_z_test() {
-	return z_test;
+	return _z_test;
 }
 void MLPPMultiOutputLayer::set_z_test(const Ref<MLPPVector> &val) {
-	z_test = val;
+	_z_test = val;
 }
 
 Ref<MLPPVector> MLPPMultiOutputLayer::get_a_test() {
-	return a_test;
+	return _a_test;
 }
 void MLPPMultiOutputLayer::set_a_test(const Ref<MLPPVector> &val) {
-	a_test = val;
+	_a_test = val;
 }
 
 Ref<MLPPMatrix> MLPPMultiOutputLayer::get_delta() {
-	return delta;
+	return _delta;
 }
 void MLPPMultiOutputLayer::set_delta(const Ref<MLPPMatrix> &val) {
-	delta = val;
+	_delta = val;
 }
 
 MLPPReg::RegularizationType MLPPMultiOutputLayer::get_reg() {
-	return reg;
+	return _reg;
 }
 void MLPPMultiOutputLayer::set_reg(const MLPPReg::RegularizationType val) {
-	reg = val;
+	_reg = val;
 }
 
 real_t MLPPMultiOutputLayer::get_lambda() {
-	return lambda;
+	return _lambda;
 }
 void MLPPMultiOutputLayer::set_lambda(const real_t val) {
-	lambda = val;
+	_lambda = val;
 }
 
 real_t MLPPMultiOutputLayer::get_alpha() {
-	return alpha;
+	return _alpha;
 }
 void MLPPMultiOutputLayer::set_alpha(const real_t val) {
-	alpha = val;
+	_alpha = val;
 }
 
 MLPPUtilities::WeightDistributionType MLPPMultiOutputLayer::get_weight_init() {
-	return weight_init;
+	return _weight_init;
 }
 void MLPPMultiOutputLayer::set_weight_init(const MLPPUtilities::WeightDistributionType val) {
-	weight_init = val;
+	_weight_init = val;
 }
 
 void MLPPMultiOutputLayer::forward_pass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	z = alg.mat_vec_addv(alg.matmultm(input, weights), bias);
-	a = avn.run_activation_norm_matrix(activation, z);
+	_z = alg.mat_vec_addv(alg.matmultm(_input, _weights), _bias);
+	_a = avn.run_activation_norm_matrix(_activation, _z);
 }
 
 void MLPPMultiOutputLayer::test(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	z_test = alg.additionm(alg.mat_vec_multv(alg.transposem(weights), x), bias);
-	a_test = avn.run_activation_norm_vector(activation, z_test);
+	_z_test = alg.additionm(alg.mat_vec_multv(alg.transposem(_weights), x), _bias);
+	_a_test = avn.run_activation_norm_vector(_activation, _z_test);
 }
 
 MLPPMultiOutputLayer::MLPPMultiOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
-	n_hidden = p_n_hidden;
-	activation = p_activation;
+	_n_hidden = p_n_hidden;
+	_activation = p_activation;
 
-	input = p_input;
+	_input = p_input;
 
 	// Regularization Params
-	reg = p_reg;
-	lambda = p_lambda; /* Regularization Parameter */
-	alpha = p_alpha; /* This is the controlling param for Elastic Net*/
+	_reg = p_reg;
+	_lambda = p_lambda; /* Regularization Parameter */
+	_alpha = p_alpha; /* This is the controlling param for Elastic Net*/
 
-	weight_init = p_weight_init;
+	_weight_init = p_weight_init;
 
-	z.instance();
-	a.instance();
+	_z.instance();
+	_a.instance();
 
-	z_test.instance();
-	a_test.instance();
+	_z_test.instance();
+	_a_test.instance();
 
-	delta.instance();
+	_delta.instance();
 
-	weights.instance();
-	bias.instance();
+	_weights.instance();
+	_bias.instance();
 
-	weights->resize(Size2i(n_hidden, n_output));
-	bias->resize(n_output);
+	_weights->resize(Size2i(_n_hidden, _n_output));
+	_bias->resize(_n_output);
 
 	MLPPUtilities utils;
 
-	utils.weight_initializationm(weights, weight_init);
-	utils.bias_initializationv(bias);
+	utils.weight_initializationm(_weights, _weight_init);
+	utils.bias_initializationv(_bias);
 }
 
 MLPPMultiOutputLayer::MLPPMultiOutputLayer() {
-	n_hidden = 0;
-	activation = MLPPActivation::ACTIVATION_FUNCTION_LINEAR;
+	_n_hidden = 0;
+	_activation = MLPPActivation::ACTIVATION_FUNCTION_LINEAR;
 
 	// Regularization Params
 	//reg = 0;
-	lambda = 0; /* Regularization Parameter */
-	alpha = 0; /* This is the controlling param for Elastic Net*/
+	_lambda = 0; /* Regularization Parameter */
+	_alpha = 0; /* This is the controlling param for Elastic Net*/
 
-	weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT;
+	_weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT;
 
-	z.instance();
-	a.instance();
+	_z.instance();
+	_a.instance();
 
-	z_test.instance();
-	a_test.instance();
+	_z_test.instance();
+	_a_test.instance();
 
-	delta.instance();
+	_delta.instance();
 
-	weights.instance();
-	bias.instance();
+	_weights.instance();
+	_bias.instance();
 }
 MLPPMultiOutputLayer::~MLPPMultiOutputLayer() {
 }

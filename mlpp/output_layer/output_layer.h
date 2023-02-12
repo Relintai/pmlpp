@@ -84,29 +84,29 @@ public:
 protected:
 	static void _bind_methods();
 
-	int n_hidden;
-	MLPPActivation::ActivationFunction activation;
-	MLPPCost::CostTypes cost;
+	int _n_hidden;
+	MLPPActivation::ActivationFunction _activation;
+	MLPPCost::CostTypes _cost;
 
-	Ref<MLPPMatrix> input;
+	Ref<MLPPMatrix> _input;
 
-	Ref<MLPPVector> weights;
-	real_t bias;
+	Ref<MLPPVector> _weights;
+	real_t _bias;
 
-	Ref<MLPPVector> z;
-	Ref<MLPPVector> a;
+	Ref<MLPPVector> _z;
+	Ref<MLPPVector> _a;
 
-	Ref<MLPPVector> z_test;
-	Ref<MLPPVector> a_test;
+	Ref<MLPPVector> _z_test;
+	Ref<MLPPVector> _a_test;
 
-	Ref<MLPPVector> delta;
+	Ref<MLPPVector> _delta;
 
 	// Regularization Params
-	MLPPReg::RegularizationType reg;
-	real_t lambda; /* Regularization Parameter */
-	real_t alpha; /* This is the controlling param for Elastic Net*/
+	MLPPReg::RegularizationType _reg;
+	real_t _lambda; /* Regularization Parameter */
+	real_t _alpha; /* This is the controlling param for Elastic Net*/
 
-	MLPPUtilities::WeightDistributionType weight_init;
+	MLPPUtilities::WeightDistributionType _weight_init;
 
 	bool _initialized;
 };
