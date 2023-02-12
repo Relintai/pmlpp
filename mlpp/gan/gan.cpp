@@ -14,64 +14,83 @@
 #include <cmath>
 #include <iostream>
 
-MLPPGAN::MLPPGAN(real_t k, std::vector<std::vector<real_t>> outputSet) :
-		outputSet(outputSet), n(outputSet.size()), k(k) {
+/*
+Ref<MLPPMatrix> MLPPGAN::get_input_set() {
+	return _input_set;
+}
+void MLPPGAN::set_input_set(const Ref<MLPPMatrix> &val) {
+	_input_set = val;
 }
 
-MLPPGAN::~MLPPGAN() {
-	delete outputLayer;
+Ref<MLPPVector> MLPPGAN::get_output_set() {
+	return _output_set;
+}
+void MLPPGAN::set_output_set(const Ref<MLPPVector> &val) {
+	_output_set = val;
 }
 
-std::vector<std::vector<real_t>> MLPPGAN::generateExample(int n) {
+int MLPPGAN::get_k() {
+	return _k;
+}
+void MLPPGAN::set_k(const int val) {
+	_k = val;
+}
+*/
+
+std::vector<std::vector<real_t>> MLPPGAN::generate_example(int n) {
 	MLPPLinAlg alg;
-	return modelSetTestGenerator(alg.gaussianNoise(n, k));
+
+	return model_set_test_generator(alg.gaussianNoise(n, _k));
 }
 
-void MLPPGAN::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	class MLPPCost cost;
+void MLPPGAN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
+	MLPPCost mlpp_cost;
 	MLPPLinAlg alg;
 	real_t cost_prev = 0;
 	int epoch = 1;
-	forwardPass();
+
+	forward_pass();
 
 	while (true) {
-		cost_prev = Cost(y_hat, alg.onevec(n));
+		cost_prev = cost(_y_hat, alg.onevec(_n));
 
 		// Training of the discriminator.
 
-		std::vector<std::vector<real_t>> generatorInputSet = alg.gaussianNoise(n, k);
-		std::vector<std::vector<real_t>> discriminatorInputSet = modelSetTestGenerator(generatorInputSet);
-		discriminatorInputSet.insert(discriminatorInputSet.end(), outputSet.begin(), outputSet.end()); // Fake + real inputs.
+		std::vector<std::vector<real_t>> generator_input_set = alg.gaussianNoise(_n, _k);
+		std::vector<std::vector<real_t>> discriminator_input_set = model_set_test_generator(generator_input_set);
+		discriminator_input_set.insert(discriminator_input_set.end(), _output_set.begin(), _output_set.end()); // Fake + real inputs.
 
-		std::vector<real_t> y_hat = modelSetTestDiscriminator(discriminatorInputSet);
-		std::vector<real_t> outputSet = alg.zerovec(n);
-		std::vector<real_t> outputSetReal = alg.onevec(n);
-		outputSet.insert(outputSet.end(), outputSetReal.begin(), outputSetReal.end()); // Fake + real output scores.
+		std::vector<real_t> y_hat = model_set_test_discriminator(discriminator_input_set);
+		std::vector<real_t> _output_set = alg.zerovec(_n);
+		std::vector<real_t> _output_setReal = alg.onevec(_n);
+		_output_set.insert(_output_set.end(), _output_setReal.begin(), _output_setReal.end()); // Fake + real output scores.
 
-		auto dgrads = computeDiscriminatorGradients(y_hat, outputSet);
-		auto cumulativeDiscriminatorHiddenLayerWGrad = std::get<0>(dgrads);
+		auto dgrads = compute_discriminator_gradients(y_hat, _output_set);
+		auto cumulative_discriminator_hidden_layer_w_grad = std::get<0>(dgrads);
 		auto outputDiscriminatorWGrad = std::get<1>(dgrads);
 
-		cumulativeDiscriminatorHiddenLayerWGrad = alg.scalarMultiply(learning_rate / n, cumulativeDiscriminatorHiddenLayerWGrad);
-		outputDiscriminatorWGrad = alg.scalarMultiply(learning_rate / n, outputDiscriminatorWGrad);
-		updateDiscriminatorParameters(cumulativeDiscriminatorHiddenLayerWGrad, outputDiscriminatorWGrad, learning_rate);
+		cumulative_discriminator_hidden_layer_w_grad = alg.scalarMultiply(learning_rate / _n, cumulative_discriminator_hidden_layer_w_grad);
+		outputDiscriminatorWGrad = alg.scalarMultiply(learning_rate / _n, outputDiscriminatorWGrad);
+		update_discriminator_parameters(cumulative_discriminator_hidden_layer_w_grad, outputDiscriminatorWGrad, learning_rate);
 
 		// Training of the generator.
-		generatorInputSet = alg.gaussianNoise(n, k);
-		discriminatorInputSet = modelSetTestGenerator(generatorInputSet);
-		y_hat = modelSetTestDiscriminator(discriminatorInputSet);
-		outputSet = alg.onevec(n);
+		generator_input_set = alg.gaussianNoise(_n, _k);
+		discriminator_input_set = model_set_test_generator(generator_input_set);
+		y_hat = model_set_test_discriminator(discriminator_input_set);
+		_output_set = alg.onevec(_n);
 
-		std::vector<std::vector<std::vector<real_t>>> cumulativeGeneratorHiddenLayerWGrad = computeGeneratorGradients(y_hat, outputSet);
-		cumulativeGeneratorHiddenLayerWGrad = alg.scalarMultiply(learning_rate / n, cumulativeGeneratorHiddenLayerWGrad);
-		updateGeneratorParameters(cumulativeGeneratorHiddenLayerWGrad, learning_rate);
+		std::vector<std::vector<std::vector<real_t>>> cumulative_generator_hidden_layer_w_grad = compute_generator_gradients(y_hat, _output_set);
+		cumulative_generator_hidden_layer_w_grad = alg.scalarMultiply(learning_rate / _n, cumulative_generator_hidden_layer_w_grad);
+		update_generator_parameters(cumulative_generator_hidden_layer_w_grad, learning_rate);
 
-		forwardPass();
-		if (UI) {
-			MLPPGAN::UI(epoch, cost_prev, MLPPGAN::y_hat, alg.onevec(n));
+		forward_pass();
+
+		if (ui) {
+			print_ui(epoch, cost_prev, _y_hat, alg.onevec(_n));
 		}
 
 		epoch++;
+
 		if (epoch > max_epoch) {
 			break;
 		}
@@ -81,135 +100,159 @@ void MLPPGAN::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 real_t MLPPGAN::score() {
 	MLPPLinAlg alg;
 	MLPPUtilities util;
-	forwardPass();
-	return util.performance(y_hat, alg.onevec(n));
+
+	forward_pass();
+
+	return util.performance(_y_hat, alg.onevec(_n));
 }
 
 void MLPPGAN::save(std::string fileName) {
 	MLPPUtilities util;
-	if (!network.empty()) {
-		util.saveParameters(fileName, network[0].weights, network[0].bias, false, 1);
-		for (uint32_t i = 1; i < network.size(); i++) {
-			util.saveParameters(fileName, network[i].weights, network[i].bias, true, i + 1);
+
+	if (!_network.empty()) {
+		util.saveParameters(fileName, _network[0].weights, _network[0].bias, false, 1);
+		for (uint32_t i = 1; i < _network.size(); i++) {
+			util.saveParameters(fileName, _network[i].weights, _network[i].bias, true, i + 1);
 		}
-		util.saveParameters(fileName, outputLayer->weights, outputLayer->bias, true, network.size() + 1);
+		util.saveParameters(fileName, _output_layer->weights, _output_layer->bias, true, _network.size() + 1);
 	} else {
-		util.saveParameters(fileName, outputLayer->weights, outputLayer->bias, false, network.size() + 1);
+		util.saveParameters(fileName, _output_layer->weights, _output_layer->bias, false, _network.size() + 1);
 	}
 }
 
-void MLPPGAN::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
+void MLPPGAN::add_layer(int n_hidden, std::string activation, std::string weight_init, std::string reg, real_t lambda, real_t alpha) {
 	MLPPLinAlg alg;
-	if (network.empty()) {
-		network.push_back(MLPPOldHiddenLayer(n_hidden, activation, alg.gaussianNoise(n, k), weightInit, reg, lambda, alpha));
-		network[0].forwardPass();
+	if (_network.empty()) {
+		_network.push_back(MLPPOldHiddenLayer(n_hidden, activation, alg.gaussianNoise(_n, _k), weight_init, reg, lambda, alpha));
+		_network[0].forwardPass();
 	} else {
-		network.push_back(MLPPOldHiddenLayer(n_hidden, activation, network[network.size() - 1].a, weightInit, reg, lambda, alpha));
-		network[network.size() - 1].forwardPass();
+		_network.push_back(MLPPOldHiddenLayer(n_hidden, activation, _network[_network.size() - 1].a, weight_init, reg, lambda, alpha));
+		_network[_network.size() - 1].forwardPass();
 	}
 }
 
-void MLPPGAN::addOutputLayer(std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
+void MLPPGAN::add_output_layer(std::string weight_init, std::string reg, real_t lambda, real_t alpha) {
 	MLPPLinAlg alg;
-	if (!network.empty()) {
-		outputLayer = new MLPPOldOutputLayer(network[network.size() - 1].n_hidden, "Sigmoid", "LogLoss", network[network.size() - 1].a, weightInit, reg, lambda, alpha);
+	if (!_network.empty()) {
+		_output_layer = new MLPPOldOutputLayer(_network[_network.size() - 1].n_hidden, "Sigmoid", "LogLoss", _network[_network.size() - 1].a, weight_init, reg, lambda, alpha);
 	} else {
-		outputLayer = new MLPPOldOutputLayer(k, "Sigmoid", "LogLoss", alg.gaussianNoise(n, k), weightInit, reg, lambda, alpha);
+		_output_layer = new MLPPOldOutputLayer(_k, "Sigmoid", "LogLoss", alg.gaussianNoise(_n, _k), weight_init, reg, lambda, alpha);
 	}
 }
 
-std::vector<std::vector<real_t>> MLPPGAN::modelSetTestGenerator(std::vector<std::vector<real_t>> X) {
-	if (!network.empty()) {
-		network[0].input = X;
-		network[0].forwardPass();
+MLPPGAN::MLPPGAN(real_t k, std::vector<std::vector<real_t>> output_set) {
+	_output_set = output_set;
+	_n = _output_set.size();
+	_k = k;
+}
 
-		for (uint32_t i = 1; i <= network.size() / 2; i++) {
-			network[i].input = network[i - 1].a;
-			network[i].forwardPass();
+MLPPGAN::MLPPGAN() {
+}
+
+MLPPGAN::~MLPPGAN() {
+	delete _output_layer;
+}
+
+std::vector<std::vector<real_t>> MLPPGAN::model_set_test_generator(std::vector<std::vector<real_t>> X) {
+	if (!_network.empty()) {
+		_network[0].input = X;
+		_network[0].forwardPass();
+
+		for (uint32_t i = 1; i <= _network.size() / 2; i++) {
+			_network[i].input = _network[i - 1].a;
+			_network[i].forwardPass();
 		}
 	}
-	return network[network.size() / 2].a;
+	return _network[_network.size() / 2].a;
 }
 
-std::vector<real_t> MLPPGAN::modelSetTestDiscriminator(std::vector<std::vector<real_t>> X) {
-	if (!network.empty()) {
-		for (uint32_t i = network.size() / 2 + 1; i < network.size(); i++) {
-			if (i == network.size() / 2 + 1) {
-				network[i].input = X;
+std::vector<real_t> MLPPGAN::model_set_test_discriminator(std::vector<std::vector<real_t>> X) {
+	if (!_network.empty()) {
+		for (uint32_t i = _network.size() / 2 + 1; i < _network.size(); i++) {
+			if (i == _network.size() / 2 + 1) {
+				_network[i].input = X;
 			} else {
-				network[i].input = network[i - 1].a;
+				_network[i].input = _network[i - 1].a;
 			}
-			network[i].forwardPass();
+
+			_network[i].forwardPass();
 		}
-		outputLayer->input = network[network.size() - 1].a;
+
+		_output_layer->input = _network[_network.size() - 1].a;
 	}
-	outputLayer->forwardPass();
-	return outputLayer->a;
+
+	_output_layer->forwardPass();
+
+	return _output_layer->a;
 }
 
-real_t MLPPGAN::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
+real_t MLPPGAN::cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
 	MLPPReg regularization;
 	class MLPPCost cost;
 	real_t totalRegTerm = 0;
 
-	auto cost_function = outputLayer->cost_map[outputLayer->cost];
-	if (!network.empty()) {
-		for (uint32_t i = 0; i < network.size() - 1; i++) {
-			totalRegTerm += regularization.regTerm(network[i].weights, network[i].lambda, network[i].alpha, network[i].reg);
+	auto cost_function = _output_layer->cost_map[_output_layer->cost];
+
+	if (!_network.empty()) {
+		for (uint32_t i = 0; i < _network.size() - 1; i++) {
+			totalRegTerm += regularization.regTerm(_network[i].weights, _network[i].lambda, _network[i].alpha, _network[i].reg);
 		}
 	}
-	return (cost.*cost_function)(y_hat, y) + totalRegTerm + regularization.regTerm(outputLayer->weights, outputLayer->lambda, outputLayer->alpha, outputLayer->reg);
+
+	return (cost.*cost_function)(y_hat, y) + totalRegTerm + regularization.regTerm(_output_layer->weights, _output_layer->lambda, _output_layer->alpha, _output_layer->reg);
 }
 
-void MLPPGAN::forwardPass() {
+void MLPPGAN::forward_pass() {
 	MLPPLinAlg alg;
-	if (!network.empty()) {
-		network[0].input = alg.gaussianNoise(n, k);
-		network[0].forwardPass();
 
-		for (uint32_t i = 1; i < network.size(); i++) {
-			network[i].input = network[i - 1].a;
-			network[i].forwardPass();
+	if (!_network.empty()) {
+		_network[0].input = alg.gaussianNoise(_n, _k);
+		_network[0].forwardPass();
+
+		for (uint32_t i = 1; i < _network.size(); i++) {
+			_network[i].input = _network[i - 1].a;
+			_network[i].forwardPass();
 		}
-		outputLayer->input = network[network.size() - 1].a;
+		_output_layer->input = _network[_network.size() - 1].a;
 	} else { // Should never happen, though.
-		outputLayer->input = alg.gaussianNoise(n, k);
+		_output_layer->input = alg.gaussianNoise(_n, _k);
 	}
-	outputLayer->forwardPass();
-	y_hat = outputLayer->a;
+
+	_output_layer->forwardPass();
+	_y_hat = _output_layer->a;
 }
 
-void MLPPGAN::updateDiscriminatorParameters(std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations, std::vector<real_t> outputLayerUpdation, real_t learning_rate) {
+void MLPPGAN::update_discriminator_parameters(std::vector<std::vector<std::vector<real_t>>> hidden_layer_updations, std::vector<real_t> output_layer_updation, real_t learning_rate) {
 	MLPPLinAlg alg;
 
-	outputLayer->weights = alg.subtraction(outputLayer->weights, outputLayerUpdation);
-	outputLayer->bias -= learning_rate * alg.sum_elements(outputLayer->delta) / n;
+	_output_layer->weights = alg.subtraction(_output_layer->weights, output_layer_updation);
+	_output_layer->bias -= learning_rate * alg.sum_elements(_output_layer->delta) / _n;
 
-	if (!network.empty()) {
-		network[network.size() - 1].weights = alg.subtraction(network[network.size() - 1].weights, hiddenLayerUpdations[0]);
-		network[network.size() - 1].bias = alg.subtractMatrixRows(network[network.size() - 1].bias, alg.scalarMultiply(learning_rate / n, network[network.size() - 1].delta));
+	if (!_network.empty()) {
+		_network[_network.size() - 1].weights = alg.subtraction(_network[_network.size() - 1].weights, hidden_layer_updations[0]);
+		_network[_network.size() - 1].bias = alg.subtractMatrixRows(_network[_network.size() - 1].bias, alg.scalarMultiply(learning_rate / _n, _network[_network.size() - 1].delta));
 
-		for (int i = static_cast<int>(network.size()) - 2; i > static_cast<int>(network.size()) / 2; i--) {
-			network[i].weights = alg.subtraction(network[i].weights, hiddenLayerUpdations[(network.size() - 2) - i + 1]);
-			network[i].bias = alg.subtractMatrixRows(network[i].bias, alg.scalarMultiply(learning_rate / n, network[i].delta));
+		for (int i = static_cast<int>(_network.size()) - 2; i > static_cast<int>(_network.size()) / 2; i--) {
+			_network[i].weights = alg.subtraction(_network[i].weights, hidden_layer_updations[(_network.size() - 2) - i + 1]);
+			_network[i].bias = alg.subtractMatrixRows(_network[i].bias, alg.scalarMultiply(learning_rate / _n, _network[i].delta));
 		}
 	}
 }
 
-void MLPPGAN::updateGeneratorParameters(std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations, real_t learning_rate) {
+void MLPPGAN::update_generator_parameters(std::vector<std::vector<std::vector<real_t>>> hidden_layer_updations, real_t learning_rate) {
 	MLPPLinAlg alg;
 
-	if (!network.empty()) {
-		for (int i = network.size() / 2; i >= 0; i--) {
+	if (!_network.empty()) {
+		for (int i = _network.size() / 2; i >= 0; i--) {
 			//std::cout << network[i].weights.size() << "x" << network[i].weights[0].size() << std::endl;
-			//std::cout << hiddenLayerUpdations[(network.size() - 2) - i + 1].size() << "x" << hiddenLayerUpdations[(network.size() - 2) - i + 1][0].size() << std::endl;
-			network[i].weights = alg.subtraction(network[i].weights, hiddenLayerUpdations[(network.size() - 2) - i + 1]);
-			network[i].bias = alg.subtractMatrixRows(network[i].bias, alg.scalarMultiply(learning_rate / n, network[i].delta));
+			//std::cout << hidden_layer_updations[(network.size() - 2) - i + 1].size() << "x" << hidden_layer_updations[(network.size() - 2) - i + 1][0].size() << std::endl;
+			_network[i].weights = alg.subtraction(_network[i].weights, hidden_layer_updations[(_network.size() - 2) - i + 1]);
+			_network[i].bias = alg.subtractMatrixRows(_network[i].bias, alg.scalarMultiply(learning_rate / _n, _network[i].delta));
 		}
 	}
 }
 
-std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> MLPPGAN::computeDiscriminatorGradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
+std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> MLPPGAN::compute_discriminator_gradients(std::vector<real_t> y_hat, std::vector<real_t> _output_set) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
@@ -217,35 +260,35 @@ std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> M
 
 	std::vector<std::vector<std::vector<real_t>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
 
-	auto costDeriv = outputLayer->costDeriv_map[outputLayer->cost];
-	auto outputAvn = outputLayer->activation_map[outputLayer->activation];
-	outputLayer->delta = alg.hadamard_product((cost.*costDeriv)(y_hat, outputSet), (avn.*outputAvn)(outputLayer->z, 1));
-	std::vector<real_t> outputWGrad = alg.mat_vec_mult(alg.transpose(outputLayer->input), outputLayer->delta);
-	outputWGrad = alg.addition(outputWGrad, regularization.regDerivTerm(outputLayer->weights, outputLayer->lambda, outputLayer->alpha, outputLayer->reg));
+	auto costDeriv = _output_layer->costDeriv_map[_output_layer->cost];
+	auto outputAvn = _output_layer->activation_map[_output_layer->activation];
+	_output_layer->delta = alg.hadamard_product((cost.*costDeriv)(y_hat, _output_set), (avn.*outputAvn)(_output_layer->z, 1));
+	std::vector<real_t> outputWGrad = alg.mat_vec_mult(alg.transpose(_output_layer->input), _output_layer->delta);
+	outputWGrad = alg.addition(outputWGrad, regularization.regDerivTerm(_output_layer->weights, _output_layer->lambda, _output_layer->alpha, _output_layer->reg));
 
-	if (!network.empty()) {
-		auto hiddenLayerAvn = network[network.size() - 1].activation_map[network[network.size() - 1].activation];
+	if (!_network.empty()) {
+		auto hiddenLayerAvn = _network[_network.size() - 1].activation_map[_network[_network.size() - 1].activation];
 
-		network[network.size() - 1].delta = alg.hadamard_product(alg.outerProduct(outputLayer->delta, outputLayer->weights), (avn.*hiddenLayerAvn)(network[network.size() - 1].z, 1));
-		std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[network.size() - 1].input), network[network.size() - 1].delta);
+		_network[_network.size() - 1].delta = alg.hadamard_product(alg.outerProduct(_output_layer->delta, _output_layer->weights), (avn.*hiddenLayerAvn)(_network[_network.size() - 1].z, 1));
+		std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(_network[_network.size() - 1].input), _network[_network.size() - 1].delta);
 
-		cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(network[network.size() - 1].weights, network[network.size() - 1].lambda, network[network.size() - 1].alpha, network[network.size() - 1].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+		cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(_network[_network.size() - 1].weights, _network[_network.size() - 1].lambda, _network[_network.size() - 1].alpha, _network[_network.size() - 1].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 
 		//std::cout << "HIDDENLAYER FIRST:" << hiddenLayerWGrad.size() << "x" << hiddenLayerWGrad[0].size() << std::endl;
 		//std::cout << "WEIGHTS SECOND:" << network[network.size() - 1].weights.size() << "x" << network[network.size() - 1].weights[0].size() << std::endl;
 
-		for (int i = static_cast<int>(network.size()) - 2; i > static_cast<int>(network.size()) / 2; i--) {
-			hiddenLayerAvn = network[i].activation_map[network[i].activation];
-			network[i].delta = alg.hadamard_product(alg.matmult(network[i + 1].delta, alg.transpose(network[i + 1].weights)), (avn.*hiddenLayerAvn)(network[i].z, 1));
-			hiddenLayerWGrad = alg.matmult(alg.transpose(network[i].input), network[i].delta);
+		for (int i = static_cast<int>(_network.size()) - 2; i > static_cast<int>(_network.size()) / 2; i--) {
+			hiddenLayerAvn = _network[i].activation_map[_network[i].activation];
+			_network[i].delta = alg.hadamard_product(alg.matmult(_network[i + 1].delta, alg.transpose(_network[i + 1].weights)), (avn.*hiddenLayerAvn)(_network[i].z, 1));
+			hiddenLayerWGrad = alg.matmult(alg.transpose(_network[i].input), _network[i].delta);
 
-			cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(network[i].weights, network[i].lambda, network[i].alpha, network[i].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+			cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(_network[i].weights, _network[i].lambda, _network[i].alpha, _network[i].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 		}
 	}
 	return { cumulativeHiddenLayerWGrad, outputWGrad };
 }
 
-std::vector<std::vector<std::vector<real_t>>> MLPPGAN::computeGeneratorGradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
+std::vector<std::vector<std::vector<real_t>>> MLPPGAN::compute_generator_gradients(std::vector<real_t> y_hat, std::vector<real_t> _output_set) {
 	class MLPPCost cost;
 	MLPPActivation avn;
 	MLPPLinAlg alg;
@@ -253,35 +296,57 @@ std::vector<std::vector<std::vector<real_t>>> MLPPGAN::computeGeneratorGradients
 
 	std::vector<std::vector<std::vector<real_t>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
 
-	auto costDeriv = outputLayer->costDeriv_map[outputLayer->cost];
-	auto outputAvn = outputLayer->activation_map[outputLayer->activation];
-	outputLayer->delta = alg.hadamard_product((cost.*costDeriv)(y_hat, outputSet), (avn.*outputAvn)(outputLayer->z, 1));
-	std::vector<real_t> outputWGrad = alg.mat_vec_mult(alg.transpose(outputLayer->input), outputLayer->delta);
-	outputWGrad = alg.addition(outputWGrad, regularization.regDerivTerm(outputLayer->weights, outputLayer->lambda, outputLayer->alpha, outputLayer->reg));
-	if (!network.empty()) {
-		auto hiddenLayerAvn = network[network.size() - 1].activation_map[network[network.size() - 1].activation];
-		network[network.size() - 1].delta = alg.hadamard_product(alg.outerProduct(outputLayer->delta, outputLayer->weights), (avn.*hiddenLayerAvn)(network[network.size() - 1].z, 1));
-		std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(network[network.size() - 1].input), network[network.size() - 1].delta);
-		cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(network[network.size() - 1].weights, network[network.size() - 1].lambda, network[network.size() - 1].alpha, network[network.size() - 1].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+	auto costDeriv = _output_layer->costDeriv_map[_output_layer->cost];
+	auto outputAvn = _output_layer->activation_map[_output_layer->activation];
+	_output_layer->delta = alg.hadamard_product((cost.*costDeriv)(y_hat, _output_set), (avn.*outputAvn)(_output_layer->z, true));
+	std::vector<real_t> outputWGrad = alg.mat_vec_mult(alg.transpose(_output_layer->input), _output_layer->delta);
+	outputWGrad = alg.addition(outputWGrad, regularization.regDerivTerm(_output_layer->weights, _output_layer->lambda, _output_layer->alpha, _output_layer->reg));
 
-		for (int i = network.size() - 2; i >= 0; i--) {
-			hiddenLayerAvn = network[i].activation_map[network[i].activation];
-			network[i].delta = alg.hadamard_product(alg.matmult(network[i + 1].delta, alg.transpose(network[i + 1].weights)), (avn.*hiddenLayerAvn)(network[i].z, 1));
-			hiddenLayerWGrad = alg.matmult(alg.transpose(network[i].input), network[i].delta);
-			cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(network[i].weights, network[i].lambda, network[i].alpha, network[i].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+	if (!_network.empty()) {
+		auto hiddenLayerAvn = _network[_network.size() - 1].activation_map[_network[_network.size() - 1].activation];
+		_network[_network.size() - 1].delta = alg.hadamard_product(alg.outerProduct(_output_layer->delta, _output_layer->weights), (avn.*hiddenLayerAvn)(_network[_network.size() - 1].z, 1));
+		std::vector<std::vector<real_t>> hiddenLayerWGrad = alg.matmult(alg.transpose(_network[_network.size() - 1].input), _network[_network.size() - 1].delta);
+		cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(_network[_network.size() - 1].weights, _network[_network.size() - 1].lambda, _network[_network.size() - 1].alpha, _network[_network.size() - 1].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+
+		for (int i = _network.size() - 2; i >= 0; i--) {
+			hiddenLayerAvn = _network[i].activation_map[_network[i].activation];
+			_network[i].delta = alg.hadamard_product(alg.matmult(_network[i + 1].delta, alg.transpose(_network[i + 1].weights)), (avn.*hiddenLayerAvn)(_network[i].z, true));
+			hiddenLayerWGrad = alg.matmult(alg.transpose(_network[i].input), _network[i].delta);
+			cumulativeHiddenLayerWGrad.push_back(alg.addition(hiddenLayerWGrad, regularization.regDerivTerm(_network[i].weights, _network[i].lambda, _network[i].alpha, _network[i].reg))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 		}
 	}
+
 	return cumulativeHiddenLayerWGrad;
 }
 
-void MLPPGAN::UI(int epoch, real_t cost_prev, std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
-	MLPPUtilities::CostInfo(epoch, cost_prev, Cost(y_hat, outputSet));
-	std::cout << "Layer " << network.size() + 1 << ": " << std::endl;
-	MLPPUtilities::UI(outputLayer->weights, outputLayer->bias);
-	if (!network.empty()) {
-		for (int i = network.size() - 1; i >= 0; i--) {
+void MLPPGAN::print_ui(int epoch, real_t cost_prev, std::vector<real_t> y_hat, std::vector<real_t> _output_set) {
+	MLPPUtilities::CostInfo(epoch, cost_prev, cost(y_hat, _output_set));
+	std::cout << "Layer " << _network.size() + 1 << ": " << std::endl;
+	MLPPUtilities::UI(_output_layer->weights, _output_layer->bias);
+	if (!_network.empty()) {
+		for (int i = _network.size() - 1; i >= 0; i--) {
 			std::cout << "Layer " << i + 1 << ": " << std::endl;
-			MLPPUtilities::UI(network[i].weights, network[i].bias);
+			MLPPUtilities::UI(_network[i].weights, _network[i].bias);
 		}
 	}
+}
+
+void MLPPGAN::_bind_methods() {
+	/*
+	ClassDB::bind_method(D_METHOD("get_input_set"), &MLPPGAN::get_input_set);
+	ClassDB::bind_method(D_METHOD("set_input_set", "value"), &MLPPGAN::set_input_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "input_set", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_input_set", "get_input_set");
+
+	ClassDB::bind_method(D_METHOD("get_output_set"), &MLPPGAN::get_output_set);
+	ClassDB::bind_method(D_METHOD("set_output_set", "value"), &MLPPGAN::set_output_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "output_set", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "set_output_set", "get_output_set");
+
+	ClassDB::bind_method(D_METHOD("get_k"), &MLPPGAN::get_k);
+	ClassDB::bind_method(D_METHOD("set_k", "value"), &MLPPGAN::set_k);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "k"), "set_k", "get_k");
+
+	ClassDB::bind_method(D_METHOD("model_set_test", "X"), &MLPPGAN::model_set_test);
+	ClassDB::bind_method(D_METHOD("model_test", "x"), &MLPPGAN::model_test);
+	ClassDB::bind_method(D_METHOD("score"), &MLPPGAN::score);
+	*/
 }
