@@ -591,17 +591,31 @@ void MLPPTests::test_dynamically_sized_ann(bool ui) {
 	// Possible Loss Functions: MSE, RMSE, MBE, LogLoss, CrossEntropy, HingeLoss
 	std::vector<std::vector<real_t>> inputSet = { { 0, 0, 1, 1 }, { 0, 1, 0, 1 } };
 	std::vector<real_t> outputSet = { 0, 1, 1, 0 };
+
+	MLPPANNOld ann_old(alg.transpose(inputSet), outputSet);
+	ann_old.addLayer(2, "Cosh");
+	ann_old.addOutputLayer("Sigmoid", "LogLoss");
+
+	ann_old.AMSGrad(0.1, 10000, 1, 0.9, 0.999, 0.000001, ui);
+	ann_old.Adadelta(1, 1000, 2, 0.9, 0.000001, ui);
+	ann_old.Momentum(0.1, 8000, 2, 0.9, true, ui);
+
+	ann_old.setLearningRateScheduler("Step", 0.5, 1000);
+	ann_old.gradientDescent(0.01, 30000);
+	alg.printVector(ann_old.modelSetTest(alg.transpose(inputSet)));
+	std::cout << "ACCURACY: " << 100 * ann_old.score() << "%" << std::endl;
+
 	MLPPANN ann(alg.transpose(inputSet), outputSet);
-	ann.addLayer(2, "Cosh");
-	ann.addOutputLayer("Sigmoid", "LogLoss");
+	ann.add_layer(2, "Cosh");
+	ann.add_output_layer("Sigmoid", "LogLoss");
 
-	ann.AMSGrad(0.1, 10000, 1, 0.9, 0.999, 0.000001, ui);
-	ann.Adadelta(1, 1000, 2, 0.9, 0.000001, ui);
-	ann.Momentum(0.1, 8000, 2, 0.9, true, ui);
+	ann.amsgrad(0.1, 10000, 1, 0.9, 0.999, 0.000001, ui);
+	ann.adadelta(1, 1000, 2, 0.9, 0.000001, ui);
+	ann.momentum(0.1, 8000, 2, 0.9, true, ui);
 
-	ann.setLearningRateScheduler("Step", 0.5, 1000);
-	ann.gradientDescent(0.01, 30000);
-	alg.printVector(ann.modelSetTest(alg.transpose(inputSet)));
+	ann.set_learning_rate_scheduler_drop("Step", 0.5, 1000);
+	ann.gradient_descent(0.01, 30000);
+	alg.printVector(ann.model_set_test(alg.transpose(inputSet)));
 	std::cout << "ACCURACY: " << 100 * ann.score() << "%" << std::endl;
 }
 void MLPPTests::test_wgan_old(bool ui) {
@@ -660,13 +674,23 @@ void MLPPTests::test_ann(bool ui) {
 	std::vector<std::vector<real_t>> inputSet = { { 0, 0 }, { 0, 1 }, { 1, 0 }, { 1, 1 } }; // XOR
 	std::vector<real_t> outputSet = { 0, 1, 1, 0 };
 
-	MLPPANN ann(inputSet, outputSet);
-	ann.addLayer(5, "Sigmoid");
-	ann.addLayer(8, "Sigmoid"); // Add more layers as needed.
-	ann.addOutputLayer("Sigmoid", "LogLoss");
-	ann.gradientDescent(1, 20000, ui);
+	MLPPANNOld ann_old(inputSet, outputSet);
+	ann_old.addLayer(5, "Sigmoid");
+	ann_old.addLayer(8, "Sigmoid"); // Add more layers as needed.
+	ann_old.addOutputLayer("Sigmoid", "LogLoss");
+	ann_old.gradientDescent(1, 20000, ui);
 
-	std::vector<real_t> predictions = ann.modelSetTest(inputSet);
+	std::vector<real_t> predictions_old = ann_old.modelSetTest(inputSet);
+	alg.printVector(predictions_old); // Testing out the model's preds for train set.
+	std::cout << "ACCURACY: " << 100 * ann_old.score() << "%" << std::endl; // Accuracy.
+
+	MLPPANN ann(inputSet, outputSet);
+	ann.add_layer(5, "Sigmoid");
+	ann.add_layer(8, "Sigmoid"); // Add more layers as needed.
+	ann.add_output_layer("Sigmoid", "LogLoss");
+	ann.gradient_descent(1, 20000, ui);
+
+	std::vector<real_t> predictions = ann.model_set_test(inputSet);
 	alg.printVector(predictions); // Testing out the model's preds for train set.
 	std::cout << "ACCURACY: " << 100 * ann.score() << "%" << std::endl; // Accuracy.
 }
