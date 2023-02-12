@@ -12,55 +12,46 @@
 #include <iostream>
 #include <random>
 
-MLPPBernoulliNB::MLPPBernoulliNB(std::vector<std::vector<real_t>> p_inputSet, std::vector<real_t> p_outputSet) {
-	inputSet = p_inputSet;
-	outputSet = p_outputSet;
-	class_num = 2;
-
-	y_hat.resize(outputSet.size());
-	Evaluate();
-}
-
-std::vector<real_t> MLPPBernoulliNB::modelSetTest(std::vector<std::vector<real_t>> X) {
+std::vector<real_t> MLPPBernoulliNB::model_set_test(std::vector<std::vector<real_t>> X) {
 	std::vector<real_t> y_hat;
 	for (uint32_t i = 0; i < X.size(); i++) {
-		y_hat.push_back(modelTest(X[i]));
+		y_hat.push_back(model_test(X[i]));
 	}
 	return y_hat;
 }
 
-real_t MLPPBernoulliNB::modelTest(std::vector<real_t> x) {
+real_t MLPPBernoulliNB::model_test(std::vector<real_t> x) {
 	real_t score_0 = 1;
 	real_t score_1 = 1;
 
 	std::vector<int> foundIndices;
 
 	for (uint32_t j = 0; j < x.size(); j++) {
-		for (uint32_t k = 0; k < vocab.size(); k++) {
-			if (x[j] == vocab[k]) {
-				score_0 *= theta[0][vocab[k]];
-				score_1 *= theta[1][vocab[k]];
+		for (uint32_t k = 0; k < _vocab.size(); k++) {
+			if (x[j] == _vocab[k]) {
+				score_0 *= _theta[0][_vocab[k]];
+				score_1 *= _theta[1][_vocab[k]];
 
 				foundIndices.push_back(k);
 			}
 		}
 	}
 
-	for (uint32_t i = 0; i < vocab.size(); i++) {
+	for (uint32_t i = 0; i < _vocab.size(); i++) {
 		bool found = false;
 		for (uint32_t j = 0; j < foundIndices.size(); j++) {
-			if (vocab[i] == vocab[foundIndices[j]]) {
+			if (_vocab[i] == _vocab[foundIndices[j]]) {
 				found = true;
 			}
 		}
 		if (!found) {
-			score_0 *= 1 - theta[0][vocab[i]];
-			score_1 *= 1 - theta[1][vocab[i]];
+			score_0 *= 1 - _theta[0][_vocab[i]];
+			score_1 *= 1 - _theta[1][_vocab[i]];
 		}
 	}
 
-	score_0 *= prior_0;
-	score_1 *= prior_1;
+	score_0 *= _prior_0;
+	score_1 *= _prior_1;
 
 	// Assigning the traning example to a class
 
@@ -73,94 +64,113 @@ real_t MLPPBernoulliNB::modelTest(std::vector<real_t> x) {
 
 real_t MLPPBernoulliNB::score() {
 	MLPPUtilities util;
-	return util.performance(y_hat, outputSet);
+	return util.performance(_y_hat, _output_set);
 }
 
-void MLPPBernoulliNB::computeVocab() {
+MLPPBernoulliNB::MLPPBernoulliNB(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set) {
+	_input_set = p_input_set;
+	_output_set = p_output_set;
+	_class_num = 2;
+
+	_prior_1 = 0;
+	_prior_0 = 0;
+
+	_y_hat.resize(_output_set.size());
+	evaluate();
+}
+
+MLPPBernoulliNB::MLPPBernoulliNB() {
+	_prior_1 = 0;
+	_prior_0 = 0;
+}
+MLPPBernoulliNB::~MLPPBernoulliNB() {
+}
+
+void MLPPBernoulliNB::compute_vocab() {
 	MLPPLinAlg alg;
 	MLPPData data;
-	vocab = data.vecToSet<real_t>(alg.flatten(inputSet));
+	_vocab = data.vecToSet<real_t>(alg.flatten(_input_set));
 }
 
-void MLPPBernoulliNB::computeTheta() {
+void MLPPBernoulliNB::compute_theta() {
 	// Resizing theta for the sake of ease & proper access of the elements.
-	theta.resize(class_num);
+	_theta.resize(_class_num);
 
 	// Setting all values in the hasmap by default to 0.
-	for (int i = class_num - 1; i >= 0; i--) {
-		for (uint32_t j = 0; j < vocab.size(); j++) {
-			theta[i][vocab[j]] = 0;
+	for (int i = _class_num - 1; i >= 0; i--) {
+		for (uint32_t j = 0; j < _vocab.size(); j++) {
+			_theta[i][_vocab[j]] = 0;
 		}
 	}
 
-	for (uint32_t i = 0; i < inputSet.size(); i++) {
-		for (uint32_t j = 0; j < inputSet[0].size(); j++) {
-			theta[outputSet[i]][inputSet[i][j]]++;
+	for (uint32_t i = 0; i < _input_set.size(); i++) {
+		for (uint32_t j = 0; j < _input_set[0].size(); j++) {
+			_theta[_output_set[i]][_input_set[i][j]]++;
 		}
 	}
 
-	for (uint32_t i = 0; i < theta.size(); i++) {
-		for (uint32_t j = 0; j < theta[i].size(); j++) {
+	for (uint32_t i = 0; i < _theta.size(); i++) {
+		for (uint32_t j = 0; j < _theta[i].size(); j++) {
 			if (i == 0) {
-				theta[i][j] /= prior_0 * y_hat.size();
+				_theta[i][j] /= _prior_0 * _y_hat.size();
 			} else {
-				theta[i][j] /= prior_1 * y_hat.size();
+				_theta[i][j] /= _prior_1 * _y_hat.size();
 			}
 		}
 	}
 }
 
-void MLPPBernoulliNB::Evaluate() {
-	for (uint32_t i = 0; i < outputSet.size(); i++) {
+void MLPPBernoulliNB::evaluate() {
+	for (uint32_t i = 0; i < _output_set.size(); i++) {
 		// Pr(B | A) * Pr(A)
 		real_t score_0 = 1;
 		real_t score_1 = 1;
 
 		real_t sum = 0;
-		for (uint32_t ii = 0; ii < outputSet.size(); ii++) {
-			if (outputSet[ii] == 1) {
-				sum += outputSet[ii];
+		for (uint32_t ii = 0; ii < _output_set.size(); ii++) {
+			if (_output_set[ii] == 1) {
+				sum += _output_set[ii];
 			}
 		}
 
 		// Easy computation of priors, i.e. Pr(C_k)
-		prior_1 = sum / y_hat.size();
-		prior_0 = 1 - prior_1;
+		_prior_1 = sum / _y_hat.size();
+		_prior_0 = 1 - _prior_1;
 
 		// Evaluating Theta...
-		computeTheta();
+		compute_theta();
 
 		// Evaluating the vocab set...
-		computeVocab();
+		compute_vocab();
 
 		std::vector<int> foundIndices;
 
-		for (uint32_t j = 0; j < inputSet.size(); j++) {
-			for (uint32_t k = 0; k < vocab.size(); k++) {
-				if (inputSet[i][j] == vocab[k]) {
-					score_0 += std::log(theta[0][vocab[k]]);
-					score_1 += std::log(theta[1][vocab[k]]);
+		for (uint32_t j = 0; j < _input_set.size(); j++) {
+			for (uint32_t k = 0; k < _vocab.size(); k++) {
+				if (_input_set[i][j] == _vocab[k]) {
+					score_0 += std::log(_theta[0][_vocab[k]]);
+					score_1 += std::log(_theta[1][_vocab[k]]);
 
 					foundIndices.push_back(k);
 				}
 			}
 		}
 
-		for (uint32_t ii = 0; ii < vocab.size(); ii++) {
+		for (uint32_t ii = 0; ii < _vocab.size(); ii++) {
 			bool found = false;
 			for (uint32_t j = 0; j < foundIndices.size(); j++) {
-				if (vocab[ii] == vocab[foundIndices[j]]) {
+				if (_vocab[ii] == _vocab[foundIndices[j]]) {
 					found = true;
 				}
 			}
 			if (!found) {
-				score_0 += std::log(1 - theta[0][vocab[ii]]);
-				score_1 += std::log(1 - theta[1][vocab[ii]]);
+				score_0 += std::log(1 - _theta[0][_vocab[ii]]);
+				score_1 += std::log(1 - _theta[1][_vocab[ii]]);
 			}
 		}
 
-		score_0 += std::log(prior_0);
-		score_1 += std::log(prior_1);
+		score_0 += std::log(_prior_0);
+		score_1 += std::log(_prior_1);
 
 		score_0 = exp(score_0);
 		score_1 = exp(score_1);
@@ -171,9 +181,9 @@ void MLPPBernoulliNB::Evaluate() {
 		// Assigning the traning example to a class
 
 		if (score_0 > score_1) {
-			y_hat[i] = 0;
+			_y_hat[i] = 0;
 		} else {
-			y_hat[i] = 1;
+			_y_hat[i] = 1;
 		}
 	}
 }

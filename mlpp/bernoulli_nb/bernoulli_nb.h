@@ -15,28 +15,33 @@
 
 class MLPPBernoulliNB {
 public:
-	MLPPBernoulliNB(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet);
-	std::vector<real_t> modelSetTest(std::vector<std::vector<real_t>> X);
-	real_t modelTest(std::vector<real_t> x);
+	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
+	real_t model_test(std::vector<real_t> x);
+
 	real_t score();
 
+	MLPPBernoulliNB(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set);
+
+	MLPPBernoulliNB();
+	~MLPPBernoulliNB();
+
 private:
-	void computeVocab();
-	void computeTheta();
-	void Evaluate();
+	void compute_vocab();
+	void compute_theta();
+	void evaluate();
 
 	// Model Params
-	real_t prior_1 = 0;
-	real_t prior_0 = 0;
+	real_t _prior_1;
+	real_t _prior_0;
 
-	std::vector<std::map<real_t, int>> theta;
-	std::vector<real_t> vocab;
-	int class_num;
+	std::vector<std::map<real_t, int>> _theta;
+	std::vector<real_t> _vocab;
+	int _class_num;
 
 	// Datasets
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> outputSet;
-	std::vector<real_t> y_hat;
+	std::vector<std::vector<real_t>> _input_set;
+	std::vector<real_t> _output_set;
+	std::vector<real_t> _y_hat;
 };
 
 #endif /* BernoulliNB_hpp */
