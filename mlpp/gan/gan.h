@@ -10,6 +10,8 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
 #include "../hidden_layer/hidden_layer.h"
 #include "../output_layer/output_layer.h"
 
@@ -20,7 +22,9 @@
 #include <tuple>
 #include <vector>
 
-class MLPPGAN {
+class MLPPGAN : public Reference {
+	GDCLASS(MLPPGAN, Reference);
+
 public:
 	/*
 	Ref<MLPPMatrix> get_input_set();
