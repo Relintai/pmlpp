@@ -31,7 +31,7 @@ real_t MLPPStat::b1_estimation(const Ref<MLPPVector> &x, const Ref<MLPPVector> &
 
 real_t MLPPStat::mean(const std::vector<real_t> &x) {
 	real_t sum = 0;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		sum += x[i];
 	}
 	return sum / x.size();
@@ -51,15 +51,15 @@ std::vector<real_t> MLPPStat::mode(const std::vector<real_t> &x) {
 	MLPPData data;
 	std::vector<real_t> x_set = data.vecToSet(x);
 	std::map<real_t, int> element_num;
-	for (int i = 0; i < x_set.size(); i++) {
+	for (uint32_t i = 0; i < x_set.size(); i++) {
 		element_num[x[i]] = 0;
 	}
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		element_num[x[i]]++;
 	}
 	std::vector<real_t> modes;
 	real_t max_num = element_num[x_set[0]];
-	for (int i = 0; i < x_set.size(); i++) {
+	for (uint32_t i = 0; i < x_set.size(); i++) {
 		if (element_num[x_set[i]] > max_num) {
 			max_num = element_num[x_set[i]];
 			modes.clear();
@@ -82,7 +82,7 @@ real_t MLPPStat::midrange(const std::vector<real_t> &x) {
 
 real_t MLPPStat::absAvgDeviation(const std::vector<real_t> &x) {
 	real_t sum = 0;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		sum += std::abs(x[i] - mean(x));
 	}
 	return sum / x.size();
@@ -94,7 +94,7 @@ real_t MLPPStat::standardDeviation(const std::vector<real_t> &x) {
 
 real_t MLPPStat::variance(const std::vector<real_t> &x) {
 	real_t sum = 0;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		sum += (x[i] - mean(x)) * (x[i] - mean(x));
 	}
 	return sum / (x.size() - 1);
@@ -102,7 +102,7 @@ real_t MLPPStat::variance(const std::vector<real_t> &x) {
 
 real_t MLPPStat::covariance(const std::vector<real_t> &x, const std::vector<real_t> &y) {
 	real_t sum = 0;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		sum += (x[i] - mean(x)) * (y[i] - mean(y));
 	}
 	return sum / (x.size() - 1);
@@ -174,7 +174,7 @@ real_t MLPPStat::covariancev(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y)
 real_t MLPPStat::weightedMean(const std::vector<real_t> &x, const std::vector<real_t> &weights) {
 	real_t sum = 0;
 	real_t weights_sum = 0;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		sum += x[i] * weights[i];
 		weights_sum += weights[i];
 	}
@@ -183,7 +183,7 @@ real_t MLPPStat::weightedMean(const std::vector<real_t> &x, const std::vector<re
 
 real_t MLPPStat::geometricMean(const std::vector<real_t> &x) {
 	real_t product = 1;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		product *= x[i];
 	}
 	return std::pow(product, 1.0 / x.size());
@@ -191,7 +191,7 @@ real_t MLPPStat::geometricMean(const std::vector<real_t> &x) {
 
 real_t MLPPStat::harmonicMean(const std::vector<real_t> &x) {
 	real_t sum = 0;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		sum += 1 / x[i];
 	}
 	return x.size() / sum;
@@ -199,7 +199,7 @@ real_t MLPPStat::harmonicMean(const std::vector<real_t> &x) {
 
 real_t MLPPStat::RMS(const std::vector<real_t> &x) {
 	real_t sum = 0;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		sum += x[i] * x[i];
 	}
 	return sqrt(sum / x.size());
@@ -207,7 +207,7 @@ real_t MLPPStat::RMS(const std::vector<real_t> &x) {
 
 real_t MLPPStat::powerMean(const std::vector<real_t> &x, const real_t p) {
 	real_t sum = 0;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		sum += std::pow(x[i], p);
 	}
 	return std::pow(sum / x.size(), 1 / p);
@@ -216,7 +216,7 @@ real_t MLPPStat::powerMean(const std::vector<real_t> &x, const real_t p) {
 real_t MLPPStat::lehmerMean(const std::vector<real_t> &x, const real_t p) {
 	real_t num = 0;
 	real_t den = 0;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		num += std::pow(x[i], p);
 		den += std::pow(x[i], p - 1);
 	}
@@ -226,7 +226,7 @@ real_t MLPPStat::lehmerMean(const std::vector<real_t> &x, const real_t p) {
 real_t MLPPStat::weightedLehmerMean(const std::vector<real_t> &x, const std::vector<real_t> &weights, const real_t p) {
 	real_t num = 0;
 	real_t den = 0;
-	for (int i = 0; i < x.size(); i++) {
+	for (uint32_t i = 0; i < x.size(); i++) {
 		num += weights[i] * std::pow(x[i], p);
 		den += weights[i] * std::pow(x[i], p - 1);
 	}
