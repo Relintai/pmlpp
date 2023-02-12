@@ -49,7 +49,7 @@ SOFTWARE.
 #include "mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "mlpp/wgan/wgan.h"
 #include "mlpp/tanh_reg/tanh_reg.h"
-
+#include "mlpp/softmax_net/softmax_net.h"
 #include "mlpp/mlp/mlp.h"
 
 #include "test/mlpp_tests.h"
@@ -83,6 +83,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPSoftmaxReg>();
 		ClassDB::register_class<MLPPAutoEncoder>();
 		ClassDB::register_class<MLPPTanhReg>();
+		ClassDB::register_class<MLPPSoftmaxNet>();
 
 		ClassDB::register_class<MLPPDataESimple>();
 		ClassDB::register_class<MLPPDataSimple>();
