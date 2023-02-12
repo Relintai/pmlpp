@@ -18,52 +18,55 @@
 
 class MLPPDualSVC {
 public:
-	MLPPDualSVC(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, real_t C, std::string kernel = "Linear");
-	MLPPDualSVC(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, real_t C, std::string kernel, real_t p, real_t c);
+	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
+	real_t model_test(std::vector<real_t> x);
 
-	std::vector<real_t> modelSetTest(std::vector<std::vector<real_t>> X);
-	real_t modelTest(std::vector<real_t> x);
-	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = false);
-	void SGD(real_t learning_rate, int max_epoch, bool UI = false);
-	void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI = false);
+	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
+	//void SGD(real_t learning_rate, int max_epoch, bool ui = false);
+	//void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui = false);
+
 	real_t score();
-	void save(std::string fileName);
+	void save(std::string file_name);
+
+	MLPPDualSVC(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, real_t p_C, std::string p_kernel = "Linear");
+
+	MLPPDualSVC();
+	~MLPPDualSVC();
 
 private:
 	void init();
 
-	real_t Cost(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y);
+	real_t cost(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y);
 
-	std::vector<real_t> Evaluate(std::vector<std::vector<real_t>> X);
-	std::vector<real_t> propagate(std::vector<std::vector<real_t>> X);
-	real_t Evaluate(std::vector<real_t> x);
-	real_t propagate(std::vector<real_t> x);
-	void forwardPass();
+	real_t evaluatev(std::vector<real_t> x);
+	real_t propagatev(std::vector<real_t> x);
 
-	void alphaProjection();
+	std::vector<real_t> evaluatem(std::vector<std::vector<real_t>> X);
+	std::vector<real_t> propagatem(std::vector<std::vector<real_t>> X);
 
-	real_t kernelFunction(std::vector<real_t> v, std::vector<real_t> u, std::string kernel);
-	std::vector<std::vector<real_t>> kernelFunction(std::vector<std::vector<real_t>> U, std::vector<std::vector<real_t>> V, std::string kernel);
+	void forward_pass();
 
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> outputSet;
-	std::vector<real_t> z;
-	std::vector<real_t> y_hat;
-	real_t bias;
+	void alpha_projection();
 
-	std::vector<real_t> alpha;
-	std::vector<std::vector<real_t>> K;
+	real_t kernel_functionv(std::vector<real_t> v, std::vector<real_t> u, std::string kernel);
+	std::vector<std::vector<real_t>> kernel_functionm(std::vector<std::vector<real_t>> U, std::vector<std::vector<real_t>> V, std::string kernel);
 
-	real_t C;
-	int n;
-	int k;
+	std::vector<std::vector<real_t>> _input_set;
+	std::vector<real_t> _output_set;
+	std::vector<real_t> _z;
+	std::vector<real_t> _y_hat;
+	real_t _bias;
 
-	std::string kernel;
-	real_t p; // Poly
-	real_t c; // Poly
+	std::vector<real_t> _alpha;
+	std::vector<std::vector<real_t>> _K;
 
-	// UI Portion
-	void UI(int epoch, real_t cost_prev);
+	real_t _C;
+	int _n;
+	int _k;
+
+	std::string _kernel;
+	real_t _p; // Poly
+	real_t _c; // Poly
 };
 
 #endif /* DualSVC_hpp */

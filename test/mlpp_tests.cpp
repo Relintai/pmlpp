@@ -1193,8 +1193,12 @@ void MLPPTests::test_support_vector_classification_kernel(bool ui) {
 	//SUPPORT VECTOR CLASSIFICATION (kernel method)
 	Ref<MLPPDataSimple> dt = data.load_breast_cancer_svc(_breast_cancer_svm_data_path);
 
+	MLPPDualSVCOld kernelSVMOld(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), 1000);
+	kernelSVMOld.gradientDescent(0.0001, 20, ui);
+	std::cout << "SCORE: " << kernelSVMOld.score() << std::endl;
+
 	MLPPDualSVC kernelSVM(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), 1000);
-	kernelSVM.gradientDescent(0.0001, 20, ui);
+	kernelSVM.gradient_descent(0.0001, 20, ui);
 	std::cout << "SCORE: " << kernelSVM.score() << std::endl;
 
 	std::vector<std::vector<real_t>> linearlyIndependentMat = {
