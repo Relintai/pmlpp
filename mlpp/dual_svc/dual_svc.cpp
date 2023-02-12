@@ -254,3 +254,6 @@ std::vector<std::vector<real_t>> MLPPDualSVC::kernel_functionm(std::vector<std::
 
 	return std::vector<std::vector<real_t>>();
 }
+
+void MLPPDualSVC::_bind_methods() {
+}

@@ -13,10 +13,14 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
 #include <string>
 #include <vector>
 
-class MLPPDualSVC {
+class MLPPDualSVC : public Reference {
+	GDCLASS(MLPPDualSVC, Reference);
+
 public:
 	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
 	real_t model_test(std::vector<real_t> x);
@@ -33,7 +37,7 @@ public:
 	MLPPDualSVC();
 	~MLPPDualSVC();
 
-private:
+protected:
 	void init();
 
 	real_t cost(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y);
@@ -50,6 +54,8 @@ private:
 
 	real_t kernel_functionv(std::vector<real_t> v, std::vector<real_t> u, std::string kernel);
 	std::vector<std::vector<real_t>> kernel_functionm(std::vector<std::vector<real_t>> U, std::vector<std::vector<real_t>> V, std::string kernel);
+
+	static void _bind_methods();
 
 	std::vector<std::vector<real_t>> _input_set;
 	std::vector<real_t> _output_set;

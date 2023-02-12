@@ -29,38 +29,39 @@ SOFTWARE.
 
 #include "mlpp/activation/activation.h"
 #include "mlpp/cost/cost.h"
+#include "mlpp/gauss_markov_checker/gauss_markov_checker.h"
+#include "mlpp/hypothesis_testing/hypothesis_testing.h"
+#include "mlpp/numerical_analysis/numerical_analysis.h"
 #include "mlpp/regularization/reg.h"
+#include "mlpp/stat/stat.h"
 #include "mlpp/transforms/transforms.h"
 #include "mlpp/utilities/utilities.h"
-#include "mlpp/stat/stat.h"
-#include "mlpp/numerical_analysis/numerical_analysis.h"
-#include "mlpp/hypothesis_testing/hypothesis_testing.h"
-#include "mlpp/gauss_markov_checker/gauss_markov_checker.h"
 
 #include "mlpp/hidden_layer/hidden_layer.h"
 #include "mlpp/multi_output_layer/multi_output_layer.h"
 #include "mlpp/output_layer/output_layer.h"
 
 #include "mlpp/auto_encoder/auto_encoder.h"
+#include "mlpp/exp_reg/exp_reg.h"
+#include "mlpp/gan/gan.h"
+#include "mlpp/gaussian_nb/gaussian_nb.h"
 #include "mlpp/kmeans/kmeans.h"
 #include "mlpp/knn/knn.h"
+#include "mlpp/lin_reg/lin_reg.h"
+#include "mlpp/log_reg/log_reg.h"
+#include "mlpp/mann/mann.h"
+#include "mlpp/mlp/mlp.h"
+#include "mlpp/multinomial_nb/multinomial_nb.h"
 #include "mlpp/outlier_finder/outlier_finder.h"
 #include "mlpp/pca/pca.h"
 #include "mlpp/probit_reg/probit_reg.h"
+#include "mlpp/softmax_net/softmax_net.h"
 #include "mlpp/softmax_reg/softmax_reg.h"
 #include "mlpp/svc/svc.h"
+#include "mlpp/tanh_reg/tanh_reg.h"
 #include "mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "mlpp/wgan/wgan.h"
-#include "mlpp/tanh_reg/tanh_reg.h"
-#include "mlpp/softmax_net/softmax_net.h"
-#include "mlpp/mlp/mlp.h"
-#include "mlpp/multinomial_nb/multinomial_nb.h"
-#include "mlpp/mann/mann.h"
-#include "mlpp/log_reg/log_reg.h"
-#include "mlpp/lin_reg/lin_reg.h"
-#include "mlpp/gaussian_nb/gaussian_nb.h"
-#include "mlpp/gan/gan.h"
-#include "mlpp/exp_reg/exp_reg.h"
+#include "mlpp/dual_svc/dual_svc.h"
 
 #include "test/mlpp_tests.h"
 
@@ -104,6 +105,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPGaussianNB>();
 		ClassDB::register_class<MLPPGAN>();
 		ClassDB::register_class<MLPPExpReg>();
+		ClassDB::register_class<MLPPDualSVC>();
 
 		ClassDB::register_class<MLPPDataESimple>();
 		ClassDB::register_class<MLPPDataSimple>();
