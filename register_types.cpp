@@ -63,6 +63,7 @@ SOFTWARE.
 #include "mlpp/tanh_reg/tanh_reg.h"
 #include "mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "mlpp/wgan/wgan.h"
+#include "mlpp/c_log_log_reg/c_log_log_reg.h"
 
 #include "test/mlpp_tests.h"
 
@@ -108,6 +109,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPGAN>();
 		ClassDB::register_class<MLPPExpReg>();
 		ClassDB::register_class<MLPPDualSVC>();
+		ClassDB::register_class<MLPPCLogLogReg>();
 
 		ClassDB::register_class<MLPPDataESimple>();
 		ClassDB::register_class<MLPPDataSimple>();

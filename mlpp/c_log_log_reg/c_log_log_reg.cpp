@@ -248,3 +248,6 @@ void MLPPCLogLogReg::forward_pass() {
 	_z = propagatem(_input_set);
 	_y_hat = avn.cloglog(_z);
 }
+
+void MLPPCLogLogReg::_bind_methods() {
+}

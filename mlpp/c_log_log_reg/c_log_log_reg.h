@@ -10,10 +10,14 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
 #include <string>
 #include <vector>
 
-class MLPPCLogLogReg {
+class MLPPCLogLogReg : public Reference {
+	GDCLASS(MLPPCLogLogReg, Reference);
+
 public:
 	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
 	real_t model_test(std::vector<real_t> x);
@@ -30,7 +34,7 @@ public:
 	MLPPCLogLogReg();
 	~MLPPCLogLogReg();
 
-private:
+protected:
 	void weight_initialization(int k);
 	void bias_initialization();
 
@@ -43,6 +47,8 @@ private:
 	std::vector<real_t> propagatem(std::vector<std::vector<real_t>> X);
 
 	void forward_pass();
+
+	static void _bind_methods();
 
 	std::vector<std::vector<real_t>> _input_set;
 	std::vector<real_t> _output_set;
