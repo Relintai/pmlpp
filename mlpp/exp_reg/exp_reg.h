@@ -15,36 +15,41 @@
 
 class MLPPExpReg {
 public:
-	MLPPExpReg(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
-	std::vector<real_t> modelSetTest(std::vector<std::vector<real_t>> X);
-	real_t modelTest(std::vector<real_t> x);
-	void gradientDescent(real_t learning_rate, int max_epoch, bool UI = 1);
-	void SGD(real_t learning_rate, int max_epoch, bool UI = 1);
-	void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI = 1);
+	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
+	real_t model_test(std::vector<real_t> x);
+
+	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
+	void sgd(real_t learning_rate, int max_epoch, bool ui = false);
+	void mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui = false);
+
 	real_t score();
-	void save(std::string fileName);
+
+	void save(std::string file_name);
+
+	MLPPExpReg(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, std::string p_reg = "None", real_t p_lambda = 0.5, real_t p_alpha = 0.5);
 
 private:
-	real_t Cost(std::vector<real_t> y_hat, std::vector<real_t> y);
+	real_t cost(std::vector<real_t> y_hat, std::vector<real_t> y);
 
-	std::vector<real_t> Evaluate(std::vector<std::vector<real_t>> X);
-	real_t Evaluate(std::vector<real_t> x);
-	void forwardPass();
+	real_t evaluatev(std::vector<real_t> x);
+	std::vector<real_t> evaluatem(std::vector<std::vector<real_t>> X);
 
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> outputSet;
-	std::vector<real_t> y_hat;
-	std::vector<real_t> weights;
-	std::vector<real_t> initial;
-	real_t bias;
+	void forward_pass();
 
-	int n;
-	int k;
+	std::vector<std::vector<real_t>> _input_set;
+	std::vector<real_t> _output_set;
+	std::vector<real_t> _y_hat;
+	std::vector<real_t> _weights;
+	std::vector<real_t> _initial;
+	real_t _bias;
+
+	int _n;
+	int _k;
 
 	// Regularization Params
-	std::string reg;
-	real_t lambda;
-	real_t alpha; /* This is the controlling param for Elastic Net*/
+	std::string _reg;
+	real_t _lambda;
+	real_t _alpha; /* This is the controlling param for Elastic Net*/
 };
 
 #endif /* ExpReg_hpp */
