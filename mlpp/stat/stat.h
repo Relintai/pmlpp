@@ -10,12 +10,16 @@
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
 
 #include <vector>
 
-class MLPPStat {
+class MLPPStat : public Reference {
+	GDCLASS(MLPPStat, Reference);
+
 public:
 	// These functions are for univariate lin reg module- not for users.
 	real_t b0Estimation(const std::vector<real_t> &x, const std::vector<real_t> &y);
@@ -58,6 +62,9 @@ public:
 	real_t stolarskyMean(const real_t x, const real_t y, const real_t p);
 	real_t identricMean(const real_t x, const real_t y);
 	real_t logMean(const real_t x, const real_t y);
+
+protected:
+	static void _bind_methods();
 };
 
 #endif /* Stat_hpp */

@@ -270,3 +270,6 @@ real_t MLPPStat::logMean(const real_t x, const real_t y) {
 	}
 	return (y - x) / (log(y) - std::log(x));
 }
+
+void MLPPStat::_bind_methods() {
+}
