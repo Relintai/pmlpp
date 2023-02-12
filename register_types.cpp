@@ -56,6 +56,7 @@ SOFTWARE.
 #include "mlpp/mann/mann.h"
 #include "mlpp/log_reg/log_reg.h"
 #include "mlpp/lin_reg/lin_reg.h"
+#include "mlpp/hypothesis_testing/hypothesis_testing.h"
 
 #include "test/mlpp_tests.h"
 
@@ -71,6 +72,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPTransforms>();
 		ClassDB::register_class<MLPPStat>();
 		ClassDB::register_class<MLPPNumericalAnalysis>();
+		ClassDB::register_class<MLPPHypothesisTesting>();
 
 		ClassDB::register_class<MLPPHiddenLayer>();
 		ClassDB::register_class<MLPPOutputLayer>();
