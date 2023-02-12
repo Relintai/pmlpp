@@ -180,9 +180,9 @@ public:
 	template <class T>
 	std::vector<T> vecToSet(std::vector<T> inputSet) {
 		std::vector<T> setInputSet;
-		for (int i = 0; i < inputSet.size(); i++) {
+		for (uint32_t i = 0; i < inputSet.size(); i++) {
 			bool new_element = true;
-			for (int j = 0; j < setInputSet.size(); j++) {
+			for (uint32_t j = 0; j < setInputSet.size(); j++) {
 				if (setInputSet[j] == inputSet[i]) {
 					new_element = false;
 				}
