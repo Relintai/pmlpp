@@ -17,18 +17,18 @@ MLPPConvolutions::MLPPConvolutions() :
 std::vector<std::vector<real_t>> MLPPConvolutions::convolve(std::vector<std::vector<real_t>> input, std::vector<std::vector<real_t>> filter, int S, int P) {
 	MLPPLinAlg alg;
 	std::vector<std::vector<real_t>> featureMap;
-	int N = input.size();
-	int F = filter.size();
-	int mapSize = (N - F + 2 * P) / S + 1; // This is computed as ⌊mapSize⌋ by def- thanks C++!
+	uint32_t N = input.size();
+	uint32_t F = filter.size();
+	uint32_t mapSize = (N - F + 2 * P) / S + 1; // This is computed as ⌊mapSize⌋ by def- thanks C++!
 
 	if (P != 0) {
 		std::vector<std::vector<real_t>> paddedInput;
 		paddedInput.resize(N + 2 * P);
-		for (int i = 0; i < paddedInput.size(); i++) {
+		for (uint32_t i = 0; i < paddedInput.size(); i++) {
 			paddedInput[i].resize(N + 2 * P);
 		}
-		for (int i = 0; i < paddedInput.size(); i++) {
-			for (int j = 0; j < paddedInput[i].size(); j++) {
+		for (uint32_t i = 0; i < paddedInput.size(); i++) {
+			for (uint32_t j = 0; j < paddedInput[i].size(); j++) {
 				if (i - P < 0 || j - P < 0 || i - P > input.size() - 1 || j - P > input[0].size() - 1) {
 					paddedInput[i][j] = 0;
 				} else {
@@ -37,22 +37,22 @@ std::vector<std::vector<real_t>> MLPPConvolutions::convolve(std::vector<std::vec
 			}
 		}
 		input.resize(paddedInput.size());
-		for (int i = 0; i < paddedInput.size(); i++) {
+		for (uint32_t i = 0; i < paddedInput.size(); i++) {
 			input[i].resize(paddedInput[i].size());
 		}
 		input = paddedInput;
 	}
 
 	featureMap.resize(mapSize);
-	for (int i = 0; i < mapSize; i++) {
+	for (uint32_t i = 0; i < mapSize; i++) {
 		featureMap[i].resize(mapSize);
 	}
 
-	for (int i = 0; i < mapSize; i++) {
-		for (int j = 0; j < mapSize; j++) {
+	for (uint32_t i = 0; i < mapSize; i++) {
+		for (uint32_t j = 0; j < mapSize; j++) {
 			std::vector<real_t> convolvingInput;
-			for (int k = 0; k < F; k++) {
-				for (int p = 0; p < F; p++) {
+			for (uint32_t k = 0; k < F; k++) {
+				for (uint32_t p = 0; p < F; p++) {
 					if (i == 0 && j == 0) {
 						convolvingInput.push_back(input[i + k][j + p]);
 					} else if (i == 0) {
@@ -73,20 +73,20 @@ std::vector<std::vector<real_t>> MLPPConvolutions::convolve(std::vector<std::vec
 std::vector<std::vector<std::vector<real_t>>> MLPPConvolutions::convolve(std::vector<std::vector<std::vector<real_t>>> input, std::vector<std::vector<std::vector<real_t>>> filter, int S, int P) {
 	MLPPLinAlg alg;
 	std::vector<std::vector<std::vector<real_t>>> featureMap;
-	int N = input[0].size();
-	int F = filter[0].size();
-	int C = filter.size() / input.size();
-	int mapSize = (N - F + 2 * P) / S + 1; // This is computed as ⌊mapSize⌋ by def.
+	uint32_t N = input[0].size();
+	uint32_t F = filter[0].size();
+	uint32_t C = filter.size() / input.size();
+	uint32_t mapSize = (N - F + 2 * P) / S + 1; // This is computed as ⌊mapSize⌋ by def.
 
 	if (P != 0) {
-		for (int c = 0; c < input.size(); c++) {
+		for (uint32_t c = 0; c < input.size(); c++) {
 			std::vector<std::vector<real_t>> paddedInput;
 			paddedInput.resize(N + 2 * P);
-			for (int i = 0; i < paddedInput.size(); i++) {
+			for (uint32_t i = 0; i < paddedInput.size(); i++) {
 				paddedInput[i].resize(N + 2 * P);
 			}
-			for (int i = 0; i < paddedInput.size(); i++) {
-				for (int j = 0; j < paddedInput[i].size(); j++) {
+			for (uint32_t i = 0; i < paddedInput.size(); i++) {
+				for (uint32_t j = 0; j < paddedInput[i].size(); j++) {
 					if (i - P < 0 || j - P < 0 || i - P > input[c].size() - 1 || j - P > input[c][0].size() - 1) {
 						paddedInput[i][j] = 0;
 					} else {
@@ -95,7 +95,7 @@ std::vector<std::vector<std::vector<real_t>>> MLPPConvolutions::convolve(std::ve
 				}
 			}
 			input[c].resize(paddedInput.size());
-			for (int i = 0; i < paddedInput.size(); i++) {
+			for (uint32_t i = 0; i < paddedInput.size(); i++) {
 				input[c][i].resize(paddedInput[i].size());
 			}
 			input[c] = paddedInput;
@@ -103,20 +103,20 @@ std::vector<std::vector<std::vector<real_t>>> MLPPConvolutions::convolve(std::ve
 	}
 
 	featureMap.resize(C);
-	for (int i = 0; i < featureMap.size(); i++) {
+	for (uint32_t i = 0; i < featureMap.size(); i++) {
 		featureMap[i].resize(mapSize);
-		for (int j = 0; j < featureMap[i].size(); j++) {
+		for (uint32_t j = 0; j < featureMap[i].size(); j++) {
 			featureMap[i][j].resize(mapSize);
 		}
 	}
 
-	for (int c = 0; c < C; c++) {
-		for (int i = 0; i < mapSize; i++) {
-			for (int j = 0; j < mapSize; j++) {
+	for (uint32_t c = 0; c < C; c++) {
+		for (uint32_t i = 0; i < mapSize; i++) {
+			for (uint32_t j = 0; j < mapSize; j++) {
 				std::vector<real_t> convolvingInput;
-				for (int t = 0; t < input.size(); t++) {
-					for (int k = 0; k < F; k++) {
-						for (int p = 0; p < F; p++) {
+				for (uint32_t t = 0; t < input.size(); t++) {
+					for (uint32_t k = 0; k < F; k++) {
+						for (uint32_t p = 0; p < F; p++) {
 							if (i == 0 && j == 0) {
 								convolvingInput.push_back(input[t][i + k][j + p]);
 							} else if (i == 0) {
@@ -139,16 +139,16 @@ std::vector<std::vector<std::vector<real_t>>> MLPPConvolutions::convolve(std::ve
 std::vector<std::vector<real_t>> MLPPConvolutions::pool(std::vector<std::vector<real_t>> input, int F, int S, std::string type) {
 	MLPPLinAlg alg;
 	std::vector<std::vector<real_t>> pooledMap;
-	int N = input.size();
-	int mapSize = floor((N - F) / S + 1);
+	uint32_t N = input.size();
+	uint32_t mapSize = floor((N - F) / S + 1);
 
 	pooledMap.resize(mapSize);
-	for (int i = 0; i < mapSize; i++) {
+	for (uint32_t i = 0; i < mapSize; i++) {
 		pooledMap[i].resize(mapSize);
 	}
 
-	for (int i = 0; i < mapSize; i++) {
-		for (int j = 0; j < mapSize; j++) {
+	for (uint32_t i = 0; i < mapSize; i++) {
+		for (uint32_t j = 0; j < mapSize; j++) {
 			std::vector<real_t> poolingInput;
 			for (int k = 0; k < F; k++) {
 				for (int p = 0; p < F; p++) {
@@ -164,7 +164,7 @@ std::vector<std::vector<real_t>> MLPPConvolutions::pool(std::vector<std::vector<
 				}
 			}
 			if (type == "Average") {
-				MLPPStat  stat;
+				MLPPStat stat;
 				pooledMap[i][j] = stat.mean(poolingInput);
 			} else if (type == "Min") {
 				pooledMap[i][j] = alg.min(poolingInput);
@@ -178,7 +178,7 @@ std::vector<std::vector<real_t>> MLPPConvolutions::pool(std::vector<std::vector<
 
 std::vector<std::vector<std::vector<real_t>>> MLPPConvolutions::pool(std::vector<std::vector<std::vector<real_t>>> input, int F, int S, std::string type) {
 	std::vector<std::vector<std::vector<real_t>>> pooledMap;
-	for (int i = 0; i < input.size(); i++) {
+	for (uint32_t i = 0; i < input.size(); i++) {
 		pooledMap.push_back(pool(input[i], F, S, type));
 	}
 	return pooledMap;
@@ -187,7 +187,7 @@ std::vector<std::vector<std::vector<real_t>>> MLPPConvolutions::pool(std::vector
 real_t MLPPConvolutions::globalPool(std::vector<std::vector<real_t>> input, std::string type) {
 	MLPPLinAlg alg;
 	if (type == "Average") {
-		MLPPStat  stat;
+		MLPPStat stat;
 		return stat.mean(alg.flatten(input));
 	} else if (type == "Min") {
 		return alg.min(alg.flatten(input));
@@ -198,7 +198,7 @@ real_t MLPPConvolutions::globalPool(std::vector<std::vector<real_t>> input, std:
 
 std::vector<real_t> MLPPConvolutions::globalPool(std::vector<std::vector<std::vector<real_t>>> input, std::string type) {
 	std::vector<real_t> pooledMap;
-	for (int i = 0; i < input.size(); i++) {
+	for (uint32_t i = 0; i < input.size(); i++) {
 		pooledMap.push_back(globalPool(input[i], type));
 	}
 	return pooledMap;
@@ -212,7 +212,7 @@ real_t MLPPConvolutions::gaussian2D(real_t x, real_t y, real_t std) {
 std::vector<std::vector<real_t>> MLPPConvolutions::gaussianFilter2D(int size, real_t std) {
 	std::vector<std::vector<real_t>> filter;
 	filter.resize(size);
-	for (int i = 0; i < filter.size(); i++) {
+	for (uint32_t i = 0; i < filter.size(); i++) {
 		filter[i].resize(size);
 	}
 	for (int i = 0; i < size; i++) {
@@ -232,12 +232,12 @@ heights and widths.
 std::vector<std::vector<real_t>> MLPPConvolutions::dx(std::vector<std::vector<real_t>> input) {
 	std::vector<std::vector<real_t>> deriv; // We assume a gray scale image.
 	deriv.resize(input.size());
-	for (int i = 0; i < deriv.size(); i++) {
+	for (uint32_t i = 0; i < deriv.size(); i++) {
 		deriv[i].resize(input[i].size());
 	}
 
-	for (int i = 0; i < input.size(); i++) {
-		for (int j = 0; j < input[i].size(); j++) {
+	for (uint32_t i = 0; i < input.size(); i++) {
+		for (uint32_t j = 0; j < input[i].size(); j++) {
 			if (j != 0 && j != input.size() - 1) {
 				deriv[i][j] = input[i][j + 1] - input[i][j - 1];
 			} else if (j == 0) {
@@ -253,12 +253,12 @@ std::vector<std::vector<real_t>> MLPPConvolutions::dx(std::vector<std::vector<re
 std::vector<std::vector<real_t>> MLPPConvolutions::dy(std::vector<std::vector<real_t>> input) {
 	std::vector<std::vector<real_t>> deriv;
 	deriv.resize(input.size());
-	for (int i = 0; i < deriv.size(); i++) {
+	for (uint32_t i = 0; i < deriv.size(); i++) {
 		deriv[i].resize(input[i].size());
 	}
 
-	for (int i = 0; i < input.size(); i++) {
-		for (int j = 0; j < input[i].size(); j++) {
+	for (uint32_t i = 0; i < input.size(); i++) {
+		for (uint32_t j = 0; j < input[i].size(); j++) {
 			if (i != 0 && i != input.size() - 1) {
 				deriv[i][j] = input[i - 1][j] - input[i + 1][j];
 			} else if (i == 0) {
@@ -281,14 +281,14 @@ std::vector<std::vector<real_t>> MLPPConvolutions::gradMagnitude(std::vector<std
 std::vector<std::vector<real_t>> MLPPConvolutions::gradOrientation(std::vector<std::vector<real_t>> input) {
 	std::vector<std::vector<real_t>> deriv;
 	deriv.resize(input.size());
-	for (int i = 0; i < deriv.size(); i++) {
+	for (uint32_t i = 0; i < deriv.size(); i++) {
 		deriv[i].resize(input[i].size());
 	}
 
 	std::vector<std::vector<real_t>> xDeriv = dx(input);
 	std::vector<std::vector<real_t>> yDeriv = dy(input);
-	for (int i = 0; i < deriv.size(); i++) {
-		for (int j = 0; j < deriv[i].size(); j++) {
+	for (uint32_t i = 0; i < deriv.size(); i++) {
+		for (uint32_t j = 0; j < deriv[i].size(); j++) {
 			deriv[i][j] = std::atan2(yDeriv[i][j], xDeriv[i][j]);
 		}
 	}
@@ -325,9 +325,9 @@ std::vector<std::vector<std::string>> MLPPConvolutions::harrisCornerDetection(st
 	std::vector<std::vector<std::string>> imageTypes;
 	imageTypes.resize(r.size());
 	alg.printMatrix(r);
-	for (int i = 0; i < r.size(); i++) {
+	for (uint32_t i = 0; i < r.size(); i++) {
 		imageTypes[i].resize(r[i].size());
-		for (int j = 0; j < r[i].size(); j++) {
+		for (uint32_t j = 0; j < r[i].size(); j++) {
 			if (r[i][j] > 0) {
 				imageTypes[i][j] = "C";
 			} else if (r[i][j] < 0) {
@@ -370,4 +370,7 @@ std::vector<std::vector<real_t>> MLPPConvolutions::getRobertsHorizontal() {
 
 std::vector<std::vector<real_t>> MLPPConvolutions::getRobertsVertical() {
 	return robertsVertical;
+}
+
+void MLPPConvolutions::_bind_methods() {
 }

@@ -2,12 +2,16 @@
 #ifndef MLPP_CONVOLUTIONS_H
 #define MLPP_CONVOLUTIONS_H
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "core/math/math_defs.h"
 
-class MLPPConvolutions {
+#include "core/object/reference.h"
+
+class MLPPConvolutions : public Reference {
+	GDCLASS(MLPPConvolutions, Reference);
+
 public:
 	MLPPConvolutions();
 	std::vector<std::vector<real_t>> convolve(std::vector<std::vector<real_t>> input, std::vector<std::vector<real_t>> filter, int S, int P = 0);
@@ -38,7 +42,9 @@ public:
 	std::vector<std::vector<real_t>> getRobertsHorizontal();
 	std::vector<std::vector<real_t>> getRobertsVertical();
 
-private:
+protected:
+	static void _bind_methods();
+
 	std::vector<std::vector<real_t>> prewittHorizontal;
 	std::vector<std::vector<real_t>> prewittVertical;
 	std::vector<std::vector<real_t>> sobelHorizontal;

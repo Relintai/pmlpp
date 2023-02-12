@@ -28,6 +28,7 @@ SOFTWARE.
 #include "mlpp/lin_alg/mlpp_vector.h"
 
 #include "mlpp/activation/activation.h"
+#include "mlpp/convolutions/convolutions.h"
 #include "mlpp/cost/cost.h"
 #include "mlpp/gauss_markov_checker/gauss_markov_checker.h"
 #include "mlpp/hypothesis_testing/hypothesis_testing.h"
@@ -42,6 +43,7 @@ SOFTWARE.
 #include "mlpp/output_layer/output_layer.h"
 
 #include "mlpp/auto_encoder/auto_encoder.h"
+#include "mlpp/dual_svc/dual_svc.h"
 #include "mlpp/exp_reg/exp_reg.h"
 #include "mlpp/gan/gan.h"
 #include "mlpp/gaussian_nb/gaussian_nb.h"
@@ -61,7 +63,6 @@ SOFTWARE.
 #include "mlpp/tanh_reg/tanh_reg.h"
 #include "mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "mlpp/wgan/wgan.h"
-#include "mlpp/dual_svc/dual_svc.h"
 
 #include "test/mlpp_tests.h"
 
@@ -79,6 +80,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPNumericalAnalysis>();
 		ClassDB::register_class<MLPPHypothesisTesting>();
 		ClassDB::register_class<MLPPGaussMarkovChecker>();
+		ClassDB::register_class<MLPPConvolutions>();
 
 		ClassDB::register_class<MLPPHiddenLayer>();
 		ClassDB::register_class<MLPPOutputLayer>();
