@@ -10,8 +10,6 @@
 #include <iostream>
 #include <string>
 
-
-
 // DCT ii.
 // https://www.mathworks.com/help/images/discrete-cosine-transform.html
 std::vector<std::vector<real_t>> MLPPTransforms::discreteCosineTransform(std::vector<std::vector<real_t>> A) {
@@ -52,4 +50,7 @@ std::vector<std::vector<real_t>> MLPPTransforms::discreteCosineTransform(std::ve
 		}
 	}
 	return B;
+}
+
+void MLPPTransforms::_bind_methods() {
 }

@@ -31,6 +31,7 @@ SOFTWARE.
 #include "mlpp/cost/cost.h"
 #include "mlpp/regularization/reg.h"
 #include "mlpp/utilities/utilities.h"
+#include "mlpp/transforms/transforms.h"
 
 #include "mlpp/hidden_layer/hidden_layer.h"
 #include "mlpp/multi_output_layer/multi_output_layer.h"
@@ -60,6 +61,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPReg>();
 		ClassDB::register_class<MLPPActivation>();
 		ClassDB::register_class<MLPPCost>();
+		ClassDB::register_class<MLPPTransforms>();
 
 		ClassDB::register_class<MLPPHiddenLayer>();
 		ClassDB::register_class<MLPPOutputLayer>();
