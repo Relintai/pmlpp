@@ -51,6 +51,3 @@ std::vector<std::vector<real_t>> MLPPTransformsOld::discreteCosineTransform(std:
 	}
 	return B;
 }
-
-void MLPPTransformsOld::_bind_methods() {
-}
