@@ -11,101 +11,12 @@
 
 #include "core/math/math_defs.h"
 
-#include "core/string/ustring.h"
-#include "core/variant/array.h"
-
-#include "core/object/reference.h"
-
-#include "../lin_alg/mlpp_matrix.h"
-#include "../lin_alg/mlpp_vector.h"
-
 #include <string>
 #include <tuple>
 #include <vector>
 
-class MLPPDataOldESimple : public Reference {
-	GDCLASS(MLPPDataOldESimple, Reference);
-
+class MLPPDataOld {
 public:
-	Ref<MLPPVector> get_input();
-	void set_input(const Ref<MLPPVector> &val);
-
-	Ref<MLPPVector> get_output();
-	void set_output(const Ref<MLPPVector> &val);
-
-	void instance_data();
-
-protected:
-	static void _bind_methods();
-
-	Ref<MLPPVector> _input;
-	Ref<MLPPVector> _output;
-};
-
-class MLPPDataOldSimple : public Reference {
-	GDCLASS(MLPPDataOldSimple, Reference);
-
-public:
-	Ref<MLPPMatrix> get_input();
-	void set_input(const Ref<MLPPMatrix> &val);
-
-	Ref<MLPPVector> get_output();
-	void set_output(const Ref<MLPPVector> &val);
-
-	void instance_data();
-
-protected:
-	static void _bind_methods();
-
-	Ref<MLPPMatrix> _input;
-	Ref<MLPPVector> _output;
-};
-
-class MLPPDataOldComplex : public Reference {
-	GDCLASS(MLPPDataOldComplex, Reference);
-
-public:
-	Ref<MLPPMatrix> get_input();
-	void set_input(const Ref<MLPPMatrix> &val);
-
-	Ref<MLPPMatrix> get_output();
-	void set_output(const Ref<MLPPMatrix> &val);
-
-	void instance_data();
-
-protected:
-	static void _bind_methods();
-
-	Ref<MLPPMatrix> _input;
-	Ref<MLPPMatrix> _output;
-};
-
-class MLPPDataOld : public Reference {
-	GDCLASS(MLPPDataOld, Reference);
-
-public:
-	// Load Datasets
-	Ref<MLPPDataOldSimple> load_breast_cancer(const String &path);
-	Ref<MLPPDataOldSimple> load_breast_cancer_svc(const String &path);
-	Ref<MLPPDataOldComplex> load_iris(const String &path);
-	Ref<MLPPDataOldComplex> load_wine(const String &path);
-	Ref<MLPPDataOldComplex> load_mnist_train(const String &path);
-	Ref<MLPPDataOldComplex> load_mnist_test(const String &path);
-	Ref<MLPPDataOldSimple> load_california_housing(const String &path);
-	Ref<MLPPDataOldESimple> load_fires_and_crime(const String &path);
-
-	void set_data_supervised(int k, const String &file_name, Ref<MLPPMatrix> input_set, Ref<MLPPVector> output_set);
-	void set_data_unsupervised(int k, const String &file_name, Ref<MLPPMatrix> input_set);
-	void set_data_simple(const String &file_name, Ref<MLPPVector> input_set, Ref<MLPPVector> output_set);
-
-	struct SplitComplexData {
-		Ref<MLPPDataOldComplex> train;
-		Ref<MLPPDataOldComplex> test;
-	};
-
-	SplitComplexData train_test_split(Ref<MLPPDataOldComplex> data, real_t test_size);
-	Array train_test_split_bind(const Ref<MLPPDataOldComplex> &data, real_t test_size);
-
 	// Load Datasets
 	std::tuple<std::vector<std::vector<real_t>>, std::vector<real_t>> loadBreastCancer();
 	std::tuple<std::vector<std::vector<real_t>>, std::vector<real_t>> loadBreastCancerSVC();
@@ -173,9 +84,6 @@ public:
 	std::vector<std::vector<real_t>> meanCentering(std::vector<std::vector<real_t>> X);
 	std::vector<std::vector<real_t>> oneHotRep(std::vector<real_t> tempOutputSet, int n_class);
 	std::vector<real_t> reverseOneHot(std::vector<std::vector<real_t>> tempOutputSet);
-
-	Ref<MLPPMatrix> mean_centering(const Ref<MLPPMatrix> &X);
-	Ref<MLPPMatrix> one_hot_rep(const Ref<MLPPVector> &temp_output_set, int n_class);
 
 	template <class T>
 	std::vector<T> vecToSet(std::vector<T> inputSet) {
