@@ -86,6 +86,7 @@ sources = [
     "mlpp/data/data_old.cpp",
     "mlpp/cost/cost_old.cpp",
     "mlpp/convolutions/convolutions_old.cpp",
+    "mlpp/activation/activation_old.cpp",
 
     "test/mlpp_tests.cpp",
 ]
