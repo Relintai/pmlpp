@@ -16,9 +16,6 @@
 
 #include "../regularization/reg.h"
 
-#include <string>
-#include <vector>
-
 class MLPPSoftmaxNet : public Reference {
 	GDCLASS(MLPPSoftmaxNet, Reference);
 
@@ -40,8 +37,8 @@ public:
 	void set_alpha(const real_t val);
 	*/
 
-	std::vector<real_t> model_test(std::vector<real_t> x);
-	std::vector<std::vector<real_t>> model_set_test(std::vector<std::vector<real_t>> X);
+	Ref<MLPPVector> model_test(const Ref<MLPPVector> &x);
+	Ref<MLPPMatrix> model_set_test(const Ref<MLPPMatrix> &X);
 
 	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
 	void sgd(real_t learning_rate, int max_epoch, bool ui = false);
@@ -49,44 +46,55 @@ public:
 
 	real_t score();
 
-	void save(std::string fileName);
+	void save(const String &file_name);
 
-	std::vector<std::vector<real_t>> get_embeddings(); // This class is used (mostly) for word2Vec. This function returns our embeddings.
+	Ref<MLPPMatrix> get_embeddings(); // This class is used (mostly) for word2Vec. This function returns our embeddings.
 
 	bool is_initialized();
 	void initialize();
 
-	MLPPSoftmaxNet(std::vector<std::vector<real_t>> p_input_set, std::vector<std::vector<real_t>> p_output_set, int p_n_hidden, MLPPReg::RegularizationType p_reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t p_lambda = 0.5, real_t p_alpha = 0.5);
-	//MLPPSoftmaxNet(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, MLPPReg::RegularizationType p_reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t p_lambda = 0.5, real_t p_alpha = 0.5);
+	MLPPSoftmaxNet(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, int p_n_hidden, MLPPReg::RegularizationType p_reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t p_lambda = 0.5, real_t p_alpha = 0.5);
 
 	MLPPSoftmaxNet();
 	~MLPPSoftmaxNet();
 
 protected:
-	real_t cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y);
+	real_t cost(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
 
-	std::vector<real_t> evaluatev(std::vector<real_t> x);
-	std::tuple<std::vector<real_t>, std::vector<real_t>> propagatev(std::vector<real_t> x);
+	Ref<MLPPVector> evaluatev(const Ref<MLPPVector> &x);
 
-	std::vector<std::vector<real_t>> evaluatem(std::vector<std::vector<real_t>> X);
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> propagatem(std::vector<std::vector<real_t>> X);
+	struct PropagateVResult {
+		Ref<MLPPVector> z2;
+		Ref<MLPPVector> a2;
+	};
+
+	PropagateVResult propagatev(const Ref<MLPPVector> &x);
+
+	Ref<MLPPMatrix> evaluatem(const Ref<MLPPMatrix> &X);
+
+	struct PropagateMResult {
+		Ref<MLPPMatrix> z2;
+		Ref<MLPPMatrix> a2;
+	};
+
+	PropagateMResult propagatem(const Ref<MLPPMatrix> &X);
 
 	void forward_pass();
 
 	static void _bind_methods();
 
-	std::vector<std::vector<real_t>> _input_set;
-	std::vector<std::vector<real_t>> _output_set;
-	std::vector<std::vector<real_t>> _y_hat;
+	Ref<MLPPMatrix> _input_set;
+	Ref<MLPPMatrix> _output_set;
+	Ref<MLPPMatrix> _y_hat;
 
-	std::vector<std::vector<real_t>> _weights1;
-	std::vector<std::vector<real_t>> _weights2;
+	Ref<MLPPMatrix> _weights1;
+	Ref<MLPPMatrix> _weights2;
 
-	std::vector<real_t> _bias1;
-	std::vector<real_t> _bias2;
+	Ref<MLPPVector> _bias1;
+	Ref<MLPPVector> _bias2;
 
-	std::vector<std::vector<real_t>> _z2;
-	std::vector<std::vector<real_t>> _a2;
+	Ref<MLPPMatrix> _z2;
+	Ref<MLPPMatrix> _a2;
 
 	int _n;
 	int _k;

@@ -562,9 +562,9 @@ void MLPPTests::test_soft_max_network(bool ui) {
 	alg.printMatrix(model_old.modelSetTest(dt->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
 
-	MLPPSoftmaxNet model(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), 1);
+	MLPPSoftmaxNet model(dt->get_input(), dt->get_output(), 1);
 	model.gradient_descent(0.01, 100000, ui);
-	alg.printMatrix(model.model_set_test(dt->get_input()->to_std_vector()));
+	PLOG_MSG(model.model_set_test(dt->get_input())->to_string());
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_autoencoder(bool ui) {

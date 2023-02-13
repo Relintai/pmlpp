@@ -5,6 +5,7 @@
 //
 
 #include "softmax_net.h"
+
 #include "../activation/activation.h"
 #include "../cost/cost.h"
 #include "../data/data.h"
@@ -12,7 +13,8 @@
 #include "../regularization/reg.h"
 #include "../utilities/utilities.h"
 
-#include <iostream>
+#include "core/log/logger.h"
+
 #include <random>
 
 /*
@@ -62,11 +64,11 @@ void MLPPSoftmaxNet::set_alpha(const real_t val) {
 }
 */
 
-std::vector<real_t> MLPPSoftmaxNet::model_test(std::vector<real_t> x) {
+Ref<MLPPVector> MLPPSoftmaxNet::model_test(const Ref<MLPPVector> &x) {
 	return evaluatev(x);
 }
 
-std::vector<std::vector<real_t>> MLPPSoftmaxNet::model_set_test(std::vector<std::vector<real_t>> X) {
+Ref<MLPPMatrix> MLPPSoftmaxNet::model_set_test(const Ref<MLPPMatrix> &X) {
 	return evaluatem(X);
 }
 
@@ -84,43 +86,41 @@ void MLPPSoftmaxNet::gradient_descent(real_t learning_rate, int max_epoch, bool 
 		cost_prev = cost(_y_hat, _output_set);
 
 		// Calculating the errors
-		std::vector<std::vector<real_t>> error = alg.subtraction(_y_hat, _output_set);
+		Ref<MLPPMatrix> error = alg.subtractionm(_y_hat, _output_set);
 
 		// Calculating the weight/bias gradients for layer 2
 
-		std::vector<std::vector<real_t>> D2_1 = alg.matmult(alg.transpose(_a2), error);
+		Ref<MLPPMatrix> D2_1 = alg.matmultm(alg.transposem(_a2), error);
 
 		// weights and bias updation for layer 2
-		_weights2 = alg.subtraction(_weights2, alg.scalarMultiply(learning_rate, D2_1));
-		//_reg
-		_weights2 = regularization.regWeights(_weights2, _lambda, _alpha, "None");
+		_weights2 = alg.subtractionm(_weights2, alg.scalar_multiplym(learning_rate, D2_1));
+		_weights2 = regularization.reg_weightsm(_weights2, _lambda, _alpha, _reg);
 
-		_bias2 = alg.subtractMatrixRows(_bias2, alg.scalarMultiply(learning_rate, error));
+		_bias2 = alg.subtract_matrix_rows(_bias2, alg.scalar_multiplym(learning_rate, error));
 
 		//Calculating the weight/bias for layer 1
 
-		std::vector<std::vector<real_t>> D1_1 = alg.matmult(error, alg.transpose(_weights2));
+		Ref<MLPPMatrix> D1_1 = alg.matmultm(error, alg.transposem(_weights2));
 
-		std::vector<std::vector<real_t>> D1_2 = alg.hadamard_product(D1_1, avn.sigmoid(_z2, true));
+		Ref<MLPPMatrix> D1_2 = alg.hadamard_productm(D1_1, avn.sigmoid_derivm(_z2));
 
-		std::vector<std::vector<real_t>> D1_3 = alg.matmult(alg.transpose(_input_set), D1_2);
+		Ref<MLPPMatrix> D1_3 = alg.matmultm(alg.transposem(_input_set), D1_2);
 
 		// weight an bias updation for layer 1
-		_weights1 = alg.subtraction(_weights1, alg.scalarMultiply(learning_rate, D1_3));
-		//_reg
-		_weights1 = regularization.regWeights(_weights1, _lambda, _alpha, "None");
+		_weights1 = alg.subtractionm(_weights1, alg.scalar_multiplym(learning_rate, D1_3));
+		_weights1 = regularization.reg_weightsm(_weights1, _lambda, _alpha, _reg);
 
-		_bias1 = alg.subtractMatrixRows(_bias1, alg.scalarMultiply(learning_rate, D1_2));
+		_bias1 = alg.subtract_matrix_rows(_bias1, alg.scalar_multiplym(learning_rate, D1_2));
 
 		forward_pass();
 
 		// UI PORTION
 		if (ui) {
-			MLPPUtilities::CostInfo(epoch, cost_prev, cost(_y_hat, _output_set));
-			std::cout << "Layer 1:" << std::endl;
-			MLPPUtilities::UI(_weights1, _bias1);
-			std::cout << "Layer 2:" << std::endl;
-			MLPPUtilities::UI(_weights2, _bias2);
+			MLPPUtilities::cost_info(epoch, cost_prev, cost(_y_hat, _output_set));
+			PLOG_MSG("Layer 1:");
+			MLPPUtilities::print_ui_mb(_weights1, _bias1);
+			PLOG_MSG("Layer 2:");
+			MLPPUtilities::print_ui_mb(_weights2, _bias2);
 		}
 
 		epoch++;
@@ -143,47 +143,64 @@ void MLPPSoftmaxNet::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	std::default_random_engine generator(rd());
 	std::uniform_int_distribution<int> distribution(0, int(_n - 1));
 
+	Ref<MLPPVector> input_set_row_tmp;
+	input_set_row_tmp.instance();
+	input_set_row_tmp->resize(_input_set->size().x);
+
+	Ref<MLPPVector> output_set_row_tmp;
+	output_set_row_tmp.instance();
+	output_set_row_tmp->resize(_output_set->size().x);
+
+	Ref<MLPPMatrix> y_hat_mat_tmp;
+	y_hat_mat_tmp.instance();
+	y_hat_mat_tmp->resize(Size2i(_bias1->size(), 1));
+
+	Ref<MLPPMatrix> output_row_mat_tmp;
+	output_row_mat_tmp.instance();
+	output_row_mat_tmp->resize(Size2i(_output_set->size().x, 1));
+
 	while (true) {
-		int outputIndex = distribution(generator);
+		int output_index = distribution(generator);
 
-		std::vector<real_t> y_hat = evaluatev(_input_set[outputIndex]);
+		_input_set->get_row_into_mlpp_vector(output_index, input_set_row_tmp);
+		_output_set->get_row_into_mlpp_vector(output_index, output_set_row_tmp);
+		output_row_mat_tmp->set_row_mlpp_vector(0, output_set_row_tmp);
 
-		auto prop_res = propagatev(_input_set[outputIndex]);
-		auto z2 = std::get<0>(prop_res);
-		auto a2 = std::get<1>(prop_res);
+		Ref<MLPPVector> y_hat = evaluatev(input_set_row_tmp);
+		y_hat_mat_tmp->set_row_mlpp_vector(0, y_hat);
 
-		cost_prev = cost({ y_hat }, { _output_set[outputIndex] });
-		std::vector<real_t> error = alg.subtraction(y_hat, _output_set[outputIndex]);
+		PropagateVResult prop_res = propagatev(input_set_row_tmp);
+
+		cost_prev = cost(y_hat_mat_tmp, output_row_mat_tmp);
+		Ref<MLPPVector> error = alg.subtractionnv(y_hat, output_set_row_tmp);
 
 		// Weight updation for layer 2
-		std::vector<std::vector<real_t>> D2_1 = alg.outerProduct(error, a2);
-		_weights2 = alg.subtraction(_weights2, alg.scalarMultiply(learning_rate, alg.transpose(D2_1)));
-		//_reg
-		_weights2 = regularization.regWeights(_weights2, _lambda, _alpha, "None");
+		Ref<MLPPMatrix> D2_1 = alg.outer_product(error, prop_res.a2);
+		_weights2 = alg.subtractionm(_weights2, alg.scalar_multiplym(learning_rate, alg.transposem(D2_1)));
+		_weights2 = regularization.reg_weightsm(_weights2, _lambda, _alpha, _reg);
 
 		// Bias updation for layer 2
-		_bias2 = alg.subtraction(_bias2, alg.scalarMultiply(learning_rate, error));
+		_bias2 = alg.subtractionnv(_bias2, alg.scalar_multiplynv(learning_rate, error));
 
 		// Weight updation for layer 1
-		std::vector<real_t> D1_1 = alg.mat_vec_mult(_weights2, error);
-		std::vector<real_t> D1_2 = alg.hadamard_product(D1_1, avn.sigmoid(z2, true));
-		std::vector<std::vector<real_t>> D1_3 = alg.outerProduct(_input_set[outputIndex], D1_2);
+		Ref<MLPPVector> D1_1 = alg.mat_vec_multv(_weights2, error);
+		Ref<MLPPVector> D1_2 = alg.hadamard_productm(D1_1, avn.sigmoid_derivv(prop_res.z2));
+		Ref<MLPPMatrix> D1_3 = alg.outer_product(input_set_row_tmp, D1_2);
 
-		_weights1 = alg.subtraction(_weights1, alg.scalarMultiply(learning_rate, D1_3));
-		//_reg
-		_weights1 = regularization.regWeights(_weights1, _lambda, _alpha, "None");
+		_weights1 = alg.subtractionm(_weights1, alg.scalar_multiplym(learning_rate, D1_3));
+		_weights1 = regularization.reg_weightsm(_weights1, _lambda, _alpha, _reg);
 		// Bias updation for layer 1
 
-		_bias1 = alg.subtraction(_bias1, alg.scalarMultiply(learning_rate, D1_2));
+		_bias1 = alg.subtractionnv(_bias1, alg.scalar_multiplynv(learning_rate, D1_2));
 
-		y_hat = evaluatev(_input_set[outputIndex]);
+		y_hat = evaluatev(input_set_row_tmp);
 
 		if (ui) {
-			MLPPUtilities::CostInfo(epoch, cost_prev, cost({ y_hat }, { _output_set[outputIndex] }));
-			std::cout << "Layer 1:" << std::endl;
-			MLPPUtilities::UI(_weights1, _bias1);
-			std::cout << "Layer 2:" << std::endl;
-			MLPPUtilities::UI(_weights2, _bias2);
+			MLPPUtilities::cost_info(epoch, cost_prev, cost(y_hat_mat_tmp, output_row_mat_tmp));
+			PLOG_MSG("Layer 1:");
+			MLPPUtilities::print_ui_mb(_weights1, _bias1);
+			PLOG_MSG("Layer 2:");
+			MLPPUtilities::print_ui_mb(_weights2, _bias2);
 		}
 
 		epoch++;
@@ -206,58 +223,53 @@ void MLPPSoftmaxNet::mbgd(real_t learning_rate, int max_epoch, int mini_batch_si
 	// Creating the mini-batches
 	int n_mini_batch = _n / mini_batch_size;
 
-	auto batches = MLPPUtilities::createMiniBatches(_input_set, _output_set, n_mini_batch);
-	auto inputMiniBatches = std::get<0>(batches);
-	auto outputMiniBatches = std::get<1>(batches);
+	MLPPUtilities::CreateMiniBatchMMBatch batches = MLPPUtilities::create_mini_batchesmm(_input_set, _output_set, n_mini_batch);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<std::vector<real_t>> y_hat = evaluatem(inputMiniBatches[i]);
+			Ref<MLPPMatrix> current_input_mini_batch = batches.input_sets[i];
+			Ref<MLPPMatrix> current_output_mini_batch = batches.output_sets[i];
 
-			auto propagate_res = propagatem(inputMiniBatches[i]);
-			auto z2 = std::get<0>(propagate_res);
-			auto a2 = std::get<1>(propagate_res);
+			Ref<MLPPMatrix> y_hat = evaluatem(current_input_mini_batch);
 
-			cost_prev = cost(y_hat, outputMiniBatches[i]);
+			PropagateMResult prop_res = propagatem(current_input_mini_batch);
+
+			cost_prev = cost(y_hat, current_output_mini_batch);
 
 			// Calculating the errors
-			std::vector<std::vector<real_t>> error = alg.subtraction(y_hat, outputMiniBatches[i]);
+			Ref<MLPPMatrix> error = alg.subtractionm(y_hat, current_output_mini_batch);
 
 			// Calculating the weight/bias gradients for layer 2
 
-			std::vector<std::vector<real_t>> D2_1 = alg.matmult(alg.transpose(a2), error);
+			Ref<MLPPMatrix> D2_1 = alg.matmultm(alg.transposem(prop_res.a2), error);
 
 			// weights and bias updation for layser 2
-			_weights2 = alg.subtraction(_weights2, alg.scalarMultiply(learning_rate, D2_1));
-			//_reg
-			_weights2 = regularization.regWeights(_weights2, _lambda, _alpha, "None");
+			_weights2 = alg.subtractionm(_weights2, alg.scalar_multiplym(learning_rate, D2_1));
+			_weights2 = regularization.reg_weightsm(_weights2, _lambda, _alpha, _reg);
 
 			// Bias Updation for layer 2
-			_bias2 = alg.subtractMatrixRows(_bias2, alg.scalarMultiply(learning_rate, error));
+			_bias2 = alg.subtract_matrix_rows(_bias2, alg.scalar_multiplym(learning_rate, error));
 
 			//Calculating the weight/bias for layer 1
 
-			std::vector<std::vector<real_t>> D1_1 = alg.matmult(error, alg.transpose(_weights2));
-
-			std::vector<std::vector<real_t>> D1_2 = alg.hadamard_product(D1_1, avn.sigmoid(z2, true));
-
-			std::vector<std::vector<real_t>> D1_3 = alg.matmult(alg.transpose(inputMiniBatches[i]), D1_2);
+			Ref<MLPPMatrix> D1_1 = alg.matmultm(error, alg.transposem(_weights2));
+			Ref<MLPPMatrix> D1_2 = alg.hadamard_productm(D1_1, avn.sigmoid_derivm(prop_res.z2));
+			Ref<MLPPMatrix> D1_3 = alg.matmultm(alg.transposem(current_input_mini_batch), D1_2);
 
 			// weight an bias updation for layer 1
-			_weights1 = alg.subtraction(_weights1, alg.scalarMultiply(learning_rate, D1_3));
-			//_reg
-			_weights1 = regularization.regWeights(_weights1, _lambda, _alpha, "None");
+			_weights1 = alg.subtractionm(_weights1, alg.scalar_multiplym(learning_rate, D1_3));
+			_weights1 = regularization.reg_weightsm(_weights1, _lambda, _alpha, _reg);
 
-			_bias1 = alg.subtractMatrixRows(_bias1, alg.scalarMultiply(learning_rate, D1_2));
+			_bias1 = alg.subtract_matrix_rows(_bias1, alg.scalar_multiplym(learning_rate, D1_2));
 
-			y_hat = evaluatem(inputMiniBatches[i]);
+			y_hat = evaluatem(current_input_mini_batch);
 
 			if (ui) {
-				MLPPUtilities::CostInfo(epoch, cost_prev, cost(y_hat, outputMiniBatches[i]));
-				std::cout << "Layer 1:" << std::endl;
-				MLPPUtilities::UI(_weights1, _bias1);
-				std::cout << "Layer 2:" << std::endl;
-				MLPPUtilities::UI(_weights2, _bias2);
+				MLPPUtilities::cost_info(epoch, cost_prev, cost(y_hat, current_output_mini_batch));
+				PLOG_MSG("Layer 1:");
+				MLPPUtilities::print_ui_mb(_weights1, _bias1);
+				PLOG_MSG("Layer 2:");
+				MLPPUtilities::print_ui_mb(_weights2, _bias2);
 			}
 		}
 
@@ -274,17 +286,17 @@ void MLPPSoftmaxNet::mbgd(real_t learning_rate, int max_epoch, int mini_batch_si
 real_t MLPPSoftmaxNet::score() {
 	MLPPUtilities util;
 
-	return util.performance(_y_hat, _output_set);
+	return util.performance_mat(_y_hat, _output_set);
 }
 
-void MLPPSoftmaxNet::save(std::string fileName) {
+void MLPPSoftmaxNet::save(const String &file_name) {
 	MLPPUtilities util;
 
-	util.saveParameters(fileName, _weights1, _bias1, false, 1);
-	util.saveParameters(fileName, _weights2, _bias2, true, 2);
+	//util.saveParameters(fileName, _weights1, _bias1, false, 1);
+	//util.saveParameters(fileName, _weights2, _bias2, true, 2);
 }
 
-std::vector<std::vector<real_t>> MLPPSoftmaxNet::get_embeddings() {
+Ref<MLPPMatrix> MLPPSoftmaxNet::get_embeddings() {
 	return _weights1;
 }
 
@@ -301,23 +313,37 @@ void MLPPSoftmaxNet::initialize() {
 	_initialized = true;
 }
 
-MLPPSoftmaxNet::MLPPSoftmaxNet(std::vector<std::vector<real_t>> p_input_set, std::vector<std::vector<real_t>> p_output_set, int p_n_hidden, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
+MLPPSoftmaxNet::MLPPSoftmaxNet(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, int p_n_hidden, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
 	_input_set = p_input_set;
 	_output_set = p_output_set;
-	_n = p_input_set.size();
-	_k = p_input_set[0].size();
+	_n = p_input_set->size().y;
+	_k = p_input_set->size().x;
 	_n_hidden = p_n_hidden;
-	_n_class = p_output_set[0].size();
+	_n_class = p_output_set->size().x;
 	_reg = p_reg;
 	_lambda = p_lambda;
 	_alpha = p_alpha;
 
-	_y_hat.resize(_n);
+	_y_hat.instance();
+	_y_hat->resize(Size2i(0, _n));
 
-	_weights1 = MLPPUtilities::weightInitialization(_k, _n_hidden);
-	_weights2 = MLPPUtilities::weightInitialization(_n_hidden, _n_class);
-	_bias1 = MLPPUtilities::biasInitialization(_n_hidden);
-	_bias2 = MLPPUtilities::biasInitialization(_n_class);
+	MLPPUtilities utils;
+
+	_weights1.instance();
+	_weights1->resize(Size2i(_n_hidden, _k));
+	utils.weight_initializationm(_weights1);
+
+	_weights2.instance();
+	_weights2->resize(Size2i(_n_class, _n_hidden));
+	utils.weight_initializationm(_weights2);
+
+	_bias1.instance();
+	_bias1->resize(_n_hidden);
+	utils.bias_initializationv(_bias1);
+
+	_bias2.instance();
+	_bias2->resize(_n_class);
+	utils.bias_initializationv(_bias2);
 
 	_initialized = true;
 }
@@ -328,62 +354,65 @@ MLPPSoftmaxNet::MLPPSoftmaxNet() {
 MLPPSoftmaxNet::~MLPPSoftmaxNet() {
 }
 
-real_t MLPPSoftmaxNet::cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
+real_t MLPPSoftmaxNet::cost(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
 	MLPPReg regularization;
 	MLPPData data;
-	class MLPPCost cost;
+	MLPPCost mlpp_cost;
 
-	//_reg
-	return cost.CrossEntropy(y_hat, y) + regularization.regTerm(_weights1, _lambda, _alpha, "None") + regularization.regTerm(_weights2, _lambda, _alpha, "None");
+	return mlpp_cost.cross_entropym(y_hat, y) + regularization.reg_termm(_weights1, _lambda, _alpha, _reg) + regularization.reg_termm(_weights2, _lambda, _alpha, _reg);
 }
 
-std::vector<real_t> MLPPSoftmaxNet::evaluatev(std::vector<real_t> x) {
+Ref<MLPPVector> MLPPSoftmaxNet::evaluatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	std::vector<real_t> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(_weights1), x), _bias1);
-	std::vector<real_t> a2 = avn.sigmoid(z2);
+	Ref<MLPPVector> z2 = alg.additionnv(alg.mat_vec_multv(alg.transposem(_weights1), x), _bias1);
+	Ref<MLPPVector> a2 = avn.sigmoid_normv(z2);
 
-	return avn.adjSoftmax(alg.addition(alg.mat_vec_mult(alg.transpose(_weights2), a2), _bias2));
+	return avn.adj_softmax_normv(alg.additionnv(alg.mat_vec_multv(alg.transposem(_weights2), a2), _bias2));
 }
 
-std::tuple<std::vector<real_t>, std::vector<real_t>> MLPPSoftmaxNet::propagatev(std::vector<real_t> x) {
+MLPPSoftmaxNet::PropagateVResult MLPPSoftmaxNet::propagatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	std::vector<real_t> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(_weights1), x), _bias1);
-	std::vector<real_t> a2 = avn.sigmoid(z2);
+	PropagateVResult res;
 
-	return { z2, a2 };
+	res.z2 = alg.additionnv(alg.mat_vec_multv(alg.transposem(_weights1), x), _bias1);
+	res.a2 = avn.sigmoid_normv(res.z2);
+
+	return res;
 }
 
-std::vector<std::vector<real_t>> MLPPSoftmaxNet::evaluatem(std::vector<std::vector<real_t>> X) {
+Ref<MLPPMatrix> MLPPSoftmaxNet::evaluatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	std::vector<std::vector<real_t>> z2 = alg.mat_vec_add(alg.matmult(X, _weights1), _bias1);
-	std::vector<std::vector<real_t>> a2 = avn.sigmoid(z2);
+	Ref<MLPPMatrix> z2 = alg.mat_vec_addv(alg.matmultm(X, _weights1), _bias1);
+	Ref<MLPPMatrix> a2 = avn.sigmoid_normm(z2);
 
-	return avn.adjSoftmax(alg.mat_vec_add(alg.matmult(a2, _weights2), _bias2));
+	return avn.adj_softmax_normm(alg.mat_vec_addv(alg.matmultm(a2, _weights2), _bias2));
 }
 
-std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPSoftmaxNet::propagatem(std::vector<std::vector<real_t>> X) {
+MLPPSoftmaxNet::PropagateMResult MLPPSoftmaxNet::propagatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	std::vector<std::vector<real_t>> z2 = alg.mat_vec_add(alg.matmult(X, _weights1), _bias1);
-	std::vector<std::vector<real_t>> a2 = avn.sigmoid(z2);
+	MLPPSoftmaxNet::PropagateMResult res;
 
-	return { z2, a2 };
+	res.z2 = alg.mat_vec_addv(alg.matmultm(X, _weights1), _bias1);
+	res.a2 = avn.sigmoid_normm(res.z2);
+
+	return res;
 }
 
 void MLPPSoftmaxNet::forward_pass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	_z2 = alg.mat_vec_add(alg.matmult(_input_set, _weights1), _bias1);
-	_a2 = avn.sigmoid(_z2);
-	_y_hat = avn.adjSoftmax(alg.mat_vec_add(alg.matmult(_a2, _weights2), _bias2));
+	_z2 = alg.mat_vec_addv(alg.matmultm(_input_set, _weights1), _bias1);
+	_a2 = avn.sigmoid_normm(_z2);
+	_y_hat = avn.adj_softmax_normm(alg.mat_vec_addv(alg.matmultm(_a2, _weights2), _bias2));
 }
 
 void MLPPSoftmaxNet::_bind_methods() {
