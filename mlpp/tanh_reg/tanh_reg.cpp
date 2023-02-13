@@ -12,7 +12,6 @@
 #include "../regularization/reg.h"
 #include "../utilities/utilities.h"
 
-#include <iostream>
 #include <random>
 
 /*
@@ -62,11 +61,14 @@ void MLPPTanhReg::set_alpha(const real_t val) {
 }
 */
 
-std::vector<real_t> MLPPTanhReg::model_set_test(std::vector<std::vector<real_t>> X) {
+//	Ref<MLPPVector> model_set_test(const Ref<MLPPMatrix> &X);
+//	real_t model_test(const Ref<MLPPVector> &x);
+
+Ref<MLPPVector> MLPPTanhReg::model_set_test(const Ref<MLPPMatrix> &X) {
 	return evaluatem(X);
 }
 
-real_t MLPPTanhReg::model_test(std::vector<real_t> x) {
+real_t MLPPTanhReg::model_test(const Ref<MLPPVector> &x) {
 	return evaluatev(x);
 }
 
@@ -83,21 +85,21 @@ void MLPPTanhReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui)
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		std::vector<real_t> error = alg.subtraction(_y_hat, _output_set);
+		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
 
-		_weights = alg.subtraction(_weights, alg.scalarMultiply(learning_rate / _n, alg.mat_vec_mult(alg.transpose(_input_set), alg.hadamard_product(error, avn.tanh(_z, 1)))));
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(_input_set), alg.hadamard_productnv(error, avn.tanh_derivv(_z)))));
 		//_reg
-		_weights = regularization.regWeights(_weights, _lambda, _alpha, "None");
+		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, MLPPReg::REGULARIZATION_TYPE_NONE);
 
 		// Calculating the bias gradients
-		_bias -= learning_rate * alg.sum_elements(alg.hadamard_product(error, avn.tanh(_z, 1))) / _n;
+		_bias -= learning_rate * alg.sum_elementsv(alg.hadamard_productnv(error, avn.tanh_derivv(_z))) / _n;
 
 		forward_pass();
 
 		// UI PORTION
 		if (ui) {
-			MLPPUtilities::CostInfo(epoch, cost_prev, cost(_y_hat, _output_set));
-			MLPPUtilities::UI(_weights, _bias);
+			MLPPUtilities::cost_info(epoch, cost_prev, cost(_y_hat, _output_set));
+			MLPPUtilities::print_ui_vb(_weights, _bias);
 		}
 
 		epoch++;
@@ -119,28 +121,47 @@ void MLPPTanhReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	std::default_random_engine generator(rd());
 	std::uniform_int_distribution<int> distribution(0, int(_n - 1));
 
+	Ref<MLPPVector> input_set_row_tmp;
+	input_set_row_tmp.instance();
+	input_set_row_tmp->resize(_input_set->size().x);
+
+	Ref<MLPPVector> output_set_row_tmp;
+	output_set_row_tmp.instance();
+	output_set_row_tmp->resize(1);
+
+	Ref<MLPPVector> y_hat_row_tmp;
+	y_hat_row_tmp.instance();
+	y_hat_row_tmp->resize(1);
+
 	while (true) {
-		int outputIndex = distribution(generator);
+		int output_index = distribution(generator);
 
-		real_t y_hat = evaluatev(_input_set[outputIndex]);
-		cost_prev = cost({ _y_hat }, { _output_set[outputIndex] });
+		_input_set->get_row_into_mlpp_vector(output_index, input_set_row_tmp);
+		real_t output_set_entry = _output_set->get_element(output_index);
+		output_set_row_tmp->set_element(0, output_set_entry);
 
-		real_t error = y_hat - _output_set[outputIndex];
+		real_t y_hat = evaluatev(input_set_row_tmp);
+		y_hat_row_tmp->set_element(0, y_hat);
+
+		cost_prev = cost(y_hat_row_tmp, output_set_row_tmp);
+
+		real_t error = y_hat - output_set_entry;
 
 		// Weight Updation
-		_weights = alg.subtraction(_weights, alg.scalarMultiply(learning_rate * error * (1 - y_hat * y_hat), _input_set[outputIndex]));
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * error * (1 - y_hat * y_hat), input_set_row_tmp));
 		//_reg
-		_weights = regularization.regWeights(_weights, _lambda, _alpha, "None");
+		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, MLPPReg::REGULARIZATION_TYPE_NONE);
 
 		// Bias updation
 		_bias -= learning_rate * error * (1 - y_hat * y_hat);
 
-		y_hat = evaluatev(_input_set[outputIndex]);
+		y_hat = evaluatev(input_set_row_tmp);
 
 		if (ui) {
-			MLPPUtilities::CostInfo(epoch, cost_prev, cost({ _y_hat }, { _output_set[outputIndex] }));
-			MLPPUtilities::UI(_weights, _bias);
+			MLPPUtilities::cost_info(epoch, cost_prev, cost(y_hat_row_tmp, output_set_row_tmp));
+			MLPPUtilities::print_ui_vb(_weights, _bias);
 		}
+
 		epoch++;
 
 		if (epoch > max_epoch) {
@@ -161,33 +182,34 @@ void MLPPTanhReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size,
 
 	// Creating the mini-batches
 	int n_mini_batch = _n / mini_batch_size;
-	auto batches = MLPPUtilities::createMiniBatches(_input_set, _output_set, n_mini_batch);
-	auto inputMiniBatches = std::get<0>(batches);
-	auto outputMiniBatches = std::get<1>(batches);
+	MLPPUtilities::CreateMiniBatchMVBatch batches = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<real_t> y_hat = evaluatem(inputMiniBatches[i]);
-			std::vector<real_t> z = propagatem(inputMiniBatches[i]);
-			cost_prev = cost(y_hat, outputMiniBatches[i]);
+			Ref<MLPPMatrix> current_input_batch_entry = batches.input_sets[i];
+			Ref<MLPPVector> current_output_batch_entry = batches.output_sets[i];
 
-			std::vector<real_t> error = alg.subtraction(y_hat, outputMiniBatches[i]);
+			Ref<MLPPVector> y_hat = evaluatem(current_input_batch_entry);
+			Ref<MLPPVector> z = propagatem(current_input_batch_entry);
+			cost_prev = cost(y_hat, current_output_batch_entry);
+
+			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_batch_entry);
 
 			// Calculating the weight gradients
-			_weights = alg.subtraction(_weights, alg.scalarMultiply(learning_rate / _n, alg.mat_vec_mult(alg.transpose(inputMiniBatches[i]), alg.hadamard_product(error, avn.tanh(z, 1)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(current_input_batch_entry), alg.hadamard_productnv(error, avn.tanh_derivv(z)))));
 			//_reg
-			_weights = regularization.regWeights(_weights, _lambda, _alpha, "None");
+			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, MLPPReg::REGULARIZATION_TYPE_NONE);
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elements(alg.hadamard_product(error, avn.tanh(_z, true))) / _n;
+			_bias -= learning_rate * alg.sum_elementsv(alg.hadamard_productnv(error, avn.tanh_derivv(_z))) / _n;
 
 			forward_pass();
 
-			y_hat = evaluatem(inputMiniBatches[i]);
+			y_hat = evaluatem(current_input_batch_entry);
 
 			if (ui) {
-				MLPPUtilities::CostInfo(epoch, cost_prev, cost(y_hat, outputMiniBatches[i]));
-				MLPPUtilities::UI(_weights, _bias);
+				MLPPUtilities::cost_info(epoch, cost_prev, cost(y_hat, current_output_batch_entry));
+				MLPPUtilities::print_ui_vb(_weights, _bias);
 			}
 		}
 
@@ -204,13 +226,13 @@ void MLPPTanhReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size,
 real_t MLPPTanhReg::score() {
 	MLPPUtilities util;
 
-	return util.performance(_y_hat, _output_set);
+	return util.performance_vec(_y_hat, _output_set);
 }
 
-void MLPPTanhReg::save(std::string file_name) {
-	MLPPUtilities util;
+void MLPPTanhReg::save(const String &file_name) {
+	//MLPPUtilities util;
 
-	util.saveParameters(file_name, _weights, _bias);
+	//util.saveParameters(file_name, _weights, _bias);
 }
 
 bool MLPPTanhReg::is_initialized() {
@@ -226,53 +248,68 @@ void MLPPTanhReg::initialize() {
 	_initialized = true;
 }
 
-MLPPTanhReg::MLPPTanhReg(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
+MLPPTanhReg::MLPPTanhReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
 	_input_set = p_input_set;
 	_output_set = p_output_set;
-	_n = _input_set.size();
-	_k = _input_set[0].size();
+	_n = _input_set->size().y;
+	_k = _input_set->size().x;
 	_reg = p_reg;
 	_lambda = p_lambda;
 	_alpha = p_alpha;
 
-	_y_hat.resize(_n);
-	_weights = MLPPUtilities::weightInitialization(_k);
-	_bias = MLPPUtilities::biasInitialization();
+	_y_hat.instance();
+	_y_hat->resize(_n);
+
+	MLPPUtilities utils;
+
+	_weights.instance();
+	_weights->resize(_k);
+
+	utils.weight_initializationv(_weights);
+
+	_bias = utils.bias_initializationr();
+
+	_initialized = true;
 }
 
 MLPPTanhReg::MLPPTanhReg() {
+	_initialized = false;
 }
 MLPPTanhReg::~MLPPTanhReg() {
 }
 
-real_t MLPPTanhReg::cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
+real_t MLPPTanhReg::cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
 	MLPPReg regularization;
-	class MLPPCost cost;
+	MLPPCost mlpp_cost;
 
 	//_reg
-	return cost.MSE(y_hat, y) + regularization.regTerm(_weights, _lambda, _alpha, "None");
+	return mlpp_cost.msev(y_hat, y) + regularization.reg_termv(_weights, _lambda, _alpha, MLPPReg::REGULARIZATION_TYPE_NONE);
 }
 
-real_t MLPPTanhReg::evaluatev(std::vector<real_t> x) {
+real_t MLPPTanhReg::evaluatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
-	return avn.tanh(alg.dot(_weights, x) + _bias);
+
+	return avn.tanh_normr(alg.dotv(_weights, x) + _bias);
 }
 
-real_t MLPPTanhReg::propagatev(std::vector<real_t> x) {
+real_t MLPPTanhReg::propagatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
-	return alg.dot(_weights, x) + _bias;
+
+	return alg.dotv(_weights, x) + _bias;
 }
 
-std::vector<real_t> MLPPTanhReg::evaluatem(std::vector<std::vector<real_t>> X) {
+Ref<MLPPVector> MLPPTanhReg::evaluatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
-	return avn.tanh(alg.scalarAdd(_bias, alg.mat_vec_mult(X, _weights)));
+
+	return avn.tanh_normv(alg.scalar_addnv(_bias, alg.mat_vec_multv(X, _weights)));
 }
 
-std::vector<real_t> MLPPTanhReg::propagatem(std::vector<std::vector<real_t>> X) {
+Ref<MLPPVector> MLPPTanhReg::propagatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
-	return alg.scalarAdd(_bias, alg.mat_vec_mult(X, _weights));
+
+	return alg.scalar_addnv(_bias, alg.mat_vec_multv(X, _weights));
 }
 
 // Tanh ( wTx + b )
@@ -280,7 +317,7 @@ void MLPPTanhReg::forward_pass() {
 	MLPPActivation avn;
 
 	_z = propagatem(_input_set);
-	_y_hat = avn.tanh(_z);
+	_y_hat = avn.tanh_normv(_z);
 }
 
 void MLPPTanhReg::_bind_methods() {
