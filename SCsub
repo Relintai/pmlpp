@@ -84,6 +84,7 @@ sources = [
     "mlpp/lin_alg/lin_alg_old.cpp",
     "mlpp/hypothesis_testing/hypothesis_testing_old.cpp",
     "mlpp/data/data_old.cpp",
+    "mlpp/cost/cost_old.cpp",
 
     "test/mlpp_tests.cpp",
 ]
