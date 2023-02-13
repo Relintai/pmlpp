@@ -7,11 +7,7 @@
 
 #include "core/math/math_defs.h"
 
-#include "core/object/reference.h"
-
-class MLPPConvolutionsOld : public Reference {
-	GDCLASS(MLPPConvolutionsOld, Reference);
-
+class MLPPConvolutionsOld {
 public:
 	std::vector<std::vector<real_t>> convolve_2d(std::vector<std::vector<real_t>> input, std::vector<std::vector<real_t>> filter, int S, int P = 0);
 	std::vector<std::vector<std::vector<real_t>>> convolve_3d(std::vector<std::vector<std::vector<real_t>>> input, std::vector<std::vector<std::vector<real_t>>> filter, int S, int P = 0);
@@ -46,8 +42,6 @@ public:
 	MLPPConvolutionsOld();
 
 protected:
-	static void _bind_methods();
-
 	std::vector<std::vector<real_t>> _prewitt_horizontal;
 	std::vector<std::vector<real_t>> _prewitt_vertical;
 	std::vector<std::vector<real_t>> _sobel_horizontal;

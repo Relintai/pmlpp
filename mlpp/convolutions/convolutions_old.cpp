@@ -372,6 +372,3 @@ MLPPConvolutionsOld::MLPPConvolutionsOld() {
 	_roberts_horizontal = { { 0, 1 }, { -1, 0 } };
 	_roberts_vertical = { { 1, 0 }, { 0, -1 } };
 }
-
-void MLPPConvolutionsOld::_bind_methods() {
-}
