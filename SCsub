@@ -82,6 +82,7 @@ sources = [
     "mlpp/transforms/transforms_old.cpp",
     "mlpp/stat/stat_old.cpp",
     "mlpp/lin_alg/lin_alg_old.cpp",
+    "mlpp/hypothesis_testing/hypothesis_testing_old.cpp",
 
     "test/mlpp_tests.cpp",
 ]
