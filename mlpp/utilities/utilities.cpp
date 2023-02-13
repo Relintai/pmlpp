@@ -281,7 +281,7 @@ void MLPPUtilities::bias_initializationv(Ref<MLPPVector> z) {
 
 real_t MLPPUtilities::performance(std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
 	real_t correct = 0;
-	for (int i = 0; i < y_hat.size(); i++) {
+	for (uint32_t i = 0; i < y_hat.size(); i++) {
 		if (std::round(y_hat[i]) == outputSet[i]) {
 			correct++;
 		}
@@ -291,9 +291,9 @@ real_t MLPPUtilities::performance(std::vector<real_t> y_hat, std::vector<real_t>
 
 real_t MLPPUtilities::performance(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
 	real_t correct = 0;
-	for (int i = 0; i < y_hat.size(); i++) {
-		int sub_correct = 0;
-		for (int j = 0; j < y_hat[i].size(); j++) {
+	for (uint32_t i = 0; i < y_hat.size(); i++) {
+		uint32_t sub_correct = 0;
+		for (uint32_t j = 0; j < y_hat[i].size(); j++) {
 			if (std::round(y_hat[i][j]) == y[i][j]) {
 				sub_correct++;
 			}
@@ -368,7 +368,7 @@ void MLPPUtilities::saveParameters(std::string fileName, std::vector<real_t> wei
 	}
 
 	saveFile << "Weight(s)" << layer_info << std::endl;
-	for (int i = 0; i < weights.size(); i++) {
+	for (uint32_t i = 0; i < weights.size(); i++) {
 		saveFile << weights[i] << std::endl;
 	}
 	saveFile << "Bias" << layer_info << std::endl;
@@ -396,12 +396,12 @@ void MLPPUtilities::saveParameters(std::string fileName, std::vector<real_t> wei
 	}
 
 	saveFile << "Weight(s)" << layer_info << std::endl;
-	for (int i = 0; i < weights.size(); i++) {
+	for (uint32_t i = 0; i < weights.size(); i++) {
 		saveFile << weights[i] << std::endl;
 	}
 
 	saveFile << "Initial(s)" << layer_info << std::endl;
-	for (int i = 0; i < initial.size(); i++) {
+	for (uint32_t i = 0; i < initial.size(); i++) {
 		saveFile << initial[i] << std::endl;
 	}
 
@@ -430,13 +430,13 @@ void MLPPUtilities::saveParameters(std::string fileName, std::vector<std::vector
 	}
 
 	saveFile << "Weight(s)" << layer_info << std::endl;
-	for (int i = 0; i < weights.size(); i++) {
-		for (int j = 0; j < weights[i].size(); j++) {
+	for (uint32_t i = 0; i < weights.size(); i++) {
+		for (uint32_t j = 0; j < weights[i].size(); j++) {
 			saveFile << weights[i][j] << std::endl;
 		}
 	}
 	saveFile << "Bias(es)" << layer_info << std::endl;
-	for (int i = 0; i < bias.size(); i++) {
+	for (uint32_t i = 0; i < bias.size(); i++) {
 		saveFile << bias[i] << std::endl;
 	}
 
@@ -445,7 +445,7 @@ void MLPPUtilities::saveParameters(std::string fileName, std::vector<std::vector
 
 void MLPPUtilities::UI(std::vector<real_t> weights, real_t bias) {
 	std::cout << "Values of the weight(s):" << std::endl;
-	for (int i = 0; i < weights.size(); i++) {
+	for (uint32_t i = 0; i < weights.size(); i++) {
 		std::cout << weights[i] << std::endl;
 	}
 	std::cout << "Value of the bias:" << std::endl;
@@ -454,24 +454,24 @@ void MLPPUtilities::UI(std::vector<real_t> weights, real_t bias) {
 
 void MLPPUtilities::UI(std::vector<std::vector<real_t>> weights, std::vector<real_t> bias) {
 	std::cout << "Values of the weight(s):" << std::endl;
-	for (int i = 0; i < weights.size(); i++) {
-		for (int j = 0; j < weights[i].size(); j++) {
+	for (uint32_t i = 0; i < weights.size(); i++) {
+		for (uint32_t j = 0; j < weights[i].size(); j++) {
 			std::cout << weights[i][j] << std::endl;
 		}
 	}
 	std::cout << "Value of the biases:" << std::endl;
-	for (int i = 0; i < bias.size(); i++) {
+	for (uint32_t i = 0; i < bias.size(); i++) {
 		std::cout << bias[i] << std::endl;
 	}
 }
 
 void MLPPUtilities::UI(std::vector<real_t> weights, std::vector<real_t> initial, real_t bias) {
 	std::cout << "Values of the weight(s):" << std::endl;
-	for (int i = 0; i < weights.size(); i++) {
+	for (uint32_t i = 0; i < weights.size(); i++) {
 		std::cout << weights[i] << std::endl;
 	}
 	std::cout << "Values of the initial(s):" << std::endl;
-	for (int i = 0; i < initial.size(); i++) {
+	for (uint32_t i = 0; i < initial.size(); i++) {
 		std::cout << initial[i] << std::endl;
 	}
 	std::cout << "Value of the bias:" << std::endl;
@@ -782,8 +782,11 @@ Array MLPPUtilities::create_mini_batchesmm_bind(const Ref<MLPPMatrix> &input_set
 }
 
 std::tuple<real_t, real_t, real_t, real_t> MLPPUtilities::TF_PN(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	real_t TP, FP, TN, FN = 0;
-	for (int i = 0; i < y_hat.size(); i++) {
+	real_t TP = 0;
+	real_t FP = 0;
+	real_t TN = 0;
+	real_t FN = 0;
+	for (uint32_t i = 0; i < y_hat.size(); i++) {
 		if (y_hat[i] == y[i]) {
 			if (y_hat[i] == 1) {
 				TP++;
@@ -802,17 +805,32 @@ std::tuple<real_t, real_t, real_t, real_t> MLPPUtilities::TF_PN(std::vector<real
 }
 
 real_t MLPPUtilities::recall(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	auto [TP, FP, TN, FN] = TF_PN(y_hat, y);
+	auto res = TF_PN(y_hat, y);
+	auto TP = std::get<0>(res);
+	//auto FP = std::get<1>(res);
+	//auto TN = std::get<2>(res);
+	auto FN = std::get<3>(res);
+
 	return TP / (TP + FN);
 }
 
 real_t MLPPUtilities::precision(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	auto [TP, FP, TN, FN] = TF_PN(y_hat, y);
+	auto res = TF_PN(y_hat, y);
+	auto TP = std::get<0>(res);
+	auto FP = std::get<1>(res);
+	//auto TN = std::get<2>(res);
+	//auto FN = std::get<3>(res);
+
 	return TP / (TP + FP);
 }
 
 real_t MLPPUtilities::accuracy(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	auto [TP, FP, TN, FN] = TF_PN(y_hat, y);
+	auto res = TF_PN(y_hat, y);
+	auto TP = std::get<0>(res);
+	auto FP = std::get<1>(res);
+	auto TN = std::get<2>(res);
+	auto FN = std::get<3>(res);
+
 	return (TP + TN) / (TP + FP + FN + TN);
 }
 real_t MLPPUtilities::f1_score(std::vector<real_t> y_hat, std::vector<real_t> y) {
