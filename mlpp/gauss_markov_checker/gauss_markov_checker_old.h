@@ -10,14 +10,10 @@
 
 #include "core/math/math_defs.h"
 
-#include "core/object/reference.h"
-
 #include <string>
 #include <vector>
 
-class MLPPGaussMarkovCheckerOld : public Reference {
-	GDCLASS(MLPPGaussMarkovCheckerOld, Reference);
-
+class MLPPGaussMarkovCheckerOld {
 public:
 	void checkGMConditions(std::vector<real_t> eps);
 
