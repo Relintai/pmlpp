@@ -79,6 +79,7 @@ sources = [
     "mlpp/regularization/reg_old.cpp",
     "mlpp/gauss_markov_checker/gauss_markov_checker_old.cpp",
     "mlpp/utilities/utilities_old.cpp",
+    "mlpp/transforms/transforms_old.cpp",
 
     "test/mlpp_tests.cpp",
 ]
