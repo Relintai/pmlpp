@@ -62,6 +62,7 @@
 #include "../mlpp/mlp/mlp_old.h"
 #include "../mlpp/multi_output_layer/multi_output_layer_old.h"
 #include "../mlpp/multinomial_nb/multinomial_nb_old.h"
+#include "../mlpp/numerical_analysis/numerical_analysis_old.h"
 #include "../mlpp/outlier_finder/outlier_finder_old.h"
 #include "../mlpp/output_layer/output_layer_old.h"
 #include "../mlpp/pca/pca_old.h"
@@ -1151,7 +1152,7 @@ void MLPPTests::test_numerical_analysis() {
 	MLPPConvolutions conv;
 
 	// Checks for numerical analysis class.
-	MLPPNumericalAnalysis numAn;
+	MLPPNumericalAnalysisOld numAn;
 
 	std::cout << numAn.quadraticApproximation(f, 0, 1) << std::endl;
 
