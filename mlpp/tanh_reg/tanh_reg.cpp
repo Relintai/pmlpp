@@ -88,8 +88,7 @@ void MLPPTanhReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui)
 		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
 
 		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(_input_set), alg.hadamard_productnv(error, avn.tanh_derivv(_z)))));
-		//_reg
-		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, MLPPReg::REGULARIZATION_TYPE_NONE);
+		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
 		_bias -= learning_rate * alg.sum_elementsv(alg.hadamard_productnv(error, avn.tanh_derivv(_z))) / _n;
@@ -149,8 +148,7 @@ void MLPPTanhReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 
 		// Weight Updation
 		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * error * (1 - y_hat * y_hat), input_set_row_tmp));
-		//_reg
-		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, MLPPReg::REGULARIZATION_TYPE_NONE);
+		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Bias updation
 		_bias -= learning_rate * error * (1 - y_hat * y_hat);
@@ -197,8 +195,7 @@ void MLPPTanhReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size,
 
 			// Calculating the weight gradients
 			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(current_input_batch_entry), alg.hadamard_productnv(error, avn.tanh_derivv(z)))));
-			//_reg
-			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, MLPPReg::REGULARIZATION_TYPE_NONE);
+			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients
 			_bias -= learning_rate * alg.sum_elementsv(alg.hadamard_productnv(error, avn.tanh_derivv(_z))) / _n;
@@ -282,8 +279,7 @@ real_t MLPPTanhReg::cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y)
 	MLPPReg regularization;
 	MLPPCost mlpp_cost;
 
-	//_reg
-	return mlpp_cost.msev(y_hat, y) + regularization.reg_termv(_weights, _lambda, _alpha, MLPPReg::REGULARIZATION_TYPE_NONE);
+	return mlpp_cost.msev(y_hat, y) + regularization.reg_termv(_weights, _lambda, _alpha, _reg);
 }
 
 real_t MLPPTanhReg::evaluatev(const Ref<MLPPVector> &x) {
