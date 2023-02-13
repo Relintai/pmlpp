@@ -76,6 +76,7 @@ sources = [
     "mlpp/bernoulli_nb/bernoulli_nb_old.cpp",
     "mlpp/ann/ann_old.cpp",
     "mlpp/numerical_analysis/numerical_analysis_old.cpp",
+    "mlpp/regularization/reg_old.cpp",
 
     "test/mlpp_tests.cpp",
 ]
