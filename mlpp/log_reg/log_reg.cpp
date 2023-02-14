@@ -62,13 +62,13 @@ void MLPPLogReg::set_alpha(const real_t val) {
 }
 */
 
-std::vector<real_t> MLPPLogReg::model_set_test(std::vector<std::vector<real_t>> X) {
-	ERR_FAIL_COND_V(!_initialized, std::vector<real_t>());
+Ref<MLPPVector> MLPPLogReg::model_set_test(const Ref<MLPPMatrix> &X) {
+	ERR_FAIL_COND_V(!_initialized, Ref<MLPPVector>());
 
 	return evaluatem(X);
 }
 
-real_t MLPPLogReg::model_test(std::vector<real_t> x) {
+real_t MLPPLogReg::model_test(const Ref<MLPPVector> &x) {
 	ERR_FAIL_COND_V(!_initialized, 0);
 
 	return evaluatev(x);
@@ -88,19 +88,20 @@ void MLPPLogReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) 
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		std::vector<real_t> error = alg.subtraction(_y_hat, _output_set);
+		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
 
 		// Calculating the weight gradients
-		_weights = alg.subtraction(_weights, alg.scalarMultiply(learning_rate / _n, alg.mat_vec_mult(alg.transpose(_input_set), error)));
-		_weights = regularization.regWeights(_weights, _lambda, _alpha, _reg);
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(_input_set), error)));
+		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		_bias -= learning_rate * alg.sum_elements(error) / _n;
+		_bias -= learning_rate * alg.sum_elementsv(error) / _n;
+
 		forward_pass();
 
 		if (ui) {
-			MLPPUtilities::CostInfo(epoch, cost_prev, cost(_y_hat, _output_set));
-			MLPPUtilities::UI(_weights, _bias);
+			MLPPUtilities::cost_info(epoch, cost_prev, cost(_y_hat, _output_set));
+			MLPPUtilities::print_ui_vb(_weights, _bias);
 		}
 
 		epoch++;
@@ -125,20 +126,20 @@ void MLPPLogReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		std::vector<real_t> error = alg.subtraction(_output_set, _y_hat);
+		Ref<MLPPVector> error = alg.subtractionnv(_output_set, _y_hat);
 
 		// Calculating the weight gradients
-		_weights = alg.addition(_weights, alg.scalarMultiply(learning_rate / _n, alg.mat_vec_mult(alg.transpose(_input_set), error)));
-		_weights = regularization.regWeights(_weights, _lambda, _alpha, _reg);
+		_weights = alg.additionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(_input_set), error)));
+		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		_bias += learning_rate * alg.sum_elements(error) / _n;
+		_bias += learning_rate * alg.sum_elementsv(error) / _n;
 
 		forward_pass();
 
 		if (ui) {
-			MLPPUtilities::CostInfo(epoch, cost_prev, cost(_y_hat, _output_set));
-			MLPPUtilities::UI(_weights, _bias);
+			MLPPUtilities::cost_info(epoch, cost_prev, cost(_y_hat, _output_set));
+			MLPPUtilities::print_ui_vb(_weights, _bias);
 		}
 
 		epoch++;
@@ -161,26 +162,44 @@ void MLPPLogReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	std::default_random_engine generator(rd());
 	std::uniform_int_distribution<int> distribution(0, int(_n - 1));
 
+	Ref<MLPPVector> input_row_tmp;
+	input_row_tmp.instance();
+	input_row_tmp->resize(_input_set->size().x);
+
+	Ref<MLPPVector> y_hat_tmp;
+	y_hat_tmp.instance();
+	y_hat_tmp->resize(1);
+
+	Ref<MLPPVector> output_set_element_tmp;
+	output_set_element_tmp.instance();
+	output_set_element_tmp->resize(1);
+
 	while (true) {
-		int outputIndex = distribution(generator);
+		int output_index = distribution(generator);
 
-		real_t y_hat = evaluatev(_input_set[outputIndex]);
-		cost_prev = cost({ y_hat }, { _output_set[outputIndex] });
+		_input_set->get_row_into_mlpp_vector(output_index, input_row_tmp);
+		real_t output_set_element = _output_set->get_element(output_index);
+		output_set_element_tmp->set_element(0, output_set_element);
 
-		real_t error = y_hat - _output_set[outputIndex];
+		real_t y_hat = evaluatev(input_row_tmp);
+		y_hat_tmp->set_element(0, y_hat);
+
+		cost_prev = cost(y_hat_tmp, output_set_element_tmp);
+
+		real_t error = y_hat - output_set_element;
 
 		// Weight updation
-		_weights = alg.subtraction(_weights, alg.scalarMultiply(learning_rate * error, _input_set[outputIndex]));
-		_weights = regularization.regWeights(_weights, _lambda, _alpha, _reg);
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * error, input_row_tmp));
+		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Bias updation
 		_bias -= learning_rate * error;
 
-		y_hat = evaluatev(_input_set[outputIndex]);
+		y_hat = evaluatev(input_row_tmp);
 
 		if (ui) {
-			MLPPUtilities::CostInfo(epoch, cost_prev, cost({ y_hat }, { _output_set[outputIndex] }));
-			MLPPUtilities::UI(_weights, _bias);
+			MLPPUtilities::cost_info(epoch, cost_prev, cost(y_hat_tmp, output_set_element_tmp));
+			MLPPUtilities::print_ui_vb(_weights, _bias);
 		}
 
 		epoch++;
@@ -203,28 +222,29 @@ void MLPPLogReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, 
 
 	// Creating the mini-batches
 	int n_mini_batch = _n / mini_batch_size;
-	auto bacthes = MLPPUtilities::createMiniBatches(_input_set, _output_set, n_mini_batch);
-	auto inputMiniBatches = std::get<0>(bacthes);
-	auto outputMiniBatches = std::get<1>(bacthes);
+	MLPPUtilities::CreateMiniBatchMVBatch bacthes = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
-			std::vector<real_t> y_hat = evaluatem(inputMiniBatches[i]);
-			cost_prev = cost(y_hat, outputMiniBatches[i]);
+			Ref<MLPPMatrix> current_mini_batch_input_entry = bacthes.input_sets[i];
+			Ref<MLPPVector> current_mini_batch_output_entry = bacthes.output_sets[i];
 
-			std::vector<real_t> error = alg.subtraction(y_hat, outputMiniBatches[i]);
+			Ref<MLPPVector> y_hat = evaluatem(current_mini_batch_input_entry);
+			cost_prev = cost(y_hat, current_mini_batch_output_entry);
+
+			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_mini_batch_output_entry);
 
 			// Calculating the weight gradients
-			_weights = alg.subtraction(_weights, alg.scalarMultiply(learning_rate / outputMiniBatches[i].size(), alg.mat_vec_mult(alg.transpose(inputMiniBatches[i]), error)));
-			_weights = regularization.regWeights(_weights, _lambda, _alpha, _reg);
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / current_mini_batch_output_entry->size(), alg.mat_vec_multv(alg.transposem(current_mini_batch_input_entry), error)));
+			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elements(error) / outputMiniBatches[i].size();
-			y_hat = evaluatem(inputMiniBatches[i]);
+			_bias -= learning_rate * alg.sum_elementsv(error) / current_mini_batch_output_entry->size();
+			y_hat = evaluatem(current_mini_batch_input_entry);
 
 			if (UI) {
-				MLPPUtilities::CostInfo(epoch, cost_prev, cost(y_hat, outputMiniBatches[i]));
-				MLPPUtilities::UI(_weights, _bias);
+				MLPPUtilities::cost_info(epoch, cost_prev, cost(y_hat, current_mini_batch_output_entry));
+				MLPPUtilities::print_ui_vb(_weights, _bias);
 			}
 		}
 
@@ -242,14 +262,14 @@ real_t MLPPLogReg::score() {
 	ERR_FAIL_COND_V(!_initialized, 0);
 
 	MLPPUtilities util;
-	return util.performance(_y_hat, _output_set);
+	return util.performance_vec(_y_hat, _output_set);
 }
 
 void MLPPLogReg::save(std::string file_name) {
-	ERR_FAIL_COND(!_initialized);
+	//ERR_FAIL_COND(!_initialized);
 
-	MLPPUtilities util;
-	util.saveParameters(file_name, _weights, _bias);
+	//MLPPUtilities util;
+	//util.saveParameters(file_name, _weights, _bias);
 }
 
 bool MLPPLogReg::is_initialized() {
@@ -265,18 +285,25 @@ void MLPPLogReg::initialize() {
 	_initialized = true;
 }
 
-MLPPLogReg::MLPPLogReg(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, std::string p_reg, real_t p_lambda, real_t p_alpha) {
+MLPPLogReg::MLPPLogReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
 	_input_set = p_input_set;
 	_output_set = p_output_set;
-	_n = p_input_set.size();
-	_k = p_input_set[0].size();
+	_n = p_input_set->size().y;
+	_k = p_input_set->size().x;
 	_reg = p_reg;
 	_lambda = p_lambda;
 	_alpha = p_alpha;
 
-	_y_hat.resize(_n);
-	_weights = MLPPUtilities::weightInitialization(_k);
-	_bias = MLPPUtilities::biasInitialization();
+	_y_hat.instance();
+	_y_hat->resize(_n);
+
+	_weights.instance();
+	_weights->resize(_k);
+
+	MLPPUtilities utils;
+
+	utils.weight_initializationv(_weights);
+	_bias = utils.bias_initializationr();
 
 	_initialized = true;
 }
@@ -287,25 +314,25 @@ MLPPLogReg::MLPPLogReg() {
 MLPPLogReg::~MLPPLogReg() {
 }
 
-real_t MLPPLogReg::cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
+real_t MLPPLogReg::cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
 	MLPPReg regularization;
 	class MLPPCost cost;
 
-	return cost.LogLoss(y_hat, y) + regularization.regTerm(_weights, _lambda, _alpha, _reg);
+	return cost.log_lossv(y_hat, y) + regularization.reg_termv(_weights, _lambda, _alpha, _reg);
 }
 
-real_t MLPPLogReg::evaluatev(std::vector<real_t> x) {
+real_t MLPPLogReg::evaluatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.sigmoid(alg.dot(_weights, x) + _bias);
+	return avn.sigmoid_normr(alg.dotv(_weights, x) + _bias);
 }
 
-std::vector<real_t> MLPPLogReg::evaluatem(std::vector<std::vector<real_t>> X) {
+Ref<MLPPVector> MLPPLogReg::evaluatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.sigmoid(alg.scalarAdd(_bias, alg.mat_vec_mult(X, _weights)));
+	return avn.sigmoid_normv(alg.scalar_addnv(_bias, alg.mat_vec_multv(X, _weights)));
 }
 
 // sigmoid ( wTx + b )

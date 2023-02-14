@@ -396,9 +396,9 @@ void MLPPTests::test_logistic_regression(bool ui) {
 	alg.printVector(model_old.modelSetTest(dt->get_input()->to_std_vector()));
 	std::cout << "ACCURACY (Old): " << 100 * model_old.score() << "%" << std::endl;
 
-	MLPPLogReg model(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
+	MLPPLogReg model(dt->get_input(), dt->get_output());
 	model.sgd(0.001, 100000, ui);
-	alg.printVector(model.model_set_test(dt->get_input()->to_std_vector()));
+	PLOG_MSG(model.model_set_test(dt->get_input())->to_string());
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTests::test_probit_regression(bool ui) {
@@ -1034,11 +1034,11 @@ void MLPPTests::test_new_math_functions() {
 
 	std::vector<real_t> z_v = { 0.001 };
 	alg.printVector(avn.logit(z_v));
-	alg.printVector(avn.logit(z_v, 1));
+	alg.printVector(avn.logit(z_v, true));
 
 	std::vector<std::vector<real_t>> Z_m = { { 0.001 } };
 	alg.printMatrix(avn.logit(Z_m));
-	alg.printMatrix(avn.logit(Z_m, 1));
+	alg.printMatrix(avn.logit(Z_m, true));
 
 	std::cout << alg.trace({ { 1, 2 }, { 3, 4 } }) << std::endl;
 	alg.printMatrix(alg.pinverse({ { 1, 2 }, { 3, 4 } }));
