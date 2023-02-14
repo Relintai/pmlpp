@@ -17,9 +17,6 @@
 
 #include "../regularization/reg.h"
 
-#include <string>
-#include <vector>
-
 class MLPPLogReg : public Reference {
 	GDCLASS(MLPPLogReg, Reference);
 
@@ -56,9 +53,7 @@ public:
 	bool is_initialized();
 	void initialize();
 
-	//MLPPSoftmaxReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, MLPPReg::RegularizationType p_reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t p_lambda = 0.5, real_t p_alpha = 0.5);
-
-	MLPPLogReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, MLPPReg::RegularizationType p_reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t p_lambda = 0.5, real_t p_alpha = 0.5);
+	MLPPLogReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, MLPPReg::RegularizationType p_reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t p_lambda = 0.5, real_t p_alpha = 0.5);
 
 	MLPPLogReg();
 	~MLPPLogReg();

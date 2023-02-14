@@ -285,7 +285,7 @@ void MLPPLogReg::initialize() {
 	_initialized = true;
 }
 
-MLPPLogReg::MLPPLogReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
+MLPPLogReg::MLPPLogReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
 	_input_set = p_input_set;
 	_output_set = p_output_set;
 	_n = p_input_set->size().y;
