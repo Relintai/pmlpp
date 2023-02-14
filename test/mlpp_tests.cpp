@@ -248,9 +248,9 @@ void MLPPTests::test_multivariate_linear_regression_gradient_descent(bool ui) {
 	model_old.gradientDescent(0.001, 30, ui);
 	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinReg model(ds->get_input(), ds->get_output()); // Can use Lasso, Ridge, ElasticNet Reg
 	model.gradient_descent(0.001, 30, ui);
-	alg.printVector(model.model_set_test(ds->get_input()->to_std_vector()));
+	PLOG_MSG(model.model_set_test(ds->get_input())->to_string());
 }
 
 void MLPPTests::test_multivariate_linear_regression_sgd(bool ui) {
@@ -263,9 +263,9 @@ void MLPPTests::test_multivariate_linear_regression_sgd(bool ui) {
 	model_old.SGD(0.00000001, 300000, ui);
 	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinReg model(ds->get_input(), ds->get_output()); // Can use Lasso, Ridge, ElasticNet Reg
 	model.sgd(0.00000001, 300000, ui);
-	alg.printVector(model.model_set_test(ds->get_input()->to_std_vector()));
+	PLOG_MSG(model.model_set_test(ds->get_input())->to_string());
 }
 
 void MLPPTests::test_multivariate_linear_regression_mbgd(bool ui) {
@@ -278,9 +278,9 @@ void MLPPTests::test_multivariate_linear_regression_mbgd(bool ui) {
 	model_old.MBGD(0.001, 10000, 2, ui);
 	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinReg model(ds->get_input(), ds->get_output()); // Can use Lasso, Ridge, ElasticNet Reg
 	model.mbgd(0.001, 10000, 2, ui);
-	alg.printVector(model.model_set_test(ds->get_input()->to_std_vector()));
+	PLOG_MSG(model.model_set_test(ds->get_input())->to_string());
 }
 
 void MLPPTests::test_multivariate_linear_regression_normal_equation(bool ui) {
@@ -293,9 +293,9 @@ void MLPPTests::test_multivariate_linear_regression_normal_equation(bool ui) {
 	model_old.normalEquation();
 	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	MLPPLinReg model(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinReg model(ds->get_input(), ds->get_output()); // Can use Lasso, Ridge, ElasticNet Reg
 	model.normal_equation();
-	alg.printVector(model.model_set_test(ds->get_input()->to_std_vector()));
+	PLOG_MSG(model.model_set_test(ds->get_input())->to_string());
 }
 
 void MLPPTests::test_multivariate_linear_regression_adam() {
@@ -308,9 +308,9 @@ void MLPPTests::test_multivariate_linear_regression_adam() {
 	alg.printVector(adamModelOld.modelSetTest(ds->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * adamModelOld.score() << "%" << std::endl;
 
-	MLPPLinReg adam_model(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
-	alg.printVector(adam_model.model_set_test(ds->get_input()->to_std_vector()));
-	std::cout << "ACCURACY: " << 100 * adam_model.score() << "%" << std::endl;
+	MLPPLinReg adam_model(alg.transposem(ds->get_input()), ds->get_output());
+	PLOG_MSG(adam_model.model_set_test(ds->get_input())->to_string());
+	PLOG_MSG("ACCURACY: " + String::num(100 * adam_model.score()) + "%");
 }
 
 void MLPPTests::test_multivariate_linear_regression_score_sgd_adam(bool ui) {
@@ -328,7 +328,7 @@ void MLPPTests::test_multivariate_linear_regression_score_sgd_adam(bool ui) {
 		modelf_old.MBGD(0.001, 5, 1, ui);
 		scoreSGD += modelf_old.score();
 
-		MLPPLinReg modelf(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
+		MLPPLinReg modelf(alg.transposem(ds->get_input()), ds->get_output());
 		modelf.mbgd(0.001, 5, 1, ui);
 		scoreSGD += modelf.score();
 
@@ -336,7 +336,7 @@ void MLPPTests::test_multivariate_linear_regression_score_sgd_adam(bool ui) {
 		adamModelf_old.Adam(0.1, 5, 1, 0.9, 0.999, 1e-8, ui); // Change batch size = sgd, bgd
 		scoreADAM += adamModelf_old.score();
 
-		MLPPLinReg adamModelf(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
+		MLPPLinReg adamModelf(alg.transposem(ds->get_input()), ds->get_output());
 		adamModelf.adam(0.1, 5, 1, 0.9, 0.999, 1e-8, ui); // Change batch size = sgd, bgd
 		scoreADAM += adamModelf.score();
 	}
@@ -359,9 +359,9 @@ void MLPPTests::test_multivariate_linear_regression_epochs_gradient_descent(bool
 	model3_old.gradientDescent(0.001, 300, ui);
 	alg.printVector(model3_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	MLPPLinReg model3(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinReg model3(alg.transposem(ds->get_input()), ds->get_output()); // Can use Lasso, Ridge, ElasticNet Reg
 	model3.gradient_descent(0.001, 300, ui);
-	alg.printVector(model3.model_set_test(ds->get_input()->to_std_vector()));
+	PLOG_MSG(model3.model_set_test(ds->get_input())->to_string());
 }
 
 void MLPPTests::test_multivariate_linear_regression_newton_raphson(bool ui) {
@@ -378,9 +378,9 @@ void MLPPTests::test_multivariate_linear_regression_newton_raphson(bool ui) {
 	model2_old.NewtonRaphson(1.5, 300, ui);
 	alg.printVector(model2_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	MLPPLinReg model2(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
+	MLPPLinReg model2(alg.transposem(ds->get_input()), ds->get_output());
 	model2.newton_raphson(1.5, 300, ui);
-	alg.printVector(model2.model_set_test(ds->get_input()->to_std_vector()));
+	PLOG_MSG(model2.model_set_test(ds->get_input())->to_string());
 }
 
 void MLPPTests::test_logistic_regression(bool ui) {

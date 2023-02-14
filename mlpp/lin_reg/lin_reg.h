@@ -17,9 +17,6 @@
 
 #include "../regularization/reg.h"
 
-#include <string>
-#include <vector>
-
 class MLPPLinReg : public Reference {
 	GDCLASS(MLPPLinReg, Reference);
 
@@ -41,8 +38,8 @@ public:
 	void set_alpha(const real_t val);
 	*/
 
-	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
-	real_t model_test(std::vector<real_t> x);
+	Ref<MLPPVector> model_set_test(const Ref<MLPPMatrix> &X);
+	real_t model_test(const Ref<MLPPVector> &x);
 
 	void newton_raphson(real_t learning_rate, int max_epoch, bool ui = false);
 	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
@@ -60,37 +57,37 @@ public:
 
 	real_t score();
 
-	void save(std::string fileName);
+	void save(const String &file_name);
 
 	bool is_initialized();
 	void initialize();
 
-	MLPPLinReg(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, std::string p_reg = "None", real_t p_lambda = 0.5, real_t p_alpha = 0.5);
+	MLPPLinReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, MLPPReg::RegularizationType p_reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t p_lambda = 0.5, real_t p_alpha = 0.5);
 
 	MLPPLinReg();
 	~MLPPLinReg();
 
 protected:
-	real_t cost(std::vector<real_t> y_hat, std::vector<real_t> y);
+	real_t cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
 
-	real_t evaluatev(std::vector<real_t> x);
-	std::vector<real_t> evaluatem(std::vector<std::vector<real_t>> X);
+	real_t evaluatev(const Ref<MLPPVector> &x);
+	Ref<MLPPVector> evaluatem(const Ref<MLPPMatrix> &X);
 
 	void forward_pass();
 
 	static void _bind_methods();
 
-	std::vector<std::vector<real_t>> _input_set;
-	std::vector<real_t> _output_set;
-	std::vector<real_t> _y_hat;
-	std::vector<real_t> _weights;
+	Ref<MLPPMatrix> _input_set;
+	Ref<MLPPVector> _output_set;
+	Ref<MLPPVector> _y_hat;
+	Ref<MLPPVector> _weights;
 	real_t _bias;
 
 	int _n;
 	int _k;
 
 	// Regularization Params
-	std::string _reg;
+	MLPPReg::RegularizationType _reg;
 	int _lambda;
 	int _alpha; /* This is the controlling param for Elastic Net*/
 

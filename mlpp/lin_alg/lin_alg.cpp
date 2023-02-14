@@ -993,6 +993,38 @@ std::vector<real_t> MLPPLinAlg::max(std::vector<real_t> a, std::vector<real_t> b
 	return c;
 }
 
+Ref<MLPPVector> MLPPLinAlg::maxnvv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	Ref<MLPPVector> ret;
+	ret.instance();
+
+	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), ret);
+
+	int a_size = a->size();
+
+	ERR_FAIL_COND_V(a_size != b->size(), ret);
+
+	ret->resize(a_size);
+
+	const real_t *aa = a->ptr();
+	const real_t *ba = b->ptr();
+	real_t *ret_ptr = ret->ptrw();
+
+	real_t dist = 0;
+
+	for (int i = 0; i < a_size; i++) {
+		real_t aa_i = aa[i];
+		real_t bb_i = ba[i];
+
+		if (aa_i > bb_i) {
+			ret_ptr[i] = aa_i;
+		} else {
+			ret_ptr[i] = bb_i;
+		}
+	}
+
+	return ret;
+}
+
 real_t MLPPLinAlg::max(std::vector<std::vector<real_t>> A) {
 	return max(flatten(A));
 }
@@ -2470,6 +2502,45 @@ real_t MLPPLinAlg::min(std::vector<real_t> a) {
 		}
 	}
 	return min;
+}
+
+real_t MLPPLinAlg::maxvr(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND_V(!a.is_valid(), -Math_INF);
+
+	int a_size = a->size();
+
+	const real_t *aa = a->ptr();
+
+	real_t max_element = -Math_INF;
+
+	for (int i = 0; i < a_size; i++) {
+		real_t current_element = aa[i];
+
+		if (current_element > max_element) {
+			max_element = current_element;
+		}
+	}
+
+	return max_element;
+}
+real_t MLPPLinAlg::minvr(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND_V(!a.is_valid(), Math_INF);
+
+	int a_size = a->size();
+
+	const real_t *aa = a->ptr();
+
+	real_t min_element = Math_INF;
+
+	for (int i = 0; i < a_size; i++) {
+		real_t current_element = aa[i];
+
+		if (current_element > min_element) {
+			min_element = current_element;
+		}
+	}
+
+	return min_element;
 }
 
 std::vector<real_t> MLPPLinAlg::round(std::vector<real_t> a) {

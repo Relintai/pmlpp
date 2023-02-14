@@ -268,9 +268,13 @@ public:
 
 	std::vector<real_t> max(std::vector<real_t> a, std::vector<real_t> b);
 
-	real_t max(std::vector<real_t> a);
+	Ref<MLPPVector> maxnvv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
+	real_t max(std::vector<real_t> a);
 	real_t min(std::vector<real_t> a);
+
+	real_t maxvr(const Ref<MLPPVector> &a);
+	real_t minvr(const Ref<MLPPVector> &a);
 
 	std::vector<real_t> round(std::vector<real_t> a);
 
