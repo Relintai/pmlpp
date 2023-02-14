@@ -769,8 +769,16 @@ void MLPPTests::test_naive_bayes() {
 	MLPPMultinomialNBOld MNB_old(alg.transpose(inputSet), outputSet, 2);
 	alg.printVector(MNB_old.modelSetTest(alg.transpose(inputSet)));
 
-	MLPPMultinomialNB MNB(alg.transpose(inputSet), outputSet, 2);
-	alg.printVector(MNB.model_set_test(alg.transpose(inputSet)));
+	Ref<MLPPMatrix> input_set;
+	input_set.instance();
+	input_set->set_from_std_vectors(alg.transpose(inputSet));
+
+	Ref<MLPPVector> output_set;
+	output_set.instance();
+	output_set->set_from_std_vector(outputSet);
+
+	MLPPMultinomialNB MNB(input_set, output_set, 2);
+	PLOG_MSG(MNB.model_set_test(input_set)->to_string());
 
 	MLPPBernoulliNBOld BNBOld(alg.transpose(inputSet), outputSet);
 	alg.printVector(BNBOld.modelSetTest(alg.transpose(inputSet)));

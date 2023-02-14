@@ -8,15 +8,14 @@
 //  Created by Marc Melikyan on 1/17/21.
 //
 
+#include "core/containers/hash_map.h"
+#include "core/containers/vector.h"
 #include "core/math/math_defs.h"
 
 #include "core/object/reference.h"
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
-
-#include <map>
-#include <vector>
 
 class MLPPMultinomialNB : public Reference {
 	GDCLASS(MLPPMultinomialNB, Reference);
@@ -26,20 +25,20 @@ public:
 	void set_input_set(const Ref<MLPPMatrix> &val);
 
 	Ref<MLPPVector> get_output_set();
-	void set_output_set(const Ref<MLPPMatrix> &val);
+	void set_output_set(const Ref<MLPPVector> &val);
 
 	real_t get_class_num();
 	void set_class_num(const real_t val);
 
-	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
-	real_t model_test(std::vector<real_t> x);
+	Ref<MLPPVector> model_set_test(const Ref<MLPPMatrix> &X);
+	real_t model_test(const Ref<MLPPVector> &x);
 
 	real_t score();
 
 	bool is_initialized();
 	void initialize();
 
-	MLPPMultinomialNB(std::vector<std::vector<real_t>> _input_set, std::vector<real_t> _output_set, int class_num);
+	MLPPMultinomialNB(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, int class_num);
 
 	MLPPMultinomialNB();
 	~MLPPMultinomialNB();
@@ -51,16 +50,16 @@ protected:
 	static void _bind_methods();
 
 	// Model Params
-	std::vector<real_t> _priors;
+	Ref<MLPPVector> _priors;
 
-	std::vector<std::map<real_t, int>> _theta;
-	std::vector<real_t> _vocab;
+	Vector<HashMap<real_t, int>> _theta;
+	Ref<MLPPVector> _vocab;
 	int _class_num;
 
 	// Datasets
-	std::vector<std::vector<real_t>> _input_set;
-	std::vector<real_t> _output_set;
-	std::vector<real_t> _y_hat;
+	Ref<MLPPMatrix> _input_set;
+	Ref<MLPPVector> _output_set;
+	Ref<MLPPVector> _y_hat;
 
 	bool _initialized;
 };

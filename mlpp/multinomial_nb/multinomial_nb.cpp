@@ -5,11 +5,12 @@
 //
 
 #include "multinomial_nb.h"
+
+#include "core/containers/local_vector.h"
+
 #include "../lin_alg/lin_alg.h"
 #include "../utilities/utilities.h"
 
-#include <algorithm>
-#include <iostream>
 #include <random>
 
 /*
@@ -41,38 +42,72 @@ void MLPPMultinomialNB::set_class_num(const real_t val) {
 }
 */
 
-std::vector<real_t> MLPPMultinomialNB::model_set_test(std::vector<std::vector<real_t>> X) {
-	ERR_FAIL_COND_V(!_initialized, std::vector<real_t>());
+Ref<MLPPVector> MLPPMultinomialNB::model_set_test(const Ref<MLPPMatrix> &X) {
+	ERR_FAIL_COND_V(!_initialized, Ref<MLPPVector>());
 
-	std::vector<real_t> y_hat;
-	for (uint32_t i = 0; i < X.size(); i++) {
-		y_hat.push_back(model_test(X[i]));
+	Size2i x_size = X->size();
+
+	Ref<MLPPVector> x_row_tmp;
+	x_row_tmp.instance();
+	x_row_tmp->resize(x_size.x);
+
+	Ref<MLPPVector> y_hat;
+	y_hat.instance();
+	y_hat->resize(x_size.y);
+
+	for (int i = 0; i < x_size.y; i++) {
+		X->get_row_into_mlpp_vector(i, x_row_tmp);
+
+		y_hat->set_element(i, model_test(x_row_tmp));
 	}
+
 	return y_hat;
 }
 
-real_t MLPPMultinomialNB::model_test(std::vector<real_t> x) {
+real_t MLPPMultinomialNB::model_test(const Ref<MLPPVector> &x) {
 	ERR_FAIL_COND_V(!_initialized, 0);
 
-	real_t score[_class_num];
+	int x_size = x->size();
+
+	LocalVector<real_t> score;
+	score.resize(_class_num);
 
 	compute_theta();
 
-	for (uint32_t j = 0; j < x.size(); j++) {
-		for (uint32_t k = 0; k < _vocab.size(); k++) {
-			if (x[j] == _vocab[k]) {
+	int vocab_size = _vocab->size();
+
+	for (int j = 0; j < x_size; j++) {
+		for (int k = 0; k < vocab_size; k++) {
+			real_t x_j = x->get_element(j);
+			real_t vocab_k = _vocab->get_element(k);
+
+			if (Math::is_equal_approx(x_j, vocab_k)) {
 				for (int p = _class_num - 1; p >= 0; p--) {
-					score[p] += std::log(_theta[p][_vocab[k]]);
+					real_t theta_p_k = _theta[p][vocab_k];
+
+					score[p] += Math::log(theta_p_k);
 				}
 			}
 		}
 	}
 
-	for (uint32_t i = 0; i < _priors.size(); i++) {
-		score[i] += std::log(_priors[i]);
+	for (int i = 0; i < _priors->size(); i++) {
+		score[i] += std::log(_priors->get_element(i));
 	}
 
-	return std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(real_t)));
+	int max_index = 0;
+	real_t max_element = score[0];
+
+	for (uint32_t i = 1; i < score.size(); ++i) {
+		real_t si = score[i];
+
+		if (si > max_element) {
+			max_index = i;
+			max_element = si;
+		}
+	}
+
+	return max_index;
 }
 
 real_t MLPPMultinomialNB::score() {
@@ -80,7 +115,7 @@ real_t MLPPMultinomialNB::score() {
 
 	MLPPUtilities util;
 
-	return util.performance(_y_hat, _output_set);
+	return util.performance_vec(_y_hat, _output_set);
 }
 
 bool MLPPMultinomialNB::is_initialized() {
@@ -96,12 +131,13 @@ void MLPPMultinomialNB::initialize() {
 	_initialized = true;
 }
 
-MLPPMultinomialNB::MLPPMultinomialNB(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, int pclass_num) {
+MLPPMultinomialNB::MLPPMultinomialNB(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, int pclass_num) {
 	_input_set = p_input_set;
 	_output_set = p_output_set;
 	_class_num = pclass_num;
 
-	_y_hat.resize(_output_set.size());
+	_y_hat.instance();
+	_y_hat->resize(_output_set->size());
 
 	_initialized = true;
 
@@ -118,22 +154,28 @@ void MLPPMultinomialNB::compute_theta() {
 	// Resizing theta for the sake of ease & proper access of the elements.
 	_theta.resize(_class_num);
 
+	int vocab_size = _vocab->size();
+
 	// Setting all values in the hasmap by default to 0.
 	for (int i = _class_num - 1; i >= 0; i--) {
-		for (uint32_t j = 0; j < _vocab.size(); j++) {
-			_theta[i][_vocab[j]] = 0;
+		for (int j = 0; j < vocab_size; j++) {
+			_theta.write[i][_vocab->get_element(j)] = 0;
 		}
 	}
 
-	for (uint32_t i = 0; i < _input_set.size(); i++) {
-		for (uint32_t j = 0; j < _input_set[0].size(); j++) {
-			_theta[_output_set[i]][_input_set[i][j]]++;
+	Size2i input_set_size = _input_set->size();
+
+	for (int i = 0; i < input_set_size.y; i++) {
+		for (int j = 0; j < input_set_size.x; j++) {
+			_theta.write[_output_set->get_element(i)][_input_set->get_element(i, j)]++;
 		}
 	}
 
-	for (uint32_t i = 0; i < _theta.size(); i++) {
-		for (uint32_t j = 0; j < _theta[i].size(); j++) {
-			_theta[i][j] /= _priors[i] * _y_hat.size();
+	for (int i = 0; i < _theta.size(); i++) {
+		uint32_t theta_i_size = _theta[i].size();
+
+		for (uint32_t j = 0; j < theta_i_size; j++) {
+			_theta.write[i][j] /= _priors->get_element(i) * _y_hat->size();
 		}
 	}
 }
@@ -141,42 +183,64 @@ void MLPPMultinomialNB::compute_theta() {
 void MLPPMultinomialNB::evaluate() {
 	MLPPLinAlg alg;
 
-	for (uint32_t i = 0; i < _output_set.size(); i++) {
+	int output_set_size = _output_set->size();
+	Size2i input_set_size = _input_set->size();
+
+	for (int i = 0; i < output_set_size; i++) {
 		// Pr(B | A) * Pr(A)
-		real_t score[_class_num];
+		LocalVector<real_t> score;
+		score.resize(_class_num);
 
 		// Easy computation of priors, i.e. Pr(C_k)
-		_priors.resize(_class_num);
-		for (uint32_t ii = 0; ii < _output_set.size(); ii++) {
-			_priors[int(_output_set[ii])]++;
+		_priors->resize(_class_num);
+		for (int ii = 0; ii < _output_set->size(); ii++) {
+			int osii = static_cast<int>(_output_set->get_element(ii));
+			_priors->set_element(osii, _priors->get_element(osii) + 1);
 		}
 
-		_priors = alg.scalarMultiply(real_t(1) / real_t(_output_set.size()), _priors);
+		_priors = alg.scalar_multiplynv(real_t(1) / real_t(output_set_size), _priors);
 
 		// Evaluating Theta...
 		compute_theta();
 
-		for (uint32_t j = 0; j < _input_set.size(); j++) {
-			for (uint32_t k = 0; k < _vocab.size(); k++) {
-				if (_input_set[i][j] == _vocab[k]) {
+		for (int j = 0; j < input_set_size.y; j++) {
+			for (int k = 0; k < _vocab->size(); k++) {
+				real_t input_set_i_j = _input_set->get_element(i, j);
+				real_t vocab_k = _vocab->get_element(k);
+
+				if (Math::is_equal_approx(input_set_i_j, vocab_k)) {
+					real_t theta_i_k = _theta[i][vocab_k];
+					theta_i_k = Math::log(theta_i_k);
+
 					for (int p = _class_num - 1; p >= 0; p--) {
-						score[p] += std::log(_theta[i][_vocab[k]]);
+						score[p] += theta_i_k;
 					}
 				}
 			}
 		}
 
-		for (uint32_t ii = 0; ii < _priors.size(); ii++) {
-			score[ii] += std::log(_priors[ii]);
-			score[ii] = exp(score[ii]);
-		}
+		int priors_size = _priors->size();
 
-		for (int ii = 0; ii < 2; ii++) {
-			std::cout << score[ii] << std::endl;
+		for (int ii = 0; ii < priors_size; ii++) {
+			score[ii] += Math::log(_priors->get_element(ii));
+			score[ii] = Math::exp(score[ii]);
 		}
 
 		// Assigning the traning example's y_hat to a class
-		_y_hat[i] = std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(real_t)));
+
+		int max_index = 0;
+		real_t max_element = score[0];
+
+		for (uint32_t ii = 1; ii < score.size(); ++ii) {
+			real_t si = score[ii];
+
+			if (si > max_element) {
+				max_index = ii;
+				max_element = si;
+			}
+		}
+
+		_y_hat->set_element(i, max_index);
 	}
 }
 
