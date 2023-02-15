@@ -9,10 +9,6 @@
 #include "../stat/stat.h"
 #include "../utilities/utilities.h"
 
-#include <algorithm>
-#include <iostream>
-#include <random>
-
 /*
 Ref<MLPPMatrix> MLPPGaussianNB::get_input_set() {
 	return _input_set;
@@ -36,29 +32,57 @@ void MLPPGaussianNB::set_class_num(const int val) {
 }
 */
 
-std::vector<real_t> MLPPGaussianNB::model_set_test(std::vector<std::vector<real_t>> X) {
-	std::vector<real_t> y_hat;
-	for (uint32_t i = 0; i < X.size(); i++) {
-		y_hat.push_back(model_test(X[i]));
+Ref<MLPPVector> MLPPGaussianNB::model_set_test(const Ref<MLPPMatrix> &X) {
+	Ref<MLPPVector> y_hat;
+	y_hat.instance();
+	y_hat->resize(X->size().y);
+
+	Ref<MLPPVector> x_row_tmp;
+	x_row_tmp.instance();
+	x_row_tmp->resize(X->size().x);
+
+	for (int i = 0; i < X->size().y; i++) {
+		X->get_row_into_mlpp_vector(i, x_row_tmp);
+
+		y_hat->set_element(i, model_test(x_row_tmp));
 	}
+
 	return y_hat;
 }
 
-real_t MLPPGaussianNB::model_test(std::vector<real_t> x) {
-	real_t score[_class_num];
+real_t MLPPGaussianNB::model_test(const Ref<MLPPVector> &x) {
+	LocalVector<real_t> score;
+	score.resize(_class_num);
+
 	real_t y_hat_i = 1;
 
 	for (int i = _class_num - 1; i >= 0; i--) {
-		y_hat_i += std::log(_priors[i] * (1 / sqrt(2 * M_PI * _sigma[i] * _sigma[i])) * exp(-(x[i] * _mu[i]) * (x[i] * _mu[i]) / (2 * _sigma[i] * _sigma[i])));
-		score[i] = exp(y_hat_i);
+		real_t sigma_i = _sigma->get_element(i);
+		real_t x_i = x->get_element(i);
+		real_t mu_i = _mu->get_element(i);
+
+		y_hat_i += Math::log(_priors->get_element(i) * (1 / Math::sqrt(2 * M_PI * sigma_i * sigma_i)) * Math::exp(-(x_i * mu_i) * (x_i * mu_i) / (2 * sigma_i * sigma_i)));
+		score[i] = Math::exp(y_hat_i);
 	}
 
-	return std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(real_t)));
+	real_t max_element = -Math_INF;
+	int max_element_index = 0;
+
+	for (int i = 0; i < _class_num; ++i) {
+		real_t score_i = score[i];
+
+		if (score_i > max_element) {
+			max_element = score_i;
+			max_element_index = i;
+		}
+	}
+
+	return max_element_index;
 }
 
 real_t MLPPGaussianNB::score() {
 	MLPPUtilities util;
-	return util.performance(_y_hat, _output_set);
+	return util.performance_vec(_y_hat, _output_set);
 }
 
 bool MLPPGaussianNB::is_initialized() {
@@ -74,12 +98,17 @@ void MLPPGaussianNB::initialize() {
 	_initialized = true;
 }
 
-MLPPGaussianNB::MLPPGaussianNB(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, int p_class_num) {
+MLPPGaussianNB::MLPPGaussianNB(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, int p_class_num) {
 	_input_set = p_input_set;
 	_output_set = p_output_set;
 	_class_num = p_class_num;
 
-	_y_hat.resize(_output_set.size());
+	_mu.instance();
+	_sigma.instance();
+	_priors.instance();
+
+	_y_hat.instance();
+	_y_hat->resize(_output_set->size());
 
 	evaluate();
 
@@ -97,44 +126,70 @@ void MLPPGaussianNB::evaluate() {
 	MLPPLinAlg alg;
 
 	// Computing mu_k_y and sigma_k_y
-	_mu.resize(_class_num);
-	_sigma.resize(_class_num);
+	_mu->resize(_class_num);
+	_sigma->resize(_class_num);
+
+	Ref<MLPPVector> set_vec;
+	set_vec.instance();
 
 	for (int i = _class_num - 1; i >= 0; i--) {
-		std::vector<real_t> set;
-		for (uint32_t j = 0; j < _input_set.size(); j++) {
-			for (uint32_t k = 0; k < _input_set[j].size(); k++) {
-				if (_output_set[j] == i) {
-					set.push_back(_input_set[j][k]);
+		PoolRealArray set;
+
+		for (int j = 0; j < _input_set->size().y; j++) {
+			for (int k = 0; k < _input_set->size().x; k++) {
+				if (_output_set->get_element(j) == i) {
+					set.push_back(_input_set->get_element(j, k));
 				}
 			}
 		}
 
-		_mu[i] = stat.mean(set);
-		_sigma[i] = stat.standardDeviation(set);
+		set_vec->set_from_pool_vector(set);
+
+		_mu->set_element(i, stat.meanv(set_vec));
+		_sigma->set_element(i, stat.standard_deviationv(set_vec));
 	}
 
 	// Priors
-	_priors.resize(_class_num);
-	for (uint32_t i = 0; i < _output_set.size(); i++) {
-		_priors[int(_output_set[i])]++;
+	_priors->resize(_class_num);
+	_priors->fill(0);
+	for (int i = 0; i < _output_set->size(); i++) {
+		int indx = static_cast<int>(_output_set->get_element(i));
+		_priors->set_element(indx, _priors->get_element(indx));
 	}
-	_priors = alg.scalarMultiply(real_t(1) / real_t(_output_set.size()), _priors);
 
-	for (uint32_t i = 0; i < _output_set.size(); i++) {
-		real_t score[_class_num];
+	_priors = alg.scalar_multiplynv(real_t(1) / real_t(_output_set->size()), _priors);
+
+	for (int i = 0; i < _output_set->size(); i++) {
+		LocalVector<real_t> score;
+		score.resize(_class_num);
+
 		real_t y_hat_i = 1;
 
 		for (int j = _class_num - 1; j >= 0; j--) {
-			for (uint32_t k = 0; k < _input_set[i].size(); k++) {
-				y_hat_i += std::log(_priors[j] * (1 / sqrt(2 * M_PI * _sigma[j] * _sigma[j])) * exp(-(_input_set[i][k] * _mu[j]) * (_input_set[i][k] * _mu[j]) / (2 * _sigma[j] * _sigma[j])));
+			for (int k = 0; k < _input_set->size().x; k++) {
+				real_t sigma_j = _sigma->get_element(j);
+				real_t mu_j = _mu->get_element(j);
+				real_t input_set_i_k = _input_set->get_element(i, k);
+
+				y_hat_i += Math::log(_priors->get_element(j) * (1 / Math::sqrt(2 * M_PI * sigma_j * sigma_j)) * Math::exp(-(input_set_i_k * mu_j) * (input_set_i_k * mu_j) / (2 * sigma_j * sigma_j)));
 			}
-			score[j] = exp(y_hat_i);
-			std::cout << score[j] << std::endl;
+
+			score[j] = Math::exp(y_hat_i);
 		}
 
-		_y_hat[i] = std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(real_t)));
-		std::cout << std::distance(score, std::max_element(score, score + sizeof(score) / sizeof(real_t))) << std::endl;
+		real_t max_element = -Math_INF;
+		int max_element_index = 0;
+
+		for (int ii = 0; ii < _class_num; ++ii) {
+			real_t score_ii = score[ii];
+
+			if (score_ii > max_element) {
+				max_element = score_ii;
+				max_element_index = ii;
+			}
+		}
+
+		_y_hat->set_element(i, max_element_index);
 	}
 }
 

@@ -15,8 +15,6 @@
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
 
-#include <vector>
-
 class MLPPGaussianNB : public Reference {
 	GDCLASS(MLPPGaussianNB, Reference);
 
@@ -32,15 +30,15 @@ public:
 	void set_class_num(const int val);
 	*/
 
-	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
-	real_t model_test(std::vector<real_t> x);
+	Ref<MLPPVector> model_set_test(const Ref<MLPPMatrix> &X);
+	real_t model_test(const Ref<MLPPVector> &x);
 
 	real_t score();
 
 	bool is_initialized();
 	void initialize();
 
-	MLPPGaussianNB(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, int p_class_num);
+	MLPPGaussianNB(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, int p_class_num);
 
 	MLPPGaussianNB();
 	~MLPPGaussianNB();
@@ -52,14 +50,14 @@ protected:
 
 	int _class_num;
 
-	std::vector<real_t> _priors;
-	std::vector<real_t> _mu;
-	std::vector<real_t> _sigma;
+	Ref<MLPPVector> _priors;
+	Ref<MLPPVector> _mu;
+	Ref<MLPPVector> _sigma;
 
-	std::vector<std::vector<real_t>> _input_set;
-	std::vector<real_t> _output_set;
+	Ref<MLPPMatrix> _input_set;
+	Ref<MLPPVector> _output_set;
 
-	std::vector<real_t> _y_hat;
+	Ref<MLPPVector> _y_hat;
 
 	bool _initialized;
 };
