@@ -15,24 +15,29 @@
 
 #include "core/object/reference.h"
 
-#include <string>
-#include <vector>
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
 
 class MLPPDualSVC : public Reference {
 	GDCLASS(MLPPDualSVC, Reference);
 
 public:
-	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
-	real_t model_test(std::vector<real_t> x);
+	enum KernelMethod {
+		KERNEL_METHOD_LINEAR = 0,
+	};
+
+public:
+	Ref<MLPPVector> model_set_test(const Ref<MLPPMatrix> &X);
+	real_t model_test(const Ref<MLPPVector> &x);
 
 	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
 	//void SGD(real_t learning_rate, int max_epoch, bool ui = false);
 	//void MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui = false);
 
 	real_t score();
-	void save(std::string file_name);
+	void save(const String &file_name);
 
-	MLPPDualSVC(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, real_t p_C, std::string p_kernel = "Linear");
+	MLPPDualSVC(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, real_t p_C, KernelMethod p_kernel = KERNEL_METHOD_LINEAR);
 
 	MLPPDualSVC();
 	~MLPPDualSVC();
@@ -40,37 +45,37 @@ public:
 protected:
 	void init();
 
-	real_t cost(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y);
+	real_t cost(const Ref<MLPPVector> &alpha, const Ref<MLPPMatrix> &X, const Ref<MLPPVector> &y);
 
-	real_t evaluatev(std::vector<real_t> x);
-	real_t propagatev(std::vector<real_t> x);
+	real_t evaluatev(const Ref<MLPPVector> &x);
+	real_t propagatev(const Ref<MLPPVector> &x);
 
-	std::vector<real_t> evaluatem(std::vector<std::vector<real_t>> X);
-	std::vector<real_t> propagatem(std::vector<std::vector<real_t>> X);
+	Ref<MLPPVector> evaluatem(const Ref<MLPPMatrix> &X);
+	Ref<MLPPVector> propagatem(const Ref<MLPPMatrix> &X);
 
 	void forward_pass();
 
 	void alpha_projection();
 
-	real_t kernel_functionv(std::vector<real_t> v, std::vector<real_t> u, std::string kernel);
-	std::vector<std::vector<real_t>> kernel_functionm(std::vector<std::vector<real_t>> U, std::vector<std::vector<real_t>> V, std::string kernel);
+	real_t kernel_functionv(const Ref<MLPPVector> &v, const Ref<MLPPVector> &u, KernelMethod kernel);
+	Ref<MLPPMatrix> kernel_functionm(const Ref<MLPPMatrix> &U, const Ref<MLPPMatrix> &V, KernelMethod kernel);
 
 	static void _bind_methods();
 
-	std::vector<std::vector<real_t>> _input_set;
-	std::vector<real_t> _output_set;
-	std::vector<real_t> _z;
-	std::vector<real_t> _y_hat;
+	Ref<MLPPMatrix> _input_set;
+	Ref<MLPPVector> _output_set;
+	Ref<MLPPVector> _z;
+	Ref<MLPPVector> _y_hat;
 	real_t _bias;
 
-	std::vector<real_t> _alpha;
-	std::vector<std::vector<real_t>> _K;
+	Ref<MLPPVector> _alpha;
+	Ref<MLPPMatrix> _K;
 
 	real_t _C;
 	int _n;
 	int _k;
 
-	std::string _kernel;
+	KernelMethod _kernel;
 	real_t _p; // Poly
 	real_t _c; // Poly
 };

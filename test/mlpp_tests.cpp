@@ -1247,9 +1247,9 @@ void MLPPTests::test_support_vector_classification_kernel(bool ui) {
 	kernelSVMOld.gradientDescent(0.0001, 20, ui);
 	std::cout << "SCORE: " << kernelSVMOld.score() << std::endl;
 
-	MLPPDualSVC kernelSVM(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), 1000);
+	MLPPDualSVC kernelSVM(dt->get_input(), dt->get_output(), 1000);
 	kernelSVM.gradient_descent(0.0001, 20, ui);
-	std::cout << "SCORE: " << kernelSVM.score() << std::endl;
+	PLOG_MSG("SCORE: " + String::num(kernelSVM.score()));
 
 	std::vector<std::vector<real_t>> linearlyIndependentMat = {
 		{ 1, 2, 3, 4 },
