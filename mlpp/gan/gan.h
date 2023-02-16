@@ -15,12 +15,8 @@
 #include "../hidden_layer/hidden_layer.h"
 #include "../output_layer/output_layer.h"
 
-#include "../hidden_layer/hidden_layer_old.h"
-#include "../output_layer/output_layer_old.h"
-
-#include <string>
-#include <tuple>
-#include <vector>
+#include "../activation/activation.h"
+#include "../utilities/utilities.h"
 
 class MLPPGAN : public Reference {
 	GDCLASS(MLPPGAN, Reference);
@@ -37,45 +33,50 @@ public:
 	void set_k(const int val);
 	*/
 
-	std::vector<std::vector<real_t>> generate_example(int n);
+	Ref<MLPPMatrix> generate_example(int n);
 
 	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
 
 	real_t score();
 
-	void save(std::string file_name);
+	void save(const String &file_name);
 
-	void add_layer(int n_hidden, std::string activation, std::string weight_init = "Default", std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
-	void add_output_layer(std::string weight_init = "Default", std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
+	void add_layer(int n_hidden, MLPPActivation::ActivationFunction activation, MLPPUtilities::WeightDistributionType weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT, MLPPReg::RegularizationType reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t lambda = 0.5, real_t alpha = 0.5);
+	void add_output_layer(MLPPUtilities::WeightDistributionType weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT, MLPPReg::RegularizationType reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t lambda = 0.5, real_t alpha = 0.5);
 
-	MLPPGAN(real_t k, std::vector<std::vector<real_t>> output_set);
+	MLPPGAN(real_t k, const Ref<MLPPMatrix> &output_set);
 
 	MLPPGAN();
 	~MLPPGAN();
 
 protected:
-	std::vector<std::vector<real_t>> model_set_test_generator(std::vector<std::vector<real_t>> X); // Evaluator for the generator of the gan.
-	std::vector<real_t> model_set_test_discriminator(std::vector<std::vector<real_t>> X); // Evaluator for the discriminator of the gan.
+	Ref<MLPPMatrix> model_set_test_generator(const Ref<MLPPMatrix> &X); // Evaluator for the generator of the gan.
+	Ref<MLPPVector> model_set_test_discriminator(const Ref<MLPPMatrix> &X); // Evaluator for the discriminator of the gan.
 
-	real_t cost(std::vector<real_t> y_hat, std::vector<real_t> y);
+	real_t cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
 
 	void forward_pass();
 
-	void update_discriminator_parameters(std::vector<std::vector<std::vector<real_t>>> hidden_layer_updations, std::vector<real_t> output_layer_updation, real_t learning_rate);
-	void update_generator_parameters(std::vector<std::vector<std::vector<real_t>>> hidden_layer_updations, real_t learning_rate);
+	void update_discriminator_parameters(const Vector<Ref<MLPPMatrix>> &hidden_layer_updations, const Ref<MLPPVector> &output_layer_updation, real_t learning_rate);
+	void update_generator_parameters(const Vector<Ref<MLPPMatrix>> &hidden_layer_updations, real_t learning_rate);
 
-	std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> compute_discriminator_gradients(std::vector<real_t> y_hat, std::vector<real_t> output_set);
-	std::vector<std::vector<std::vector<real_t>>> compute_generator_gradients(std::vector<real_t> y_hat, std::vector<real_t> output_set);
+	struct ComputeDiscriminatorGradientsResult {
+		Vector<Ref<MLPPMatrix>> cumulative_hidden_layer_w_grad; // Tensor containing ALL hidden grads.
+		Ref<MLPPVector> output_w_grad;
+	};
 
-	void print_ui(int epoch, real_t cost_prev, std::vector<real_t> y_hat, std::vector<real_t> output_set);
+	ComputeDiscriminatorGradientsResult compute_discriminator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
+	Vector<Ref<MLPPMatrix>> compute_generator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
+
+	void print_ui(int epoch, real_t cost_prev, const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
 
 	static void _bind_methods();
 
-	std::vector<std::vector<real_t>> _output_set;
-	std::vector<real_t> _y_hat;
+	Ref<MLPPMatrix> _output_set;
+	Ref<MLPPVector> _y_hat;
 
-	std::vector<MLPPOldHiddenLayer> _network;
-	MLPPOldOutputLayer *_output_layer;
+	Vector<Ref<MLPPHiddenLayer>> _network;
+	Ref<MLPPOutputLayer> _output_layer;
 
 	int _n;
 	int _k;
