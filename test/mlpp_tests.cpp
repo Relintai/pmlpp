@@ -447,10 +447,18 @@ void MLPPTests::test_exp_reg_regression(bool ui) {
 	alg.printVector(model_old.modelSetTest(alg.transpose(inputSet)));
 	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
 
-	MLPPExpReg model(alg.transpose(inputSet), outputSet);
+	Ref<MLPPMatrix> input_set;
+	input_set.instance();
+	input_set->set_from_std_vectors(inputSet);
+
+	Ref<MLPPVector> output_set;
+	output_set.instance();
+	output_set->set_from_std_vector(outputSet);
+
+	MLPPExpReg model(alg.transposem(input_set), output_set);
 	model.sgd(0.001, 10000, ui);
-	alg.printVector(model.model_set_test(alg.transpose(inputSet)));
-	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
+	PLOG_MSG(model.model_set_test(alg.transposem(input_set))->to_string());
+	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
 void MLPPTests::test_tanh_regression(bool ui) {
 	MLPPLinAlg alg;

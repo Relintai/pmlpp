@@ -12,15 +12,17 @@
 
 #include "core/object/reference.h"
 
-#include <string>
-#include <vector>
+#include "../regularization/reg.h"
+
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
 
 class MLPPExpReg : public Reference {
 	GDCLASS(MLPPExpReg, Reference);
 
 public:
-	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
-	real_t model_test(std::vector<real_t> x);
+	Ref<MLPPVector> model_set_test(const Ref<MLPPMatrix> &X);
+	real_t model_test(const Ref<MLPPVector> &x);
 
 	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
 	void sgd(real_t learning_rate, int max_epoch, bool ui = false);
@@ -28,35 +30,35 @@ public:
 
 	real_t score();
 
-	void save(std::string file_name);
+	void save(const String &file_name);
 
-	MLPPExpReg(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set, std::string p_reg = "None", real_t p_lambda = 0.5, real_t p_alpha = 0.5);
+	MLPPExpReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, MLPPReg::RegularizationType p_reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t p_lambda = 0.5, real_t p_alpha = 0.5);
 
 	MLPPExpReg();
 	~MLPPExpReg();
 
 protected:
-	real_t cost(std::vector<real_t> y_hat, std::vector<real_t> y);
+	real_t cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
 
-	real_t evaluatev(std::vector<real_t> x);
-	std::vector<real_t> evaluatem(std::vector<std::vector<real_t>> X);
+	real_t evaluatev(const Ref<MLPPVector> &x);
+	Ref<MLPPVector> evaluatem(const Ref<MLPPMatrix> &X);
 
 	void forward_pass();
 
 	static void _bind_methods();
 
-	std::vector<std::vector<real_t>> _input_set;
-	std::vector<real_t> _output_set;
-	std::vector<real_t> _y_hat;
-	std::vector<real_t> _weights;
-	std::vector<real_t> _initial;
+	Ref<MLPPMatrix> _input_set;
+	Ref<MLPPVector> _output_set;
+	Ref<MLPPVector> _y_hat;
+	Ref<MLPPVector> _weights;
+	Ref<MLPPVector> _initial;
 	real_t _bias;
 
 	int _n;
 	int _k;
 
 	// Regularization Params
-	std::string _reg;
+	MLPPReg::RegularizationType _reg;
 	real_t _lambda;
 	real_t _alpha; /* This is the controlling param for Elastic Net*/
 };
