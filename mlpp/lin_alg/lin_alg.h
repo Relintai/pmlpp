@@ -181,7 +181,8 @@ public:
 	real_t sum_elements(std::vector<std::vector<real_t>> A);
 
 	std::vector<real_t> flatten(std::vector<std::vector<real_t>> A);
-	Ref<MLPPVector> flattenv(const Vector<Ref<MLPPVector>> &A);
+	Ref<MLPPVector> flattenvv(const Vector<Ref<MLPPVector>> &A);
+	Ref<MLPPVector> flattenv(const Ref<MLPPMatrix> &A);
 
 	std::vector<real_t> solve(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
 

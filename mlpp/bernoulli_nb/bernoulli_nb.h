@@ -8,23 +8,25 @@
 //  Created by Marc Melikyan on 1/17/21.
 //
 
+#include "core/containers/hash_map.h"
+#include "core/containers/vector.h"
 #include "core/math/math_defs.h"
 
 #include "core/object/reference.h"
 
-#include <map>
-#include <vector>
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_vector.h"
 
 class MLPPBernoulliNB : public Reference {
 	GDCLASS(MLPPBernoulliNB, Reference);
 
 public:
-	std::vector<real_t> model_set_test(std::vector<std::vector<real_t>> X);
-	real_t model_test(std::vector<real_t> x);
+	Ref<MLPPVector> model_set_test(const Ref<MLPPMatrix> &X);
+	real_t model_test(const Ref<MLPPVector> &x);
 
 	real_t score();
 
-	MLPPBernoulliNB(std::vector<std::vector<real_t>> p_input_set, std::vector<real_t> p_output_set);
+	MLPPBernoulliNB(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set);
 
 	MLPPBernoulliNB();
 	~MLPPBernoulliNB();
@@ -40,14 +42,14 @@ protected:
 	real_t _prior_1;
 	real_t _prior_0;
 
-	std::vector<std::map<real_t, int>> _theta;
-	std::vector<real_t> _vocab;
+	Vector<HashMap<real_t, int>> _theta;
+	Ref<MLPPVector> _vocab;
 	int _class_num;
 
 	// Datasets
-	std::vector<std::vector<real_t>> _input_set;
-	std::vector<real_t> _output_set;
-	std::vector<real_t> _y_hat;
+	Ref<MLPPMatrix> _input_set;
+	Ref<MLPPVector> _output_set;
+	Ref<MLPPVector> _y_hat;
 };
 
 #endif /* BernoulliNB_hpp */

@@ -194,6 +194,51 @@ public:
 		return setInputSet;
 	}
 
+	template <class T>
+	Vector<T> vec_to_set(Vector<T> input_set) {
+		Vector<T> set_input_set;
+
+		for (int i = 0; i < input_set.size(); i++) {
+			bool new_element = true;
+
+			for (int j = 0; j < set_input_set.size(); j++) {
+				if (set_input_set[j] == input_set[i]) {
+					new_element = false;
+				}
+			}
+
+			if (new_element) {
+				set_input_set.push_back(input_set[i]);
+			}
+		}
+
+		return set_input_set;
+	}
+
+	Ref<MLPPVector> vec_to_setnv(const Ref<MLPPVector> &input_set) {
+		Vector<real_t> set_input_set;
+
+		for (int i = 0; i < input_set->size(); i++) {
+			bool new_element = true;
+
+			for (int j = 0; j < set_input_set.size(); j++) {
+				if (set_input_set[j] == input_set->get_element(i)) {
+					new_element = false;
+				}
+			}
+
+			if (new_element) {
+				set_input_set.push_back(input_set->get_element(i));
+			}
+		}
+
+		Ref<MLPPVector> ret;
+		ret.instance();
+		ret->set_from_vector(set_input_set);
+
+		return ret;
+	}
+
 protected:
 	static void _bind_methods();
 };

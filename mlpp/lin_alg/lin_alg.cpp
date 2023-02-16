@@ -302,7 +302,7 @@ Ref<MLPPMatrix> MLPPLinAlg::kronecker_productm(const Ref<MLPPMatrix> &A, const R
 				row.push_back(scalar_multiplynv(a_ptr[A->calculate_index(i, k)], row_tmp));
 			}
 
-			Ref<MLPPVector> flattened_row = flattenv(row);
+			Ref<MLPPVector> flattened_row = flattenvv(row);
 
 			C->set_row_mlpp_vector(i * b_size.y + j, flattened_row);
 		}
@@ -1009,8 +1009,6 @@ Ref<MLPPVector> MLPPLinAlg::maxnvv(const Ref<MLPPVector> &a, const Ref<MLPPVecto
 	const real_t *ba = b->ptr();
 	real_t *ret_ptr = ret->ptrw();
 
-	real_t dist = 0;
-
 	for (int i = 0; i < a_size; i++) {
 		real_t aa_i = aa[i];
 		real_t bb_i = ba[i];
@@ -1678,7 +1676,7 @@ std::vector<real_t> MLPPLinAlg::flatten(std::vector<std::vector<real_t>> A) {
 	return a;
 }
 
-Ref<MLPPVector> MLPPLinAlg::flattenv(const Vector<Ref<MLPPVector>> &A) {
+Ref<MLPPVector> MLPPLinAlg::flattenvv(const Vector<Ref<MLPPVector>> &A) {
 	Ref<MLPPVector> a;
 	a.instance();
 
@@ -1705,6 +1703,23 @@ Ref<MLPPVector> MLPPLinAlg::flattenv(const Vector<Ref<MLPPVector>> &A) {
 	}
 
 	return a;
+}
+
+Ref<MLPPVector> MLPPLinAlg::flattenv(const Ref<MLPPMatrix> &A) {
+	int data_size = A->data_size();
+
+	Ref<MLPPVector> res;
+	res.instance();
+	res->resize(data_size);
+
+	real_t *res_ptr = res->ptrw();
+	const real_t *a_ptr = A->ptr();
+
+	for (int i = 0; i < data_size; ++i) {
+		res_ptr[i] = a_ptr[i];
+	}
+
+	return res;
 }
 
 std::vector<real_t> MLPPLinAlg::solve(std::vector<std::vector<real_t>> A, std::vector<real_t> b) {
