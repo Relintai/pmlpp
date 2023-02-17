@@ -111,6 +111,8 @@ public:
 	std::vector<std::vector<real_t>> rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis = -1);
 
 	std::vector<std::vector<real_t>> max(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
+	Ref<MLPPMatrix> max_nm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+
 	real_t max(std::vector<std::vector<real_t>> A);
 	real_t min(std::vector<std::vector<real_t>> A);
 
@@ -305,11 +307,16 @@ public:
 	// TENSOR FUNCTIONS
 	std::vector<std::vector<std::vector<real_t>>> addition(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
 
+	Vector<Ref<MLPPMatrix>> addition_vt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
+
 	std::vector<std::vector<std::vector<real_t>>> elementWiseDivision(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
+	Vector<Ref<MLPPMatrix>> element_wise_division_vt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
 
 	std::vector<std::vector<std::vector<real_t>>> sqrt(std::vector<std::vector<std::vector<real_t>>> A);
+	Vector<Ref<MLPPMatrix>> sqrt_vt(const Vector<Ref<MLPPMatrix>> &A);
 
 	std::vector<std::vector<std::vector<real_t>>> exponentiate(std::vector<std::vector<std::vector<real_t>>> A, real_t p);
+	Vector<Ref<MLPPMatrix>> exponentiate_vt(const Vector<Ref<MLPPMatrix>> &A, real_t p);
 
 	std::vector<std::vector<real_t>> tensor_vec_mult(std::vector<std::vector<std::vector<real_t>>> A, std::vector<real_t> b);
 
@@ -325,11 +332,15 @@ public:
 
 	std::vector<std::vector<std::vector<real_t>>> resize(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
 
+	Vector<Ref<MLPPMatrix>> resize_vt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
+
 	std::vector<std::vector<std::vector<real_t>>> hadamard_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
 
 	std::vector<std::vector<std::vector<real_t>>> max(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
+	Vector<Ref<MLPPMatrix>> max_vt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
 
 	std::vector<std::vector<std::vector<real_t>>> abs(std::vector<std::vector<std::vector<real_t>>> A);
+	Vector<Ref<MLPPMatrix>> abs_vt(const Vector<Ref<MLPPMatrix>> &A);
 
 	real_t norm_2(std::vector<std::vector<std::vector<real_t>>> A);
 

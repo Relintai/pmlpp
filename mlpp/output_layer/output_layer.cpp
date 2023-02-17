@@ -72,18 +72,18 @@ void MLPPOutputLayer::set_a(const Ref<MLPPVector> &val) {
 	_initialized = false;
 }
 
-Ref<MLPPVector> MLPPOutputLayer::get_z_test() {
+real_t MLPPOutputLayer::get_z_test() {
 	return _z_test;
 }
-void MLPPOutputLayer::set_z_test(const Ref<MLPPVector> &val) {
+void MLPPOutputLayer::set_z_test(const real_t val) {
 	_z_test = val;
 	_initialized = false;
 }
 
-Ref<MLPPVector> MLPPOutputLayer::get_a_test() {
+real_t MLPPOutputLayer::get_a_test() {
 	return _a_test;
 }
-void MLPPOutputLayer::set_a_test(const Ref<MLPPVector> &val) {
+void MLPPOutputLayer::set_a_test(const real_t val) {
 	_a_test = val;
 	_initialized = false;
 }
@@ -166,12 +166,13 @@ void MLPPOutputLayer::test(const Ref<MLPPVector> &x) {
 	MLPPActivation avn;
 
 	_z_test = alg.dotv(_weights, x) + _bias;
-	_a_test = avn.run_activation_norm_vector(_activation, _z_test);
+	_a_test = avn.run_activation_norm_real(_activation, _z_test);
 }
 
-MLPPOutputLayer::MLPPOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
+MLPPOutputLayer::MLPPOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, MLPPCost::CostTypes p_cost, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
 	_n_hidden = p_n_hidden;
 	_activation = p_activation;
+	_cost = p_cost;
 
 	_input = p_input;
 
@@ -185,8 +186,8 @@ MLPPOutputLayer::MLPPOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunct
 	_z.instance();
 	_a.instance();
 
-	_z_test.instance();
-	_a_test.instance();
+	_z_test = 0;
+	_a_test = 0;
 
 	_delta.instance();
 
@@ -217,8 +218,8 @@ MLPPOutputLayer::MLPPOutputLayer() {
 	_z.instance();
 	_a.instance();
 
-	_z_test.instance();
-	_a_test.instance();
+	_z_test = 0;
+	_a_test = 0;
 
 	_delta.instance();
 
@@ -265,11 +266,11 @@ void MLPPOutputLayer::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("get_z_test"), &MLPPOutputLayer::get_z_test);
 	ClassDB::bind_method(D_METHOD("set_z_test", "val"), &MLPPOutputLayer::set_z_test);
-	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "z_test", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "set_z_test", "get_z_test");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "z_test"), "set_z_test", "get_z_test");
 
 	ClassDB::bind_method(D_METHOD("get_a_test"), &MLPPOutputLayer::get_a_test);
 	ClassDB::bind_method(D_METHOD("set_a_test", "val"), &MLPPOutputLayer::set_a_test);
-	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "a_test", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "set_a_test", "get_a_test");
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "a_test"), "set_a_test", "get_a_test");
 
 	ClassDB::bind_method(D_METHOD("get_delta"), &MLPPOutputLayer::get_delta);
 	ClassDB::bind_method(D_METHOD("set_delta", "val"), &MLPPOutputLayer::set_delta);

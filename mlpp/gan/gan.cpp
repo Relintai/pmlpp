@@ -142,9 +142,9 @@ void MLPPGAN::add_output_layer(MLPPUtilities::WeightDistributionType weight_init
 	MLPPLinAlg alg;
 
 	if (!_network.empty()) {
-		_output_layer = Ref<MLPPOutputLayer>(memnew(MLPPOutputLayer(_network.write[_network.size() - 1]->get_n_hidden(), MLPPActivation::ACTIVATION_FUNCTION_SIGMOID, _network.write[_network.size() - 1]->get_a(), weight_init, reg, lambda, alpha)));
+		_output_layer = Ref<MLPPOutputLayer>(memnew(MLPPOutputLayer(_network.write[_network.size() - 1]->get_n_hidden(), MLPPActivation::ACTIVATION_FUNCTION_SIGMOID, MLPPCost::COST_TYPE_LOGISTIC_LOSS, _network.write[_network.size() - 1]->get_a(), weight_init, reg, lambda, alpha)));
 	} else {
-		_output_layer = Ref<MLPPOutputLayer>(memnew(MLPPOutputLayer(_k, MLPPActivation::ACTIVATION_FUNCTION_SIGMOID, alg.gaussian_noise(_n, _k), weight_init, reg, lambda, alpha)));
+		_output_layer = Ref<MLPPOutputLayer>(memnew(MLPPOutputLayer(_k, MLPPActivation::ACTIVATION_FUNCTION_SIGMOID, MLPPCost::COST_TYPE_LOGISTIC_LOSS, alg.gaussian_noise(_n, _k), weight_init, reg, lambda, alpha)));
 	}
 }
 

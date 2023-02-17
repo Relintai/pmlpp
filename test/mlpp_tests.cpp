@@ -626,18 +626,26 @@ void MLPPTests::test_dynamically_sized_ann(bool ui) {
 	alg.printVector(ann_old.modelSetTest(alg.transpose(inputSet)));
 	std::cout << "ACCURACY: " << 100 * ann_old.score() << "%" << std::endl;
 
-	MLPPANN ann(alg.transpose(inputSet), outputSet);
-	ann.add_layer(2, "Cosh");
-	ann.add_output_layer("Sigmoid", "LogLoss");
+	Ref<MLPPMatrix> input_set;
+	input_set.instance();
+	input_set->set_from_std_vectors(inputSet);
+
+	Ref<MLPPVector> output_set;
+	output_set.instance();
+	output_set->set_from_std_vector(outputSet);
+
+	MLPPANN ann(alg.transposem(input_set), output_set);
+	ann.add_layer(2, MLPPActivation::ACTIVATION_FUNCTION_COSH);
+	ann.add_output_layer(MLPPActivation::ACTIVATION_FUNCTION_SIGMOID, MLPPCost::COST_TYPE_LOGISTIC_LOSS);
 
 	ann.amsgrad(0.1, 10000, 1, 0.9, 0.999, 0.000001, ui);
 	ann.adadelta(1, 1000, 2, 0.9, 0.000001, ui);
 	ann.momentum(0.1, 8000, 2, 0.9, true, ui);
 
-	ann.set_learning_rate_scheduler_drop("Step", 0.5, 1000);
+	ann.set_learning_rate_scheduler_drop(MLPPANN::SCHEDULER_TYPE_STEP, 0.5, 1000);
 	ann.gradient_descent(0.01, 30000);
-	alg.printVector(ann.model_set_test(alg.transpose(inputSet)));
-	std::cout << "ACCURACY: " << 100 * ann.score() << "%" << std::endl;
+	PLOG_MSG(ann.model_set_test(alg.transposem(input_set))->to_string());
+	PLOG_MSG("ACCURACY: " + String::num(100 * ann.score()) + "%");
 }
 void MLPPTests::test_wgan_old(bool ui) {
 	//MLPPStat stat;
@@ -705,15 +713,23 @@ void MLPPTests::test_ann(bool ui) {
 	alg.printVector(predictions_old); // Testing out the model's preds for train set.
 	std::cout << "ACCURACY: " << 100 * ann_old.score() << "%" << std::endl; // Accuracy.
 
-	MLPPANN ann(inputSet, outputSet);
-	ann.add_layer(5, "Sigmoid");
-	ann.add_layer(8, "Sigmoid"); // Add more layers as needed.
-	ann.add_output_layer("Sigmoid", "LogLoss");
+	Ref<MLPPMatrix> input_set;
+	input_set.instance();
+	input_set->set_from_std_vectors(inputSet);
+
+	Ref<MLPPVector> output_set;
+	output_set.instance();
+	output_set->set_from_std_vector(outputSet);
+
+	MLPPANN ann(input_set, output_set);
+	ann.add_layer(5, MLPPActivation::ACTIVATION_FUNCTION_SIGMOID);
+	ann.add_layer(8, MLPPActivation::ACTIVATION_FUNCTION_SIGMOID); // Add more layers as needed.
+	ann.add_output_layer(MLPPActivation::ACTIVATION_FUNCTION_SIGMOID, MLPPCost::COST_TYPE_LOGISTIC_LOSS);
 	ann.gradient_descent(1, 20000, ui);
 
-	std::vector<real_t> predictions = ann.model_set_test(inputSet);
-	alg.printVector(predictions); // Testing out the model's preds for train set.
-	std::cout << "ACCURACY: " << 100 * ann.score() << "%" << std::endl; // Accuracy.
+	Ref<MLPPVector> predictions = ann.model_set_test(input_set);
+	PLOG_MSG(predictions->to_string()); // Testing out the model's preds for train set.
+	PLOG_MSG("ACCURACY: " + String::num(100 * ann.score()) + "%"); // Accuracy.
 }
 void MLPPTests::test_dynamically_sized_mann(bool ui) {
 	MLPPLinAlg alg;

@@ -2499,6 +2499,24 @@ std::vector<std::vector<real_t>> MLPPLinAlg::max(std::vector<std::vector<real_t>
 	return C;
 }
 
+Ref<MLPPMatrix> MLPPLinAlg::max_nm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	Ref<MLPPMatrix> C;
+	C.instance();
+	C->resize(A->size());
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	int size = A->data_size();
+
+	for (int i = 0; i < size; i++) {
+		c_ptr[i] = MAX(a_ptr[i], b_ptr[i]);
+	}
+
+	return C;
+}
+
 real_t MLPPLinAlg::max(std::vector<real_t> a) {
 	int max = a[0];
 	for (uint32_t i = 0; i < a.size(); i++) {
@@ -2749,11 +2767,33 @@ std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::addition(std::vector<s
 	return A;
 }
 
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::addition_vt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < res.size(); i++) {
+		res.write[i] = additionm(A[i], B[i]);
+	}
+
+	return res;
+}
+
 std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::elementWiseDivision(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B) {
 	for (uint32_t i = 0; i < A.size(); i++) {
 		A[i] = elementWiseDivision(A[i], B[i]);
 	}
 	return A;
+}
+
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::element_wise_division_vt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < A.size(); i++) {
+		res.write[i] = element_wise_divisionm(A[i], B[i]);
+	}
+
+	return res;
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::sqrt(std::vector<std::vector<std::vector<real_t>>> A) {
@@ -2763,11 +2803,33 @@ std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::sqrt(std::vector<std::
 	return A;
 }
 
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::sqrt_vt(const Vector<Ref<MLPPMatrix>> &A) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < A.size(); i++) {
+		res.write[i] = sqrtm(A[i]);
+	}
+
+	return res;
+}
+
 std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::exponentiate(std::vector<std::vector<std::vector<real_t>>> A, real_t p) {
 	for (uint32_t i = 0; i < A.size(); i++) {
 		A[i] = exponentiate(A[i], p);
 	}
 	return A;
+}
+
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::exponentiate_vt(const Vector<Ref<MLPPMatrix>> &A, real_t p) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < A.size(); i++) {
+		res.write[i] = exponentiatem(A[i], p);
+	}
+
+	return res;
 }
 
 std::vector<std::vector<real_t>> MLPPLinAlg::tensor_vec_mult(std::vector<std::vector<std::vector<real_t>>> A, std::vector<real_t> b) {
@@ -2840,6 +2902,21 @@ std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::resize(std::vector<std
 	return A;
 }
 
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::resize_vt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(B.size());
+
+	for (int i = 0; i < res.size(); i++) {
+		Ref<MLPPMatrix> m;
+		m.instance();
+		m->resize(B[i]->size());
+
+		res.write[i] = m;
+	}
+
+	return res;
+}
+
 std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::max(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B) {
 	for (uint32_t i = 0; i < A.size(); i++) {
 		A[i] = max(A[i], B[i]);
@@ -2847,10 +2924,32 @@ std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::max(std::vector<std::v
 	return A;
 }
 
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::max_vt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < A.size(); i++) {
+		res.write[i] = max_nm(A[i], B[i]);
+	}
+
+	return res;
+}
+
 std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::abs(std::vector<std::vector<std::vector<real_t>>> A) {
 	for (uint32_t i = 0; i < A.size(); i++) {
 		A[i] = abs(A[i]);
 	}
+	return A;
+}
+
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::abs_vt(const Vector<Ref<MLPPMatrix>> &A) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < A.size(); i++) {
+		res.write[i] = absm(A[i]);
+	}
+
 	return A;
 }
 

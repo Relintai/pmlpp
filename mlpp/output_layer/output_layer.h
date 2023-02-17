@@ -49,11 +49,11 @@ public:
 	Ref<MLPPVector> get_a();
 	void set_a(const Ref<MLPPVector> &val);
 
-	Ref<MLPPVector> get_z_test();
-	void set_z_test(const Ref<MLPPVector> &val);
+	real_t get_z_test();
+	void set_z_test(const real_t val);
 
-	Ref<MLPPVector> get_a_test();
-	void set_a_test(const Ref<MLPPVector> &val);
+	real_t get_a_test();
+	void set_a_test(const real_t val);
 
 	Ref<MLPPVector> get_delta();
 	void set_delta(const Ref<MLPPVector> &val);
@@ -76,7 +76,7 @@ public:
 	void forward_pass();
 	void test(const Ref<MLPPVector> &x);
 
-	MLPPOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha);
+	MLPPOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, MLPPCost::CostTypes p_cost, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha);
 
 	MLPPOutputLayer();
 	~MLPPOutputLayer();
@@ -96,8 +96,8 @@ protected:
 	Ref<MLPPVector> _z;
 	Ref<MLPPVector> _a;
 
-	Ref<MLPPVector> _z_test;
-	Ref<MLPPVector> _a_test;
+	real_t _z_test;
+	real_t _a_test;
 
 	Ref<MLPPVector> _delta;
 
