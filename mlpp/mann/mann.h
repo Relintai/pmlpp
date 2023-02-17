@@ -20,12 +20,6 @@
 #include "../hidden_layer/hidden_layer.h"
 #include "../multi_output_layer/multi_output_layer.h"
 
-#include "../hidden_layer/hidden_layer_old.h"
-#include "../multi_output_layer/multi_output_layer_old.h"
-
-#include <string>
-#include <vector>
-
 class MLPPMANN : public Reference {
 	GDCLASS(MLPPMANN, Reference);
 
@@ -38,38 +32,38 @@ public:
 	void set_output_set(const Ref<MLPPMatrix> &val);
 	*/
 
-	std::vector<std::vector<real_t>> model_set_test(std::vector<std::vector<real_t>> X);
-	std::vector<real_t> model_test(std::vector<real_t> x);
+	Ref<MLPPMatrix> model_set_test(const Ref<MLPPMatrix> &X);
+	Ref<MLPPVector> model_test(const Ref<MLPPVector> &x);
 
 	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
 	real_t score();
 
-	void save(std::string file_name);
+	void save(const String &file_name);
 
-	void add_layer(int n_hidden, std::string activation, std::string weight_init = "Default", std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
-	void add_output_layer(std::string activation, std::string loss, std::string weight_init = "Default", std::string reg = "None", real_t lambda = 0.5, real_t alpha = 0.5);
+	void add_layer(int n_hidden, MLPPActivation::ActivationFunction activation, MLPPUtilities::WeightDistributionType weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT, MLPPReg::RegularizationType reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t lambda = 0.5, real_t alpha = 0.5);
+	void add_output_layer(MLPPActivation::ActivationFunction activation, MLPPCost::CostTypes loss, MLPPUtilities::WeightDistributionType weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT, MLPPReg::RegularizationType reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t lambda = 0.5, real_t alpha = 0.5);
 
 	bool is_initialized();
 	void initialize();
 
-	MLPPMANN(std::vector<std::vector<real_t>> p_input_set, std::vector<std::vector<real_t>> p_output_set);
+	MLPPMANN(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set);
 
 	MLPPMANN();
 	~MLPPMANN();
 
 private:
-	real_t cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y);
+	real_t cost(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y);
 
 	void forward_pass();
 
 	static void _bind_methods();
 
-	std::vector<std::vector<real_t>> _input_set;
-	std::vector<std::vector<real_t>> _output_set;
-	std::vector<std::vector<real_t>> _y_hat;
+	Ref<MLPPMatrix> _input_set;
+	Ref<MLPPMatrix> _output_set;
+	Ref<MLPPMatrix> _y_hat;
 
-	std::vector<MLPPOldHiddenLayer> _network;
-	MLPPOldMultiOutputLayer *_output_layer;
+	Vector<Ref<MLPPHiddenLayer>> _network;
+	Ref<MLPPMultiOutputLayer> _output_layer;
 
 	int _n;
 	int _k;

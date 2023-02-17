@@ -136,9 +136,11 @@ void MLPPMultiOutputLayer::test(const Ref<MLPPVector> &x) {
 	_a_test = avn.run_activation_norm_vector(_activation, _z_test);
 }
 
-MLPPMultiOutputLayer::MLPPMultiOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
+MLPPMultiOutputLayer::MLPPMultiOutputLayer(int n_output, int p_n_hidden, MLPPActivation::ActivationFunction p_activation, MLPPCost::CostTypes cost, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
+	_n_output = n_output;
 	_n_hidden = p_n_hidden;
 	_activation = p_activation;
+	_cost = cost;
 
 	_input = p_input;
 

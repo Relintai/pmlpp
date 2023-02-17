@@ -76,7 +76,7 @@ public:
 	void forward_pass();
 	void test(const Ref<MLPPVector> &x);
 
-	MLPPMultiOutputLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha);
+	MLPPMultiOutputLayer(int n_output, int p_n_hidden, MLPPActivation::ActivationFunction p_activation, MLPPCost::CostTypes cost, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha);
 
 	MLPPMultiOutputLayer();
 	~MLPPMultiOutputLayer();

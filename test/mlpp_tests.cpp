@@ -745,11 +745,19 @@ void MLPPTests::test_dynamically_sized_mann(bool ui) {
 	alg.printMatrix(mann_old.modelSetTest(inputSet));
 	std::cout << "ACCURACY (old): " << 100 * mann_old.score() << "%" << std::endl;
 
-	MLPPMANN mann(inputSet, outputSet);
-	mann.add_output_layer("Linear", "MSE");
+	Ref<MLPPMatrix> input_set;
+	input_set.instance();
+	input_set->set_from_std_vectors(inputSet);
+
+	Ref<MLPPMatrix> output_set;
+	output_set.instance();
+	output_set->set_from_std_vectors(outputSet);
+
+	MLPPMANN mann(input_set, output_set);
+	mann.add_output_layer(MLPPActivation::ACTIVATION_FUNCTION_LINEAR, MLPPCost::COST_TYPE_MSE);
 	mann.gradient_descent(0.001, 80000, false);
-	alg.printMatrix(mann.model_set_test(inputSet));
-	std::cout << "ACCURACY: " << 100 * mann.score() << "%" << std::endl;
+	PLOG_MSG(mann.model_set_test(input_set)->to_string());
+	PLOG_MSG("ACCURACY: " + String::num(100 * mann.score()) + "%");
 }
 void MLPPTests::test_train_test_split_mann(bool ui) {
 	MLPPLinAlg alg;
@@ -787,12 +795,12 @@ void MLPPTests::test_train_test_split_mann(bool ui) {
 	alg.printMatrix(mann_old.modelSetTest(split_data.test->get_input()->to_std_vector()));
 	std::cout << "ACCURACY (old): " << 100 * mann_old.score() << "%" << std::endl;
 
-	MLPPMANN mann(split_data.train->get_input()->to_std_vector(), split_data.train->get_output()->to_std_vector());
-	mann.add_layer(100, "RELU", "XavierNormal");
-	mann.add_output_layer("Softmax", "CrossEntropy", "XavierNormal");
+	MLPPMANN mann(split_data.train->get_input(), split_data.train->get_output());
+	mann.add_layer(100, MLPPActivation::ACTIVATION_FUNCTION_RELU, MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_XAVIER_NORMAL);
+	mann.add_output_layer(MLPPActivation::ACTIVATION_FUNCTION_SOFTMAX, MLPPCost::COST_TYPE_CROSS_ENTROPY, MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_XAVIER_NORMAL);
 	mann.gradient_descent(0.1, 80000, ui);
-	alg.printMatrix(mann.model_set_test(split_data.test->get_input()->to_std_vector()));
-	std::cout << "ACCURACY: " << 100 * mann.score() << "%" << std::endl;
+	PLOG_MSG(mann.model_set_test(split_data.test->get_input())->to_string());
+	PLOG_MSG("ACCURACY: " + String::num(100 * mann.score()) + "%");
 }
 
 void MLPPTests::test_naive_bayes() {
