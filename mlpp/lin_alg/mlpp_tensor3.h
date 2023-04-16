@@ -19,6 +19,7 @@ class MLPPTensor3 : public Reference {
 	GDCLASS(MLPPTensor3, Reference);
 
 public:
+	/*
 	real_t *ptrw() {
 		return _data;
 	}
@@ -613,12 +614,15 @@ public:
 
 		return true;
 	}
+	*/
 
-	String to_string();
+	//String to_string();
 
 	_FORCE_INLINE_ MLPPTensor3() {
 		_data = NULL;
 	}
+
+	/*
 	_FORCE_INLINE_ MLPPTensor3(const MLPPMatrix &p_from) {
 		_data = NULL;
 
@@ -653,7 +657,7 @@ public:
 	std::vector<std::vector<real_t>> to_std_vector();
 	void set_row_std_vector(int p_index_y, const std::vector<real_t> &p_row);
 	MLPPTensor3(const std::vector<std::vector<real_t>> &p_from);
-
+	*/
 protected:
 	static void _bind_methods();
 

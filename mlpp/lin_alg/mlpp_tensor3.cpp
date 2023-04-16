@@ -1,6 +1,7 @@
 
 #include "mlpp_tensor3.h"
 
+/*
 String MLPPTensor3::to_string() {
 	String str;
 
@@ -21,7 +22,9 @@ String MLPPTensor3::to_string() {
 
 	return str;
 }
+*/
 
+/*
 std::vector<real_t> MLPPTensor3::to_flat_std_vector() const {
 	std::vector<real_t> ret;
 	ret.resize(data_size());
@@ -93,8 +96,10 @@ MLPPTensor3::MLPPTensor3(const std::vector<std::vector<real_t>> &p_from) {
 
 	set_from_std_vectors(p_from);
 }
+*/
 
 void MLPPTensor3::_bind_methods() {
+	/*
 	ClassDB::bind_method(D_METHOD("add_row", "row"), &MLPPTensor3::add_row_pool_vector);
 	ClassDB::bind_method(D_METHOD("add_row_mlpp_vector", "row"), &MLPPTensor3::add_row_mlpp_vector);
 	ClassDB::bind_method(D_METHOD("add_rows_mlpp_matrix", "other"), &MLPPTensor3::add_rows_mlpp_matrix);
@@ -134,4 +139,5 @@ void MLPPTensor3::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_from_mlpp_matrix", "from"), &MLPPTensor3::set_from_mlpp_matrix);
 
 	ClassDB::bind_method(D_METHOD("is_equal_approx", "with", "tolerance"), &MLPPTensor3::is_equal_approx, CMP_EPSILON);
+	*/
 }
