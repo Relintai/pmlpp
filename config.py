@@ -8,6 +8,7 @@ def get_doc_classes():
     return [
         "MLPPVector",
         "MLPPMatrix",
+        "MLPPTensor3",
 
         "MLPPUtilities",
         "MLPPReg",

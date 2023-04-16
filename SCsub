@@ -9,6 +9,7 @@ sources = [
 
     "mlpp/lin_alg/mlpp_vector.cpp",
     "mlpp/lin_alg/mlpp_matrix.cpp",
+    "mlpp/lin_alg/mlpp_tensor3.cpp",
 
     "mlpp/activation/activation.cpp",
     "mlpp/ann/ann.cpp",
