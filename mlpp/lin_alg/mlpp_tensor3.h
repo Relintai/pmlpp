@@ -19,7 +19,6 @@ class MLPPTensor3 : public Reference {
 	GDCLASS(MLPPTensor3, Reference);
 
 public:
-	/*
 	real_t *ptrw() {
 		return _data;
 	}
@@ -28,6 +27,7 @@ public:
 		return _data;
 	}
 
+	/*
 	_FORCE_INLINE_ void add_row(const Vector<real_t> &p_row) {
 		if (p_row.size() == 0) {
 			return;
@@ -197,21 +197,22 @@ public:
 			SWAP(_data[ind1_start + i], _data[ind2_start + i]);
 		}
 	}
+	*/
 
-	_FORCE_INLINE_ void clear() { resize(Size2i()); }
+	_FORCE_INLINE_ void clear() { resize(Size3i()); }
 	_FORCE_INLINE_ void reset() {
 		if (_data) {
 			memfree(_data);
 			_data = NULL;
-			_size = Vector2i();
+			_size = Size3i();
 		}
 	}
 
-	_FORCE_INLINE_ bool empty() const { return data_size() == 0; }
-	_FORCE_INLINE_ int data_size() const { return _size.x * _size.y; }
-	_FORCE_INLINE_ Size2i size() const { return _size; }
+	_FORCE_INLINE_ bool empty() const { return _size == Size3i(); }
+	_FORCE_INLINE_ int data_size() const { return _size.x * _size.y * _size.z; }
+	_FORCE_INLINE_ Size3i size() const { return _size; }
 
-	void resize(const Size2i &p_size) {
+	void resize(const Size3i &p_size) {
 		_size = p_size;
 
 		int ds = data_size();
@@ -229,8 +230,8 @@ public:
 		CRASH_COND_MSG(!_data, "Out of memory");
 	}
 
-	_FORCE_INLINE_ int calculate_index(int p_index_y, int p_index_x) const {
-		return p_index_y * _size.x + p_index_x;
+	_FORCE_INLINE_ int calculate_index(int p_index_y, int p_index_x, int p_index_z) const {
+		return p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z;
 	}
 
 	_FORCE_INLINE_ const real_t &operator[](int p_index) const {
@@ -242,42 +243,48 @@ public:
 		return _data[p_index];
 	}
 
-	_FORCE_INLINE_ real_t get_element(int p_index_y, int p_index_x) const {
+	_FORCE_INLINE_ real_t get_element(int p_index_y, int p_index_x, int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
+		ERR_FAIL_INDEX_V(p_index_z, _size.z, 0);
 
-		return _data[p_index_y * _size.x + p_index_x];
+		return _data[p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z];
 	}
-	_FORCE_INLINE_ real_t get_element(int p_index_y, int p_index_x) {
+	_FORCE_INLINE_ real_t get_element(int p_index_y, int p_index_x, int p_index_z) {
 		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
+		ERR_FAIL_INDEX_V(p_index_z, _size.z, 0);
 
-		return _data[p_index_y * _size.x + p_index_x];
+		return _data[p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z];
 	}
 
-	_FORCE_INLINE_ real_t get_element_bind(int p_index_y, int p_index_x) const {
+	_FORCE_INLINE_ real_t get_element_bind(int p_index_y, int p_index_x, int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
+		ERR_FAIL_INDEX_V(p_index_z, _size.z, 0);
 
-		return static_cast<real_t>(_data[p_index_y * _size.x + p_index_x]);
+		return static_cast<real_t>(_data[p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z]);
 	}
 
-	_FORCE_INLINE_ void set_element(int p_index_y, int p_index_x, real_t p_val) {
+	_FORCE_INLINE_ void set_element(int p_index_y, int p_index_x, int p_index_z, real_t p_val) {
 		ERR_FAIL_INDEX(p_index_x, _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
+		ERR_FAIL_INDEX(p_index_z, _size.z);
 
-		_data[p_index_y * _size.x + p_index_x] = p_val;
+		_data[p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z] = p_val;
 	}
 
-	_FORCE_INLINE_ void set_element_bind(int p_index_y, int p_index_x, real_t p_val) {
+	_FORCE_INLINE_ void set_element_bind(int p_index_y, int p_index_x, int p_index_z, real_t p_val) {
 		ERR_FAIL_INDEX(p_index_x, _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
+		ERR_FAIL_INDEX(p_index_z, _size.z);
 
-		_data[p_index_y * _size.x + p_index_x] = p_val;
+		_data[p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z] = p_val;
 	}
 
-	_FORCE_INLINE_ Vector<real_t> get_row_vector(int p_index_y) {
+	_FORCE_INLINE_ Vector<real_t> get_row_vector(int p_index_y, int p_index_z) {
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, Vector<real_t>());
+		ERR_FAIL_INDEX_V(p_index_z, _size.z, Vector<real_t>());
 
 		Vector<real_t> ret;
 
@@ -298,8 +305,9 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ PoolRealArray get_row_pool_vector(int p_index_y) {
+	_FORCE_INLINE_ PoolRealArray get_row_pool_vector(int p_index_y, int p_index_z) {
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, PoolRealArray());
+		ERR_FAIL_INDEX_V(p_index_z, _size.z, PoolRealArray());
 
 		PoolRealArray ret;
 
@@ -309,7 +317,7 @@ public:
 
 		ret.resize(_size.x);
 
-		int ind_start = p_index_y * _size.x;
+		int ind_start = p_index_y * _size.x + _size.x * _size.y * p_index_z;
 
 		PoolRealArray::Write w = ret.write();
 		real_t *row_ptr = w.ptr();
@@ -321,8 +329,9 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ Ref<MLPPVector> get_row_mlpp_vector(int p_index_y) {
+	_FORCE_INLINE_ Ref<MLPPVector> get_row_mlpp_vector(int p_index_y, int p_index_z) {
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, Ref<MLPPVector>());
+		ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<MLPPVector>());
 
 		Ref<MLPPVector> ret;
 		ret.instance();
@@ -333,7 +342,7 @@ public:
 
 		ret->resize(_size.x);
 
-		int ind_start = p_index_y * _size.x;
+		int ind_start = p_index_y * _size.x + _size.x * _size.y * p_index_z;
 
 		real_t *row_ptr = ret->ptrw();
 
@@ -344,15 +353,16 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ void get_row_into_mlpp_vector(int p_index_y, Ref<MLPPVector> target) const {
+	_FORCE_INLINE_ void get_row_into_mlpp_vector(int p_index_y, int p_index_z, Ref<MLPPVector> target) const {
 		ERR_FAIL_COND(!target.is_valid());
 		ERR_FAIL_INDEX(p_index_y, _size.y);
+		ERR_FAIL_INDEX(p_index_z, _size.z);
 
 		if (unlikely(target->size() != _size.x)) {
 			target->resize(_size.x);
 		}
 
-		int ind_start = p_index_y * _size.x;
+		int ind_start = p_index_y * _size.x + _size.x * _size.y * p_index_z;
 
 		real_t *row_ptr = target->ptrw();
 
@@ -361,11 +371,12 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void set_row_vector(int p_index_y, const Vector<real_t> &p_row) {
+	_FORCE_INLINE_ void set_row_vector(int p_index_y, int p_index_z, const Vector<real_t> &p_row) {
 		ERR_FAIL_COND(p_row.size() != _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
+		ERR_FAIL_INDEX(p_index_z, _size.z);
 
-		int ind_start = p_index_y * _size.x;
+		int ind_start = p_index_y * _size.x + _size.x * _size.y * p_index_z;
 
 		const real_t *row_ptr = p_row.ptr();
 
@@ -374,11 +385,12 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void set_row_pool_vector(int p_index_y, const PoolRealArray &p_row) {
+	_FORCE_INLINE_ void set_row_pool_vector(int p_index_y, int p_index_z, const PoolRealArray &p_row) {
 		ERR_FAIL_COND(p_row.size() != _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
+		ERR_FAIL_INDEX(p_index_z, _size.z);
 
-		int ind_start = p_index_y * _size.x;
+		int ind_start = p_index_y * _size.x + _size.x * _size.y * p_index_z;
 
 		PoolRealArray::Read r = p_row.read();
 		const real_t *row_ptr = r.ptr();
@@ -388,12 +400,13 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void set_row_mlpp_vector(int p_index_y, const Ref<MLPPVector> &p_row) {
+	_FORCE_INLINE_ void set_row_mlpp_vector(int p_index_y, int p_index_z, const Ref<MLPPVector> &p_row) {
 		ERR_FAIL_COND(!p_row.is_valid());
 		ERR_FAIL_COND(p_row->size() != _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
+		ERR_FAIL_INDEX(p_index_z, _size.z);
 
-		int ind_start = p_index_y * _size.x;
+		int ind_start = p_index_y * _size.x + _size.x * _size.y * p_index_z;
 
 		const real_t *row_ptr = p_row->ptr();
 
@@ -455,17 +468,27 @@ public:
 	_FORCE_INLINE_ void set_from_mlpp_matrix(const Ref<MLPPMatrix> &p_from) {
 		ERR_FAIL_COND(!p_from.is_valid());
 
-		//resize(p_from->size());
-		//for (int i = 0; i < p_from->data_size(); ++i) {
-			//_data[i] = p_from->_data[i];
-		//}
+		Size2i mat_size = p_from->size();
+		resize(Size3i(mat_size.x, mat_size.y, 1));
+
+		int ds = p_from->data_size();
+		const real_t *ptr = p_from->ptr();
+
+		for (int i = 0; i < ds; ++i) {
+			_data[i] = ptr[i];
+		}
 	}
 
 	_FORCE_INLINE_ void set_from_mlpp_matrixr(const MLPPMatrix &p_from) {
-		//resize(p_from.size());
-		//for (int i = 0; i < p_from.data_size(); ++i) {
-			//_data[i] = p_from._data[i];
-		//}
+		Size2i mat_size = p_from.size();
+		resize(Size3i(mat_size.x, mat_size.y, 1));
+
+		int ds = p_from.data_size();
+		const real_t *ptr = p_from.ptr();
+
+		for (int i = 0; i < ds; ++i) {
+			_data[i] = ptr[i];
+		}
 	}
 
 	_FORCE_INLINE_ void set_from_mlpp_vectors(const Vector<Ref<MLPPVector>> &p_from) {
@@ -479,7 +502,7 @@ public:
 			return;
 		}
 
-		resize(Size2i(p_from[0]->size(), p_from.size()));
+		resize(Size3i(p_from[0]->size(), p_from.size(), 1));
 
 		if (data_size() == 0) {
 			reset();
@@ -514,7 +537,7 @@ public:
 			return;
 		}
 
-		resize(Size2i(v0->size(), p_from.size()));
+		resize(Size3i(v0->size(), p_from.size(), 1));
 
 		if (data_size() == 0) {
 			reset();
@@ -542,7 +565,7 @@ public:
 			return;
 		}
 
-		resize(Size2i(p_from[0].size(), p_from.size()));
+		resize(Size3i(p_from[0].size(), p_from.size(), 1));
 
 		if (data_size() == 0) {
 			reset();
@@ -571,7 +594,7 @@ public:
 
 		PoolRealArray p0arr = p_from[0];
 
-		resize(Size2i(p0arr.size(), p_from.size()));
+		resize(Size3i(p0arr.size(), p_from.size(), 1));
 
 		if (data_size() == 0) {
 			reset();
@@ -614,22 +637,25 @@ public:
 
 		return true;
 	}
-	*/
 
-	//String to_string();
+	String to_string();
 
 	_FORCE_INLINE_ MLPPTensor3() {
 		_data = NULL;
 	}
 
-	/*
 	_FORCE_INLINE_ MLPPTensor3(const MLPPMatrix &p_from) {
 		_data = NULL;
 
-		//resize(p_from.size());
-		//for (int i = 0; i < p_from.data_size(); ++i) {
-		//	_data[i] = p_from._data[i];
-		//}
+		Size2i mat_size = p_from.size();
+		resize(Size3i(mat_size.x, mat_size.y, 1));
+
+		int ds = p_from.data_size();
+		const real_t *ptr = p_from.ptr();
+
+		for (int i = 0; i < ds; ++i) {
+			_data[i] = ptr[i];
+		}
 	}
 
 	MLPPTensor3(const Vector<Vector<real_t>> &p_from) {
@@ -650,19 +676,18 @@ public:
 		}
 	}
 
-
 	// TODO: These are temporary
 	std::vector<real_t> to_flat_std_vector() const;
-	void set_from_std_vectors(const std::vector<std::vector<real_t>> &p_from);
-	std::vector<std::vector<real_t>> to_std_vector();
+	void set_from_std_vectors(const std::vector<std::vector<std::vector<real_t>>> &p_from);
+	std::vector<std::vector<std::vector<real_t>>> to_std_vector();
 	void set_row_std_vector(int p_index_y, const std::vector<real_t> &p_row);
-	MLPPTensor3(const std::vector<std::vector<real_t>> &p_from);
-	*/
+	MLPPTensor3(const std::vector<std::vector<std::vector<real_t>>> &p_from);
+
 protected:
 	static void _bind_methods();
 
 protected:
-	Size2i _size;
+	Size3i _size;
 	real_t *_data;
 };
 
