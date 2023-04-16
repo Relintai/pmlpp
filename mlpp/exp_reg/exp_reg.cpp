@@ -197,10 +197,10 @@ void MLPPExpReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradient
-			real_t sum = 0;
-			for (int j = 0; j < current_output_batch->size(); j++) {
-				sum += (y_hat->get_element(j) - current_output_batch->get_element(j));
-			}
+			//real_t sum = 0;
+			//for (int j = 0; j < current_output_batch->size(); j++) {
+			//	sum += (y_hat->get_element(j) - current_output_batch->get_element(j));
+			//}
 
 			//real_t b_gradient = sum / output_mini_batches[i].size();
 			y_hat = evaluatem(current_input_batch);
@@ -288,7 +288,7 @@ Ref<MLPPVector> MLPPExpReg::evaluatem(const Ref<MLPPMatrix> &X) {
 	y_hat->resize(X->size().y);
 
 	for (int i = 0; i < X->size().y; i++) {
-		real_t y;
+		real_t y = 0;
 
 		for (int j = 0; j < X->size().x; j++) {
 			y += _initial->get_element(j) * Math::pow(_weights->get_element(j), X->get_element(i, j));

@@ -40,7 +40,7 @@ private:
 
 	int n;
 	int k;
-	real_t learning_rate;
+	//real_t learning_rate;
 
 	// Regularization Params
 	std::string reg;

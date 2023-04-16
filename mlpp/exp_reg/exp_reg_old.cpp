@@ -182,10 +182,10 @@ void MLPPExpRegOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_siz
 			weights = regularization.regWeights(weights, lambda, alpha, reg);
 
 			// Calculating the bias gradient
-			real_t sum = 0;
-			for (uint32_t j = 0; j < outputMiniBatches[i].size(); j++) {
-				sum += (y_hat[j] - outputMiniBatches[i][j]);
-			}
+			//real_t sum = 0;
+			//for (uint32_t j = 0; j < outputMiniBatches[i].size(); j++) {
+			//	sum += (y_hat[j] - outputMiniBatches[i][j]);
+			//}
 
 			//real_t b_gradient = sum / outputMiniBatches[i].size();
 			y_hat = Evaluate(inputMiniBatches[i]);

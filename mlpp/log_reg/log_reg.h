@@ -76,7 +76,7 @@ protected:
 
 	int _n;
 	int _k;
-	real_t _learning_rate;
+	//real_t _learning_rate;
 
 	// Regularization Params
 	MLPPReg::RegularizationType _reg;

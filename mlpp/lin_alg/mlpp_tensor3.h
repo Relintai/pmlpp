@@ -293,6 +293,8 @@ public:
 		for (int i = 0; i < _size.x; ++i) {
 			row_ptr[i] = _data[ind_start + i];
 		}
+
+		return ret;
 	}
 
 	_FORCE_INLINE_ PoolRealArray get_row_pool_vector(int p_index_y) {
@@ -643,6 +645,7 @@ public:
 			reset();
 		}
 	}
+
 
 	// TODO: These are temporary
 	std::vector<real_t> to_flat_std_vector() const;

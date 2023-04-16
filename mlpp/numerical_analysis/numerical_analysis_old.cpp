@@ -77,7 +77,7 @@ real_t MLPPNumericalAnalysisOld::numDiff_3(real_t (*function)(std::vector<real_t
 	// For third order derivative tensors.
 	// NOTE: Approximations do not appear to be accurate for sinusodial functions...
 	// Should revisit this later.
-	real_t eps = INT_MAX;
+	real_t eps = 1e-5;
 
 	std::vector<real_t> x_ppp = x;
 	x_ppp[axis1] += eps;
