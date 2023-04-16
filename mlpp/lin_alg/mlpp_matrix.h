@@ -246,28 +246,8 @@ public:
 
 		return _data[p_index_y * _size.x + p_index_x];
 	}
-	_FORCE_INLINE_ real_t get_element(int p_index_y, int p_index_x) {
-		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
-		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
-
-		return _data[p_index_y * _size.x + p_index_x];
-	}
-
-	_FORCE_INLINE_ real_t get_element_bind(int p_index_y, int p_index_x) const {
-		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
-		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
-
-		return static_cast<real_t>(_data[p_index_y * _size.x + p_index_x]);
-	}
 
 	_FORCE_INLINE_ void set_element(int p_index_y, int p_index_x, real_t p_val) {
-		ERR_FAIL_INDEX(p_index_x, _size.x);
-		ERR_FAIL_INDEX(p_index_y, _size.y);
-
-		_data[p_index_y * _size.x + p_index_x] = p_val;
-	}
-
-	_FORCE_INLINE_ void set_element_bind(int p_index_y, int p_index_x, real_t p_val) {
 		ERR_FAIL_INDEX(p_index_x, _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
 

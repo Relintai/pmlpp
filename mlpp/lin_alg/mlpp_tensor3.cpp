@@ -129,8 +129,8 @@ void MLPPTensor3::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("resize", "size"), &MLPPTensor3::resize);
 
-	ClassDB::bind_method(D_METHOD("get_element", "index_x", "index_y"), &MLPPTensor3::get_element_bind);
-	ClassDB::bind_method(D_METHOD("set_element", "index_x", "index_y", "val"), &MLPPTensor3::set_element_bind);
+	ClassDB::bind_method(D_METHOD("get_element", "index_x", "index_y"), &MLPPTensor3::get_element);
+	ClassDB::bind_method(D_METHOD("set_element", "index_x", "index_y", "val"), &MLPPTensor3::set_element);
 
 	ClassDB::bind_method(D_METHOD("get_row_pool_vector", "index_y"), &MLPPTensor3::get_row_pool_vector);
 	ClassDB::bind_method(D_METHOD("get_row_mlpp_vector", "index_y"), &MLPPTensor3::get_row_mlpp_vector);

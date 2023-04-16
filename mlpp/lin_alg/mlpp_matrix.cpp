@@ -112,8 +112,8 @@ void MLPPMatrix::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("resize", "size"), &MLPPMatrix::resize);
 
-	ClassDB::bind_method(D_METHOD("get_element", "index_x", "index_y"), &MLPPMatrix::get_element_bind);
-	ClassDB::bind_method(D_METHOD("set_element", "index_x", "index_y", "val"), &MLPPMatrix::set_element_bind);
+	ClassDB::bind_method(D_METHOD("get_element", "index_x", "index_y"), &MLPPMatrix::get_element);
+	ClassDB::bind_method(D_METHOD("set_element", "index_x", "index_y", "val"), &MLPPMatrix::set_element);
 
 	ClassDB::bind_method(D_METHOD("get_row_pool_vector", "index_y"), &MLPPMatrix::get_row_pool_vector);
 	ClassDB::bind_method(D_METHOD("get_row_mlpp_vector", "index_y"), &MLPPMatrix::get_row_mlpp_vector);

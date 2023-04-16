@@ -56,8 +56,8 @@ void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("size"), &MLPPVector::size);
 	ClassDB::bind_method(D_METHOD("resize", "size"), &MLPPVector::resize);
 
-	ClassDB::bind_method(D_METHOD("get_element", "index"), &MLPPVector::get_element_bind);
-	ClassDB::bind_method(D_METHOD("set_element", "index", "val"), &MLPPVector::set_element_bind);
+	ClassDB::bind_method(D_METHOD("get_element", "index"), &MLPPVector::get_element);
+	ClassDB::bind_method(D_METHOD("set_element", "index", "val"), &MLPPVector::set_element);
 
 	ClassDB::bind_method(D_METHOD("fill", "val"), &MLPPVector::fill);
 	ClassDB::bind_method(D_METHOD("insert", "pos", "val"), &MLPPVector::insert);
