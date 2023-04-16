@@ -243,7 +243,7 @@ Ref<MLPPVector> MLPPKMeans::silhouette_scores() {
 		closest_centroids->get_row_into_mlpp_vector(i, closest_centroids_i_tempv);
 
 		// COMPUTING b[i]
-		real_t b = INT_MAX;
+		real_t b = Math_INF;
 		for (int j = 0; j < mu_size_y; ++j) {
 			_mu->get_row_into_mlpp_vector(j, mu_j_tempv);
 
