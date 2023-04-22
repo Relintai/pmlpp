@@ -235,13 +235,13 @@ public:
 	std::vector<real_t> sqrt(std::vector<real_t> a);
 	std::vector<real_t> cbrt(std::vector<real_t> a);
 
-	Ref<MLPPVector> logv(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> log10v(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> expv(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> erfv(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> exponentiatev(const Ref<MLPPVector> &a, real_t p);
-	Ref<MLPPVector> sqrtv(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> cbrtv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> lognv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> log10nv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> expnv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> erfnv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> exponentiatenv(const Ref<MLPPVector> &a, real_t p);
+	Ref<MLPPVector> sqrtnv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> cbrtnv(const Ref<MLPPVector> &a);
 
 	real_t dot(std::vector<real_t> a, std::vector<real_t> b);
 	real_t dotv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);

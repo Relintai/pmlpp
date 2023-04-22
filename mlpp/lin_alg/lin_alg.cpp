@@ -2171,7 +2171,7 @@ std::vector<real_t> MLPPLinAlg::cbrt(std::vector<real_t> a) {
 	return exponentiate(a, real_t(1) / real_t(3));
 }
 
-Ref<MLPPVector> MLPPLinAlg::logv(const Ref<MLPPVector> &a) {
+Ref<MLPPVector> MLPPLinAlg::lognv(const Ref<MLPPVector> &a) {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -2189,7 +2189,7 @@ Ref<MLPPVector> MLPPLinAlg::logv(const Ref<MLPPVector> &a) {
 
 	return out;
 }
-Ref<MLPPVector> MLPPLinAlg::log10v(const Ref<MLPPVector> &a) {
+Ref<MLPPVector> MLPPLinAlg::log10nv(const Ref<MLPPVector> &a) {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -2207,7 +2207,7 @@ Ref<MLPPVector> MLPPLinAlg::log10v(const Ref<MLPPVector> &a) {
 
 	return out;
 }
-Ref<MLPPVector> MLPPLinAlg::expv(const Ref<MLPPVector> &a) {
+Ref<MLPPVector> MLPPLinAlg::expnv(const Ref<MLPPVector> &a) {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -2225,7 +2225,7 @@ Ref<MLPPVector> MLPPLinAlg::expv(const Ref<MLPPVector> &a) {
 
 	return out;
 }
-Ref<MLPPVector> MLPPLinAlg::erfv(const Ref<MLPPVector> &a) {
+Ref<MLPPVector> MLPPLinAlg::erfnv(const Ref<MLPPVector> &a) {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -2243,7 +2243,7 @@ Ref<MLPPVector> MLPPLinAlg::erfv(const Ref<MLPPVector> &a) {
 
 	return out;
 }
-Ref<MLPPVector> MLPPLinAlg::exponentiatev(const Ref<MLPPVector> &a, real_t p) {
+Ref<MLPPVector> MLPPLinAlg::exponentiatenv(const Ref<MLPPVector> &a, real_t p) {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -2261,7 +2261,7 @@ Ref<MLPPVector> MLPPLinAlg::exponentiatev(const Ref<MLPPVector> &a, real_t p) {
 
 	return out;
 }
-Ref<MLPPVector> MLPPLinAlg::sqrtv(const Ref<MLPPVector> &a) {
+Ref<MLPPVector> MLPPLinAlg::sqrtnv(const Ref<MLPPVector> &a) {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -2279,8 +2279,8 @@ Ref<MLPPVector> MLPPLinAlg::sqrtv(const Ref<MLPPVector> &a) {
 
 	return out;
 }
-Ref<MLPPVector> MLPPLinAlg::cbrtv(const Ref<MLPPVector> &a) {
-	return exponentiatev(a, static_cast<real_t>(1) / static_cast<real_t>(3));
+Ref<MLPPVector> MLPPLinAlg::cbrtnv(const Ref<MLPPVector> &a) {
+	return exponentiatenv(a, static_cast<real_t>(1) / static_cast<real_t>(3));
 }
 
 real_t MLPPLinAlg::dot(std::vector<real_t> a, std::vector<real_t> b) {

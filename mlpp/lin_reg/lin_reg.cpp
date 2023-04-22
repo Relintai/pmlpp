@@ -405,7 +405,7 @@ void MLPPLinReg::adagrad(real_t learning_rate, int max_epoch, int mini_batch_siz
 
 			v = alg.hadamard_productnv(weight_grad, weight_grad);
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_division(weight_grad, alg.sqrtv(alg.scalar_addnv(e, v)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_division(weight_grad, alg.sqrtnv(alg.scalar_addnv(e, v)))));
 
 			// Calculating the bias gradients
 			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
@@ -460,7 +460,7 @@ void MLPPLinReg::adadelta(real_t learning_rate, int max_epoch, int mini_batch_si
 
 			v = alg.additionnv(alg.scalar_multiplynv(b1, v), alg.scalar_multiplynv(1 - b1, alg.hadamard_productnv(weight_grad, weight_grad)));
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_division(weight_grad, alg.sqrtv(alg.scalar_addnv(e, v)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_division(weight_grad, alg.sqrtnv(alg.scalar_addnv(e, v)))));
 
 			// Calculating the bias gradients
 			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
@@ -514,12 +514,12 @@ void MLPPLinReg::adam(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			Ref<MLPPVector> weight_grad = alg.additionnv(gradient, reg_deriv_term); // Weight_grad_final
 
 			m = alg.additionnv(alg.scalar_multiplynv(b1, m), alg.scalar_multiplynv(1 - b1, weight_grad));
-			v = alg.additionnv(alg.scalar_multiplynv(b2, v), alg.scalar_multiplynv(1 - b2, alg.exponentiatev(weight_grad, 2)));
+			v = alg.additionnv(alg.scalar_multiplynv(b2, v), alg.scalar_multiplynv(1 - b2, alg.exponentiatenv(weight_grad, 2)));
 
 			Ref<MLPPVector> m_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b1, epoch)), m);
 			Ref<MLPPVector> v_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b2, epoch)), v);
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_divisionm(m_hat, alg.scalar_addnv(e, alg.sqrtv(v_hat)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_divisionm(m_hat, alg.scalar_addnv(e, alg.sqrtnv(v_hat)))));
 
 			// Calculating the bias gradients
 			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
@@ -631,13 +631,13 @@ void MLPPLinReg::nadam(real_t learning_rate, int max_epoch, int mini_batch_size,
 			Ref<MLPPVector> weight_grad = alg.additionnv(gradient, reg_deriv_term); // Weight_grad_final
 
 			m = alg.additionnv(alg.scalar_multiplynv(b1, m), alg.scalar_multiplynv(1 - b1, weight_grad));
-			v = alg.additionnv(alg.scalar_multiplynv(b2, v), alg.scalar_multiplynv(1 - b2, alg.exponentiatev(weight_grad, 2)));
+			v = alg.additionnv(alg.scalar_multiplynv(b2, v), alg.scalar_multiplynv(1 - b2, alg.exponentiatenv(weight_grad, 2)));
 			m_final = alg.additionnv(alg.scalar_multiplynv(b1, m), alg.scalar_multiplynv((1 - b1) / (1 - Math::pow(b1, epoch)), weight_grad));
 
 			Ref<MLPPVector> m_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b1, epoch)), m);
 			Ref<MLPPVector> v_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b2, epoch)), v);
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_division(m_final, alg.scalar_addnv(e, alg.sqrtv(v_hat)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_division(m_final, alg.scalar_addnv(e, alg.sqrtnv(v_hat)))));
 
 			// Calculating the bias gradients
 			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
