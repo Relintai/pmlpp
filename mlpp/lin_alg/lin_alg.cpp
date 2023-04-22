@@ -302,7 +302,7 @@ Ref<MLPPMatrix> MLPPLinAlg::kronecker_productnm(const Ref<MLPPMatrix> &A, const 
 				row.push_back(scalar_multiplynv(a_ptr[A->calculate_index(i, k)], row_tmp));
 			}
 
-			Ref<MLPPVector> flattened_row = flattenvv(row);
+			Ref<MLPPVector> flattened_row = flattenmnv(row);
 
 			C->set_row_mlpp_vector(i * b_size.y + j, flattened_row);
 		}
@@ -310,7 +310,7 @@ Ref<MLPPMatrix> MLPPLinAlg::kronecker_productnm(const Ref<MLPPMatrix> &A, const 
 
 	return C;
 }
-Ref<MLPPMatrix> MLPPLinAlg::element_wise_divisionnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+Ref<MLPPMatrix> MLPPLinAlg::element_wise_divisionnvnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
 	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
 	Size2i a_size = A->size();
 	ERR_FAIL_COND_V(a_size != B->size(), Ref<MLPPMatrix>());
@@ -485,7 +485,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::cbrt(std::vector<std::vector<real_t
 	return exponentiate(A, real_t(1) / real_t(3));
 }
 
-Ref<MLPPMatrix> MLPPLinAlg::logm(const Ref<MLPPMatrix> &A) {
+Ref<MLPPMatrix> MLPPLinAlg::lognm(const Ref<MLPPMatrix> &A) {
 	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPMatrix> out;
@@ -503,7 +503,7 @@ Ref<MLPPMatrix> MLPPLinAlg::logm(const Ref<MLPPMatrix> &A) {
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPLinAlg::log10m(const Ref<MLPPMatrix> &A) {
+Ref<MLPPMatrix> MLPPLinAlg::log10nm(const Ref<MLPPMatrix> &A) {
 	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPMatrix> out;
@@ -521,7 +521,7 @@ Ref<MLPPMatrix> MLPPLinAlg::log10m(const Ref<MLPPMatrix> &A) {
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPLinAlg::expm(const Ref<MLPPMatrix> &A) {
+Ref<MLPPMatrix> MLPPLinAlg::expnm(const Ref<MLPPMatrix> &A) {
 	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPMatrix> out;
@@ -539,7 +539,7 @@ Ref<MLPPMatrix> MLPPLinAlg::expm(const Ref<MLPPMatrix> &A) {
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPLinAlg::erfm(const Ref<MLPPMatrix> &A) {
+Ref<MLPPMatrix> MLPPLinAlg::erfnm(const Ref<MLPPMatrix> &A) {
 	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPMatrix> out;
@@ -557,7 +557,7 @@ Ref<MLPPMatrix> MLPPLinAlg::erfm(const Ref<MLPPMatrix> &A) {
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPLinAlg::exponentiatem(const Ref<MLPPMatrix> &A, real_t p) {
+Ref<MLPPMatrix> MLPPLinAlg::exponentiatenm(const Ref<MLPPMatrix> &A, real_t p) {
 	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPMatrix> out;
@@ -575,7 +575,7 @@ Ref<MLPPMatrix> MLPPLinAlg::exponentiatem(const Ref<MLPPMatrix> &A, real_t p) {
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPLinAlg::sqrtm(const Ref<MLPPMatrix> &A) {
+Ref<MLPPMatrix> MLPPLinAlg::sqrtnm(const Ref<MLPPMatrix> &A) {
 	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPMatrix> out;
@@ -593,8 +593,8 @@ Ref<MLPPMatrix> MLPPLinAlg::sqrtm(const Ref<MLPPMatrix> &A) {
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPLinAlg::cbrtm(const Ref<MLPPMatrix> &A) {
-	return exponentiatem(A, real_t(1) / real_t(3));
+Ref<MLPPMatrix> MLPPLinAlg::cbrtnm(const Ref<MLPPMatrix> &A) {
+	return exponentiatenm(A, real_t(1) / real_t(3));
 }
 
 std::vector<std::vector<real_t>> MLPPLinAlg::matrixPower(std::vector<std::vector<real_t>> A, int n) {
@@ -624,7 +624,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::abs(std::vector<std::vector<real_t>
 	return B;
 }
 
-Ref<MLPPMatrix> MLPPLinAlg::absm(const Ref<MLPPMatrix> &A) {
+Ref<MLPPMatrix> MLPPLinAlg::absnm(const Ref<MLPPMatrix> &A) {
 	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPMatrix> out;
@@ -790,7 +790,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::pinverse(std::vector<std::vector<re
 	return matmult(inverse(matmult(transpose(A), A)), transpose(A));
 }
 
-Ref<MLPPMatrix> MLPPLinAlg::cofactorm(const Ref<MLPPMatrix> &A, int n, int i, int j) {
+Ref<MLPPMatrix> MLPPLinAlg::cofactornm(const Ref<MLPPMatrix> &A, int n, int i, int j) {
 	Ref<MLPPMatrix> cof;
 	cof.instance();
 	cof->resize(A->size());
@@ -813,7 +813,7 @@ Ref<MLPPMatrix> MLPPLinAlg::cofactorm(const Ref<MLPPMatrix> &A, int n, int i, in
 
 	return cof;
 }
-Ref<MLPPMatrix> MLPPLinAlg::adjointm(const Ref<MLPPMatrix> &A) {
+Ref<MLPPMatrix> MLPPLinAlg::adjointnm(const Ref<MLPPMatrix> &A) {
 	Ref<MLPPMatrix> adj;
 
 	ERR_FAIL_COND_V(!A.is_valid(), adj);
@@ -845,7 +845,7 @@ Ref<MLPPMatrix> MLPPLinAlg::adjointm(const Ref<MLPPMatrix> &A) {
 
 	for (int i = 0; i < a_size.y; i++) {
 		for (int j = 0; j < a_size.x; j++) {
-			Ref<MLPPMatrix> cof = cofactorm(A, a_size.y, i, j);
+			Ref<MLPPMatrix> cof = cofactornm(A, a_size.y, i, j);
 			// 1 if even, -1 if odd
 			int sign = (i + j) % 2 == 0 ? 1 : -1;
 			adj->set_element(j, i, sign * detm(cof, int(a_size.y) - 1));
@@ -853,11 +853,11 @@ Ref<MLPPMatrix> MLPPLinAlg::adjointm(const Ref<MLPPMatrix> &A) {
 	}
 	return adj;
 }
-Ref<MLPPMatrix> MLPPLinAlg::inversem(const Ref<MLPPMatrix> &A) {
-	return scalar_multiplynm(1 / detm(A, int(A->size().y)), adjointm(A));
+Ref<MLPPMatrix> MLPPLinAlg::inversenm(const Ref<MLPPMatrix> &A) {
+	return scalar_multiplynm(1 / detm(A, int(A->size().y)), adjointnm(A));
 }
-Ref<MLPPMatrix> MLPPLinAlg::pinversem(const Ref<MLPPMatrix> &A) {
-	return matmultnm(inversem(matmultnm(transposenm(A), A)), transposenm(A));
+Ref<MLPPMatrix> MLPPLinAlg::pinversenm(const Ref<MLPPMatrix> &A) {
+	return matmultnm(inversenm(matmultnm(transposenm(A), A)), transposenm(A));
 }
 
 std::vector<std::vector<real_t>> MLPPLinAlg::zeromat(int n, int m) {
@@ -873,7 +873,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::onemat(int n, int m) {
 	return full(n, m, 1);
 }
 
-Ref<MLPPMatrix> MLPPLinAlg::zeromatm(int n, int m) {
+Ref<MLPPMatrix> MLPPLinAlg::zeromatnm(int n, int m) {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
@@ -882,7 +882,7 @@ Ref<MLPPMatrix> MLPPLinAlg::zeromatm(int n, int m) {
 
 	return mat;
 }
-Ref<MLPPMatrix> MLPPLinAlg::onematm(int n, int m) {
+Ref<MLPPMatrix> MLPPLinAlg::onematnm(int n, int m) {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
@@ -891,7 +891,7 @@ Ref<MLPPMatrix> MLPPLinAlg::onematm(int n, int m) {
 
 	return mat;
 }
-Ref<MLPPMatrix> MLPPLinAlg::fullm(int n, int m, int k) {
+Ref<MLPPMatrix> MLPPLinAlg::fullnm(int n, int m, int k) {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
@@ -943,7 +943,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::cos(std::vector<std::vector<real_t>
 	return B;
 }
 
-Ref<MLPPMatrix> MLPPLinAlg::sinm(const Ref<MLPPMatrix> &A) {
+Ref<MLPPMatrix> MLPPLinAlg::sinnm(const Ref<MLPPMatrix> &A) {
 	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPMatrix> out;
@@ -961,7 +961,7 @@ Ref<MLPPMatrix> MLPPLinAlg::sinm(const Ref<MLPPMatrix> &A) {
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPLinAlg::cosm(const Ref<MLPPMatrix> &A) {
+Ref<MLPPMatrix> MLPPLinAlg::cosnm(const Ref<MLPPMatrix> &A) {
 	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPMatrix> out;
@@ -1103,7 +1103,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::cov(std::vector<std::vector<real_t>
 	return covMat;
 }
 
-Ref<MLPPMatrix> MLPPLinAlg::covm(const Ref<MLPPMatrix> &A) {
+Ref<MLPPMatrix> MLPPLinAlg::covnm(const Ref<MLPPMatrix> &A) {
 	MLPPStat stat;
 
 	Ref<MLPPMatrix> cov_mat;
@@ -1437,7 +1437,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 		P->set_element(sub_j, sub_j, Math::cos(theta));
 		P->set_element(sub_j, sub_i, Math::sin(theta));
 
-		a_new = matmultnm(matmultnm(inversem(P), A), P);
+		a_new = matmultnm(matmultnm(inversenm(P), A), P);
 
 		Size2i a_new_size = a_new->size();
 
@@ -1549,8 +1549,8 @@ MLPPLinAlg::SVDResult MLPPLinAlg::svd(const Ref<MLPPMatrix> &A) {
 	EigenResult left_eigen = eigen(matmultnm(A, transposenm(A)));
 	EigenResult right_eigen = eigen(matmultnm(transposenm(A), A));
 
-	Ref<MLPPMatrix> singularvals = sqrtm(left_eigen.eigen_values);
-	Ref<MLPPMatrix> sigma = zeromatm(a_size.y, a_size.x);
+	Ref<MLPPMatrix> singularvals = sqrtnm(left_eigen.eigen_values);
+	Ref<MLPPMatrix> sigma = zeromatnm(a_size.y, a_size.x);
 
 	Size2i singularvals_size = singularvals->size();
 
@@ -1676,7 +1676,7 @@ std::vector<real_t> MLPPLinAlg::flatten(std::vector<std::vector<real_t>> A) {
 	return a;
 }
 
-Ref<MLPPVector> MLPPLinAlg::flattenvv(const Vector<Ref<MLPPVector>> &A) {
+Ref<MLPPVector> MLPPLinAlg::flattenmnv(const Vector<Ref<MLPPVector>> &A) {
 	Ref<MLPPVector> a;
 	a.instance();
 
@@ -1705,7 +1705,7 @@ Ref<MLPPVector> MLPPLinAlg::flattenvv(const Vector<Ref<MLPPVector>> &A) {
 	return a;
 }
 
-Ref<MLPPVector> MLPPLinAlg::flattenv(const Ref<MLPPMatrix> &A) {
+Ref<MLPPVector> MLPPLinAlg::flattenvvnv(const Ref<MLPPMatrix> &A) {
 	int data_size = A->data_size();
 
 	Ref<MLPPVector> res;
@@ -1878,7 +1878,7 @@ std::vector<real_t> MLPPLinAlg::elementWiseDivision(std::vector<real_t> a, std::
 	return c;
 }
 
-Ref<MLPPVector> MLPPLinAlg::element_wise_division(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+Ref<MLPPVector> MLPPLinAlg::element_wise_divisionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
 	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -2446,7 +2446,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::max(std::vector<std::vector<real_t>
 	return C;
 }
 
-Ref<MLPPMatrix> MLPPLinAlg::max_nm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+Ref<MLPPMatrix> MLPPLinAlg::maxnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
 	Ref<MLPPMatrix> C;
 	C.instance();
 	C->resize(A->size());
@@ -2732,12 +2732,12 @@ std::vector<std::vector<std::vector<real_t>>> MLPPLinAlg::elementWiseDivision(st
 	return A;
 }
 
-Vector<Ref<MLPPMatrix>> MLPPLinAlg::element_wise_division_vt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::element_wise_divisionnv_vt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
 	Vector<Ref<MLPPMatrix>> res;
 	res.resize(A.size());
 
 	for (int i = 0; i < A.size(); i++) {
-		res.write[i] = element_wise_divisionnm(A[i], B[i]);
+		res.write[i] = element_wise_divisionnvnm(A[i], B[i]);
 	}
 
 	return res;
@@ -2755,7 +2755,7 @@ Vector<Ref<MLPPMatrix>> MLPPLinAlg::sqrt_vt(const Vector<Ref<MLPPMatrix>> &A) {
 	res.resize(A.size());
 
 	for (int i = 0; i < A.size(); i++) {
-		res.write[i] = sqrtm(A[i]);
+		res.write[i] = sqrtnm(A[i]);
 	}
 
 	return res;
@@ -2773,7 +2773,7 @@ Vector<Ref<MLPPMatrix>> MLPPLinAlg::exponentiate_vt(const Vector<Ref<MLPPMatrix>
 	res.resize(A.size());
 
 	for (int i = 0; i < A.size(); i++) {
-		res.write[i] = exponentiatem(A[i], p);
+		res.write[i] = exponentiatenm(A[i], p);
 	}
 
 	return res;
@@ -2876,7 +2876,7 @@ Vector<Ref<MLPPMatrix>> MLPPLinAlg::max_vt(const Vector<Ref<MLPPMatrix>> &A, con
 	res.resize(A.size());
 
 	for (int i = 0; i < A.size(); i++) {
-		res.write[i] = max_nm(A[i], B[i]);
+		res.write[i] = maxnm(A[i], B[i]);
 	}
 
 	return res;
@@ -2894,7 +2894,7 @@ Vector<Ref<MLPPMatrix>> MLPPLinAlg::abs_vt(const Vector<Ref<MLPPMatrix>> &A) {
 	res.resize(A.size());
 
 	for (int i = 0; i < A.size(); i++) {
-		res.write[i] = absm(A[i]);
+		res.write[i] = absnm(A[i]);
 	}
 
 	return A;

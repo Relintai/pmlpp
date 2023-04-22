@@ -94,7 +94,7 @@ void MLPPLinReg::newton_raphson(real_t learning_rate, int max_epoch, bool ui) {
 		// Calculating the weight gradients (2nd derivative)
 		Ref<MLPPVector> first_derivative = alg.mat_vec_multv(alg.transposenm(_input_set), error);
 		Ref<MLPPMatrix> second_derivative = alg.matmultnm(alg.transposenm(_input_set), _input_set);
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(alg.inversem(second_derivative)), first_derivative)));
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(alg.inversenm(second_derivative)), first_derivative)));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients (2nd derivative)
@@ -405,7 +405,7 @@ void MLPPLinReg::adagrad(real_t learning_rate, int max_epoch, int mini_batch_siz
 
 			v = alg.hadamard_productnv(weight_grad, weight_grad);
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_division(weight_grad, alg.sqrtnv(alg.scalar_addnv(e, v)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_divisionnv(weight_grad, alg.sqrtnv(alg.scalar_addnv(e, v)))));
 
 			// Calculating the bias gradients
 			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
@@ -460,7 +460,7 @@ void MLPPLinReg::adadelta(real_t learning_rate, int max_epoch, int mini_batch_si
 
 			v = alg.additionnv(alg.scalar_multiplynv(b1, v), alg.scalar_multiplynv(1 - b1, alg.hadamard_productnv(weight_grad, weight_grad)));
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_division(weight_grad, alg.sqrtnv(alg.scalar_addnv(e, v)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_divisionnv(weight_grad, alg.sqrtnv(alg.scalar_addnv(e, v)))));
 
 			// Calculating the bias gradients
 			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
@@ -519,7 +519,7 @@ void MLPPLinReg::adam(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			Ref<MLPPVector> m_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b1, epoch)), m);
 			Ref<MLPPVector> v_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b2, epoch)), v);
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_divisionnm(m_hat, alg.scalar_addnv(e, alg.sqrtnv(v_hat)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_divisionnvnm(m_hat, alg.scalar_addnv(e, alg.sqrtnv(v_hat)))));
 
 			// Calculating the bias gradients
 			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
@@ -576,7 +576,7 @@ void MLPPLinReg::adamax(real_t learning_rate, int max_epoch, int mini_batch_size
 
 			Ref<MLPPVector> m_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b1, epoch)), m);
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_division(m_hat, u)));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_divisionnv(m_hat, u)));
 
 			// Calculating the bias gradients
 			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
@@ -637,7 +637,7 @@ void MLPPLinReg::nadam(real_t learning_rate, int max_epoch, int mini_batch_size,
 			Ref<MLPPVector> m_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b1, epoch)), m);
 			Ref<MLPPVector> v_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b2, epoch)), v);
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_division(m_final, alg.scalar_addnv(e, alg.sqrtnv(v_hat)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.element_wise_divisionnv(m_final, alg.scalar_addnv(e, alg.sqrtnv(v_hat)))));
 
 			// Calculating the bias gradients
 			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
@@ -683,14 +683,14 @@ void MLPPLinReg::normal_equation() {
 
 	Ref<MLPPVector> temp;
 	//temp.resize(_k);
-	temp = alg.mat_vec_multv(alg.inversem(alg.matmultnm(alg.transposenm(_input_set), _input_set)), alg.mat_vec_multv(alg.transposenm(_input_set), _output_set));
+	temp = alg.mat_vec_multv(alg.inversenm(alg.matmultnm(alg.transposenm(_input_set), _input_set)), alg.mat_vec_multv(alg.transposenm(_input_set), _output_set));
 
 	ERR_FAIL_COND_MSG(Math::is_nan(temp->get_element(0)), "ERR: Resulting matrix was noninvertible/degenerate, and so the normal equation could not be performed. Try utilizing gradient descent.");
 
 	if (_reg == MLPPReg::REGULARIZATION_TYPE_RIDGE) {
-		_weights = alg.mat_vec_multv(alg.inversem(alg.additionnm(alg.matmultnm(alg.transposenm(_input_set), _input_set), alg.scalar_multiplynm(_lambda, alg.identitym(_k)))), alg.mat_vec_multv(alg.transposenm(_input_set), _output_set));
+		_weights = alg.mat_vec_multv(alg.inversenm(alg.additionnm(alg.matmultnm(alg.transposenm(_input_set), _input_set), alg.scalar_multiplynm(_lambda, alg.identitym(_k)))), alg.mat_vec_multv(alg.transposenm(_input_set), _output_set));
 	} else {
-		_weights = alg.mat_vec_multv(alg.inversem(alg.matmultnm(alg.transposenm(_input_set), _input_set)), alg.mat_vec_multv(alg.transposenm(_input_set), _output_set));
+		_weights = alg.mat_vec_multv(alg.inversenm(alg.matmultnm(alg.transposenm(_input_set), _input_set)), alg.mat_vec_multv(alg.transposenm(_input_set), _output_set));
 	}
 
 	_bias = stat.meanv(_output_set) - alg.dotv(_weights, x_means);

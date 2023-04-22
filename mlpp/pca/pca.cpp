@@ -28,7 +28,7 @@ Ref<MLPPMatrix> MLPPPCA::principal_components() {
 	MLPPLinAlg alg;
 	MLPPData data;
 
-	MLPPLinAlg::SVDResult svr_res = alg.svd(alg.covm(_input_set));
+	MLPPLinAlg::SVDResult svr_res = alg.svd(alg.covnm(_input_set));
 	_x_normalized = data.mean_centering(_input_set);
 
 	Size2i svr_res_u_size = svr_res.U->size();

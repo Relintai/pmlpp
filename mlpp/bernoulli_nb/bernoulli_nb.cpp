@@ -103,7 +103,7 @@ void MLPPBernoulliNB::compute_vocab() {
 	MLPPLinAlg alg;
 	MLPPData data;
 
-	_vocab = data.vec_to_setnv(alg.flattenv(_input_set));
+	_vocab = data.vec_to_setnv(alg.flattenvvnv(_input_set));
 }
 
 void MLPPBernoulliNB::compute_theta() {
