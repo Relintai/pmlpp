@@ -420,7 +420,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::log(std::vector<std::vector<real_t>
 	}
 	for (uint32_t i = 0; i < A.size(); i++) {
 		for (uint32_t j = 0; j < A[i].size(); j++) {
-			B[i][j] = std::log(A[i][j]);
+			B[i][j] = Math::log(A[i][j]);
 		}
 	}
 	return B;
@@ -434,7 +434,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::log10(std::vector<std::vector<real_
 	}
 	for (uint32_t i = 0; i < A.size(); i++) {
 		for (uint32_t j = 0; j < A[i].size(); j++) {
-			B[i][j] = std::log10(A[i][j]);
+			B[i][j] = Math::log10(A[i][j]);
 		}
 	}
 	return B;
@@ -516,7 +516,7 @@ Ref<MLPPMatrix> MLPPLinAlg::log10m(const Ref<MLPPMatrix> &A) {
 	real_t *out_ptr = out->ptrw();
 
 	for (int i = 0; i < data_size; ++i) {
-		out_ptr[i] = std::log10(a_ptr[i]);
+		out_ptr[i] = Math::log10(a_ptr[i]);
 	}
 
 	return out;
@@ -552,7 +552,7 @@ Ref<MLPPMatrix> MLPPLinAlg::erfm(const Ref<MLPPMatrix> &A) {
 	real_t *out_ptr = out->ptrw();
 
 	for (int i = 0; i < data_size; ++i) {
-		out_ptr[i] = std::erf(a_ptr[i]);
+		out_ptr[i] = Math::erf(a_ptr[i]);
 	}
 
 	return out;
@@ -618,7 +618,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::abs(std::vector<std::vector<real_t>
 	}
 	for (uint32_t i = 0; i < B.size(); i++) {
 		for (uint32_t j = 0; j < B[i].size(); j++) {
-			B[i][j] = std::abs(A[i][j]);
+			B[i][j] = Math::abs(A[i][j]);
 		}
 	}
 	return B;
@@ -672,7 +672,7 @@ real_t MLPPLinAlg::det(std::vector<std::vector<real_t>> A, int d) {
 				}
 				sub_i++;
 			}
-			deter += std::pow(-1, i) * A[0][i] * det(B, d - 1);
+			deter += Math::pow(-1.0, i) * A[0][i] * det(B, d - 1);
 		}
 	}
 	return deter;
@@ -923,7 +923,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::sin(std::vector<std::vector<real_t>
 	}
 	for (uint32_t i = 0; i < A.size(); i++) {
 		for (uint32_t j = 0; j < A[i].size(); j++) {
-			B[i][j] = std::sin(A[i][j]);
+			B[i][j] = Math::sin(A[i][j]);
 		}
 	}
 	return B;
@@ -937,7 +937,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::cos(std::vector<std::vector<real_t>
 	}
 	for (uint32_t i = 0; i < A.size(); i++) {
 		for (uint32_t j = 0; j < A[i].size(); j++) {
-			B[i][j] = std::cos(A[i][j]);
+			B[i][j] = Math::cos(A[i][j]);
 		}
 	}
 	return B;
@@ -1039,7 +1039,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::round(std::vector<std::vector<real_
 	}
 	for (uint32_t i = 0; i < A.size(); i++) {
 		for (uint32_t j = 0; j < A[i].size(); j++) {
-			B[i][j] = std::round(A[i][j]);
+			B[i][j] = Math::round(A[i][j]);
 		}
 	}
 	return B;
@@ -1052,7 +1052,7 @@ real_t MLPPLinAlg::norm_2(std::vector<std::vector<real_t>> A) {
 			sum += A[i][j] * A[i][j];
 		}
 	}
-	return std::sqrt(sum);
+	return Math::sqrt(sum);
 }
 
 std::vector<std::vector<real_t>> MLPPLinAlg::identity(real_t d) {
@@ -1152,11 +1152,11 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 		real_t sub_j = 1;
 		for (uint32_t i = 0; i < A.size(); i++) {
 			for (uint32_t j = 0; j < A[i].size(); j++) {
-				if (i != j && std::abs(A[i][j]) > a_ij) {
+				if (i != j && Math::abs(A[i][j]) > a_ij) {
 					a_ij = A[i][j];
 					sub_i = i;
 					sub_j = j;
-				} else if (i != j && std::abs(A[i][j]) == a_ij) {
+				} else if (i != j && Math::abs(A[i][j]) == a_ij) {
 					if (i < sub_i) {
 						a_ij = A[i][j];
 						sub_i = i;
@@ -1178,16 +1178,16 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 		}
 
 		std::vector<std::vector<real_t>> P = identity(A.size());
-		P[sub_i][sub_j] = -std::sin(theta);
-		P[sub_i][sub_i] = std::cos(theta);
-		P[sub_j][sub_j] = std::cos(theta);
-		P[sub_j][sub_i] = std::sin(theta);
+		P[sub_i][sub_j] = -Math::sin(theta);
+		P[sub_i][sub_i] = Math::cos(theta);
+		P[sub_j][sub_j] = Math::cos(theta);
+		P[sub_j][sub_i] = Math::sin(theta);
 
 		a_new = matmult(matmult(inverse(P), A), P);
 
 		for (uint32_t i = 0; i < a_new.size(); i++) {
 			for (uint32_t j = 0; j < a_new[i].size(); j++) {
-				if (i != j && std::round(a_new[i][j]) == 0) {
+				if (i != j && Math::round(a_new[i][j]) == 0) {
 					a_new[i][j] = 0;
 				}
 			}
@@ -1196,7 +1196,7 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 		bool non_zero = false;
 		for (uint32_t i = 0; i < a_new.size(); i++) {
 			for (uint32_t j = 0; j < a_new[i].size(); j++) {
-				if (i != j && std::round(a_new[i][j]) != 0) {
+				if (i != j && Math::round(a_new[i][j]) != 0) {
 					non_zero = true;
 				}
 			}
@@ -1272,11 +1272,11 @@ MLPPLinAlg::EigenResultOld MLPPLinAlg::eigen_old(std::vector<std::vector<real_t>
 		real_t sub_j = 1;
 		for (uint32_t i = 0; i < A.size(); i++) {
 			for (uint32_t j = 0; j < A[i].size(); j++) {
-				if (i != j && std::abs(A[i][j]) > a_ij) {
+				if (i != j && Math::abs(A[i][j]) > a_ij) {
 					a_ij = A[i][j];
 					sub_i = i;
 					sub_j = j;
-				} else if (i != j && std::abs(A[i][j]) == a_ij) {
+				} else if (i != j && Math::abs(A[i][j]) == a_ij) {
 					if (i < sub_i) {
 						a_ij = A[i][j];
 						sub_i = i;
@@ -1298,16 +1298,16 @@ MLPPLinAlg::EigenResultOld MLPPLinAlg::eigen_old(std::vector<std::vector<real_t>
 		}
 
 		std::vector<std::vector<real_t>> P = identity(A.size());
-		P[sub_i][sub_j] = -std::sin(theta);
-		P[sub_i][sub_i] = std::cos(theta);
-		P[sub_j][sub_j] = std::cos(theta);
-		P[sub_j][sub_i] = std::sin(theta);
+		P[sub_i][sub_j] = -Math::sin(theta);
+		P[sub_i][sub_i] = Math::cos(theta);
+		P[sub_j][sub_j] = Math::cos(theta);
+		P[sub_j][sub_i] = Math::sin(theta);
 
 		a_new = matmult(matmult(inverse(P), A), P);
 
 		for (uint32_t i = 0; i < a_new.size(); i++) {
 			for (uint32_t j = 0; j < a_new[i].size(); j++) {
-				if (i != j && std::round(a_new[i][j]) == 0) {
+				if (i != j && Math::round(a_new[i][j]) == 0) {
 					a_new[i][j] = 0;
 				}
 			}
@@ -1316,7 +1316,7 @@ MLPPLinAlg::EigenResultOld MLPPLinAlg::eigen_old(std::vector<std::vector<real_t>
 		bool non_zero = false;
 		for (uint32_t i = 0; i < a_new.size(); i++) {
 			for (uint32_t j = 0; j < a_new[i].size(); j++) {
-				if (i != j && std::round(a_new[i][j]) != 0) {
+				if (i != j && Math::round(a_new[i][j]) != 0) {
 					non_zero = true;
 				}
 			}
@@ -1616,7 +1616,7 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 				for (uint32_t k = 0; k < j; k++) {
 					sum += L[i][k] * L[i][k];
 				}
-				L[i][j] = std::sqrt(A[i][j] - sum);
+				L[i][j] = Math::sqrt(A[i][j] - sum);
 			} else { // That is, i!=j
 				real_t sum = 0;
 				for (uint32_t k = 0; k < j; k++) {
@@ -1638,7 +1638,7 @@ MLPPLinAlg::CholeskyResult MLPPLinAlg::cholesky(std::vector<std::vector<real_t>>
 				for (uint32_t k = 0; k < j; k++) {
 					sum += L[i][k] * L[i][k];
 				}
-				L[i][j] = std::sqrt(A[i][j] - sum);
+				L[i][j] = Math::sqrt(A[i][j] - sum);
 			} else { // That is, i!=j
 				real_t sum = 0;
 				for (uint32_t k = 0; k < j; k++) {
@@ -2122,7 +2122,7 @@ std::vector<real_t> MLPPLinAlg::log(std::vector<real_t> a) {
 	std::vector<real_t> b;
 	b.resize(a.size());
 	for (uint32_t i = 0; i < a.size(); i++) {
-		b[i] = std::log(a[i]);
+		b[i] = Math::log(a[i]);
 	}
 	return b;
 }
@@ -2131,7 +2131,7 @@ std::vector<real_t> MLPPLinAlg::log10(std::vector<real_t> a) {
 	std::vector<real_t> b;
 	b.resize(a.size());
 	for (uint32_t i = 0; i < a.size(); i++) {
-		b[i] = std::log10(a[i]);
+		b[i] = Math::log10(a[i]);
 	}
 	return b;
 }
@@ -2140,7 +2140,7 @@ std::vector<real_t> MLPPLinAlg::exp(std::vector<real_t> a) {
 	std::vector<real_t> b;
 	b.resize(a.size());
 	for (uint32_t i = 0; i < a.size(); i++) {
-		b[i] = std::exp(a[i]);
+		b[i] = Math::exp(a[i]);
 	}
 	return b;
 }
@@ -2149,7 +2149,7 @@ std::vector<real_t> MLPPLinAlg::erf(std::vector<real_t> a) {
 	std::vector<real_t> b;
 	b.resize(a.size());
 	for (uint32_t i = 0; i < a.size(); i++) {
-		b[i] = std::erf(a[i]);
+		b[i] = Math::erf(a[i]);
 	}
 	return b;
 }
@@ -2158,7 +2158,7 @@ std::vector<real_t> MLPPLinAlg::exponentiate(std::vector<real_t> a, real_t p) {
 	std::vector<real_t> b;
 	b.resize(a.size());
 	for (uint32_t i = 0; i < b.size(); i++) {
-		b[i] = std::pow(a[i], p);
+		b[i] = Math::pow(a[i], p);
 	}
 	return b;
 }
@@ -2202,7 +2202,7 @@ Ref<MLPPVector> MLPPLinAlg::log10v(const Ref<MLPPVector> &a) {
 	real_t *out_ptr = out->ptrw();
 
 	for (int i = 0; i < size; ++i) {
-		out_ptr[i] = std::log10(a_ptr[i]);
+		out_ptr[i] = Math::log10(a_ptr[i]);
 	}
 
 	return out;
@@ -2238,7 +2238,7 @@ Ref<MLPPVector> MLPPLinAlg::erfv(const Ref<MLPPVector> &a) {
 	real_t *out_ptr = out->ptrw();
 
 	for (int i = 0; i < size; ++i) {
-		out_ptr[i] = std::erf(a_ptr[i]);
+		out_ptr[i] = Math::erf(a_ptr[i]);
 	}
 
 	return out;
@@ -2321,7 +2321,7 @@ std::vector<real_t> MLPPLinAlg::abs(std::vector<real_t> a) {
 	std::vector<real_t> b;
 	b.resize(a.size());
 	for (uint32_t i = 0; i < b.size(); i++) {
-		b[i] = std::abs(a[i]);
+		b[i] = Math::abs(a[i]);
 	}
 	return b;
 }
@@ -2423,7 +2423,7 @@ std::vector<real_t> MLPPLinAlg::sin(std::vector<real_t> a) {
 	std::vector<real_t> b;
 	b.resize(a.size());
 	for (uint32_t i = 0; i < a.size(); i++) {
-		b[i] = std::sin(a[i]);
+		b[i] = Math::sin(a[i]);
 	}
 	return b;
 }
@@ -2432,7 +2432,7 @@ std::vector<real_t> MLPPLinAlg::cos(std::vector<real_t> a) {
 	std::vector<real_t> b;
 	b.resize(a.size());
 	for (uint32_t i = 0; i < a.size(); i++) {
-		b[i] = std::cos(a[i]);
+		b[i] = Math::cos(a[i]);
 	}
 	return b;
 }
@@ -2475,13 +2475,13 @@ Ref<MLPPVector> MLPPLinAlg::cosv(const Ref<MLPPVector> &a) {
 }
 
 std::vector<std::vector<real_t>> MLPPLinAlg::rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis) {
-	std::vector<std::vector<real_t>> rotationMatrix = { { std::cos(theta), -std::sin(theta) }, { std::sin(theta), std::cos(theta) } };
+	std::vector<std::vector<real_t>> rotationMatrix = { { Math::cos(theta), -Math::sin(theta) }, { Math::sin(theta), Math::cos(theta) } };
 	if (axis == 0) {
-		rotationMatrix = { { 1, 0, 0 }, { 0, std::cos(theta), -std::sin(theta) }, { 0, std::sin(theta), std::cos(theta) } };
+		rotationMatrix = { { 1, 0, 0 }, { 0, Math::cos(theta), -Math::sin(theta) }, { 0, Math::sin(theta), Math::cos(theta) } };
 	} else if (axis == 1) {
-		rotationMatrix = { { std::cos(theta), 0, std::sin(theta) }, { 0, 1, 0 }, { -std::sin(theta), 0, std::cos(theta) } };
+		rotationMatrix = { { Math::cos(theta), 0, Math::sin(theta) }, { 0, 1, 0 }, { -Math::sin(theta), 0, Math::cos(theta) } };
 	} else if (axis == 2) {
-		rotationMatrix = { { std::cos(theta), -std::sin(theta), 0 }, { std::sin(theta), std::cos(theta), 0 }, { 1, 0, 0 } };
+		rotationMatrix = { { Math::cos(theta), -Math::sin(theta), 0 }, { Math::sin(theta), Math::cos(theta), 0 }, { 1, 0, 0 } };
 	}
 
 	return matmult(A, rotationMatrix);
@@ -2580,7 +2580,7 @@ std::vector<real_t> MLPPLinAlg::round(std::vector<real_t> a) {
 	std::vector<real_t> b;
 	b.resize(a.size());
 	for (uint32_t i = 0; i < a.size(); i++) {
-		b[i] = std::round(a[i]);
+		b[i] = Math::round(a[i]);
 	}
 	return b;
 }
@@ -2591,7 +2591,7 @@ real_t MLPPLinAlg::euclideanDistance(std::vector<real_t> a, std::vector<real_t> 
 	for (uint32_t i = 0; i < a.size(); i++) {
 		dist += (a[i] - b[i]) * (a[i] - b[i]);
 	}
-	return std::sqrt(dist);
+	return Math::sqrt(dist);
 }
 
 real_t MLPPLinAlg::euclidean_distance(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
@@ -2632,7 +2632,7 @@ real_t MLPPLinAlg::euclidean_distance_squared(const Ref<MLPPVector> &a, const Re
 }
 
 real_t MLPPLinAlg::norm_2(std::vector<real_t> a) {
-	return std::sqrt(norm_sq(a));
+	return Math::sqrt(norm_sq(a));
 }
 
 real_t MLPPLinAlg::norm_sq(std::vector<real_t> a) {
@@ -2962,7 +2962,7 @@ real_t MLPPLinAlg::norm_2(std::vector<std::vector<std::vector<real_t>>> A) {
 			}
 		}
 	}
-	return std::sqrt(sum);
+	return Math::sqrt(sum);
 }
 
 // Bad implementation. Change this later.
