@@ -5,7 +5,7 @@
 //
 
 #include "stat_old.h"
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../data/data.h"
 #include "../lin_alg/lin_alg.h"
 #include <algorithm>
@@ -189,7 +189,7 @@ real_t MLPPStatOld::heinzMean(const real_t A, const real_t B, const real_t x) {
 }
 
 real_t MLPPStatOld::neumanSandorMean(const real_t a, const real_t b) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return (a - b) / 2 * avn.arsinh((a - b) / (a + b));
 }
 

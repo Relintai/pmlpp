@@ -5,7 +5,7 @@
 //
 
 #include "probit_reg_old.h"
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
@@ -30,7 +30,7 @@ real_t MLPPProbitRegOld::modelTest(std::vector<real_t> x) {
 }
 
 void MLPPProbitRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -63,7 +63,7 @@ void MLPPProbitRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool
 }
 
 void MLPPProbitRegOld::MLE(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -97,7 +97,7 @@ void MLPPProbitRegOld::MLE(real_t learning_rate, int max_epoch, bool UI) {
 
 void MLPPProbitRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 	// NOTE: ∂y_hat/∂z is sparse
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -138,7 +138,7 @@ void MLPPProbitRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPProbitRegOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -216,7 +216,7 @@ real_t MLPPProbitRegOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) 
 
 std::vector<real_t> MLPPProbitRegOld::Evaluate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return avn.gaussianCDF(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
@@ -227,7 +227,7 @@ std::vector<real_t> MLPPProbitRegOld::propagate(std::vector<std::vector<real_t>>
 
 real_t MLPPProbitRegOld::Evaluate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return avn.gaussianCDF(alg.dot(weights, x) + bias);
 }
 
@@ -238,7 +238,7 @@ real_t MLPPProbitRegOld::propagate(std::vector<real_t> x) {
 
 // gaussianCDF ( wTx + b )
 void MLPPProbitRegOld::forwardPass() {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 
 	z = propagate(inputSet);
 	y_hat = avn.gaussianCDF(z);

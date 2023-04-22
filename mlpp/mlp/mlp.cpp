@@ -380,7 +380,7 @@ real_t MLPPMLP::evaluatev(const Ref<MLPPVector> &x) {
 	Ref<MLPPVector> pz2 = alg.additionnv(alg.mat_vec_multv(alg.transposem(_weights1), x), _bias1);
 	Ref<MLPPVector> pa2 = avn.sigmoid_normv(pz2);
 
-	return avn.sigmoid(alg.dotv(_weights2, pa2) + _bias2);
+	return avn.sigmoid_normr(alg.dotv(_weights2, pa2) + _bias2);
 }
 
 void MLPPMLP::propagatev(const Ref<MLPPVector> &x, Ref<MLPPVector> z2_out, Ref<MLPPVector> a2_out) {

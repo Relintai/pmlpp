@@ -6,7 +6,7 @@
 
 #include "c_log_log_reg_old.h"
 
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
@@ -31,7 +31,7 @@ real_t MLPPCLogLogRegOld::modelTest(std::vector<real_t> x) {
 }
 
 void MLPPCLogLogRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -65,7 +65,7 @@ void MLPPCLogLogRegOld::gradientDescent(real_t learning_rate, int max_epoch, boo
 }
 
 void MLPPCLogLogRegOld::MLE(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -138,7 +138,7 @@ void MLPPCLogLogRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPCLogLogRegOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -195,7 +195,7 @@ real_t MLPPCLogLogRegOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y)
 
 std::vector<real_t> MLPPCLogLogRegOld::Evaluate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return avn.cloglog(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
@@ -206,7 +206,7 @@ std::vector<real_t> MLPPCLogLogRegOld::propagate(std::vector<std::vector<real_t>
 
 real_t MLPPCLogLogRegOld::Evaluate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return avn.cloglog(alg.dot(weights, x) + bias);
 }
 
@@ -217,7 +217,7 @@ real_t MLPPCLogLogRegOld::propagate(std::vector<real_t> x) {
 
 // cloglog ( wTx + b )
 void MLPPCLogLogRegOld::forwardPass() {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 
 	z = propagate(inputSet);
 	y_hat = avn.cloglog(z);

@@ -5,7 +5,7 @@
 //
 
 #include "gan_old.h"
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
@@ -211,7 +211,7 @@ void MLPPGANOld::updateGeneratorParameters(std::vector<std::vector<std::vector<r
 
 std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> MLPPGANOld::computeDiscriminatorGradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
 	class MLPPCost cost;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 
@@ -247,7 +247,7 @@ std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> M
 
 std::vector<std::vector<std::vector<real_t>>> MLPPGANOld::computeGeneratorGradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
 	class MLPPCost cost;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 

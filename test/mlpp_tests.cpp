@@ -47,6 +47,7 @@
 #include "../mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "../mlpp/wgan/wgan.h"
 
+#include "../mlpp/activation/activation_old.h"
 #include "../mlpp/ann/ann_old.h"
 #include "../mlpp/auto_encoder/auto_encoder_old.h"
 #include "../mlpp/bernoulli_nb/bernoulli_nb_old.h"
@@ -56,6 +57,7 @@
 #include "../mlpp/gan/gan_old.h"
 #include "../mlpp/gaussian_nb/gaussian_nb_old.h"
 #include "../mlpp/hidden_layer/hidden_layer_old.h"
+#include "../mlpp/lin_alg/lin_alg_old.h"
 #include "../mlpp/lin_reg/lin_reg_old.h"
 #include "../mlpp/log_reg/log_reg_old.h"
 #include "../mlpp/mann/mann_old.h"
@@ -1067,8 +1069,8 @@ void MLPPTests::test_outlier_finder(bool ui) {
 	PLOG_MSG(Variant(outlier_finder.model_test(input_set)));
 }
 void MLPPTests::test_new_math_functions() {
-	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPLinAlgOld alg;
+	MLPPActivationOld avn;
 	MLPPData data;
 
 	// Testing new Functions
@@ -1107,11 +1109,9 @@ void MLPPTests::test_new_math_functions() {
 
 	alg.printMatrix(alg.gramSchmidtProcess(P));
 
-	MLPPLinAlg::QRDResult qrd_result = alg.qrd(P); // It works!
-
-	alg.printMatrix(qrd_result.Q);
-
-	alg.printMatrix(qrd_result.R);
+	//MLPPLinAlg::QRDResult qrd_result = alg.qrd(P); // It works!
+	//alg.printMatrix(qrd_result.Q);
+	//alg.printMatrix(qrd_result.R);
 }
 void MLPPTests::test_positive_definiteness_checker() {
 	//MLPPStat stat;

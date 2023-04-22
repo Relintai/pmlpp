@@ -253,6 +253,19 @@ std::vector<std::vector<real_t>> MLPPLinAlgOld::cbrt(std::vector<std::vector<rea
 	return exponentiate(A, real_t(1) / real_t(3));
 }
 
+std::vector<std::vector<real_t>> MLPPLinAlgOld::matrixPower(std::vector<std::vector<real_t>> A, int n) {
+	std::vector<std::vector<real_t>> B = identity(A.size());
+	if (n == 0) {
+		return identity(A.size());
+	} else if (n < 0) {
+		A = inverse(A);
+	}
+	for (int i = 0; i < std::abs(n); i++) {
+		B = matmult(B, A);
+	}
+	return B;
+}
+
 std::vector<std::vector<real_t>> MLPPLinAlgOld::abs(std::vector<std::vector<real_t>> A) {
 	std::vector<std::vector<real_t>> B;
 	B.resize(A.size());
@@ -1068,6 +1081,14 @@ std::vector<real_t> MLPPLinAlgOld::sqrt(std::vector<real_t> a) {
 
 std::vector<real_t> MLPPLinAlgOld::cbrt(std::vector<real_t> a) {
 	return exponentiate(a, real_t(1) / real_t(3));
+}
+
+real_t MLPPLinAlgOld::dot(std::vector<real_t> a, std::vector<real_t> b) {
+	real_t c = 0;
+	for (uint32_t i = 0; i < a.size(); i++) {
+		c += a[i] * b[i];
+	}
+	return c;
 }
 
 std::vector<real_t> MLPPLinAlgOld::cross(std::vector<real_t> a, std::vector<real_t> b) {

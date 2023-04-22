@@ -5,7 +5,7 @@
 //
 
 #include "dual_svc_old.h"
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
@@ -38,7 +38,7 @@ real_t MLPPDualSVCOld::modelTest(std::vector<real_t> x) {
 
 void MLPPDualSVCOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -86,7 +86,7 @@ void MLPPDualSVCOld::gradientDescent(real_t learning_rate, int max_epoch, bool U
 
 // void MLPPDualSVCOld::SGD(real_t learning_rate, int max_epoch, bool UI){
 //     class MLPPCost cost;
-//     MLPPActivation avn;
+//     MLPPActivationOld avn;
 //     MLPPLinAlg alg;
 //     MLPPReg regularization;
 
@@ -119,7 +119,7 @@ void MLPPDualSVCOld::gradientDescent(real_t learning_rate, int max_epoch, bool U
 
 // void MLPPDualSVCOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI){
 //     class MLPPCost cost;
-//     MLPPActivation avn;
+//     MLPPActivationOld avn;
 //     MLPPLinAlg alg;
 //     MLPPReg regularization;
 //     real_t cost_prev = 0;
@@ -173,7 +173,7 @@ real_t MLPPDualSVCOld::Cost(std::vector<real_t> alpha, std::vector<std::vector<r
 }
 
 std::vector<real_t> MLPPDualSVCOld::Evaluate(std::vector<std::vector<real_t>> X) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return avn.sign(propagate(X));
 }
 
@@ -194,7 +194,7 @@ std::vector<real_t> MLPPDualSVCOld::propagate(std::vector<std::vector<real_t>> X
 }
 
 real_t MLPPDualSVCOld::Evaluate(std::vector<real_t> x) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return avn.sign(propagate(x));
 }
 
@@ -211,7 +211,7 @@ real_t MLPPDualSVCOld::propagate(std::vector<real_t> x) {
 }
 
 void MLPPDualSVCOld::forwardPass() {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 
 	z = propagate(inputSet);
 	y_hat = avn.sign(z);

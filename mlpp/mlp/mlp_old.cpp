@@ -8,7 +8,7 @@
 
 #include "core/log/logger.h"
 
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
@@ -27,7 +27,7 @@ MLPPMLPOld::MLPPMLPOld(std::vector<std::vector<real_t>> p_inputSet, std::vector<
 	lambda = p_lambda;
 	alpha = p_alpha;
 
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	y_hat.resize(n);
 
 	weights1 = MLPPUtilities::weightInitialization(k, n_hidden);
@@ -45,7 +45,7 @@ real_t MLPPMLPOld::modelTest(std::vector<real_t> x) {
 }
 
 void MLPPMLPOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -104,7 +104,7 @@ void MLPPMLPOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPMLPOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -160,7 +160,7 @@ void MLPPMLPOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPMLPOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -249,7 +249,7 @@ real_t MLPPMLPOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
 
 std::vector<real_t> MLPPMLPOld::Evaluate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	std::vector<std::vector<real_t>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
 	std::vector<std::vector<real_t>> a2 = avn.sigmoid(z2);
 	return avn.sigmoid(alg.scalarAdd(bias2, alg.mat_vec_mult(a2, weights2)));
@@ -257,7 +257,7 @@ std::vector<real_t> MLPPMLPOld::Evaluate(std::vector<std::vector<real_t>> X) {
 
 std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPMLPOld::propagate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	std::vector<std::vector<real_t>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
 	std::vector<std::vector<real_t>> a2 = avn.sigmoid(z2);
 	return { z2, a2 };
@@ -265,7 +265,7 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 
 real_t MLPPMLPOld::Evaluate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	std::vector<real_t> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
 	std::vector<real_t> a2 = avn.sigmoid(z2);
 	return avn.sigmoid(alg.dot(weights2, a2) + bias2);
@@ -273,7 +273,7 @@ real_t MLPPMLPOld::Evaluate(std::vector<real_t> x) {
 
 std::tuple<std::vector<real_t>, std::vector<real_t>> MLPPMLPOld::propagate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	std::vector<real_t> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
 	std::vector<real_t> a2 = avn.sigmoid(z2);
 	return { z2, a2 };
@@ -281,7 +281,7 @@ std::tuple<std::vector<real_t>, std::vector<real_t>> MLPPMLPOld::propagate(std::
 
 void MLPPMLPOld::forwardPass() {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	z2 = alg.mat_vec_add(alg.matmult(inputSet, weights1), bias1);
 	a2 = avn.sigmoid(z2);
 	y_hat = avn.sigmoid(alg.scalarAdd(bias2, alg.mat_vec_mult(a2, weights2)));

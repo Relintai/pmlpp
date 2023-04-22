@@ -6,7 +6,7 @@
 
 #include "auto_encoder_old.h"
 
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"
 #include "../utilities/utilities.h"
@@ -23,7 +23,7 @@ std::vector<real_t> MLPPAutoEncoderOld::modelTest(std::vector<real_t> x) {
 }
 
 void MLPPAutoEncoderOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -76,7 +76,7 @@ void MLPPAutoEncoderOld::gradientDescent(real_t learning_rate, int max_epoch, bo
 }
 
 void MLPPAutoEncoderOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -130,7 +130,7 @@ void MLPPAutoEncoderOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPAutoEncoderOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -210,7 +210,7 @@ MLPPAutoEncoderOld::MLPPAutoEncoderOld(std::vector<std::vector<real_t>> pinputSe
 	n = inputSet.size();
 	k = inputSet[0].size();
 
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	y_hat.resize(inputSet.size());
 
 	weights1 = MLPPUtilities::weightInitialization(k, n_hidden);
@@ -226,7 +226,7 @@ real_t MLPPAutoEncoderOld::Cost(std::vector<std::vector<real_t>> y_hat, std::vec
 
 std::vector<std::vector<real_t>> MLPPAutoEncoderOld::Evaluate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	std::vector<std::vector<real_t>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
 	std::vector<std::vector<real_t>> a2 = avn.sigmoid(z2);
 	return alg.mat_vec_add(alg.matmult(a2, weights2), bias2);
@@ -234,7 +234,7 @@ std::vector<std::vector<real_t>> MLPPAutoEncoderOld::Evaluate(std::vector<std::v
 
 std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPAutoEncoderOld::propagate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	std::vector<std::vector<real_t>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
 	std::vector<std::vector<real_t>> a2 = avn.sigmoid(z2);
 	return { z2, a2 };
@@ -242,7 +242,7 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 
 std::vector<real_t> MLPPAutoEncoderOld::Evaluate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	std::vector<real_t> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
 	std::vector<real_t> a2 = avn.sigmoid(z2);
 	return alg.addition(alg.mat_vec_mult(alg.transpose(weights2), a2), bias2);
@@ -250,7 +250,7 @@ std::vector<real_t> MLPPAutoEncoderOld::Evaluate(std::vector<real_t> x) {
 
 std::tuple<std::vector<real_t>, std::vector<real_t>> MLPPAutoEncoderOld::propagate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	std::vector<real_t> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
 	std::vector<real_t> a2 = avn.sigmoid(z2);
 	return { z2, a2 };
@@ -258,7 +258,7 @@ std::tuple<std::vector<real_t>, std::vector<real_t>> MLPPAutoEncoderOld::propaga
 
 void MLPPAutoEncoderOld::forwardPass() {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	z2 = alg.mat_vec_add(alg.matmult(inputSet, weights1), bias1);
 	a2 = avn.sigmoid(z2);
 	y_hat = alg.mat_vec_add(alg.matmult(a2, weights2), bias2);

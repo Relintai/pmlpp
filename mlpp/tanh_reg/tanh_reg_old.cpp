@@ -6,7 +6,7 @@
 
 #include "tanh_reg_old.h"
 
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
@@ -31,7 +31,7 @@ real_t MLPPTanhRegOld::modelTest(std::vector<real_t> x) {
 }
 
 void MLPPTanhRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
@@ -104,7 +104,7 @@ void MLPPTanhRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPTanhRegOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 
@@ -167,7 +167,7 @@ real_t MLPPTanhRegOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
 
 std::vector<real_t> MLPPTanhRegOld::Evaluate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return avn.tanh(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
@@ -178,7 +178,7 @@ std::vector<real_t> MLPPTanhRegOld::propagate(std::vector<std::vector<real_t>> X
 
 real_t MLPPTanhRegOld::Evaluate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return avn.tanh(alg.dot(weights, x) + bias);
 }
 
@@ -189,7 +189,7 @@ real_t MLPPTanhRegOld::propagate(std::vector<real_t> x) {
 
 // Tanh ( wTx + b )
 void MLPPTanhRegOld::forwardPass() {
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 
 	z = propagate(inputSet);
 	y_hat = avn.tanh(z);

@@ -227,14 +227,6 @@ public:
 	std::vector<real_t> subtractMatrixRows(std::vector<real_t> a, std::vector<std::vector<real_t>> B);
 	Ref<MLPPVector> subtract_matrix_rows(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B);
 
-	std::vector<real_t> log(std::vector<real_t> a);
-	std::vector<real_t> log10(std::vector<real_t> a);
-	std::vector<real_t> exp(std::vector<real_t> a);
-	std::vector<real_t> erf(std::vector<real_t> a);
-	std::vector<real_t> exponentiate(std::vector<real_t> a, real_t p);
-	std::vector<real_t> sqrt(std::vector<real_t> a);
-	std::vector<real_t> cbrt(std::vector<real_t> a);
-
 	Ref<MLPPVector> lognv(const Ref<MLPPVector> &a);
 	Ref<MLPPVector> log10nv(const Ref<MLPPVector> &a);
 	Ref<MLPPVector> expnv(const Ref<MLPPVector> &a);

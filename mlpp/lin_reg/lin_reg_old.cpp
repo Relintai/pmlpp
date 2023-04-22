@@ -7,7 +7,7 @@
 #include "lin_reg_old.h"
 
 #include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
+#include "../lin_alg/lin_alg_old.h"
 #include "../regularization/reg.h"
 #include "../stat/stat.h"
 #include "../utilities/utilities.h"
@@ -40,7 +40,7 @@ real_t MLPPLinRegOld::modelTest(std::vector<real_t> x) {
 }
 
 void MLPPLinRegOld::NewtonRaphson(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -72,7 +72,7 @@ void MLPPLinRegOld::NewtonRaphson(real_t learning_rate, int max_epoch, bool UI) 
 }
 
 void MLPPLinRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -103,7 +103,7 @@ void MLPPLinRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI
 }
 
 void MLPPLinRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -142,7 +142,7 @@ void MLPPLinRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPLinRegOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -182,7 +182,7 @@ void MLPPLinRegOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_siz
 }
 
 void MLPPLinRegOld::Momentum(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool UI) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -229,7 +229,7 @@ void MLPPLinRegOld::Momentum(real_t learning_rate, int max_epoch, int mini_batch
 }
 
 void MLPPLinRegOld::NAG(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool UI) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -278,7 +278,7 @@ void MLPPLinRegOld::NAG(real_t learning_rate, int max_epoch, int mini_batch_size
 }
 
 void MLPPLinRegOld::Adagrad(real_t learning_rate, int max_epoch, int mini_batch_size, real_t e, bool UI) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -326,7 +326,7 @@ void MLPPLinRegOld::Adagrad(real_t learning_rate, int max_epoch, int mini_batch_
 
 void MLPPLinRegOld::Adadelta(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t e, bool UI) {
 	// Adagrad upgrade. Momentum is applied.
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -373,7 +373,7 @@ void MLPPLinRegOld::Adadelta(real_t learning_rate, int max_epoch, int mini_batch
 }
 
 void MLPPLinRegOld::Adam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -426,7 +426,7 @@ void MLPPLinRegOld::Adam(real_t learning_rate, int max_epoch, int mini_batch_siz
 }
 
 void MLPPLinRegOld::Adamax(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -477,7 +477,7 @@ void MLPPLinRegOld::Adamax(real_t learning_rate, int max_epoch, int mini_batch_s
 }
 
 void MLPPLinRegOld::Nadam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -531,7 +531,7 @@ void MLPPLinRegOld::Nadam(real_t learning_rate, int max_epoch, int mini_batch_si
 }
 
 void MLPPLinRegOld::normalEquation() {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPStat stat;
 	std::vector<real_t> x_means;
 	std::vector<std::vector<real_t>> inputSetT = alg.transpose(inputSet);
@@ -583,12 +583,12 @@ real_t MLPPLinRegOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
 }
 
 std::vector<real_t> MLPPLinRegOld::Evaluate(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
 real_t MLPPLinRegOld::Evaluate(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.dot(weights, x) + bias;
 }
 

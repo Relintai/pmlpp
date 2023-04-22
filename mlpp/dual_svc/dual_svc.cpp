@@ -203,7 +203,7 @@ real_t MLPPDualSVC::cost(const Ref<MLPPVector> &alpha, const Ref<MLPPMatrix> &X,
 
 real_t MLPPDualSVC::evaluatev(const Ref<MLPPVector> &x) {
 	MLPPActivation avn;
-	return avn.sign(propagatev(x));
+	return avn.sign_normr(propagatev(x));
 }
 
 real_t MLPPDualSVC::propagatev(const Ref<MLPPVector> &x) {

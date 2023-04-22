@@ -6,7 +6,7 @@
 
 #include "log_reg_old.h"
 
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
@@ -197,13 +197,13 @@ real_t MLPPLogRegOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
 
 std::vector<real_t> MLPPLogRegOld::Evaluate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return avn.sigmoid(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
 real_t MLPPLogRegOld::Evaluate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return avn.sigmoid(alg.dot(weights, x) + bias);
 }
 

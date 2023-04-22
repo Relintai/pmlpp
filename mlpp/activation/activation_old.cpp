@@ -5,7 +5,7 @@
 //
 
 #include "activation_old.h"
-#include "../lin_alg/lin_alg.h"
+#include "../lin_alg/lin_alg_old.h"
 
 #include <algorithm>
 #include <cmath>
@@ -20,7 +20,7 @@ real_t MLPPActivationOld::linear(real_t z, bool deriv) {
 
 std::vector<real_t> MLPPActivationOld::linear(std::vector<real_t> z, bool deriv) {
 	if (deriv) {
-		MLPPLinAlg alg;
+		MLPPLinAlgOld alg;
 		return alg.onevec(z.size());
 	}
 	return z;
@@ -28,7 +28,7 @@ std::vector<real_t> MLPPActivationOld::linear(std::vector<real_t> z, bool deriv)
 
 std::vector<std::vector<real_t>> MLPPActivationOld::linear(std::vector<std::vector<real_t>> z, bool deriv) {
 	if (deriv) {
-		MLPPLinAlg alg;
+		MLPPLinAlgOld alg;
 		return alg.onemat(z.size(), z[0].size());
 	}
 	return z;
@@ -42,7 +42,7 @@ real_t MLPPActivationOld::sigmoid(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::sigmoid(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), sigmoid(z)));
 	}
@@ -50,7 +50,7 @@ std::vector<real_t> MLPPActivationOld::sigmoid(std::vector<real_t> z, bool deriv
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::sigmoid(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), sigmoid(z)));
 	}
@@ -58,7 +58,7 @@ std::vector<std::vector<real_t>> MLPPActivationOld::sigmoid(std::vector<std::vec
 }
 
 std::vector<real_t> MLPPActivationOld::softmax(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<real_t> a;
 	a.resize(z.size());
 	std::vector<real_t> expZ = alg.exp(z);
@@ -84,7 +84,7 @@ std::vector<std::vector<real_t>> MLPPActivationOld::softmax(std::vector<std::vec
 }
 
 std::vector<real_t> MLPPActivationOld::adjSoftmax(std::vector<real_t> z) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<real_t> a;
 	real_t C = -*std::max_element(z.begin(), z.end());
 	z = alg.scalarAdd(C, z);
@@ -122,7 +122,7 @@ std::vector<std::vector<real_t>> MLPPActivationOld::softmaxDeriv(std::vector<rea
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPActivationOld::softmaxDeriv(std::vector<std::vector<real_t>> z) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> deriv;
 	std::vector<std::vector<real_t>> a = softmax(z);
 
@@ -153,7 +153,7 @@ std::vector<real_t> MLPPActivationOld::softplus(std::vector<real_t> z, bool deri
 	if (deriv) {
 		return sigmoid(z);
 	}
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.log(alg.addition(alg.onevec(z.size()), alg.exp(z)));
 }
 
@@ -161,7 +161,7 @@ std::vector<std::vector<real_t>> MLPPActivationOld::softplus(std::vector<std::ve
 	if (deriv) {
 		return sigmoid(z);
 	}
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.log(alg.addition(alg.onemat(z.size(), z[0].size()), alg.exp(z)));
 }
 
@@ -173,7 +173,7 @@ real_t MLPPActivationOld::softsign(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::softsign(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onevec(z.size()), alg.exponentiate(alg.addition(alg.onevec(z.size()), alg.abs(z)), 2));
 	}
@@ -181,7 +181,7 @@ std::vector<real_t> MLPPActivationOld::softsign(std::vector<real_t> z, bool deri
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::softsign(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.exponentiate(alg.addition(alg.onemat(z.size(), z[0].size()), alg.abs(z)), 2));
 	}
@@ -196,7 +196,7 @@ real_t MLPPActivationOld::gaussianCDF(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::gaussianCDF(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.scalarMultiply(1 / sqrt(2 * M_PI), alg.exp(alg.scalarMultiply(-1 / 2, alg.hadamard_product(z, z))));
 	}
@@ -204,7 +204,7 @@ std::vector<real_t> MLPPActivationOld::gaussianCDF(std::vector<real_t> z, bool d
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::gaussianCDF(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.scalarMultiply(1 / sqrt(2 * M_PI), alg.exp(alg.scalarMultiply(-1 / 2, alg.hadamard_product(z, z))));
 	}
@@ -219,7 +219,7 @@ real_t MLPPActivationOld::cloglog(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::cloglog(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.exp(alg.scalarMultiply(-1, alg.exp(z)));
 	}
@@ -227,7 +227,7 @@ std::vector<real_t> MLPPActivationOld::cloglog(std::vector<real_t> z, bool deriv
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::cloglog(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.exp(alg.scalarMultiply(-1, alg.exp(z)));
 	}
@@ -242,7 +242,7 @@ real_t MLPPActivationOld::logit(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::logit(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.subtraction(alg.elementWiseDivision(alg.onevec(z.size()), z), alg.elementWiseDivision(alg.onevec(z.size()), alg.subtraction(z, alg.onevec(z.size()))));
 	}
@@ -250,7 +250,7 @@ std::vector<real_t> MLPPActivationOld::logit(std::vector<real_t> z, bool deriv) 
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::logit(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.subtraction(alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), z), alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.subtraction(z, alg.onemat(z.size(), z[0].size()))));
 	}
@@ -308,7 +308,7 @@ real_t MLPPActivationOld::swish(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::swish(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		alg.addition(swish(z), alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), swish(z))));
 	}
@@ -316,7 +316,7 @@ std::vector<real_t> MLPPActivationOld::swish(std::vector<real_t> z, bool deriv) 
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::swish(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		alg.addition(swish(z), alg.subtraction(sigmoid(z), alg.hadamard_product(sigmoid(z), swish(z))));
 	}
@@ -331,7 +331,7 @@ real_t MLPPActivationOld::mish(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::mish(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.addition(alg.hadamard_product(alg.hadamard_product(alg.hadamard_product(sech(softplus(z)), sech(softplus(z))), z), sigmoid(z)), alg.elementWiseDivision(mish(z), z));
 	}
@@ -339,7 +339,7 @@ std::vector<real_t> MLPPActivationOld::mish(std::vector<real_t> z, bool deriv) {
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::mish(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.addition(alg.hadamard_product(alg.hadamard_product(alg.hadamard_product(sech(softplus(z)), sech(softplus(z))), z), sigmoid(z)), alg.elementWiseDivision(mish(z), z));
 	}
@@ -354,7 +354,7 @@ real_t MLPPActivationOld::sinc(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::sinc(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.subtraction(alg.hadamard_product(z, alg.cos(z)), alg.sin(z)), alg.hadamard_product(z, z));
 	}
@@ -362,7 +362,7 @@ std::vector<real_t> MLPPActivationOld::sinc(std::vector<real_t> z, bool deriv) {
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::sinc(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.subtraction(alg.hadamard_product(z, alg.cos(z)), alg.sin(z)), alg.hadamard_product(z, z));
 	}
@@ -660,7 +660,7 @@ std::vector<real_t> MLPPActivationOld::sinh(std::vector<real_t> z, bool deriv) {
 	if (deriv) {
 		return cosh(z);
 	}
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(0.5, alg.subtraction(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
 }
 
@@ -668,7 +668,7 @@ std::vector<std::vector<real_t>> MLPPActivationOld::sinh(std::vector<std::vector
 	if (deriv) {
 		return cosh(z);
 	}
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(0.5, alg.subtraction(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
 }
 
@@ -683,7 +683,7 @@ std::vector<real_t> MLPPActivationOld::cosh(std::vector<real_t> z, bool deriv) {
 	if (deriv) {
 		return sinh(z);
 	}
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(0.5, alg.addition(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
 }
 
@@ -691,7 +691,7 @@ std::vector<std::vector<real_t>> MLPPActivationOld::cosh(std::vector<std::vector
 	if (deriv) {
 		return sinh(z);
 	}
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(0.5, alg.addition(alg.exp(z), alg.exp(alg.scalarMultiply(-1, z))));
 }
 
@@ -703,7 +703,7 @@ real_t MLPPActivationOld::tanh(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::tanh(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.scalarMultiply(-1, alg.scalarAdd(-1, alg.hadamard_product(tanh(z), tanh(z))));
 	}
@@ -711,7 +711,7 @@ std::vector<real_t> MLPPActivationOld::tanh(std::vector<real_t> z, bool deriv) {
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::tanh(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.scalarMultiply(-1, alg.scalarAdd(-1, alg.hadamard_product(tanh(z), tanh(z))));
 	}
@@ -727,7 +727,7 @@ real_t MLPPActivationOld::csch(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::csch(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), coth(z));
 	}
@@ -735,7 +735,7 @@ std::vector<real_t> MLPPActivationOld::csch(std::vector<real_t> z, bool deriv) {
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::csch(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), coth(z));
 	}
@@ -750,7 +750,7 @@ real_t MLPPActivationOld::sech(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::sech(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, sech(z)), tanh(z));
 	}
@@ -760,7 +760,7 @@ std::vector<real_t> MLPPActivationOld::sech(std::vector<real_t> z, bool deriv) {
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::sech(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, sech(z)), tanh(z));
 	}
@@ -777,7 +777,7 @@ real_t MLPPActivationOld::coth(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::coth(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), csch(z));
 	}
@@ -785,7 +785,7 @@ std::vector<real_t> MLPPActivationOld::coth(std::vector<real_t> z, bool deriv) {
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::coth(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.hadamard_product(alg.scalarMultiply(-1, csch(z)), csch(z));
 	}
@@ -800,7 +800,7 @@ real_t MLPPActivationOld::arsinh(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::arsinh(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onevec(z.size()), alg.sqrt(alg.addition(alg.hadamard_product(z, z), alg.onevec(z.size()))));
 	}
@@ -808,7 +808,7 @@ std::vector<real_t> MLPPActivationOld::arsinh(std::vector<real_t> z, bool deriv)
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::arsinh(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.sqrt(alg.addition(alg.hadamard_product(z, z), alg.onemat(z.size(), z[0].size()))));
 	}
@@ -823,7 +823,7 @@ real_t MLPPActivationOld::arcosh(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::arcosh(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onevec(z.size()), alg.sqrt(alg.subtraction(alg.hadamard_product(z, z), alg.onevec(z.size()))));
 	}
@@ -831,7 +831,7 @@ std::vector<real_t> MLPPActivationOld::arcosh(std::vector<real_t> z, bool deriv)
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::arcosh(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.sqrt(alg.subtraction(alg.hadamard_product(z, z), alg.onemat(z.size(), z[0].size()))));
 	}
@@ -846,7 +846,7 @@ real_t MLPPActivationOld::artanh(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::artanh(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onevec(z.size()), alg.subtraction(alg.onevec(z.size()), alg.hadamard_product(z, z)));
 	}
@@ -854,7 +854,7 @@ std::vector<real_t> MLPPActivationOld::artanh(std::vector<real_t> z, bool deriv)
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::artanh(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.subtraction(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)));
 	}
@@ -869,7 +869,7 @@ real_t MLPPActivationOld::arcsch(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::arcsch(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.full(z.size(), -1), alg.hadamard_product(alg.hadamard_product(z, z), alg.sqrt(alg.addition(alg.onevec(z.size()), alg.elementWiseDivision(alg.onevec(z.size()), alg.hadamard_product(z, z))))));
 	}
@@ -877,7 +877,7 @@ std::vector<real_t> MLPPActivationOld::arcsch(std::vector<real_t> z, bool deriv)
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::arcsch(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.full(z.size(), z[0].size(), -1), alg.hadamard_product(alg.hadamard_product(z, z), alg.sqrt(alg.addition(alg.onemat(z.size(), z[0].size()), alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z))))));
 	}
@@ -892,7 +892,7 @@ real_t MLPPActivationOld::arsech(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::arsech(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.full(z.size(), -1), alg.hadamard_product(z, alg.sqrt(alg.subtraction(alg.onevec(z.size()), alg.hadamard_product(z, z)))));
 	}
@@ -900,7 +900,7 @@ std::vector<real_t> MLPPActivationOld::arsech(std::vector<real_t> z, bool deriv)
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::arsech(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.full(z.size(), z[0].size(), -1), alg.hadamard_product(z, alg.sqrt(alg.subtraction(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)))));
 	}
@@ -915,7 +915,7 @@ real_t MLPPActivationOld::arcoth(real_t z, bool deriv) {
 }
 
 std::vector<real_t> MLPPActivationOld::arcoth(std::vector<real_t> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onevec(z.size()), alg.subtraction(alg.onevec(z.size()), alg.hadamard_product(z, z)));
 	}
@@ -923,7 +923,7 @@ std::vector<real_t> MLPPActivationOld::arcoth(std::vector<real_t> z, bool deriv)
 }
 
 std::vector<std::vector<real_t>> MLPPActivationOld::arcoth(std::vector<std::vector<real_t>> z, bool deriv) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (deriv) {
 		return alg.elementWiseDivision(alg.onemat(z.size(), z[0].size()), alg.subtraction(alg.onemat(z.size(), z[0].size()), alg.hadamard_product(z, z)));
 	}

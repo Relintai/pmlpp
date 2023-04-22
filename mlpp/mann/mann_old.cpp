@@ -6,7 +6,7 @@
 
 #include "mann_old.h"
 
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
@@ -54,7 +54,7 @@ std::vector<real_t> MLPPMANNOld::modelTest(std::vector<real_t> x) {
 
 void MLPPMANNOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 

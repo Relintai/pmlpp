@@ -169,9 +169,9 @@ real_t MLPPReg::reg_deriv_termvr(const Ref<MLPPVector> &weights, real_t lambda, 
 	if (reg == REGULARIZATION_TYPE_RIDGE) {
 		return lambda * wj;
 	} else if (reg == REGULARIZATION_TYPE_LASSO) {
-		return lambda * act.sign(wj);
+		return lambda * act.sign_normr(wj);
 	} else if (reg == REGULARIZATION_TYPE_ELASTIC_NET) {
-		return alpha * lambda * act.sign(wj) + (1 - alpha) * lambda * wj;
+		return alpha * lambda * act.sign_normr(wj) + (1 - alpha) * lambda * wj;
 	} else if (reg == REGULARIZATION_TYPE_WEIGHT_CLIPPING) { // Preparation for Wasserstein GANs.
 		// We assume lambda is the lower clipping threshold, while alpha is the higher clipping threshold.
 		// alpha > lambda.
@@ -194,9 +194,9 @@ real_t MLPPReg::reg_deriv_termmr(const Ref<MLPPMatrix> &weights, real_t lambda, 
 	if (reg == REGULARIZATION_TYPE_RIDGE) {
 		return lambda * wj;
 	} else if (reg == REGULARIZATION_TYPE_LASSO) {
-		return lambda * act.sign(wj);
+		return lambda * act.sign_normr(wj);
 	} else if (reg == REGULARIZATION_TYPE_ELASTIC_NET) {
-		return alpha * lambda * act.sign(wj) + (1 - alpha) * lambda * wj;
+		return alpha * lambda * act.sign_normr(wj) + (1 - alpha) * lambda * wj;
 	} else if (reg == REGULARIZATION_TYPE_WEIGHT_CLIPPING) { // Preparation for Wasserstein GANs.
 		// We assume lambda is the lower clipping threshold, while alpha is the higher clipping threshold.
 		// alpha > lambda.
@@ -322,9 +322,9 @@ real_t MLPPReg::regDerivTerm(std::vector<real_t> weights, real_t lambda, real_t 
 	if (reg == "Ridge") {
 		return lambda * weights[j];
 	} else if (reg == "Lasso") {
-		return lambda * act.sign(weights[j]);
+		return lambda * act.sign_normr(weights[j]);
 	} else if (reg == "ElasticNet") {
-		return alpha * lambda * act.sign(weights[j]) + (1 - alpha) * lambda * weights[j];
+		return alpha * lambda * act.sign_normr(weights[j]) + (1 - alpha) * lambda * weights[j];
 	} else if (reg == "WeightClipping") { // Preparation for Wasserstein GANs.
 		// We assume lambda is the lower clipping threshold, while alpha is the higher clipping threshold.
 		// alpha > lambda.
@@ -345,9 +345,9 @@ real_t MLPPReg::regDerivTerm(std::vector<std::vector<real_t>> weights, real_t la
 	if (reg == "Ridge") {
 		return lambda * weights[i][j];
 	} else if (reg == "Lasso") {
-		return lambda * act.sign(weights[i][j]);
+		return lambda * act.sign_normr(weights[i][j]);
 	} else if (reg == "ElasticNet") {
-		return alpha * lambda * act.sign(weights[i][j]) + (1 - alpha) * lambda * weights[i][j];
+		return alpha * lambda * act.sign_normr(weights[i][j]) + (1 - alpha) * lambda * weights[i][j];
 	} else if (reg == "WeightClipping") { // Preparation for Wasserstein GANs.
 		// We assume lambda is the lower clipping threshold, while alpha is the higher clipping threshold.
 		// alpha > lambda.

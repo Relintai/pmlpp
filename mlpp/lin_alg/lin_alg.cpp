@@ -2118,59 +2118,6 @@ Ref<MLPPVector> MLPPLinAlg::subtract_matrix_rows(const Ref<MLPPVector> &a, const
 	return c;
 }
 
-std::vector<real_t> MLPPLinAlg::log(std::vector<real_t> a) {
-	std::vector<real_t> b;
-	b.resize(a.size());
-	for (uint32_t i = 0; i < a.size(); i++) {
-		b[i] = Math::log(a[i]);
-	}
-	return b;
-}
-
-std::vector<real_t> MLPPLinAlg::log10(std::vector<real_t> a) {
-	std::vector<real_t> b;
-	b.resize(a.size());
-	for (uint32_t i = 0; i < a.size(); i++) {
-		b[i] = Math::log10(a[i]);
-	}
-	return b;
-}
-
-std::vector<real_t> MLPPLinAlg::exp(std::vector<real_t> a) {
-	std::vector<real_t> b;
-	b.resize(a.size());
-	for (uint32_t i = 0; i < a.size(); i++) {
-		b[i] = Math::exp(a[i]);
-	}
-	return b;
-}
-
-std::vector<real_t> MLPPLinAlg::erf(std::vector<real_t> a) {
-	std::vector<real_t> b;
-	b.resize(a.size());
-	for (uint32_t i = 0; i < a.size(); i++) {
-		b[i] = Math::erf(a[i]);
-	}
-	return b;
-}
-
-std::vector<real_t> MLPPLinAlg::exponentiate(std::vector<real_t> a, real_t p) {
-	std::vector<real_t> b;
-	b.resize(a.size());
-	for (uint32_t i = 0; i < b.size(); i++) {
-		b[i] = Math::pow(a[i], p);
-	}
-	return b;
-}
-
-std::vector<real_t> MLPPLinAlg::sqrt(std::vector<real_t> a) {
-	return exponentiate(a, 0.5);
-}
-
-std::vector<real_t> MLPPLinAlg::cbrt(std::vector<real_t> a) {
-	return exponentiate(a, real_t(1) / real_t(3));
-}
-
 Ref<MLPPVector> MLPPLinAlg::lognv(const Ref<MLPPVector> &a) {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
 

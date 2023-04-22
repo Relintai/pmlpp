@@ -8,7 +8,7 @@
 
 #include "core/math/math_defs.h"
 
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../lin_alg/lin_alg.h"
 
 #include <iostream>
@@ -66,7 +66,7 @@ std::vector<std::vector<real_t>> MLPPRegOld::regDerivTerm(std::vector<std::vecto
 }
 
 real_t MLPPRegOld::regDerivTerm(std::vector<real_t> weights, real_t lambda, real_t alpha, std::string reg, int j) {
-	MLPPActivation act;
+	MLPPActivationOld act;
 	if (reg == "Ridge") {
 		return lambda * weights[j];
 	} else if (reg == "Lasso") {
@@ -89,7 +89,7 @@ real_t MLPPRegOld::regDerivTerm(std::vector<real_t> weights, real_t lambda, real
 }
 
 real_t MLPPRegOld::regDerivTerm(std::vector<std::vector<real_t>> weights, real_t lambda, real_t alpha, std::string reg, int i, int j) {
-	MLPPActivation act;
+	MLPPActivationOld act;
 	if (reg == "Ridge") {
 		return lambda * weights[i][j];
 	} else if (reg == "Lasso") {

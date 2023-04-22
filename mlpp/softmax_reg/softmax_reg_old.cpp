@@ -5,7 +5,7 @@
 //
 
 #include "softmax_reg_old.h"
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../cost/cost.h"
 #include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
@@ -173,13 +173,13 @@ real_t MLPPSoftmaxRegOld::Cost(std::vector<std::vector<real_t>> y_hat, std::vect
 
 std::vector<real_t> MLPPSoftmaxRegOld::Evaluate(std::vector<real_t> x) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	return avn.softmax(alg.addition(bias, alg.mat_vec_mult(alg.transpose(weights), x)));
 }
 
 std::vector<std::vector<real_t>> MLPPSoftmaxRegOld::Evaluate(std::vector<std::vector<real_t>> X) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 
 	return avn.softmax(alg.mat_vec_add(alg.matmult(X, weights), bias));
 }
@@ -187,7 +187,7 @@ std::vector<std::vector<real_t>> MLPPSoftmaxRegOld::Evaluate(std::vector<std::ve
 // softmax ( wTx + b )
 void MLPPSoftmaxRegOld::forwardPass() {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 
 	y_hat = avn.softmax(alg.mat_vec_add(alg.matmult(inputSet, weights), bias));
 }

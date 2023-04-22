@@ -247,7 +247,7 @@ real_t MLPPStat::heinzMean(const real_t A, const real_t B, const real_t x) {
 
 real_t MLPPStat::neumanSandorMean(const real_t a, const real_t b) {
 	MLPPActivation avn;
-	return (a - b) / 2 * avn.arsinh((a - b) / (a + b));
+	return (a - b) / 2 * avn.arsinh_normr((a - b) / (a + b));
 }
 
 real_t MLPPStat::stolarskyMean(const real_t x, const real_t y, const real_t p) {

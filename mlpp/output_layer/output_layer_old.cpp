@@ -24,83 +24,83 @@ MLPPOldOutputLayer::MLPPOldOutputLayer(int p_n_hidden, std::string p_activation,
 	weights = MLPPUtilities::weightInitialization(n_hidden, weightInit);
 	bias = MLPPUtilities::biasInitialization();
 
-	activation_map["Linear"] = &MLPPActivation::linear;
-	activationTest_map["Linear"] = &MLPPActivation::linear;
+	activation_map["Linear"] = &MLPPActivationOld::linear;
+	activationTest_map["Linear"] = &MLPPActivationOld::linear;
 
-	activation_map["Sigmoid"] = &MLPPActivation::sigmoid;
-	activationTest_map["Sigmoid"] = &MLPPActivation::sigmoid;
+	activation_map["Sigmoid"] = &MLPPActivationOld::sigmoid;
+	activationTest_map["Sigmoid"] = &MLPPActivationOld::sigmoid;
 
-	activation_map["Swish"] = &MLPPActivation::swish;
-	activationTest_map["Swish"] = &MLPPActivation::swish;
+	activation_map["Swish"] = &MLPPActivationOld::swish;
+	activationTest_map["Swish"] = &MLPPActivationOld::swish;
 
-	activation_map["Mish"] = &MLPPActivation::mish;
-	activationTest_map["Mish"] = &MLPPActivation::mish;
+	activation_map["Mish"] = &MLPPActivationOld::mish;
+	activationTest_map["Mish"] = &MLPPActivationOld::mish;
 
-	activation_map["SinC"] = &MLPPActivation::sinc;
-	activationTest_map["SinC"] = &MLPPActivation::sinc;
+	activation_map["SinC"] = &MLPPActivationOld::sinc;
+	activationTest_map["SinC"] = &MLPPActivationOld::sinc;
 
-	activation_map["Softplus"] = &MLPPActivation::softplus;
-	activationTest_map["Softplus"] = &MLPPActivation::softplus;
+	activation_map["Softplus"] = &MLPPActivationOld::softplus;
+	activationTest_map["Softplus"] = &MLPPActivationOld::softplus;
 
-	activation_map["Softsign"] = &MLPPActivation::softsign;
-	activationTest_map["Softsign"] = &MLPPActivation::softsign;
+	activation_map["Softsign"] = &MLPPActivationOld::softsign;
+	activationTest_map["Softsign"] = &MLPPActivationOld::softsign;
 
-	activation_map["CLogLog"] = &MLPPActivation::cloglog;
-	activationTest_map["CLogLog"] = &MLPPActivation::cloglog;
+	activation_map["CLogLog"] = &MLPPActivationOld::cloglog;
+	activationTest_map["CLogLog"] = &MLPPActivationOld::cloglog;
 
-	activation_map["Logit"] = &MLPPActivation::logit;
-	activationTest_map["Logit"] = &MLPPActivation::logit;
+	activation_map["Logit"] = &MLPPActivationOld::logit;
+	activationTest_map["Logit"] = &MLPPActivationOld::logit;
 
-	activation_map["GaussianCDF"] = &MLPPActivation::gaussianCDF;
-	activationTest_map["GaussianCDF"] = &MLPPActivation::gaussianCDF;
+	activation_map["GaussianCDF"] = &MLPPActivationOld::gaussianCDF;
+	activationTest_map["GaussianCDF"] = &MLPPActivationOld::gaussianCDF;
 
-	activation_map["RELU"] = &MLPPActivation::RELU;
-	activationTest_map["RELU"] = &MLPPActivation::RELU;
+	activation_map["RELU"] = &MLPPActivationOld::RELU;
+	activationTest_map["RELU"] = &MLPPActivationOld::RELU;
 
-	activation_map["GELU"] = &MLPPActivation::GELU;
-	activationTest_map["GELU"] = &MLPPActivation::GELU;
+	activation_map["GELU"] = &MLPPActivationOld::GELU;
+	activationTest_map["GELU"] = &MLPPActivationOld::GELU;
 
-	activation_map["Sign"] = &MLPPActivation::sign;
-	activationTest_map["Sign"] = &MLPPActivation::sign;
+	activation_map["Sign"] = &MLPPActivationOld::sign;
+	activationTest_map["Sign"] = &MLPPActivationOld::sign;
 
-	activation_map["UnitStep"] = &MLPPActivation::unitStep;
-	activationTest_map["UnitStep"] = &MLPPActivation::unitStep;
+	activation_map["UnitStep"] = &MLPPActivationOld::unitStep;
+	activationTest_map["UnitStep"] = &MLPPActivationOld::unitStep;
 
-	activation_map["Sinh"] = &MLPPActivation::sinh;
-	activationTest_map["Sinh"] = &MLPPActivation::sinh;
+	activation_map["Sinh"] = &MLPPActivationOld::sinh;
+	activationTest_map["Sinh"] = &MLPPActivationOld::sinh;
 
-	activation_map["Cosh"] = &MLPPActivation::cosh;
-	activationTest_map["Cosh"] = &MLPPActivation::cosh;
+	activation_map["Cosh"] = &MLPPActivationOld::cosh;
+	activationTest_map["Cosh"] = &MLPPActivationOld::cosh;
 
-	activation_map["Tanh"] = &MLPPActivation::tanh;
-	activationTest_map["Tanh"] = &MLPPActivation::tanh;
+	activation_map["Tanh"] = &MLPPActivationOld::tanh;
+	activationTest_map["Tanh"] = &MLPPActivationOld::tanh;
 
-	activation_map["Csch"] = &MLPPActivation::csch;
-	activationTest_map["Csch"] = &MLPPActivation::csch;
+	activation_map["Csch"] = &MLPPActivationOld::csch;
+	activationTest_map["Csch"] = &MLPPActivationOld::csch;
 
-	activation_map["Sech"] = &MLPPActivation::sech;
-	activationTest_map["Sech"] = &MLPPActivation::sech;
+	activation_map["Sech"] = &MLPPActivationOld::sech;
+	activationTest_map["Sech"] = &MLPPActivationOld::sech;
 
-	activation_map["Coth"] = &MLPPActivation::coth;
-	activationTest_map["Coth"] = &MLPPActivation::coth;
+	activation_map["Coth"] = &MLPPActivationOld::coth;
+	activationTest_map["Coth"] = &MLPPActivationOld::coth;
 
-	activation_map["Arsinh"] = &MLPPActivation::arsinh;
-	activationTest_map["Arsinh"] = &MLPPActivation::arsinh;
+	activation_map["Arsinh"] = &MLPPActivationOld::arsinh;
+	activationTest_map["Arsinh"] = &MLPPActivationOld::arsinh;
 
-	activation_map["Arcosh"] = &MLPPActivation::arcosh;
-	activationTest_map["Arcosh"] = &MLPPActivation::arcosh;
+	activation_map["Arcosh"] = &MLPPActivationOld::arcosh;
+	activationTest_map["Arcosh"] = &MLPPActivationOld::arcosh;
 
-	activation_map["Artanh"] = &MLPPActivation::artanh;
-	activationTest_map["Artanh"] = &MLPPActivation::artanh;
+	activation_map["Artanh"] = &MLPPActivationOld::artanh;
+	activationTest_map["Artanh"] = &MLPPActivationOld::artanh;
 
-	activation_map["Arcsch"] = &MLPPActivation::arcsch;
-	activationTest_map["Arcsch"] = &MLPPActivation::arcsch;
+	activation_map["Arcsch"] = &MLPPActivationOld::arcsch;
+	activationTest_map["Arcsch"] = &MLPPActivationOld::arcsch;
 
-	activation_map["Arsech"] = &MLPPActivation::arsech;
-	activationTest_map["Arsech"] = &MLPPActivation::arsech;
+	activation_map["Arsech"] = &MLPPActivationOld::arsech;
+	activationTest_map["Arsech"] = &MLPPActivationOld::arsech;
 
-	activation_map["Arcoth"] = &MLPPActivation::arcoth;
-	activationTest_map["Arcoth"] = &MLPPActivation::arcoth;
+	activation_map["Arcoth"] = &MLPPActivationOld::arcoth;
+	activationTest_map["Arcoth"] = &MLPPActivationOld::arcoth;
 
 	costDeriv_map["MSE"] = &MLPPCost::MSEDeriv;
 	cost_map["MSE"] = &MLPPCost::MSE;
@@ -122,14 +122,14 @@ MLPPOldOutputLayer::MLPPOldOutputLayer(int p_n_hidden, std::string p_activation,
 
 void MLPPOldOutputLayer::forwardPass() {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	z = alg.scalarAdd(bias, alg.mat_vec_mult(input, weights));
 	a = (avn.*activation_map[activation])(z, false);
 }
 
 void MLPPOldOutputLayer::Test(std::vector<real_t> x) {
 	MLPPLinAlg alg;
-	MLPPActivation avn;
+	MLPPActivationOld avn;
 	z_test = alg.dot(weights, x) + bias;
 	a_test = (avn.*activationTest_map[activation])(z_test, false);
 }

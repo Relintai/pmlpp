@@ -5,9 +5,9 @@
 //
 
 #include "ann_old.h"
-#include "../activation/activation.h"
+#include "../activation/activation_old.h"
 #include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
+#include "../lin_alg/lin_alg_old.h"
 #include "../regularization/reg.h"
 #include "../utilities/utilities.h"
 
@@ -62,7 +62,7 @@ real_t MLPPANNOld::modelTest(std::vector<real_t> x) {
 
 void MLPPANNOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -98,7 +98,7 @@ void MLPPANNOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 
 void MLPPANNOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -139,7 +139,7 @@ void MLPPANNOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 
 void MLPPANNOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	class MLPPCost cost;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -184,7 +184,7 @@ void MLPPANNOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, 
 
 void MLPPANNOld::Momentum(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool NAG, bool UI) {
 	class MLPPCost cost;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -246,7 +246,7 @@ void MLPPANNOld::Momentum(real_t learning_rate, int max_epoch, int mini_batch_si
 
 void MLPPANNOld::Adagrad(real_t learning_rate, int max_epoch, int mini_batch_size, real_t e, bool UI) {
 	class MLPPCost cost;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -307,7 +307,7 @@ void MLPPANNOld::Adagrad(real_t learning_rate, int max_epoch, int mini_batch_siz
 
 void MLPPANNOld::Adadelta(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t e, bool UI) {
 	class MLPPCost cost;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -368,7 +368,7 @@ void MLPPANNOld::Adadelta(real_t learning_rate, int max_epoch, int mini_batch_si
 
 void MLPPANNOld::Adam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI) {
 	class MLPPCost cost;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -441,7 +441,7 @@ void MLPPANNOld::Adam(real_t learning_rate, int max_epoch, int mini_batch_size, 
 
 void MLPPANNOld::Adamax(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI) {
 	class MLPPCost cost;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -512,7 +512,7 @@ void MLPPANNOld::Adamax(real_t learning_rate, int max_epoch, int mini_batch_size
 
 void MLPPANNOld::Nadam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI) {
 	class MLPPCost cost;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -587,7 +587,7 @@ void MLPPANNOld::Nadam(real_t learning_rate, int max_epoch, int mini_batch_size,
 
 void MLPPANNOld::AMSGrad(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI) {
 	class MLPPCost cost;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -757,7 +757,7 @@ void MLPPANNOld::forwardPass() {
 }
 
 void MLPPANNOld::updateParameters(std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations, std::vector<real_t> outputLayerUpdation, real_t learning_rate) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	outputLayer->weights = alg.subtraction(outputLayer->weights, outputLayerUpdation);
 	outputLayer->bias -= learning_rate * alg.sum_elements(outputLayer->delta) / n;
@@ -776,8 +776,8 @@ void MLPPANNOld::updateParameters(std::vector<std::vector<std::vector<real_t>>> 
 std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> MLPPANNOld::computeGradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
 	// std::cout << "BEGIN" << std::endl;
 	class MLPPCost cost;
-	MLPPActivation avn;
-	MLPPLinAlg alg;
+	MLPPActivationOld avn;
+	MLPPLinAlgOld alg;
 	MLPPReg regularization;
 
 	std::vector<std::vector<std::vector<real_t>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
