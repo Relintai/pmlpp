@@ -607,7 +607,7 @@ void MLPPANN::nadam(real_t learning_rate, int max_epoch, int mini_batch_size, re
 			Ref<MLPPVector> m_output_final = alg.additionnv(alg.scalar_multiplynv(b1, m_output_hat), alg.scalar_multiplynv((1 - b1) / (1.0 - Math::pow(b1, epoch)), grads.output_w_grad));
 
 			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiply_vm(learning_rate / _n, alg.element_wise_division_vt(m_hidden_final, alg.scalar_add_vm(e, alg.sqrt_vt(v_hidden_hat))));
-			Ref<MLPPVector> output_layer_updation = alg.scalar_multiplynv(learning_rate / _n, alg.element_wise_divisionm(m_output_final, alg.scalar_addnv(e, alg.sqrtnv(v_output_hat))));
+			Ref<MLPPVector> output_layer_updation = alg.scalar_multiplynv(learning_rate / _n, alg.element_wise_divisionnm(m_output_final, alg.scalar_addnv(e, alg.sqrtnv(v_output_hat))));
 
 			update_parameters(hidden_layer_updations, output_layer_updation, learning_rate); // subject to change. may want bias to have this matrix too.
 
@@ -844,14 +844,14 @@ void MLPPANN::update_parameters(const Vector<Ref<MLPPMatrix>> &hidden_layer_upda
 	if (!_network.empty()) {
 		Ref<MLPPHiddenLayer> layer = _network[_network.size() - 1];
 
-		layer->set_weights(alg.subtractionm(layer->get_weights(), hidden_layer_updations[0]));
-		layer->set_bias(alg.subtract_matrix_rows(layer->get_bias(), alg.scalar_multiplym(learning_rate / _n, layer->get_delta())));
+		layer->set_weights(alg.subtractionnm(layer->get_weights(), hidden_layer_updations[0]));
+		layer->set_bias(alg.subtract_matrix_rows(layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, layer->get_delta())));
 
 		for (int i = _network.size() - 2; i >= 0; i--) {
 			layer = _network[i];
 
-			layer->set_weights(alg.subtractionm(layer->get_weights(), hidden_layer_updations[(_network.size() - 2) - i + 1]));
-			layer->set_bias(alg.subtract_matrix_rows(layer->get_bias(), alg.scalar_multiplym(learning_rate / _n, layer->get_delta())));
+			layer->set_weights(alg.subtractionnm(layer->get_weights(), hidden_layer_updations[(_network.size() - 2) - i + 1]));
+			layer->set_bias(alg.subtract_matrix_rows(layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, layer->get_delta())));
 		}
 	}
 }
@@ -867,25 +867,25 @@ MLPPANN::ComputeGradientsResult MLPPANN::compute_gradients(const Ref<MLPPVector>
 
 	_output_layer->set_delta(alg.hadamard_productnv(mlpp_cost.run_cost_deriv_vector(_output_layer->get_cost(), y_hat, _output_set), avn.run_activation_deriv_vector(_output_layer->get_activation(), _output_layer->get_z())));
 
-	res.output_w_grad = alg.mat_vec_multv(alg.transposem(_output_layer->get_input()), _output_layer->get_delta());
+	res.output_w_grad = alg.mat_vec_multv(alg.transposenm(_output_layer->get_input()), _output_layer->get_delta());
 	res.output_w_grad = alg.additionnv(res.output_w_grad, regularization.reg_deriv_termv(_output_layer->get_weights(), _output_layer->get_lambda(), _output_layer->get_alpha(), _output_layer->get_reg()));
 
 	if (!_network.empty()) {
 		Ref<MLPPHiddenLayer> layer = _network[_network.size() - 1];
 
-		layer->set_delta(alg.hadamard_productm(alg.outer_product(_output_layer->get_delta(), _output_layer->get_weights()), avn.run_activation_deriv_vector(layer->get_activation(), layer->get_z())));
+		layer->set_delta(alg.hadamard_productnm(alg.outer_product(_output_layer->get_delta(), _output_layer->get_weights()), avn.run_activation_deriv_vector(layer->get_activation(), layer->get_z())));
 
-		Ref<MLPPMatrix> hidden_layer_w_grad = alg.matmultm(alg.transposem(layer->get_input()), layer->get_delta());
+		Ref<MLPPMatrix> hidden_layer_w_grad = alg.matmultnm(alg.transposenm(layer->get_input()), layer->get_delta());
 
-		res.cumulative_hidden_layer_w_grad.push_back(alg.additionm(hidden_layer_w_grad, regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+		res.cumulative_hidden_layer_w_grad.push_back(alg.additionnm(hidden_layer_w_grad, regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 
 		for (int i = _network.size() - 2; i >= 0; i--) {
 			layer = _network[i];
 			Ref<MLPPHiddenLayer> next_layer = _network[i + 1];
 
-			layer->set_delta(alg.hadamard_productm(alg.matmultm(next_layer->get_delta(), alg.transposem(next_layer->get_weights())), avn.run_activation_deriv_vector(layer->get_activation(), layer->get_z())));
-			hidden_layer_w_grad = alg.matmultm(alg.transposem(layer->get_input()), layer->get_delta());
-			res.cumulative_hidden_layer_w_grad.push_back(alg.additionm(hidden_layer_w_grad, regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+			layer->set_delta(alg.hadamard_productnm(alg.matmultnm(next_layer->get_delta(), alg.transposenm(next_layer->get_weights())), avn.run_activation_deriv_vector(layer->get_activation(), layer->get_z())));
+			hidden_layer_w_grad = alg.matmultnm(alg.transposenm(layer->get_input()), layer->get_delta());
+			res.cumulative_hidden_layer_w_grad.push_back(alg.additionnm(hidden_layer_w_grad, regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 		}
 	}
 

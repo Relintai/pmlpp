@@ -310,7 +310,7 @@ void MLPPTests::test_multivariate_linear_regression_adam() {
 	alg.printVector(adamModelOld.modelSetTest(ds->get_input()->to_std_vector()));
 	std::cout << "ACCURACY: " << 100 * adamModelOld.score() << "%" << std::endl;
 
-	MLPPLinReg adam_model(alg.transposem(ds->get_input()), ds->get_output());
+	MLPPLinReg adam_model(alg.transposenm(ds->get_input()), ds->get_output());
 	PLOG_MSG(adam_model.model_set_test(ds->get_input())->to_string());
 	PLOG_MSG("ACCURACY: " + String::num(100 * adam_model.score()) + "%");
 }
@@ -330,7 +330,7 @@ void MLPPTests::test_multivariate_linear_regression_score_sgd_adam(bool ui) {
 		modelf_old.MBGD(0.001, 5, 1, ui);
 		scoreSGD += modelf_old.score();
 
-		MLPPLinReg modelf(alg.transposem(ds->get_input()), ds->get_output());
+		MLPPLinReg modelf(alg.transposenm(ds->get_input()), ds->get_output());
 		modelf.mbgd(0.001, 5, 1, ui);
 		scoreSGD += modelf.score();
 
@@ -338,7 +338,7 @@ void MLPPTests::test_multivariate_linear_regression_score_sgd_adam(bool ui) {
 		adamModelf_old.Adam(0.1, 5, 1, 0.9, 0.999, 1e-8, ui); // Change batch size = sgd, bgd
 		scoreADAM += adamModelf_old.score();
 
-		MLPPLinReg adamModelf(alg.transposem(ds->get_input()), ds->get_output());
+		MLPPLinReg adamModelf(alg.transposenm(ds->get_input()), ds->get_output());
 		adamModelf.adam(0.1, 5, 1, 0.9, 0.999, 1e-8, ui); // Change batch size = sgd, bgd
 		scoreADAM += adamModelf.score();
 	}
@@ -361,7 +361,7 @@ void MLPPTests::test_multivariate_linear_regression_epochs_gradient_descent(bool
 	model3_old.gradientDescent(0.001, 300, ui);
 	alg.printVector(model3_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	MLPPLinReg model3(alg.transposem(ds->get_input()), ds->get_output()); // Can use Lasso, Ridge, ElasticNet Reg
+	MLPPLinReg model3(alg.transposenm(ds->get_input()), ds->get_output()); // Can use Lasso, Ridge, ElasticNet Reg
 	model3.gradient_descent(0.001, 300, ui);
 	PLOG_MSG(model3.model_set_test(ds->get_input())->to_string());
 }
@@ -380,7 +380,7 @@ void MLPPTests::test_multivariate_linear_regression_newton_raphson(bool ui) {
 	model2_old.NewtonRaphson(1.5, 300, ui);
 	alg.printVector(model2_old.modelSetTest(ds->get_input()->to_std_vector()));
 
-	MLPPLinReg model2(alg.transposem(ds->get_input()), ds->get_output());
+	MLPPLinReg model2(alg.transposenm(ds->get_input()), ds->get_output());
 	model2.newton_raphson(1.5, 300, ui);
 	PLOG_MSG(model2.model_set_test(ds->get_input())->to_string());
 }
@@ -440,9 +440,9 @@ void MLPPTests::test_c_log_log_regression(bool ui) {
 	output_set.instance();
 	output_set->set_from_std_vector(outputSet);
 
-	MLPPCLogLogReg model(alg.transposem(input_set), output_set);
+	MLPPCLogLogReg model(alg.transposenm(input_set), output_set);
 	model.sgd(0.1, 10000, ui);
-	PLOG_MSG(model.model_set_test(alg.transposem(input_set))->to_string());
+	PLOG_MSG(model.model_set_test(alg.transposenm(input_set))->to_string());
 	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
 void MLPPTests::test_exp_reg_regression(bool ui) {
@@ -465,9 +465,9 @@ void MLPPTests::test_exp_reg_regression(bool ui) {
 	output_set.instance();
 	output_set->set_from_std_vector(outputSet);
 
-	MLPPExpReg model(alg.transposem(input_set), output_set);
+	MLPPExpReg model(alg.transposenm(input_set), output_set);
 	model.sgd(0.001, 10000, ui);
-	PLOG_MSG(model.model_set_test(alg.transposem(input_set))->to_string());
+	PLOG_MSG(model.model_set_test(alg.transposenm(input_set))->to_string());
 	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
 void MLPPTests::test_tanh_regression(bool ui) {
@@ -600,9 +600,9 @@ void MLPPTests::test_autoencoder(bool ui) {
 	input_set.instance();
 	input_set->set_from_std_vectors(inputSet);
 
-	MLPPAutoEncoder model(alg.transposem(input_set), 5);
+	MLPPAutoEncoder model(alg.transposenm(input_set), 5);
 	model.sgd(0.001, 300000, ui);
-	PLOG_MSG(model.model_set_test(alg.transposem(input_set))->to_string());
+	PLOG_MSG(model.model_set_test(alg.transposenm(input_set))->to_string());
 	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
 void MLPPTests::test_dynamically_sized_ann(bool ui) {
@@ -636,7 +636,7 @@ void MLPPTests::test_dynamically_sized_ann(bool ui) {
 	output_set.instance();
 	output_set->set_from_std_vector(outputSet);
 
-	MLPPANN ann(alg.transposem(input_set), output_set);
+	MLPPANN ann(alg.transposenm(input_set), output_set);
 	ann.add_layer(2, MLPPActivation::ACTIVATION_FUNCTION_COSH);
 	ann.add_output_layer(MLPPActivation::ACTIVATION_FUNCTION_SIGMOID, MLPPCost::COST_TYPE_LOGISTIC_LOSS);
 
@@ -646,7 +646,7 @@ void MLPPTests::test_dynamically_sized_ann(bool ui) {
 
 	ann.set_learning_rate_scheduler_drop(MLPPANN::SCHEDULER_TYPE_STEP, 0.5, 1000);
 	ann.gradient_descent(0.01, 30000);
-	PLOG_MSG(ann.model_set_test(alg.transposem(input_set))->to_string());
+	PLOG_MSG(ann.model_set_test(alg.transposenm(input_set))->to_string());
 	PLOG_MSG("ACCURACY: " + String::num(100 * ann.score()) + "%");
 }
 void MLPPTests::test_wgan_old(bool ui) {
@@ -780,8 +780,8 @@ void MLPPTests::test_train_test_split_mann(bool ui) {
 	Ref<MLPPDataComplex> d;
 	d.instance();
 
-	d->set_input(alg.transposem(input_set_1));
-	d->set_output(alg.transposem(output_set_1));
+	d->set_input(alg.transposenm(input_set_1));
+	d->set_output(alg.transposenm(output_set_1));
 
 	MLPPData::SplitComplexData split_data = data.train_test_split(d, 0.2);
 
@@ -829,14 +829,14 @@ void MLPPTests::test_naive_bayes() {
 	MLPPBernoulliNBOld BNBOld(alg.transpose(inputSet), outputSet);
 	alg.printVector(BNBOld.modelSetTest(alg.transpose(inputSet)));
 
-	MLPPBernoulliNB BNB(alg.transposem(input_set), output_set);
-	PLOG_MSG(BNB.model_set_test(alg.transposem(input_set))->to_string());
+	MLPPBernoulliNB BNB(alg.transposenm(input_set), output_set);
+	PLOG_MSG(BNB.model_set_test(alg.transposenm(input_set))->to_string());
 
 	MLPPGaussianNBOld GNBOld(alg.transpose(inputSet), outputSet, 2);
 	alg.printVector(GNBOld.modelSetTest(alg.transpose(inputSet)));
 
-	MLPPGaussianNB GNB(alg.transposem(input_set), output_set, 2);
-	PLOG_MSG(GNB.model_set_test(alg.transposem(input_set))->to_string());
+	MLPPGaussianNB GNB(alg.transposenm(input_set), output_set, 2);
+	PLOG_MSG(GNB.model_set_test(alg.transposenm(input_set))->to_string());
 }
 void MLPPTests::test_k_means(bool ui) {
 	// KMeans

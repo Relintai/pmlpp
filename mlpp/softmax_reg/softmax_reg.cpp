@@ -84,20 +84,20 @@ void MLPPSoftmaxReg::gradient_descent(real_t learning_rate, int max_epoch, bool 
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		Ref<MLPPMatrix> error = alg.subtractionm(_y_hat, _output_set);
+		Ref<MLPPMatrix> error = alg.subtractionnm(_y_hat, _output_set);
 
 		//Calculating the weight gradients
-		Ref<MLPPMatrix> w_gradient = alg.matmultm(alg.transposem(_input_set), error);
+		Ref<MLPPMatrix> w_gradient = alg.matmultnm(alg.transposenm(_input_set), error);
 
 		//Weight updation
-		_weights = alg.subtractionm(_weights, alg.scalar_multiplym(learning_rate, w_gradient));
+		_weights = alg.subtractionnm(_weights, alg.scalar_multiplynm(learning_rate, w_gradient));
 		_weights = regularization.reg_weightsm(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
 		//real_t b_gradient = alg.sum_elements(error);
 
 		// Bias Updation
-		_bias = alg.subtract_matrix_rows(_bias, alg.scalar_multiplym(learning_rate, error));
+		_bias = alg.subtract_matrix_rows(_bias, alg.scalar_multiplynm(learning_rate, error));
 
 		forward_pass();
 
@@ -162,7 +162,7 @@ void MLPPSoftmaxReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 		Ref<MLPPMatrix> w_gradient = alg.outer_product(input_set_row_tmp, alg.subtractionnv(y_hat, output_set_row_tmp));
 
 		// Weight Updation
-		_weights = alg.subtractionm(_weights, alg.scalar_multiplym(learning_rate, w_gradient));
+		_weights = alg.subtractionnm(_weights, alg.scalar_multiplynm(learning_rate, w_gradient));
 		_weights = regularization.reg_weightsm(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
@@ -208,17 +208,17 @@ void MLPPSoftmaxReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_si
 			Ref<MLPPMatrix> y_hat = evaluatem(current_inputs);
 			cost_prev = cost(y_hat, current_outputs);
 
-			Ref<MLPPMatrix> error = alg.subtractionm(y_hat, current_outputs);
+			Ref<MLPPMatrix> error = alg.subtractionnm(y_hat, current_outputs);
 
 			// Calculating the weight gradients
-			Ref<MLPPMatrix> w_gradient = alg.matmultm(alg.transposem(current_inputs), error);
+			Ref<MLPPMatrix> w_gradient = alg.matmultnm(alg.transposenm(current_inputs), error);
 
 			//Weight updation
-			_weights = alg.subtractionm(_weights, alg.scalar_multiplym(learning_rate, w_gradient));
+			_weights = alg.subtractionnm(_weights, alg.scalar_multiplynm(learning_rate, w_gradient));
 			_weights = regularization.reg_weightsm(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients
-			_bias = alg.subtract_matrix_rows(_bias, alg.scalar_multiplym(learning_rate, error));
+			_bias = alg.subtract_matrix_rows(_bias, alg.scalar_multiplynm(learning_rate, error));
 			y_hat = evaluatem(current_inputs);
 
 			if (ui) {
@@ -345,14 +345,14 @@ Ref<MLPPVector> MLPPSoftmaxReg::evaluatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.softmax_normv(alg.additionnv(_bias, alg.mat_vec_multv(alg.transposem(_weights), x)));
+	return avn.softmax_normv(alg.additionnv(_bias, alg.mat_vec_multv(alg.transposenm(_weights), x)));
 }
 
 Ref<MLPPMatrix> MLPPSoftmaxReg::evaluatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.softmax_normm(alg.mat_vec_addv(alg.matmultm(X, _weights), _bias));
+	return avn.softmax_normm(alg.mat_vec_addv(alg.matmultnm(X, _weights), _bias));
 }
 
 // softmax ( wTx + b )
@@ -360,7 +360,7 @@ void MLPPSoftmaxReg::forward_pass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	_y_hat = avn.softmax_normm(alg.mat_vec_addv(alg.matmultm(_input_set, _weights), _bias));
+	_y_hat = avn.softmax_normm(alg.mat_vec_addv(alg.matmultnm(_input_set, _weights), _bias));
 }
 
 void MLPPSoftmaxReg::_bind_methods() {

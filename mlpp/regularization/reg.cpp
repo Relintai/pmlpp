@@ -94,7 +94,7 @@ Ref<MLPPMatrix> MLPPReg::reg_weightsm(const Ref<MLPPMatrix> &weights, real_t lam
 		return reg_deriv_termm(weights, lambda, alpha, reg);
 	}
 
-	return alg.subtractionm(weights, reg_deriv_termm(weights, lambda, alpha, reg));
+	return alg.subtractionnm(weights, reg_deriv_termm(weights, lambda, alpha, reg));
 
 	// for(int i = 0; i < weights.size(); i++){
 	//     for(int j = 0; j < weights[i].size(); j++){

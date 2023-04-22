@@ -294,7 +294,7 @@ Ref<MLPPMatrix> MLPPDualSVC::kernel_functionm(const Ref<MLPPMatrix> &U, const Re
 	MLPPLinAlg alg;
 
 	if (kernel == KERNEL_METHOD_LINEAR) {
-		return alg.matmultm(_input_set, alg.transposem(_input_set));
+		return alg.matmultnm(_input_set, alg.transposenm(_input_set));
 	}
 
 	Ref<MLPPMatrix> m;

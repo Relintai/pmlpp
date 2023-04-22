@@ -38,7 +38,6 @@ real_t MLPPDualSVCOld::modelTest(std::vector<real_t> x) {
 
 void MLPPDualSVCOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 	class MLPPCost cost;
-	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;

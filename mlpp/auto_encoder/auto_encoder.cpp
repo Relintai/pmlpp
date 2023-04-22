@@ -60,27 +60,27 @@ void MLPPAutoEncoder::gradient_descent(real_t learning_rate, int max_epoch, bool
 		cost_prev = cost(_y_hat, _input_set);
 
 		// Calculating the errors
-		Ref<MLPPMatrix> error = alg.subtractionm(_y_hat, _input_set);
+		Ref<MLPPMatrix> error = alg.subtractionnm(_y_hat, _input_set);
 
 		// Calculating the weight/bias gradients for layer 2
-		Ref<MLPPMatrix> D2_1 = alg.matmultm(alg.transposem(_a2), error);
+		Ref<MLPPMatrix> D2_1 = alg.matmultnm(alg.transposenm(_a2), error);
 
 		// weights and bias updation for layer 2
-		_weights2 = alg.subtractionm(_weights2, alg.scalar_multiplym(learning_rate / _n, D2_1));
+		_weights2 = alg.subtractionnm(_weights2, alg.scalar_multiplynm(learning_rate / _n, D2_1));
 
 		// Calculating the bias gradients for layer 2
-		_bias2 = alg.subtract_matrix_rows(_bias2, alg.scalar_multiplym(learning_rate, error));
+		_bias2 = alg.subtract_matrix_rows(_bias2, alg.scalar_multiplynm(learning_rate, error));
 
 		//Calculating the weight/bias for layer 1
 
-		Ref<MLPPMatrix> D1_1 = alg.matmultm(error, alg.transposem(_weights2));
-		Ref<MLPPMatrix> D1_2 = alg.hadamard_productm(D1_1, avn.sigmoid_derivm(_z2));
-		Ref<MLPPMatrix> D1_3 = alg.matmultm(alg.transposem(_input_set), D1_2);
+		Ref<MLPPMatrix> D1_1 = alg.matmultnm(error, alg.transposenm(_weights2));
+		Ref<MLPPMatrix> D1_2 = alg.hadamard_productnm(D1_1, avn.sigmoid_derivm(_z2));
+		Ref<MLPPMatrix> D1_3 = alg.matmultnm(alg.transposenm(_input_set), D1_2);
 
 		// weight an bias updation for layer 1
-		_weights1 = alg.subtractionm(_weights1, alg.scalar_multiplym(learning_rate / _n, D1_3));
+		_weights1 = alg.subtractionnm(_weights1, alg.scalar_multiplynm(learning_rate / _n, D1_3));
 
-		_bias1 = alg.subtract_matrix_rows(_bias1, alg.scalar_multiplym(learning_rate / _n, D1_2));
+		_bias1 = alg.subtract_matrix_rows(_bias1, alg.scalar_multiplynm(learning_rate / _n, D1_2));
 
 		forward_pass();
 
@@ -141,7 +141,7 @@ void MLPPAutoEncoder::sgd(real_t learning_rate, int max_epoch, bool ui) {
 
 		// Weight updation for layer 2
 		Ref<MLPPMatrix> D2_1 = alg.outer_product(error, prop_res.a2);
-		_weights2 = alg.subtractionm(_weights2, alg.scalar_multiplym(learning_rate, alg.transposem(D2_1)));
+		_weights2 = alg.subtractionnm(_weights2, alg.scalar_multiplynm(learning_rate, alg.transposenm(D2_1)));
 
 		// Bias updation for layer 2
 		_bias2 = alg.subtractionnv(_bias2, alg.scalar_multiplynv(learning_rate, error));
@@ -151,7 +151,7 @@ void MLPPAutoEncoder::sgd(real_t learning_rate, int max_epoch, bool ui) {
 		Ref<MLPPVector> D1_2 = alg.hadamard_productnv(D1_1, avn.sigmoid_derivv(prop_res.z2));
 		Ref<MLPPMatrix> D1_3 = alg.outer_product(input_set_row_tmp, D1_2);
 
-		_weights1 = alg.subtractionm(_weights1, alg.scalar_multiplym(learning_rate, D1_3));
+		_weights1 = alg.subtractionnm(_weights1, alg.scalar_multiplynm(learning_rate, D1_3));
 		// Bias updation for layer 1
 
 		_bias1 = alg.subtractionnv(_bias1, alg.scalar_multiplynv(learning_rate, D1_2));
@@ -200,27 +200,27 @@ void MLPPAutoEncoder::mbgd(real_t learning_rate, int max_epoch, int mini_batch_s
 			cost_prev = cost(y_hat, current_batch);
 
 			// Calculating the errors
-			Ref<MLPPMatrix> error = alg.subtractionm(y_hat, current_batch);
+			Ref<MLPPMatrix> error = alg.subtractionnm(y_hat, current_batch);
 
 			// Calculating the weight/bias gradients for layer 2
 
-			Ref<MLPPMatrix> D2_1 = alg.matmultm(alg.transposem(prop_res.a2), error);
+			Ref<MLPPMatrix> D2_1 = alg.matmultnm(alg.transposenm(prop_res.a2), error);
 
 			// weights and bias updation for layer 2
-			_weights2 = alg.subtractionm(_weights2, alg.scalar_multiplym(learning_rate / current_batch->size().y, D2_1));
+			_weights2 = alg.subtractionnm(_weights2, alg.scalar_multiplynm(learning_rate / current_batch->size().y, D2_1));
 
 			// Bias Updation for layer 2
-			_bias2 = alg.subtract_matrix_rows(_bias2, alg.scalar_multiplym(learning_rate, error));
+			_bias2 = alg.subtract_matrix_rows(_bias2, alg.scalar_multiplynm(learning_rate, error));
 
 			//Calculating the weight/bias for layer 1
 
-			Ref<MLPPMatrix> D1_1 = alg.matmultm(error, alg.transposem(_weights2));
-			Ref<MLPPMatrix> D1_2 = alg.hadamard_productm(D1_1, avn.sigmoid_derivm(prop_res.z2));
-			Ref<MLPPMatrix> D1_3 = alg.matmultm(alg.transposem(current_batch), D1_2);
+			Ref<MLPPMatrix> D1_1 = alg.matmultnm(error, alg.transposenm(_weights2));
+			Ref<MLPPMatrix> D1_2 = alg.hadamard_productnm(D1_1, avn.sigmoid_derivm(prop_res.z2));
+			Ref<MLPPMatrix> D1_3 = alg.matmultnm(alg.transposenm(current_batch), D1_2);
 
 			// weight an bias updation for layer 1
-			_weights1 = alg.subtractionm(_weights1, alg.scalar_multiplym(learning_rate / current_batch->size().x, D1_3));
-			_bias1 = alg.subtract_matrix_rows(_bias1, alg.scalar_multiplym(learning_rate / current_batch->size().x, D1_2));
+			_weights1 = alg.subtractionnm(_weights1, alg.scalar_multiplynm(learning_rate / current_batch->size().x, D1_3));
+			_bias1 = alg.subtract_matrix_rows(_bias1, alg.scalar_multiplynm(learning_rate / current_batch->size().x, D1_2));
 
 			y_hat = evaluatem(current_batch);
 
@@ -304,10 +304,10 @@ Ref<MLPPVector> MLPPAutoEncoder::evaluatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	Ref<MLPPVector> z2 = alg.additionnv(alg.mat_vec_multv(alg.transposem(_weights1), x), _bias1);
+	Ref<MLPPVector> z2 = alg.additionnv(alg.mat_vec_multv(alg.transposenm(_weights1), x), _bias1);
 	Ref<MLPPVector> a2 = avn.sigmoid_normv(z2);
 
-	return alg.additionnv(alg.mat_vec_multv(alg.transposem(_weights2), a2), _bias2);
+	return alg.additionnv(alg.mat_vec_multv(alg.transposenm(_weights2), a2), _bias2);
 }
 
 MLPPAutoEncoder::PropagateVResult MLPPAutoEncoder::propagatev(const Ref<MLPPVector> &x) {
@@ -316,7 +316,7 @@ MLPPAutoEncoder::PropagateVResult MLPPAutoEncoder::propagatev(const Ref<MLPPVect
 
 	PropagateVResult res;
 
-	res.z2 = alg.additionnv(alg.mat_vec_multv(alg.transposem(_weights1), x), _bias1);
+	res.z2 = alg.additionnv(alg.mat_vec_multv(alg.transposenm(_weights1), x), _bias1);
 	res.a2 = avn.sigmoid_normv(res.z2);
 
 	return res;
@@ -326,10 +326,10 @@ Ref<MLPPMatrix> MLPPAutoEncoder::evaluatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	Ref<MLPPMatrix> z2 = alg.mat_vec_addv(alg.matmultm(X, _weights1), _bias1);
+	Ref<MLPPMatrix> z2 = alg.mat_vec_addv(alg.matmultnm(X, _weights1), _bias1);
 	Ref<MLPPMatrix> a2 = avn.sigmoid_normm(z2);
 
-	return alg.mat_vec_addv(alg.matmultm(a2, _weights2), _bias2);
+	return alg.mat_vec_addv(alg.matmultnm(a2, _weights2), _bias2);
 }
 
 MLPPAutoEncoder::PropagateMResult MLPPAutoEncoder::propagatem(const Ref<MLPPMatrix> &X) {
@@ -338,7 +338,7 @@ MLPPAutoEncoder::PropagateMResult MLPPAutoEncoder::propagatem(const Ref<MLPPMatr
 
 	PropagateMResult res;
 
-	res.z2 = alg.mat_vec_addv(alg.matmultm(X, _weights1), _bias1);
+	res.z2 = alg.mat_vec_addv(alg.matmultnm(X, _weights1), _bias1);
 	res.a2 = avn.sigmoid_normm(res.z2);
 
 	return res;
@@ -348,9 +348,9 @@ void MLPPAutoEncoder::forward_pass() {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	_z2 = alg.mat_vec_addv(alg.matmultm(_input_set, _weights1), _bias1);
+	_z2 = alg.mat_vec_addv(alg.matmultnm(_input_set, _weights1), _bias1);
 	_a2 = avn.sigmoid_normm(_z2);
-	_y_hat = alg.mat_vec_addv(alg.matmultm(_a2, _weights2), _bias2);
+	_y_hat = alg.mat_vec_addv(alg.matmultnm(_a2, _weights2), _bias2);
 }
 
 void MLPPAutoEncoder::_bind_methods() {

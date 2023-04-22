@@ -69,7 +69,7 @@ void MLPPSVC::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set, _weights, _c);
 
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(_input_set), mlpp_cost.hinge_loss_derivwv(_z, _output_set, _c))));
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(_input_set), mlpp_cost.hinge_loss_derivwv(_z, _output_set, _c))));
 		_weights = regularization.reg_weightsv(_weights, learning_rate / _n, 0, MLPPReg::REGULARIZATION_TYPE_RIDGE);
 
 		// Calculating the bias gradients
@@ -190,7 +190,7 @@ void MLPPSVC::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 			cost_prev = cost(z, current_output_batch_entry, _weights, _c);
 
 			// Calculating the weight gradients
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(current_input_batch_entry), mlpp_cost.hinge_loss_derivwv(z, current_output_batch_entry, _c))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(current_input_batch_entry), mlpp_cost.hinge_loss_derivwv(z, current_output_batch_entry, _c))));
 			_weights = regularization.reg_weightsv(_weights, learning_rate / _n, 0, MLPPReg::REGULARIZATION_TYPE_RIDGE);
 
 			// Calculating the bias gradients

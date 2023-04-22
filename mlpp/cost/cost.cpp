@@ -48,7 +48,7 @@ Ref<MLPPVector> MLPPCost::mse_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLP
 
 Ref<MLPPMatrix> MLPPCost::mse_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
 	MLPPLinAlg alg;
-	return alg.subtractionm(y_hat, y);
+	return alg.subtractionnm(y_hat, y);
 }
 
 real_t MLPPCost::rmsev(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
@@ -90,7 +90,7 @@ Ref<MLPPVector> MLPPCost::rmse_derivv(const Ref<MLPPVector> &y_hat, const Ref<ML
 Ref<MLPPMatrix> MLPPCost::rmse_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
 	MLPPLinAlg alg;
 
-	return alg.scalar_multiplym(1 / (2.0 / Math::sqrt(msem(y_hat, y))), mse_derivm(y_hat, y));
+	return alg.scalar_multiplynm(1 / (2.0 / Math::sqrt(msem(y_hat, y))), mse_derivm(y_hat, y));
 }
 
 real_t MLPPCost::maev(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
@@ -256,9 +256,9 @@ Ref<MLPPVector> MLPPCost::log_loss_derivv(const Ref<MLPPVector> &y_hat, const Re
 
 Ref<MLPPMatrix> MLPPCost::log_loss_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
 	MLPPLinAlg alg;
-	return alg.additionm(
-			alg.scalar_multiplym(-1, alg.element_wise_divisionm(y, y_hat)),
-			alg.element_wise_divisionm(alg.scalar_multiplym(-1, alg.scalar_addm(-1, y)), alg.scalar_multiplym(-1, alg.scalar_addm(-1, y_hat))));
+	return alg.additionnm(
+			alg.scalar_multiplynm(-1, alg.element_wise_divisionnm(y, y_hat)),
+			alg.element_wise_divisionnm(alg.scalar_multiplynm(-1, alg.scalar_addnm(-1, y)), alg.scalar_multiplynm(-1, alg.scalar_addnm(-1, y_hat))));
 }
 
 real_t MLPPCost::cross_entropyv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
@@ -298,7 +298,7 @@ Ref<MLPPVector> MLPPCost::cross_entropy_derivv(const Ref<MLPPVector> &y_hat, con
 }
 Ref<MLPPMatrix> MLPPCost::cross_entropy_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
 	MLPPLinAlg alg;
-	return alg.scalar_multiplym(-1, alg.element_wise_divisionm(y, y_hat));
+	return alg.scalar_multiplynm(-1, alg.element_wise_divisionnm(y, y_hat));
 }
 
 real_t MLPPCost::huber_lossv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y, real_t delta) {
@@ -506,7 +506,7 @@ Ref<MLPPMatrix> MLPPCost::hinge_loss_derivwm(const Ref<MLPPMatrix> &y_hat, const
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 
-	return alg.scalar_multiplym(C, hinge_loss_derivm(y_hat, y));
+	return alg.scalar_multiplynm(C, hinge_loss_derivm(y_hat, y));
 }
 
 real_t MLPPCost::wasserstein_lossv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
@@ -548,22 +548,22 @@ Ref<MLPPVector> MLPPCost::wasserstein_loss_derivv(const Ref<MLPPVector> &y_hat, 
 Ref<MLPPMatrix> MLPPCost::wasserstein_loss_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
 	MLPPLinAlg alg;
 
-	return alg.scalar_multiplym(-1, y); // Simple.
+	return alg.scalar_multiplynm(-1, y); // Simple.
 }
 
 real_t MLPPCost::dual_form_svm(const Ref<MLPPVector> &alpha, const Ref<MLPPMatrix> &X, const Ref<MLPPVector> &y) {
 	MLPPLinAlg alg;
 
 	Ref<MLPPMatrix> Y = alg.diagm(y); // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
-	Ref<MLPPMatrix> K = alg.matmultm(X, alg.transposem(X)); // TO DO: DON'T forget to add non-linear kernelizations.
-	Ref<MLPPMatrix> Q = alg.matmultm(alg.matmultm(alg.transposem(Y), K), Y);
+	Ref<MLPPMatrix> K = alg.matmultnm(X, alg.transposenm(X)); // TO DO: DON'T forget to add non-linear kernelizations.
+	Ref<MLPPMatrix> Q = alg.matmultnm(alg.matmultnm(alg.transposenm(Y), K), Y);
 
 	Ref<MLPPMatrix> alpha_m;
 	alpha_m.instance();
 	alpha_m->resize(Size2i(alpha->size(), 1));
 	alpha_m->set_row_mlpp_vector(0, alpha);
 
-	Ref<MLPPMatrix> alpha_m_res = alg.matmultm(alg.matmultm(alpha_m, Q), alg.transposem(alpha_m));
+	Ref<MLPPMatrix> alpha_m_res = alg.matmultnm(alg.matmultnm(alpha_m, Q), alg.transposenm(alpha_m));
 
 	real_t alphaQ = alpha_m_res->get_element(0, 0);
 	Ref<MLPPVector> one = alg.onevecv(alpha->size());
@@ -575,12 +575,12 @@ Ref<MLPPVector> MLPPCost::dual_form_svm_deriv(const Ref<MLPPVector> &alpha, cons
 	MLPPLinAlg alg;
 
 	Ref<MLPPMatrix> Y = alg.diagm(y); // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
-	Ref<MLPPMatrix> K = alg.matmultm(X, alg.transposem(X)); // TO DO: DON'T forget to add non-linear kernelizations.
-	Ref<MLPPMatrix> Q = alg.matmultm(alg.matmultm(alg.transposem(Y), K), Y);
+	Ref<MLPPMatrix> K = alg.matmultnm(X, alg.transposenm(X)); // TO DO: DON'T forget to add non-linear kernelizations.
+	Ref<MLPPMatrix> Q = alg.matmultnm(alg.matmultnm(alg.transposenm(Y), K), Y);
 	Ref<MLPPVector> alphaQDeriv = alg.mat_vec_multv(Q, alpha);
 	Ref<MLPPVector> one = alg.onevecv(alpha->size());
 
-	return alg.subtractionm(alphaQDeriv, one);
+	return alg.subtractionnm(alphaQDeriv, one);
 }
 
 MLPPCost::VectorCostFunctionPointer MLPPCost::get_cost_function_ptr_normal_vector(const MLPPCost::CostTypes cost) {

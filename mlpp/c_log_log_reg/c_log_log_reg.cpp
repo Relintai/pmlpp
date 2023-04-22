@@ -37,7 +37,7 @@ void MLPPCLogLogReg::gradient_descent(real_t learning_rate, int max_epoch, bool 
 		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
 
 		// Calculating the weight gradients
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(_input_set), alg.hadamard_productnv(error, avn.cloglog_derivv(_z)))));
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.cloglog_derivv(_z)))));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
@@ -73,7 +73,7 @@ void MLPPCLogLogReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 
 		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
 
-		_weights = alg.additionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(_input_set), alg.hadamard_productnv(error, avn.cloglog_derivv(_z)))));
+		_weights = alg.additionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.cloglog_derivv(_z)))));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
@@ -182,7 +182,7 @@ void MLPPCLogLogReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_si
 			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_batch);
 
 			// Calculating the weight gradients
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(current_input_batch), alg.hadamard_productnv(error, avn.cloglog_derivv(z)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(current_input_batch), alg.hadamard_productnv(error, avn.cloglog_derivv(z)))));
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients

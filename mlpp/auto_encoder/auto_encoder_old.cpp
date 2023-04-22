@@ -210,7 +210,6 @@ MLPPAutoEncoderOld::MLPPAutoEncoderOld(std::vector<std::vector<real_t>> pinputSe
 	n = inputSet.size();
 	k = inputSet[0].size();
 
-	MLPPActivationOld avn;
 	y_hat.resize(inputSet.size());
 
 	weights1 = MLPPUtilities::weightInitialization(k, n_hidden);

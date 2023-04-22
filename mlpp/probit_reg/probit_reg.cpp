@@ -84,7 +84,7 @@ void MLPPProbitReg::gradient_descent(real_t learning_rate, int max_epoch, bool u
 		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
 
 		// Calculating the weight gradients
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(_input_set), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z)))));
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z)))));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
@@ -122,7 +122,7 @@ void MLPPProbitReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 		Ref<MLPPVector> error = alg.subtractionnv(_output_set, _y_hat);
 
 		// Calculating the weight gradients
-		_weights = alg.additionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposem(_input_set), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z)))));
+		_weights = alg.additionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z)))));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
@@ -242,7 +242,7 @@ void MLPPProbitReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_siz
 			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output);
 
 			// Calculating the weight gradients
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / batches.input_sets.size(), alg.mat_vec_multv(alg.transposem(current_input), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(z_tmp)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / batches.input_sets.size(), alg.mat_vec_multv(alg.transposenm(current_input), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(z_tmp)))));
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients

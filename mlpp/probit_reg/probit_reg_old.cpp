@@ -97,7 +97,6 @@ void MLPPProbitRegOld::MLE(real_t learning_rate, int max_epoch, bool UI) {
 
 void MLPPProbitRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 	// NOTE: ∂y_hat/∂z is sparse
-	MLPPActivationOld avn;
 	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;

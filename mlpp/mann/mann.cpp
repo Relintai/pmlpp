@@ -101,39 +101,39 @@ void MLPPMANN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 		cost_prev = cost(_y_hat, _output_set);
 
 		if (_output_layer->get_activation() == MLPPActivation::ACTIVATION_FUNCTION_SOFTMAX) {
-			_output_layer->set_delta(alg.subtractionm(_y_hat, _output_set));
+			_output_layer->set_delta(alg.subtractionnm(_y_hat, _output_set));
 		} else {
-			_output_layer->set_delta(alg.hadamard_productm(mlpp_cost.run_cost_deriv_matrix(_output_layer->get_cost(), _y_hat, _output_set), avn.run_activation_deriv_matrix(_output_layer->get_activation(), _output_layer->get_z())));
+			_output_layer->set_delta(alg.hadamard_productnm(mlpp_cost.run_cost_deriv_matrix(_output_layer->get_cost(), _y_hat, _output_set), avn.run_activation_deriv_matrix(_output_layer->get_activation(), _output_layer->get_z())));
 		}
 
-		Ref<MLPPMatrix> output_w_grad = alg.matmultm(alg.transposem(_output_layer->get_input()), _output_layer->get_delta());
+		Ref<MLPPMatrix> output_w_grad = alg.matmultnm(alg.transposenm(_output_layer->get_input()), _output_layer->get_delta());
 
-		_output_layer->set_weights(alg.subtractionm(_output_layer->get_weights(), alg.scalar_multiplym(learning_rate / _n, output_w_grad)));
+		_output_layer->set_weights(alg.subtractionnm(_output_layer->get_weights(), alg.scalar_multiplynm(learning_rate / _n, output_w_grad)));
 		_output_layer->set_weights(regularization.reg_weightsm(_output_layer->get_weights(), _output_layer->get_lambda(), _output_layer->get_alpha(), _output_layer->get_reg()));
-		_output_layer->set_bias(alg.subtract_matrix_rows(_output_layer->get_bias(), alg.scalar_multiplym(learning_rate / _n, _output_layer->get_delta())));
+		_output_layer->set_bias(alg.subtract_matrix_rows(_output_layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, _output_layer->get_delta())));
 
 		if (!_network.empty()) {
 			Ref<MLPPHiddenLayer> layer = _network[_network.size() - 1];
 
 			//auto hiddenLayerAvn = layer.activation_map[layer.activation];
 
-			layer->set_delta(alg.hadamard_productm(alg.matmultm(_output_layer->get_delta(), alg.transposem(_output_layer->get_weights())), avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
-			Ref<MLPPMatrix> hidden_layer_w_grad = alg.matmultm(alg.transposem(layer->get_input()), layer->get_delta());
+			layer->set_delta(alg.hadamard_productnm(alg.matmultnm(_output_layer->get_delta(), alg.transposenm(_output_layer->get_weights())), avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
+			Ref<MLPPMatrix> hidden_layer_w_grad = alg.matmultnm(alg.transposenm(layer->get_input()), layer->get_delta());
 
-			layer->set_weights(alg.subtractionm(layer->get_weights(), alg.scalar_multiplym(learning_rate / _n, hidden_layer_w_grad)));
+			layer->set_weights(alg.subtractionnm(layer->get_weights(), alg.scalar_multiplynm(learning_rate / _n, hidden_layer_w_grad)));
 			layer->set_weights(regularization.reg_weightsm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()));
-			layer->set_bias(alg.subtract_matrix_rows(layer->get_bias(), alg.scalar_multiplym(learning_rate / _n, layer->get_delta())));
+			layer->set_bias(alg.subtract_matrix_rows(layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, layer->get_delta())));
 
 			for (int i = _network.size() - 2; i >= 0; i--) {
 				layer = _network[i];
 				Ref<MLPPHiddenLayer> next_layer = _network[i + 1];
 
 				//hiddenLayerAvn = layer.activation_map[layer.activation];
-				layer->set_delta(alg.hadamard_productm(alg.matmultm(next_layer->get_delta(), next_layer->get_weights()), avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
-				hidden_layer_w_grad = alg.matmultm(alg.transposem(layer->get_input()), layer->get_delta());
-				layer->set_weights(alg.subtractionm(layer->get_weights(), alg.scalar_multiplym(learning_rate / _n, hidden_layer_w_grad)));
+				layer->set_delta(alg.hadamard_productnm(alg.matmultnm(next_layer->get_delta(), next_layer->get_weights()), avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
+				hidden_layer_w_grad = alg.matmultnm(alg.transposenm(layer->get_input()), layer->get_delta());
+				layer->set_weights(alg.subtractionnm(layer->get_weights(), alg.scalar_multiplynm(learning_rate / _n, hidden_layer_w_grad)));
 				layer->set_weights(regularization.reg_weightsm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()));
-				layer->set_bias(alg.subtract_matrix_rows(layer->get_bias(), alg.scalar_multiplym(learning_rate / _n, layer->get_delta())));
+				layer->set_bias(alg.subtract_matrix_rows(layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, layer->get_delta())));
 			}
 		}
 

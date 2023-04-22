@@ -262,7 +262,7 @@ void MLPPData::set_data_supervised(int k, const String &file_name, Ref<MLPPMatri
 	output_set->set_from_vector(output_set_tmp);
 
 	input_set->set_from_vectors(input_set_tmp);
-	input_set = alg.transposem(input_set);
+	input_set = alg.transposenm(input_set);
 }
 
 void MLPPData::set_data_unsupervised(int k, const String &file_name, Ref<MLPPMatrix> input_set) {
@@ -289,7 +289,7 @@ void MLPPData::set_data_unsupervised(int k, const String &file_name, Ref<MLPPMat
 	memdelete(file);
 
 	input_set->set_from_vectors(input_set_tmp);
-	input_set = alg.transposem(input_set);
+	input_set = alg.transposenm(input_set);
 }
 
 void MLPPData::set_data_simple(const String &file_name, Ref<MLPPVector> input_set, Ref<MLPPVector> output_set) {

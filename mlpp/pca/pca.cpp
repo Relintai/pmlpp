@@ -41,7 +41,7 @@ Ref<MLPPMatrix> MLPPPCA::principal_components() {
 		}
 	}
 
-	_z = alg.matmultm(alg.transposem(_u_reduce), _x_normalized);
+	_z = alg.matmultnm(alg.transposenm(_u_reduce), _x_normalized);
 
 	return _z;
 }
@@ -52,7 +52,7 @@ real_t MLPPPCA::score() {
 
 	MLPPLinAlg alg;
 
-	Ref<MLPPMatrix> x_approx = alg.matmultm(_u_reduce, _z);
+	Ref<MLPPMatrix> x_approx = alg.matmultnm(_u_reduce, _z);
 	real_t num = 0;
 	real_t den = 0;
 

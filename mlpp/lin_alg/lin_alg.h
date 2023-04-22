@@ -37,25 +37,25 @@ public:
 	std::vector<std::vector<real_t>> subtraction(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 	std::vector<std::vector<real_t>> matmult(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 
-	Ref<MLPPMatrix> additionm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> subtractionm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> matmultm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> additionnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> subtractionnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> matmultnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	std::vector<std::vector<real_t>> hadamard_product(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 	std::vector<std::vector<real_t>> kronecker_product(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 	std::vector<std::vector<real_t>> elementWiseDivision(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B);
 
-	Ref<MLPPMatrix> hadamard_productm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> kronecker_productm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> element_wise_divisionm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> hadamard_productnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> kronecker_productnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> element_wise_divisionnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	std::vector<std::vector<real_t>> transpose(std::vector<std::vector<real_t>> A);
 	std::vector<std::vector<real_t>> scalarMultiply(real_t scalar, std::vector<std::vector<real_t>> A);
 	std::vector<std::vector<real_t>> scalarAdd(real_t scalar, std::vector<std::vector<real_t>> A);
 
-	Ref<MLPPMatrix> transposem(const Ref<MLPPMatrix> &A);
-	Ref<MLPPMatrix> scalar_multiplym(real_t scalar, const Ref<MLPPMatrix> &A);
-	Ref<MLPPMatrix> scalar_addm(real_t scalar, const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> transposenm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> scalar_multiplynm(real_t scalar, const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> scalar_addnm(real_t scalar, const Ref<MLPPMatrix> &A);
 
 	std::vector<std::vector<real_t>> log(std::vector<std::vector<real_t>> A);
 	std::vector<std::vector<real_t>> log10(std::vector<std::vector<real_t>> A);

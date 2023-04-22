@@ -27,7 +27,6 @@ MLPPMLPOld::MLPPMLPOld(std::vector<std::vector<real_t>> p_inputSet, std::vector<
 	lambda = p_lambda;
 	alpha = p_alpha;
 
-	MLPPActivationOld avn;
 	y_hat.resize(n);
 
 	weights1 = MLPPUtilities::weightInitialization(k, n_hidden);
