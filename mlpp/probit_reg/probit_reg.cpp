@@ -84,7 +84,7 @@ void MLPPProbitReg::gradient_descent(real_t learning_rate, int max_epoch, bool u
 		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
 
 		// Calculating the weight gradients
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z)))));
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z)))));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
@@ -122,7 +122,7 @@ void MLPPProbitReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 		Ref<MLPPVector> error = alg.subtractionnv(_output_set, _y_hat);
 
 		// Calculating the weight gradients
-		_weights = alg.additionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z)))));
+		_weights = alg.additionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z)))));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
@@ -242,7 +242,7 @@ void MLPPProbitReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_siz
 			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output);
 
 			// Calculating the weight gradients
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / batches.input_sets.size(), alg.mat_vec_multv(alg.transposenm(current_input), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(z_tmp)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / batches.input_sets.size(), alg.mat_vec_multnv(alg.transposenm(current_input), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(z_tmp)))));
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients
@@ -364,26 +364,26 @@ Ref<MLPPVector> MLPPProbitReg::evaluatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.gaussian_cdf_normv(alg.scalar_addnv(_bias, alg.mat_vec_multv(X, _weights)));
+	return avn.gaussian_cdf_normv(alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights)));
 }
 
 Ref<MLPPVector> MLPPProbitReg::propagatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 
-	return alg.scalar_addnv(_bias, alg.mat_vec_multv(X, _weights));
+	return alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights));
 }
 
 real_t MLPPProbitReg::evaluatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.gaussian_cdf_normr(alg.dotv(_weights, x) + _bias);
+	return avn.gaussian_cdf_normr(alg.dotnv(_weights, x) + _bias);
 }
 
 real_t MLPPProbitReg::propagatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 
-	return alg.dotv(_weights, x) + _bias;
+	return alg.dotnv(_weights, x) + _bias;
 }
 
 // gaussianCDF ( wTx + b )

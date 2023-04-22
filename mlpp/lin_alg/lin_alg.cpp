@@ -2099,7 +2099,7 @@ std::vector<real_t> MLPPLinAlg::subtractMatrixRows(std::vector<real_t> a, std::v
 	return a;
 }
 
-Ref<MLPPVector> MLPPLinAlg::subtract_matrix_rows(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B) {
+Ref<MLPPVector> MLPPLinAlg::subtract_matrix_rowsnv(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B) {
 	Ref<MLPPVector> c = a->duplicate();
 
 	Size2i b_size = B->size();
@@ -2238,7 +2238,7 @@ real_t MLPPLinAlg::dot(std::vector<real_t> a, std::vector<real_t> b) {
 	return c;
 }
 
-real_t MLPPLinAlg::dotv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+real_t MLPPLinAlg::dotnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
 	int a_size = a->size();
 
 	ERR_FAIL_COND_V(a_size != b->size(), 0);
@@ -2291,7 +2291,7 @@ std::vector<std::vector<real_t>> MLPPLinAlg::diag(std::vector<real_t> a) {
 	return B;
 }
 
-Ref<MLPPVector> MLPPLinAlg::diagm(const Ref<MLPPVector> &a) {
+Ref<MLPPMatrix> MLPPLinAlg::diagnm(const Ref<MLPPVector> &a) {
 	int a_size = a->size();
 
 	Ref<MLPPMatrix> B;
@@ -2338,7 +2338,7 @@ Ref<MLPPVector> MLPPLinAlg::absv(const Ref<MLPPVector> &a) {
 	return out;
 }
 
-Ref<MLPPVector> MLPPLinAlg::zerovecv(int n) {
+Ref<MLPPVector> MLPPLinAlg::zerovecnv(int n) {
 	Ref<MLPPVector> vec;
 	vec.instance();
 
@@ -2347,7 +2347,7 @@ Ref<MLPPVector> MLPPLinAlg::zerovecv(int n) {
 
 	return vec;
 }
-Ref<MLPPVector> MLPPLinAlg::onevecv(int n) {
+Ref<MLPPVector> MLPPLinAlg::onevecnv(int n) {
 	Ref<MLPPVector> vec;
 	vec.instance();
 
@@ -2356,7 +2356,7 @@ Ref<MLPPVector> MLPPLinAlg::onevecv(int n) {
 
 	return vec;
 }
-Ref<MLPPVector> MLPPLinAlg::fullv(int n, int k) {
+Ref<MLPPVector> MLPPLinAlg::fullnv(int n, int k) {
 	Ref<MLPPVector> vec;
 	vec.instance();
 
@@ -2384,7 +2384,7 @@ std::vector<real_t> MLPPLinAlg::cos(std::vector<real_t> a) {
 	return b;
 }
 
-Ref<MLPPVector> MLPPLinAlg::sinv(const Ref<MLPPVector> &a) {
+Ref<MLPPVector> MLPPLinAlg::sinnv(const Ref<MLPPVector> &a) {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -2402,7 +2402,7 @@ Ref<MLPPVector> MLPPLinAlg::sinv(const Ref<MLPPVector> &a) {
 
 	return out;
 }
-Ref<MLPPVector> MLPPLinAlg::cosv(const Ref<MLPPVector> &a) {
+Ref<MLPPVector> MLPPLinAlg::cosnv(const Ref<MLPPVector> &a) {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -2654,7 +2654,7 @@ std::vector<real_t> MLPPLinAlg::mat_vec_mult(std::vector<std::vector<real_t>> A,
 	return c;
 }
 
-Ref<MLPPMatrix> MLPPLinAlg::mat_vec_addv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
+Ref<MLPPMatrix> MLPPLinAlg::mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
 	ERR_FAIL_COND_V(!A.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
 
 	Size2i a_size = A->size();
@@ -2679,7 +2679,7 @@ Ref<MLPPMatrix> MLPPLinAlg::mat_vec_addv(const Ref<MLPPMatrix> &A, const Ref<MLP
 
 	return ret;
 }
-Ref<MLPPVector> MLPPLinAlg::mat_vec_multv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
+Ref<MLPPVector> MLPPLinAlg::mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
 	ERR_FAIL_COND_V(!A.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
 
 	Size2i a_size = A->size();

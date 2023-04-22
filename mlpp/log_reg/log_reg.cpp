@@ -91,7 +91,7 @@ void MLPPLogReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) 
 		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
 
 		// Calculating the weight gradients
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(_input_set), error)));
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), error)));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
@@ -129,7 +129,7 @@ void MLPPLogReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 		Ref<MLPPVector> error = alg.subtractionnv(_output_set, _y_hat);
 
 		// Calculating the weight gradients
-		_weights = alg.additionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(_input_set), error)));
+		_weights = alg.additionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), error)));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
@@ -235,7 +235,7 @@ void MLPPLogReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_mini_batch_output_entry);
 
 			// Calculating the weight gradients
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / current_mini_batch_output_entry->size(), alg.mat_vec_multv(alg.transposenm(current_mini_batch_input_entry), error)));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / current_mini_batch_output_entry->size(), alg.mat_vec_multnv(alg.transposenm(current_mini_batch_input_entry), error)));
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients
@@ -325,14 +325,14 @@ real_t MLPPLogReg::evaluatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.sigmoid_normr(alg.dotv(_weights, x) + _bias);
+	return avn.sigmoid_normr(alg.dotnv(_weights, x) + _bias);
 }
 
 Ref<MLPPVector> MLPPLogReg::evaluatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.sigmoid_normv(alg.scalar_addnv(_bias, alg.mat_vec_multv(X, _weights)));
+	return avn.sigmoid_normv(alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights)));
 }
 
 // sigmoid ( wTx + b )

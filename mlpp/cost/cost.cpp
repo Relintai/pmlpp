@@ -205,7 +205,7 @@ real_t MLPPCost::mbem(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
 
 Ref<MLPPVector> MLPPCost::mbe_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
 	MLPPLinAlg alg;
-	return alg.onevecv(y_hat->size());
+	return alg.onevecnv(y_hat->size());
 }
 Ref<MLPPMatrix> MLPPCost::mbe_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
 	MLPPLinAlg alg;
@@ -554,7 +554,7 @@ Ref<MLPPMatrix> MLPPCost::wasserstein_loss_derivm(const Ref<MLPPMatrix> &y_hat, 
 real_t MLPPCost::dual_form_svm(const Ref<MLPPVector> &alpha, const Ref<MLPPMatrix> &X, const Ref<MLPPVector> &y) {
 	MLPPLinAlg alg;
 
-	Ref<MLPPMatrix> Y = alg.diagm(y); // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
+	Ref<MLPPMatrix> Y = alg.diagnm(y); // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
 	Ref<MLPPMatrix> K = alg.matmultnm(X, alg.transposenm(X)); // TO DO: DON'T forget to add non-linear kernelizations.
 	Ref<MLPPMatrix> Q = alg.matmultnm(alg.matmultnm(alg.transposenm(Y), K), Y);
 
@@ -566,19 +566,19 @@ real_t MLPPCost::dual_form_svm(const Ref<MLPPVector> &alpha, const Ref<MLPPMatri
 	Ref<MLPPMatrix> alpha_m_res = alg.matmultnm(alg.matmultnm(alpha_m, Q), alg.transposenm(alpha_m));
 
 	real_t alphaQ = alpha_m_res->get_element(0, 0);
-	Ref<MLPPVector> one = alg.onevecv(alpha->size());
+	Ref<MLPPVector> one = alg.onevecnv(alpha->size());
 
-	return -alg.dotv(one, alpha) + 0.5 * alphaQ;
+	return -alg.dotnv(one, alpha) + 0.5 * alphaQ;
 }
 
 Ref<MLPPVector> MLPPCost::dual_form_svm_deriv(const Ref<MLPPVector> &alpha, const Ref<MLPPMatrix> &X, const Ref<MLPPVector> &y) {
 	MLPPLinAlg alg;
 
-	Ref<MLPPMatrix> Y = alg.diagm(y); // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
+	Ref<MLPPMatrix> Y = alg.diagnm(y); // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
 	Ref<MLPPMatrix> K = alg.matmultnm(X, alg.transposenm(X)); // TO DO: DON'T forget to add non-linear kernelizations.
 	Ref<MLPPMatrix> Q = alg.matmultnm(alg.matmultnm(alg.transposenm(Y), K), Y);
-	Ref<MLPPVector> alphaQDeriv = alg.mat_vec_multv(Q, alpha);
-	Ref<MLPPVector> one = alg.onevecv(alpha->size());
+	Ref<MLPPVector> alphaQDeriv = alg.mat_vec_multnv(Q, alpha);
+	Ref<MLPPVector> one = alg.onevecnv(alpha->size());
 
 	return alg.subtractionnm(alphaQDeriv, one);
 }

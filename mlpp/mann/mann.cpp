@@ -110,7 +110,7 @@ void MLPPMANN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 
 		_output_layer->set_weights(alg.subtractionnm(_output_layer->get_weights(), alg.scalar_multiplynm(learning_rate / _n, output_w_grad)));
 		_output_layer->set_weights(regularization.reg_weightsm(_output_layer->get_weights(), _output_layer->get_lambda(), _output_layer->get_alpha(), _output_layer->get_reg()));
-		_output_layer->set_bias(alg.subtract_matrix_rows(_output_layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, _output_layer->get_delta())));
+		_output_layer->set_bias(alg.subtract_matrix_rowsnv(_output_layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, _output_layer->get_delta())));
 
 		if (!_network.empty()) {
 			Ref<MLPPHiddenLayer> layer = _network[_network.size() - 1];
@@ -122,7 +122,7 @@ void MLPPMANN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 
 			layer->set_weights(alg.subtractionnm(layer->get_weights(), alg.scalar_multiplynm(learning_rate / _n, hidden_layer_w_grad)));
 			layer->set_weights(regularization.reg_weightsm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()));
-			layer->set_bias(alg.subtract_matrix_rows(layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, layer->get_delta())));
+			layer->set_bias(alg.subtract_matrix_rowsnv(layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, layer->get_delta())));
 
 			for (int i = _network.size() - 2; i >= 0; i--) {
 				layer = _network[i];
@@ -133,7 +133,7 @@ void MLPPMANN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 				hidden_layer_w_grad = alg.matmultnm(alg.transposenm(layer->get_input()), layer->get_delta());
 				layer->set_weights(alg.subtractionnm(layer->get_weights(), alg.scalar_multiplynm(learning_rate / _n, hidden_layer_w_grad)));
 				layer->set_weights(regularization.reg_weightsm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()));
-				layer->set_bias(alg.subtract_matrix_rows(layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, layer->get_delta())));
+				layer->set_bias(alg.subtract_matrix_rowsnv(layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, layer->get_delta())));
 			}
 		}
 

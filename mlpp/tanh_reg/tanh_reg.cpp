@@ -87,7 +87,7 @@ void MLPPTanhReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui)
 
 		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
 
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.tanh_derivv(_z)))));
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.tanh_derivv(_z)))));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
@@ -194,7 +194,7 @@ void MLPPTanhReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size,
 			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_batch_entry);
 
 			// Calculating the weight gradients
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multv(alg.transposenm(current_input_batch_entry), alg.hadamard_productnv(error, avn.tanh_derivv(z)))));
+			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(current_input_batch_entry), alg.hadamard_productnv(error, avn.tanh_derivv(z)))));
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients
@@ -286,26 +286,26 @@ real_t MLPPTanhReg::evaluatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.tanh_normr(alg.dotv(_weights, x) + _bias);
+	return avn.tanh_normr(alg.dotnv(_weights, x) + _bias);
 }
 
 real_t MLPPTanhReg::propagatev(const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
 
-	return alg.dotv(_weights, x) + _bias;
+	return alg.dotnv(_weights, x) + _bias;
 }
 
 Ref<MLPPVector> MLPPTanhReg::evaluatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.tanh_normv(alg.scalar_addnv(_bias, alg.mat_vec_multv(X, _weights)));
+	return avn.tanh_normv(alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights)));
 }
 
 Ref<MLPPVector> MLPPTanhReg::propagatem(const Ref<MLPPMatrix> &X) {
 	MLPPLinAlg alg;
 
-	return alg.scalar_addnv(_bias, alg.mat_vec_multv(X, _weights));
+	return alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights));
 }
 
 // Tanh ( wTx + b )

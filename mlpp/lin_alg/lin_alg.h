@@ -225,7 +225,7 @@ public:
 	void subtractionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
 
 	std::vector<real_t> subtractMatrixRows(std::vector<real_t> a, std::vector<std::vector<real_t>> B);
-	Ref<MLPPVector> subtract_matrix_rows(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B);
+	Ref<MLPPVector> subtract_matrix_rowsnv(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B);
 
 	Ref<MLPPVector> lognv(const Ref<MLPPVector> &a);
 	Ref<MLPPVector> log10nv(const Ref<MLPPVector> &a);
@@ -236,7 +236,7 @@ public:
 	Ref<MLPPVector> cbrtnv(const Ref<MLPPVector> &a);
 
 	real_t dot(std::vector<real_t> a, std::vector<real_t> b);
-	real_t dotv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	real_t dotnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	std::vector<real_t> cross(std::vector<real_t> a, std::vector<real_t> b);
 
@@ -248,18 +248,18 @@ public:
 
 	Ref<MLPPVector> absv(const Ref<MLPPVector> &a);
 
-	Ref<MLPPVector> zerovecv(int n);
-	Ref<MLPPVector> onevecv(int n);
-	Ref<MLPPVector> fullv(int n, int k);
+	Ref<MLPPVector> zerovecnv(int n);
+	Ref<MLPPVector> onevecnv(int n);
+	Ref<MLPPVector> fullnv(int n, int k);
 
 	std::vector<std::vector<real_t>> diag(std::vector<real_t> a);
-	Ref<MLPPVector> diagm(const Ref<MLPPVector> &a);
+	Ref<MLPPMatrix> diagnm(const Ref<MLPPVector> &a);
 
 	std::vector<real_t> sin(std::vector<real_t> a);
 	std::vector<real_t> cos(std::vector<real_t> a);
 
-	Ref<MLPPVector> sinv(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> cosv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> sinnv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> cosnv(const Ref<MLPPVector> &a);
 
 	std::vector<real_t> max(std::vector<real_t> a, std::vector<real_t> b);
 
@@ -293,8 +293,8 @@ public:
 	std::vector<std::vector<real_t>> mat_vec_add(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
 	std::vector<real_t> mat_vec_mult(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
 
-	Ref<MLPPMatrix> mat_vec_addv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
-	Ref<MLPPVector> mat_vec_multv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
+	Ref<MLPPMatrix> mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
+	Ref<MLPPVector> mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
 
 	// TENSOR FUNCTIONS
 	std::vector<std::vector<std::vector<real_t>>> addition(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
