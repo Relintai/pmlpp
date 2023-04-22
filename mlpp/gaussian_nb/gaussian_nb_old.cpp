@@ -6,8 +6,8 @@
 
 #include "gaussian_nb_old.h"
 
-#include "../lin_alg/lin_alg.h"
-#include "../stat/stat.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../stat/stat_old.h"
 #include "../utilities/utilities.h"
 
 #include <algorithm>
@@ -47,8 +47,8 @@ real_t MLPPGaussianNBOld::score() {
 }
 
 void MLPPGaussianNBOld::Evaluate() {
-	MLPPStat stat;
-	MLPPLinAlg alg;
+	MLPPStatOld stat;
+	MLPPLinAlgOld alg;
 
 	// Computing mu_k_y and sigma_k_y
 	mu.resize(class_num);

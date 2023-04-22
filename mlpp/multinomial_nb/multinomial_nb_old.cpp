@@ -6,7 +6,7 @@
 
 #include "multinomial_nb_old.h"
 
-#include "../lin_alg/lin_alg.h"
+#include "../lin_alg/lin_alg_old.h"
 #include "../utilities/utilities.h"
 
 #include <algorithm>
@@ -81,7 +81,7 @@ void MLPPMultinomialNBOld::computeTheta() {
 }
 
 void MLPPMultinomialNBOld::Evaluate() {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	for (uint32_t i = 0; i < outputSet.size(); i++) {
 		// Pr(B | A) * Pr(A)
 		real_t score[class_num];

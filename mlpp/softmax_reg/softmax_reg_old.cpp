@@ -6,9 +6,9 @@
 
 #include "softmax_reg_old.h"
 #include "../activation/activation_old.h"
-#include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
+#include "../cost/cost_old.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../regularization/reg_old.h"
 #include "../utilities/utilities.h"
 
 #include <iostream>
@@ -30,8 +30,8 @@ std::vector<std::vector<real_t>> MLPPSoftmaxRegOld::modelSetTest(std::vector<std
 }
 
 void MLPPSoftmaxRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -69,8 +69,8 @@ void MLPPSoftmaxRegOld::gradientDescent(real_t learning_rate, int max_epoch, boo
 }
 
 void MLPPSoftmaxRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -113,8 +113,8 @@ void MLPPSoftmaxRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPSoftmaxRegOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -166,19 +166,19 @@ void MLPPSoftmaxRegOld::save(std::string fileName) {
 }
 
 real_t MLPPSoftmaxRegOld::Cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
-	MLPPReg regularization;
-	class MLPPCost cost;
+	MLPPRegOld regularization;
+	class MLPPCostOld cost;
 	return cost.CrossEntropy(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 
 std::vector<real_t> MLPPSoftmaxRegOld::Evaluate(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	return avn.softmax(alg.addition(bias, alg.mat_vec_mult(alg.transpose(weights), x)));
 }
 
 std::vector<std::vector<real_t>> MLPPSoftmaxRegOld::Evaluate(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 
 	return avn.softmax(alg.mat_vec_add(alg.matmult(X, weights), bias));
@@ -186,7 +186,7 @@ std::vector<std::vector<real_t>> MLPPSoftmaxRegOld::Evaluate(std::vector<std::ve
 
 // softmax ( wTx + b )
 void MLPPSoftmaxRegOld::forwardPass() {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 
 	y_hat = avn.softmax(alg.mat_vec_add(alg.matmult(inputSet, weights), bias));

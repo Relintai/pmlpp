@@ -5,7 +5,7 @@
 //
 
 #include "output_layer_old.h"
-#include "../lin_alg/lin_alg.h"
+#include "../lin_alg/lin_alg_old.h"
 #include "../utilities/utilities.h"
 
 #include <iostream>
@@ -102,33 +102,33 @@ MLPPOldOutputLayer::MLPPOldOutputLayer(int p_n_hidden, std::string p_activation,
 	activation_map["Arcoth"] = &MLPPActivationOld::arcoth;
 	activationTest_map["Arcoth"] = &MLPPActivationOld::arcoth;
 
-	costDeriv_map["MSE"] = &MLPPCost::MSEDeriv;
-	cost_map["MSE"] = &MLPPCost::MSE;
-	costDeriv_map["RMSE"] = &MLPPCost::RMSEDeriv;
-	cost_map["RMSE"] = &MLPPCost::RMSE;
-	costDeriv_map["MAE"] = &MLPPCost::MAEDeriv;
-	cost_map["MAE"] = &MLPPCost::MAE;
-	costDeriv_map["MBE"] = &MLPPCost::MBEDeriv;
-	cost_map["MBE"] = &MLPPCost::MBE;
-	costDeriv_map["LogLoss"] = &MLPPCost::LogLossDeriv;
-	cost_map["LogLoss"] = &MLPPCost::LogLoss;
-	costDeriv_map["CrossEntropy"] = &MLPPCost::CrossEntropyDeriv;
-	cost_map["CrossEntropy"] = &MLPPCost::CrossEntropy;
-	costDeriv_map["HingeLoss"] = &MLPPCost::HingeLossDeriv;
-	cost_map["HingeLoss"] = &MLPPCost::HingeLoss;
-	costDeriv_map["WassersteinLoss"] = &MLPPCost::HingeLossDeriv;
-	cost_map["WassersteinLoss"] = &MLPPCost::HingeLoss;
+	costDeriv_map["MSE"] = &MLPPCostOld::MSEDeriv;
+	cost_map["MSE"] = &MLPPCostOld::MSE;
+	costDeriv_map["RMSE"] = &MLPPCostOld::RMSEDeriv;
+	cost_map["RMSE"] = &MLPPCostOld::RMSE;
+	costDeriv_map["MAE"] = &MLPPCostOld::MAEDeriv;
+	cost_map["MAE"] = &MLPPCostOld::MAE;
+	costDeriv_map["MBE"] = &MLPPCostOld::MBEDeriv;
+	cost_map["MBE"] = &MLPPCostOld::MBE;
+	costDeriv_map["LogLoss"] = &MLPPCostOld::LogLossDeriv;
+	cost_map["LogLoss"] = &MLPPCostOld::LogLoss;
+	costDeriv_map["CrossEntropy"] = &MLPPCostOld::CrossEntropyDeriv;
+	cost_map["CrossEntropy"] = &MLPPCostOld::CrossEntropy;
+	costDeriv_map["HingeLoss"] = &MLPPCostOld::HingeLossDeriv;
+	cost_map["HingeLoss"] = &MLPPCostOld::HingeLoss;
+	costDeriv_map["WassersteinLoss"] = &MLPPCostOld::HingeLossDeriv;
+	cost_map["WassersteinLoss"] = &MLPPCostOld::HingeLoss;
 }
 
 void MLPPOldOutputLayer::forwardPass() {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	z = alg.scalarAdd(bias, alg.mat_vec_mult(input, weights));
 	a = (avn.*activation_map[activation])(z, false);
 }
 
 void MLPPOldOutputLayer::Test(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	z_test = alg.dot(weights, x) + bias;
 	a_test = (avn.*activationTest_map[activation])(z_test, false);

@@ -6,9 +6,9 @@
 
 #include "dual_svc_old.h"
 #include "../activation/activation_old.h"
-#include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
+#include "../cost/cost_old.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../regularization/reg_old.h"
 #include "../utilities/utilities.h"
 
 #include <iostream>
@@ -37,9 +37,8 @@ real_t MLPPDualSVCOld::modelTest(std::vector<real_t> x) {
 }
 
 void MLPPDualSVCOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	class MLPPCost cost;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	class MLPPCostOld cost;
+	MLPPLinAlgOld alg;
 	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -84,10 +83,10 @@ void MLPPDualSVCOld::gradientDescent(real_t learning_rate, int max_epoch, bool U
 }
 
 // void MLPPDualSVCOld::SGD(real_t learning_rate, int max_epoch, bool UI){
-//     class MLPPCost cost;
+//     class MLPPCostOld cost;
 //     MLPPActivationOld avn;
-//     MLPPLinAlg alg;
-//     MLPPReg regularization;
+//     MLPPLinAlgOld alg;
+//     MLPPRegOld regularization;
 
 //     real_t cost_prev = 0;
 //     int epoch = 1;
@@ -117,10 +116,10 @@ void MLPPDualSVCOld::gradientDescent(real_t learning_rate, int max_epoch, bool U
 // }
 
 // void MLPPDualSVCOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI){
-//     class MLPPCost cost;
+//     class MLPPCostOld cost;
 //     MLPPActivationOld avn;
-//     MLPPLinAlg alg;
-//     MLPPReg regularization;
+//     MLPPLinAlgOld alg;
+//     MLPPRegOld regularization;
 //     real_t cost_prev = 0;
 //     int epoch = 1;
 
@@ -167,7 +166,7 @@ void MLPPDualSVCOld::save(std::string fileName) {
 }
 
 real_t MLPPDualSVCOld::Cost(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y) {
-	class MLPPCost cost;
+	class MLPPCostOld cost;
 	return cost.dualFormSVM(alpha, X, y);
 }
 
@@ -177,7 +176,7 @@ std::vector<real_t> MLPPDualSVCOld::Evaluate(std::vector<std::vector<real_t>> X)
 }
 
 std::vector<real_t> MLPPDualSVCOld::propagate(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<real_t> z;
 	for (uint32_t i = 0; i < X.size(); i++) {
 		real_t sum = 0;
@@ -198,7 +197,7 @@ real_t MLPPDualSVCOld::Evaluate(std::vector<real_t> x) {
 }
 
 real_t MLPPDualSVCOld::propagate(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	real_t z = 0;
 	for (uint32_t j = 0; j < alpha.size(); j++) {
 		if (alpha[j] != 0) {
@@ -227,7 +226,7 @@ void MLPPDualSVCOld::alphaProjection() {
 }
 
 real_t MLPPDualSVCOld::kernelFunction(std::vector<real_t> u, std::vector<real_t> v, std::string kernel) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (kernel == "Linear") {
 		return alg.dot(u, v);
 	}
@@ -236,7 +235,7 @@ real_t MLPPDualSVCOld::kernelFunction(std::vector<real_t> u, std::vector<real_t>
 }
 
 std::vector<std::vector<real_t>> MLPPDualSVCOld::kernelFunction(std::vector<std::vector<real_t>> A, std::vector<std::vector<real_t>> B, std::string kernel) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (kernel == "Linear") {
 		return alg.matmult(inputSet, alg.transpose(inputSet));
 	}

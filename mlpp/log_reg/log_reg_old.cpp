@@ -7,9 +7,9 @@
 #include "log_reg_old.h"
 
 #include "../activation/activation_old.h"
-#include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
+#include "../cost/cost_old.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../regularization/reg_old.h"
 #include "../utilities/utilities.h"
 
 #include <iostream>
@@ -38,8 +38,8 @@ real_t MLPPLogRegOld::modelTest(std::vector<real_t> x) {
 }
 
 void MLPPLogRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -70,8 +70,8 @@ void MLPPLogRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI
 }
 
 void MLPPLogRegOld::MLE(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -101,8 +101,8 @@ void MLPPLogRegOld::MLE(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPLogRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -140,8 +140,8 @@ void MLPPLogRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPLogRegOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -190,19 +190,19 @@ void MLPPLogRegOld::save(std::string fileName) {
 }
 
 real_t MLPPLogRegOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	MLPPReg regularization;
-	class MLPPCost cost;
+	MLPPRegOld regularization;
+	class MLPPCostOld cost;
 	return cost.LogLoss(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 
 std::vector<real_t> MLPPLogRegOld::Evaluate(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	return avn.sigmoid(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
 real_t MLPPLogRegOld::Evaluate(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	return avn.sigmoid(alg.dot(weights, x) + bias);
 }

@@ -8,7 +8,7 @@
 
 #include "core/math/math_funcs.h"
 
-#include "../stat/stat.h"
+#include "../stat/stat_old.h"
 
 #include <cmath>
 #include <iostream>
@@ -509,7 +509,7 @@ std::vector<std::vector<real_t>> MLPPLinAlgOld::identity(real_t d) {
 }
 
 std::vector<std::vector<real_t>> MLPPLinAlgOld::cov(std::vector<std::vector<real_t>> A) {
-	MLPPStat stat;
+	MLPPStatOld stat;
 	std::vector<std::vector<real_t>> covMat;
 	covMat.resize(A.size());
 	for (uint32_t i = 0; i < covMat.size(); i++) {

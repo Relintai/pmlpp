@@ -10,6 +10,7 @@
 #include <cmath>
 #include <iostream>
 
+/*
 std::vector<std::vector<real_t>> MLPPConvolutions::convolve_2d(std::vector<std::vector<real_t>> input, std::vector<std::vector<real_t>> filter, int S, int P) {
 	MLPPLinAlg alg;
 	std::vector<std::vector<real_t>> feature_map;
@@ -219,12 +220,12 @@ std::vector<std::vector<real_t>> MLPPConvolutions::gaussian_filter_2d(int size, 
 	return filter;
 }
 
-/*
-Indeed a filter could have been used for this purpose, but I decided that it would've just
-been easier to carry out the calculation explicitly, mainly because it is more informative,
-and also because my convolution algorithm is only built for filters with equally sized
-heights and widths.
-*/
+
+// Indeed a filter could have been used for this purpose, but I decided that it would've just
+// been easier to carry out the calculation explicitly, mainly because it is more informative,
+// and also because my convolution algorithm is only built for filters with equally sized
+// heights and widths.
+
 std::vector<std::vector<real_t>> MLPPConvolutions::dx(std::vector<std::vector<real_t>> input) {
 	std::vector<std::vector<real_t>> deriv; // We assume a gray scale image.
 	deriv.resize(input.size());
@@ -360,8 +361,10 @@ std::vector<std::vector<real_t>> MLPPConvolutions::get_roberts_horizontal() {
 std::vector<std::vector<real_t>> MLPPConvolutions::get_roberts_vertical() {
 	return _roberts_vertical;
 }
+*/
 
 MLPPConvolutions::MLPPConvolutions() {
+	/*
 	_prewitt_horizontal = { { 1, 1, 1 }, { 0, 0, 0 }, { -1, -1, -1 } };
 	_prewitt_vertical = { { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1 } };
 	_sobel_horizontal = { { 1, 2, 1 }, { 0, 0, 0 }, { -1, -2, -1 } };
@@ -370,6 +373,7 @@ MLPPConvolutions::MLPPConvolutions() {
 	_scharr_vertical = { { 3, 0, -3 }, { 10, 0, -10 }, { 3, 0, -3 } };
 	_roberts_horizontal = { { 0, 1 }, { -1, 0 } };
 	_roberts_vertical = { { 1, 0 }, { 0, -1 } };
+	*/
 }
 
 void MLPPConvolutions::_bind_methods() {

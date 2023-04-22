@@ -7,7 +7,7 @@
 #include "stat_old.h"
 #include "../activation/activation_old.h"
 #include "../data/data.h"
-#include "../lin_alg/lin_alg.h"
+#include "../lin_alg/lin_alg_old.h"
 #include <algorithm>
 #include <cmath>
 #include <map>
@@ -65,7 +65,7 @@ std::vector<real_t> MLPPStatOld::mode(const std::vector<real_t> &x) {
 }
 
 real_t MLPPStatOld::range(const std::vector<real_t> &x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.max(x) - alg.min(x);
 }
 

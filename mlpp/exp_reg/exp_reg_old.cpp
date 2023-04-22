@@ -6,10 +6,10 @@
 
 #include "exp_reg_old.h"
 
-#include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
-#include "../stat/stat.h"
+#include "../cost/cost_old.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../regularization/reg_old.h"
+#include "../stat/stat_old.h"
 #include "../utilities/utilities.h"
 
 #include <iostream>
@@ -39,8 +39,8 @@ real_t MLPPExpRegOld::modelTest(std::vector<real_t> x) {
 }
 
 void MLPPExpRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -96,7 +96,7 @@ void MLPPExpRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI
 }
 
 void MLPPExpRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
-	MLPPReg regularization;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -142,8 +142,8 @@ void MLPPExpRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPExpRegOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -214,8 +214,8 @@ void MLPPExpRegOld::save(std::string fileName) {
 }
 
 real_t MLPPExpRegOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	MLPPReg regularization;
-	class MLPPCost cost;
+	MLPPRegOld regularization;
+	class MLPPCostOld cost;
 	return cost.MSE(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 

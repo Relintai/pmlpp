@@ -49,22 +49,6 @@ protected:
 private:
 	real_t reg_deriv_termvr(const Ref<MLPPVector> &weights, real_t lambda, real_t alpha, RegularizationType reg, int j);
 	real_t reg_deriv_termmr(const Ref<MLPPMatrix> &weights, real_t lambda, real_t alpha, RegularizationType reg, int i, int j);
-
-public:
-	// ======== OLD =========
-
-	real_t regTerm(std::vector<real_t> weights, real_t lambda, real_t alpha, std::string reg);
-	real_t regTerm(std::vector<std::vector<real_t>> weights, real_t lambda, real_t alpha, std::string reg);
-
-	std::vector<real_t> regWeights(std::vector<real_t> weights, real_t lambda, real_t alpha, std::string reg);
-	std::vector<std::vector<real_t>> regWeights(std::vector<std::vector<real_t>> weights, real_t lambda, real_t alpha, std::string reg);
-
-	std::vector<real_t> regDerivTerm(std::vector<real_t> weights, real_t lambda, real_t alpha, std::string reg);
-	std::vector<std::vector<real_t>> regDerivTerm(std::vector<std::vector<real_t>>, real_t lambda, real_t alpha, std::string reg);
-
-private:
-	real_t regDerivTerm(std::vector<real_t> weights, real_t lambda, real_t alpha, std::string reg, int j);
-	real_t regDerivTerm(std::vector<std::vector<real_t>> weights, real_t lambda, real_t alpha, std::string reg, int i, int j);
 };
 
 VARIANT_ENUM_CAST(MLPPReg::RegularizationType);

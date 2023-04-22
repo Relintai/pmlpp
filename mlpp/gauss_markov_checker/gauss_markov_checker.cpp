@@ -8,6 +8,7 @@
 #include "../stat/stat.h"
 #include <iostream>
 
+/*
 void MLPPGaussMarkovChecker::checkGMConditions(std::vector<real_t> eps) {
 	bool condition1 = arithmeticMean(eps);
 	bool condition2 = homoscedasticity(eps);
@@ -55,6 +56,7 @@ bool MLPPGaussMarkovChecker::exogeneity(std::vector<real_t> eps) {
 
 	return true;
 }
+*/
 
 void MLPPGaussMarkovChecker::_bind_methods() {
 }

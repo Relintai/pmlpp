@@ -6,13 +6,13 @@
 
 #include "../convolutions/convolutions_old.h"
 
-#include "../lin_alg/lin_alg.h"
-#include "../stat/stat.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../stat/stat_old.h"
 #include <cmath>
 #include <iostream>
 
 std::vector<std::vector<real_t>> MLPPConvolutionsOld::convolve_2d(std::vector<std::vector<real_t>> input, std::vector<std::vector<real_t>> filter, int S, int P) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<real_t>> feature_map;
 	uint32_t N = input.size();
 	uint32_t F = filter.size();
@@ -68,7 +68,7 @@ std::vector<std::vector<real_t>> MLPPConvolutionsOld::convolve_2d(std::vector<st
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPConvolutionsOld::convolve_3d(std::vector<std::vector<std::vector<real_t>>> input, std::vector<std::vector<std::vector<real_t>>> filter, int S, int P) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> feature_map;
 	uint32_t N = input[0].size();
 	uint32_t F = filter[0].size();
@@ -134,7 +134,7 @@ std::vector<std::vector<std::vector<real_t>>> MLPPConvolutionsOld::convolve_3d(s
 }
 
 std::vector<std::vector<real_t>> MLPPConvolutionsOld::pool_2d(std::vector<std::vector<real_t>> input, int F, int S, std::string type) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<real_t>> pooled_map;
 	uint32_t N = input.size();
 	uint32_t map_size = floor((N - F) / S + 1);
@@ -161,7 +161,7 @@ std::vector<std::vector<real_t>> MLPPConvolutionsOld::pool_2d(std::vector<std::v
 				}
 			}
 			if (type == "Average") {
-				MLPPStat stat;
+				MLPPStatOld stat;
 				pooled_map[i][j] = stat.mean(pooling_input);
 			} else if (type == "Min") {
 				pooled_map[i][j] = alg.min(pooling_input);
@@ -182,9 +182,9 @@ std::vector<std::vector<std::vector<real_t>>> MLPPConvolutionsOld::pool_3d(std::
 }
 
 real_t MLPPConvolutionsOld::global_pool_2d(std::vector<std::vector<real_t>> input, std::string type) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (type == "Average") {
-		MLPPStat stat;
+		MLPPStatOld stat;
 		return stat.mean(alg.flatten(input));
 	} else if (type == "Min") {
 		return alg.min(alg.flatten(input));
@@ -269,7 +269,7 @@ std::vector<std::vector<real_t>> MLPPConvolutionsOld::dy(std::vector<std::vector
 }
 
 std::vector<std::vector<real_t>> MLPPConvolutionsOld::grad_magnitude(std::vector<std::vector<real_t>> input) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<real_t>> x_deriv_2 = alg.hadamard_product(dx(input), dx(input));
 	std::vector<std::vector<real_t>> y_deriv_2 = alg.hadamard_product(dy(input), dy(input));
 	return alg.sqrt(alg.addition(x_deriv_2, y_deriv_2));
@@ -298,7 +298,7 @@ std::vector<std::vector<std::vector<real_t>>> MLPPConvolutionsOld::compute_m(std
 
 	real_t const GAUSSIAN_PADDING = ((input.size() - 1) + GAUSSIAN_SIZE - input.size()) / 2; // Convs must be same.
 	std::cout << GAUSSIAN_PADDING << std::endl;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<real_t>> x_deriv = dx(input);
 	std::vector<std::vector<real_t>> y_deriv = dy(input);
 
@@ -312,7 +312,7 @@ std::vector<std::vector<std::vector<real_t>>> MLPPConvolutionsOld::compute_m(std
 }
 std::vector<std::vector<std::string>> MLPPConvolutionsOld::harris_corner_detection(std::vector<std::vector<real_t>> input) {
 	real_t const k = 0.05; // Empirically determined wherein k -> [0.04, 0.06], though conventionally 0.05 is typically used as well.
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> M = compute_m(input);
 	std::vector<std::vector<real_t>> det = alg.subtraction(alg.hadamard_product(M[0], M[1]), alg.hadamard_product(M[2], M[2]));
 	std::vector<std::vector<real_t>> trace = alg.addition(M[0], M[1]);

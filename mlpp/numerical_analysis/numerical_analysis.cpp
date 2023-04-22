@@ -12,6 +12,7 @@
 #include <iostream>
 #include <string>
 
+/*
 real_t MLPPNumericalAnalysis::numDiff(real_t (*function)(real_t), real_t x) {
 	real_t eps = 1e-10;
 	return (function(x + eps) - function(x)) / eps; // This is just the formal def. of the derivative.
@@ -164,16 +165,15 @@ real_t MLPPNumericalAnalysis::eulerianMethod(real_t (*derivative)(std::vector<re
 }
 
 real_t MLPPNumericalAnalysis::growthMethod(real_t C, real_t k, real_t t) {
-	/*
-	dP/dt = kP
-	dP/P = kdt
-	integral(1/P)dP = integral(k) dt
-	ln|P| = kt + C_initial
-	|P| = e^(kt + C_initial)
-	|P| = e^(C_initial) * e^(kt)
-	P = +/- e^(C_initial) * e^(kt)
-	P = C * e^(kt)
-	*/
+	//dP/dt = kP
+	//dP/P = kdt
+	//integral(1/P)dP = integral(k) dt
+	//ln|P| = kt + C_initial
+	//|P| = e^(kt + C_initial)
+	//|P| = e^(C_initial) * e^(kt)
+	//P = +/- e^(C_initial) * e^(kt)
+	//P = C * e^(kt)
+	
 
 	// auto growthFunction = [&C, &k](real_t t) { return C * exp(k * t); };
 	return C * std::exp(k * t);
@@ -240,15 +240,14 @@ real_t MLPPNumericalAnalysis::quadraticApproximation(real_t (*function)(std::vec
 }
 
 real_t MLPPNumericalAnalysis::cubicApproximation(real_t (*function)(std::vector<real_t>), std::vector<real_t> c, std::vector<real_t> x) {
-	/*
-	Not completely sure as the literature seldom discusses the third order taylor approximation,
-	in particular for multivariate cases, but ostensibly, the matrix/tensor/vector multiplies
-	should look something like this:
+	//Not completely sure as the literature seldom discusses the third order taylor approximation,
+	//in particular for multivariate cases, but ostensibly, the matrix/tensor/vector multiplies
+	//should look something like this:
 
-	(N x N x N) (N x 1) [tensor vector mult] => (N x N x 1) => (N x N)
-	Perform remaining multiplies as done for the 2nd order approximation.
-	Result is a scalar.
-	*/
+	//(N x N x N) (N x 1) [tensor vector mult] => (N x N x 1) => (N x N)
+	//Perform remaining multiplies as done for the 2nd order approximation.
+	//Result is a scalar.
+	
 	MLPPLinAlg alg;
 	std::vector<std::vector<real_t>> resultMat = alg.tensor_vec_mult(thirdOrderTensor(function, c), alg.subtraction(x, c));
 	real_t resultScalar = alg.matmult({ (alg.subtraction(x, c)) }, alg.matmult(resultMat, alg.transpose({ alg.subtraction(x, c) })))[0][0];
@@ -270,10 +269,10 @@ real_t MLPPNumericalAnalysis::laplacian(real_t (*function)(std::vector<real_t>),
 std::string MLPPNumericalAnalysis::secondPartialDerivativeTest(real_t (*function)(std::vector<real_t>), std::vector<real_t> x) {
 	MLPPLinAlg alg;
 	std::vector<std::vector<real_t>> hessianMatrix = hessian(function, x);
-	/*
-	The reason we do this is because the 2nd partial derivative test is less conclusive for functions of variables greater than
-	2, and the calculations specific to the bivariate case are less computationally intensive.
-	*/
+	
+	// The reason we do this is because the 2nd partial derivative test is less conclusive for functions of variables greater than
+	// 2, and the calculations specific to the bivariate case are less computationally intensive.
+	
 	if (x.size() == 2) {
 		real_t det = alg.det(hessianMatrix, hessianMatrix.size());
 		real_t secondDerivative = numDiff_2(function, x, 0, 0);
@@ -298,6 +297,7 @@ std::string MLPPNumericalAnalysis::secondPartialDerivativeTest(real_t (*function
 		}
 	}
 }
+*/
 
 void MLPPNumericalAnalysis::_bind_methods() {
 }

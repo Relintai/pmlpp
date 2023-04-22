@@ -14,14 +14,6 @@
 
 #include <iostream>
 
-real_t MLPPStat::b0Estimation(const std::vector<real_t> &x, const std::vector<real_t> &y) {
-	return mean(y) - b1Estimation(x, y) * mean(x);
-}
-
-real_t MLPPStat::b1Estimation(const std::vector<real_t> &x, const std::vector<real_t> &y) {
-	return covariance(x, y) / variance(x);
-}
-
 real_t MLPPStat::b0_estimation(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y) {
 	return meanv(y) - b1_estimation(x, y) * meanv(x);
 }
@@ -29,14 +21,7 @@ real_t MLPPStat::b1_estimation(const Ref<MLPPVector> &x, const Ref<MLPPVector> &
 	return covariancev(x, y) / variancev(x);
 }
 
-real_t MLPPStat::mean(const std::vector<real_t> &x) {
-	real_t sum = 0;
-	for (uint32_t i = 0; i < x.size(); i++) {
-		sum += x[i];
-	}
-	return sum / x.size();
-}
-
+/*
 real_t MLPPStat::median(std::vector<real_t> x) {
 	real_t center = real_t(x.size()) / real_t(2);
 	sort(x.begin(), x.end());
@@ -88,26 +73,6 @@ real_t MLPPStat::absAvgDeviation(const std::vector<real_t> &x) {
 	return sum / x.size();
 }
 
-real_t MLPPStat::standardDeviation(const std::vector<real_t> &x) {
-	return std::sqrt(variance(x));
-}
-
-real_t MLPPStat::variance(const std::vector<real_t> &x) {
-	real_t sum = 0;
-	for (uint32_t i = 0; i < x.size(); i++) {
-		sum += (x[i] - mean(x)) * (x[i] - mean(x));
-	}
-	return sum / (x.size() - 1);
-}
-
-real_t MLPPStat::covariance(const std::vector<real_t> &x, const std::vector<real_t> &y) {
-	real_t sum = 0;
-	for (uint32_t i = 0; i < x.size(); i++) {
-		sum += (x[i] - mean(x)) * (y[i] - mean(y));
-	}
-	return sum / (x.size() - 1);
-}
-
 real_t MLPPStat::correlation(const std::vector<real_t> &x, const std::vector<real_t> &y) {
 	return covariance(x, y) / (standardDeviation(x) * standardDeviation(y));
 }
@@ -120,6 +85,7 @@ real_t MLPPStat::chebyshevIneq(const real_t k) {
 	// X may or may not belong to a Gaussian Distribution
 	return 1 - 1 / (k * k);
 }
+*/
 
 real_t MLPPStat::meanv(const Ref<MLPPVector> &x) {
 	int x_size = x->size();
@@ -171,6 +137,7 @@ real_t MLPPStat::covariancev(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y)
 	return sum / (x_size - 1);
 }
 
+/*
 real_t MLPPStat::weightedMean(const std::vector<real_t> &x, const std::vector<real_t> &weights) {
 	real_t sum = 0;
 	real_t weights_sum = 0;
@@ -270,6 +237,7 @@ real_t MLPPStat::logMean(const real_t x, const real_t y) {
 	}
 	return (y - x) / (log(y) - std::log(x));
 }
+*/
 
 void MLPPStat::_bind_methods() {
 }

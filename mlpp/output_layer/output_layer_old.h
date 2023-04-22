@@ -14,7 +14,7 @@
 #include "core/object/reference.h"
 
 #include "../activation/activation_old.h"
-#include "../cost/cost.h"
+#include "../cost/cost_old.h"
 #include "../regularization/reg.h"
 #include "../utilities/utilities.h"
 
@@ -43,8 +43,8 @@ public:
 
 	std::map<std::string, std::vector<real_t> (MLPPActivationOld::*)(std::vector<real_t>, bool)> activation_map;
 	std::map<std::string, real_t (MLPPActivationOld::*)(real_t, bool)> activationTest_map;
-	std::map<std::string, real_t (MLPPCost::*)(std::vector<real_t>, std::vector<real_t>)> cost_map;
-	std::map<std::string, std::vector<real_t> (MLPPCost::*)(std::vector<real_t>, std::vector<real_t>)> costDeriv_map;
+	std::map<std::string, real_t (MLPPCostOld::*)(std::vector<real_t>, std::vector<real_t>)> cost_map;
+	std::map<std::string, std::vector<real_t> (MLPPCostOld::*)(std::vector<real_t>, std::vector<real_t>)> costDeriv_map;
 
 	real_t z_test;
 	real_t a_test;

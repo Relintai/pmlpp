@@ -22,6 +22,7 @@ public:
 	as an analytical method for calculating derivatives will most likely be used in
 	the future.
 	*/
+	/*
 	real_t numDiff(real_t (*function)(real_t), real_t x);
 	real_t numDiff_2(real_t (*function)(real_t), real_t x);
 	real_t numDiff_3(real_t (*function)(real_t), real_t x);
@@ -56,6 +57,7 @@ public:
 	real_t laplacian(real_t (*function)(std::vector<real_t>), std::vector<real_t> x); // laplacian
 
 	std::string secondPartialDerivativeTest(real_t (*function)(std::vector<real_t>), std::vector<real_t> x);
+	*/
 
 protected:
 	static void _bind_methods();

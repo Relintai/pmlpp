@@ -9,9 +9,9 @@
 #include "core/log/logger.h"
 
 #include "../activation/activation_old.h"
-#include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
+#include "../cost/cost_old.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../regularization/reg_old.h"
 #include "../utilities/utilities.h"
 
 #include "core/object/method_bind_ext.gen.inc"
@@ -28,13 +28,12 @@ MLPPWGANOld::~MLPPWGANOld() {
 }
 
 std::vector<std::vector<real_t>> MLPPWGANOld::generateExample(int n) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return modelSetTestGenerator(alg.gaussianNoise(n, k));
 }
 
 void MLPPWGANOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	class MLPPCost cost;
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -94,7 +93,7 @@ void MLPPWGANOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) 
 }
 
 real_t MLPPWGANOld::score() {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPUtilities util;
 	forwardPass();
 	return util.performance(y_hat, alg.onevec(n));
@@ -114,7 +113,7 @@ void MLPPWGANOld::save(std::string fileName) {
 }
 
 void MLPPWGANOld::addLayer(int n_hidden, std::string activation, std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (network.empty()) {
 		network.push_back(MLPPOldHiddenLayer(n_hidden, activation, alg.gaussianNoise(n, k), weightInit, reg, lambda, alpha));
 		network[0].forwardPass();
@@ -125,7 +124,7 @@ void MLPPWGANOld::addLayer(int n_hidden, std::string activation, std::string wei
 }
 
 void MLPPWGANOld::addOutputLayer(std::string weightInit, std::string reg, real_t lambda, real_t alpha) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (!network.empty()) {
 		outputLayer = new MLPPOldOutputLayer(network[network.size() - 1].n_hidden, "Linear", "WassersteinLoss", network[network.size() - 1].a, weightInit, "WeightClipping", -0.01, 0.01);
 	} else { // Should never happen.
@@ -163,8 +162,8 @@ std::vector<real_t> MLPPWGANOld::modelSetTestDiscriminator(std::vector<std::vect
 }
 
 real_t MLPPWGANOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	MLPPReg regularization;
-	class MLPPCost cost;
+	MLPPRegOld regularization;
+	class MLPPCostOld cost;
 	real_t totalRegTerm = 0;
 
 	auto cost_function = outputLayer->cost_map[outputLayer->cost];
@@ -177,7 +176,7 @@ real_t MLPPWGANOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
 }
 
 void MLPPWGANOld::forwardPass() {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	if (!network.empty()) {
 		network[0].input = alg.gaussianNoise(n, k);
 		network[0].forwardPass();
@@ -195,7 +194,7 @@ void MLPPWGANOld::forwardPass() {
 }
 
 void MLPPWGANOld::updateDiscriminatorParameters(std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations, std::vector<real_t> outputLayerUpdation, real_t learning_rate) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	outputLayer->weights = alg.subtraction(outputLayer->weights, outputLayerUpdation);
 	outputLayer->bias -= learning_rate * alg.sum_elements(outputLayer->delta) / n;
@@ -212,7 +211,7 @@ void MLPPWGANOld::updateDiscriminatorParameters(std::vector<std::vector<std::vec
 }
 
 void MLPPWGANOld::updateGeneratorParameters(std::vector<std::vector<std::vector<real_t>>> hiddenLayerUpdations, real_t learning_rate) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 
 	if (!network.empty()) {
 		for (int ii = network.size() / 2; ii >= 0; ii--) {
@@ -227,10 +226,10 @@ void MLPPWGANOld::updateGeneratorParameters(std::vector<std::vector<std::vector<
 }
 
 std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> MLPPWGANOld::computeDiscriminatorGradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
-	class MLPPCost cost;
+	class MLPPCostOld cost;
 	MLPPActivationOld avn;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 
 	std::vector<std::vector<std::vector<real_t>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
 
@@ -262,10 +261,10 @@ std::tuple<std::vector<std::vector<std::vector<real_t>>>, std::vector<real_t>> M
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPWGANOld::computeGeneratorGradients(std::vector<real_t> y_hat, std::vector<real_t> outputSet) {
-	class MLPPCost cost;
+	class MLPPCostOld cost;
 	MLPPActivationOld avn;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 
 	std::vector<std::vector<std::vector<real_t>>> cumulativeHiddenLayerWGrad; // Tensor containing ALL hidden grads.
 

@@ -6,8 +6,8 @@
 
 #include "uni_lin_reg_old.h"
 
-#include "../lin_alg/lin_alg.h"
-#include "../stat/stat.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../stat/stat_old.h"
 
 #include <iostream>
 
@@ -19,13 +19,13 @@
 
 MLPPUniLinRegOld::MLPPUniLinRegOld(std::vector<real_t> x, std::vector<real_t> y) :
 		inputSet(x), outputSet(y) {
-	MLPPStat estimator;
+	MLPPStatOld estimator;
 	b1 = estimator.b1Estimation(inputSet, outputSet);
 	b0 = estimator.b0Estimation(inputSet, outputSet);
 }
 
 std::vector<real_t> MLPPUniLinRegOld::modelSetTest(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarAdd(b0, alg.scalarMultiply(b1, x));
 }
 

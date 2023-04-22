@@ -6,7 +6,7 @@
 
 #include "pca_old.h"
 #include "../data/data.h"
-#include "../lin_alg/lin_alg.h"
+#include "../lin_alg/lin_alg_old.h"
 
 #include <iostream>
 #include <random>
@@ -18,10 +18,10 @@ MLPPPCAOld::MLPPPCAOld(std::vector<std::vector<real_t>> inputSet, int k) :
 }
 
 std::vector<std::vector<real_t>> MLPPPCAOld::principalComponents() {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPData data;
 
-	MLPPLinAlg::SVDResultOld svr_res = alg.SVD(alg.cov(inputSet));
+	MLPPLinAlgOld::SVDResultOld svr_res = alg.SVD(alg.cov(inputSet));
 	X_normalized = data.meanCentering(inputSet);
 	U_reduce.resize(svr_res.U.size());
 	for (int i = 0; i < k; i++) {
@@ -35,7 +35,7 @@ std::vector<std::vector<real_t>> MLPPPCAOld::principalComponents() {
 
 // Simply tells us the percentage of variance maintained.
 real_t MLPPPCAOld::score() {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<real_t>> X_approx = alg.matmult(U_reduce, Z);
 	real_t num = 0;
 	real_t den = 0;

@@ -7,10 +7,10 @@
 #include "softmax_net_old.h"
 
 #include "../activation/activation_old.h"
-#include "../cost/cost.h"
+#include "../cost/cost_old.h"
 #include "../data/data.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../regularization/reg_old.h"
 #include "../utilities/utilities.h"
 
 #include <iostream>
@@ -45,8 +45,8 @@ std::vector<std::vector<real_t>> MLPPSoftmaxNetOld::modelSetTest(std::vector<std
 
 void MLPPSoftmaxNetOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 	MLPPActivationOld avn;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -101,8 +101,8 @@ void MLPPSoftmaxNetOld::gradientDescent(real_t learning_rate, int max_epoch, boo
 
 void MLPPSoftmaxNetOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 	MLPPActivationOld avn;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -159,8 +159,8 @@ void MLPPSoftmaxNetOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 
 void MLPPSoftmaxNetOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPActivationOld avn;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -262,14 +262,14 @@ std::vector<std::vector<real_t>> MLPPSoftmaxNetOld::getEmbeddings() {
 }
 
 real_t MLPPSoftmaxNetOld::Cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
-	MLPPReg regularization;
+	MLPPRegOld regularization;
 	MLPPData data;
-	class MLPPCost cost;
+	class MLPPCostOld cost;
 	return cost.CrossEntropy(y_hat, y) + regularization.regTerm(weights1, lambda, alpha, reg) + regularization.regTerm(weights2, lambda, alpha, reg);
 }
 
 std::vector<std::vector<real_t>> MLPPSoftmaxNetOld::Evaluate(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	std::vector<std::vector<real_t>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
 	std::vector<std::vector<real_t>> a2 = avn.sigmoid(z2);
@@ -277,7 +277,7 @@ std::vector<std::vector<real_t>> MLPPSoftmaxNetOld::Evaluate(std::vector<std::ve
 }
 
 std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPSoftmaxNetOld::propagate(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	std::vector<std::vector<real_t>> z2 = alg.mat_vec_add(alg.matmult(X, weights1), bias1);
 	std::vector<std::vector<real_t>> a2 = avn.sigmoid(z2);
@@ -285,7 +285,7 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 }
 
 std::vector<real_t> MLPPSoftmaxNetOld::Evaluate(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	std::vector<real_t> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
 	std::vector<real_t> a2 = avn.sigmoid(z2);
@@ -293,7 +293,7 @@ std::vector<real_t> MLPPSoftmaxNetOld::Evaluate(std::vector<real_t> x) {
 }
 
 std::tuple<std::vector<real_t>, std::vector<real_t>> MLPPSoftmaxNetOld::propagate(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	std::vector<real_t> z2 = alg.addition(alg.mat_vec_mult(alg.transpose(weights1), x), bias1);
 	std::vector<real_t> a2 = avn.sigmoid(z2);
@@ -301,7 +301,7 @@ std::tuple<std::vector<real_t>, std::vector<real_t>> MLPPSoftmaxNetOld::propagat
 }
 
 void MLPPSoftmaxNetOld::forwardPass() {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	z2 = alg.mat_vec_add(alg.matmult(inputSet, weights1), bias1);
 	a2 = avn.sigmoid(z2);

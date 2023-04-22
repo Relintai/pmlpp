@@ -77,7 +77,7 @@ void MLPPWGAN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 			Vector<Ref<MLPPMatrix>> cumulative_discriminator_hidden_layer_w_grad = discriminator_gradient_results.cumulative_hidden_layer_w_grad;
 			Ref<MLPPVector> output_discriminator_w_grad = discriminator_gradient_results.output_w_grad;
 
-			cumulative_discriminator_hidden_layer_w_grad = alg.scalar_multiply_vm(learning_rate / _n, cumulative_discriminator_hidden_layer_w_grad);
+			cumulative_discriminator_hidden_layer_w_grad = alg.scalar_multiplynvt(learning_rate / _n, cumulative_discriminator_hidden_layer_w_grad);
 			output_discriminator_w_grad = alg.scalar_multiplynv(learning_rate / _n, output_discriminator_w_grad);
 			update_discriminator_parameters(cumulative_discriminator_hidden_layer_w_grad, output_discriminator_w_grad, learning_rate);
 		}
@@ -89,7 +89,7 @@ void MLPPWGAN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 		loutput_set = alg.onevecnv(_n);
 
 		Vector<Ref<MLPPMatrix>> cumulative_generator_hidden_layer_w_grad = compute_generator_gradients(_y_hat, loutput_set);
-		cumulative_generator_hidden_layer_w_grad = alg.scalar_multiply_vm(learning_rate / _n, cumulative_generator_hidden_layer_w_grad);
+		cumulative_generator_hidden_layer_w_grad = alg.scalar_multiplynvt(learning_rate / _n, cumulative_generator_hidden_layer_w_grad);
 		update_generator_parameters(cumulative_generator_hidden_layer_w_grad, learning_rate);
 
 		forward_pass();

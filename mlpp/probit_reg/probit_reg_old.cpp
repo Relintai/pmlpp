@@ -6,9 +6,9 @@
 
 #include "probit_reg_old.h"
 #include "../activation/activation_old.h"
-#include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
+#include "../cost/cost_old.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../regularization/reg_old.h"
 #include "../utilities/utilities.h"
 
 #include <iostream>
@@ -31,8 +31,8 @@ real_t MLPPProbitRegOld::modelTest(std::vector<real_t> x) {
 
 void MLPPProbitRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 	MLPPActivationOld avn;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -64,8 +64,8 @@ void MLPPProbitRegOld::gradientDescent(real_t learning_rate, int max_epoch, bool
 
 void MLPPProbitRegOld::MLE(real_t learning_rate, int max_epoch, bool UI) {
 	MLPPActivationOld avn;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -97,8 +97,8 @@ void MLPPProbitRegOld::MLE(real_t learning_rate, int max_epoch, bool UI) {
 
 void MLPPProbitRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 	// NOTE: ∂y_hat/∂z is sparse
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -138,8 +138,8 @@ void MLPPProbitRegOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 
 void MLPPProbitRegOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	MLPPActivationOld avn;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -208,30 +208,30 @@ void MLPPProbitRegOld::save(std::string fileName) {
 }
 
 real_t MLPPProbitRegOld::Cost(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	MLPPReg regularization;
-	class MLPPCost cost;
+	MLPPRegOld regularization;
+	class MLPPCostOld cost;
 	return cost.MSE(y_hat, y) + regularization.regTerm(weights, lambda, alpha, reg);
 }
 
 std::vector<real_t> MLPPProbitRegOld::Evaluate(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	return avn.gaussianCDF(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
 std::vector<real_t> MLPPProbitRegOld::propagate(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
 real_t MLPPProbitRegOld::Evaluate(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	return avn.gaussianCDF(alg.dot(weights, x) + bias);
 }
 
 real_t MLPPProbitRegOld::propagate(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.dot(weights, x) + bias;
 }
 

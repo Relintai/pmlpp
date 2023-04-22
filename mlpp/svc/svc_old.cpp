@@ -6,9 +6,9 @@
 
 #include "svc_old.h"
 #include "../activation/activation_old.h"
-#include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
+#include "../cost/cost_old.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../regularization/reg_old.h"
 #include "../utilities/utilities.h"
 
 #include <iostream>
@@ -23,9 +23,9 @@ real_t MLPPSVCOld::modelTest(std::vector<real_t> x) {
 }
 
 void MLPPSVCOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	class MLPPCost cost;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	class MLPPCostOld cost;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 	forwardPass();
@@ -55,9 +55,9 @@ void MLPPSVCOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPSVCOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
-	class MLPPCost cost;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	class MLPPCostOld cost;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -98,9 +98,9 @@ void MLPPSVCOld::SGD(real_t learning_rate, int max_epoch, bool UI) {
 }
 
 void MLPPSVCOld::MBGD(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
-	class MLPPCost cost;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	class MLPPCostOld cost;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -163,29 +163,29 @@ MLPPSVCOld::MLPPSVCOld(std::vector<std::vector<real_t>> p_inputSet, std::vector<
 }
 
 real_t MLPPSVCOld::Cost(std::vector<real_t> z, std::vector<real_t> y, std::vector<real_t> weights, real_t C) {
-	class MLPPCost cost;
+	class MLPPCostOld cost;
 	return cost.HingeLoss(z, y, weights, C);
 }
 
 std::vector<real_t> MLPPSVCOld::Evaluate(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	return avn.sign(alg.scalarAdd(bias, alg.mat_vec_mult(X, weights)));
 }
 
 std::vector<real_t> MLPPSVCOld::propagate(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarAdd(bias, alg.mat_vec_mult(X, weights));
 }
 
 real_t MLPPSVCOld::Evaluate(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	return avn.sign(alg.dot(weights, x) + bias);
 }
 
 real_t MLPPSVCOld::propagate(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.dot(weights, x) + bias;
 }
 

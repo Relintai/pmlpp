@@ -18,7 +18,7 @@ class MLPPTransforms : public Reference {
 	GDCLASS(MLPPTransforms, Reference);
 
 public:
-	std::vector<std::vector<real_t>> discreteCosineTransform(std::vector<std::vector<real_t>> A);
+	//std::vector<std::vector<real_t>> discreteCosineTransform(std::vector<std::vector<real_t>> A);
 
 protected:
 	static void _bind_methods();

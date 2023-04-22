@@ -6,7 +6,7 @@
 
 #include "hidden_layer_old.h"
 #include "../activation/activation.h"
-#include "../lin_alg/lin_alg.h"
+#include "../lin_alg/lin_alg_old.h"
 
 #include <iostream>
 #include <random>
@@ -103,7 +103,7 @@ MLPPOldHiddenLayer::MLPPOldHiddenLayer(int p_n_hidden, std::string p_activation,
 }
 
 void MLPPOldHiddenLayer::forwardPass() {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 
 	z = alg.mat_vec_add(alg.matmult(input, weights), bias);
@@ -111,7 +111,7 @@ void MLPPOldHiddenLayer::forwardPass() {
 }
 
 void MLPPOldHiddenLayer::Test(std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPActivationOld avn;
 	z_test = alg.addition(alg.mat_vec_mult(alg.transpose(weights), x), bias);
 	a_test = (avn.*activationTest_map[activation])(z_test, false);

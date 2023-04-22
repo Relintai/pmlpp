@@ -78,7 +78,7 @@ void MLPPANN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 
 		ComputeGradientsResult grads = compute_gradients(_y_hat, _output_set);
 
-		grads.cumulative_hidden_layer_w_grad = alg.scalar_multiply_vm(learning_rate / _n, grads.cumulative_hidden_layer_w_grad);
+		grads.cumulative_hidden_layer_w_grad = alg.scalar_multiplynvt(learning_rate / _n, grads.cumulative_hidden_layer_w_grad);
 		grads.output_w_grad = alg.scalar_multiplynv(learning_rate / _n, grads.output_w_grad);
 		update_parameters(grads.cumulative_hidden_layer_w_grad, grads.output_w_grad, learning_rate); // subject to change. may want bias to have this matrix too.
 
@@ -136,7 +136,7 @@ void MLPPANN::sgd(real_t learning_rate, int max_epoch, bool ui) {
 
 		ComputeGradientsResult grads = compute_gradients(y_hat_row_tmp, output_set_row_tmp);
 
-		grads.cumulative_hidden_layer_w_grad = alg.scalar_multiply_vm(learning_rate / _n, grads.cumulative_hidden_layer_w_grad);
+		grads.cumulative_hidden_layer_w_grad = alg.scalar_multiplynvt(learning_rate / _n, grads.cumulative_hidden_layer_w_grad);
 		grads.output_w_grad = alg.scalar_multiplynv(learning_rate / _n, grads.output_w_grad);
 
 		update_parameters(grads.cumulative_hidden_layer_w_grad, grads.output_w_grad, learning_rate); // subject to change. may want bias to have this matrix too.
@@ -183,7 +183,7 @@ void MLPPANN::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 
 			ComputeGradientsResult grads = compute_gradients(y_hat, current_output_batch);
 
-			grads.cumulative_hidden_layer_w_grad = alg.scalar_multiply_vm(learning_rate / _n, grads.cumulative_hidden_layer_w_grad);
+			grads.cumulative_hidden_layer_w_grad = alg.scalar_multiplynvt(learning_rate / _n, grads.cumulative_hidden_layer_w_grad);
 			grads.output_w_grad = alg.scalar_multiplynv(learning_rate / _n, grads.output_w_grad);
 
 			update_parameters(grads.cumulative_hidden_layer_w_grad, grads.output_w_grad, learning_rate); // subject to change. may want bias to have this matrix too.
@@ -238,7 +238,7 @@ void MLPPANN::momentum(real_t learning_rate, int max_epoch, int mini_batch_size,
 			ComputeGradientsResult grads = compute_gradients(y_hat, current_output_batch);
 
 			if (!_network.empty() && v_hidden.empty()) { // Initing our tensor
-				v_hidden = alg.resize_vt(v_hidden, grads.cumulative_hidden_layer_w_grad);
+				v_hidden = alg.resizenvt(v_hidden, grads.cumulative_hidden_layer_w_grad);
 			}
 
 			if (v_output->size() == 0) {
@@ -249,7 +249,7 @@ void MLPPANN::momentum(real_t learning_rate, int max_epoch, int mini_batch_size,
 				update_parameters(v_hidden, v_output, 0); // DON'T update bias.
 			}
 
-			v_hidden = alg.addition_vt(alg.scalar_multiply_vm(gamma, v_hidden), alg.scalar_multiply_vm(learning_rate / _n, grads.cumulative_hidden_layer_w_grad));
+			v_hidden = alg.additionnvt(alg.scalar_multiplynvt(gamma, v_hidden), alg.scalar_multiplynvt(learning_rate / _n, grads.cumulative_hidden_layer_w_grad));
 			v_output = alg.additionnv(alg.scalar_multiplynv(gamma, v_output), alg.scalar_multiplynv(learning_rate / _n, grads.output_w_grad));
 
 			update_parameters(v_hidden, v_output, learning_rate); // subject to change. may want bias to have this matrix too.
@@ -304,17 +304,17 @@ void MLPPANN::adagrad(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			ComputeGradientsResult grads = compute_gradients(y_hat, current_output_batch);
 
 			if (!_network.empty() && v_hidden.empty()) { // Initing our tensor
-				v_hidden = alg.resize_vt(v_hidden, grads.cumulative_hidden_layer_w_grad);
+				v_hidden = alg.resizenvt(v_hidden, grads.cumulative_hidden_layer_w_grad);
 			}
 
 			if (v_output->size() == 0) {
 				v_output->resize(grads.output_w_grad->size());
 			}
 
-			v_hidden = alg.addition_vt(v_hidden, alg.exponentiate_vt(grads.cumulative_hidden_layer_w_grad, 2));
+			v_hidden = alg.additionnvt(v_hidden, alg.exponentiatenvt(grads.cumulative_hidden_layer_w_grad, 2));
 			v_output = alg.additionnv(v_output, alg.exponentiatenv(grads.output_w_grad, 2));
 
-			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiply_vm(learning_rate / _n, alg.element_wise_divisionnv_vt(grads.cumulative_hidden_layer_w_grad, alg.scalar_add_vm(e, alg.sqrt_vt(v_hidden))));
+			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiplynvt(learning_rate / _n, alg.element_wise_divisionnvnvt(grads.cumulative_hidden_layer_w_grad, alg.scalar_addnvt(e, alg.sqrtnvt(v_hidden))));
 			Ref<MLPPVector> output_layer_updation = alg.scalar_multiplynv(learning_rate / _n, alg.element_wise_divisionnv(grads.output_w_grad, alg.scalar_addnv(e, alg.sqrtnv(v_output))));
 
 			update_parameters(hidden_layer_updations, output_layer_updation, learning_rate); // subject to change. may want bias to have this matrix too.
@@ -368,17 +368,17 @@ void MLPPANN::adadelta(real_t learning_rate, int max_epoch, int mini_batch_size,
 			ComputeGradientsResult grads = compute_gradients(y_hat, current_output_batch);
 
 			if (!_network.empty() && v_hidden.empty()) { // Initing our tensor
-				v_hidden = alg.resize_vt(v_hidden, grads.cumulative_hidden_layer_w_grad);
+				v_hidden = alg.resizenvt(v_hidden, grads.cumulative_hidden_layer_w_grad);
 			}
 
 			if (v_output->size() == 0) {
 				v_output->resize(grads.output_w_grad->size());
 			}
 
-			v_hidden = alg.addition_vt(alg.scalar_multiply_vm(1 - b1, v_hidden), alg.scalar_multiply_vm(b1, alg.exponentiate_vt(grads.cumulative_hidden_layer_w_grad, 2)));
+			v_hidden = alg.additionnvt(alg.scalar_multiplynvt(1 - b1, v_hidden), alg.scalar_multiplynvt(b1, alg.exponentiatenvt(grads.cumulative_hidden_layer_w_grad, 2)));
 			v_output = alg.additionnv(v_output, alg.exponentiatenv(grads.output_w_grad, 2));
 
-			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiply_vm(learning_rate / _n, alg.element_wise_divisionnv_vt(grads.cumulative_hidden_layer_w_grad, alg.scalar_add_vm(e, alg.sqrt_vt(v_hidden))));
+			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiplynvt(learning_rate / _n, alg.element_wise_divisionnvnvt(grads.cumulative_hidden_layer_w_grad, alg.scalar_addnvt(e, alg.sqrtnvt(v_hidden))));
 			Ref<MLPPVector> output_layer_updation = alg.scalar_multiplynv(learning_rate / _n, alg.element_wise_divisionnv(grads.output_w_grad, alg.scalar_addnv(e, alg.sqrtnv(v_output))));
 
 			update_parameters(hidden_layer_updations, output_layer_updation, learning_rate); // subject to change. may want bias to have this matrix too.
@@ -435,8 +435,8 @@ void MLPPANN::adam(real_t learning_rate, int max_epoch, int mini_batch_size, rea
 			ComputeGradientsResult grads = compute_gradients(y_hat, current_output_batch);
 
 			if (!_network.empty() && m_hidden.empty() && v_hidden.empty()) { // Initing our tensor
-				m_hidden = alg.resize_vt(m_hidden, grads.cumulative_hidden_layer_w_grad);
-				v_hidden = alg.resize_vt(v_hidden, grads.cumulative_hidden_layer_w_grad);
+				m_hidden = alg.resizenvt(m_hidden, grads.cumulative_hidden_layer_w_grad);
+				v_hidden = alg.resizenvt(v_hidden, grads.cumulative_hidden_layer_w_grad);
 			}
 
 			if (m_output->size() == 0 && v_output->size()) {
@@ -444,19 +444,19 @@ void MLPPANN::adam(real_t learning_rate, int max_epoch, int mini_batch_size, rea
 				v_output->resize(grads.output_w_grad->size());
 			}
 
-			m_hidden = alg.addition_vt(alg.scalar_multiply_vm(b1, m_hidden), alg.scalar_multiply_vm(1 - b1, grads.cumulative_hidden_layer_w_grad));
-			v_hidden = alg.addition_vt(alg.scalar_multiply_vm(b2, v_hidden), alg.scalar_multiply_vm(1 - b2, alg.exponentiate_vt(grads.cumulative_hidden_layer_w_grad, 2)));
+			m_hidden = alg.additionnvt(alg.scalar_multiplynvt(b1, m_hidden), alg.scalar_multiplynvt(1 - b1, grads.cumulative_hidden_layer_w_grad));
+			v_hidden = alg.additionnvt(alg.scalar_multiplynvt(b2, v_hidden), alg.scalar_multiplynvt(1 - b2, alg.exponentiatenvt(grads.cumulative_hidden_layer_w_grad, 2)));
 
 			m_output = alg.additionnv(alg.scalar_multiplynv(b1, m_output), alg.scalar_multiplynv(1 - b1, grads.output_w_grad));
 			v_output = alg.additionnv(alg.scalar_multiplynv(b2, v_output), alg.scalar_multiplynv(1 - b2, alg.exponentiatenv(grads.output_w_grad, 2)));
 
-			Vector<Ref<MLPPMatrix>> m_hidden_hat = alg.scalar_multiply_vm(1 / (1 - Math::pow(b1, epoch)), m_hidden);
-			Vector<Ref<MLPPMatrix>> v_hidden_hat = alg.scalar_multiply_vm(1 / (1 - Math::pow(b2, epoch)), v_hidden);
+			Vector<Ref<MLPPMatrix>> m_hidden_hat = alg.scalar_multiplynvt(1 / (1 - Math::pow(b1, epoch)), m_hidden);
+			Vector<Ref<MLPPMatrix>> v_hidden_hat = alg.scalar_multiplynvt(1 / (1 - Math::pow(b2, epoch)), v_hidden);
 
 			Ref<MLPPVector> m_output_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b1, epoch)), m_output);
 			Ref<MLPPVector> v_output_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b2, epoch)), v_output);
 
-			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiply_vm(learning_rate / _n, alg.element_wise_divisionnv_vt(m_hidden_hat, alg.scalar_add_vm(e, alg.sqrt_vt(v_hidden_hat))));
+			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiplynvt(learning_rate / _n, alg.element_wise_divisionnvnvt(m_hidden_hat, alg.scalar_addnvt(e, alg.sqrtnvt(v_hidden_hat))));
 			Ref<MLPPVector> output_layer_updation = alg.scalar_multiplynv(learning_rate / _n, alg.element_wise_divisionnv(m_output_hat, alg.scalar_addnv(e, alg.sqrtnv(v_output_hat))));
 
 			update_parameters(hidden_layer_updations, output_layer_updation, learning_rate); // subject to change. may want bias to have this matrix too.
@@ -510,8 +510,8 @@ void MLPPANN::adamax(real_t learning_rate, int max_epoch, int mini_batch_size, r
 			ComputeGradientsResult grads = compute_gradients(y_hat, current_output_batch);
 
 			if (!_network.empty() && m_hidden.empty() && u_hidden.empty()) { // Initing our tensor
-				m_hidden = alg.resize_vt(m_hidden, grads.cumulative_hidden_layer_w_grad);
-				u_hidden = alg.resize_vt(u_hidden, grads.cumulative_hidden_layer_w_grad);
+				m_hidden = alg.resizenvt(m_hidden, grads.cumulative_hidden_layer_w_grad);
+				u_hidden = alg.resizenvt(u_hidden, grads.cumulative_hidden_layer_w_grad);
 			}
 
 			if (m_output->size() == 0 && u_output->size() == 0) {
@@ -519,17 +519,17 @@ void MLPPANN::adamax(real_t learning_rate, int max_epoch, int mini_batch_size, r
 				u_output->resize(grads.output_w_grad->size());
 			}
 
-			m_hidden = alg.addition_vt(alg.scalar_multiply_vm(b1, m_hidden), alg.scalar_multiply_vm(1 - b1, grads.cumulative_hidden_layer_w_grad));
-			u_hidden = alg.max_vt(alg.scalar_multiply_vm(b2, u_hidden), alg.abs_vt(grads.cumulative_hidden_layer_w_grad));
+			m_hidden = alg.additionnvt(alg.scalar_multiplynvt(b1, m_hidden), alg.scalar_multiplynvt(1 - b1, grads.cumulative_hidden_layer_w_grad));
+			u_hidden = alg.maxnvt(alg.scalar_multiplynvt(b2, u_hidden), alg.absnvt(grads.cumulative_hidden_layer_w_grad));
 
 			m_output = alg.additionnv(alg.scalar_multiplynv(b1, m_output), alg.scalar_multiplynv(1 - b1, grads.output_w_grad));
 			u_output = alg.maxnvv(alg.scalar_multiplynv(b2, u_output), alg.absv(grads.output_w_grad));
 
-			Vector<Ref<MLPPMatrix>> m_hidden_hat = alg.scalar_multiply_vm(1 / (1 - Math::pow(b1, epoch)), m_hidden);
+			Vector<Ref<MLPPMatrix>> m_hidden_hat = alg.scalar_multiplynvt(1 / (1 - Math::pow(b1, epoch)), m_hidden);
 
 			Ref<MLPPVector> m_output_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b1, epoch)), m_output);
 
-			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiply_vm(learning_rate / _n, alg.element_wise_divisionnv_vt(m_hidden_hat, alg.scalar_add_vm(e, u_hidden)));
+			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiplynvt(learning_rate / _n, alg.element_wise_divisionnvnvt(m_hidden_hat, alg.scalar_addnvt(e, u_hidden)));
 			Ref<MLPPVector> output_layer_updation = alg.scalar_multiplynv(learning_rate / _n, alg.element_wise_divisionnv(m_output_hat, alg.scalar_addnv(e, u_output)));
 
 			update_parameters(hidden_layer_updations, output_layer_updation, learning_rate); // subject to change. may want bias to have this matrix too.
@@ -583,8 +583,8 @@ void MLPPANN::nadam(real_t learning_rate, int max_epoch, int mini_batch_size, re
 			ComputeGradientsResult grads = compute_gradients(y_hat, current_output_batch);
 
 			if (!_network.empty() && m_hidden.empty() && v_hidden.empty()) { // Initing our tensor
-				m_hidden = alg.resize_vt(m_hidden, grads.cumulative_hidden_layer_w_grad);
-				v_hidden = alg.resize_vt(v_hidden, grads.cumulative_hidden_layer_w_grad);
+				m_hidden = alg.resizenvt(m_hidden, grads.cumulative_hidden_layer_w_grad);
+				v_hidden = alg.resizenvt(v_hidden, grads.cumulative_hidden_layer_w_grad);
 			}
 
 			if (m_output->size() == 0 && v_output->size() == 0) {
@@ -592,21 +592,21 @@ void MLPPANN::nadam(real_t learning_rate, int max_epoch, int mini_batch_size, re
 				v_output->resize(grads.output_w_grad->size());
 			}
 
-			m_hidden = alg.addition_vt(alg.scalar_multiply_vm(b1, m_hidden), alg.scalar_multiply_vm(1 - b1, grads.cumulative_hidden_layer_w_grad));
-			v_hidden = alg.addition_vt(alg.scalar_multiply_vm(b2, v_hidden), alg.scalar_multiply_vm(1 - b2, alg.exponentiate_vt(grads.cumulative_hidden_layer_w_grad, 2)));
+			m_hidden = alg.additionnvt(alg.scalar_multiplynvt(b1, m_hidden), alg.scalar_multiplynvt(1 - b1, grads.cumulative_hidden_layer_w_grad));
+			v_hidden = alg.additionnvt(alg.scalar_multiplynvt(b2, v_hidden), alg.scalar_multiplynvt(1 - b2, alg.exponentiatenvt(grads.cumulative_hidden_layer_w_grad, 2)));
 
 			m_output = alg.additionnv(alg.scalar_multiplynv(b1, m_output), alg.scalar_multiplynv(1 - b1, grads.output_w_grad));
 			v_output = alg.additionnv(alg.scalar_multiplynv(b2, v_output), alg.scalar_multiplynv(1 - b2, alg.exponentiatenv(grads.output_w_grad, 2)));
 
-			Vector<Ref<MLPPMatrix>> m_hidden_hat = alg.scalar_multiply_vm(1 / (1.0 - Math::pow(b1, epoch)), m_hidden);
-			Vector<Ref<MLPPMatrix>> v_hidden_hat = alg.scalar_multiply_vm(1 / (1.0 - Math::pow(b2, epoch)), v_hidden);
-			Vector<Ref<MLPPMatrix>> m_hidden_final = alg.addition_vt(alg.scalar_multiply_vm(b1, m_hidden_hat), alg.scalar_multiply_vm((1 - b1) / (1 - Math::pow(b1, epoch)), grads.cumulative_hidden_layer_w_grad));
+			Vector<Ref<MLPPMatrix>> m_hidden_hat = alg.scalar_multiplynvt(1 / (1.0 - Math::pow(b1, epoch)), m_hidden);
+			Vector<Ref<MLPPMatrix>> v_hidden_hat = alg.scalar_multiplynvt(1 / (1.0 - Math::pow(b2, epoch)), v_hidden);
+			Vector<Ref<MLPPMatrix>> m_hidden_final = alg.additionnvt(alg.scalar_multiplynvt(b1, m_hidden_hat), alg.scalar_multiplynvt((1 - b1) / (1 - Math::pow(b1, epoch)), grads.cumulative_hidden_layer_w_grad));
 
 			Ref<MLPPVector> m_output_hat = alg.scalar_multiplynv(1 / (1.0 - Math::pow(b1, epoch)), m_output);
 			Ref<MLPPVector> v_output_hat = alg.scalar_multiplynv(1 / (1.0 - Math::pow(b2, epoch)), v_output);
 			Ref<MLPPVector> m_output_final = alg.additionnv(alg.scalar_multiplynv(b1, m_output_hat), alg.scalar_multiplynv((1 - b1) / (1.0 - Math::pow(b1, epoch)), grads.output_w_grad));
 
-			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiply_vm(learning_rate / _n, alg.element_wise_divisionnv_vt(m_hidden_final, alg.scalar_add_vm(e, alg.sqrt_vt(v_hidden_hat))));
+			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiplynvt(learning_rate / _n, alg.element_wise_divisionnvnvt(m_hidden_final, alg.scalar_addnvt(e, alg.sqrtnvt(v_hidden_hat))));
 			Ref<MLPPVector> output_layer_updation = alg.scalar_multiplynv(learning_rate / _n, alg.element_wise_divisionnvnm(m_output_final, alg.scalar_addnv(e, alg.sqrtnv(v_output_hat))));
 
 			update_parameters(hidden_layer_updations, output_layer_updation, learning_rate); // subject to change. may want bias to have this matrix too.
@@ -666,9 +666,9 @@ void MLPPANN::amsgrad(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			ComputeGradientsResult grads = compute_gradients(y_hat, current_output_batch);
 
 			if (!_network.empty() && m_hidden.empty() && v_hidden.empty()) { // Initing our tensor
-				m_hidden = alg.resize_vt(m_hidden, grads.cumulative_hidden_layer_w_grad);
-				v_hidden = alg.resize_vt(v_hidden, grads.cumulative_hidden_layer_w_grad);
-				v_hidden_hat = alg.resize_vt(v_hidden_hat, grads.cumulative_hidden_layer_w_grad);
+				m_hidden = alg.resizenvt(m_hidden, grads.cumulative_hidden_layer_w_grad);
+				v_hidden = alg.resizenvt(v_hidden, grads.cumulative_hidden_layer_w_grad);
+				v_hidden_hat = alg.resizenvt(v_hidden_hat, grads.cumulative_hidden_layer_w_grad);
 			}
 
 			if (m_output->size() == 0 && v_output->size() == 0) {
@@ -677,16 +677,16 @@ void MLPPANN::amsgrad(real_t learning_rate, int max_epoch, int mini_batch_size, 
 				v_output_hat->resize(grads.output_w_grad->size());
 			}
 
-			m_hidden = alg.addition_vt(alg.scalar_multiply_vm(b1, m_hidden), alg.scalar_multiply_vm(1 - b1, grads.cumulative_hidden_layer_w_grad));
-			v_hidden = alg.addition_vt(alg.scalar_multiply_vm(b2, v_hidden), alg.scalar_multiply_vm(1 - b2, alg.exponentiate_vt(grads.cumulative_hidden_layer_w_grad, 2)));
+			m_hidden = alg.additionnvt(alg.scalar_multiplynvt(b1, m_hidden), alg.scalar_multiplynvt(1 - b1, grads.cumulative_hidden_layer_w_grad));
+			v_hidden = alg.additionnvt(alg.scalar_multiplynvt(b2, v_hidden), alg.scalar_multiplynvt(1 - b2, alg.exponentiatenvt(grads.cumulative_hidden_layer_w_grad, 2)));
 
 			m_output = alg.additionnv(alg.scalar_multiplynv(b1, m_output), alg.scalar_multiplynv(1 - b1, grads.output_w_grad));
 			v_output = alg.additionnv(alg.scalar_multiplynv(b2, v_output), alg.scalar_multiplynv(1 - b2, alg.exponentiatenv(grads.output_w_grad, 2)));
 
-			v_hidden_hat = alg.max_vt(v_hidden_hat, v_hidden);
+			v_hidden_hat = alg.maxnvt(v_hidden_hat, v_hidden);
 			v_output_hat = alg.maxnvv(v_output_hat, v_output);
 
-			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiply_vm(learning_rate / _n, alg.element_wise_divisionnv_vt(m_hidden, alg.scalar_add_vm(e, alg.sqrt_vt(v_hidden_hat))));
+			Vector<Ref<MLPPMatrix>> hidden_layer_updations = alg.scalar_multiplynvt(learning_rate / _n, alg.element_wise_divisionnvnvt(m_hidden, alg.scalar_addnvt(e, alg.sqrtnvt(v_hidden_hat))));
 			Ref<MLPPVector> output_layer_updation = alg.scalar_multiplynv(learning_rate / _n, alg.element_wise_divisionnv(m_output, alg.scalar_addnv(e, alg.sqrtnv(v_output_hat))));
 
 			update_parameters(hidden_layer_updations, output_layer_updation, learning_rate); // subject to change. may want bias to have this matrix too.

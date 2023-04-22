@@ -13,6 +13,7 @@ class MLPPConvolutions : public Reference {
 	GDCLASS(MLPPConvolutions, Reference);
 
 public:
+	/*
 	std::vector<std::vector<real_t>> convolve_2d(std::vector<std::vector<real_t>> input, std::vector<std::vector<real_t>> filter, int S, int P = 0);
 	std::vector<std::vector<std::vector<real_t>>> convolve_3d(std::vector<std::vector<std::vector<real_t>>> input, std::vector<std::vector<std::vector<real_t>>> filter, int S, int P = 0);
 
@@ -42,12 +43,14 @@ public:
 	std::vector<std::vector<real_t>> get_scharr_vertical();
 	std::vector<std::vector<real_t>> get_roberts_horizontal();
 	std::vector<std::vector<real_t>> get_roberts_vertical();
+	*/
 
 	MLPPConvolutions();
 
 protected:
 	static void _bind_methods();
 
+	/*
 	std::vector<std::vector<real_t>> _prewitt_horizontal;
 	std::vector<std::vector<real_t>> _prewitt_vertical;
 	std::vector<std::vector<real_t>> _sobel_horizontal;
@@ -56,6 +59,7 @@ protected:
 	std::vector<std::vector<real_t>> _scharr_vertical;
 	std::vector<std::vector<real_t>> _roberts_horizontal;
 	std::vector<std::vector<real_t>> _roberts_vertical;
+	*/
 };
 
 #endif // Convolutions_hpp

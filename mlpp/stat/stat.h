@@ -22,25 +22,20 @@ class MLPPStat : public Reference {
 
 public:
 	// These functions are for univariate lin reg module- not for users.
-	real_t b0Estimation(const std::vector<real_t> &x, const std::vector<real_t> &y);
-	real_t b1Estimation(const std::vector<real_t> &x, const std::vector<real_t> &y);
-
 	real_t b0_estimation(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
 	real_t b1_estimation(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
 
 	// Statistical Functions
-	real_t mean(const std::vector<real_t> &x);
+	/*
 	real_t median(std::vector<real_t> x);
 	std::vector<real_t> mode(const std::vector<real_t> &x);
 	real_t range(const std::vector<real_t> &x);
 	real_t midrange(const std::vector<real_t> &x);
 	real_t absAvgDeviation(const std::vector<real_t> &x);
-	real_t standardDeviation(const std::vector<real_t> &x);
-	real_t variance(const std::vector<real_t> &x);
-	real_t covariance(const std::vector<real_t> &x, const std::vector<real_t> &y);
 	real_t correlation(const std::vector<real_t> &x, const std::vector<real_t> &y);
 	real_t R2(const std::vector<real_t> &x, const std::vector<real_t> &y);
 	real_t chebyshevIneq(const real_t k);
+	*/
 
 	real_t meanv(const Ref<MLPPVector> &x);
 	real_t standard_deviationv(const Ref<MLPPVector> &x);
@@ -48,6 +43,7 @@ public:
 	real_t covariancev(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
 
 	// Extras
+	/*
 	real_t weightedMean(const std::vector<real_t> &x, const std::vector<real_t> &weights);
 	real_t geometricMean(const std::vector<real_t> &x);
 	real_t harmonicMean(const std::vector<real_t> &x);
@@ -62,6 +58,7 @@ public:
 	real_t stolarskyMean(const real_t x, const real_t y, const real_t p);
 	real_t identricMean(const real_t x, const real_t y);
 	real_t logMean(const real_t x, const real_t y);
+	*/
 
 protected:
 	static void _bind_methods();

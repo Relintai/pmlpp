@@ -6,7 +6,7 @@
 
 #include "bernoulli_nb_old.h"
 #include "../data/data.h"
-#include "../lin_alg/lin_alg.h"
+#include "../lin_alg/lin_alg_old.h"
 #include "../utilities/utilities.h"
 
 #include <iostream>
@@ -77,7 +77,7 @@ real_t MLPPBernoulliNBOld::score() {
 }
 
 void MLPPBernoulliNBOld::computeVocab() {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	MLPPData data;
 	vocab = data.vecToSet<real_t>(alg.flatten(inputSet));
 }

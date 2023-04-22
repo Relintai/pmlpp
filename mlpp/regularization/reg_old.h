@@ -16,8 +16,6 @@
 
 class MLPPRegOld {
 public:
-	// ======== OLD =========
-
 	real_t regTerm(std::vector<real_t> weights, real_t lambda, real_t alpha, std::string reg);
 	real_t regTerm(std::vector<std::vector<real_t>> weights, real_t lambda, real_t alpha, std::string reg);
 

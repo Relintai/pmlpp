@@ -5,7 +5,7 @@
 //
 
 #include "transforms_old.h"
-#include "../lin_alg/lin_alg.h"
+#include "../lin_alg/lin_alg_old.h"
 #include <cmath>
 #include <iostream>
 #include <string>
@@ -13,7 +13,7 @@
 // DCT ii.
 // https://www.mathworks.com/help/images/discrete-cosine-transform.html
 std::vector<std::vector<real_t>> MLPPTransformsOld::discreteCosineTransform(std::vector<std::vector<real_t>> A) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	A = alg.scalarAdd(-128, A); // Center around 0.
 
 	std::vector<std::vector<real_t>> B;

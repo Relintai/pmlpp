@@ -6,7 +6,7 @@
 
 #include "outlier_finder_old.h"
 
-#include "../stat/stat.h"
+#include "../stat/stat_old.h"
 #include <iostream>
 
 
@@ -15,7 +15,7 @@ MLPPOutlierFinderOld::MLPPOutlierFinderOld(int threshold) :
 }
 
 std::vector<std::vector<real_t>> MLPPOutlierFinderOld::modelSetTest(std::vector<std::vector<real_t>> inputSet) {
-	MLPPStat  stat;
+	MLPPStatOld  stat;
 	std::vector<std::vector<real_t>> outliers;
 	outliers.resize(inputSet.size());
 	for (uint32_t i = 0; i < inputSet.size(); i++) {
@@ -30,7 +30,7 @@ std::vector<std::vector<real_t>> MLPPOutlierFinderOld::modelSetTest(std::vector<
 }
 
 std::vector<real_t> MLPPOutlierFinderOld::modelTest(std::vector<real_t> inputSet) {
-	MLPPStat  stat;
+	MLPPStatOld  stat;
 	std::vector<real_t> outliers;
 	for (uint32_t i = 0; i < inputSet.size(); i++) {
 		real_t z = (inputSet[i] - stat.mean(inputSet)) / stat.standardDeviation(inputSet);

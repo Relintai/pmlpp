@@ -5,7 +5,7 @@
 //
 
 #include "gauss_markov_checker_old.h"
-#include "../stat/stat.h"
+#include "../stat/stat_old.h"
 #include <iostream>
 
 void MLPPGaussMarkovCheckerOld::checkGMConditions(std::vector<real_t> eps) {
@@ -21,7 +21,7 @@ void MLPPGaussMarkovCheckerOld::checkGMConditions(std::vector<real_t> eps) {
 }
 
 bool MLPPGaussMarkovCheckerOld::arithmeticMean(std::vector<real_t> eps) {
-	MLPPStat stat;
+	MLPPStatOld stat;
 	if (stat.mean(eps) == 0) {
 		return true;
 	} else {
@@ -30,7 +30,7 @@ bool MLPPGaussMarkovCheckerOld::arithmeticMean(std::vector<real_t> eps) {
 }
 
 bool MLPPGaussMarkovCheckerOld::homoscedasticity(std::vector<real_t> eps) {
-	MLPPStat stat;
+	MLPPStatOld stat;
 	real_t currentVar = (eps[0] - stat.mean(eps)) * (eps[0] - stat.mean(eps)) / eps.size();
 	for (uint32_t i = 0; i < eps.size(); i++) {
 		if (currentVar != (eps[i] - stat.mean(eps)) * (eps[i] - stat.mean(eps)) / eps.size()) {
@@ -42,7 +42,7 @@ bool MLPPGaussMarkovCheckerOld::homoscedasticity(std::vector<real_t> eps) {
 }
 
 bool MLPPGaussMarkovCheckerOld::exogeneity(std::vector<real_t> eps) {
-	MLPPStat stat;
+	MLPPStatOld stat;
 	for (uint32_t i = 0; i < eps.size(); i++) {
 		for (uint32_t j = 0; j < eps.size(); j++) {
 			if (i != j) {

@@ -22,7 +22,7 @@
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"
-#include "../regularization/reg.h"
+#include "../regularization/reg_old.h"
 #include "../utilities/utilities.h"
 
 #include <string>

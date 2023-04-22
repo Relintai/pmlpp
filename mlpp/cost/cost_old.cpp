@@ -5,8 +5,8 @@
 //
 
 #include "cost_old.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../regularization/reg_old.h"
 #include <cmath>
 #include <iostream>
 
@@ -29,12 +29,12 @@ real_t MLPPCostOld::MSE(std::vector<std::vector<real_t>> y_hat, std::vector<std:
 }
 
 std::vector<real_t> MLPPCostOld::MSEDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.subtraction(y_hat, y);
 }
 
 std::vector<std::vector<real_t>> MLPPCostOld::MSEDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.subtraction(y_hat, y);
 }
 
@@ -57,12 +57,12 @@ real_t MLPPCostOld::RMSE(std::vector<std::vector<real_t>> y_hat, std::vector<std
 }
 
 std::vector<real_t> MLPPCostOld::RMSEDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(1 / (2 * sqrt(MSE(y_hat, y))), MSEDeriv(y_hat, y));
 }
 
 std::vector<std::vector<real_t>> MLPPCostOld::RMSEDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(1 / (2 / sqrt(MSE(y_hat, y))), MSEDeriv(y_hat, y));
 }
 
@@ -138,12 +138,12 @@ real_t MLPPCostOld::MBE(std::vector<std::vector<real_t>> y_hat, std::vector<std:
 }
 
 std::vector<real_t> MLPPCostOld::MBEDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.onevec(y_hat.size());
 }
 
 std::vector<std::vector<real_t>> MLPPCostOld::MBEDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.onemat(y_hat.size(), y_hat[0].size());
 }
 
@@ -170,12 +170,12 @@ real_t MLPPCostOld::LogLoss(std::vector<std::vector<real_t>> y_hat, std::vector<
 }
 
 std::vector<real_t> MLPPCostOld::LogLossDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.addition(alg.scalarMultiply(-1, alg.elementWiseDivision(y, y_hat)), alg.elementWiseDivision(alg.scalarMultiply(-1, alg.scalarAdd(-1, y)), alg.scalarMultiply(-1, alg.scalarAdd(-1, y_hat))));
 }
 
 std::vector<std::vector<real_t>> MLPPCostOld::LogLossDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.addition(alg.scalarMultiply(-1, alg.elementWiseDivision(y, y_hat)), alg.elementWiseDivision(alg.scalarMultiply(-1, alg.scalarAdd(-1, y)), alg.scalarMultiply(-1, alg.scalarAdd(-1, y_hat))));
 }
 
@@ -200,17 +200,16 @@ real_t MLPPCostOld::CrossEntropy(std::vector<std::vector<real_t>> y_hat, std::ve
 }
 
 std::vector<real_t> MLPPCostOld::CrossEntropyDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(-1, alg.elementWiseDivision(y, y_hat));
 }
 
 std::vector<std::vector<real_t>> MLPPCostOld::CrossEntropyDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(-1, alg.elementWiseDivision(y, y_hat));
 }
 
 real_t MLPPCostOld::HuberLoss(std::vector<real_t> y_hat, std::vector<real_t> y, real_t delta) {
-	MLPPLinAlg alg;
 	real_t sum = 0;
 	for (uint32_t i = 0; i < y_hat.size(); i++) {
 		if (abs(y[i] - y_hat[i]) <= delta) {
@@ -223,7 +222,6 @@ real_t MLPPCostOld::HuberLoss(std::vector<real_t> y_hat, std::vector<real_t> y, 
 }
 
 real_t MLPPCostOld::HuberLoss(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y, real_t delta) {
-	MLPPLinAlg alg;
 	real_t sum = 0;
 	for (uint32_t i = 0; i < y_hat.size(); i++) {
 		for (uint32_t j = 0; j < y_hat[i].size(); j++) {
@@ -238,7 +236,6 @@ real_t MLPPCostOld::HuberLoss(std::vector<std::vector<real_t>> y_hat, std::vecto
 }
 
 std::vector<real_t> MLPPCostOld::HuberLossDeriv(std::vector<real_t> y_hat, std::vector<real_t> y, real_t delta) {
-	MLPPLinAlg alg;
 	std::vector<real_t> deriv;
 	deriv.resize(y_hat.size());
 
@@ -257,8 +254,6 @@ std::vector<real_t> MLPPCostOld::HuberLossDeriv(std::vector<real_t> y_hat, std::
 }
 
 std::vector<std::vector<real_t>> MLPPCostOld::HuberLossDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y, real_t delta) {
-	MLPPLinAlg alg;
-
 	std::vector<std::vector<real_t>> deriv;
 	deriv.resize(y_hat.size());
 	for (uint32_t i = 0; i < deriv.size(); i++) {
@@ -347,39 +342,35 @@ real_t MLPPCostOld::WassersteinLoss(std::vector<std::vector<real_t>> y_hat, std:
 }
 
 std::vector<real_t> MLPPCostOld::WassersteinLossDeriv(std::vector<real_t> y_hat, std::vector<real_t> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(-1, y); // Simple.
 }
 
 std::vector<std::vector<real_t>> MLPPCostOld::WassersteinLossDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(-1, y); // Simple.
 }
 
 real_t MLPPCostOld::HingeLoss(std::vector<real_t> y_hat, std::vector<real_t> y, std::vector<real_t> weights, real_t C) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPRegOld regularization;
 	return C * HingeLoss(y_hat, y) + regularization.regTerm(weights, 1, 0, "Ridge");
 }
 real_t MLPPCostOld::HingeLoss(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y, std::vector<std::vector<real_t>> weights, real_t C) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPRegOld regularization;
 	return C * HingeLoss(y_hat, y) + regularization.regTerm(weights, 1, 0, "Ridge");
 }
 
 std::vector<real_t> MLPPCostOld::HingeLossDeriv(std::vector<real_t> y_hat, std::vector<real_t> y, real_t C) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(C, HingeLossDeriv(y_hat, y));
 }
 std::vector<std::vector<real_t>> MLPPCostOld::HingeLossDeriv(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y, real_t C) {
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
 	return alg.scalarMultiply(C, HingeLossDeriv(y_hat, y));
 }
 
 real_t MLPPCostOld::dualFormSVM(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<real_t>> Y = alg.diag(y); // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.
 	std::vector<std::vector<real_t>> K = alg.matmult(X, alg.transpose(X)); // TO DO: DON'T forget to add non-linear kernelizations.
 	std::vector<std::vector<real_t>> Q = alg.matmult(alg.matmult(alg.transpose(Y), K), Y);
@@ -390,7 +381,7 @@ real_t MLPPCostOld::dualFormSVM(std::vector<real_t> alpha, std::vector<std::vect
 }
 
 std::vector<real_t> MLPPCostOld::dualFormSVMDeriv(std::vector<real_t> alpha, std::vector<std::vector<real_t>> X, std::vector<real_t> y) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<real_t>> Y = alg.zeromat(y.size(), y.size());
 	for (uint32_t i = 0; i < y.size(); i++) {
 		Y[i][i] = y[i]; // Y is a diagnoal matrix. Y[i][j] = y[i] if i = i, else Y[i][j] = 0. Yt = Y.

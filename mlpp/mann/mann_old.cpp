@@ -7,9 +7,9 @@
 #include "mann_old.h"
 
 #include "../activation/activation_old.h"
-#include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
+#include "../cost/cost_old.h"
+#include "../lin_alg/lin_alg_old.h"
+#include "../regularization/reg_old.h"
 #include "../utilities/utilities.h"
 
 #include <iostream>
@@ -53,10 +53,10 @@ std::vector<real_t> MLPPMANNOld::modelTest(std::vector<real_t> x) {
 }
 
 void MLPPMANNOld::gradientDescent(real_t learning_rate, int max_epoch, bool UI) {
-	class MLPPCost cost;
+	class MLPPCostOld cost;
 	MLPPActivationOld avn;
-	MLPPLinAlg alg;
-	MLPPReg regularization;
+	MLPPLinAlgOld alg;
+	MLPPRegOld regularization;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -158,8 +158,8 @@ void MLPPMANNOld::addOutputLayer(std::string activation, std::string loss, std::
 }
 
 real_t MLPPMANNOld::Cost(std::vector<std::vector<real_t>> y_hat, std::vector<std::vector<real_t>> y) {
-	MLPPReg regularization;
-	class MLPPCost cost;
+	MLPPRegOld regularization;
+	class MLPPCostOld cost;
 	real_t totalRegTerm = 0;
 
 	auto cost_function = outputLayer->cost_map[outputLayer->cost];

@@ -5,7 +5,7 @@
 //
 
 #include "numerical_analysis_old.h"
-#include "../lin_alg/lin_alg.h"
+#include "../lin_alg/lin_alg_old.h"
 
 #include <climits>
 #include <cmath>
@@ -230,12 +230,12 @@ real_t MLPPNumericalAnalysisOld::constantApproximation(real_t (*function)(std::v
 }
 
 real_t MLPPNumericalAnalysisOld::linearApproximation(real_t (*function)(std::vector<real_t>), std::vector<real_t> c, std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return constantApproximation(function, c) + alg.matmult(alg.transpose({ jacobian(function, c) }), { alg.subtraction(x, c) })[0][0];
 }
 
 real_t MLPPNumericalAnalysisOld::quadraticApproximation(real_t (*function)(std::vector<real_t>), std::vector<real_t> c, std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	return linearApproximation(function, c, x) + 0.5 * alg.matmult({ (alg.subtraction(x, c)) }, alg.matmult(hessian(function, c), alg.transpose({ alg.subtraction(x, c) })))[0][0];
 }
 
@@ -249,7 +249,7 @@ real_t MLPPNumericalAnalysisOld::cubicApproximation(real_t (*function)(std::vect
 	Perform remaining multiplies as done for the 2nd order approximation.
 	Result is a scalar.
 	*/
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<real_t>> resultMat = alg.tensor_vec_mult(thirdOrderTensor(function, c), alg.subtraction(x, c));
 	real_t resultScalar = alg.matmult({ (alg.subtraction(x, c)) }, alg.matmult(resultMat, alg.transpose({ alg.subtraction(x, c) })))[0][0];
 
@@ -268,7 +268,7 @@ real_t MLPPNumericalAnalysisOld::laplacian(real_t (*function)(std::vector<real_t
 }
 
 std::string MLPPNumericalAnalysisOld::secondPartialDerivativeTest(real_t (*function)(std::vector<real_t>), std::vector<real_t> x) {
-	MLPPLinAlg alg;
+	MLPPLinAlgOld alg;
 	std::vector<std::vector<real_t>> hessianMatrix = hessian(function, x);
 	/*
 	The reason we do this is because the 2nd partial derivative test is less conclusive for functions of variables greater than
