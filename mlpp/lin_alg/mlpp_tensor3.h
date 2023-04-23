@@ -640,8 +640,8 @@ public:
 	Ref<Image> get_feature_map_image(const int p_index_z);
 	Ref<Image> get_feature_maps_image(const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);
 
-	void get_feature_map_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels = IMAGE_CHANNEL_RGBA) const;
-	void get_feature_map_into_image(Ref<Image> p_target, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
+	void get_feature_map_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels = IMAGE_CHANNEL_RGB) const;
+	void get_feature_maps_into_image(Ref<Image> p_target, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
 
 	void set_feature_map_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel = IMAGE_CHANNEL_R);
 	void set_feature_maps_image(const Ref<Image> &p_img, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);

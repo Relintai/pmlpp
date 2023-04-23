@@ -93,22 +93,197 @@ Ref<Image> MLPPTensor3::get_feature_map_image(const int p_index_z) {
 	return image;
 }
 Ref<Image> MLPPTensor3::get_feature_maps_image(const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) {
-	ERR_FAIL_INDEX_V(p_index_r, _size.z, Ref<Image>());
-	ERR_FAIL_INDEX_V(p_index_g, _size.z, Ref<Image>());
-	ERR_FAIL_INDEX_V(p_index_b, _size.z, Ref<Image>());
-	ERR_FAIL_INDEX_V(p_index_a, _size.z, Ref<Image>());
+	if (p_index_r != -1) {
+		ERR_FAIL_INDEX_V(p_index_r, _size.z, Ref<Image>());
+	}
 
-	return Ref<Image>();
+	if (p_index_g != -1) {
+		ERR_FAIL_INDEX_V(p_index_g, _size.z, Ref<Image>());
+	}
+
+	if (p_index_b != -1) {
+		ERR_FAIL_INDEX_V(p_index_b, _size.z, Ref<Image>());
+	}
+
+	if (p_index_a != -1) {
+		ERR_FAIL_INDEX_V(p_index_a, _size.z, Ref<Image>());
+	}
+
+	Ref<Image> image;
+	image.instance();
+
+	if (data_size() == 0) {
+		return image;
+	}
+
+	Size2i fms = feature_map_size();
+
+	image->create(_size.x, _size.y, false, Image::FORMAT_RGBA8);
+
+	image->lock();
+
+	for (int y = 0; y < fms.y; ++y) {
+		for (int x = 0; x < fms.x; ++x) {
+			Color c;
+
+			if (p_index_r != -1) {
+				c.r = get_element(y, x, p_index_r);
+			}
+
+			if (p_index_g != -1) {
+				c.g = get_element(y, x, p_index_g);
+			}
+
+			if (p_index_b != -1) {
+				c.b = get_element(y, x, p_index_b);
+			}
+
+			if (p_index_a != -1) {
+				c.a = get_element(y, x, p_index_a);
+			}
+
+			image->set_pixel(x, y, c);
+		}
+	}
+
+	image->unlock();
+
+	return image;
 }
 
 void MLPPTensor3::get_feature_map_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels) const {
 	ERR_FAIL_INDEX(p_index_z, _size.z);
+	ERR_FAIL_COND(!p_target.is_valid());
+
+	int channel_count = 0;
+	int channels[4];
+
+	if (p_target_channels & IMAGE_CHANNEL_R) {
+		channels[channel_count] = 0;
+		++channel_count;
+	}
+
+	if (p_target_channels & IMAGE_CHANNEL_G) {
+		channels[channel_count] = 1;
+		++channel_count;
+	}
+
+	if (p_target_channels & IMAGE_CHANNEL_B) {
+		channels[channel_count] = 2;
+		++channel_count;
+	}
+
+	if (p_target_channels & IMAGE_CHANNEL_A) {
+		channels[channel_count] = 3;
+		++channel_count;
+	}
+
+	ERR_FAIL_COND(channel_count == 0);
+
+	if (data_size() == 0) {
+		p_target->clear();
+		return;
+	}
+
+	Size2i img_size = Size2i(p_target->get_width(), p_target->get_height());
+	Size2i fms = feature_map_size();
+	if (img_size != fms) {
+		bool mip_maps = p_target->has_mipmaps();
+		p_target->resize(fms.x, fms.y, Image::INTERPOLATE_NEAREST);
+
+		if (p_target->has_mipmaps() != mip_maps) {
+			if (mip_maps) {
+				p_target->generate_mipmaps();
+			} else {
+				p_target->clear_mipmaps();
+			}
+		}
+	}
+
+	p_target->lock();
+
+	for (int y = 0; y < fms.y; ++y) {
+		for (int x = 0; x < fms.x; ++x) {
+			Color c;
+
+			float e = get_element(y, x, p_index_z);
+
+			for (int i = 0; i < channel_count; ++i) {
+				c[channels[i]] = e;
+			}
+
+			p_target->set_pixel(x, y, c);
+		}
+	}
+
+	p_target->unlock();
 }
-void MLPPTensor3::get_feature_map_into_image(Ref<Image> p_target, const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) const {
-	ERR_FAIL_INDEX(p_index_r, _size.z);
-	ERR_FAIL_INDEX(p_index_g, _size.z);
-	ERR_FAIL_INDEX(p_index_b, _size.z);
-	ERR_FAIL_INDEX(p_index_a, _size.z);
+void MLPPTensor3::get_feature_maps_into_image(Ref<Image> p_target, const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) const {
+	ERR_FAIL_COND(!p_target.is_valid());
+
+	if (p_index_r != -1) {
+		ERR_FAIL_INDEX(p_index_r, _size.z);
+	}
+
+	if (p_index_g != -1) {
+		ERR_FAIL_INDEX(p_index_g, _size.z);
+	}
+
+	if (p_index_b != -1) {
+		ERR_FAIL_INDEX(p_index_b, _size.z);
+	}
+
+	if (p_index_a != -1) {
+		ERR_FAIL_INDEX(p_index_a, _size.z);
+	}
+
+	if (data_size() == 0) {
+		p_target->clear();
+		return;
+	}
+
+	Size2i img_size = Size2i(p_target->get_width(), p_target->get_height());
+	Size2i fms = feature_map_size();
+	if (img_size != fms) {
+		bool mip_maps = p_target->has_mipmaps();
+		p_target->resize(fms.x, fms.y, Image::INTERPOLATE_NEAREST);
+
+		if (p_target->has_mipmaps() != mip_maps) {
+			if (mip_maps) {
+				p_target->generate_mipmaps();
+			} else {
+				p_target->clear_mipmaps();
+			}
+		}
+	}
+
+	p_target->lock();
+
+	for (int y = 0; y < fms.y; ++y) {
+		for (int x = 0; x < fms.x; ++x) {
+			Color c;
+
+			if (p_index_r != -1) {
+				c.r = get_element(y, x, p_index_r);
+			}
+
+			if (p_index_g != -1) {
+				c.g = get_element(y, x, p_index_g);
+			}
+
+			if (p_index_b != -1) {
+				c.b = get_element(y, x, p_index_b);
+			}
+
+			if (p_index_a != -1) {
+				c.a = get_element(y, x, p_index_a);
+			}
+
+			p_target->set_pixel(x, y, c);
+		}
+	}
+
+	p_target->unlock();
 }
 
 void MLPPTensor3::set_feature_map_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel) {
