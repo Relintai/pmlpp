@@ -531,7 +531,7 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ void get_feature_map_into_mlpp_vector(int p_index_z, Ref<MLPPMatrix> target) const {
+	_FORCE_INLINE_ void get_feature_map_into_mlpp_matrix(int p_index_z, Ref<MLPPMatrix> target) const {
 		ERR_FAIL_INDEX(p_index_z, _size.z);
 
 		int fmds = feature_map_data_size();

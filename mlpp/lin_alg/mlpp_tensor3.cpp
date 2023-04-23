@@ -521,36 +521,67 @@ MLPPTensor3::MLPPTensor3(const std::vector<std::vector<std::vector<real_t>>> &p_
 }
 
 void MLPPTensor3::_bind_methods() {
-	/*
-	ClassDB::bind_method(D_METHOD("add_row", "row"), &MLPPTensor3::add_row_pool_vector);
-	ClassDB::bind_method(D_METHOD("add_row_mlpp_vector", "row"), &MLPPTensor3::add_row_mlpp_vector);
-	ClassDB::bind_method(D_METHOD("add_rows_mlpp_matrix", "other"), &MLPPTensor3::add_rows_mlpp_matrix);
+	ClassDB::bind_method(D_METHOD("add_feature_map_pool_vector", "row"), &MLPPTensor3::add_feature_map_pool_vector);
+	ClassDB::bind_method(D_METHOD("add_feature_map_mlpp_vector", "row"), &MLPPTensor3::add_feature_map_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("add_feature_map_mlpp_matrix", "matrix"), &MLPPTensor3::add_feature_map_mlpp_matrix);
 
-	ClassDB::bind_method(D_METHOD("remove_row", "index"), &MLPPTensor3::remove_row);
-	ClassDB::bind_method(D_METHOD("remove_row_unordered", "index"), &MLPPTensor3::remove_row_unordered);
-	ClassDB::bind_method(D_METHOD("swap_row", "index_1", "index_2"), &MLPPTensor3::swap_row);
+	ClassDB::bind_method(D_METHOD("remove_feature_map", "index"), &MLPPTensor3::remove_feature_map);
+	ClassDB::bind_method(D_METHOD("remove_feature_map_unordered", "index"), &MLPPTensor3::remove_feature_map_unordered);
+
+	ClassDB::bind_method(D_METHOD("swap_feature_map", "index_1", "index_2"), &MLPPTensor3::swap_feature_map);
 
 	ClassDB::bind_method(D_METHOD("clear"), &MLPPTensor3::clear);
 	ClassDB::bind_method(D_METHOD("reset"), &MLPPTensor3::reset);
 	ClassDB::bind_method(D_METHOD("empty"), &MLPPTensor3::empty);
+
+	ClassDB::bind_method(D_METHOD("feature_map_data_size"), &MLPPTensor3::feature_map_data_size);
+	ClassDB::bind_method(D_METHOD("feature_map_size"), &MLPPTensor3::feature_map_size);
 
 	ClassDB::bind_method(D_METHOD("data_size"), &MLPPTensor3::data_size);
 	ClassDB::bind_method(D_METHOD("size"), &MLPPTensor3::size);
 
 	ClassDB::bind_method(D_METHOD("resize", "size"), &MLPPTensor3::resize);
 
+	ClassDB::bind_method(D_METHOD("set_shape", "size"), &MLPPTensor3::set_shape);
+	ClassDB::bind_method(D_METHOD("calculate_index", "index_y", "index_x", "index_z"), &MLPPTensor3::calculate_index);
+	ClassDB::bind_method(D_METHOD("calculate_feature_map_index", "index_z"), &MLPPTensor3::calculate_feature_map_index);
+
 	ClassDB::bind_method(D_METHOD("get_element_index", "index"), &MLPPTensor3::get_element_index);
 	ClassDB::bind_method(D_METHOD("set_element_index", "index", "val"), &MLPPTensor3::set_element_index);
 
-	ClassDB::bind_method(D_METHOD("get_element", "index_x", "index_y"), &MLPPTensor3::get_element);
-	ClassDB::bind_method(D_METHOD("set_element", "index_x", "index_y", "val"), &MLPPTensor3::set_element);
+	ClassDB::bind_method(D_METHOD("get_element", "index_y", "index_x", "index_z"), &MLPPTensor3::get_element);
+	ClassDB::bind_method(D_METHOD("set_element", "index_y", "index_x", "index_z", "val"), &MLPPTensor3::set_element);
 
-	ClassDB::bind_method(D_METHOD("get_row_pool_vector", "index_y"), &MLPPTensor3::get_row_pool_vector);
-	ClassDB::bind_method(D_METHOD("get_row_mlpp_vector", "index_y"), &MLPPTensor3::get_row_mlpp_vector);
-	ClassDB::bind_method(D_METHOD("get_row_into_mlpp_vector", "index_y", "target"), &MLPPTensor3::get_row_into_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("get_row_pool_vector", "index_y", "index_z"), &MLPPTensor3::get_row_pool_vector);
+	ClassDB::bind_method(D_METHOD("get_row_mlpp_vector", "index_y", "index_z"), &MLPPTensor3::get_row_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("get_row_into_mlpp_vector", "index_y", "index_z", "target"), &MLPPTensor3::get_row_into_mlpp_vector);
 
-	ClassDB::bind_method(D_METHOD("set_row_pool_vector", "index_y", "row"), &MLPPTensor3::set_row_pool_vector);
-	ClassDB::bind_method(D_METHOD("set_row_mlpp_vector", "index_y", "row"), &MLPPTensor3::set_row_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("set_row_pool_vector", "index_y", "index_z", "row"), &MLPPTensor3::set_row_pool_vector);
+	ClassDB::bind_method(D_METHOD("set_row_mlpp_vector", "index_y", "index_z", "row"), &MLPPTensor3::set_row_mlpp_vector);
+
+	ClassDB::bind_method(D_METHOD("get_feature_map_pool_vector", "index_z"), &MLPPTensor3::get_feature_map_pool_vector);
+	ClassDB::bind_method(D_METHOD("get_feature_map_mlpp_vector", "index_z"), &MLPPTensor3::get_feature_map_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("get_feature_map_into_mlpp_vector", "index_z", "target"), &MLPPTensor3::get_feature_map_into_mlpp_vector);
+
+	ClassDB::bind_method(D_METHOD("get_feature_map_mlpp_matrix", "index_z"), &MLPPTensor3::get_feature_map_mlpp_matrix);
+	ClassDB::bind_method(D_METHOD("get_feature_map_into_mlpp_matrix", "index_z", "target"), &MLPPTensor3::get_feature_map_into_mlpp_matrix);
+
+	ClassDB::bind_method(D_METHOD("set_feature_map_pool_vector", "index_z", "row"), &MLPPTensor3::set_feature_map_pool_vector);
+	ClassDB::bind_method(D_METHOD("set_feature_map_mlpp_vector", "index_z", "row"), &MLPPTensor3::set_feature_map_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("set_feature_map_mlpp_matrix", "index_z", "mat"), &MLPPTensor3::set_feature_map_mlpp_matrix);
+
+	ClassDB::bind_method(D_METHOD("add_feature_maps_image", "img", "channels"), &MLPPTensor3::add_feature_maps_image, IMAGE_CHANNEL_RGBA);
+
+	ClassDB::bind_method(D_METHOD("get_feature_map_image", "index_z"), &MLPPTensor3::get_feature_map_image);
+	ClassDB::bind_method(D_METHOD("get_feature_maps_image", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::get_feature_maps_image, -1, -1, -1, -1);
+
+	ClassDB::bind_method(D_METHOD("get_feature_map_into_image", "target", "index_z", "target_channels"), &MLPPTensor3::get_feature_map_into_image, IMAGE_CHANNEL_RGB);
+	ClassDB::bind_method(D_METHOD("get_feature_maps_into_image", "target", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::get_feature_maps_into_image, -1, -1, -1, -1);
+
+	ClassDB::bind_method(D_METHOD("set_feature_map_image", "img", "index_z", "image_channel"), &MLPPTensor3::set_feature_map_image, IMAGE_CHANNEL_R);
+	ClassDB::bind_method(D_METHOD("set_feature_maps_image", "img", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::set_feature_maps_image);
+
+	ClassDB::bind_method(D_METHOD("set_from_image", "img", "channels"), &MLPPTensor3::set_from_image, IMAGE_CHANNEL_RGBA);
 
 	ClassDB::bind_method(D_METHOD("fill", "val"), &MLPPTensor3::fill);
 
@@ -559,10 +590,23 @@ void MLPPTensor3::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("duplicate"), &MLPPTensor3::duplicate);
 
-	ClassDB::bind_method(D_METHOD("set_from_mlpp_vectors_array", "from"), &MLPPTensor3::set_from_mlpp_vectors_array);
-	ClassDB::bind_method(D_METHOD("set_from_arrays", "from"), &MLPPTensor3::set_from_arrays);
+	ClassDB::bind_method(D_METHOD("set_from_mlpp_tensor3", "from"), &MLPPTensor3::set_from_mlpp_tensor3);
 	ClassDB::bind_method(D_METHOD("set_from_mlpp_matrix", "from"), &MLPPTensor3::set_from_mlpp_matrix);
+	ClassDB::bind_method(D_METHOD("set_from_mlpp_vectors_array", "from"), &MLPPTensor3::set_from_mlpp_vectors_array);
+	ClassDB::bind_method(D_METHOD("set_from_mlpp_matrices_array", "from"), &MLPPTensor3::set_from_mlpp_matrices_array);
 
 	ClassDB::bind_method(D_METHOD("is_equal_approx", "with", "tolerance"), &MLPPTensor3::is_equal_approx, CMP_EPSILON);
-	*/
+
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_R);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_G);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_B);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_A);
+
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_NONE);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_RG);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_RGB);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_GB);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_GBA);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_BA);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_RGBA);
 }
