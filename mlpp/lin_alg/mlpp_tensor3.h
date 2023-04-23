@@ -15,6 +15,8 @@
 #include "mlpp_matrix.h"
 #include "mlpp_vector.h"
 
+class Image;
+
 class MLPPTensor3 : public Reference {
 	GDCLASS(MLPPTensor3, Reference);
 
@@ -615,6 +617,38 @@ public:
 		}
 	}
 
+public:
+	//Image api
+
+	enum ImageChannels {
+		IMAGE_CHANNEL_R = 1 << 0,
+		IMAGE_CHANNEL_G = 1 << 1,
+		IMAGE_CHANNEL_B = 1 << 2,
+		IMAGE_CHANNEL_A = 1 << 3,
+
+		IMAGE_CHANNEL_NONE = 0,
+		IMAGE_CHANNEL_RG = IMAGE_CHANNEL_R | IMAGE_CHANNEL_G,
+		IMAGE_CHANNEL_RGB = IMAGE_CHANNEL_R | IMAGE_CHANNEL_G | IMAGE_CHANNEL_B,
+		IMAGE_CHANNEL_GB = IMAGE_CHANNEL_G | IMAGE_CHANNEL_B,
+		IMAGE_CHANNEL_GBA = IMAGE_CHANNEL_G | IMAGE_CHANNEL_B | IMAGE_CHANNEL_A,
+		IMAGE_CHANNEL_BA = IMAGE_CHANNEL_B | IMAGE_CHANNEL_A,
+		IMAGE_CHANNEL_RGBA = IMAGE_CHANNEL_R | IMAGE_CHANNEL_G | IMAGE_CHANNEL_B | IMAGE_CHANNEL_A,
+	};
+
+	void add_feature_maps_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_RGBA);
+
+	Ref<Image> get_feature_map_image(const int p_index_z);
+	Ref<Image> get_feature_maps_image(const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);
+
+	void get_feature_map_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels = IMAGE_CHANNEL_RGBA) const;
+	void get_feature_map_into_image(Ref<Image> p_target, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
+
+	void set_feature_map_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel = IMAGE_CHANNEL_R);
+	void set_feature_maps_image(const Ref<Image> &p_img, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);
+
+	void set_from_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_RGBA);
+
+public:
 	void fill(real_t p_val) {
 		if (!_data) {
 			return;
@@ -924,5 +958,7 @@ protected:
 	Size3i _size;
 	real_t *_data;
 };
+
+VARIANT_ENUM_CAST(MLPPTensor3::ImageChannels);
 
 #endif
