@@ -225,6 +225,15 @@ public:
 		CRASH_COND_MSG(!_data, "Out of memory");
 	}
 
+	void set_shape(const Size3i &p_size) {
+		int ds = data_size();
+		int new_data_size = p_size.x * p_size.y * p_size.z;
+
+		ERR_FAIL_COND_MSG(ds != new_data_size, "The new size has a different volume than the old. If this is intended use resize()!");
+
+		_size = p_size;
+	}
+
 	_FORCE_INLINE_ int calculate_index(int p_index_y, int p_index_x, int p_index_z) const {
 		return p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z;
 	}
