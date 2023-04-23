@@ -287,16 +287,141 @@ void MLPPTensor3::get_feature_maps_into_image(Ref<Image> p_target, const int p_i
 }
 
 void MLPPTensor3::set_feature_map_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel) {
+	ERR_FAIL_COND(!p_img.is_valid());
 	ERR_FAIL_INDEX(p_index_z, _size.z);
+
+	int channel_index = -1;
+
+	for (int i = 0; i < 4; ++i) {
+		if (((p_image_channel & (1 << i)) != 0)) {
+			channel_index = i;
+			break;
+		}
+	}
+
+	ERR_FAIL_INDEX(channel_index, 4);
+
+	Size2i img_size = Size2i(p_img->get_width(), p_img->get_height());
+	Size2i fms = feature_map_size();
+
+	ERR_FAIL_COND(img_size != fms);
+
+	Ref<Image> img = p_img;
+
+	img->lock();
+
+	for (int y = 0; y < fms.y; ++y) {
+		for (int x = 0; x < fms.x; ++x) {
+			Color c = img->get_pixel(x, y);
+
+			set_element(y, x, p_index_z, c[channel_index]);
+		}
+	}
+
+	img->unlock();
 }
 void MLPPTensor3::set_feature_maps_image(const Ref<Image> &p_img, const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) {
-	ERR_FAIL_INDEX(p_index_r, _size.z);
-	ERR_FAIL_INDEX(p_index_g, _size.z);
-	ERR_FAIL_INDEX(p_index_b, _size.z);
-	ERR_FAIL_INDEX(p_index_a, _size.z);
+	ERR_FAIL_COND(!p_img.is_valid());
+
+	if (p_index_r != -1) {
+		ERR_FAIL_INDEX(p_index_r, _size.z);
+	}
+
+	if (p_index_g != -1) {
+		ERR_FAIL_INDEX(p_index_g, _size.z);
+	}
+
+	if (p_index_b != -1) {
+		ERR_FAIL_INDEX(p_index_b, _size.z);
+	}
+
+	if (p_index_a != -1) {
+		ERR_FAIL_INDEX(p_index_a, _size.z);
+	}
+
+	Size2i img_size = Size2i(p_img->get_width(), p_img->get_height());
+	Size2i fms = feature_map_size();
+
+	ERR_FAIL_COND(img_size != fms);
+
+	Ref<Image> img = p_img;
+
+	img->lock();
+
+	for (int y = 0; y < fms.y; ++y) {
+		for (int x = 0; x < fms.x; ++x) {
+			Color c = img->get_pixel(x, y);
+
+			if (p_index_r != -1) {
+				set_element(y, x, p_index_r, c.r);
+			}
+
+			if (p_index_g != -1) {
+				set_element(y, x, p_index_g, c.g);
+			}
+
+			if (p_index_b != -1) {
+				set_element(y, x, p_index_b, c.b);
+			}
+
+			if (p_index_a != -1) {
+				set_element(y, x, p_index_a, c.a);
+			}
+		}
+	}
+
+	img->unlock();
 }
 
 void MLPPTensor3::set_from_image(const Ref<Image> &p_img, const int p_channels) {
+	ERR_FAIL_COND(!p_img.is_valid());
+
+	int channel_count = 0;
+	int channels[4];
+
+	if (p_channels & IMAGE_CHANNEL_R) {
+		channels[channel_count] = 0;
+		++channel_count;
+	}
+
+	if (p_channels & IMAGE_CHANNEL_G) {
+		channels[channel_count] = 1;
+		++channel_count;
+	}
+
+	if (p_channels & IMAGE_CHANNEL_B) {
+		channels[channel_count] = 2;
+		++channel_count;
+	}
+
+	if (p_channels & IMAGE_CHANNEL_A) {
+		channels[channel_count] = 3;
+		++channel_count;
+	}
+
+	ERR_FAIL_COND(channel_count == 0);
+
+	Size2i img_size = Size2i(p_img->get_width(), p_img->get_height());
+
+	resize(Size3i(img_size.x, img_size.y, channel_count));
+
+	Size2i fms = feature_map_size();
+
+	Ref<Image> img = p_img;
+
+	img->lock();
+
+	for (int y = 0; y < fms.y; ++y) {
+		for (int x = 0; x < fms.x; ++x) {
+			Color c = img->get_pixel(x, y);
+
+			for (int i = 0; i < channel_count; ++i) {
+				set_element(y, x, i, c[channels[i]]);
+			}
+		}
+	}
+
+	img->unlock();
 }
 
 String MLPPTensor3::to_string() {
