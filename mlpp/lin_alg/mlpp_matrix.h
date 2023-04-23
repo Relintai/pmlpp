@@ -137,7 +137,7 @@ public:
 		}
 	}
 
-	void remove_row(real_t p_index) {
+	void remove_row(int p_index) {
 		ERR_FAIL_INDEX(p_index, _size.y);
 
 		--_size.y;
