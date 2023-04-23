@@ -27,21 +27,18 @@ public:
 		return _data;
 	}
 
-	/*
-	_FORCE_INLINE_ void add_row(const Vector<real_t> &p_row) {
+	_FORCE_INLINE_ void add_feature_map(const Vector<real_t> &p_row) {
 		if (p_row.size() == 0) {
 			return;
 		}
 
-		if (_size.x == 0) {
-			_size.x = p_row.size();
-		}
+		int fms = feature_map_data_size();
 
-		ERR_FAIL_COND(_size.x != p_row.size());
+		ERR_FAIL_COND(fms != p_row.size());
 
 		int ci = data_size();
 
-		++_size.y;
+		++_size.z;
 
 		_data = (real_t *)memrealloc(_data, data_size() * sizeof(real_t));
 		CRASH_COND_MSG(!_data, "Out of memory");
@@ -53,20 +50,18 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void add_row_pool_vector(const PoolRealArray &p_row) {
+	_FORCE_INLINE_ void add_feature_map_pool_vector(const PoolRealArray &p_row) {
 		if (p_row.size() == 0) {
 			return;
 		}
 
-		if (_size.x == 0) {
-			_size.x = p_row.size();
-		}
+		int fms = feature_map_data_size();
 
-		ERR_FAIL_COND(_size.x != p_row.size());
+		ERR_FAIL_COND(fms != p_row.size());
 
 		int ci = data_size();
 
-		++_size.y;
+		++_size.z;
 
 		_data = (real_t *)memrealloc(_data, data_size() * sizeof(real_t));
 		CRASH_COND_MSG(!_data, "Out of memory");
@@ -79,7 +74,7 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void add_row_mlpp_vector(const Ref<MLPPVector> &p_row) {
+	_FORCE_INLINE_ void add_feature_map_mlpp_vector(const Ref<MLPPVector> &p_row) {
 		ERR_FAIL_COND(!p_row.is_valid());
 
 		int p_row_size = p_row->size();
@@ -88,15 +83,13 @@ public:
 			return;
 		}
 
-		if (_size.x == 0) {
-			_size.x = p_row_size;
-		}
+		int fms = feature_map_data_size();
 
-		ERR_FAIL_COND(_size.x != p_row_size);
+		ERR_FAIL_COND(fms != p_row_size);
 
 		int ci = data_size();
 
-		++_size.y;
+		++_size.z;
 
 		_data = (real_t *)memrealloc(_data, data_size() * sizeof(real_t));
 		CRASH_COND_MSG(!_data, "Out of memory");
@@ -108,41 +101,38 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void add_rows_mlpp_matrix(const Ref<MLPPMatrix> &p_other) {
-		ERR_FAIL_COND(!p_other.is_valid());
+	_FORCE_INLINE_ void add_feature_map_mlpp_matrix(const Ref<MLPPMatrix> &p_matrix) {
+		ERR_FAIL_COND(!p_matrix.is_valid());
 
-		int other_data_size = p_other->data_size();
+		int other_data_size = p_matrix->data_size();
 
 		if (other_data_size == 0) {
 			return;
 		}
 
-		Size2i other_size = p_other->size();
+		Size2i matrix_size = p_matrix->size();
+		Size2i fms = feature_map_size();
 
-		if (_size.x == 0) {
-			_size.x = other_size.x;
-		}
-
-		ERR_FAIL_COND(other_size.x != _size.x);
+		ERR_FAIL_COND(fms != matrix_size);
 
 		int start_offset = data_size();
 
-		_size.y += other_size.y;
+		++_size.z;
 
 		_data = (real_t *)memrealloc(_data, data_size() * sizeof(real_t));
 		CRASH_COND_MSG(!_data, "Out of memory");
 
-		const real_t *other_ptr = p_other->ptr();
+		const real_t *other_ptr = p_matrix->ptr();
 
 		for (int i = 0; i < other_data_size; ++i) {
 			_data[start_offset + i] = other_ptr[i];
 		}
 	}
 
-	void remove_row(real_t p_index) {
-		ERR_FAIL_INDEX(p_index, _size.y);
+	void remove_feature_map(int p_index) {
+		ERR_FAIL_INDEX(p_index, _size.z);
 
-		--_size.y;
+		--_size.z;
 
 		int ds = data_size();
 
@@ -152,8 +142,10 @@ public:
 			return;
 		}
 
-		for (int i = p_index * _size.x; i < ds; ++i) {
-			_data[i] = _data[i + _size.x];
+		int fmds = feature_map_data_size();
+
+		for (int i = calculate_feature_map_index(p_index); i < ds; ++i) {
+			_data[i] = _data[i + fmds];
 		}
 
 		_data = (real_t *)memrealloc(_data, data_size() * sizeof(real_t));
@@ -162,10 +154,10 @@ public:
 
 	// Removes the item copying the last value into the position of the one to
 	// remove. It's generally faster than `remove`.
-	void remove_row_unordered(int p_index) {
-		ERR_FAIL_INDEX(p_index, _size.y);
+	void remove_feature_map_unordered(int p_index) {
+		ERR_FAIL_INDEX(p_index, _size.z);
 
-		--_size.y;
+		--_size.z;
 
 		int ds = data_size();
 
@@ -175,8 +167,8 @@ public:
 			return;
 		}
 
-		int start_ind = p_index * _size.x;
-		int end_ind = (p_index + 1) * _size.x;
+		int start_ind = calculate_feature_map_index(p_index);
+		int end_ind = calculate_feature_map_index(p_index + 1);
 
 		for (int i = start_ind; i < end_ind; ++i) {
 			_data[i] = _data[ds + i];
@@ -186,18 +178,19 @@ public:
 		CRASH_COND_MSG(!_data, "Out of memory");
 	}
 
-	void swap_row(int p_index_1, int p_index_2) {
-		ERR_FAIL_INDEX(p_index_1, _size.y);
-		ERR_FAIL_INDEX(p_index_2, _size.y);
+	void swap_feature_map(int p_index_1, int p_index_2) {
+		ERR_FAIL_INDEX(p_index_1, _size.z);
+		ERR_FAIL_INDEX(p_index_2, _size.z);
 
-		int ind1_start = p_index_1 * _size.x;
-		int ind2_start = p_index_2 * _size.x;
+		int ind1_start = calculate_feature_map_index(p_index_1);
+		int ind2_start = calculate_feature_map_index(p_index_2);
 
-		for (int i = 0; i < _size.x; ++i) {
+		int fmds = feature_map_data_size();
+
+		for (int i = 0; i < fmds; ++i) {
 			SWAP(_data[ind1_start + i], _data[ind2_start + i]);
 		}
 	}
-	*/
 
 	_FORCE_INLINE_ void clear() { resize(Size3i()); }
 	_FORCE_INLINE_ void reset() {
@@ -209,6 +202,8 @@ public:
 	}
 
 	_FORCE_INLINE_ bool empty() const { return _size == Size3i(); }
+	_FORCE_INLINE_ int feature_map_data_size() const { return _size.x * _size.y; }
+	_FORCE_INLINE_ Size2i feature_map_size() const { return Size2i(_size.x, _size.y); }
 	_FORCE_INLINE_ int data_size() const { return _size.x * _size.y * _size.z; }
 	_FORCE_INLINE_ Size3i size() const { return _size; }
 
@@ -232,6 +227,10 @@ public:
 
 	_FORCE_INLINE_ int calculate_index(int p_index_y, int p_index_x, int p_index_z) const {
 		return p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z;
+	}
+
+	_FORCE_INLINE_ int calculate_feature_map_index(int p_index_z) const {
+		return _size.x * _size.y * p_index_z;
 	}
 
 	_FORCE_INLINE_ const real_t &operator[](int p_index) const {
@@ -669,7 +668,6 @@ public:
 	std::vector<real_t> to_flat_std_vector() const;
 	void set_from_std_vectors(const std::vector<std::vector<std::vector<real_t>>> &p_from);
 	std::vector<std::vector<std::vector<real_t>>> to_std_vector();
-	void set_row_std_vector(int p_index_y, const std::vector<real_t> &p_row);
 	MLPPTensor3(const std::vector<std::vector<std::vector<real_t>>> &p_from);
 
 protected:

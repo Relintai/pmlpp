@@ -91,19 +91,6 @@ std::vector<std::vector<std::vector<real_t>>> MLPPTensor3::to_std_vector() {
 	return ret;
 }
 
-void MLPPTensor3::set_row_std_vector(int p_index_y, const std::vector<real_t> &p_row) {
-	ERR_FAIL_COND(p_row.size() != static_cast<uint32_t>(_size.x));
-	ERR_FAIL_INDEX(p_index_y, _size.y);
-
-	int ind_start = p_index_y * _size.x;
-
-	const real_t *row_ptr = &p_row[0];
-
-	for (int i = 0; i < _size.x; ++i) {
-		_data[ind_start + i] = row_ptr[i];
-	}
-}
-
 MLPPTensor3::MLPPTensor3(const std::vector<std::vector<std::vector<real_t>>> &p_from) {
 	_data = NULL;
 
