@@ -656,13 +656,37 @@ public:
 		return ret;
 	}
 
-	Ref<MLPPMatrix> duplicate() const {
-		Ref<MLPPMatrix> ret;
+	Ref<MLPPTensor3> duplicate() const {
+		Ref<MLPPTensor3> ret;
 		ret.instance();
 
-		//ret->set_from_mlpp_matrixr(*this);
+		ret->set_from_mlpp_tensor3r(*this);
 
 		return ret;
+	}
+
+	_FORCE_INLINE_ void set_from_mlpp_tensor3(const Ref<MLPPTensor3> &p_from) {
+		ERR_FAIL_COND(!p_from.is_valid());
+
+		resize(p_from->size());
+
+		int ds = p_from->data_size();
+		const real_t *ptr = p_from->ptr();
+
+		for (int i = 0; i < ds; ++i) {
+			_data[i] = ptr[i];
+		}
+	}
+
+	_FORCE_INLINE_ void set_from_mlpp_tensor3r(const MLPPTensor3 &p_from) {
+		resize(p_from.size());
+
+		int ds = p_from.data_size();
+		const real_t *ptr = p_from.ptr();
+
+		for (int i = 0; i < ds; ++i) {
+			_data[i] = ptr[i];
+		}
 	}
 
 	_FORCE_INLINE_ void set_from_mlpp_matrix(const Ref<MLPPMatrix> &p_from) {
@@ -724,6 +748,42 @@ public:
 		}
 	}
 
+	_FORCE_INLINE_ void set_from_mlpp_matricess(const Vector<Ref<MLPPMatrix>> &p_from) {
+		if (p_from.size() == 0) {
+			reset();
+			return;
+		}
+
+		if (!p_from[0].is_valid()) {
+			reset();
+			return;
+		}
+
+		resize(Size3i(p_from[0]->size().x, p_from[0]->size().y, p_from.size()));
+
+		if (data_size() == 0) {
+			reset();
+			return;
+		}
+
+		Size2i fms = feature_map_size();
+		int fmds = feature_map_data_size();
+
+		for (int i = 0; i < p_from.size(); ++i) {
+			const Ref<MLPPMatrix> &r = p_from[i];
+
+			ERR_CONTINUE(!r.is_valid());
+			ERR_CONTINUE(r->size() != fms);
+
+			int start_index = calculate_feature_map_index(i);
+
+			const real_t *from_ptr = r->ptr();
+			for (int j = 0; j < fmds; j++) {
+				_data[start_index + j] = from_ptr[j];
+			}
+		}
+	}
+
 	_FORCE_INLINE_ void set_from_mlpp_vectors_array(const Array &p_from) {
 		if (p_from.size() == 0) {
 			reset();
@@ -759,58 +819,39 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void set_from_vectors(const Vector<Vector<real_t>> &p_from) {
+	_FORCE_INLINE_ void set_from_mlpp_matrices_array(const Array &p_from) {
 		if (p_from.size() == 0) {
 			reset();
 			return;
 		}
 
-		resize(Size3i(p_from[0].size(), p_from.size(), 1));
+		Ref<MLPPMatrix> v0 = p_from[0];
+
+		if (!v0.is_valid()) {
+			reset();
+			return;
+		}
+
+		resize(Size3i(v0->size().x, v0->size().y, p_from.size()));
 
 		if (data_size() == 0) {
 			reset();
 			return;
 		}
 
-		for (int i = 0; i < p_from.size(); ++i) {
-			const Vector<real_t> &r = p_from[i];
-
-			ERR_CONTINUE(r.size() != _size.x);
-
-			int start_index = i * _size.x;
-
-			const real_t *from_ptr = r.ptr();
-			for (int j = 0; j < _size.x; j++) {
-				_data[start_index + j] = from_ptr[j];
-			}
-		}
-	}
-
-	_FORCE_INLINE_ void set_from_arrays(const Array &p_from) {
-		if (p_from.size() == 0) {
-			reset();
-			return;
-		}
-
-		PoolRealArray p0arr = p_from[0];
-
-		resize(Size3i(p0arr.size(), p_from.size(), 1));
-
-		if (data_size() == 0) {
-			reset();
-			return;
-		}
+		Size2i fms = feature_map_size();
+		int fmds = feature_map_data_size();
 
 		for (int i = 0; i < p_from.size(); ++i) {
-			PoolRealArray r = p_from[i];
+			Ref<MLPPMatrix> r = p_from[i];
 
-			ERR_CONTINUE(r.size() != _size.x);
+			ERR_CONTINUE(!r.is_valid());
+			ERR_CONTINUE(r->size() != fms);
 
-			int start_index = i * _size.x;
+			int start_index = calculate_feature_map_index(i);
 
-			PoolRealArray::Read read = r.read();
-			const real_t *from_ptr = read.ptr();
-			for (int j = 0; j < _size.x; j++) {
+			const real_t *from_ptr = r->ptr();
+			for (int j = 0; j < fmds; j++) {
 				_data[start_index + j] = from_ptr[j];
 			}
 		}
@@ -858,16 +899,10 @@ public:
 		}
 	}
 
-	MLPPTensor3(const Vector<Vector<real_t>> &p_from) {
-		_data = NULL;
-
-		set_from_vectors(p_from);
-	}
-
 	MLPPTensor3(const Array &p_from) {
 		_data = NULL;
 
-		set_from_arrays(p_from);
+		set_from_mlpp_matrices_array(p_from);
 	}
 
 	_FORCE_INLINE_ ~MLPPTensor3() {

@@ -44,7 +44,7 @@ void MLPPTensor3::set_from_std_vectors(const std::vector<std::vector<std::vector
 		return;
 	}
 
-	resize(Size3i(p_from[1].size(), p_from.size(), p_from[0].size()));
+	resize(Size3i(p_from[1].size(), p_from[0].size(), p_from.size()));
 
 	if (data_size() == 0) {
 		reset();
