@@ -11,22 +11,22 @@ void MLPPTensor3::add_feature_maps_image(const Ref<Image> &p_img, const int p_ch
 	int channel_count = 0;
 	int channels[4];
 
-	if (p_channels & IMAGE_CHANNEL_R) {
+	if (p_channels & IMAGE_CHANNEL_FLAG_R) {
 		channels[channel_count] = 0;
 		++channel_count;
 	}
 
-	if (p_channels & IMAGE_CHANNEL_G) {
+	if (p_channels & IMAGE_CHANNEL_FLAG_G) {
 		channels[channel_count] = 1;
 		++channel_count;
 	}
 
-	if (p_channels & IMAGE_CHANNEL_B) {
+	if (p_channels & IMAGE_CHANNEL_FLAG_B) {
 		channels[channel_count] = 2;
 		++channel_count;
 	}
 
-	if (p_channels & IMAGE_CHANNEL_A) {
+	if (p_channels & IMAGE_CHANNEL_FLAG_A) {
 		channels[channel_count] = 3;
 		++channel_count;
 	}
@@ -158,22 +158,22 @@ void MLPPTensor3::get_feature_map_into_image(Ref<Image> p_target, const int p_in
 	int channel_count = 0;
 	int channels[4];
 
-	if (p_target_channels & IMAGE_CHANNEL_R) {
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_R) {
 		channels[channel_count] = 0;
 		++channel_count;
 	}
 
-	if (p_target_channels & IMAGE_CHANNEL_G) {
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_G) {
 		channels[channel_count] = 1;
 		++channel_count;
 	}
 
-	if (p_target_channels & IMAGE_CHANNEL_B) {
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_B) {
 		channels[channel_count] = 2;
 		++channel_count;
 	}
 
-	if (p_target_channels & IMAGE_CHANNEL_A) {
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_A) {
 		channels[channel_count] = 3;
 		++channel_count;
 	}
@@ -286,14 +286,14 @@ void MLPPTensor3::get_feature_maps_into_image(Ref<Image> p_target, const int p_i
 	p_target->unlock();
 }
 
-void MLPPTensor3::set_feature_map_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel) {
+void MLPPTensor3::set_feature_map_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel_flag) {
 	ERR_FAIL_COND(!p_img.is_valid());
 	ERR_FAIL_INDEX(p_index_z, _size.z);
 
 	int channel_index = -1;
 
 	for (int i = 0; i < 4; ++i) {
-		if (((p_image_channel & (1 << i)) != 0)) {
+		if (((p_image_channel_flag & (1 << i)) != 0)) {
 			channel_index = i;
 			break;
 		}
@@ -379,22 +379,22 @@ void MLPPTensor3::set_from_image(const Ref<Image> &p_img, const int p_channels) 
 	int channel_count = 0;
 	int channels[4];
 
-	if (p_channels & IMAGE_CHANNEL_R) {
+	if (p_channels & IMAGE_CHANNEL_FLAG_R) {
 		channels[channel_count] = 0;
 		++channel_count;
 	}
 
-	if (p_channels & IMAGE_CHANNEL_G) {
+	if (p_channels & IMAGE_CHANNEL_FLAG_G) {
 		channels[channel_count] = 1;
 		++channel_count;
 	}
 
-	if (p_channels & IMAGE_CHANNEL_B) {
+	if (p_channels & IMAGE_CHANNEL_FLAG_B) {
 		channels[channel_count] = 2;
 		++channel_count;
 	}
 
-	if (p_channels & IMAGE_CHANNEL_A) {
+	if (p_channels & IMAGE_CHANNEL_FLAG_A) {
 		channels[channel_count] = 3;
 		++channel_count;
 	}
@@ -570,18 +570,18 @@ void MLPPTensor3::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_feature_map_mlpp_vector", "index_z", "row"), &MLPPTensor3::set_feature_map_mlpp_vector);
 	ClassDB::bind_method(D_METHOD("set_feature_map_mlpp_matrix", "index_z", "mat"), &MLPPTensor3::set_feature_map_mlpp_matrix);
 
-	ClassDB::bind_method(D_METHOD("add_feature_maps_image", "img", "channels"), &MLPPTensor3::add_feature_maps_image, IMAGE_CHANNEL_RGBA);
+	ClassDB::bind_method(D_METHOD("add_feature_maps_image", "img", "channels"), &MLPPTensor3::add_feature_maps_image, IMAGE_CHANNEL_FLAG_RGBA);
 
 	ClassDB::bind_method(D_METHOD("get_feature_map_image", "index_z"), &MLPPTensor3::get_feature_map_image);
 	ClassDB::bind_method(D_METHOD("get_feature_maps_image", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::get_feature_maps_image, -1, -1, -1, -1);
 
-	ClassDB::bind_method(D_METHOD("get_feature_map_into_image", "target", "index_z", "target_channels"), &MLPPTensor3::get_feature_map_into_image, IMAGE_CHANNEL_RGB);
+	ClassDB::bind_method(D_METHOD("get_feature_map_into_image", "target", "index_z", "target_channels"), &MLPPTensor3::get_feature_map_into_image, IMAGE_CHANNEL_FLAG_RGB);
 	ClassDB::bind_method(D_METHOD("get_feature_maps_into_image", "target", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::get_feature_maps_into_image, -1, -1, -1, -1);
 
-	ClassDB::bind_method(D_METHOD("set_feature_map_image", "img", "index_z", "image_channel"), &MLPPTensor3::set_feature_map_image, IMAGE_CHANNEL_R);
+	ClassDB::bind_method(D_METHOD("set_feature_map_image", "img", "index_z", "image_channel_flag"), &MLPPTensor3::set_feature_map_image, IMAGE_CHANNEL_FLAG_R);
 	ClassDB::bind_method(D_METHOD("set_feature_maps_image", "img", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::set_feature_maps_image);
 
-	ClassDB::bind_method(D_METHOD("set_from_image", "img", "channels"), &MLPPTensor3::set_from_image, IMAGE_CHANNEL_RGBA);
+	ClassDB::bind_method(D_METHOD("set_from_image", "img", "channels"), &MLPPTensor3::set_from_image, IMAGE_CHANNEL_FLAG_RGBA);
 
 	ClassDB::bind_method(D_METHOD("fill", "val"), &MLPPTensor3::fill);
 
@@ -597,16 +597,16 @@ void MLPPTensor3::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("is_equal_approx", "with", "tolerance"), &MLPPTensor3::is_equal_approx, CMP_EPSILON);
 
-	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_R);
-	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_G);
-	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_B);
-	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_A);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_R);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_G);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_B);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_A);
 
-	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_NONE);
-	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_RG);
-	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_RGB);
-	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_GB);
-	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_GBA);
-	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_BA);
-	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_RGBA);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_NONE);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_RG);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_RGB);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_GB);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_GBA);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_BA);
+	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_RGBA);
 }

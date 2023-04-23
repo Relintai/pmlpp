@@ -620,33 +620,33 @@ public:
 public:
 	//Image api
 
-	enum ImageChannels {
-		IMAGE_CHANNEL_R = 1 << 0,
-		IMAGE_CHANNEL_G = 1 << 1,
-		IMAGE_CHANNEL_B = 1 << 2,
-		IMAGE_CHANNEL_A = 1 << 3,
+	enum ImageChannelFlags {
+		IMAGE_CHANNEL_FLAG_R = 1 << 0,
+		IMAGE_CHANNEL_FLAG_G = 1 << 1,
+		IMAGE_CHANNEL_FLAG_B = 1 << 2,
+		IMAGE_CHANNEL_FLAG_A = 1 << 3,
 
-		IMAGE_CHANNEL_NONE = 0,
-		IMAGE_CHANNEL_RG = IMAGE_CHANNEL_R | IMAGE_CHANNEL_G,
-		IMAGE_CHANNEL_RGB = IMAGE_CHANNEL_R | IMAGE_CHANNEL_G | IMAGE_CHANNEL_B,
-		IMAGE_CHANNEL_GB = IMAGE_CHANNEL_G | IMAGE_CHANNEL_B,
-		IMAGE_CHANNEL_GBA = IMAGE_CHANNEL_G | IMAGE_CHANNEL_B | IMAGE_CHANNEL_A,
-		IMAGE_CHANNEL_BA = IMAGE_CHANNEL_B | IMAGE_CHANNEL_A,
-		IMAGE_CHANNEL_RGBA = IMAGE_CHANNEL_R | IMAGE_CHANNEL_G | IMAGE_CHANNEL_B | IMAGE_CHANNEL_A,
+		IMAGE_CHANNEL_FLAG_NONE = 0,
+		IMAGE_CHANNEL_FLAG_RG = IMAGE_CHANNEL_FLAG_R | IMAGE_CHANNEL_FLAG_G,
+		IMAGE_CHANNEL_FLAG_RGB = IMAGE_CHANNEL_FLAG_R | IMAGE_CHANNEL_FLAG_G | IMAGE_CHANNEL_FLAG_B,
+		IMAGE_CHANNEL_FLAG_GB = IMAGE_CHANNEL_FLAG_G | IMAGE_CHANNEL_FLAG_B,
+		IMAGE_CHANNEL_FLAG_GBA = IMAGE_CHANNEL_FLAG_G | IMAGE_CHANNEL_FLAG_B | IMAGE_CHANNEL_FLAG_A,
+		IMAGE_CHANNEL_FLAG_BA = IMAGE_CHANNEL_FLAG_B | IMAGE_CHANNEL_FLAG_A,
+		IMAGE_CHANNEL_FLAG_RGBA = IMAGE_CHANNEL_FLAG_R | IMAGE_CHANNEL_FLAG_G | IMAGE_CHANNEL_FLAG_B | IMAGE_CHANNEL_FLAG_A,
 	};
 
-	void add_feature_maps_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_RGBA);
+	void add_feature_maps_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
 
 	Ref<Image> get_feature_map_image(const int p_index_z);
 	Ref<Image> get_feature_maps_image(const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);
 
-	void get_feature_map_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels = IMAGE_CHANNEL_RGB) const;
+	void get_feature_map_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
 	void get_feature_maps_into_image(Ref<Image> p_target, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
 
-	void set_feature_map_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel = IMAGE_CHANNEL_R);
+	void set_feature_map_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel_flag = IMAGE_CHANNEL_FLAG_R);
 	void set_feature_maps_image(const Ref<Image> &p_img, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);
 
-	void set_from_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_RGBA);
+	void set_from_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
 
 public:
 	void fill(real_t p_val) {
@@ -959,6 +959,6 @@ protected:
 	real_t *_data;
 };
 
-VARIANT_ENUM_CAST(MLPPTensor3::ImageChannels);
+VARIANT_ENUM_CAST(MLPPTensor3::ImageChannelFlags);
 
 #endif
