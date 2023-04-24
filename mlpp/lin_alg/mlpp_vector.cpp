@@ -3,7 +3,33 @@
 
 #include "mlpp_matrix.h"
 
-Ref<MLPPVector> MLPPVector::flattenmnv(const Vector<Ref<MLPPVector>> &A) {
+
+void MLPPVector::flatten_vectors(const Vector<Ref<MLPPVector>> &A) {
+	int vsize = 0;
+	for (int i = 0; i < A.size(); ++i) {
+		vsize += A[i]->size();
+	}
+
+	resize(vsize);
+
+	int a_index = 0;
+	real_t *a_ptr = ptrw();
+
+	for (int i = 0; i < A.size(); ++i) {
+		const Ref<MLPPVector> &r = A[i];
+
+		int r_size = r->size();
+		const real_t *r_ptr = r->ptr();
+
+		for (int j = 0; j < r_size; ++j) {
+			a_ptr[a_index] = r_ptr[j];
+			++a_index;
+		}
+	}
+}
+
+
+Ref<MLPPVector> MLPPVector::flatten_vectorsn(const Vector<Ref<MLPPVector>> &A) {
 	Ref<MLPPVector> a;
 	a.instance();
 
@@ -32,44 +58,55 @@ Ref<MLPPVector> MLPPVector::flattenmnv(const Vector<Ref<MLPPVector>> &A) {
 	return a;
 }
 
-Ref<MLPPVector> MLPPVector::hadamard_productnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
-	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPVector>());
+void MLPPVector::hadamard_product(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!b.is_valid());
+
+	ERR_FAIL_COND(_size != b->size());
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] = a_ptr[i] * b_ptr[i];
+	}
+}
+Ref<MLPPVector> MLPPVector::hadamard_productn(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
 	out.instance();
 
-	int size = a->size();
+	ERR_FAIL_COND_V(_size != b->size(), Ref<MLPPVector>());
 
-	ERR_FAIL_COND_V(size != b->size(), Ref<MLPPVector>());
+	out->resize(_size);
 
-	out->resize(size);
-
-	const real_t *a_ptr = a->ptr();
+	const real_t *a_ptr = ptr();
 	const real_t *b_ptr = b->ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = a_ptr[i] * b_ptr[i];
 	}
 
 	return out;
 }
-void MLPPVector::hadamard_productv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out) {
-	ERR_FAIL_COND(!a.is_valid() || !b.is_valid() || !out.is_valid());
+void MLPPVector::hadamard_productb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!a.is_valid() || !b.is_valid());
 
-	int size = a->size();
+	int s = a->size();
 
-	ERR_FAIL_COND(size != b->size());
+	ERR_FAIL_COND(s != b->size());
 
-	if (unlikely(out->size() != size)) {
-		out->resize(size);
+	if (unlikely(size() != s)) {
+		resize(s);
 	}
 
 	const real_t *a_ptr = a->ptr();
 	const real_t *b_ptr = b->ptr();
-	real_t *out_ptr = out->ptrw();
+	real_t *out_ptr = ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < s; ++i) {
 		out_ptr[i] = a_ptr[i] * b_ptr[i];
 	}
 }

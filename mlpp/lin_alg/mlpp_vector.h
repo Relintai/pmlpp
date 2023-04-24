@@ -330,14 +330,22 @@ public:
 	}
 
 	// New apis should look like this:
-	//Ref<MLPPVector> substract(const Ref<MLPPVector> &b);
-	//void substracted(const Ref<MLPPVector> &b);
-	//void subtraction(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); -> result is in this (subtractionv like)
+	//void substract(const Ref<MLPPVector> &b); <- this should be the simplest / most obvious method
+	//Ref<MLPPVector> substractn(const Ref<MLPPVector> &b);
+	//void substractb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); -> result is in this (subtractionv like)
+	
+	// Or:
+	//void hadamard_product(const Ref<MLPPVector> &b); <- this should be the simplest / most obvious method
+	//Ref<MLPPVector> hadamard_productn(const Ref<MLPPVector> &b); <- n -> new
+	//void hadamard_productb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); <- b -> between, result is stored in *this
 
-	Ref<MLPPVector> flattenmnv(const Vector<Ref<MLPPVector>> &A);
+	
+	void flatten_vectors(const Vector<Ref<MLPPVector>> &A);
+	Ref<MLPPVector> flatten_vectorsn(const Vector<Ref<MLPPVector>> &A);
 
-	Ref<MLPPVector> hadamard_productnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
-	void hadamard_productv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
+	void hadamard_product(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> hadamard_productn(const Ref<MLPPVector> &b);
+	void hadamard_productb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	Ref<MLPPVector> element_wise_divisionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
