@@ -338,116 +338,224 @@ void MLPPVector::subb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
 	}
 }
 
-Ref<MLPPVector> MLPPVector::lognv(const Ref<MLPPVector> &a) {
-	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+void MLPPVector::log() {
+	real_t *out_ptr = ptrw();
 
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] = Math::log(out_ptr[i]);
+	}
+}
+Ref<MLPPVector> MLPPVector::logn() {
 	Ref<MLPPVector> out;
 	out.instance();
+	out->resize(_size);
 
-	int size = a->size();
-	out->resize(size);
-
-	const real_t *a_ptr = a->ptr();
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = Math::log(a_ptr[i]);
 	}
 
 	return out;
 }
-Ref<MLPPVector> MLPPVector::log10nv(const Ref<MLPPVector> &a) {
-	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+void MLPPVector::logb(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND(!a.is_valid());
 
-	Ref<MLPPVector> out;
-	out.instance();
-
-	int size = a->size();
-	out->resize(size);
+	int s = a->size();
+	resize(s);
 
 	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < s; ++i) {
+		out_ptr[i] = Math::log(a_ptr[i]);
+	}
+}
+
+void MLPPVector::log10() {
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] = Math::log10(out_ptr[i]);
+	}
+}
+Ref<MLPPVector> MLPPVector::log10n() {
+	Ref<MLPPVector> out;
+	out.instance();
+	out->resize(_size);
+
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = Math::log10(a_ptr[i]);
 	}
 
 	return out;
 }
-Ref<MLPPVector> MLPPVector::expnv(const Ref<MLPPVector> &a) {
-	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+void MLPPVector::log10b(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND(!a.is_valid());
 
-	Ref<MLPPVector> out;
-	out.instance();
-
-	int size = a->size();
-	out->resize(size);
+	int s = a->size();
+	resize(s);
 
 	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < s; ++i) {
+		out_ptr[i] = Math::log10(a_ptr[i]);
+	}
+}
+
+void MLPPVector::exp() {
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] = Math::exp(out_ptr[i]);
+	}
+}
+Ref<MLPPVector> MLPPVector::expn() {
+	Ref<MLPPVector> out;
+	out.instance();
+	out->resize(_size);
+
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = Math::exp(a_ptr[i]);
 	}
 
 	return out;
 }
-Ref<MLPPVector> MLPPVector::erfnv(const Ref<MLPPVector> &a) {
-	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+void MLPPVector::expb(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND(!a.is_valid());
 
-	Ref<MLPPVector> out;
-	out.instance();
-
-	int size = a->size();
-	out->resize(size);
+	int s = a->size();
+	resize(s);
 
 	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < s; ++i) {
+		out_ptr[i] = Math::exp(a_ptr[i]);
+	}
+}
+
+void MLPPVector::erf() {
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] = Math::erf(out_ptr[i]);
+	}
+}
+Ref<MLPPVector> MLPPVector::erfn() {
+	Ref<MLPPVector> out;
+	out.instance();
+	out->resize(_size);
+
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = Math::erf(a_ptr[i]);
 	}
 
 	return out;
 }
-Ref<MLPPVector> MLPPVector::exponentiatenv(const Ref<MLPPVector> &a, real_t p) {
-	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+void MLPPVector::erfb(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND(!a.is_valid());
 
-	Ref<MLPPVector> out;
-	out.instance();
-
-	int size = a->size();
-	out->resize(size);
+	int s = a->size();
+	resize(s);
 
 	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < s; ++i) {
+		out_ptr[i] = Math::erf(a_ptr[i]);
+	}
+}
+
+void MLPPVector::exponentiate(real_t p) {
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] = Math::pow(out_ptr[i], p);
+	}
+}
+Ref<MLPPVector> MLPPVector::exponentiaten(real_t p) {
+	Ref<MLPPVector> out;
+	out.instance();
+	out->resize(_size);
+
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = Math::pow(a_ptr[i], p);
 	}
 
 	return out;
 }
-Ref<MLPPVector> MLPPVector::sqrtnv(const Ref<MLPPVector> &a) {
-	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+void MLPPVector::exponentiateb(const Ref<MLPPVector> &a, real_t p) {
+	ERR_FAIL_COND(!a.is_valid());
 
-	Ref<MLPPVector> out;
-	out.instance();
-
-	int size = a->size();
-	out->resize(size);
+	int s = a->size();
+	resize(s);
 
 	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < s; ++i) {
+		out_ptr[i] = Math::pow(a_ptr[i], p);
+	}
+}
+
+void MLPPVector::sqrt() {
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] = Math::sqrt(out_ptr[i]);
+	}
+}
+Ref<MLPPVector> MLPPVector::sqrtn() {
+	Ref<MLPPVector> out;
+	out.instance();
+	out->resize(_size);
+
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = Math::sqrt(a_ptr[i]);
 	}
 
 	return out;
 }
-Ref<MLPPVector> MLPPVector::cbrtnv(const Ref<MLPPVector> &a) {
-	return exponentiatenv(a, static_cast<real_t>(1) / static_cast<real_t>(3));
+void MLPPVector::sqrtb(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND(!a.is_valid());
+
+	int s = a->size();
+	resize(s);
+
+	const real_t *a_ptr = a->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < s; ++i) {
+		out_ptr[i] = Math::sqrt(a_ptr[i]);
+	}
+}
+
+void MLPPVector::cbrt() {
+	return exponentiate(static_cast<real_t>(1) / static_cast<real_t>(3));
+}
+Ref<MLPPVector> MLPPVector::cbrtn() {
+	return exponentiaten(static_cast<real_t>(1) / static_cast<real_t>(3));
+}
+void MLPPVector::cbrtb(const Ref<MLPPVector> &a) {
+	return exponentiateb(a, static_cast<real_t>(1) / static_cast<real_t>(3));
 }
 
 real_t MLPPVector::dotnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {

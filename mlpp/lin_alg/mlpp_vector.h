@@ -366,13 +366,33 @@ public:
 	Ref<MLPPVector> subn(const Ref<MLPPVector> &b);
 	void subb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
-	Ref<MLPPVector> lognv(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> log10nv(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> expnv(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> erfnv(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> exponentiatenv(const Ref<MLPPVector> &a, real_t p);
-	Ref<MLPPVector> sqrtnv(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> cbrtnv(const Ref<MLPPVector> &a);
+	void log();
+	Ref<MLPPVector> logn();
+	void logb(const Ref<MLPPVector> &a);
+
+	void log10();
+	Ref<MLPPVector> log10n();
+	void log10b(const Ref<MLPPVector> &a);
+
+	void exp();
+	Ref<MLPPVector> expn();
+	void expb(const Ref<MLPPVector> &a);
+
+	void erf();
+	Ref<MLPPVector> erfn();
+	void erfb(const Ref<MLPPVector> &a);
+
+	void exponentiate(real_t p);
+	Ref<MLPPVector> exponentiaten(real_t p);
+	void exponentiateb(const Ref<MLPPVector> &a, real_t p);
+
+	void sqrt();
+	Ref<MLPPVector> sqrtn();
+	void sqrtb(const Ref<MLPPVector> &a);
+
+	void cbrt();
+	Ref<MLPPVector> cbrtn();
+	void cbrtb(const Ref<MLPPVector> &a);
 
 	real_t dotnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
