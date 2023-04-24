@@ -950,35 +950,6 @@ real_t MLPPLinAlg::sum_elements(std::vector<std::vector<real_t>> A) {
 }
 */
 
-Ref<MLPPVector> MLPPLinAlg::flattenmnv(const Vector<Ref<MLPPVector>> &A) {
-	Ref<MLPPVector> a;
-	a.instance();
-
-	int vsize = 0;
-	for (int i = 0; i < A.size(); ++i) {
-		vsize += A[i]->size();
-	}
-
-	a->resize(vsize);
-
-	int a_index = 0;
-	real_t *a_ptr = a->ptrw();
-
-	for (int i = 0; i < A.size(); ++i) {
-		const Ref<MLPPVector> &r = A[i];
-
-		int r_size = r->size();
-		const real_t *r_ptr = r->ptr();
-
-		for (int j = 0; j < r_size; ++j) {
-			a_ptr[a_index] = r_ptr[j];
-			++a_index;
-		}
-	}
-
-	return a;
-}
-
 Ref<MLPPVector> MLPPLinAlg::flattenvvnv(const Ref<MLPPMatrix> &A) {
 	int data_size = A->data_size();
 
@@ -1052,6 +1023,35 @@ bool MLPPLinAlg::zeroEigenvalue(std::vector<std::vector<real_t>> A) {
 	return false;
 }
 */
+
+Ref<MLPPVector> MLPPLinAlg::flattenmnv(const Vector<Ref<MLPPVector>> &A) {
+	Ref<MLPPVector> a;
+	a.instance();
+
+	int vsize = 0;
+	for (int i = 0; i < A.size(); ++i) {
+		vsize += A[i]->size();
+	}
+
+	a->resize(vsize);
+
+	int a_index = 0;
+	real_t *a_ptr = a->ptrw();
+
+	for (int i = 0; i < A.size(); ++i) {
+		const Ref<MLPPVector> &r = A[i];
+
+		int r_size = r->size();
+		const real_t *r_ptr = r->ptr();
+
+		for (int j = 0; j < r_size; ++j) {
+			a_ptr[a_index] = r_ptr[j];
+			++a_index;
+		}
+	}
+
+	return a;
+}
 
 Ref<MLPPMatrix> MLPPLinAlg::outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
 	Ref<MLPPMatrix> C;

@@ -125,7 +125,6 @@ public:
 
 	//real_t sum_elements(std::vector<std::vector<real_t>> A);
 
-	Ref<MLPPVector> flattenmnv(const Vector<Ref<MLPPVector>> &A);
 	Ref<MLPPVector> flattenvvnv(const Ref<MLPPMatrix> &A);
 
 	/*
@@ -139,6 +138,8 @@ public:
 	*/
 
 	// VECTOR FUNCTIONS
+
+	Ref<MLPPVector> flattenmnv(const Vector<Ref<MLPPVector>> &A);
 
 	Ref<MLPPMatrix> outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); // This multiplies a, bT
 
@@ -199,7 +200,6 @@ public:
 	*/
 
 	real_t norm_sqv(const Ref<MLPPVector> &a);
-
 
 	real_t sum_elementsv(const Ref<MLPPVector> &a);
 

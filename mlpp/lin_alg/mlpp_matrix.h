@@ -583,6 +583,121 @@ public:
 		}
 	}
 
+	//TODO remove these
+	Ref<MLPPVector> scalar_multiplynv(real_t scalar, const Ref<MLPPVector> &a);
+	Ref<MLPPVector> flattenmnv(const Vector<Ref<MLPPVector>> &A);
+
+	//std::vector<std::vector<real_t>> gramMatrix(std::vector<std::vector<real_t>> A);
+	//bool linearIndependenceChecker(std::vector<std::vector<real_t>> A);
+
+	Ref<MLPPMatrix> gaussian_noise(int n, int m);
+
+	Ref<MLPPMatrix> additionnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> subtractionnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> matmultnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+
+	Ref<MLPPMatrix> hadamard_productnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> kronecker_productnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> element_wise_divisionnvnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+
+	Ref<MLPPMatrix> transposenm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> scalar_multiplynm(real_t scalar, const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> scalar_addnm(real_t scalar, const Ref<MLPPMatrix> &A);
+
+	Ref<MLPPMatrix> lognm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> log10nm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> expnm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> erfnm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> exponentiatenm(const Ref<MLPPMatrix> &A, real_t p);
+	Ref<MLPPMatrix> sqrtnm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> cbrtnm(const Ref<MLPPMatrix> &A);
+
+	//std::vector<std::vector<real_t>> matrixPower(std::vector<std::vector<real_t>> A, int n);
+
+	Ref<MLPPMatrix> absnm(const Ref<MLPPMatrix> &A);
+
+	real_t detm(const Ref<MLPPMatrix> &A, int d);
+
+	//real_t trace(std::vector<std::vector<real_t>> A);
+
+	Ref<MLPPMatrix> cofactornm(const Ref<MLPPMatrix> &A, int n, int i, int j);
+	Ref<MLPPMatrix> adjointnm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> inversenm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> pinversenm(const Ref<MLPPMatrix> &A);
+
+	Ref<MLPPMatrix> zeromatnm(int n, int m);
+	Ref<MLPPMatrix> onematnm(int n, int m);
+	Ref<MLPPMatrix> fullnm(int n, int m, int k);
+
+	Ref<MLPPMatrix> sinnm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> cosnm(const Ref<MLPPMatrix> &A);
+
+	//std::vector<std::vector<real_t>> rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis = -1);
+
+	Ref<MLPPMatrix> maxnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+
+	//real_t max(std::vector<std::vector<real_t>> A);
+	//real_t min(std::vector<std::vector<real_t>> A);
+
+	//std::vector<std::vector<real_t>> round(std::vector<std::vector<real_t>> A);
+
+	//real_t norm_2(std::vector<std::vector<real_t>> A);
+
+	Ref<MLPPMatrix> identitym(int d);
+
+	Ref<MLPPMatrix> covnm(const Ref<MLPPMatrix> &A);
+
+	struct EigenResult {
+		Ref<MLPPMatrix> eigen_vectors;
+		Ref<MLPPMatrix> eigen_values;
+	};
+
+	EigenResult eigen(Ref<MLPPMatrix> A);
+
+	struct SVDResult {
+		Ref<MLPPMatrix> U;
+		Ref<MLPPMatrix> S;
+		Ref<MLPPMatrix> Vt;
+	};
+
+	SVDResult svd(const Ref<MLPPMatrix> &A);
+
+	//std::vector<real_t> vectorProjection(std::vector<real_t> a, std::vector<real_t> b);
+
+	//std::vector<std::vector<real_t>> gramSchmidtProcess(std::vector<std::vector<real_t>> A);
+
+	/*
+	struct QRDResult {
+		std::vector<std::vector<real_t>> Q;
+		std::vector<std::vector<real_t>> R;
+	};
+	*/
+
+	//QRDResult qrd(std::vector<std::vector<real_t>> A);
+
+	/*
+	struct CholeskyResult {
+		std::vector<std::vector<real_t>> L;
+		std::vector<std::vector<real_t>> Lt;
+	};
+
+	CholeskyResult cholesky(std::vector<std::vector<real_t>> A);
+	*/
+
+	//real_t sum_elements(std::vector<std::vector<real_t>> A);
+
+	Ref<MLPPVector> flattenvvnv(const Ref<MLPPMatrix> &A);
+
+	/*
+	std::vector<real_t> solve(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
+
+	bool positiveDefiniteChecker(std::vector<std::vector<real_t>> A);
+
+	bool negativeDefiniteChecker(std::vector<std::vector<real_t>> A);
+
+	bool zeroEigenvalue(std::vector<std::vector<real_t>> A);
+	*/
+
 	_FORCE_INLINE_ bool is_equal_approx(const Ref<MLPPMatrix> &p_with, real_t tolerance = static_cast<real_t>(CMP_EPSILON)) const {
 		ERR_FAIL_COND_V(!p_with.is_valid(), false);
 
