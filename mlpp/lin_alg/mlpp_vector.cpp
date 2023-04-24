@@ -1068,4 +1068,95 @@ void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_from_pool_vector", "from"), &MLPPVector::set_from_pool_vector);
 
 	ClassDB::bind_method(D_METHOD("is_equal_approx", "with", "tolerance"), &MLPPVector::is_equal_approx, CMP_EPSILON);
+
+	ClassDB::bind_method(D_METHOD("hadamard_product", "b"), &MLPPVector::hadamard_product);
+	ClassDB::bind_method(D_METHOD("hadamard_productn", "b"), &MLPPVector::hadamard_productn);
+	ClassDB::bind_method(D_METHOD("hadamard_productb", "a", "b"), &MLPPVector::hadamard_productb);
+
+	ClassDB::bind_method(D_METHOD("element_wise_division", "b"), &MLPPVector::element_wise_division);
+	ClassDB::bind_method(D_METHOD("element_wise_divisionn", "b"), &MLPPVector::element_wise_divisionn);
+	ClassDB::bind_method(D_METHOD("element_wise_divisionb", "a", "b"), &MLPPVector::element_wise_divisionb);
+
+	ClassDB::bind_method(D_METHOD("scalar_multiply", "scalar"), &MLPPVector::scalar_multiply);
+	ClassDB::bind_method(D_METHOD("scalar_multiplyn", "scalar"), &MLPPVector::scalar_multiplyn);
+	ClassDB::bind_method(D_METHOD("scalar_multiplyb", "scalar", "a"), &MLPPVector::scalar_multiplyb);
+
+	ClassDB::bind_method(D_METHOD("scalar_add", "scalar"), &MLPPVector::scalar_add);
+	ClassDB::bind_method(D_METHOD("scalar_addn", "scalar"), &MLPPVector::scalar_addn);
+	ClassDB::bind_method(D_METHOD("scalar_addb", "scalar", "a"), &MLPPVector::scalar_addb);
+
+	ClassDB::bind_method(D_METHOD("add", "b"), &MLPPVector::add);
+	ClassDB::bind_method(D_METHOD("addn", "b"), &MLPPVector::addn);
+	ClassDB::bind_method(D_METHOD("addb", "a", "b"), &MLPPVector::addb);
+
+	ClassDB::bind_method(D_METHOD("sub", "b"), &MLPPVector::sub);
+	ClassDB::bind_method(D_METHOD("subn", "b"), &MLPPVector::subn);
+	ClassDB::bind_method(D_METHOD("subb", "a", "b"), &MLPPVector::subb);
+
+	ClassDB::bind_method(D_METHOD("log"), &MLPPVector::log);
+	ClassDB::bind_method(D_METHOD("logn"), &MLPPVector::logn);
+	ClassDB::bind_method(D_METHOD("logb", "a"), &MLPPVector::logb);
+
+	ClassDB::bind_method(D_METHOD("log10"), &MLPPVector::log10);
+	ClassDB::bind_method(D_METHOD("log10n"), &MLPPVector::log10n);
+	ClassDB::bind_method(D_METHOD("log10b", "a"), &MLPPVector::log10b);
+
+	ClassDB::bind_method(D_METHOD("exp"), &MLPPVector::exp);
+	ClassDB::bind_method(D_METHOD("expn"), &MLPPVector::expn);
+	ClassDB::bind_method(D_METHOD("expb", "a"), &MLPPVector::expb);
+
+	ClassDB::bind_method(D_METHOD("erf"), &MLPPVector::erf);
+	ClassDB::bind_method(D_METHOD("erfn"), &MLPPVector::erfn);
+	ClassDB::bind_method(D_METHOD("erfb", "a"), &MLPPVector::erfb);
+
+	ClassDB::bind_method(D_METHOD("exponentiate", "p"), &MLPPVector::exponentiate);
+	ClassDB::bind_method(D_METHOD("exponentiaten", "p"), &MLPPVector::exponentiaten);
+	ClassDB::bind_method(D_METHOD("exponentiateb", "a", "p"), &MLPPVector::exponentiateb);
+
+	ClassDB::bind_method(D_METHOD("sqrt"), &MLPPVector::sqrt);
+	ClassDB::bind_method(D_METHOD("sqrtn"), &MLPPVector::sqrtn);
+	ClassDB::bind_method(D_METHOD("sqrtb", "a"), &MLPPVector::sqrtb);
+
+	ClassDB::bind_method(D_METHOD("cbrt"), &MLPPVector::cbrt);
+	ClassDB::bind_method(D_METHOD("cbrtn"), &MLPPVector::cbrtn);
+	ClassDB::bind_method(D_METHOD("cbrtb", "a"), &MLPPVector::cbrtb);
+
+	ClassDB::bind_method(D_METHOD("dot", "b"), &MLPPVector::dot);
+
+	ClassDB::bind_method(D_METHOD("abs"), &MLPPVector::abs);
+	ClassDB::bind_method(D_METHOD("absn"), &MLPPVector::absn);
+	ClassDB::bind_method(D_METHOD("absb", "a"), &MLPPVector::absb);
+
+	ClassDB::bind_method(D_METHOD("zero_vec", "n"), &MLPPVector::zero_vec);
+	ClassDB::bind_method(D_METHOD("one_vec", "n"), &MLPPVector::one_vec);
+	ClassDB::bind_method(D_METHOD("full_vec", "n", "k"), &MLPPVector::full_vec);
+
+	ClassDB::bind_method(D_METHOD("sin"), &MLPPVector::sin);
+	ClassDB::bind_method(D_METHOD("sinn"), &MLPPVector::sinn);
+	ClassDB::bind_method(D_METHOD("sinb", "a"), &MLPPVector::sinb);
+
+	ClassDB::bind_method(D_METHOD("cos"), &MLPPVector::cos);
+	ClassDB::bind_method(D_METHOD("cosn"), &MLPPVector::cosn);
+	ClassDB::bind_method(D_METHOD("cosb", "a"), &MLPPVector::cosb);
+
+	ClassDB::bind_method(D_METHOD("maxv", "b"), &MLPPVector::maxv);
+	ClassDB::bind_method(D_METHOD("maxvn", "b"), &MLPPVector::maxvn);
+	ClassDB::bind_method(D_METHOD("maxvb", "a", "b"), &MLPPVector::maxvb);
+
+	ClassDB::bind_method(D_METHOD("max_element"), &MLPPVector::max_element);
+	ClassDB::bind_method(D_METHOD("min_element"), &MLPPVector::min_element);
+
+	ClassDB::bind_method(D_METHOD("euclidean_distance", "b"), &MLPPVector::euclidean_distance);
+	ClassDB::bind_method(D_METHOD("euclidean_distance_squared", "b"), &MLPPVector::euclidean_distance_squared);
+
+	ClassDB::bind_method(D_METHOD("norm_sq"), &MLPPVector::norm_sq);
+	ClassDB::bind_method(D_METHOD("sum_elements"), &MLPPVector::sum_elements);
+
+	ClassDB::bind_method(D_METHOD("subtract_matrix_rows", "B"), &MLPPVector::subtract_matrix_rows);
+	ClassDB::bind_method(D_METHOD("subtract_matrix_rowsn", "B"), &MLPPVector::subtract_matrix_rowsn);
+	ClassDB::bind_method(D_METHOD("subtract_matrix_rowsb", "a", "B"), &MLPPVector::subtract_matrix_rowsb);
+
+	ClassDB::bind_method(D_METHOD("outer_product", "b"), &MLPPVector::outer_product);
+
+	ClassDB::bind_method(D_METHOD("diagnm"), &MLPPVector::diagnm);
 }
