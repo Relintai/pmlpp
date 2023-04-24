@@ -601,9 +601,17 @@ public:
 	Ref<MLPPMatrix> multn(const Ref<MLPPMatrix> &B) const;
 	void multb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
-	Ref<MLPPMatrix> hadamard_productnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> kronecker_productnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> element_wise_divisionnvnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	void hadamard_product(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> hadamard_productn(const Ref<MLPPMatrix> &B) const;
+	void hadamard_productb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+
+	void kronecker_product(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> kronecker_productn(const Ref<MLPPMatrix> &B) const;
+	void kronecker_productb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+
+	void element_wise_division(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> element_wise_divisionn(const Ref<MLPPMatrix> &B) const;
+	void element_wise_divisionb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	Ref<MLPPMatrix> transposenm(const Ref<MLPPMatrix> &A);
 	Ref<MLPPMatrix> scalar_multiplynm(real_t scalar, const Ref<MLPPMatrix> &A);
