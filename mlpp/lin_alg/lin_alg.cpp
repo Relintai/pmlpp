@@ -1053,26 +1053,6 @@ Ref<MLPPVector> MLPPLinAlg::flattenmnv(const Vector<Ref<MLPPVector>> &A) {
 	return a;
 }
 
-Ref<MLPPMatrix> MLPPLinAlg::outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
-	Ref<MLPPMatrix> C;
-	C.instance();
-	Size2i size = Size2i(b->size(), a->size());
-	C->resize(size);
-
-	const real_t *a_ptr = a->ptr();
-	const real_t *b_ptr = b->ptr();
-
-	for (int i = 0; i < size.y; ++i) {
-		real_t curr_a = a_ptr[i];
-
-		for (int j = 0; j < size.x; ++j) {
-			C->set_element(i, j, curr_a * b_ptr[j]);
-		}
-	}
-
-	return C;
-}
-
 Ref<MLPPVector> MLPPLinAlg::hadamard_productnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
 	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPVector>());
 
@@ -1297,25 +1277,6 @@ void MLPPLinAlg::subtractionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b
 	}
 }
 
-Ref<MLPPVector> MLPPLinAlg::subtract_matrix_rowsnv(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B) {
-	Ref<MLPPVector> c = a->duplicate();
-
-	Size2i b_size = B->size();
-
-	ERR_FAIL_COND_V(b_size.x != c->size(), c);
-
-	const real_t *b_ptr = B->ptr();
-	real_t *c_ptr = c->ptrw();
-
-	for (int i = 0; i < b_size.y; ++i) {
-		for (int j = 0; j < b_size.x; ++j) {
-			c_ptr[j] -= b_ptr[B->calculate_index(i, j)];
-		}
-	}
-
-	return c;
-}
-
 Ref<MLPPVector> MLPPLinAlg::lognv(const Ref<MLPPVector> &a) {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
 
@@ -1455,25 +1416,6 @@ std::vector<real_t> MLPPLinAlg::cross(std::vector<real_t> a, std::vector<real_t>
 	return { det1, det2, det3 };
 }
 */
-
-Ref<MLPPMatrix> MLPPLinAlg::diagnm(const Ref<MLPPVector> &a) {
-	int a_size = a->size();
-
-	Ref<MLPPMatrix> B;
-	B.instance();
-
-	B->resize(Size2i(a_size, a_size));
-	B->fill(0);
-
-	const real_t *a_ptr = a->ptr();
-	real_t *b_ptr = B->ptrw();
-
-	for (int i = 0; i < a_size; ++i) {
-		b_ptr[B->calculate_index(i, i)] = a_ptr[i];
-	}
-
-	return B;
-}
 
 Ref<MLPPVector> MLPPLinAlg::absv(const Ref<MLPPVector> &a) {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
@@ -1718,31 +1660,6 @@ real_t MLPPLinAlg::cosineSimilarity(std::vector<real_t> a, std::vector<real_t> b
 }
 */
 
-Ref<MLPPMatrix> MLPPLinAlg::mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
-	ERR_FAIL_COND_V(!A.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
-
-	Size2i a_size = A->size();
-
-	ERR_FAIL_COND_V(a_size.x != b->size(), Ref<MLPPMatrix>());
-
-	Ref<MLPPMatrix> ret;
-	ret.instance();
-	ret->resize(a_size);
-
-	const real_t *a_ptr = A->ptr();
-	const real_t *b_ptr = b->ptr();
-	real_t *ret_ptr = ret->ptrw();
-
-	for (int i = 0; i < a_size.y; ++i) {
-		for (int j = 0; j < a_size.x; ++j) {
-			int mat_index = A->calculate_index(i, j);
-
-			ret_ptr[mat_index] = a_ptr[mat_index] + b_ptr[j];
-		}
-	}
-
-	return ret;
-}
 Ref<MLPPVector> MLPPLinAlg::mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
 	ERR_FAIL_COND_V(!A.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
 
@@ -1769,6 +1686,90 @@ Ref<MLPPVector> MLPPLinAlg::mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<M
 	}
 
 	return c;
+}
+
+Ref<MLPPVector> MLPPLinAlg::subtract_matrix_rowsnv(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B) {
+	Ref<MLPPVector> c = a->duplicate();
+
+	Size2i b_size = B->size();
+
+	ERR_FAIL_COND_V(b_size.x != c->size(), c);
+
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = c->ptrw();
+
+	for (int i = 0; i < b_size.y; ++i) {
+		for (int j = 0; j < b_size.x; ++j) {
+			c_ptr[j] -= b_ptr[B->calculate_index(i, j)];
+		}
+	}
+
+	return c;
+}
+
+Ref<MLPPMatrix> MLPPLinAlg::outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	Ref<MLPPMatrix> C;
+	C.instance();
+	Size2i size = Size2i(b->size(), a->size());
+	C->resize(size);
+
+	const real_t *a_ptr = a->ptr();
+	const real_t *b_ptr = b->ptr();
+
+	for (int i = 0; i < size.y; ++i) {
+		real_t curr_a = a_ptr[i];
+
+		for (int j = 0; j < size.x; ++j) {
+			C->set_element(i, j, curr_a * b_ptr[j]);
+		}
+	}
+
+	return C;
+}
+
+Ref<MLPPMatrix> MLPPLinAlg::mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!A.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
+
+	Size2i a_size = A->size();
+
+	ERR_FAIL_COND_V(a_size.x != b->size(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> ret;
+	ret.instance();
+	ret->resize(a_size);
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *ret_ptr = ret->ptrw();
+
+	for (int i = 0; i < a_size.y; ++i) {
+		for (int j = 0; j < a_size.x; ++j) {
+			int mat_index = A->calculate_index(i, j);
+
+			ret_ptr[mat_index] = a_ptr[mat_index] + b_ptr[j];
+		}
+	}
+
+	return ret;
+}
+
+Ref<MLPPMatrix> MLPPLinAlg::diagnm(const Ref<MLPPVector> &a) {
+	int a_size = a->size();
+
+	Ref<MLPPMatrix> B;
+	B.instance();
+
+	B->resize(Size2i(a_size, a_size));
+	B->fill(0);
+
+	const real_t *a_ptr = a->ptr();
+	real_t *b_ptr = B->ptrw();
+
+	for (int i = 0; i < a_size; ++i) {
+		b_ptr[B->calculate_index(i, i)] = a_ptr[i];
+	}
+
+	return B;
 }
 
 Vector<Ref<MLPPMatrix>> MLPPLinAlg::additionnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {

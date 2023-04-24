@@ -141,8 +141,6 @@ public:
 
 	Ref<MLPPVector> flattenmnv(const Vector<Ref<MLPPVector>> &A);
 
-	Ref<MLPPMatrix> outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); // This multiplies a, bT
-
 	Ref<MLPPVector> hadamard_productnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 	void hadamard_productv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
 
@@ -159,8 +157,6 @@ public:
 
 	Ref<MLPPVector> subtractionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 	void subtractionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
-
-	Ref<MLPPVector> subtract_matrix_rowsnv(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B);
 
 	Ref<MLPPVector> lognv(const Ref<MLPPVector> &a);
 	Ref<MLPPVector> log10nv(const Ref<MLPPVector> &a);
@@ -179,8 +175,6 @@ public:
 	Ref<MLPPVector> zerovecnv(int n);
 	Ref<MLPPVector> onevecnv(int n);
 	Ref<MLPPVector> fullnv(int n, int k);
-
-	Ref<MLPPMatrix> diagnm(const Ref<MLPPVector> &a);
 
 	Ref<MLPPVector> sinnv(const Ref<MLPPVector> &a);
 	Ref<MLPPVector> cosnv(const Ref<MLPPVector> &a);
@@ -206,8 +200,12 @@ public:
 	//real_t cosineSimilarity(std::vector<real_t> a, std::vector<real_t> b);
 
 	// MATRIX-VECTOR FUNCTIONS
-	Ref<MLPPMatrix> mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
 	Ref<MLPPVector> mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
+	Ref<MLPPVector> subtract_matrix_rowsnv(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B);
+
+	Ref<MLPPMatrix> outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); // This multiplies a, bT
+	Ref<MLPPMatrix> mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
+	Ref<MLPPMatrix> diagnm(const Ref<MLPPVector> &a);
 
 	// TENSOR FUNCTIONS
 	Vector<Ref<MLPPMatrix>> additionnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);

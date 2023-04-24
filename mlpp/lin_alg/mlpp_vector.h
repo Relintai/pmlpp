@@ -327,6 +327,66 @@ public:
 		return true;
 	}
 
+	Ref<MLPPVector> flattenmnv(const Vector<Ref<MLPPVector>> &A);
+
+	Ref<MLPPVector> hadamard_productnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	void hadamard_productv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
+
+	Ref<MLPPVector> element_wise_divisionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+
+	Ref<MLPPVector> scalar_multiplynv(real_t scalar, const Ref<MLPPVector> &a);
+	void scalar_multiplyv(real_t scalar, const Ref<MLPPVector> &a, Ref<MLPPVector> out);
+
+	Ref<MLPPVector> scalar_addnv(real_t scalar, const Ref<MLPPVector> &a);
+	void scalar_addv(real_t scalar, const Ref<MLPPVector> &a, Ref<MLPPVector> out);
+
+	Ref<MLPPVector> additionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	void additionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
+
+	Ref<MLPPVector> subtractionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	void subtractionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
+
+	Ref<MLPPVector> lognv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> log10nv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> expnv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> erfnv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> exponentiatenv(const Ref<MLPPVector> &a, real_t p);
+	Ref<MLPPVector> sqrtnv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> cbrtnv(const Ref<MLPPVector> &a);
+
+	real_t dotnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+
+	//std::vector<real_t> cross(std::vector<real_t> a, std::vector<real_t> b);
+
+	Ref<MLPPVector> absv(const Ref<MLPPVector> &a);
+
+	Ref<MLPPVector> zerovecnv(int n);
+	Ref<MLPPVector> onevecnv(int n);
+	Ref<MLPPVector> fullnv(int n, int k);
+
+	Ref<MLPPVector> sinnv(const Ref<MLPPVector> &a);
+	Ref<MLPPVector> cosnv(const Ref<MLPPVector> &a);
+
+	Ref<MLPPVector> maxnvv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+
+	real_t maxvr(const Ref<MLPPVector> &a);
+	real_t minvr(const Ref<MLPPVector> &a);
+
+	//std::vector<real_t> round(std::vector<real_t> a);
+
+	real_t euclidean_distance(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	real_t euclidean_distance_squared(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+
+	/*
+	real_t norm_2(std::vector<real_t> a);
+	*/
+
+	real_t norm_sqv(const Ref<MLPPVector> &a);
+
+	real_t sum_elementsv(const Ref<MLPPVector> &a);
+
+	//real_t cosineSimilarity(std::vector<real_t> a, std::vector<real_t> b);
+
 	String to_string();
 
 	_FORCE_INLINE_ MLPPVector() {
