@@ -609,24 +609,50 @@ void MLPPMatrix::scalar_addb(const real_t scalar, const Ref<MLPPMatrix> &A) {
 	}
 }
 
-Ref<MLPPMatrix> MLPPMatrix::lognm(const Ref<MLPPMatrix> &A) {
-	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
+void MLPPMatrix::log() {
+	int ds = data_size();
 
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::log(out_ptr[i]);
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::logn() {
 	Ref<MLPPMatrix> out;
 	out.instance();
+	out->resize(size());
 
-	int data_size = A->data_size();
-	out->resize(A->size());
+	int ds = data_size();
 
-	const real_t *a_ptr = A->ptr();
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < data_size; ++i) {
+	for (int i = 0; i < ds; ++i) {
 		out_ptr[i] = Math::log(a_ptr[i]);
 	}
 
 	return out;
 }
+void MLPPMatrix::logb(const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND(!A.is_valid());
+
+	Size2i a_size = A->size();
+
+	if (a_size != size()) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
+
+	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::log(a_ptr[i]);
+	}
+}
+
 Ref<MLPPMatrix> MLPPMatrix::log10nm(const Ref<MLPPMatrix> &A) {
 	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
 

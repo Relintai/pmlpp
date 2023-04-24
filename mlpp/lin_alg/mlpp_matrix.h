@@ -625,7 +625,10 @@ public:
 	Ref<MLPPMatrix> scalar_addn(const real_t scalar) const;
 	void scalar_addb(const real_t scalar, const Ref<MLPPMatrix> &A);
 
-	Ref<MLPPMatrix> lognm(const Ref<MLPPMatrix> &A);
+	void log();
+	Ref<MLPPMatrix> logn();
+	void logb(const Ref<MLPPMatrix> &A);
+
 	Ref<MLPPMatrix> log10nm(const Ref<MLPPMatrix> &A);
 	Ref<MLPPMatrix> expnm(const Ref<MLPPMatrix> &A);
 	Ref<MLPPMatrix> erfnm(const Ref<MLPPMatrix> &A);
