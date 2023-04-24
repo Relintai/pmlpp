@@ -649,6 +649,35 @@ public:
 	void set_from_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
 
 public:
+	//math api
+
+	//Vector<Ref<MLPPMatrix>> additionnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
+
+	//Vector<Ref<MLPPMatrix>> element_wise_divisionnvnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
+
+	//Vector<Ref<MLPPMatrix>> sqrtnvt(const Vector<Ref<MLPPMatrix>> &A);
+	
+	//Vector<Ref<MLPPMatrix>> exponentiatenvt(const Vector<Ref<MLPPMatrix>> &A, real_t p);
+
+	//std::vector<std::vector<real_t>> tensor_vec_mult(std::vector<std::vector<std::vector<real_t>>> A, std::vector<real_t> b);
+
+	//std::vector<real_t> flatten(std::vector<std::vector<std::vector<real_t>>> A);
+
+	//Vector<Ref<MLPPMatrix>> scalar_multiplynvt(real_t scalar, Vector<Ref<MLPPMatrix>> A);
+	//Vector<Ref<MLPPMatrix>> scalar_addnvt(real_t scalar, Vector<Ref<MLPPMatrix>> A);
+
+	//Vector<Ref<MLPPMatrix>> resizenvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
+
+	//std::vector<std::vector<std::vector<real_t>>> hadamard_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
+
+	//Vector<Ref<MLPPMatrix>> maxnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
+	//Vector<Ref<MLPPMatrix>> absnvt(const Vector<Ref<MLPPMatrix>> &A);
+
+	//real_t norm_2(std::vector<std::vector<std::vector<real_t>>> A);
+
+	//std::vector<std::vector<std::vector<real_t>>> vector_wise_tensor_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<real_t>> B);
+
+public:
 	void fill(real_t p_val) {
 		if (!_data) {
 			return;

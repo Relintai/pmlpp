@@ -424,6 +424,177 @@ void MLPPTensor3::set_from_image(const Ref<Image> &p_img, const int p_channels) 
 	img->unlock();
 }
 
+/*
+Vector<Ref<MLPPMatrix>> MLPPTensor3::additionnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < res.size(); i++) {
+		res.write[i] = additionnm(A[i], B[i]);
+	}
+
+	return res;
+}
+*/
+/*
+Vector<Ref<MLPPMatrix>> MLPPTensor3::element_wise_divisionnvnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < A.size(); i++) {
+		res.write[i] = element_wise_divisionnvnm(A[i], B[i]);
+	}
+
+	return res;
+}
+*/
+/*
+Vector<Ref<MLPPMatrix>> MLPPTensor3::sqrtnvt(const Vector<Ref<MLPPMatrix>> &A) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < A.size(); i++) {
+		res.write[i] = sqrtnm(A[i]);
+	}
+
+	return res;
+}
+*/
+/*
+Vector<Ref<MLPPMatrix>> MLPPTensor3::exponentiatenvt(const Vector<Ref<MLPPMatrix>> &A, real_t p) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < A.size(); i++) {
+		res.write[i] = exponentiatenm(A[i], p);
+	}
+
+	return res;
+}
+
+*/
+/*
+std::vector<std::vector<real_t>> MLPPTensor3::tensor_vec_mult(std::vector<std::vector<std::vector<real_t>>> A, std::vector<real_t> b) {
+	std::vector<std::vector<real_t>> C;
+	C.resize(A.size());
+	for (uint32_t i = 0; i < C.size(); i++) {
+		C[i].resize(A[0].size());
+	}
+	for (uint32_t i = 0; i < C.size(); i++) {
+		for (uint32_t j = 0; j < C[i].size(); j++) {
+			C[i][j] = dot(A[i][j], b);
+		}
+	}
+	return C;
+}
+*/
+
+/*
+std::vector<real_t> MLPPTensor3::flatten(std::vector<std::vector<std::vector<real_t>>> A) {
+	std::vector<real_t> c;
+	for (uint32_t i = 0; i < A.size(); i++) {
+		std::vector<real_t> flattenedVec = flatten(A[i]);
+		c.insert(c.end(), flattenedVec.begin(), flattenedVec.end());
+	}
+	return c;
+}
+*/
+
+/*
+Vector<Ref<MLPPMatrix>> MLPPTensor3::scalar_multiplynvt(real_t scalar, Vector<Ref<MLPPMatrix>> A) {
+	for (int i = 0; i < A.size(); i++) {
+		A.write[i] = scalar_multiplynm(scalar, A[i]);
+	}
+	return A;
+}
+Vector<Ref<MLPPMatrix>> MLPPTensor3::scalar_addnvt(real_t scalar, Vector<Ref<MLPPMatrix>> A) {
+	for (int i = 0; i < A.size(); i++) {
+		A.write[i] = scalar_addnm(scalar, A[i]);
+	}
+	return A;
+}
+
+Vector<Ref<MLPPMatrix>> MLPPTensor3::resizenvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(B.size());
+
+	for (int i = 0; i < res.size(); i++) {
+		Ref<MLPPMatrix> m;
+		m.instance();
+		m->resize(B[i]->size());
+
+		res.write[i] = m;
+	}
+
+	return res;
+}
+*/
+
+//std::vector<std::vector<std::vector<real_t>>> hadamard_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
+
+/*
+Vector<Ref<MLPPMatrix>> MLPPTensor3::maxnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < A.size(); i++) {
+		res.write[i] = maxnm(A[i], B[i]);
+	}
+
+	return res;
+}
+
+Vector<Ref<MLPPMatrix>> MLPPTensor3::absnvt(const Vector<Ref<MLPPMatrix>> &A) {
+	Vector<Ref<MLPPMatrix>> res;
+	res.resize(A.size());
+
+	for (int i = 0; i < A.size(); i++) {
+		res.write[i] = absnm(A[i]);
+	}
+
+	return A;
+}
+*/
+
+/*
+real_t MLPPTensor3::norm_2(std::vector<std::vector<std::vector<real_t>>> A) {
+	real_t sum = 0;
+	for (uint32_t i = 0; i < A.size(); i++) {
+		for (uint32_t j = 0; j < A[i].size(); j++) {
+			for (uint32_t k = 0; k < A[i][j].size(); k++) {
+				sum += A[i][j][k] * A[i][j][k];
+			}
+		}
+	}
+	return Math::sqrt(sum);
+}
+*/
+
+/*
+// Bad implementation. Change this later.
+std::vector<std::vector<std::vector<real_t>>> MLPPTensor3::vector_wise_tensor_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<real_t>> B) {
+	std::vector<std::vector<std::vector<real_t>>> C;
+	C = resize(C, A);
+	for (uint32_t i = 0; i < A[0].size(); i++) {
+		for (uint32_t j = 0; j < A[0][i].size(); j++) {
+			std::vector<real_t> currentVector;
+			currentVector.resize(A.size());
+
+			for (uint32_t k = 0; k < C.size(); k++) {
+				currentVector[k] = A[k][i][j];
+			}
+
+			currentVector = mat_vec_mult(B, currentVector);
+
+			for (uint32_t k = 0; k < C.size(); k++) {
+				C[k][i][j] = currentVector[k];
+			}
+		}
+	}
+	return C;
+}
+*/
+
 String MLPPTensor3::to_string() {
 	String str;
 
