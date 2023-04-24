@@ -583,10 +583,6 @@ public:
 		}
 	}
 
-	//TODO remove these
-	Ref<MLPPVector> scalar_multiplynv(real_t scalar, const Ref<MLPPVector> &a);
-	Ref<MLPPVector> flattenmnv(const Vector<Ref<MLPPVector>> &A);
-
 	//std::vector<std::vector<real_t>> gramMatrix(std::vector<std::vector<real_t>> A);
 	//bool linearIndependenceChecker(std::vector<std::vector<real_t>> A);
 

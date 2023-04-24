@@ -4,55 +4,6 @@
 #include "../stat/stat.h"
 #include <random>
 
-Ref<MLPPVector> MLPPMatrix::scalar_multiplynv(real_t scalar, const Ref<MLPPVector> &a) {
-	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
-
-	Ref<MLPPVector> out;
-	out.instance();
-
-	int size = a->size();
-
-	out->resize(size);
-
-	const real_t *a_ptr = a->ptr();
-	real_t *out_ptr = out->ptrw();
-
-	for (int i = 0; i < size; ++i) {
-		out_ptr[i] = a_ptr[i] * scalar;
-	}
-
-	return out;
-}
-
-Ref<MLPPVector> MLPPMatrix::flattenmnv(const Vector<Ref<MLPPVector>> &A) {
-	Ref<MLPPVector> a;
-	a.instance();
-
-	int vsize = 0;
-	for (int i = 0; i < A.size(); ++i) {
-		vsize += A[i]->size();
-	}
-
-	a->resize(vsize);
-
-	int a_index = 0;
-	real_t *a_ptr = a->ptrw();
-
-	for (int i = 0; i < A.size(); ++i) {
-		const Ref<MLPPVector> &r = A[i];
-
-		int r_size = r->size();
-		const real_t *r_ptr = r->ptr();
-
-		for (int j = 0; j < r_size; ++j) {
-			a_ptr[a_index] = r_ptr[j];
-			++a_index;
-		}
-	}
-
-	return a;
-}
-
 /*
 std::vector<std::vector<real_t>> MLPPMatrix::gramMatrix(std::vector<std::vector<real_t>> A) {
 	return matmult(transpose(A), A); // AtA
@@ -221,10 +172,10 @@ Ref<MLPPMatrix> MLPPMatrix::kronecker_productnm(const Ref<MLPPMatrix> &A, const 
 
 			Vector<Ref<MLPPVector>> row;
 			for (int k = 0; k < a_size.x; ++k) {
-				row.push_back(scalar_multiplynv(a_ptr[A->calculate_index(i, k)], row_tmp));
+				row.push_back(row_tmp->scalar_multiplyn(a_ptr[A->calculate_index(i, k)]));
 			}
 
-			Ref<MLPPVector> flattened_row = flattenmnv(row);
+			Ref<MLPPVector> flattened_row = row_tmp->flatten_vectorsn(row);
 
 			C->set_row_mlpp_vector(i * b_size.y + j, flattened_row);
 		}
