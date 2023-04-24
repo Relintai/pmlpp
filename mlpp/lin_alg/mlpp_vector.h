@@ -423,24 +423,28 @@ public:
 
 	//std::vector<real_t> round(std::vector<real_t> a);
 
-	real_t euclidean_distance(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
-	real_t euclidean_distance_squared(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	real_t euclidean_distance(const Ref<MLPPVector> &b);
+	real_t euclidean_distance_squared(const Ref<MLPPVector> &b);
 
 	/*
 	real_t norm_2(std::vector<real_t> a);
 	*/
 
-	real_t norm_sqv(const Ref<MLPPVector> &a);
+	real_t norm_sq();
 
-	real_t sum_elementsv(const Ref<MLPPVector> &a);
+	real_t sum_elements();
 
 	//real_t cosineSimilarity(std::vector<real_t> a, std::vector<real_t> b);
 
-	Ref<MLPPVector> subtract_matrix_rowsnv(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); // This multiplies a, bT
+	void subtract_matrix_rows(const Ref<MLPPMatrix> &B);
+	Ref<MLPPVector> subtract_matrix_rowsn(const Ref<MLPPMatrix> &B);
+	void subtract_matrix_rowsb(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B);
+
+	// This multiplies a, bT
+	Ref<MLPPMatrix> outer_product(const Ref<MLPPVector> &b);
 
 	// as_diagonal_matrix / to_diagonal_matrix
-	Ref<MLPPMatrix> diagnm(const Ref<MLPPVector> &a);
+	Ref<MLPPMatrix> diagnm();
 
 	String to_string();
 

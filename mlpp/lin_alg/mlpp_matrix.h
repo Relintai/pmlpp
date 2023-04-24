@@ -701,6 +701,8 @@ public:
 	Ref<MLPPVector> mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
 	Ref<MLPPMatrix> mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
 
+	Ref<MLPPMatrix> outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); // This multiplies a, bT
+
 	// set_diagonal (just sets diagonal), set_as_diagonal (zeros, then sets diagonal to vec)
 	// Also a variant that copies
 	Ref<MLPPMatrix> diagnm(const Ref<MLPPVector> &a);
