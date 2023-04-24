@@ -394,23 +394,32 @@ public:
 	Ref<MLPPVector> cbrtn();
 	void cbrtb(const Ref<MLPPVector> &a);
 
-	real_t dotnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	real_t dot(const Ref<MLPPVector> &b);
 
 	//std::vector<real_t> cross(std::vector<real_t> a, std::vector<real_t> b);
 
-	Ref<MLPPVector> absv(const Ref<MLPPVector> &a);
+	void abs();
+	Ref<MLPPVector> absn();
+	void absb(const Ref<MLPPVector> &a);
 
-	Ref<MLPPVector> zerovecnv(int n);
-	Ref<MLPPVector> onevecnv(int n);
-	Ref<MLPPVector> fullnv(int n, int k);
+	Ref<MLPPVector> zero_vec(int n);
+	Ref<MLPPVector> one_vec(int n);
+	Ref<MLPPVector> full_vec(int n, int k);
 
-	Ref<MLPPVector> sinnv(const Ref<MLPPVector> &a);
-	Ref<MLPPVector> cosnv(const Ref<MLPPVector> &a);
+	void sin();
+	Ref<MLPPVector> sinn();
+	void sinb(const Ref<MLPPVector> &a);
 
-	Ref<MLPPVector> maxnvv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	void cos();
+	Ref<MLPPVector> cosn();
+	void cosb(const Ref<MLPPVector> &a);
 
-	real_t maxvr(const Ref<MLPPVector> &a);
-	real_t minvr(const Ref<MLPPVector> &a);
+	void maxv(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> maxvn(const Ref<MLPPVector> &b);
+	void maxvb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+
+	real_t max_element();
+	real_t min_element();
 
 	//std::vector<real_t> round(std::vector<real_t> a);
 
