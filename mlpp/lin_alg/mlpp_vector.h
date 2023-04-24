@@ -327,6 +327,11 @@ public:
 		return true;
 	}
 
+	// New apis should look like this:
+	//Ref<MLPPVector> substract(const Ref<MLPPVector> &b);
+	//void substracted(const Ref<MLPPVector> &b);
+	//void subtraction(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); -> result is in this (subtractionv like)
+
 	Ref<MLPPVector> flattenmnv(const Vector<Ref<MLPPVector>> &A);
 
 	Ref<MLPPVector> hadamard_productnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
