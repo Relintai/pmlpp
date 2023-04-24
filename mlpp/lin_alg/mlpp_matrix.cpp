@@ -38,71 +38,204 @@ Ref<MLPPMatrix> MLPPMatrix::gaussian_noise(int n, int m) {
 	return A;
 }
 
-Ref<MLPPMatrix> MLPPMatrix::additionnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
-	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
-	Size2i a_size = A->size();
-	ERR_FAIL_COND_V(a_size != B->size(), Ref<MLPPMatrix>());
+void MLPPMatrix::gaussian_noise_fill() {
+	std::random_device rd;
+	std::default_random_engine generator(rd());
+	std::normal_distribution<real_t> distribution(0, 1); // Standard normal distribution. Mean of 0, std of 1.
+
+	int a_data_size = data_size();
+	real_t *a_ptr = ptrw();
+
+	for (int i = 0; i < a_data_size; ++i) {
+		a_ptr[i] = distribution(generator);
+	}
+}
+
+void MLPPMatrix::add(const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND(!B.is_valid());
+	ERR_FAIL_COND(_size != B->size());
+
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] += b_ptr[i];
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::addn(const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPMatrix>());
+	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPMatrix>());
 
 	Ref<MLPPMatrix> C;
 	C.instance();
-	C->resize(a_size);
+	C->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] = a_ptr[i] + b_ptr[i];
+	}
+
+	return C;
+}
+void MLPPMatrix::addb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
+	Size2i a_size = A->size();
+	ERR_FAIL_COND(a_size != B->size());
+
+	if (_size != a_size) {
+		resize(a_size);
+	}
 
 	const real_t *a_ptr = A->ptr();
 	const real_t *b_ptr = B->ptr();
-	real_t *c_ptr = C->ptrw();
+	real_t *c_ptr = ptrw();
 
 	int data_size = A->data_size();
 
 	for (int i = 0; i < data_size; ++i) {
 		c_ptr[i] = a_ptr[i] + b_ptr[i];
 	}
-
-	return C;
 }
-Ref<MLPPMatrix> MLPPMatrix::subtractionnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
-	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
-	Size2i a_size = A->size();
-	ERR_FAIL_COND_V(a_size != B->size(), Ref<MLPPMatrix>());
+
+void MLPPMatrix::sub(const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND(!B.is_valid());
+	ERR_FAIL_COND(_size != B->size());
+
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] -= b_ptr[i];
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::subn(const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPMatrix>());
+	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPMatrix>());
 
 	Ref<MLPPMatrix> C;
 	C.instance();
-	C->resize(a_size);
+	C->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] = a_ptr[i] - b_ptr[i];
+	}
+
+	return C;
+}
+void MLPPMatrix::subb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
+	Size2i a_size = A->size();
+	ERR_FAIL_COND(a_size != B->size());
+
+	if (_size != a_size) {
+		resize(a_size);
+	}
 
 	const real_t *a_ptr = A->ptr();
 	const real_t *b_ptr = B->ptr();
-	real_t *c_ptr = C->ptrw();
+	real_t *c_ptr = ptrw();
 
 	int data_size = A->data_size();
 
 	for (int i = 0; i < data_size; ++i) {
 		c_ptr[i] = a_ptr[i] - b_ptr[i];
 	}
+}
+
+void MLPPMatrix::mult(const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND(!B.is_valid());
+
+	Size2i b_size = B->size();
+
+	ERR_FAIL_COND(_size != b_size);
+
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	for (int i = 0; i < _size.y; i++) {
+		for (int k = 0; k < b_size.y; k++) {
+			int ind_i_k = calculate_index(i, k);
+
+			for (int j = 0; j < b_size.x; j++) {
+				int ind_i_j = calculate_index(i, j);
+				int ind_k_j = B->calculate_index(k, j);
+
+				c_ptr[ind_i_j] += c_ptr[ind_i_k] * b_ptr[ind_k_j];
+
+				//C->set_element(i, j, get_element(i, j) + get_element(i, k) * B->get_element(k, j
+			}
+		}
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::multn(const Ref<MLPPMatrix> &B) const {
+	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPMatrix>());
+
+	Size2i b_size = B->size();
+
+	ERR_FAIL_COND_V(_size != b_size, Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> C;
+	C.instance();
+	C->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	for (int i = 0; i < _size.y; i++) {
+		for (int k = 0; k < b_size.y; k++) {
+			int ind_i_k = calculate_index(i, k);
+
+			for (int j = 0; j < b_size.x; j++) {
+				int ind_i_j = C->calculate_index(i, j);
+				int ind_k_j = B->calculate_index(k, j);
+
+				c_ptr[ind_i_j] += a_ptr[ind_i_k] * b_ptr[ind_k_j];
+
+				//C->set_element(i, j, C->get_element(i, j) + get_element(i, k) * B->get_element(k, j
+			}
+		}
+	}
 
 	return C;
 }
-Ref<MLPPMatrix> MLPPMatrix::matmultnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
-	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
+void MLPPMatrix::multb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
 
 	Size2i a_size = A->size();
 	Size2i b_size = B->size();
 
-	ERR_FAIL_COND_V(a_size.x != b_size.y, Ref<MLPPMatrix>());
+	ERR_FAIL_COND(a_size != b_size);
 
-	Ref<MLPPMatrix> C;
-	C.instance();
-	C->resize(Size2i(b_size.x, a_size.y));
-	C->fill(0);
+	if (_size != a_size) {
+		resize(a_size);
+	}
 
 	const real_t *a_ptr = A->ptr();
 	const real_t *b_ptr = B->ptr();
-	real_t *c_ptr = C->ptrw();
+	real_t *c_ptr = ptrw();
 
 	for (int i = 0; i < a_size.y; i++) {
 		for (int k = 0; k < b_size.y; k++) {
 			int ind_i_k = A->calculate_index(i, k);
 
 			for (int j = 0; j < b_size.x; j++) {
-				int ind_i_j = C->calculate_index(i, j);
+				int ind_i_j = calculate_index(i, j);
 				int ind_k_j = B->calculate_index(k, j);
 
 				c_ptr[ind_i_j] += a_ptr[ind_i_k] * b_ptr[ind_k_j];
@@ -111,8 +244,6 @@ Ref<MLPPMatrix> MLPPMatrix::matmultnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMa
 			}
 		}
 	}
-
-	return C;
 }
 
 Ref<MLPPMatrix> MLPPMatrix::hadamard_productnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
@@ -512,7 +643,7 @@ Ref<MLPPMatrix> MLPPMatrix::inversenm(const Ref<MLPPMatrix> &A) {
 	return scalar_multiplynm(1 / detm(A, int(A->size().y)), adjointnm(A));
 }
 Ref<MLPPMatrix> MLPPMatrix::pinversenm(const Ref<MLPPMatrix> &A) {
-	return matmultnm(inversenm(matmultnm(transposenm(A), A)), transposenm(A));
+	return inversenm(transposenm(A->multn(A)))->multn(transposenm(A));
 }
 Ref<MLPPMatrix> MLPPMatrix::zeromatnm(int n, int m) {
 	Ref<MLPPMatrix> mat;
@@ -752,7 +883,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
 		P->set_element(sub_j, sub_j, Math::cos(theta));
 		P->set_element(sub_j, sub_i, Math::sin(theta));
 
-		a_new = matmultnm(matmultnm(inversenm(P), A), P);
+		a_new = inversenm(P)->multn(A)->multn(P);
 
 		Size2i a_new_size = a_new->size();
 
@@ -790,7 +921,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
 			}
 		}
 
-		eigenvectors = matmultnm(eigenvectors, P);
+		eigenvectors = eigenvectors->multn(P);
 		A = a_new;
 
 	} while (!diagonal);
@@ -841,8 +972,8 @@ MLPPMatrix::SVDResult MLPPMatrix::svd(const Ref<MLPPMatrix> &A) {
 
 	Size2i a_size = A->size();
 
-	EigenResult left_eigen = eigen(matmultnm(A, transposenm(A)));
-	EigenResult right_eigen = eigen(matmultnm(transposenm(A), A));
+	EigenResult left_eigen = eigen(A->multn(transposenm(A)));
+	EigenResult right_eigen = eigen(transposenm(A)->multn(A));
 
 	Ref<MLPPMatrix> singularvals = sqrtnm(left_eigen.eigen_values);
 	Ref<MLPPMatrix> sigma = zeromatnm(a_size.y, a_size.x);
@@ -1045,7 +1176,6 @@ Ref<MLPPVector> MLPPMatrix::mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<M
 	return c;
 }
 
-
 Ref<MLPPMatrix> MLPPMatrix::mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
 	ERR_FAIL_COND_V(!A.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
 
@@ -1110,7 +1240,6 @@ Ref<MLPPMatrix> MLPPMatrix::diagnm(const Ref<MLPPVector> &a) {
 
 	return B;
 }
-
 
 String MLPPMatrix::to_string() {
 	String str;

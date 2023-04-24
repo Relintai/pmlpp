@@ -587,10 +587,19 @@ public:
 	//bool linearIndependenceChecker(std::vector<std::vector<real_t>> A);
 
 	Ref<MLPPMatrix> gaussian_noise(int n, int m);
+	void gaussian_noise_fill();
 
-	Ref<MLPPMatrix> additionnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> subtractionnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> matmultnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	void add(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> addn(const Ref<MLPPMatrix> &B);
+	void addb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+
+	void sub(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> subn(const Ref<MLPPMatrix> &B);
+	void subb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+
+	void mult(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> multn(const Ref<MLPPMatrix> &B) const;
+	void multb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	Ref<MLPPMatrix> hadamard_productnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 	Ref<MLPPMatrix> kronecker_productnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
