@@ -3,7 +3,6 @@
 
 #include "mlpp_matrix.h"
 
-
 void MLPPVector::flatten_vectors(const Vector<Ref<MLPPVector>> &A) {
 	int vsize = 0;
 	for (int i = 0; i < A.size(); ++i) {
@@ -27,7 +26,6 @@ void MLPPVector::flatten_vectors(const Vector<Ref<MLPPVector>> &A) {
 		}
 	}
 }
-
 
 Ref<MLPPVector> MLPPVector::flatten_vectorsn(const Vector<Ref<MLPPVector>> &A) {
 	Ref<MLPPVector> a;
@@ -111,184 +109,231 @@ void MLPPVector::hadamard_productb(const Ref<MLPPVector> &a, const Ref<MLPPVecto
 	}
 }
 
-Ref<MLPPVector> MLPPVector::element_wise_divisionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
-	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPVector>());
+void MLPPVector::element_wise_division(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!b.is_valid());
 
 	Ref<MLPPVector> out;
 	out.instance();
 
-	int size = a->size();
+	ERR_FAIL_COND(_size != b->size());
 
-	ERR_FAIL_COND_V(size != b->size(), Ref<MLPPVector>());
-
-	out->resize(size);
-
-	const real_t *a_ptr = a->ptr();
+	const real_t *a_ptr = ptr();
 	const real_t *b_ptr = b->ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] = a_ptr[i] / b_ptr[i];
+	}
+}
+
+Ref<MLPPVector> MLPPVector::element_wise_divisionn(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+
+	ERR_FAIL_COND_V(_size != b->size(), Ref<MLPPVector>());
+
+	out->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = a_ptr[i] / b_ptr[i];
 	}
 
 	return out;
 }
 
-Ref<MLPPVector> MLPPVector::scalar_multiplynv(real_t scalar, const Ref<MLPPVector> &a) {
-	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+void MLPPVector::element_wise_divisionb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!a.is_valid() || !b.is_valid());
 
-	Ref<MLPPVector> out;
-	out.instance();
+	int s = a->size();
 
-	int size = a->size();
+	ERR_FAIL_COND(s != b->size());
 
-	out->resize(size);
+	resize(s);
 
 	const real_t *a_ptr = a->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < s; ++i) {
+		out_ptr[i] = a_ptr[i] / b_ptr[i];
+	}
+}
+
+void MLPPVector::scalar_multiply(real_t scalar) {
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] = out_ptr[i] * scalar;
+	}
+}
+Ref<MLPPVector> MLPPVector::scalar_multiplyn(real_t scalar) {
+	Ref<MLPPVector> out;
+	out.instance();
+	out->resize(_size);
+
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = a_ptr[i] * scalar;
 	}
 
 	return out;
 }
-void MLPPVector::scalar_multiplyv(real_t scalar, const Ref<MLPPVector> &a, Ref<MLPPVector> out) {
-	ERR_FAIL_COND(!a.is_valid() || !out.is_valid());
+void MLPPVector::scalar_multiplyb(real_t scalar, const Ref<MLPPVector> &a) {
+	int s = a->size();
 
-	int size = a->size();
-
-	if (unlikely(out->size() != size)) {
-		out->resize(size);
+	if (unlikely(size() != s)) {
+		resize(s);
 	}
 
 	const real_t *a_ptr = a->ptr();
-	real_t *out_ptr = out->ptrw();
+	real_t *out_ptr = ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < s; ++i) {
 		out_ptr[i] = a_ptr[i] * scalar;
 	}
 }
 
-Ref<MLPPVector> MLPPVector::scalar_addnv(real_t scalar, const Ref<MLPPVector> &a) {
-	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPVector>());
+void MLPPVector::scalar_add(real_t scalar) {
+	real_t *out_ptr = ptrw();
 
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] = out_ptr[i] + scalar;
+	}
+}
+Ref<MLPPVector> MLPPVector::scalar_addn(real_t scalar) {
 	Ref<MLPPVector> out;
 	out.instance();
 
-	int size = a->size();
+	out->resize(_size);
 
-	out->resize(size);
-
-	const real_t *a_ptr = a->ptr();
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = a_ptr[i] + scalar;
 	}
 
 	return out;
 }
-void MLPPVector::scalar_addv(real_t scalar, const Ref<MLPPVector> &a, Ref<MLPPVector> out) {
-	ERR_FAIL_COND(!a.is_valid() || !out.is_valid());
+void MLPPVector::scalar_addb(real_t scalar, const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND(!a.is_valid());
 
-	int size = a->size();
+	int s = a->size();
 
-	if (unlikely(out->size() != size)) {
-		out->resize(size);
+	if (unlikely(size() != s)) {
+		resize(s);
 	}
 
 	const real_t *a_ptr = a->ptr();
-	real_t *out_ptr = out->ptrw();
+	real_t *out_ptr = ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < s; ++i) {
 		out_ptr[i] = a_ptr[i] + scalar;
 	}
 }
 
-Ref<MLPPVector> MLPPVector::additionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
-	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPVector>());
+void MLPPVector::add(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!b.is_valid());
+	ERR_FAIL_COND(_size != b->size());
 
-	int size = a->size();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = ptrw();
 
-	ERR_FAIL_COND_V(size != b->size(), Ref<MLPPVector>());
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] += b_ptr[i];
+	}
+}
+Ref<MLPPVector> MLPPVector::addn(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
+	ERR_FAIL_COND_V(_size != b->size(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
 	out.instance();
-	out->resize(size);
+	out->resize(_size);
 
-	const real_t *a_ptr = a->ptr();
+	const real_t *a_ptr = ptr();
 	const real_t *b_ptr = b->ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = a_ptr[i] + b_ptr[i];
 	}
 
 	return out;
 }
-void MLPPVector::additionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out) {
-	ERR_FAIL_COND(!a.is_valid() || !b.is_valid() || !out.is_valid());
+void MLPPVector::addb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!a.is_valid() || !b.is_valid());
 
-	int size = a->size();
+	int s = a->size();
 
-	ERR_FAIL_COND(size != b->size());
+	ERR_FAIL_COND(s != b->size());
 
-	if (unlikely(out->size() != size)) {
-		out->resize(size);
+	if (unlikely(size() != s)) {
+		resize(s);
 	}
 
 	const real_t *a_ptr = a->ptr();
 	const real_t *b_ptr = b->ptr();
-	real_t *out_ptr = out->ptrw();
+	real_t *out_ptr = ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < s; ++i) {
 		out_ptr[i] = a_ptr[i] + b_ptr[i];
 	}
 }
 
-Ref<MLPPVector> MLPPVector::subtractionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
-	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPVector>());
+void MLPPVector::sub(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!b.is_valid());
+	ERR_FAIL_COND(_size != b->size());
 
-	int size = a->size();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = ptrw();
 
-	ERR_FAIL_COND_V(size != b->size(), Ref<MLPPVector>());
+	for (int i = 0; i < _size; ++i) {
+		out_ptr[i] -= b_ptr[i];
+	}
+}
+Ref<MLPPVector> MLPPVector::subn(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
+	ERR_FAIL_COND_V(_size != b->size(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
 	out.instance();
+	out->resize(_size);
 
-	if (unlikely(size == 0)) {
-		return out;
-	}
-
-	out->resize(size);
-
-	const real_t *a_ptr = a->ptr();
+	const real_t *a_ptr = ptr();
 	const real_t *b_ptr = b->ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		out_ptr[i] = a_ptr[i] - b_ptr[i];
 	}
 
 	return out;
 }
-void MLPPVector::subtractionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out) {
-	ERR_FAIL_COND(!a.is_valid() || !b.is_valid() || !out.is_valid());
+void MLPPVector::subb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!a.is_valid() || !b.is_valid());
 
-	int size = a->size();
+	int s = a->size();
 
-	ERR_FAIL_COND(size != b->size());
+	ERR_FAIL_COND(s != b->size());
 
-	if (unlikely(out->size() != size)) {
-		out->resize(size);
+	if (unlikely(size() != s)) {
+		resize(s);
 	}
 
 	const real_t *a_ptr = a->ptr();
 	const real_t *b_ptr = b->ptr();
-	real_t *out_ptr = out->ptrw();
+	real_t *out_ptr = ptrw();
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < s; ++i) {
 		out_ptr[i] = a_ptr[i] - b_ptr[i];
 	}
 }

@@ -333,13 +333,12 @@ public:
 	//void substract(const Ref<MLPPVector> &b); <- this should be the simplest / most obvious method
 	//Ref<MLPPVector> substractn(const Ref<MLPPVector> &b);
 	//void substractb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); -> result is in this (subtractionv like)
-	
+
 	// Or:
 	//void hadamard_product(const Ref<MLPPVector> &b); <- this should be the simplest / most obvious method
 	//Ref<MLPPVector> hadamard_productn(const Ref<MLPPVector> &b); <- n -> new
 	//void hadamard_productb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); <- b -> between, result is stored in *this
 
-	
 	void flatten_vectors(const Vector<Ref<MLPPVector>> &A);
 	Ref<MLPPVector> flatten_vectorsn(const Vector<Ref<MLPPVector>> &A);
 
@@ -347,19 +346,25 @@ public:
 	Ref<MLPPVector> hadamard_productn(const Ref<MLPPVector> &b);
 	void hadamard_productb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
-	Ref<MLPPVector> element_wise_divisionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	void element_wise_division(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> element_wise_divisionn(const Ref<MLPPVector> &b);
+	void element_wise_divisionb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
-	Ref<MLPPVector> scalar_multiplynv(real_t scalar, const Ref<MLPPVector> &a);
-	void scalar_multiplyv(real_t scalar, const Ref<MLPPVector> &a, Ref<MLPPVector> out);
+	void scalar_multiply(real_t scalar);
+	Ref<MLPPVector> scalar_multiplyn(real_t scalar);
+	void scalar_multiplyb(real_t scalar, const Ref<MLPPVector> &a);
 
-	Ref<MLPPVector> scalar_addnv(real_t scalar, const Ref<MLPPVector> &a);
-	void scalar_addv(real_t scalar, const Ref<MLPPVector> &a, Ref<MLPPVector> out);
+	void scalar_add(real_t scalar);
+	Ref<MLPPVector> scalar_addn(real_t scalar);
+	void scalar_addb(real_t scalar, const Ref<MLPPVector> &a);
 
-	Ref<MLPPVector> additionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
-	void additionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
+	void add(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> addn(const Ref<MLPPVector> &b);
+	void addb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
-	Ref<MLPPVector> subtractionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
-	void subtractionv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
+	void sub(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> subn(const Ref<MLPPVector> &b);
+	void subb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	Ref<MLPPVector> lognv(const Ref<MLPPVector> &a);
 	Ref<MLPPVector> log10nv(const Ref<MLPPVector> &a);
