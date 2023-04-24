@@ -613,9 +613,17 @@ public:
 	Ref<MLPPMatrix> element_wise_divisionn(const Ref<MLPPMatrix> &B) const;
 	void element_wise_divisionb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
-	Ref<MLPPMatrix> transposenm(const Ref<MLPPMatrix> &A);
-	Ref<MLPPMatrix> scalar_multiplynm(real_t scalar, const Ref<MLPPMatrix> &A);
-	Ref<MLPPMatrix> scalar_addnm(real_t scalar, const Ref<MLPPMatrix> &A);
+	void transpose();
+	Ref<MLPPMatrix> transposen() const;
+	void transposeb(const Ref<MLPPMatrix> &A);
+
+	void scalar_multiply(const real_t scalar);
+	Ref<MLPPMatrix> scalar_multiplyn(const real_t scalar) const;
+	void scalar_multiplyb(const real_t scalar, const Ref<MLPPMatrix> &A);
+
+	void scalar_add(const real_t scalar);
+	Ref<MLPPMatrix> scalar_addn(const real_t scalar) const;
+	void scalar_addb(const real_t scalar, const Ref<MLPPMatrix> &A);
 
 	Ref<MLPPMatrix> lognm(const Ref<MLPPMatrix> &A);
 	Ref<MLPPMatrix> log10nm(const Ref<MLPPMatrix> &A);

@@ -491,50 +491,122 @@ void MLPPMatrix::element_wise_divisionb(const Ref<MLPPMatrix> &A, const Ref<MLPP
 	}
 }
 
-Ref<MLPPMatrix> MLPPMatrix::transposenm(const Ref<MLPPMatrix> &A) {
+void MLPPMatrix::transpose() {
+	Ref<MLPPMatrix> A = duplicate();
 	Size2i a_size = A->size();
 
-	Ref<MLPPMatrix> AT;
-	AT.instance();
-	AT->resize(Size2i(a_size.y, a_size.x));
+	resize(Size2i(a_size.y, a_size.x));
 
 	const real_t *a_ptr = A->ptr();
-	real_t *at_ptr = AT->ptrw();
+	real_t *at_ptr = ptrw();
 
 	for (int i = 0; i < a_size.y; ++i) {
 		for (int j = 0; j < a_size.x; ++j) {
-			at_ptr[AT->calculate_index(j, i)] = a_ptr[A->calculate_index(i, j)];
+			at_ptr[calculate_index(j, i)] = a_ptr[A->calculate_index(i, j)];
+		}
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::transposen() const {
+	Ref<MLPPMatrix> AT;
+	AT.instance();
+	AT->resize(Size2i(_size.y, _size.x));
+
+	const real_t *a_ptr = ptr();
+	real_t *at_ptr = AT->ptrw();
+
+	for (int i = 0; i < _size.y; ++i) {
+		for (int j = 0; j < _size.x; ++j) {
+			at_ptr[AT->calculate_index(j, i)] = a_ptr[calculate_index(i, j)];
 		}
 	}
 
 	return AT;
 }
-Ref<MLPPMatrix> MLPPMatrix::scalar_multiplynm(real_t scalar, const Ref<MLPPMatrix> &A) {
-	Ref<MLPPMatrix> AN = A->duplicate();
-	Size2i a_size = AN->size();
-	real_t *an_ptr = AN->ptrw();
+void MLPPMatrix::transposeb(const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND(!A.is_valid());
+
+	Size2i a_size = A->size();
+
+	Size2i s = Size2i(a_size.y, a_size.x);
+
+	if (_size != s) {
+		resize(s);
+	}
+
+	const real_t *a_ptr = A->ptr();
+	real_t *at_ptr = ptrw();
 
 	for (int i = 0; i < a_size.y; ++i) {
 		for (int j = 0; j < a_size.x; ++j) {
-			an_ptr[AN->calculate_index(i, j)] *= scalar;
+			at_ptr[calculate_index(j, i)] = a_ptr[A->calculate_index(i, j)];
 		}
+	}
+}
+
+void MLPPMatrix::scalar_multiply(const real_t scalar) {
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		_data[i] *= scalar;
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::scalar_multiplyn(const real_t scalar) const {
+	Ref<MLPPMatrix> AN = duplicate();
+	int ds = AN->data_size();
+	real_t *an_ptr = AN->ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		an_ptr[i] *= scalar;
 	}
 
 	return AN;
 }
+void MLPPMatrix::scalar_multiplyb(const real_t scalar, const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND(!A.is_valid());
 
-Ref<MLPPMatrix> MLPPMatrix::scalar_addnm(real_t scalar, const Ref<MLPPMatrix> &A) {
-	Ref<MLPPMatrix> AN = A->duplicate();
-	Size2i a_size = AN->size();
+	if (A->size() != _size) {
+		resize(A->size());
+	}
+
+	int ds = data_size();
+	real_t *an_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		_data[i] = an_ptr[i] * scalar;
+	}
+}
+
+void MLPPMatrix::scalar_add(const real_t scalar) {
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		_data[i] += scalar;
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::scalar_addn(const real_t scalar) const {
+	Ref<MLPPMatrix> AN = duplicate();
+	int ds = AN->data_size();
 	real_t *an_ptr = AN->ptrw();
 
-	for (int i = 0; i < a_size.y; ++i) {
-		for (int j = 0; j < a_size.x; ++j) {
-			an_ptr[AN->calculate_index(i, j)] += scalar;
-		}
+	for (int i = 0; i < ds; ++i) {
+		an_ptr[i] += scalar;
 	}
 
 	return AN;
+}
+void MLPPMatrix::scalar_addb(const real_t scalar, const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND(!A.is_valid());
+
+	if (A->size() != _size) {
+		resize(A->size());
+	}
+
+	int ds = data_size();
+	real_t *an_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		_data[i] = an_ptr[i] + scalar;
+	}
 }
 
 Ref<MLPPMatrix> MLPPMatrix::lognm(const Ref<MLPPMatrix> &A) {
@@ -794,10 +866,10 @@ Ref<MLPPMatrix> MLPPMatrix::adjointnm(const Ref<MLPPMatrix> &A) {
 	return adj;
 }
 Ref<MLPPMatrix> MLPPMatrix::inversenm(const Ref<MLPPMatrix> &A) {
-	return scalar_multiplynm(1 / detm(A, int(A->size().y)), adjointnm(A));
+	return adjointnm(A)->scalar_multiplyn(1 / detm(A, int(A->size().y)));
 }
 Ref<MLPPMatrix> MLPPMatrix::pinversenm(const Ref<MLPPMatrix> &A) {
-	return inversenm(transposenm(A->multn(A)))->multn(transposenm(A));
+	return inversenm(A->multn(A)->transposen())->multn(A->transposen());
 }
 Ref<MLPPMatrix> MLPPMatrix::zeromatnm(int n, int m) {
 	Ref<MLPPMatrix> mat;
@@ -1126,8 +1198,8 @@ MLPPMatrix::SVDResult MLPPMatrix::svd(const Ref<MLPPMatrix> &A) {
 
 	Size2i a_size = A->size();
 
-	EigenResult left_eigen = eigen(A->multn(transposenm(A)));
-	EigenResult right_eigen = eigen(transposenm(A)->multn(A));
+	EigenResult left_eigen = eigen(A->multn(A->transposen()));
+	EigenResult right_eigen = eigen(A->transposen()->multn(A));
 
 	Ref<MLPPMatrix> singularvals = sqrtnm(left_eigen.eigen_values);
 	Ref<MLPPMatrix> sigma = zeromatnm(a_size.y, a_size.x);
