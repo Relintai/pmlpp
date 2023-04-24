@@ -1066,6 +1066,81 @@ bool MLPPMatrix::zeroEigenvalue(std::vector<std::vector<real_t>> A) {
 }
 */
 
+Ref<MLPPVector> MLPPMatrix::mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!A.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
+
+	Size2i a_size = A->size();
+	int b_size = b->size();
+
+	ERR_FAIL_COND_V(a_size.x < b->size(), Ref<MLPPMatrix>());
+
+	Ref<MLPPVector> c;
+	c.instance();
+	c->resize(a_size.y);
+	c->fill(0);
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *c_ptr = c->ptrw();
+
+	for (int i = 0; i < a_size.y; ++i) {
+		for (int k = 0; k < b_size; ++k) {
+			int mat_index = A->calculate_index(i, k);
+
+			c_ptr[i] += a_ptr[mat_index] * b_ptr[k];
+		}
+	}
+
+	return c;
+}
+
+
+Ref<MLPPMatrix> MLPPMatrix::mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!A.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
+
+	Size2i a_size = A->size();
+
+	ERR_FAIL_COND_V(a_size.x != b->size(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> ret;
+	ret.instance();
+	ret->resize(a_size);
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *ret_ptr = ret->ptrw();
+
+	for (int i = 0; i < a_size.y; ++i) {
+		for (int j = 0; j < a_size.x; ++j) {
+			int mat_index = A->calculate_index(i, j);
+
+			ret_ptr[mat_index] = a_ptr[mat_index] + b_ptr[j];
+		}
+	}
+
+	return ret;
+}
+
+Ref<MLPPMatrix> MLPPMatrix::diagnm(const Ref<MLPPVector> &a) {
+	int a_size = a->size();
+
+	Ref<MLPPMatrix> B;
+	B.instance();
+
+	B->resize(Size2i(a_size, a_size));
+	B->fill(0);
+
+	const real_t *a_ptr = a->ptr();
+	real_t *b_ptr = B->ptrw();
+
+	for (int i = 0; i < a_size; ++i) {
+		b_ptr[B->calculate_index(i, i)] = a_ptr[i];
+	}
+
+	return B;
+}
+
+
 String MLPPMatrix::to_string() {
 	String str;
 

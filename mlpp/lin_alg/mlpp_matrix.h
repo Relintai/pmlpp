@@ -698,6 +698,13 @@ public:
 	bool zeroEigenvalue(std::vector<std::vector<real_t>> A);
 	*/
 
+	Ref<MLPPVector> mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
+	Ref<MLPPMatrix> mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
+
+	// set_diagonal (just sets diagonal), set_as_diagonal (zeros, then sets diagonal to vec)
+	// Also a variant that copies
+	Ref<MLPPMatrix> diagnm(const Ref<MLPPVector> &a);
+
 	_FORCE_INLINE_ bool is_equal_approx(const Ref<MLPPMatrix> &p_with, real_t tolerance = static_cast<real_t>(CMP_EPSILON)) const {
 		ERR_FAIL_COND_V(!p_with.is_valid(), false);
 

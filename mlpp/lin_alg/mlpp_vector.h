@@ -15,6 +15,8 @@
 //REMOVE
 #include <vector>
 
+class MLPPMatrix;
+
 class MLPPVector : public Reference {
 	GDCLASS(MLPPVector, Reference);
 
@@ -391,6 +393,12 @@ public:
 	real_t sum_elementsv(const Ref<MLPPVector> &a);
 
 	//real_t cosineSimilarity(std::vector<real_t> a, std::vector<real_t> b);
+
+	Ref<MLPPVector> subtract_matrix_rowsnv(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); // This multiplies a, bT
+
+	// as_diagonal_matrix / to_diagonal_matrix
+	Ref<MLPPMatrix> diagnm(const Ref<MLPPVector> &a);
 
 	String to_string();
 
