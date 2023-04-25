@@ -1441,10 +1441,8 @@ void MLPPMatrix::covo(Ref<MLPPMatrix> out) const {
 	}
 }
 
-MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
+MLPPMatrix::EigenResult MLPPMatrix::eigen() {
 	EigenResult res;
-
-	ERR_FAIL_COND_V(!A.is_valid(), res);
 
 	/*
 	A (the entered parameter) in most use cases will be X'X, XX', etc. and must be symmetric.
@@ -1456,16 +1454,17 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
 
 	HashMap<int, int> val_to_vec;
 	Ref<MLPPMatrix> a_new;
-	Ref<MLPPMatrix> eigenvectors = identity_mat(A->size().y);
-	Size2i a_size = A->size();
+	Ref<MLPPMatrix> a_mat = Ref<MLPPMatrix>(this);
+	Ref<MLPPMatrix> eigenvectors = identity_mat(a_mat->size().y);
+	Size2i a_size = a_mat->size();
 
 	do {
-		real_t a_ij = A->get_element(0, 1);
+		real_t a_ij = a_mat->get_element(0, 1);
 		real_t sub_i = 0;
 		real_t sub_j = 1;
 		for (int i = 0; i < a_size.y; ++i) {
 			for (int j = 0; j < a_size.x; ++j) {
-				real_t ca_ij = A->get_element(i, j);
+				real_t ca_ij = a_mat->get_element(i, j);
 				real_t abs_ca_ij = ABS(ca_ij);
 
 				if (i != j && abs_ca_ij > a_ij) {
@@ -1482,9 +1481,9 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
 			}
 		}
 
-		real_t a_ii = A->get_element(sub_i, sub_i);
-		real_t a_jj = A->get_element(sub_j, sub_j);
-		//real_t a_ji = A->get_element(sub_j, sub_i);
+		real_t a_ii = a_mat->get_element(sub_i, sub_i);
+		real_t a_jj = a_mat->get_element(sub_j, sub_j);
+		//real_t a_ji = a_mat->get_element(sub_j, sub_i);
 		real_t theta;
 
 		if (a_ii == a_jj) {
@@ -1493,13 +1492,13 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
 			theta = 0.5 * atan(2 * a_ij / (a_ii - a_jj));
 		}
 
-		Ref<MLPPMatrix> P = identity_mat(A->size().y);
+		Ref<MLPPMatrix> P = identity_mat(a_mat->size().y);
 		P->set_element(sub_i, sub_j, -Math::sin(theta));
 		P->set_element(sub_i, sub_i, Math::cos(theta));
 		P->set_element(sub_j, sub_j, Math::cos(theta));
 		P->set_element(sub_j, sub_i, Math::sin(theta));
 
-		a_new = P->inverse()->multn(A)->multn(P);
+		a_new = P->inverse()->multn(a_mat)->multn(P);
 
 		Size2i a_new_size = a_new->size();
 
@@ -1526,7 +1525,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
 			diagonal = true;
 		}
 
-		if (a_new->is_equal_approx(A)) {
+		if (a_new->is_equal_approx(a_mat)) {
 			diagonal = true;
 			for (int i = 0; i < a_new_size.y; ++i) {
 				for (int j = 0; j < a_new_size.x; ++j) {
@@ -1538,7 +1537,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
 		}
 
 		eigenvectors = eigenvectors->multn(P);
-		A = a_new;
+		a_mat = a_new;
 
 	} while (!diagonal);
 
@@ -1580,16 +1579,202 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
 
 	return res;
 }
+MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) {
+	EigenResult res;
 
-MLPPMatrix::SVDResult MLPPMatrix::svd(const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND_V(!A.is_valid(), res);
+
+	/*
+	A (the entered parameter) in most use cases will be X'X, XX', etc. and must be symmetric.
+	That simply means that 1) X' = X and 2) X is a square matrix. This function that computes the
+	eigenvalues of a matrix is utilizing Jacobi's method.
+	*/
+
+	real_t diagonal = true; // Perform the iterative Jacobi algorithm unless and until we reach a diagonal matrix which yields us the eigenvals.
+
+	HashMap<int, int> val_to_vec;
+	Ref<MLPPMatrix> a_new;
+	Ref<MLPPMatrix> a_mat = A;
+	Ref<MLPPMatrix> eigenvectors = identity_mat(a_mat->size().y);
+	Size2i a_size = a_mat->size();
+
+	do {
+		real_t a_ij = a_mat->get_element(0, 1);
+		real_t sub_i = 0;
+		real_t sub_j = 1;
+		for (int i = 0; i < a_size.y; ++i) {
+			for (int j = 0; j < a_size.x; ++j) {
+				real_t ca_ij = a_mat->get_element(i, j);
+				real_t abs_ca_ij = ABS(ca_ij);
+
+				if (i != j && abs_ca_ij > a_ij) {
+					a_ij = ca_ij;
+					sub_i = i;
+					sub_j = j;
+				} else if (i != j && abs_ca_ij == a_ij) {
+					if (i < sub_i) {
+						a_ij = ca_ij;
+						sub_i = i;
+						sub_j = j;
+					}
+				}
+			}
+		}
+
+		real_t a_ii = a_mat->get_element(sub_i, sub_i);
+		real_t a_jj = a_mat->get_element(sub_j, sub_j);
+		//real_t a_ji = a_mat->get_element(sub_j, sub_i);
+		real_t theta;
+
+		if (a_ii == a_jj) {
+			theta = M_PI / 4;
+		} else {
+			theta = 0.5 * atan(2 * a_ij / (a_ii - a_jj));
+		}
+
+		Ref<MLPPMatrix> P = identity_mat(a_mat->size().y);
+		P->set_element(sub_i, sub_j, -Math::sin(theta));
+		P->set_element(sub_i, sub_i, Math::cos(theta));
+		P->set_element(sub_j, sub_j, Math::cos(theta));
+		P->set_element(sub_j, sub_i, Math::sin(theta));
+
+		a_new = P->inverse()->multn(a_mat)->multn(P);
+
+		Size2i a_new_size = a_new->size();
+
+		for (int i = 0; i < a_new_size.y; ++i) {
+			for (int j = 0; j < a_new_size.x; ++j) {
+				if (i != j && Math::is_zero_approx(Math::round(a_new->get_element(i, j)))) {
+					a_new->set_element(i, j, 0);
+				}
+			}
+		}
+
+		bool non_zero = false;
+		for (int i = 0; i < a_new_size.y; ++i) {
+			for (int j = 0; j < a_new_size.x; ++j) {
+				if (i != j && Math::is_zero_approx(Math::round(a_new->get_element(i, j)))) {
+					non_zero = true;
+				}
+			}
+		}
+
+		if (non_zero) {
+			diagonal = false;
+		} else {
+			diagonal = true;
+		}
+
+		if (a_new->is_equal_approx(a_mat)) {
+			diagonal = true;
+			for (int i = 0; i < a_new_size.y; ++i) {
+				for (int j = 0; j < a_new_size.x; ++j) {
+					if (i != j) {
+						a_new->set_element(i, j, 0);
+					}
+				}
+			}
+		}
+
+		eigenvectors = eigenvectors->multn(P);
+		a_mat = a_new;
+
+	} while (!diagonal);
+
+	Ref<MLPPMatrix> a_new_prior = a_new->duplicate();
+
+	Size2i a_new_size = a_new->size();
+
+	// Bubble Sort. Should change this later.
+	for (int i = 0; i < a_new_size.y - 1; ++i) {
+		for (int j = 0; j < a_new_size.x - 1 - i; ++j) {
+			if (a_new->get_element(j, j) < a_new->get_element(j + 1, j + 1)) {
+				real_t temp = a_new->get_element(j + 1, j + 1);
+				a_new->set_element(j + 1, j + 1, a_new->get_element(j, j));
+				a_new->set_element(j, j, temp);
+			}
+		}
+	}
+
+	for (int i = 0; i < a_new_size.y; ++i) {
+		for (int j = 0; j < a_new_size.x; ++j) {
+			if (a_new->get_element(i, i) == a_new_prior->get_element(j, j)) {
+				val_to_vec[i] = j;
+			}
+		}
+	}
+
+	Ref<MLPPMatrix> eigen_temp = eigenvectors->duplicate();
+
+	Size2i eigenvectors_size = eigenvectors->size();
+
+	for (int i = 0; i < eigenvectors_size.y; ++i) {
+		for (int j = 0; j < eigenvectors_size.x; ++j) {
+			eigenvectors->set_element(i, j, eigen_temp->get_element(i, val_to_vec[j]));
+		}
+	}
+
+	res.eigen_vectors = eigenvectors;
+	res.eigen_values = a_new;
+
+	return res;
+}
+Array MLPPMatrix::eigen_bind() {
+	Array arr;
+
+	EigenResult r = eigen();
+
+	arr.push_back(r.eigen_values);
+	arr.push_back(r.eigen_vectors);
+
+	return arr;
+}
+Array MLPPMatrix::eigenb_bind(const Ref<MLPPMatrix> &A) {
+	Array arr;
+
+	ERR_FAIL_COND_V(!A.is_valid(), arr);
+
+	EigenResult r = eigenb(A);
+
+	arr.push_back(r.eigen_values);
+	arr.push_back(r.eigen_vectors);
+
+	return arr;
+}
+
+MLPPMatrix::SVDResult MLPPMatrix::svd() {
+	SVDResult res;
+
+	EigenResult left_eigen = multn(transposen())->eigen();
+	EigenResult right_eigen = transposen()->multn(Ref<MLPPMatrix>(this))->eigen();
+
+	Ref<MLPPMatrix> singularvals = left_eigen.eigen_values->sqrtn();
+	Ref<MLPPMatrix> sigma = zero_mat(_size.y, _size.x);
+
+	Size2i singularvals_size = singularvals->size();
+
+	for (int i = 0; i < singularvals_size.y; ++i) {
+		for (int j = 0; j < singularvals_size.x; ++j) {
+			sigma->set_element(i, j, singularvals->get_element(i, j));
+		}
+	}
+
+	res.U = left_eigen.eigen_vectors;
+	res.S = sigma;
+	res.Vt = right_eigen.eigen_vectors;
+
+	return res;
+}
+
+MLPPMatrix::SVDResult MLPPMatrix::svdb(const Ref<MLPPMatrix> &A) {
 	SVDResult res;
 
 	ERR_FAIL_COND_V(!A.is_valid(), res);
 
 	Size2i a_size = A->size();
 
-	EigenResult left_eigen = eigen(A->multn(A->transposen()));
-	EigenResult right_eigen = eigen(A->transposen()->multn(A));
+	EigenResult left_eigen = A->multn(A->transposen())->eigen();
+	EigenResult right_eigen = A->transposen()->multn(A)->eigen();
 
 	Ref<MLPPMatrix> singularvals = left_eigen.eigen_values->sqrtn();
 	Ref<MLPPMatrix> sigma = zero_mat(a_size.y, a_size.x);
@@ -1607,6 +1792,31 @@ MLPPMatrix::SVDResult MLPPMatrix::svd(const Ref<MLPPMatrix> &A) {
 	res.Vt = right_eigen.eigen_vectors;
 
 	return res;
+}
+
+Array MLPPMatrix::svd_bind() {
+	Array arr;
+
+	SVDResult r = svd();
+
+	arr.push_back(r.U);
+	arr.push_back(r.S);
+	arr.push_back(r.Vt);
+
+	return arr;
+}
+Array MLPPMatrix::svdb_bind(const Ref<MLPPMatrix> &A) {
+	Array arr;
+
+	ERR_FAIL_COND_V(!A.is_valid(), arr);
+
+	SVDResult r = svdb(A);
+
+	arr.push_back(r.U);
+	arr.push_back(r.S);
+	arr.push_back(r.Vt);
+
+	return arr;
 }
 
 /*
@@ -1690,21 +1900,37 @@ real_t MLPPMatrix::sum_elements(std::vector<std::vector<real_t>> A) {
 }
 */
 
-Ref<MLPPVector> MLPPMatrix::flattenvvnv(const Ref<MLPPMatrix> &A) {
-	int data_size = A->data_size();
+Ref<MLPPVector> MLPPMatrix::flatten() const {
+	int ds = data_size();
 
 	Ref<MLPPVector> res;
 	res.instance();
-	res->resize(data_size);
+	res->resize(ds);
 
 	real_t *res_ptr = res->ptrw();
-	const real_t *a_ptr = A->ptr();
+	const real_t *a_ptr = ptr();
 
-	for (int i = 0; i < data_size; ++i) {
+	for (int i = 0; i < ds; ++i) {
 		res_ptr[i] = a_ptr[i];
 	}
 
 	return res;
+}
+void MLPPMatrix::flatteno(Ref<MLPPVector> out) const {
+	ERR_FAIL_COND(!out.is_valid());
+
+	int ds = data_size();
+
+	if (unlikely(out->size() != ds)) {
+		out->resize(ds);
+	}
+
+	real_t *res_ptr = out->ptrw();
+	const real_t *a_ptr = ptr();
+
+	for (int i = 0; i < ds; ++i) {
+		res_ptr[i] = a_ptr[i];
+	}
 }
 
 /*
@@ -1764,26 +1990,25 @@ bool MLPPMatrix::zeroEigenvalue(std::vector<std::vector<real_t>> A) {
 }
 */
 
-Ref<MLPPVector> MLPPMatrix::mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
-	ERR_FAIL_COND_V(!A.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
+Ref<MLPPVector> MLPPMatrix::mult_vec(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPMatrix>());
 
-	Size2i a_size = A->size();
 	int b_size = b->size();
 
-	ERR_FAIL_COND_V(a_size.x < b->size(), Ref<MLPPMatrix>());
+	ERR_FAIL_COND_V(_size.x < b->size(), Ref<MLPPMatrix>());
 
 	Ref<MLPPVector> c;
 	c.instance();
-	c->resize(a_size.y);
+	c->resize(_size.y);
 	c->fill(0);
 
-	const real_t *a_ptr = A->ptr();
+	const real_t *a_ptr = ptr();
 	const real_t *b_ptr = b->ptr();
 	real_t *c_ptr = c->ptrw();
 
-	for (int i = 0; i < a_size.y; ++i) {
+	for (int i = 0; i < _size.y; ++i) {
 		for (int k = 0; k < b_size; ++k) {
-			int mat_index = A->calculate_index(i, k);
+			int mat_index = calculate_index(i, k);
 
 			c_ptr[i] += a_ptr[mat_index] * b_ptr[k];
 		}
@@ -1791,21 +2016,82 @@ Ref<MLPPVector> MLPPMatrix::mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<M
 
 	return c;
 }
+void MLPPMatrix::mult_veco(const Ref<MLPPVector> &b, Ref<MLPPVector> out) {
+	ERR_FAIL_COND(!out.is_valid() || !b.is_valid());
 
-Ref<MLPPMatrix> MLPPMatrix::mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
-	ERR_FAIL_COND_V(!A.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
+	int b_size = b->size();
 
-	Size2i a_size = A->size();
+	ERR_FAIL_COND(_size.x < b->size());
 
-	ERR_FAIL_COND_V(a_size.x != b->size(), Ref<MLPPMatrix>());
+	if (unlikely(out->size() != _size.y)) {
+		out->resize(_size.y);
+	}
+
+	out->fill(0);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *c_ptr = out->ptrw();
+
+	for (int i = 0; i < _size.y; ++i) {
+		for (int k = 0; k < b_size; ++k) {
+			int mat_index = calculate_index(i, k);
+
+			c_ptr[i] += a_ptr[mat_index] * b_ptr[k];
+		}
+	}
+}
+
+void MLPPMatrix::add_vec(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!b.is_valid());
+	ERR_FAIL_COND(_size.x != b->size());
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *ret_ptr = ptrw();
+
+	for (int i = 0; i < _size.y; ++i) {
+		for (int j = 0; j < _size.x; ++j) {
+			int mat_index = calculate_index(i, j);
+
+			ret_ptr[mat_index] = a_ptr[mat_index] + b_ptr[j];
+		}
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::add_vecn(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPMatrix>());
+	ERR_FAIL_COND_V(_size.x != b->size(), Ref<MLPPMatrix>());
 
 	Ref<MLPPMatrix> ret;
 	ret.instance();
-	ret->resize(a_size);
+	ret->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *ret_ptr = ret->ptrw();
+
+	for (int i = 0; i < _size.y; ++i) {
+		for (int j = 0; j < _size.x; ++j) {
+			int mat_index = calculate_index(i, j);
+
+			ret_ptr[mat_index] = a_ptr[mat_index] + b_ptr[j];
+		}
+	}
+
+	return ret;
+}
+void MLPPMatrix::add_vecb(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!A.is_valid() || !b.is_valid());
+	Size2i a_size = A->size();
+	ERR_FAIL_COND(a_size.x != b->size());
+
+	if (unlikely(_size != a_size)) {
+		resize(a_size);
+	}
 
 	const real_t *a_ptr = A->ptr();
 	const real_t *b_ptr = b->ptr();
-	real_t *ret_ptr = ret->ptrw();
+	real_t *ret_ptr = ptrw();
 
 	for (int i = 0; i < a_size.y; ++i) {
 		for (int j = 0; j < a_size.x; ++j) {
@@ -1814,23 +2100,44 @@ Ref<MLPPMatrix> MLPPMatrix::mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<ML
 			ret_ptr[mat_index] = a_ptr[mat_index] + b_ptr[j];
 		}
 	}
-
-	return ret;
 }
 
-Ref<MLPPMatrix> MLPPMatrix::outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
-	Ref<MLPPMatrix> C;
-	C.instance();
-	Size2i size = Size2i(b->size(), a->size());
-	C->resize(size);
+void MLPPMatrix::outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!a.is_valid() || !b.is_valid());
+
+	Size2i s = Size2i(b->size(), a->size());
+
+	if (unlikely(_size != s)) {
+		resize(s);
+	}
 
 	const real_t *a_ptr = a->ptr();
 	const real_t *b_ptr = b->ptr();
 
-	for (int i = 0; i < size.y; ++i) {
+	for (int i = 0; i < s.y; ++i) {
 		real_t curr_a = a_ptr[i];
 
-		for (int j = 0; j < size.x; ++j) {
+		for (int j = 0; j < s.x; ++j) {
+			set_element(i, j, curr_a * b_ptr[j]);
+		}
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::outer_productn(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> C;
+	C.instance();
+
+	Size2i s = Size2i(b->size(), a->size());
+	C->resize(s);
+
+	const real_t *a_ptr = a->ptr();
+	const real_t *b_ptr = b->ptr();
+
+	for (int i = 0; i < s.y; ++i) {
+		real_t curr_a = a_ptr[i];
+
+		for (int j = 0; j < s.x; ++j) {
 			C->set_element(i, j, curr_a * b_ptr[j]);
 		}
 	}
@@ -1838,19 +2145,87 @@ Ref<MLPPMatrix> MLPPMatrix::outer_product(const Ref<MLPPVector> &a, const Ref<ML
 	return C;
 }
 
-Ref<MLPPMatrix> MLPPMatrix::diagnm(const Ref<MLPPVector> &a) {
+void MLPPMatrix::set_diagonal(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND(!a.is_valid());
+
 	int a_size = a->size();
+	int ms = MIN(_size.x, _size.y);
+	ms = MIN(ms, a_size);
 
-	Ref<MLPPMatrix> B;
-	B.instance();
+	if (ms <= 0) {
+		return;
+	}
 
-	B->resize(Size2i(a_size, a_size));
-	B->fill(0);
+	const real_t *a_ptr = a->ptr();
+	real_t *b_ptr = ptrw();
+
+	for (int i = 0; i < ms; ++i) {
+		b_ptr[calculate_index(i, i)] = a_ptr[i];
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::set_diagonaln(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> B = duplicate();
+
+	int a_size = a->size();
+	int ms = MIN(_size.x, _size.y);
+	ms = MIN(ms, a_size);
+
+	if (ms <= 0) {
+		return B;
+	}
 
 	const real_t *a_ptr = a->ptr();
 	real_t *b_ptr = B->ptrw();
 
-	for (int i = 0; i < a_size; ++i) {
+	for (int i = 0; i < ms; ++i) {
+		b_ptr[B->calculate_index(i, i)] = a_ptr[i];
+	}
+
+	return B;
+}
+
+void MLPPMatrix::diagonal_zeroed(const Ref<MLPPVector> &a) {
+	fill(0);
+
+	ERR_FAIL_COND(!a.is_valid());
+
+	int a_size = a->size();
+	int ms = MIN(_size.x, _size.y);
+	ms = MIN(ms, a_size);
+
+	if (ms <= 0) {
+		return;
+	}
+
+	const real_t *a_ptr = a->ptr();
+	real_t *b_ptr = ptrw();
+
+	for (int i = 0; i < ms; ++i) {
+		b_ptr[calculate_index(i, i)] = a_ptr[i];
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::diagonal_zeroedn(const Ref<MLPPVector> &a) {
+	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> B;
+	B.instance();
+	B->resize(_size);
+	B->fill(0);
+
+	int a_size = a->size();
+	int ms = MIN(_size.x, _size.y);
+	ms = MIN(ms, a_size);
+
+	if (ms <= 0) {
+		return B;
+	}
+
+	const real_t *a_ptr = a->ptr();
+	real_t *b_ptr = B->ptrw();
+
+	for (int i = 0; i < ms; ++i) {
 		b_ptr[B->calculate_index(i, i)] = a_ptr[i];
 	}
 

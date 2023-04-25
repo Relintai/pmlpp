@@ -713,7 +713,10 @@ public:
 		Ref<MLPPMatrix> eigen_values;
 	};
 
-	EigenResult eigen(Ref<MLPPMatrix> A);
+	EigenResult eigen();
+	EigenResult eigenb(const Ref<MLPPMatrix> &A);
+	Array eigen_bind();
+	Array eigenb_bind(const Ref<MLPPMatrix> &A);
 
 	struct SVDResult {
 		Ref<MLPPMatrix> U;
@@ -721,7 +724,10 @@ public:
 		Ref<MLPPMatrix> Vt;
 	};
 
-	SVDResult svd(const Ref<MLPPMatrix> &A);
+	SVDResult svd();
+	SVDResult svdb(const Ref<MLPPMatrix> &A);
+	Array svd_bind();
+	Array svdb_bind(const Ref<MLPPMatrix> &A);
 
 	//std::vector<real_t> vectorProjection(std::vector<real_t> a, std::vector<real_t> b);
 
@@ -747,7 +753,8 @@ public:
 
 	//real_t sum_elements(std::vector<std::vector<real_t>> A);
 
-	Ref<MLPPVector> flattenvvnv(const Ref<MLPPMatrix> &A);
+	Ref<MLPPVector> flatten() const;
+	void flatteno(Ref<MLPPVector> out) const;
 
 	/*
 	std::vector<real_t> solve(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
@@ -759,14 +766,24 @@ public:
 	bool zeroEigenvalue(std::vector<std::vector<real_t>> A);
 	*/
 
-	Ref<MLPPVector> mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
-	Ref<MLPPMatrix> mat_vec_addnm(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
+	Ref<MLPPVector> mult_vec(const Ref<MLPPVector> &b);
+	void mult_veco(const Ref<MLPPVector> &b, Ref<MLPPVector> out);
 
-	Ref<MLPPMatrix> outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); // This multiplies a, bT
+	void add_vec(const Ref<MLPPVector> &b);
+	Ref<MLPPMatrix> add_vecn(const Ref<MLPPVector> &b);
+	void add_vecb(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
 
-	// set_diagonal (just sets diagonal), set_as_diagonal (zeros, then sets diagonal to vec)
-	// Also a variant that copies
-	Ref<MLPPMatrix> diagnm(const Ref<MLPPVector> &a);
+	// This multiplies a, bT
+	void outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	Ref<MLPPMatrix> outer_productn(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+
+	// Just sets the diagonal
+	void set_diagonal(const Ref<MLPPVector> &a);
+	Ref<MLPPMatrix> set_diagonaln(const Ref<MLPPVector> &a);
+
+	// Sets the diagonals, everythign else will get zeroed
+	void diagonal_zeroed(const Ref<MLPPVector> &a);
+	Ref<MLPPMatrix> diagonal_zeroedn(const Ref<MLPPVector> &a);
 
 	_FORCE_INLINE_ bool is_equal_approx(const Ref<MLPPMatrix> &p_with, real_t tolerance = static_cast<real_t>(CMP_EPSILON)) const {
 		ERR_FAIL_COND_V(!p_with.is_valid(), false);
