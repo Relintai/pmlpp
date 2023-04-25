@@ -35,12 +35,12 @@ public:
 	// TODO: Add Image get, set helper methods to MLPPMatrix -> so the other axis helper methods can use them.
 	// TODO: _FORCE_INLINE_ less big methods (Also do this in MLPPVEctor and MLPPMatrix)
 
-	_FORCE_INLINE_ void add_feature_map(const Vector<real_t> &p_row) {
+	_FORCE_INLINE_ void add_z_slice(const Vector<real_t> &p_row) {
 		if (p_row.size() == 0) {
 			return;
 		}
 
-		int fms = feature_map_data_size();
+		int fms = z_slice_data_size();
 
 		ERR_FAIL_COND(fms != p_row.size());
 
@@ -58,12 +58,12 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void add_feature_map_pool_vector(const PoolRealArray &p_row) {
+	_FORCE_INLINE_ void add_z_slice_pool_vector(const PoolRealArray &p_row) {
 		if (p_row.size() == 0) {
 			return;
 		}
 
-		int fms = feature_map_data_size();
+		int fms = z_slice_data_size();
 
 		ERR_FAIL_COND(fms != p_row.size());
 
@@ -82,7 +82,7 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void add_feature_map_mlpp_vector(const Ref<MLPPVector> &p_row) {
+	_FORCE_INLINE_ void add_z_slice_mlpp_vector(const Ref<MLPPVector> &p_row) {
 		ERR_FAIL_COND(!p_row.is_valid());
 
 		int p_row_size = p_row->size();
@@ -91,7 +91,7 @@ public:
 			return;
 		}
 
-		int fms = feature_map_data_size();
+		int fms = z_slice_data_size();
 
 		ERR_FAIL_COND(fms != p_row_size);
 
@@ -109,7 +109,7 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void add_feature_map_mlpp_matrix(const Ref<MLPPMatrix> &p_matrix) {
+	_FORCE_INLINE_ void add_z_slice_mlpp_matrix(const Ref<MLPPMatrix> &p_matrix) {
 		ERR_FAIL_COND(!p_matrix.is_valid());
 
 		int other_data_size = p_matrix->data_size();
@@ -119,7 +119,7 @@ public:
 		}
 
 		Size2i matrix_size = p_matrix->size();
-		Size2i fms = feature_map_size();
+		Size2i fms = z_slice_size();
 
 		ERR_FAIL_COND(fms != matrix_size);
 
@@ -137,7 +137,7 @@ public:
 		}
 	}
 
-	void remove_feature_map(int p_index) {
+	void remove_z_slice(int p_index) {
 		ERR_FAIL_INDEX(p_index, _size.z);
 
 		--_size.z;
@@ -150,9 +150,9 @@ public:
 			return;
 		}
 
-		int fmds = feature_map_data_size();
+		int fmds = z_slice_data_size();
 
-		for (int i = calculate_feature_map_index(p_index); i < ds; ++i) {
+		for (int i = calculate_z_slice_index(p_index); i < ds; ++i) {
 			_data[i] = _data[i + fmds];
 		}
 
@@ -162,7 +162,7 @@ public:
 
 	// Removes the item copying the last value into the position of the one to
 	// remove. It's generally faster than `remove`.
-	void remove_feature_map_unordered(int p_index) {
+	void remove_z_slice_unordered(int p_index) {
 		ERR_FAIL_INDEX(p_index, _size.z);
 
 		--_size.z;
@@ -175,8 +175,8 @@ public:
 			return;
 		}
 
-		int start_ind = calculate_feature_map_index(p_index);
-		int end_ind = calculate_feature_map_index(p_index + 1);
+		int start_ind = calculate_z_slice_index(p_index);
+		int end_ind = calculate_z_slice_index(p_index + 1);
 
 		for (int i = start_ind; i < end_ind; ++i) {
 			_data[i] = _data[ds + i];
@@ -186,14 +186,14 @@ public:
 		CRASH_COND_MSG(!_data, "Out of memory");
 	}
 
-	void swap_feature_map(int p_index_1, int p_index_2) {
+	void swap_z_slice(int p_index_1, int p_index_2) {
 		ERR_FAIL_INDEX(p_index_1, _size.z);
 		ERR_FAIL_INDEX(p_index_2, _size.z);
 
-		int ind1_start = calculate_feature_map_index(p_index_1);
-		int ind2_start = calculate_feature_map_index(p_index_2);
+		int ind1_start = calculate_z_slice_index(p_index_1);
+		int ind2_start = calculate_z_slice_index(p_index_2);
 
-		int fmds = feature_map_data_size();
+		int fmds = z_slice_data_size();
 
 		for (int i = 0; i < fmds; ++i) {
 			SWAP(_data[ind1_start + i], _data[ind2_start + i]);
@@ -210,8 +210,8 @@ public:
 	}
 
 	_FORCE_INLINE_ bool empty() const { return _size == Size3i(); }
-	_FORCE_INLINE_ int feature_map_data_size() const { return _size.x * _size.y; }
-	_FORCE_INLINE_ Size2i feature_map_size() const { return Size2i(_size.x, _size.y); }
+	_FORCE_INLINE_ int z_slice_data_size() const { return _size.x * _size.y; }
+	_FORCE_INLINE_ Size2i z_slice_size() const { return Size2i(_size.x, _size.y); }
 	_FORCE_INLINE_ int data_size() const { return _size.x * _size.y * _size.z; }
 	_FORCE_INLINE_ Size3i size() const { return _size; }
 
@@ -246,7 +246,7 @@ public:
 		return p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z;
 	}
 
-	_FORCE_INLINE_ int calculate_feature_map_index(int p_index_z) const {
+	_FORCE_INLINE_ int calculate_z_slice_index(int p_index_z) const {
 		return _size.x * _size.y * p_index_z;
 	}
 
@@ -420,12 +420,12 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ Vector<real_t> get_feature_map_vector(int p_index_z) const {
+	_FORCE_INLINE_ Vector<real_t> get_z_slice_vector(int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, Vector<real_t>());
 
 		Vector<real_t> ret;
 
-		int fmds = feature_map_data_size();
+		int fmds = z_slice_data_size();
 
 		if (unlikely(fmds == 0)) {
 			return ret;
@@ -433,7 +433,7 @@ public:
 
 		ret.resize(fmds);
 
-		int ind_start = calculate_feature_map_index(p_index_z);
+		int ind_start = calculate_z_slice_index(p_index_z);
 
 		real_t *row_ptr = ret.ptrw();
 
@@ -444,12 +444,12 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ PoolRealArray get_feature_map_pool_vector(int p_index_z) const {
+	_FORCE_INLINE_ PoolRealArray get_z_slice_pool_vector(int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, PoolRealArray());
 
 		PoolRealArray ret;
 
-		int fmds = feature_map_data_size();
+		int fmds = z_slice_data_size();
 
 		if (unlikely(fmds == 0)) {
 			return ret;
@@ -457,7 +457,7 @@ public:
 
 		ret.resize(fmds);
 
-		int ind_start = calculate_feature_map_index(p_index_z);
+		int ind_start = calculate_z_slice_index(p_index_z);
 
 		PoolRealArray::Write w = ret.write();
 		real_t *row_ptr = w.ptr();
@@ -469,13 +469,13 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ Ref<MLPPVector> get_feature_map_mlpp_vector(int p_index_z) const {
+	_FORCE_INLINE_ Ref<MLPPVector> get_z_slice_mlpp_vector(int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<MLPPVector>());
 
 		Ref<MLPPVector> ret;
 		ret.instance();
 
-		int fmds = feature_map_data_size();
+		int fmds = z_slice_data_size();
 
 		if (unlikely(fmds == 0)) {
 			return ret;
@@ -483,7 +483,7 @@ public:
 
 		ret->resize(fmds);
 
-		int ind_start = calculate_feature_map_index(p_index_z);
+		int ind_start = calculate_z_slice_index(p_index_z);
 
 		real_t *row_ptr = ret->ptrw();
 
@@ -494,16 +494,16 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ void get_feature_map_into_mlpp_vector(int p_index_z, Ref<MLPPVector> target) const {
+	_FORCE_INLINE_ void get_z_slice_into_mlpp_vector(int p_index_z, Ref<MLPPVector> target) const {
 		ERR_FAIL_INDEX(p_index_z, _size.z);
 
-		int fmds = feature_map_data_size();
+		int fmds = z_slice_data_size();
 
 		if (unlikely(target->size() != fmds)) {
 			target->resize(fmds);
 		}
 
-		int ind_start = calculate_feature_map_index(p_index_z);
+		int ind_start = calculate_z_slice_index(p_index_z);
 
 		real_t *row_ptr = target->ptrw();
 
@@ -512,21 +512,21 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ Ref<MLPPMatrix> get_feature_map_mlpp_matrix(int p_index_z) const {
+	_FORCE_INLINE_ Ref<MLPPMatrix> get_z_slice_mlpp_matrix(int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<MLPPMatrix>());
 
 		Ref<MLPPMatrix> ret;
 		ret.instance();
 
-		int fmds = feature_map_data_size();
+		int fmds = z_slice_data_size();
 
 		if (unlikely(fmds == 0)) {
 			return ret;
 		}
 
-		ret->resize(feature_map_size());
+		ret->resize(z_slice_size());
 
-		int ind_start = calculate_feature_map_index(p_index_z);
+		int ind_start = calculate_z_slice_index(p_index_z);
 
 		real_t *row_ptr = ret->ptrw();
 
@@ -537,17 +537,17 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ void get_feature_map_into_mlpp_matrix(int p_index_z, Ref<MLPPMatrix> target) const {
+	_FORCE_INLINE_ void get_z_slice_into_mlpp_matrix(int p_index_z, Ref<MLPPMatrix> target) const {
 		ERR_FAIL_INDEX(p_index_z, _size.z);
 
-		int fmds = feature_map_data_size();
-		Size2i fms = feature_map_size();
+		int fmds = z_slice_data_size();
+		Size2i fms = z_slice_size();
 
 		if (unlikely(target->size() != fms)) {
 			target->resize(fms);
 		}
 
-		int ind_start = calculate_feature_map_index(p_index_z);
+		int ind_start = calculate_z_slice_index(p_index_z);
 
 		real_t *row_ptr = target->ptrw();
 
@@ -556,14 +556,14 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void set_feature_map_vector(int p_index_z, const Vector<real_t> &p_row) {
+	_FORCE_INLINE_ void set_z_slice_vector(int p_index_z, const Vector<real_t> &p_row) {
 		ERR_FAIL_INDEX(p_index_z, _size.z);
 
-		int fmds = feature_map_data_size();
+		int fmds = z_slice_data_size();
 
 		ERR_FAIL_COND(p_row.size() != fmds);
 
-		int ind_start = calculate_feature_map_index(p_index_z);
+		int ind_start = calculate_z_slice_index(p_index_z);
 
 		const real_t *row_ptr = p_row.ptr();
 
@@ -572,14 +572,14 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void set_feature_map_pool_vector(int p_index_z, const PoolRealArray &p_row) {
+	_FORCE_INLINE_ void set_z_slice_pool_vector(int p_index_z, const PoolRealArray &p_row) {
 		ERR_FAIL_INDEX(p_index_z, _size.z);
 
-		int fmds = feature_map_data_size();
+		int fmds = z_slice_data_size();
 
 		ERR_FAIL_COND(p_row.size() != fmds);
 
-		int ind_start = calculate_feature_map_index(p_index_z);
+		int ind_start = calculate_z_slice_index(p_index_z);
 
 		PoolRealArray::Read r = p_row.read();
 		const real_t *row_ptr = r.ptr();
@@ -589,15 +589,15 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void set_feature_map_mlpp_vector(int p_index_z, const Ref<MLPPVector> &p_row) {
+	_FORCE_INLINE_ void set_z_slice_mlpp_vector(int p_index_z, const Ref<MLPPVector> &p_row) {
 		ERR_FAIL_INDEX(p_index_z, _size.z);
 		ERR_FAIL_COND(!p_row.is_valid());
 
-		int fmds = feature_map_data_size();
+		int fmds = z_slice_data_size();
 
 		ERR_FAIL_COND(p_row->size() != fmds);
 
-		int ind_start = calculate_feature_map_index(p_index_z);
+		int ind_start = calculate_z_slice_index(p_index_z);
 
 		const real_t *row_ptr = p_row->ptr();
 
@@ -606,15 +606,15 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ void set_feature_map_mlpp_matrix(int p_index_z, const Ref<MLPPMatrix> &p_mat) {
+	_FORCE_INLINE_ void set_z_slice_mlpp_matrix(int p_index_z, const Ref<MLPPMatrix> &p_mat) {
 		ERR_FAIL_INDEX(p_index_z, _size.z);
 		ERR_FAIL_COND(!p_mat.is_valid());
 
-		int fmds = feature_map_data_size();
+		int fmds = z_slice_data_size();
 
-		ERR_FAIL_COND(p_mat->size() != feature_map_size());
+		ERR_FAIL_COND(p_mat->size() != z_slice_size());
 
-		int ind_start = calculate_feature_map_index(p_index_z);
+		int ind_start = calculate_z_slice_index(p_index_z);
 
 		const real_t *row_ptr = p_mat->ptr();
 
@@ -641,16 +641,16 @@ public:
 		IMAGE_CHANNEL_FLAG_RGBA = IMAGE_CHANNEL_FLAG_R | IMAGE_CHANNEL_FLAG_G | IMAGE_CHANNEL_FLAG_B | IMAGE_CHANNEL_FLAG_A,
 	};
 
-	void add_feature_maps_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
+	void add_z_slices_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
 
-	Ref<Image> get_feature_map_image(const int p_index_z) const;
-	Ref<Image> get_feature_maps_image(const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
+	Ref<Image> get_z_slice_image(const int p_index_z) const;
+	Ref<Image> get_z_slices_image(const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
 
-	void get_feature_map_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
-	void get_feature_maps_into_image(Ref<Image> p_target, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
+	void get_z_slice_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
+	void get_z_slices_into_image(Ref<Image> p_target, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
 
-	void set_feature_map_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel_flag = IMAGE_CHANNEL_FLAG_R);
-	void set_feature_maps_image(const Ref<Image> &p_img, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);
+	void set_z_slice_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel_flag = IMAGE_CHANNEL_FLAG_R);
+	void set_z_slices_image(const Ref<Image> &p_img, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);
 
 	void set_from_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
 
@@ -857,8 +857,8 @@ public:
 			return;
 		}
 
-		Size2i fms = feature_map_size();
-		int fmds = feature_map_data_size();
+		Size2i fms = z_slice_size();
+		int fmds = z_slice_data_size();
 
 		for (int i = 0; i < p_from.size(); ++i) {
 			const Ref<MLPPMatrix> &r = p_from[i];
@@ -866,7 +866,7 @@ public:
 			ERR_CONTINUE(!r.is_valid());
 			ERR_CONTINUE(r->size() != fms);
 
-			int start_index = calculate_feature_map_index(i);
+			int start_index = calculate_z_slice_index(i);
 
 			const real_t *from_ptr = r->ptr();
 			for (int j = 0; j < fmds; j++) {
@@ -930,8 +930,8 @@ public:
 			return;
 		}
 
-		Size2i fms = feature_map_size();
-		int fmds = feature_map_data_size();
+		Size2i fms = z_slice_size();
+		int fmds = z_slice_data_size();
 
 		for (int i = 0; i < p_from.size(); ++i) {
 			Ref<MLPPMatrix> r = p_from[i];
@@ -939,7 +939,7 @@ public:
 			ERR_CONTINUE(!r.is_valid());
 			ERR_CONTINUE(r->size() != fms);
 
-			int start_index = calculate_feature_map_index(i);
+			int start_index = calculate_z_slice_index(i);
 
 			const real_t *from_ptr = r->ptr();
 			for (int j = 0; j < fmds; j++) {
