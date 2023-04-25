@@ -531,6 +531,78 @@ void MLPPTensor3::set_z_slice_mlpp_matrix(int p_index_z, const Ref<MLPPMatrix> &
 	}
 }
 
+void MLPPTensor3::get_x_slice_into(int p_index_x, Ref<MLPPMatrix> target) const {
+	ERR_FAIL_INDEX(p_index_x, _size.x);
+	ERR_FAIL_COND(!target.is_valid());
+
+	if (unlikely(target->size() != Size2i(_size.y, _size.z))) {
+		target->resize(Size2i(_size.y, _size.z));
+	}
+
+	for (int z = 0; z < _size.z; ++z) {
+		for (int y = 0; y < _size.y; ++y) {
+			target->set_element(z, y, get_element(p_index_x, y, z));
+		}
+	}
+}
+Ref<MLPPMatrix> MLPPTensor3::get_x_slice(int p_index_x) const {
+	ERR_FAIL_INDEX_V(p_index_x, _size.x, Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> m;
+	m.instance();
+
+	get_x_slice_into(p_index_x, m);
+
+	return m;
+}
+void MLPPTensor3::set_x_slice(int p_index_x, const Ref<MLPPMatrix> &p_mat) {
+	ERR_FAIL_INDEX(p_index_x, _size.x);
+	ERR_FAIL_COND(!p_mat.is_valid());
+	ERR_FAIL_COND(p_mat->size() != Size2i(_size.y, _size.z));
+
+	for (int z = 0; z < _size.z; ++z) {
+		for (int y = 0; y < _size.y; ++y) {
+			set_element(p_index_x, y, z, p_mat->get_element(z, y));
+		}
+	}
+}
+
+void MLPPTensor3::get_y_slice_into(int p_index_y, Ref<MLPPMatrix> target) const {
+	ERR_FAIL_INDEX(p_index_y, _size.y);
+	ERR_FAIL_COND(!target.is_valid());
+
+	if (unlikely(target->size() != Size2i(_size.y, _size.z))) {
+		target->resize(Size2i(_size.x, _size.z));
+	}
+
+	for (int z = 0; z < _size.z; ++z) {
+		for (int x = 0; x < _size.x; ++x) {
+			target->set_element(z, x, get_element(x, p_index_y, z));
+		}
+	}
+}
+Ref<MLPPMatrix> MLPPTensor3::get_y_slice(int p_index_y) const {
+	ERR_FAIL_INDEX_V(p_index_y, _size.y, Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> m;
+	m.instance();
+
+	get_y_slice_into(p_index_y, m);
+
+	return m;
+}
+void MLPPTensor3::set_y_slice(int p_index_y, const Ref<MLPPMatrix> &p_mat) {
+	ERR_FAIL_INDEX(p_index_y, _size.y);
+	ERR_FAIL_COND(!p_mat.is_valid());
+	ERR_FAIL_COND(p_mat->size() != Size2i(_size.y, _size.z));
+
+	for (int z = 0; z < _size.z; ++z) {
+		for (int x = 0; x < _size.x; ++x) {
+			set_element(x, p_index_y, z, p_mat->get_element(z, x));
+		}
+	}
+}
+
 void MLPPTensor3::add_z_slices_image(const Ref<Image> &p_img, const int p_channels) {
 	ERR_FAIL_COND(!p_img.is_valid());
 
@@ -946,6 +1018,268 @@ void MLPPTensor3::set_from_image(const Ref<Image> &p_img, const int p_channels) 
 			for (int i = 0; i < channel_count; ++i) {
 				set_element(y, x, i, c[channels[i]]);
 			}
+		}
+	}
+
+	img->unlock();
+}
+
+Ref<Image> MLPPTensor3::get_x_slice_image(const int p_index_x) const {
+	ERR_FAIL_INDEX_V(p_index_x, _size.x, Ref<Image>());
+
+	Ref<Image> image;
+	image.instance();
+
+	if (data_size() == 0) {
+		return image;
+	}
+
+	PoolByteArray arr;
+	arr.resize(_size.y * _size.z);
+
+	PoolByteArray::Write w = arr.write();
+	uint8_t *wptr = w.ptr();
+	int i = 0;
+
+	for (int z = 0; z < _size.z; ++z) {
+		for (int y = 0; y < _size.y; ++y) {
+			wptr[i] = static_cast<uint8_t>(get_element(p_index_x, y, z) * 255.0);
+
+			++i;
+		}
+	}
+
+	image->create(_size.y, _size.z, false, Image::FORMAT_L8, arr);
+
+	return image;
+}
+void MLPPTensor3::get_x_slice_into_image(Ref<Image> p_target, const int p_index_x, const int p_target_channels) const {
+	ERR_FAIL_INDEX(p_index_x, _size.x);
+	ERR_FAIL_COND(!p_target.is_valid());
+
+	int channel_count = 0;
+	int channels[4];
+
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_R) {
+		channels[channel_count] = 0;
+		++channel_count;
+	}
+
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_G) {
+		channels[channel_count] = 1;
+		++channel_count;
+	}
+
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_B) {
+		channels[channel_count] = 2;
+		++channel_count;
+	}
+
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_A) {
+		channels[channel_count] = 3;
+		++channel_count;
+	}
+
+	ERR_FAIL_COND(channel_count == 0);
+
+	if (data_size() == 0) {
+		p_target->clear();
+		return;
+	}
+
+	Size2i img_size = Size2i(p_target->get_width(), p_target->get_height());
+	Size2i fms = Size2i(_size.y, _size.z);
+	if (img_size != fms) {
+		bool mip_maps = p_target->has_mipmaps();
+		p_target->resize(fms.x, fms.y, Image::INTERPOLATE_NEAREST);
+
+		if (p_target->has_mipmaps() != mip_maps) {
+			if (mip_maps) {
+				p_target->generate_mipmaps();
+			} else {
+				p_target->clear_mipmaps();
+			}
+		}
+	}
+
+	p_target->lock();
+
+	for (int y = 0; y < fms.y; ++y) {
+		for (int z = 0; z < fms.x; ++z) {
+			Color c;
+
+			float e = get_element(y, p_index_x, z);
+
+			for (int i = 0; i < channel_count; ++i) {
+				c[channels[i]] = e;
+			}
+
+			p_target->set_pixel(z, y, c);
+		}
+	}
+
+	p_target->unlock();
+}
+void MLPPTensor3::set_x_slice_image(const Ref<Image> &p_img, const int p_index_x, const int p_image_channel_flag) {
+	ERR_FAIL_COND(!p_img.is_valid());
+	ERR_FAIL_INDEX(p_index_x, _size.x);
+
+	int channel_index = -1;
+
+	for (int i = 0; i < 4; ++i) {
+		if (((p_image_channel_flag & (1 << i)) != 0)) {
+			channel_index = i;
+			break;
+		}
+	}
+
+	ERR_FAIL_INDEX(channel_index, 4);
+
+	Size2i img_size = Size2i(p_img->get_width(), p_img->get_height());
+	Size2i fms = Size2i(_size.y, _size.z);
+
+	ERR_FAIL_COND(img_size != fms);
+
+	Ref<Image> img = p_img;
+
+	img->lock();
+
+	for (int y = 0; y < fms.y; ++y) {
+		for (int z = 0; z < fms.x; ++z) {
+			Color c = img->get_pixel(z, y);
+
+			set_element(y, p_index_x, z, c[channel_index]);
+		}
+	}
+
+	img->unlock();
+}
+
+Ref<Image> MLPPTensor3::get_y_slice_image(const int p_index_y) const {
+	ERR_FAIL_INDEX_V(p_index_y, _size.y, Ref<Image>());
+
+	Ref<Image> image;
+	image.instance();
+
+	if (data_size() == 0) {
+		return image;
+	}
+
+	PoolByteArray arr;
+	arr.resize(_size.x * _size.z);
+
+	PoolByteArray::Write w = arr.write();
+	uint8_t *wptr = w.ptr();
+	int i = 0;
+
+	for (int z = 0; z < _size.z; ++z) {
+		for (int x = 0; x < _size.x; ++x) {
+			wptr[i] = static_cast<uint8_t>(get_element(x, p_index_y, z) * 255.0);
+
+			++i;
+		}
+	}
+
+	image->create(_size.x, _size.z, false, Image::FORMAT_L8, arr);
+
+	return image;
+}
+void MLPPTensor3::get_y_slice_into_image(Ref<Image> p_target, const int p_index_y, const int p_target_channels) const {
+	ERR_FAIL_INDEX(p_index_y, _size.y);
+	ERR_FAIL_COND(!p_target.is_valid());
+
+	int channel_count = 0;
+	int channels[4];
+
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_R) {
+		channels[channel_count] = 0;
+		++channel_count;
+	}
+
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_G) {
+		channels[channel_count] = 1;
+		++channel_count;
+	}
+
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_B) {
+		channels[channel_count] = 2;
+		++channel_count;
+	}
+
+	if (p_target_channels & IMAGE_CHANNEL_FLAG_A) {
+		channels[channel_count] = 3;
+		++channel_count;
+	}
+
+	ERR_FAIL_COND(channel_count == 0);
+
+	if (data_size() == 0) {
+		p_target->clear();
+		return;
+	}
+
+	Size2i img_size = Size2i(p_target->get_width(), p_target->get_height());
+	Size2i fms = Size2i(_size.x, _size.z);
+	if (img_size != fms) {
+		bool mip_maps = p_target->has_mipmaps();
+		p_target->resize(fms.x, fms.y, Image::INTERPOLATE_NEAREST);
+
+		if (p_target->has_mipmaps() != mip_maps) {
+			if (mip_maps) {
+				p_target->generate_mipmaps();
+			} else {
+				p_target->clear_mipmaps();
+			}
+		}
+	}
+
+	p_target->lock();
+
+	for (int x = 0; x < fms.y; ++x) {
+		for (int z = 0; z < fms.x; ++z) {
+			Color c;
+
+			float e = get_element(p_index_y, x, z);
+
+			for (int i = 0; i < channel_count; ++i) {
+				c[channels[i]] = e;
+			}
+
+			p_target->set_pixel(z, x, c);
+		}
+	}
+
+	p_target->unlock();
+}
+void MLPPTensor3::set_y_slice_image(const Ref<Image> &p_img, const int p_index_y, const int p_image_channel_flag) {
+	ERR_FAIL_COND(!p_img.is_valid());
+	ERR_FAIL_INDEX(p_index_y, _size.y);
+
+	int channel_index = -1;
+
+	for (int i = 0; i < 4; ++i) {
+		if (((p_image_channel_flag & (1 << i)) != 0)) {
+			channel_index = i;
+			break;
+		}
+	}
+
+	ERR_FAIL_INDEX(channel_index, 4);
+
+	Size2i img_size = Size2i(p_img->get_width(), p_img->get_height());
+	Size2i fms = Size2i(_size.x, _size.z);
+
+	ERR_FAIL_COND(img_size != fms);
+
+	Ref<Image> img = p_img;
+
+	img->lock();
+
+	for (int z = 0; z < fms.y; ++z) {
+		for (int x = 0; x < fms.x; ++x) {
+			Color c = img->get_pixel(x, z);
+
+			set_element(p_index_y, x, z, c[channel_index]);
 		}
 	}
 
@@ -1943,6 +2277,14 @@ void MLPPTensor3::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_z_slice_mlpp_vector", "index_z", "row"), &MLPPTensor3::set_z_slice_mlpp_vector);
 	ClassDB::bind_method(D_METHOD("set_z_slice_mlpp_matrix", "index_z", "mat"), &MLPPTensor3::set_z_slice_mlpp_matrix);
 
+	ClassDB::bind_method(D_METHOD("get_x_slice_into", "index_x", "target"), &MLPPTensor3::get_x_slice_into);
+	ClassDB::bind_method(D_METHOD("get_x_slice", "index_x"), &MLPPTensor3::get_x_slice);
+	ClassDB::bind_method(D_METHOD("set_x_slice", "index_x", "mat"), &MLPPTensor3::set_x_slice);
+
+	ClassDB::bind_method(D_METHOD("get_y_slice_into", "index_y", "target"), &MLPPTensor3::get_y_slice_into);
+	ClassDB::bind_method(D_METHOD("get_y_slice", "index_y"), &MLPPTensor3::get_y_slice);
+	ClassDB::bind_method(D_METHOD("set_y_slice", "index_y", "mat"), &MLPPTensor3::set_y_slice);
+
 	ClassDB::bind_method(D_METHOD("add_z_slices_image", "img", "channels"), &MLPPTensor3::add_z_slices_image, IMAGE_CHANNEL_FLAG_RGBA);
 
 	ClassDB::bind_method(D_METHOD("get_z_slice_image", "index_z"), &MLPPTensor3::get_z_slice_image);
@@ -1955,6 +2297,14 @@ void MLPPTensor3::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_z_slices_image", "img", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::set_z_slices_image);
 
 	ClassDB::bind_method(D_METHOD("set_from_image", "img", "channels"), &MLPPTensor3::set_from_image, IMAGE_CHANNEL_FLAG_RGBA);
+
+	ClassDB::bind_method(D_METHOD("get_x_slice_image", "index_x"), &MLPPTensor3::get_x_slice_image);
+	ClassDB::bind_method(D_METHOD("get_x_slice_into_image", "target", "index_x", "target_channels"), &MLPPTensor3::get_x_slice_into_image, IMAGE_CHANNEL_FLAG_RGB);
+	ClassDB::bind_method(D_METHOD("set_x_slice_image", "img", "index_x", "image_channel_flag"), &MLPPTensor3::set_x_slice_image, IMAGE_CHANNEL_FLAG_R);
+
+	ClassDB::bind_method(D_METHOD("get_y_slice_image", "index_x"), &MLPPTensor3::get_y_slice_image);
+	ClassDB::bind_method(D_METHOD("get_y_slice_into_image", "target", "index_x", "target_channels"), &MLPPTensor3::get_y_slice_into_image, IMAGE_CHANNEL_FLAG_RGB);
+	ClassDB::bind_method(D_METHOD("set_y_slice_image", "img", "index_x", "image_channel_flag"), &MLPPTensor3::set_y_slice_image, IMAGE_CHANNEL_FLAG_R);
 
 	ClassDB::bind_method(D_METHOD("fill", "val"), &MLPPTensor3::fill);
 

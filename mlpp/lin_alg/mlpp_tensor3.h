@@ -125,6 +125,19 @@ public:
 	void set_z_slice_mlpp_vector(int p_index_z, const Ref<MLPPVector> &p_row);
 	void set_z_slice_mlpp_matrix(int p_index_z, const Ref<MLPPMatrix> &p_mat);
 
+	//TODO resize() need to be reworked for add and remove to work, in any other direction than z
+	//void add_x_slice(const Ref<MLPPMatrix> &p_matrix);
+	//void remove_x_slice(int p_index);
+	void get_x_slice_into(int p_index_x, Ref<MLPPMatrix> target) const;
+	Ref<MLPPMatrix> get_x_slice(int p_index_x) const;
+	void set_x_slice(int p_index_x, const Ref<MLPPMatrix> &p_mat);
+
+	//void add_y_slice(const Ref<MLPPMatrix> &p_matrix);
+	//void remove_y_slice(int p_index);
+	void get_y_slice_into(int p_index_y, Ref<MLPPMatrix> target) const;
+	Ref<MLPPMatrix> get_y_slice(int p_index_y) const;
+	void set_y_slice(int p_index_y, const Ref<MLPPMatrix> &p_mat);
+
 public:
 	//Image api
 
@@ -155,6 +168,16 @@ public:
 	void set_z_slices_image(const Ref<Image> &p_img, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);
 
 	void set_from_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
+
+	//void add_x_slices_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
+	Ref<Image> get_x_slice_image(const int p_index_x) const;
+	void get_x_slice_into_image(Ref<Image> p_target, const int p_index_x, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
+	void set_x_slice_image(const Ref<Image> &p_img, const int p_index_x, const int p_image_channel_flag = IMAGE_CHANNEL_FLAG_R);
+
+	//void add_y_slices_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
+	Ref<Image> get_y_slice_image(const int p_index_y) const;
+	void get_y_slice_into_image(Ref<Image> p_target, const int p_index_y, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
+	void set_y_slice_image(const Ref<Image> &p_img, const int p_index_y, const int p_image_channel_flag = IMAGE_CHANNEL_FLAG_R);
 
 public:
 	//math api
