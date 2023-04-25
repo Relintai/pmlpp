@@ -56,26 +56,9 @@ There are still likely lots of crashes, find, and fix them.
 
 Replace remaining std::random usage with engine internals.
 
-### Tensor3D
-
-Add a tensor3D class. Same as MLPPVector and MLPPMatrix, except it's 3d.
-
 ### Tensor
 
 Add a tensor class. Same as MLPPVector and MLPPMatrix, except it's n-d.
-
-### Make the api postfixes consistent
-
-For example if we look at `substraction()`:
-
-substraction_v -> Non allocating MLPPVector
-substraction_nv -> Allocating MLPPVector
-substraction_m -> Non allocating MLPPMatrix
-substraction_nm -> Non allocating MLPPMatrix
-substraction_vt -> Non allocating vector based tensor
-substraction_nvt -> Allocating vector based tensor
-substraction_t3d -> Non allocating 3d tensor
-substraction_nt3d -> Allocating 3d tensor
 
 ### More algos
 
