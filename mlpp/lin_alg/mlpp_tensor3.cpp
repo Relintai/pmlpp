@@ -1148,6 +1148,49 @@ void MLPPTensor3::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("is_equal_approx", "with", "tolerance"), &MLPPTensor3::is_equal_approx, CMP_EPSILON);
 
+	ClassDB::bind_method(D_METHOD("add", "B"), &MLPPTensor3::add);
+	ClassDB::bind_method(D_METHOD("addn", "B"), &MLPPTensor3::addn);
+	ClassDB::bind_method(D_METHOD("addb", "A", "B"), &MLPPTensor3::addb);
+
+	ClassDB::bind_method(D_METHOD("sub", "B"), &MLPPTensor3::sub);
+	ClassDB::bind_method(D_METHOD("subn", "B"), &MLPPTensor3::subn);
+	ClassDB::bind_method(D_METHOD("subb", "A", "B"), &MLPPTensor3::subb);
+
+	ClassDB::bind_method(D_METHOD("hadamard_product", "B"), &MLPPTensor3::hadamard_product);
+	ClassDB::bind_method(D_METHOD("hadamard_productn", "B"), &MLPPTensor3::hadamard_productn);
+	ClassDB::bind_method(D_METHOD("hadamard_productb", "A", "B"), &MLPPTensor3::hadamard_productb);
+
+	ClassDB::bind_method(D_METHOD("element_wise_division", "B"), &MLPPTensor3::element_wise_division);
+	ClassDB::bind_method(D_METHOD("element_wise_divisionn", "B"), &MLPPTensor3::element_wise_divisionn);
+	ClassDB::bind_method(D_METHOD("element_wise_divisionb", "A", "B"), &MLPPTensor3::element_wise_divisionb);
+
+	ClassDB::bind_method(D_METHOD("scalar_multiply", "scalar"), &MLPPTensor3::scalar_multiply);
+	ClassDB::bind_method(D_METHOD("scalar_multiplyn", "scalar"), &MLPPTensor3::scalar_multiplyn);
+	ClassDB::bind_method(D_METHOD("scalar_multiplyb", "scalar", "A"), &MLPPTensor3::scalar_multiplyb);
+
+	ClassDB::bind_method(D_METHOD("scalar_add", "scalar"), &MLPPTensor3::scalar_add);
+	ClassDB::bind_method(D_METHOD("scalar_addn", "scalar"), &MLPPTensor3::scalar_addn);
+	ClassDB::bind_method(D_METHOD("scalar_addb", "scalar", "A"), &MLPPTensor3::scalar_addb);
+
+	ClassDB::bind_method(D_METHOD("exponentiate", "p"), &MLPPTensor3::exponentiate);
+	ClassDB::bind_method(D_METHOD("exponentiaten", "p"), &MLPPTensor3::exponentiaten);
+	ClassDB::bind_method(D_METHOD("exponentiateb", "A", "p"), &MLPPTensor3::exponentiateb);
+
+	ClassDB::bind_method(D_METHOD("sqrt"), &MLPPTensor3::sqrt);
+	ClassDB::bind_method(D_METHOD("sqrtn"), &MLPPTensor3::sqrtn);
+	ClassDB::bind_method(D_METHOD("sqrtb", "A"), &MLPPTensor3::sqrtb);
+
+	ClassDB::bind_method(D_METHOD("abs"), &MLPPTensor3::abs);
+	ClassDB::bind_method(D_METHOD("absn"), &MLPPTensor3::absn);
+	ClassDB::bind_method(D_METHOD("absb", "A"), &MLPPTensor3::absb);
+
+	ClassDB::bind_method(D_METHOD("max", "B"), &MLPPTensor3::max);
+	ClassDB::bind_method(D_METHOD("maxn", "B"), &MLPPTensor3::maxn);
+	ClassDB::bind_method(D_METHOD("maxb", "A", "B"), &MLPPTensor3::maxb);
+
+	ClassDB::bind_method(D_METHOD("flatten"), &MLPPTensor3::flatten);
+	ClassDB::bind_method(D_METHOD("flatteno", "out"), &MLPPTensor3::flatteno);
+
 	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_R);
 	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_G);
 	BIND_ENUM_CONSTANT(IMAGE_CHANNEL_FLAG_B);
