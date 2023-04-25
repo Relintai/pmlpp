@@ -1,6 +1,8 @@
 
 #include "mlpp_matrix.h"
 
+#include "core/io/image.h"
+
 #include "../stat/stat.h"
 #include <random>
 
@@ -2753,6 +2755,63 @@ bool MLPPMatrix::is_equal_approx(const Ref<MLPPMatrix> &p_with, real_t tolerance
 	return true;
 }
 
+Ref<Image> MLPPMatrix::get_as_image() const {
+	Ref<Image> image;
+	image.instance();
+
+	get_into_image(image);
+
+	return image;
+}
+
+void MLPPMatrix::get_into_image(Ref<Image> out) const {
+	ERR_FAIL_COND(!out.is_valid());
+
+	if (data_size() == 0) {
+		out->clear();
+		return;
+	}
+
+	PoolByteArray arr;
+
+	int ds = data_size();
+
+	arr.resize(ds);
+
+	PoolByteArray::Write w = arr.write();
+	uint8_t *wptr = w.ptr();
+
+	for (int i = 0; i < ds; ++i) {
+		wptr[i] = static_cast<uint8_t>(_data[i] * 255.0);
+	}
+
+	out->create(_size.x, _size.y, false, Image::FORMAT_L8, arr);
+}
+void MLPPMatrix::set_from_image(const Ref<Image> &p_img, const int p_image_channel) {
+	ERR_FAIL_COND(!p_img.is_valid());
+	ERR_FAIL_INDEX(p_image_channel, 4);
+
+	Size2i img_size = Size2i(p_img->get_width(), p_img->get_height());
+
+	if (img_size != _size) {
+		resize(img_size);
+	}
+
+	Ref<Image> img = p_img;
+
+	img->lock();
+
+	for (int y = 0; y < _size.y; ++y) {
+		for (int x = 0; x < _size.x; ++x) {
+			Color c = img->get_pixel(x, y);
+
+			set_element(y, x, c[p_image_channel]);
+		}
+	}
+
+	img->unlock();
+}
+
 String MLPPMatrix::to_string() {
 	String str;
 
@@ -2920,6 +2979,10 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_from_mlpp_matrix", "from"), &MLPPMatrix::set_from_mlpp_matrix);
 
 	ClassDB::bind_method(D_METHOD("is_equal_approx", "with", "tolerance"), &MLPPMatrix::is_equal_approx, CMP_EPSILON);
+
+	ClassDB::bind_method(D_METHOD("get_as_image"), &MLPPMatrix::get_as_image);
+	ClassDB::bind_method(D_METHOD("get_into_image", "out"), &MLPPMatrix::get_into_image);
+	ClassDB::bind_method(D_METHOD("set_from_image", "img", "image_channel"), &MLPPMatrix::set_from_image);
 
 	ClassDB::bind_method(D_METHOD("gaussian_noise", "n", "m"), &MLPPMatrix::gaussian_noise);
 	ClassDB::bind_method(D_METHOD("gaussian_noise_fill"), &MLPPMatrix::gaussian_noise_fill);

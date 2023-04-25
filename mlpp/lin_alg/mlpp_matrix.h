@@ -14,6 +14,8 @@
 
 #include "mlpp_vector.h"
 
+class Image;
+
 class MLPPMatrix : public Reference {
 	GDCLASS(MLPPMatrix, Reference);
 
@@ -320,6 +322,10 @@ public:
 	Ref<MLPPMatrix> diagonal_zeroedn(const Ref<MLPPVector> &a) const;
 
 	bool is_equal_approx(const Ref<MLPPMatrix> &p_with, real_t tolerance = static_cast<real_t>(CMP_EPSILON)) const;
+
+	Ref<Image> get_as_image() const;
+	void get_into_image(Ref<Image> out) const;
+	void set_from_image(const Ref<Image> &p_img, const int p_image_channel);
 
 	String to_string();
 
