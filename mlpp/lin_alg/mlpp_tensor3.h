@@ -29,12 +29,6 @@ public:
 		return _data;
 	}
 
-	// TODO: Need to double check whether it's right to call the z axis feature map (probably not)
-	// TODO: Add helper methods for the other axes aswell (probably shouldn't have as extensive of a coverage as z),
-	// Only MLPPMatrix: get, add, set.
-	// TODO: Add Image get, set helper methods to MLPPMatrix -> so the other axis helper methods can use them.
-	// TODO: _FORCE_INLINE_ less big methods (Also do this in MLPPVEctor and MLPPMatrix)
-
 	_FORCE_INLINE_ void add_z_slice(const Vector<real_t> &p_row) {
 		if (p_row.size() == 0) {
 			return;
