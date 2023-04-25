@@ -27,7 +27,7 @@ void MLPPVector::flatten_vectors(const Vector<Ref<MLPPVector>> &A) {
 	}
 }
 
-Ref<MLPPVector> MLPPVector::flatten_vectorsn(const Vector<Ref<MLPPVector>> &A) {
+Ref<MLPPVector> MLPPVector::flatten_vectorsn(const Vector<Ref<MLPPVector>> &A) const {
 	Ref<MLPPVector> a;
 	a.instance();
 
@@ -69,7 +69,7 @@ void MLPPVector::hadamard_product(const Ref<MLPPVector> &b) {
 		out_ptr[i] = a_ptr[i] * b_ptr[i];
 	}
 }
-Ref<MLPPVector> MLPPVector::hadamard_productn(const Ref<MLPPVector> &b) {
+Ref<MLPPVector> MLPPVector::hadamard_productn(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -126,7 +126,7 @@ void MLPPVector::element_wise_division(const Ref<MLPPVector> &b) {
 	}
 }
 
-Ref<MLPPVector> MLPPVector::element_wise_divisionn(const Ref<MLPPVector> &b) {
+Ref<MLPPVector> MLPPVector::element_wise_divisionn(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -172,7 +172,7 @@ void MLPPVector::scalar_multiply(real_t scalar) {
 		out_ptr[i] = out_ptr[i] * scalar;
 	}
 }
-Ref<MLPPVector> MLPPVector::scalar_multiplyn(real_t scalar) {
+Ref<MLPPVector> MLPPVector::scalar_multiplyn(real_t scalar) const {
 	Ref<MLPPVector> out;
 	out.instance();
 	out->resize(_size);
@@ -208,7 +208,7 @@ void MLPPVector::scalar_add(real_t scalar) {
 		out_ptr[i] = out_ptr[i] + scalar;
 	}
 }
-Ref<MLPPVector> MLPPVector::scalar_addn(real_t scalar) {
+Ref<MLPPVector> MLPPVector::scalar_addn(real_t scalar) const {
 	Ref<MLPPVector> out;
 	out.instance();
 
@@ -251,7 +251,7 @@ void MLPPVector::add(const Ref<MLPPVector> &b) {
 		out_ptr[i] += b_ptr[i];
 	}
 }
-Ref<MLPPVector> MLPPVector::addn(const Ref<MLPPVector> &b) {
+Ref<MLPPVector> MLPPVector::addn(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
 	ERR_FAIL_COND_V(_size != b->size(), Ref<MLPPVector>());
 
@@ -300,7 +300,7 @@ void MLPPVector::sub(const Ref<MLPPVector> &b) {
 		out_ptr[i] -= b_ptr[i];
 	}
 }
-Ref<MLPPVector> MLPPVector::subn(const Ref<MLPPVector> &b) {
+Ref<MLPPVector> MLPPVector::subn(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
 	ERR_FAIL_COND_V(_size != b->size(), Ref<MLPPVector>());
 
@@ -345,7 +345,7 @@ void MLPPVector::log() {
 		out_ptr[i] = Math::log(out_ptr[i]);
 	}
 }
-Ref<MLPPVector> MLPPVector::logn() {
+Ref<MLPPVector> MLPPVector::logn() const {
 	Ref<MLPPVector> out;
 	out.instance();
 	out->resize(_size);
@@ -380,7 +380,7 @@ void MLPPVector::log10() {
 		out_ptr[i] = Math::log10(out_ptr[i]);
 	}
 }
-Ref<MLPPVector> MLPPVector::log10n() {
+Ref<MLPPVector> MLPPVector::log10n() const {
 	Ref<MLPPVector> out;
 	out.instance();
 	out->resize(_size);
@@ -415,7 +415,7 @@ void MLPPVector::exp() {
 		out_ptr[i] = Math::exp(out_ptr[i]);
 	}
 }
-Ref<MLPPVector> MLPPVector::expn() {
+Ref<MLPPVector> MLPPVector::expn() const {
 	Ref<MLPPVector> out;
 	out.instance();
 	out->resize(_size);
@@ -450,7 +450,7 @@ void MLPPVector::erf() {
 		out_ptr[i] = Math::erf(out_ptr[i]);
 	}
 }
-Ref<MLPPVector> MLPPVector::erfn() {
+Ref<MLPPVector> MLPPVector::erfn() const {
 	Ref<MLPPVector> out;
 	out.instance();
 	out->resize(_size);
@@ -485,7 +485,7 @@ void MLPPVector::exponentiate(real_t p) {
 		out_ptr[i] = Math::pow(out_ptr[i], p);
 	}
 }
-Ref<MLPPVector> MLPPVector::exponentiaten(real_t p) {
+Ref<MLPPVector> MLPPVector::exponentiaten(real_t p) const {
 	Ref<MLPPVector> out;
 	out.instance();
 	out->resize(_size);
@@ -520,7 +520,7 @@ void MLPPVector::sqrt() {
 		out_ptr[i] = Math::sqrt(out_ptr[i]);
 	}
 }
-Ref<MLPPVector> MLPPVector::sqrtn() {
+Ref<MLPPVector> MLPPVector::sqrtn() const {
 	Ref<MLPPVector> out;
 	out.instance();
 	out->resize(_size);
@@ -551,14 +551,14 @@ void MLPPVector::sqrtb(const Ref<MLPPVector> &a) {
 void MLPPVector::cbrt() {
 	return exponentiate(static_cast<real_t>(1) / static_cast<real_t>(3));
 }
-Ref<MLPPVector> MLPPVector::cbrtn() {
+Ref<MLPPVector> MLPPVector::cbrtn() const {
 	return exponentiaten(static_cast<real_t>(1) / static_cast<real_t>(3));
 }
 void MLPPVector::cbrtb(const Ref<MLPPVector> &a) {
 	return exponentiateb(a, static_cast<real_t>(1) / static_cast<real_t>(3));
 }
 
-real_t MLPPVector::dot(const Ref<MLPPVector> &b) {
+real_t MLPPVector::dot(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), 0);
 
 	ERR_FAIL_COND_V(_size != b->size(), 0);
@@ -593,7 +593,7 @@ void MLPPVector::abs() {
 		out_ptr[i] = ABS(out_ptr[i]);
 	}
 }
-Ref<MLPPVector> MLPPVector::absn() {
+Ref<MLPPVector> MLPPVector::absn() const {
 	Ref<MLPPVector> out;
 	out.instance();
 	out->resize(_size);
@@ -621,7 +621,7 @@ void MLPPVector::absb(const Ref<MLPPVector> &a) {
 	}
 }
 
-Ref<MLPPVector> MLPPVector::zero_vec(int n) {
+Ref<MLPPVector> MLPPVector::zero_vec(int n) const {
 	Ref<MLPPVector> vec;
 	vec.instance();
 
@@ -630,7 +630,7 @@ Ref<MLPPVector> MLPPVector::zero_vec(int n) {
 
 	return vec;
 }
-Ref<MLPPVector> MLPPVector::one_vec(int n) {
+Ref<MLPPVector> MLPPVector::one_vec(int n) const {
 	Ref<MLPPVector> vec;
 	vec.instance();
 
@@ -639,7 +639,7 @@ Ref<MLPPVector> MLPPVector::one_vec(int n) {
 
 	return vec;
 }
-Ref<MLPPVector> MLPPVector::full_vec(int n, int k) {
+Ref<MLPPVector> MLPPVector::full_vec(int n, int k) const {
 	Ref<MLPPVector> vec;
 	vec.instance();
 
@@ -656,7 +656,7 @@ void MLPPVector::sin() {
 		out_ptr[i] = Math::sin(out_ptr[i]);
 	}
 }
-Ref<MLPPVector> MLPPVector::sinn() {
+Ref<MLPPVector> MLPPVector::sinn() const {
 	Ref<MLPPVector> out;
 	out.instance();
 	out->resize(_size);
@@ -691,7 +691,7 @@ void MLPPVector::cos() {
 		out_ptr[i] = Math::sqrt(out_ptr[i]);
 	}
 }
-Ref<MLPPVector> MLPPVector::cosn() {
+Ref<MLPPVector> MLPPVector::cosn() const {
 	Ref<MLPPVector> out;
 	out.instance();
 	out->resize(_size);
@@ -738,7 +738,7 @@ void MLPPVector::maxv(const Ref<MLPPVector> &b) {
 		}
 	}
 }
-Ref<MLPPVector> MLPPVector::maxvn(const Ref<MLPPVector> &b) {
+Ref<MLPPVector> MLPPVector::maxvn(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
 	ERR_FAIL_COND_V(_size != b->size(), Ref<MLPPVector>());
 
@@ -790,7 +790,7 @@ void MLPPVector::maxvb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
 	}
 }
 
-real_t MLPPVector::max_element() {
+real_t MLPPVector::max_element() const {
 	const real_t *aa = ptr();
 
 	real_t max_element = -Math_INF;
@@ -805,7 +805,7 @@ real_t MLPPVector::max_element() {
 
 	return max_element;
 }
-real_t MLPPVector::min_element() {
+real_t MLPPVector::min_element() const {
 	const real_t *aa = ptr();
 
 	real_t min_element = Math_INF;
@@ -838,7 +838,7 @@ std::vector<std::vector<real_t>> MLPPVector::round(std::vector<std::vector<real_
 }
 */
 
-real_t MLPPVector::euclidean_distance(const Ref<MLPPVector> &b) {
+real_t MLPPVector::euclidean_distance(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), 0);
 
 	ERR_FAIL_COND_V(_size != b->size(), 0);
@@ -854,7 +854,7 @@ real_t MLPPVector::euclidean_distance(const Ref<MLPPVector> &b) {
 
 	return Math::sqrt(dist);
 }
-real_t MLPPVector::euclidean_distance_squared(const Ref<MLPPVector> &b) {
+real_t MLPPVector::euclidean_distance_squared(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), 0);
 
 	ERR_FAIL_COND_V(_size != b->size(), 0);
@@ -883,7 +883,7 @@ real_t MLPPVector::norm_2(std::vector<std::vector<real_t>> A) {
 }
 */
 
-real_t MLPPVector::norm_sq() {
+real_t MLPPVector::norm_sq() const {
 	const real_t *a_ptr = ptr();
 
 	real_t n_sq = 0;
@@ -893,7 +893,7 @@ real_t MLPPVector::norm_sq() {
 	return n_sq;
 }
 
-real_t MLPPVector::sum_elements() {
+real_t MLPPVector::sum_elements() const {
 	const real_t *a_ptr = ptr();
 
 	real_t sum = 0;
@@ -923,7 +923,7 @@ void MLPPVector::subtract_matrix_rows(const Ref<MLPPMatrix> &B) {
 		}
 	}
 }
-Ref<MLPPVector> MLPPVector::subtract_matrix_rowsn(const Ref<MLPPMatrix> &B) {
+Ref<MLPPVector> MLPPVector::subtract_matrix_rowsn(const Ref<MLPPMatrix> &B) const {
 	Ref<MLPPVector> c = duplicate();
 
 	Size2i b_size = B->size();
@@ -958,7 +958,7 @@ void MLPPVector::subtract_matrix_rowsb(const Ref<MLPPVector> &a, const Ref<MLPPM
 	}
 }
 
-Ref<MLPPMatrix> MLPPVector::outer_product(const Ref<MLPPVector> &b) {
+Ref<MLPPMatrix> MLPPVector::outer_product(const Ref<MLPPVector> &b) const {
 	Ref<MLPPMatrix> C;
 	C.instance();
 	Size2i sm = Size2i(b->size(), size());
@@ -978,7 +978,7 @@ Ref<MLPPMatrix> MLPPVector::outer_product(const Ref<MLPPVector> &b) {
 	return C;
 }
 
-Ref<MLPPMatrix> MLPPVector::diagnm() {
+Ref<MLPPMatrix> MLPPVector::diagnm() const {
 	Ref<MLPPMatrix> B;
 	B.instance();
 

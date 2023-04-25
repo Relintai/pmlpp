@@ -287,7 +287,7 @@ public:
 		_data[p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z] = p_val;
 	}
 
-	_FORCE_INLINE_ Vector<real_t> get_row_vector(int p_index_y, int p_index_z) {
+	_FORCE_INLINE_ Vector<real_t> get_row_vector(int p_index_y, int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, Vector<real_t>());
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, Vector<real_t>());
 
@@ -310,7 +310,7 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ PoolRealArray get_row_pool_vector(int p_index_y, int p_index_z) {
+	_FORCE_INLINE_ PoolRealArray get_row_pool_vector(int p_index_y, int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, PoolRealArray());
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, PoolRealArray());
 
@@ -334,7 +334,7 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ Ref<MLPPVector> get_row_mlpp_vector(int p_index_y, int p_index_z) {
+	_FORCE_INLINE_ Ref<MLPPVector> get_row_mlpp_vector(int p_index_y, int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, Ref<MLPPVector>());
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<MLPPVector>());
 
@@ -420,7 +420,7 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ Vector<real_t> get_feature_map_vector(int p_index_z) {
+	_FORCE_INLINE_ Vector<real_t> get_feature_map_vector(int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, Vector<real_t>());
 
 		Vector<real_t> ret;
@@ -444,7 +444,7 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ PoolRealArray get_feature_map_pool_vector(int p_index_z) {
+	_FORCE_INLINE_ PoolRealArray get_feature_map_pool_vector(int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, PoolRealArray());
 
 		PoolRealArray ret;
@@ -469,7 +469,7 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ Ref<MLPPVector> get_feature_map_mlpp_vector(int p_index_z) {
+	_FORCE_INLINE_ Ref<MLPPVector> get_feature_map_mlpp_vector(int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<MLPPVector>());
 
 		Ref<MLPPVector> ret;
@@ -512,7 +512,7 @@ public:
 		}
 	}
 
-	_FORCE_INLINE_ Ref<MLPPMatrix> get_feature_map_mlpp_matrix(int p_index_z) {
+	_FORCE_INLINE_ Ref<MLPPMatrix> get_feature_map_mlpp_matrix(int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<MLPPMatrix>());
 
 		Ref<MLPPMatrix> ret;
@@ -643,8 +643,8 @@ public:
 
 	void add_feature_maps_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
 
-	Ref<Image> get_feature_map_image(const int p_index_z);
-	Ref<Image> get_feature_maps_image(const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);
+	Ref<Image> get_feature_map_image(const int p_index_z) const;
+	Ref<Image> get_feature_maps_image(const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
 
 	void get_feature_map_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
 	void get_feature_maps_into_image(Ref<Image> p_target, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
@@ -658,11 +658,11 @@ public:
 	//math api
 
 	void add(const Ref<MLPPTensor3> &B);
-	Ref<MLPPTensor3> addn(const Ref<MLPPTensor3> &B);
+	Ref<MLPPTensor3> addn(const Ref<MLPPTensor3> &B) const;
 	void addb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
 
 	void sub(const Ref<MLPPTensor3> &B);
-	Ref<MLPPTensor3> subn(const Ref<MLPPTensor3> &B);
+	Ref<MLPPTensor3> subn(const Ref<MLPPTensor3> &B) const;
 	void subb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
 
 	void element_wise_division(const Ref<MLPPTensor3> &B);
@@ -690,7 +690,7 @@ public:
 	void hadamard_productb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
 
 	void max(const Ref<MLPPTensor3> &B);
-	Ref<MLPPTensor3> maxn(const Ref<MLPPTensor3> &B);
+	Ref<MLPPTensor3> maxn(const Ref<MLPPTensor3> &B) const;
 	void maxb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
 
 	void abs();

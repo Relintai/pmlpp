@@ -64,7 +64,7 @@ void MLPPTensor3::add_feature_maps_image(const Ref<Image> &p_img, const int p_ch
 	img->unlock();
 }
 
-Ref<Image> MLPPTensor3::get_feature_map_image(const int p_index_z) {
+Ref<Image> MLPPTensor3::get_feature_map_image(const int p_index_z) const {
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<Image>());
 
 	Ref<Image> image;
@@ -92,7 +92,7 @@ Ref<Image> MLPPTensor3::get_feature_map_image(const int p_index_z) {
 
 	return image;
 }
-Ref<Image> MLPPTensor3::get_feature_maps_image(const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) {
+Ref<Image> MLPPTensor3::get_feature_maps_image(const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) const {
 	if (p_index_r != -1) {
 		ERR_FAIL_INDEX_V(p_index_r, _size.z, Ref<Image>());
 	}
@@ -437,7 +437,7 @@ void MLPPTensor3::add(const Ref<MLPPTensor3> &B) {
 		c_ptr[i] += b_ptr[i];
 	}
 }
-Ref<MLPPTensor3> MLPPTensor3::addn(const Ref<MLPPTensor3> &B) {
+Ref<MLPPTensor3> MLPPTensor3::addn(const Ref<MLPPTensor3> &B) const {
 	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPTensor3>());
 	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPTensor3>());
 
@@ -490,7 +490,7 @@ void MLPPTensor3::sub(const Ref<MLPPTensor3> &B) {
 		c_ptr[i] -= b_ptr[i];
 	}
 }
-Ref<MLPPTensor3> MLPPTensor3::subn(const Ref<MLPPTensor3> &B) {
+Ref<MLPPTensor3> MLPPTensor3::subn(const Ref<MLPPTensor3> &B) const {
 	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPTensor3>());
 	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPTensor3>());
 
@@ -803,7 +803,7 @@ void MLPPTensor3::max(const Ref<MLPPTensor3> &B) {
 		c_ptr[i] = MAX(c_ptr[i], b_ptr[i]);
 	}
 }
-Ref<MLPPTensor3> MLPPTensor3::maxn(const Ref<MLPPTensor3> &B) {
+Ref<MLPPTensor3> MLPPTensor3::maxn(const Ref<MLPPTensor3> &B) const {
 	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPTensor3>());
 	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPTensor3>());
 

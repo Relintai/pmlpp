@@ -266,7 +266,7 @@ public:
 		_data[p_index_y * _size.x + p_index_x] = p_val;
 	}
 
-	_FORCE_INLINE_ Vector<real_t> get_row_vector(int p_index_y) {
+	_FORCE_INLINE_ Vector<real_t> get_row_vector(int p_index_y) const {
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, Vector<real_t>());
 
 		Vector<real_t> ret;
@@ -288,7 +288,7 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ PoolRealArray get_row_pool_vector(int p_index_y) {
+	_FORCE_INLINE_ PoolRealArray get_row_pool_vector(int p_index_y) const {
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, PoolRealArray());
 
 		PoolRealArray ret;
@@ -311,7 +311,7 @@ public:
 		return ret;
 	}
 
-	_FORCE_INLINE_ Ref<MLPPVector> get_row_mlpp_vector(int p_index_y) {
+	_FORCE_INLINE_ Ref<MLPPVector> get_row_mlpp_vector(int p_index_y) const {
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, Ref<MLPPVector>());
 
 		Ref<MLPPVector> ret;
@@ -586,15 +586,15 @@ public:
 	//std::vector<std::vector<real_t>> gramMatrix(std::vector<std::vector<real_t>> A);
 	//bool linearIndependenceChecker(std::vector<std::vector<real_t>> A);
 
-	Ref<MLPPMatrix> gaussian_noise(int n, int m);
+	Ref<MLPPMatrix> gaussian_noise(int n, int m) const;
 	void gaussian_noise_fill();
 
 	void add(const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> addn(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> addn(const Ref<MLPPMatrix> &B) const;
 	void addb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	void sub(const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> subn(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> subn(const Ref<MLPPMatrix> &B) const;
 	void subb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	void mult(const Ref<MLPPMatrix> &B);
@@ -691,7 +691,7 @@ public:
 	//std::vector<std::vector<real_t>> rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis = -1);
 
 	void max(const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> maxn(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> maxn(const Ref<MLPPMatrix> &B) const;
 	void maxb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	//real_t max(std::vector<std::vector<real_t>> A);
@@ -713,8 +713,8 @@ public:
 		Ref<MLPPMatrix> eigen_values;
 	};
 
-	EigenResult eigen();
-	EigenResult eigenb(const Ref<MLPPMatrix> &A);
+	EigenResult eigen() const;
+	EigenResult eigenb(const Ref<MLPPMatrix> &A) const;
 	Array eigen_bind();
 	Array eigenb_bind(const Ref<MLPPMatrix> &A);
 
@@ -724,8 +724,8 @@ public:
 		Ref<MLPPMatrix> Vt;
 	};
 
-	SVDResult svd();
-	SVDResult svdb(const Ref<MLPPMatrix> &A);
+	SVDResult svd() const;
+	SVDResult svdb(const Ref<MLPPMatrix> &A) const;
 	Array svd_bind();
 	Array svdb_bind(const Ref<MLPPMatrix> &A);
 
@@ -766,24 +766,24 @@ public:
 	bool zeroEigenvalue(std::vector<std::vector<real_t>> A);
 	*/
 
-	Ref<MLPPVector> mult_vec(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> mult_vec(const Ref<MLPPVector> &b) const;
 	void mult_veco(const Ref<MLPPVector> &b, Ref<MLPPVector> out);
 
 	void add_vec(const Ref<MLPPVector> &b);
-	Ref<MLPPMatrix> add_vecn(const Ref<MLPPVector> &b);
+	Ref<MLPPMatrix> add_vecn(const Ref<MLPPVector> &b) const;
 	void add_vecb(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
 
 	// This multiplies a, bT
 	void outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
-	Ref<MLPPMatrix> outer_productn(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	Ref<MLPPMatrix> outer_productn(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) const;
 
 	// Just sets the diagonal
 	void set_diagonal(const Ref<MLPPVector> &a);
-	Ref<MLPPMatrix> set_diagonaln(const Ref<MLPPVector> &a);
+	Ref<MLPPMatrix> set_diagonaln(const Ref<MLPPVector> &a) const;
 
 	// Sets the diagonals, everythign else will get zeroed
 	void diagonal_zeroed(const Ref<MLPPVector> &a);
-	Ref<MLPPMatrix> diagonal_zeroedn(const Ref<MLPPVector> &a);
+	Ref<MLPPMatrix> diagonal_zeroedn(const Ref<MLPPVector> &a) const;
 
 	_FORCE_INLINE_ bool is_equal_approx(const Ref<MLPPMatrix> &p_with, real_t tolerance = static_cast<real_t>(CMP_EPSILON)) const {
 		ERR_FAIL_COND_V(!p_with.is_valid(), false);

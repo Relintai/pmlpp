@@ -19,7 +19,7 @@ bool MLPPMatrix::linearIndependenceChecker(std::vector<std::vector<real_t>> A) {
 }
 */
 
-Ref<MLPPMatrix> MLPPMatrix::gaussian_noise(int n, int m) {
+Ref<MLPPMatrix> MLPPMatrix::gaussian_noise(int n, int m) const {
 	std::random_device rd;
 	std::default_random_engine generator(rd());
 	std::normal_distribution<real_t> distribution(0, 1); // Standard normal distribution. Mean of 0, std of 1.
@@ -64,7 +64,7 @@ void MLPPMatrix::add(const Ref<MLPPMatrix> &B) {
 		c_ptr[i] += b_ptr[i];
 	}
 }
-Ref<MLPPMatrix> MLPPMatrix::addn(const Ref<MLPPMatrix> &B) {
+Ref<MLPPMatrix> MLPPMatrix::addn(const Ref<MLPPMatrix> &B) const {
 	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPMatrix>());
 	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPMatrix>());
 
@@ -117,7 +117,7 @@ void MLPPMatrix::sub(const Ref<MLPPMatrix> &B) {
 		c_ptr[i] -= b_ptr[i];
 	}
 }
-Ref<MLPPMatrix> MLPPMatrix::subn(const Ref<MLPPMatrix> &B) {
+Ref<MLPPMatrix> MLPPMatrix::subn(const Ref<MLPPMatrix> &B) const {
 	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPMatrix>());
 	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPMatrix>());
 
@@ -1269,7 +1269,7 @@ void MLPPMatrix::max(const Ref<MLPPMatrix> &B) {
 		c_ptr[i] = MAX(c_ptr[i], b_ptr[i]);
 	}
 }
-Ref<MLPPMatrix> MLPPMatrix::maxn(const Ref<MLPPMatrix> &B) {
+Ref<MLPPMatrix> MLPPMatrix::maxn(const Ref<MLPPMatrix> &B) const {
 	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPMatrix>());
 	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPMatrix>());
 
@@ -1435,7 +1435,7 @@ void MLPPMatrix::covo(Ref<MLPPMatrix> out) const {
 	}
 }
 
-MLPPMatrix::EigenResult MLPPMatrix::eigen() {
+MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 	EigenResult res;
 
 	/*
@@ -1573,7 +1573,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() {
 
 	return res;
 }
-MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) {
+MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 	EigenResult res;
 
 	ERR_FAIL_COND_V(!A.is_valid(), res);
@@ -1736,7 +1736,7 @@ Array MLPPMatrix::eigenb_bind(const Ref<MLPPMatrix> &A) {
 	return arr;
 }
 
-MLPPMatrix::SVDResult MLPPMatrix::svd() {
+MLPPMatrix::SVDResult MLPPMatrix::svd() const {
 	SVDResult res;
 
 	EigenResult left_eigen = multn(transposen())->eigen();
@@ -1760,7 +1760,7 @@ MLPPMatrix::SVDResult MLPPMatrix::svd() {
 	return res;
 }
 
-MLPPMatrix::SVDResult MLPPMatrix::svdb(const Ref<MLPPMatrix> &A) {
+MLPPMatrix::SVDResult MLPPMatrix::svdb(const Ref<MLPPMatrix> &A) const {
 	SVDResult res;
 
 	ERR_FAIL_COND_V(!A.is_valid(), res);
@@ -1984,7 +1984,7 @@ bool MLPPMatrix::zeroEigenvalue(std::vector<std::vector<real_t>> A) {
 }
 */
 
-Ref<MLPPVector> MLPPMatrix::mult_vec(const Ref<MLPPVector> &b) {
+Ref<MLPPVector> MLPPMatrix::mult_vec(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPMatrix>());
 
 	int b_size = b->size();
@@ -2052,7 +2052,7 @@ void MLPPMatrix::add_vec(const Ref<MLPPVector> &b) {
 		}
 	}
 }
-Ref<MLPPMatrix> MLPPMatrix::add_vecn(const Ref<MLPPVector> &b) {
+Ref<MLPPMatrix> MLPPMatrix::add_vecn(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPMatrix>());
 	ERR_FAIL_COND_V(_size.x != b->size(), Ref<MLPPMatrix>());
 
@@ -2116,7 +2116,7 @@ void MLPPMatrix::outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &
 		}
 	}
 }
-Ref<MLPPMatrix> MLPPMatrix::outer_productn(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+Ref<MLPPMatrix> MLPPMatrix::outer_productn(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPMatrix>());
 
 	Ref<MLPPMatrix> C;
@@ -2157,7 +2157,7 @@ void MLPPMatrix::set_diagonal(const Ref<MLPPVector> &a) {
 		b_ptr[calculate_index(i, i)] = a_ptr[i];
 	}
 }
-Ref<MLPPMatrix> MLPPMatrix::set_diagonaln(const Ref<MLPPVector> &a) {
+Ref<MLPPMatrix> MLPPMatrix::set_diagonaln(const Ref<MLPPVector> &a) const {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPMatrix>());
 
 	Ref<MLPPMatrix> B = duplicate();
@@ -2200,7 +2200,7 @@ void MLPPMatrix::diagonal_zeroed(const Ref<MLPPVector> &a) {
 		b_ptr[calculate_index(i, i)] = a_ptr[i];
 	}
 }
-Ref<MLPPMatrix> MLPPMatrix::diagonal_zeroedn(const Ref<MLPPVector> &a) {
+Ref<MLPPMatrix> MLPPMatrix::diagonal_zeroedn(const Ref<MLPPVector> &a) const {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPMatrix>());
 
 	Ref<MLPPMatrix> B;

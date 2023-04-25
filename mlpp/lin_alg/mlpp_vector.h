@@ -329,122 +329,112 @@ public:
 		return true;
 	}
 
-	// New apis should look like this:
-	//void substract(const Ref<MLPPVector> &b); <- this should be the simplest / most obvious method
-	//Ref<MLPPVector> substractn(const Ref<MLPPVector> &b);
-	//void substractb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); -> result is in this (subtractionv like)
-
-	// Or:
-	//void hadamard_product(const Ref<MLPPVector> &b); <- this should be the simplest / most obvious method
-	//Ref<MLPPVector> hadamard_productn(const Ref<MLPPVector> &b); <- n -> new
-	//void hadamard_productb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b); <- b -> between, result is stored in *this
-
 	void flatten_vectors(const Vector<Ref<MLPPVector>> &A);
-	Ref<MLPPVector> flatten_vectorsn(const Vector<Ref<MLPPVector>> &A);
+	Ref<MLPPVector> flatten_vectorsn(const Vector<Ref<MLPPVector>> &A) const;
 
 	void hadamard_product(const Ref<MLPPVector> &b);
-	Ref<MLPPVector> hadamard_productn(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> hadamard_productn(const Ref<MLPPVector> &b) const;
 	void hadamard_productb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	void element_wise_division(const Ref<MLPPVector> &b);
-	Ref<MLPPVector> element_wise_divisionn(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> element_wise_divisionn(const Ref<MLPPVector> &b) const;
 	void element_wise_divisionb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	void scalar_multiply(real_t scalar);
-	Ref<MLPPVector> scalar_multiplyn(real_t scalar);
+	Ref<MLPPVector> scalar_multiplyn(real_t scalar) const;
 	void scalar_multiplyb(real_t scalar, const Ref<MLPPVector> &a);
 
 	void scalar_add(real_t scalar);
-	Ref<MLPPVector> scalar_addn(real_t scalar);
+	Ref<MLPPVector> scalar_addn(real_t scalar) const;
 	void scalar_addb(real_t scalar, const Ref<MLPPVector> &a);
 
 	void add(const Ref<MLPPVector> &b);
-	Ref<MLPPVector> addn(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> addn(const Ref<MLPPVector> &b) const;
 	void addb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	void sub(const Ref<MLPPVector> &b);
-	Ref<MLPPVector> subn(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> subn(const Ref<MLPPVector> &b) const;
 	void subb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	void log();
-	Ref<MLPPVector> logn();
+	Ref<MLPPVector> logn() const;
 	void logb(const Ref<MLPPVector> &a);
 
 	void log10();
-	Ref<MLPPVector> log10n();
+	Ref<MLPPVector> log10n() const;
 	void log10b(const Ref<MLPPVector> &a);
 
 	void exp();
-	Ref<MLPPVector> expn();
+	Ref<MLPPVector> expn() const;
 	void expb(const Ref<MLPPVector> &a);
 
 	void erf();
-	Ref<MLPPVector> erfn();
+	Ref<MLPPVector> erfn() const;
 	void erfb(const Ref<MLPPVector> &a);
 
 	void exponentiate(real_t p);
-	Ref<MLPPVector> exponentiaten(real_t p);
+	Ref<MLPPVector> exponentiaten(real_t p) const;
 	void exponentiateb(const Ref<MLPPVector> &a, real_t p);
 
 	void sqrt();
-	Ref<MLPPVector> sqrtn();
+	Ref<MLPPVector> sqrtn() const;
 	void sqrtb(const Ref<MLPPVector> &a);
 
 	void cbrt();
-	Ref<MLPPVector> cbrtn();
+	Ref<MLPPVector> cbrtn() const;
 	void cbrtb(const Ref<MLPPVector> &a);
 
-	real_t dot(const Ref<MLPPVector> &b);
+	real_t dot(const Ref<MLPPVector> &b) const;
 
 	//std::vector<real_t> cross(std::vector<real_t> a, std::vector<real_t> b);
 
 	void abs();
-	Ref<MLPPVector> absn();
+	Ref<MLPPVector> absn() const;
 	void absb(const Ref<MLPPVector> &a);
 
-	Ref<MLPPVector> zero_vec(int n);
-	Ref<MLPPVector> one_vec(int n);
-	Ref<MLPPVector> full_vec(int n, int k);
+	Ref<MLPPVector> zero_vec(int n) const;
+	Ref<MLPPVector> one_vec(int n) const;
+	Ref<MLPPVector> full_vec(int n, int k) const;
 
 	void sin();
-	Ref<MLPPVector> sinn();
+	Ref<MLPPVector> sinn() const;
 	void sinb(const Ref<MLPPVector> &a);
 
 	void cos();
-	Ref<MLPPVector> cosn();
+	Ref<MLPPVector> cosn() const;
 	void cosb(const Ref<MLPPVector> &a);
 
 	void maxv(const Ref<MLPPVector> &b);
-	Ref<MLPPVector> maxvn(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> maxvn(const Ref<MLPPVector> &b) const;
 	void maxvb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
-	real_t max_element();
-	real_t min_element();
+	real_t max_element() const;
+	real_t min_element() const;
 
 	//std::vector<real_t> round(std::vector<real_t> a);
 
-	real_t euclidean_distance(const Ref<MLPPVector> &b);
-	real_t euclidean_distance_squared(const Ref<MLPPVector> &b);
+	real_t euclidean_distance(const Ref<MLPPVector> &b) const;
+	real_t euclidean_distance_squared(const Ref<MLPPVector> &b) const;
 
 	/*
 	real_t norm_2(std::vector<real_t> a);
 	*/
 
-	real_t norm_sq();
+	real_t norm_sq() const;
 
-	real_t sum_elements();
+	real_t sum_elements() const;
 
 	//real_t cosineSimilarity(std::vector<real_t> a, std::vector<real_t> b);
 
 	void subtract_matrix_rows(const Ref<MLPPMatrix> &B);
-	Ref<MLPPVector> subtract_matrix_rowsn(const Ref<MLPPMatrix> &B);
+	Ref<MLPPVector> subtract_matrix_rowsn(const Ref<MLPPMatrix> &B) const;
 	void subtract_matrix_rowsb(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B);
 
 	// This multiplies a, bT
-	Ref<MLPPMatrix> outer_product(const Ref<MLPPVector> &b);
+	Ref<MLPPMatrix> outer_product(const Ref<MLPPVector> &b) const;
 
 	// as_diagonal_matrix / to_diagonal_matrix
-	Ref<MLPPMatrix> diagnm();
+	Ref<MLPPMatrix> diagnm() const;
 
 	String to_string();
 
