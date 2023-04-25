@@ -18,11 +18,11 @@ class MLPPMatrix : public Reference {
 	GDCLASS(MLPPMatrix, Reference);
 
 public:
-	real_t *ptrw() {
+	_FORCE_INLINE_ real_t *ptrw() {
 		return _data;
 	}
 
-	const real_t *ptr() const {
+	_FORCE_INLINE_ const real_t *ptr() const {
 		return _data;
 	}
 
