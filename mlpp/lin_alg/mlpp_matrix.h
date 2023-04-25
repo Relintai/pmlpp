@@ -626,15 +626,32 @@ public:
 	void scalar_addb(const real_t scalar, const Ref<MLPPMatrix> &A);
 
 	void log();
-	Ref<MLPPMatrix> logn();
+	Ref<MLPPMatrix> logn() const;
 	void logb(const Ref<MLPPMatrix> &A);
 
-	Ref<MLPPMatrix> log10nm(const Ref<MLPPMatrix> &A);
-	Ref<MLPPMatrix> expnm(const Ref<MLPPMatrix> &A);
-	Ref<MLPPMatrix> erfnm(const Ref<MLPPMatrix> &A);
-	Ref<MLPPMatrix> exponentiatenm(const Ref<MLPPMatrix> &A, real_t p);
-	Ref<MLPPMatrix> sqrtnm(const Ref<MLPPMatrix> &A);
-	Ref<MLPPMatrix> cbrtnm(const Ref<MLPPMatrix> &A);
+	void log10();
+	Ref<MLPPMatrix> log10n() const;
+	void log10b(const Ref<MLPPMatrix> &A);
+
+	void exp();
+	Ref<MLPPMatrix> expn() const;
+	void expb(const Ref<MLPPMatrix> &A);
+
+	void erf();
+	Ref<MLPPMatrix> erfn() const;
+	void erfb(const Ref<MLPPMatrix> &A);
+
+	void exponentiate(real_t p);
+	Ref<MLPPMatrix> exponentiaten(real_t p) const;
+	void exponentiateb(const Ref<MLPPMatrix> &A, real_t p);
+
+	void sqrt();
+	Ref<MLPPMatrix> sqrtn() const;
+	void sqrtb(const Ref<MLPPMatrix> &A);
+
+	void cbrt();
+	Ref<MLPPMatrix> cbrtn() const;
+	void cbrtb(const Ref<MLPPMatrix> &A);
 
 	//std::vector<std::vector<real_t>> matrixPower(std::vector<std::vector<real_t>> A, int n);
 

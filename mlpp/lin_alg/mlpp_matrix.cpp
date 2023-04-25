@@ -618,7 +618,7 @@ void MLPPMatrix::log() {
 		out_ptr[i] = Math::log(out_ptr[i]);
 	}
 }
-Ref<MLPPMatrix> MLPPMatrix::logn() {
+Ref<MLPPMatrix> MLPPMatrix::logn() const {
 	Ref<MLPPMatrix> out;
 	out.instance();
 	out->resize(size());
@@ -653,98 +653,234 @@ void MLPPMatrix::logb(const Ref<MLPPMatrix> &A) {
 	}
 }
 
-Ref<MLPPMatrix> MLPPMatrix::log10nm(const Ref<MLPPMatrix> &A) {
-	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
+void MLPPMatrix::log10() {
+	int ds = data_size();
 
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::log10(out_ptr[i]);
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::log10n() const {
 	Ref<MLPPMatrix> out;
 	out.instance();
+	out->resize(size());
 
-	int data_size = A->data_size();
-	out->resize(A->size());
+	int ds = data_size();
 
-	const real_t *a_ptr = A->ptr();
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < data_size; ++i) {
+	for (int i = 0; i < ds; ++i) {
 		out_ptr[i] = Math::log10(a_ptr[i]);
 	}
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPMatrix::expnm(const Ref<MLPPMatrix> &A) {
-	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
+void MLPPMatrix::log10b(const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND(!A.is_valid());
 
-	Ref<MLPPMatrix> out;
-	out.instance();
+	Size2i a_size = A->size();
 
-	int data_size = A->data_size();
-	out->resize(A->size());
+	if (a_size != size()) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
 
 	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::log10(a_ptr[i]);
+	}
+}
+
+void MLPPMatrix::exp() {
+	int ds = data_size();
+
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::exp(out_ptr[i]);
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::expn() const {
+	Ref<MLPPMatrix> out;
+	out.instance();
+	out->resize(size());
+
+	int ds = data_size();
+
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < data_size; ++i) {
+	for (int i = 0; i < ds; ++i) {
 		out_ptr[i] = Math::exp(a_ptr[i]);
 	}
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPMatrix::erfnm(const Ref<MLPPMatrix> &A) {
-	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
+void MLPPMatrix::expb(const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND(!A.is_valid());
 
-	Ref<MLPPMatrix> out;
-	out.instance();
+	Size2i a_size = A->size();
 
-	int data_size = A->data_size();
-	out->resize(A->size());
+	if (a_size != size()) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
 
 	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::exp(a_ptr[i]);
+	}
+}
+
+void MLPPMatrix::erf() {
+	int ds = data_size();
+
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::erf(out_ptr[i]);
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::erfn() const {
+	Ref<MLPPMatrix> out;
+	out.instance();
+	out->resize(size());
+
+	int ds = data_size();
+
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < data_size; ++i) {
+	for (int i = 0; i < ds; ++i) {
 		out_ptr[i] = Math::erf(a_ptr[i]);
 	}
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPMatrix::exponentiatenm(const Ref<MLPPMatrix> &A, real_t p) {
-	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
+void MLPPMatrix::erfb(const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND(!A.is_valid());
 
-	Ref<MLPPMatrix> out;
-	out.instance();
+	Size2i a_size = A->size();
 
-	int data_size = A->data_size();
-	out->resize(A->size());
+	if (a_size != size()) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
 
 	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::erf(a_ptr[i]);
+	}
+}
+
+void MLPPMatrix::exponentiate(real_t p) {
+	int ds = data_size();
+
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::pow(out_ptr[i], p);
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::exponentiaten(real_t p) const {
+	Ref<MLPPMatrix> out;
+	out.instance();
+	out->resize(size());
+
+	int ds = data_size();
+
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < data_size; ++i) {
+	for (int i = 0; i < ds; ++i) {
 		out_ptr[i] = Math::pow(a_ptr[i], p);
 	}
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPMatrix::sqrtnm(const Ref<MLPPMatrix> &A) {
-	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
+void MLPPMatrix::exponentiateb(const Ref<MLPPMatrix> &A, real_t p) {
+	ERR_FAIL_COND(!A.is_valid());
 
-	Ref<MLPPMatrix> out;
-	out.instance();
+	Size2i a_size = A->size();
 
-	int data_size = A->data_size();
-	out->resize(A->size());
+	if (a_size != size()) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
 
 	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::pow(a_ptr[i], p);
+	}
+}
+
+void MLPPMatrix::sqrt() {
+	int ds = data_size();
+
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::sqrt(out_ptr[i]);
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::sqrtn() const {
+	Ref<MLPPMatrix> out;
+	out.instance();
+	out->resize(size());
+
+	int ds = data_size();
+
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < data_size; ++i) {
+	for (int i = 0; i < ds; ++i) {
 		out_ptr[i] = Math::sqrt(a_ptr[i]);
 	}
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPMatrix::cbrtnm(const Ref<MLPPMatrix> &A) {
-	return exponentiatenm(A, real_t(1) / real_t(3));
+void MLPPMatrix::sqrtb(const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND(!A.is_valid());
+
+	Size2i a_size = A->size();
+
+	if (a_size != size()) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
+
+	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::sqrt(a_ptr[i]);
+	}
+}
+
+void MLPPMatrix::cbrt() {
+	exponentiate(real_t(1) / real_t(3));
+}
+Ref<MLPPMatrix> MLPPMatrix::cbrtn() const {
+	return exponentiaten(real_t(1) / real_t(3));
+}
+void MLPPMatrix::cbrtb(const Ref<MLPPMatrix> &A) {
+	exponentiateb(A, real_t(1) / real_t(3));
 }
 
 /*
@@ -1227,7 +1363,7 @@ MLPPMatrix::SVDResult MLPPMatrix::svd(const Ref<MLPPMatrix> &A) {
 	EigenResult left_eigen = eigen(A->multn(A->transposen()));
 	EigenResult right_eigen = eigen(A->transposen()->multn(A));
 
-	Ref<MLPPMatrix> singularvals = sqrtnm(left_eigen.eigen_values);
+	Ref<MLPPMatrix> singularvals = left_eigen.eigen_values->sqrtn();
 	Ref<MLPPMatrix> sigma = zeromatnm(a_size.y, a_size.x);
 
 	Size2i singularvals_size = singularvals->size();
