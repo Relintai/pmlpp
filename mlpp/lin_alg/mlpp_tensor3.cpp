@@ -424,55 +424,516 @@ void MLPPTensor3::set_from_image(const Ref<Image> &p_img, const int p_channels) 
 	img->unlock();
 }
 
-/*
-Vector<Ref<MLPPMatrix>> MLPPTensor3::additionnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
-	Vector<Ref<MLPPMatrix>> res;
-	res.resize(A.size());
+void MLPPTensor3::add(const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND(!B.is_valid());
+	ERR_FAIL_COND(_size != B->size());
 
-	for (int i = 0; i < res.size(); i++) {
-		res.write[i] = additionnm(A[i], B[i]);
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] += b_ptr[i];
+	}
+}
+Ref<MLPPTensor3> MLPPTensor3::addn(const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPTensor3>());
+	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPTensor3>());
+
+	Ref<MLPPTensor3> C;
+	C.instance();
+	C->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] = a_ptr[i] + b_ptr[i];
+	}
+
+	return C;
+}
+void MLPPTensor3::addb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
+	Size3i a_size = A->size();
+	ERR_FAIL_COND(a_size != B->size());
+
+	if (_size != a_size) {
+		resize(a_size);
+	}
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int data_size = A->data_size();
+
+	for (int i = 0; i < data_size; ++i) {
+		c_ptr[i] = a_ptr[i] + b_ptr[i];
+	}
+}
+
+void MLPPTensor3::sub(const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND(!B.is_valid());
+	ERR_FAIL_COND(_size != B->size());
+
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] -= b_ptr[i];
+	}
+}
+Ref<MLPPTensor3> MLPPTensor3::subn(const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPTensor3>());
+	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPTensor3>());
+
+	Ref<MLPPTensor3> C;
+	C.instance();
+	C->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] = a_ptr[i] - b_ptr[i];
+	}
+
+	return C;
+}
+void MLPPTensor3::subb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
+	Size3i a_size = A->size();
+	ERR_FAIL_COND(a_size != B->size());
+
+	if (_size != a_size) {
+		resize(a_size);
+	}
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int data_size = A->data_size();
+
+	for (int i = 0; i < data_size; ++i) {
+		c_ptr[i] = a_ptr[i] - b_ptr[i];
+	}
+}
+
+void MLPPTensor3::element_wise_division(const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND(!B.is_valid());
+	ERR_FAIL_COND(_size != B->size());
+
+	int ds = data_size();
+
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	for (int i = 0; i < ds; i++) {
+		c_ptr[i] /= b_ptr[i];
+	}
+}
+Ref<MLPPTensor3> MLPPTensor3::element_wise_divisionn(const Ref<MLPPTensor3> &B) const {
+	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPTensor3>());
+	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPTensor3>());
+
+	int ds = data_size();
+
+	Ref<MLPPTensor3> C;
+	C.instance();
+	C->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	for (int i = 0; i < ds; i++) {
+		c_ptr[i] = a_ptr[i] / b_ptr[i];
+	}
+
+	return C;
+}
+void MLPPTensor3::element_wise_divisionb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
+	Size3i a_size = A->size();
+	ERR_FAIL_COND(a_size != B->size());
+
+	if (a_size != _size) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	for (int i = 0; i < ds; i++) {
+		c_ptr[i] = a_ptr[i] / b_ptr[i];
+	}
+}
+
+void MLPPTensor3::sqrt() {
+	int ds = data_size();
+
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::sqrt(out_ptr[i]);
+	}
+}
+Ref<MLPPTensor3> MLPPTensor3::sqrtn() const {
+	Ref<MLPPTensor3> out;
+	out.instance();
+	out->resize(size());
+
+	int ds = data_size();
+
+	const real_t *a_ptr = ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::sqrt(a_ptr[i]);
+	}
+
+	return out;
+}
+void MLPPTensor3::sqrtb(const Ref<MLPPTensor3> &A) {
+	ERR_FAIL_COND(!A.is_valid());
+
+	Size3i a_size = A->size();
+
+	if (a_size != size()) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
+
+	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::sqrt(a_ptr[i]);
+	}
+}
+
+void MLPPTensor3::exponentiate(real_t p) {
+	int ds = data_size();
+
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::pow(out_ptr[i], p);
+	}
+}
+Ref<MLPPTensor3> MLPPTensor3::exponentiaten(real_t p) const {
+	Ref<MLPPTensor3> out;
+	out.instance();
+	out->resize(size());
+
+	int ds = data_size();
+
+	const real_t *a_ptr = ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::pow(a_ptr[i], p);
+	}
+
+	return out;
+}
+void MLPPTensor3::exponentiateb(const Ref<MLPPTensor3> &A, real_t p) {
+	ERR_FAIL_COND(!A.is_valid());
+
+	Size3i a_size = A->size();
+
+	if (a_size != size()) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
+
+	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::pow(a_ptr[i], p);
+	}
+}
+
+void MLPPTensor3::scalar_multiply(const real_t scalar) {
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		_data[i] *= scalar;
+	}
+}
+Ref<MLPPTensor3> MLPPTensor3::scalar_multiplyn(const real_t scalar) const {
+	Ref<MLPPTensor3> AN = duplicate();
+	int ds = AN->data_size();
+	real_t *an_ptr = AN->ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		an_ptr[i] *= scalar;
+	}
+
+	return AN;
+}
+void MLPPTensor3::scalar_multiplyb(const real_t scalar, const Ref<MLPPTensor3> &A) {
+	ERR_FAIL_COND(!A.is_valid());
+
+	if (A->size() != _size) {
+		resize(A->size());
+	}
+
+	int ds = data_size();
+	real_t *an_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		_data[i] = an_ptr[i] * scalar;
+	}
+}
+
+void MLPPTensor3::scalar_add(const real_t scalar) {
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		_data[i] += scalar;
+	}
+}
+Ref<MLPPTensor3> MLPPTensor3::scalar_addn(const real_t scalar) const {
+	Ref<MLPPTensor3> AN = duplicate();
+	int ds = AN->data_size();
+	real_t *an_ptr = AN->ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		an_ptr[i] += scalar;
+	}
+
+	return AN;
+}
+void MLPPTensor3::scalar_addb(const real_t scalar, const Ref<MLPPTensor3> &A) {
+	ERR_FAIL_COND(!A.is_valid());
+
+	if (A->size() != _size) {
+		resize(A->size());
+	}
+
+	int ds = data_size();
+	real_t *an_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		_data[i] = an_ptr[i] + scalar;
+	}
+}
+
+void MLPPTensor3::hadamard_product(const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND(!B.is_valid());
+	ERR_FAIL_COND(_size != B->size());
+
+	int ds = data_size();
+
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	for (int i = 0; i < ds; i++) {
+		c_ptr[i] = c_ptr[i] * b_ptr[i];
+	}
+}
+Ref<MLPPTensor3> MLPPTensor3::hadamard_productn(const Ref<MLPPTensor3> &B) const {
+	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPTensor3>());
+	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPTensor3>());
+
+	int ds = data_size();
+
+	Ref<MLPPTensor3> C;
+	C.instance();
+	C->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	for (int i = 0; i < ds; i++) {
+		c_ptr[i] = a_ptr[i] * b_ptr[i];
+	}
+
+	return C;
+}
+void MLPPTensor3::hadamard_productb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
+	Size3i a_size = A->size();
+	ERR_FAIL_COND(a_size != B->size());
+
+	if (a_size != _size) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	for (int i = 0; i < ds; i++) {
+		c_ptr[i] = a_ptr[i] * b_ptr[i];
+	}
+}
+
+void MLPPTensor3::max(const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND(!B.is_valid());
+	ERR_FAIL_COND(_size != B->size());
+
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] = MAX(c_ptr[i], b_ptr[i]);
+	}
+}
+Ref<MLPPTensor3> MLPPTensor3::maxn(const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPTensor3>());
+	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPTensor3>());
+
+	Ref<MLPPTensor3> C;
+	C.instance();
+	C->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] = MAX(a_ptr[i], b_ptr[i]);
+	}
+
+	return C;
+}
+void MLPPTensor3::maxb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B) {
+	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
+	Size3i a_size = A->size();
+	ERR_FAIL_COND(a_size != B->size());
+
+	if (_size != a_size) {
+		resize(a_size);
+	}
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int data_size = A->data_size();
+
+	for (int i = 0; i < data_size; ++i) {
+		c_ptr[i] = MAX(a_ptr[i], b_ptr[i]);
+	}
+}
+
+void MLPPTensor3::abs() {
+	int ds = data_size();
+
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = ABS(out_ptr[i]);
+	}
+}
+Ref<MLPPTensor3> MLPPTensor3::absn() const {
+	Ref<MLPPTensor3> out;
+	out.instance();
+	out->resize(size());
+
+	int ds = data_size();
+
+	const real_t *a_ptr = ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = ABS(a_ptr[i]);
+	}
+
+	return out;
+}
+void MLPPTensor3::absb(const Ref<MLPPTensor3> &A) {
+	ERR_FAIL_COND(!A.is_valid());
+
+	Size3i a_size = A->size();
+
+	if (a_size != size()) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
+
+	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = ABS(a_ptr[i]);
+	}
+}
+
+Ref<MLPPVector> MLPPTensor3::flatten() const {
+	int ds = data_size();
+
+	Ref<MLPPVector> res;
+	res.instance();
+	res->resize(ds);
+
+	real_t *res_ptr = res->ptrw();
+	const real_t *a_ptr = ptr();
+
+	for (int i = 0; i < ds; ++i) {
+		res_ptr[i] = a_ptr[i];
 	}
 
 	return res;
 }
-*/
-/*
-Vector<Ref<MLPPMatrix>> MLPPTensor3::element_wise_divisionnvnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
-	Vector<Ref<MLPPMatrix>> res;
-	res.resize(A.size());
+void MLPPTensor3::flatteno(Ref<MLPPVector> out) const {
+	ERR_FAIL_COND(!out.is_valid());
 
-	for (int i = 0; i < A.size(); i++) {
-		res.write[i] = element_wise_divisionnvnm(A[i], B[i]);
+	int ds = data_size();
+
+	if (unlikely(out->size() != ds)) {
+		out->resize(ds);
 	}
 
-	return res;
-}
-*/
-/*
-Vector<Ref<MLPPMatrix>> MLPPTensor3::sqrtnvt(const Vector<Ref<MLPPMatrix>> &A) {
-	Vector<Ref<MLPPMatrix>> res;
-	res.resize(A.size());
+	real_t *res_ptr = out->ptrw();
+	const real_t *a_ptr = ptr();
 
-	for (int i = 0; i < A.size(); i++) {
-		res.write[i] = sqrtnm(A[i]);
+	for (int i = 0; i < ds; ++i) {
+		res_ptr[i] = a_ptr[i];
 	}
-
-	return res;
 }
-*/
+
 /*
-Vector<Ref<MLPPMatrix>> MLPPTensor3::exponentiatenvt(const Vector<Ref<MLPPMatrix>> &A, real_t p) {
-	Vector<Ref<MLPPMatrix>> res;
-	res.resize(A.size());
-
-	for (int i = 0; i < A.size(); i++) {
-		res.write[i] = exponentiatenm(A[i], p);
+real_t MLPPTensor3::norm_2(std::vector<std::vector<std::vector<real_t>>> A) {
+	real_t sum = 0;
+	for (uint32_t i = 0; i < A.size(); i++) {
+		for (uint32_t j = 0; j < A[i].size(); j++) {
+			for (uint32_t k = 0; k < A[i][j].size(); k++) {
+				sum += A[i][j][k] * A[i][j][k];
+			}
+		}
 	}
-
-	return res;
+	return Math::sqrt(sum);
 }
-
 */
+
 /*
 std::vector<std::vector<real_t>> MLPPTensor3::tensor_vec_mult(std::vector<std::vector<std::vector<real_t>>> A, std::vector<real_t> b) {
 	std::vector<std::vector<real_t>> C;
@@ -486,87 +947,6 @@ std::vector<std::vector<real_t>> MLPPTensor3::tensor_vec_mult(std::vector<std::v
 		}
 	}
 	return C;
-}
-*/
-
-/*
-std::vector<real_t> MLPPTensor3::flatten(std::vector<std::vector<std::vector<real_t>>> A) {
-	std::vector<real_t> c;
-	for (uint32_t i = 0; i < A.size(); i++) {
-		std::vector<real_t> flattenedVec = flatten(A[i]);
-		c.insert(c.end(), flattenedVec.begin(), flattenedVec.end());
-	}
-	return c;
-}
-*/
-
-/*
-Vector<Ref<MLPPMatrix>> MLPPTensor3::scalar_multiplynvt(real_t scalar, Vector<Ref<MLPPMatrix>> A) {
-	for (int i = 0; i < A.size(); i++) {
-		A.write[i] = scalar_multiplynm(scalar, A[i]);
-	}
-	return A;
-}
-Vector<Ref<MLPPMatrix>> MLPPTensor3::scalar_addnvt(real_t scalar, Vector<Ref<MLPPMatrix>> A) {
-	for (int i = 0; i < A.size(); i++) {
-		A.write[i] = scalar_addnm(scalar, A[i]);
-	}
-	return A;
-}
-
-Vector<Ref<MLPPMatrix>> MLPPTensor3::resizenvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
-	Vector<Ref<MLPPMatrix>> res;
-	res.resize(B.size());
-
-	for (int i = 0; i < res.size(); i++) {
-		Ref<MLPPMatrix> m;
-		m.instance();
-		m->resize(B[i]->size());
-
-		res.write[i] = m;
-	}
-
-	return res;
-}
-*/
-
-//std::vector<std::vector<std::vector<real_t>>> hadamard_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
-
-/*
-Vector<Ref<MLPPMatrix>> MLPPTensor3::maxnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
-	Vector<Ref<MLPPMatrix>> res;
-	res.resize(A.size());
-
-	for (int i = 0; i < A.size(); i++) {
-		res.write[i] = maxnm(A[i], B[i]);
-	}
-
-	return res;
-}
-
-Vector<Ref<MLPPMatrix>> MLPPTensor3::absnvt(const Vector<Ref<MLPPMatrix>> &A) {
-	Vector<Ref<MLPPMatrix>> res;
-	res.resize(A.size());
-
-	for (int i = 0; i < A.size(); i++) {
-		res.write[i] = absnm(A[i]);
-	}
-
-	return A;
-}
-*/
-
-/*
-real_t MLPPTensor3::norm_2(std::vector<std::vector<std::vector<real_t>>> A) {
-	real_t sum = 0;
-	for (uint32_t i = 0; i < A.size(); i++) {
-		for (uint32_t j = 0; j < A[i].size(); j++) {
-			for (uint32_t k = 0; k < A[i][j].size(); k++) {
-				sum += A[i][j][k] * A[i][j][k];
-			}
-		}
-	}
-	return Math::sqrt(sum);
 }
 */
 

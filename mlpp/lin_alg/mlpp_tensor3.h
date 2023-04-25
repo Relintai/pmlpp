@@ -30,7 +30,7 @@ public:
 	}
 
 	// TODO: Need to double check whether it's right to call the z axis feature map (probably not)
-	// TODO: Add helper methods for the other axes aswell (probably shouldn't have as extensive of a coverage as z), 
+	// TODO: Add helper methods for the other axes aswell (probably shouldn't have as extensive of a coverage as z),
 	// Only MLPPMatrix: get, add, set.
 	// TODO: Add Image get, set helper methods to MLPPMatrix -> so the other axis helper methods can use them.
 	// TODO: _FORCE_INLINE_ less big methods (Also do this in MLPPVEctor and MLPPMatrix)
@@ -657,30 +657,52 @@ public:
 public:
 	//math api
 
-	//Vector<Ref<MLPPMatrix>> additionnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
+	void add(const Ref<MLPPTensor3> &B);
+	Ref<MLPPTensor3> addn(const Ref<MLPPTensor3> &B);
+	void addb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
 
-	//Vector<Ref<MLPPMatrix>> element_wise_divisionnvnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
+	void sub(const Ref<MLPPTensor3> &B);
+	Ref<MLPPTensor3> subn(const Ref<MLPPTensor3> &B);
+	void subb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
 
-	//Vector<Ref<MLPPMatrix>> sqrtnvt(const Vector<Ref<MLPPMatrix>> &A);
-	
-	//Vector<Ref<MLPPMatrix>> exponentiatenvt(const Vector<Ref<MLPPMatrix>> &A, real_t p);
+	void element_wise_division(const Ref<MLPPTensor3> &B);
+	Ref<MLPPTensor3> element_wise_divisionn(const Ref<MLPPTensor3> &B) const;
+	void element_wise_divisionb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
 
-	//std::vector<std::vector<real_t>> tensor_vec_mult(std::vector<std::vector<std::vector<real_t>>> A, std::vector<real_t> b);
+	void sqrt();
+	Ref<MLPPTensor3> sqrtn() const;
+	void sqrtb(const Ref<MLPPTensor3> &A);
 
-	//std::vector<real_t> flatten(std::vector<std::vector<std::vector<real_t>>> A);
+	void exponentiate(real_t p);
+	Ref<MLPPTensor3> exponentiaten(real_t p) const;
+	void exponentiateb(const Ref<MLPPTensor3> &A, real_t p);
 
-	//Vector<Ref<MLPPMatrix>> scalar_multiplynvt(real_t scalar, Vector<Ref<MLPPMatrix>> A);
-	//Vector<Ref<MLPPMatrix>> scalar_addnvt(real_t scalar, Vector<Ref<MLPPMatrix>> A);
+	void scalar_multiply(const real_t scalar);
+	Ref<MLPPTensor3> scalar_multiplyn(const real_t scalar) const;
+	void scalar_multiplyb(const real_t scalar, const Ref<MLPPTensor3> &A);
 
-	//Vector<Ref<MLPPMatrix>> resizenvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
+	void scalar_add(const real_t scalar);
+	Ref<MLPPTensor3> scalar_addn(const real_t scalar) const;
+	void scalar_addb(const real_t scalar, const Ref<MLPPTensor3> &A);
 
-	//std::vector<std::vector<std::vector<real_t>>> hadamard_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
+	void hadamard_product(const Ref<MLPPTensor3> &B);
+	Ref<MLPPTensor3> hadamard_productn(const Ref<MLPPTensor3> &B) const;
+	void hadamard_productb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
 
-	//Vector<Ref<MLPPMatrix>> maxnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
-	//Vector<Ref<MLPPMatrix>> absnvt(const Vector<Ref<MLPPMatrix>> &A);
+	void max(const Ref<MLPPTensor3> &B);
+	Ref<MLPPTensor3> maxn(const Ref<MLPPTensor3> &B);
+	void maxb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
+
+	void abs();
+	Ref<MLPPTensor3> absn() const;
+	void absb(const Ref<MLPPTensor3> &A);
+
+	Ref<MLPPVector> flatten() const;
+	void flatteno(Ref<MLPPVector> out) const;
 
 	//real_t norm_2(std::vector<std::vector<std::vector<real_t>>> A);
 
+	//std::vector<std::vector<real_t>> tensor_vec_mult(std::vector<std::vector<std::vector<real_t>>> A, std::vector<real_t> b);
 	//std::vector<std::vector<std::vector<real_t>>> vector_wise_tensor_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<real_t>> B);
 
 public:
