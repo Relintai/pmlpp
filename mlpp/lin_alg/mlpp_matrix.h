@@ -655,27 +655,44 @@ public:
 
 	//std::vector<std::vector<real_t>> matrixPower(std::vector<std::vector<real_t>> A, int n);
 
-	Ref<MLPPMatrix> absnm(const Ref<MLPPMatrix> &A);
+	void abs();
+	Ref<MLPPMatrix> absn() const;
+	void absb(const Ref<MLPPMatrix> &A);
 
-	real_t detm(const Ref<MLPPMatrix> &A, int d);
+	real_t det(int d = -1) const;
+	real_t detb(const Ref<MLPPMatrix> &A, int d) const;
 
 	//real_t trace(std::vector<std::vector<real_t>> A);
 
-	Ref<MLPPMatrix> cofactornm(const Ref<MLPPMatrix> &A, int n, int i, int j);
-	Ref<MLPPMatrix> adjointnm(const Ref<MLPPMatrix> &A);
-	Ref<MLPPMatrix> inversenm(const Ref<MLPPMatrix> &A);
-	Ref<MLPPMatrix> pinversenm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> cofactor(int n, int i, int j) const;
+	void cofactoro(int n, int i, int j, Ref<MLPPMatrix> out) const;
 
-	Ref<MLPPMatrix> zeromatnm(int n, int m);
-	Ref<MLPPMatrix> onematnm(int n, int m);
-	Ref<MLPPMatrix> fullnm(int n, int m, int k);
+	Ref<MLPPMatrix> adjoint() const;
+	void adjointo(Ref<MLPPMatrix> out) const;
 
-	Ref<MLPPMatrix> sinnm(const Ref<MLPPMatrix> &A);
-	Ref<MLPPMatrix> cosnm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> inverse() const;
+	void inverseo(Ref<MLPPMatrix> out) const;
+
+	Ref<MLPPMatrix> pinverse() const;
+	void pinverseo(Ref<MLPPMatrix> out) const;
+
+	Ref<MLPPMatrix> zero_mat(int n, int m) const;
+	Ref<MLPPMatrix> one_mat(int n, int m) const;
+	Ref<MLPPMatrix> full_mat(int n, int m, int k) const;
+
+	void sin();
+	Ref<MLPPMatrix> sinn() const;
+	void sinb(const Ref<MLPPMatrix> &A);
+
+	void cos();
+	Ref<MLPPMatrix> cosn() const;
+	void cosb(const Ref<MLPPMatrix> &A);
 
 	//std::vector<std::vector<real_t>> rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis = -1);
 
-	Ref<MLPPMatrix> maxnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	void max(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> maxn(const Ref<MLPPMatrix> &B);
+	void maxb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	//real_t max(std::vector<std::vector<real_t>> A);
 	//real_t min(std::vector<std::vector<real_t>> A);
@@ -684,9 +701,12 @@ public:
 
 	//real_t norm_2(std::vector<std::vector<real_t>> A);
 
-	Ref<MLPPMatrix> identitym(int d);
+	void identity();
+	Ref<MLPPMatrix> identityn() const;
+	Ref<MLPPMatrix> identity_mat(int d) const;
 
-	Ref<MLPPMatrix> covnm(const Ref<MLPPMatrix> &A);
+	Ref<MLPPMatrix> cov() const;
+	void covo(Ref<MLPPMatrix> out) const;
 
 	struct EigenResult {
 		Ref<MLPPMatrix> eigen_vectors;

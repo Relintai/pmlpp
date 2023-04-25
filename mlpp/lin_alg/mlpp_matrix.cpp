@@ -898,26 +898,59 @@ std::vector<std::vector<real_t>> MLPPMatrix::matrixPower(std::vector<std::vector
 }
 */
 
-Ref<MLPPMatrix> MLPPMatrix::absnm(const Ref<MLPPMatrix> &A) {
-	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
+void MLPPMatrix::abs() {
+	int ds = data_size();
 
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = ABS(out_ptr[i]);
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::absn() const {
 	Ref<MLPPMatrix> out;
 	out.instance();
+	out->resize(size());
 
-	int data_size = A->data_size();
-	out->resize(A->size());
+	int ds = data_size();
 
-	const real_t *a_ptr = A->ptr();
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < data_size; ++i) {
+	for (int i = 0; i < ds; ++i) {
 		out_ptr[i] = ABS(a_ptr[i]);
 	}
 
 	return out;
 }
+void MLPPMatrix::absb(const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND(!A.is_valid());
 
-real_t MLPPMatrix::detm(const Ref<MLPPMatrix> &A, int d) {
+	Size2i a_size = A->size();
+
+	if (a_size != size()) {
+		resize(a_size);
+	}
+
+	int ds = data_size();
+
+	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = ABS(a_ptr[i]);
+	}
+}
+
+real_t MLPPMatrix::det(int d) const {
+	if (d == -1) {
+		return detb(Ref<MLPPMatrix>(this), _size.y);
+	} else {
+		return detb(Ref<MLPPMatrix>(this), d);
+	}
+}
+
+real_t MLPPMatrix::detb(const Ref<MLPPMatrix> &A, int d) const {
 	ERR_FAIL_COND_V(!A.is_valid(), 0);
 
 	real_t deter = 0;
@@ -947,7 +980,7 @@ real_t MLPPMatrix::detm(const Ref<MLPPMatrix> &A, int d) {
 				sub_i++;
 			}
 
-			deter += Math::pow(static_cast<real_t>(-1), static_cast<real_t>(i)) * A->get_element(0, i) * detm(B, d - 1);
+			deter += Math::pow(static_cast<real_t>(-1), static_cast<real_t>(i)) * A->get_element(0, i) * B->det(d - 1);
 		}
 	}
 
@@ -964,10 +997,10 @@ real_t MLPPMatrix::trace(std::vector<std::vector<real_t>> A) {
 }
 */
 
-Ref<MLPPMatrix> MLPPMatrix::cofactornm(const Ref<MLPPMatrix> &A, int n, int i, int j) {
+Ref<MLPPMatrix> MLPPMatrix::cofactor(int n, int i, int j) const {
 	Ref<MLPPMatrix> cof;
 	cof.instance();
-	cof->resize(A->size());
+	cof->resize(_size);
 
 	int sub_i = 0;
 	int sub_j = 0;
@@ -975,7 +1008,7 @@ Ref<MLPPMatrix> MLPPMatrix::cofactornm(const Ref<MLPPMatrix> &A, int n, int i, i
 	for (int row = 0; row < n; row++) {
 		for (int col = 0; col < n; col++) {
 			if (row != i && col != j) {
-				cof->set_element(sub_i, sub_j++, A->get_element(row, col));
+				cof->set_element(sub_i, sub_j++, get_element(row, col));
 
 				if (sub_j == n - 1) {
 					sub_j = 0;
@@ -987,53 +1020,122 @@ Ref<MLPPMatrix> MLPPMatrix::cofactornm(const Ref<MLPPMatrix> &A, int n, int i, i
 
 	return cof;
 }
-Ref<MLPPMatrix> MLPPMatrix::adjointnm(const Ref<MLPPMatrix> &A) {
+void MLPPMatrix::cofactoro(int n, int i, int j, Ref<MLPPMatrix> out) const {
+	ERR_FAIL_COND(!out.is_valid());
+
+	if (unlikely(out->size() != _size)) {
+		out->resize(_size);
+	}
+
+	int sub_i = 0;
+	int sub_j = 0;
+
+	for (int row = 0; row < n; row++) {
+		for (int col = 0; col < n; col++) {
+			if (row != i && col != j) {
+				out->set_element(sub_i, sub_j++, get_element(row, col));
+
+				if (sub_j == n - 1) {
+					sub_j = 0;
+					sub_i++;
+				}
+			}
+		}
+	}
+}
+
+Ref<MLPPMatrix> MLPPMatrix::adjoint() const {
 	Ref<MLPPMatrix> adj;
 
-	ERR_FAIL_COND_V(!A.is_valid(), adj);
-
-	Size2i a_size = A->size();
-
-	ERR_FAIL_COND_V(a_size.x != a_size.y, adj);
+	ERR_FAIL_COND_V(_size.x != _size.y, adj);
 
 	//Resizing the initial adjoint matrix
 
 	adj.instance();
-	adj->resize(a_size);
+	adj->resize(_size);
 
 	// Checking for the case where the given N x N matrix is a scalar
-	if (a_size.y == 1) {
+	if (_size.y == 1) {
 		adj->set_element(0, 0, 1);
 		return adj;
 	}
 
-	if (a_size.y == 2) {
-		adj->set_element(0, 0, A->get_element(1, 1));
-		adj->set_element(1, 1, A->get_element(0, 0));
+	if (_size.y == 2) {
+		adj->set_element(0, 0, get_element(1, 1));
+		adj->set_element(1, 1, get_element(0, 0));
 
-		adj->set_element(0, 1, -A->get_element(0, 1));
-		adj->set_element(1, 0, -A->get_element(1, 0));
+		adj->set_element(0, 1, -get_element(0, 1));
+		adj->set_element(1, 0, -get_element(1, 0));
 
 		return adj;
 	}
 
-	for (int i = 0; i < a_size.y; i++) {
-		for (int j = 0; j < a_size.x; j++) {
-			Ref<MLPPMatrix> cof = cofactornm(A, a_size.y, i, j);
+	for (int i = 0; i < _size.y; i++) {
+		for (int j = 0; j < _size.x; j++) {
+			Ref<MLPPMatrix> cof = cofactor(_size.y, i, j);
 			// 1 if even, -1 if odd
 			int sign = (i + j) % 2 == 0 ? 1 : -1;
-			adj->set_element(j, i, sign * detm(cof, int(a_size.y) - 1));
+			adj->set_element(j, i, sign * cof->det(int(_size.y) - 1));
 		}
 	}
 	return adj;
 }
-Ref<MLPPMatrix> MLPPMatrix::inversenm(const Ref<MLPPMatrix> &A) {
-	return adjointnm(A)->scalar_multiplyn(1 / detm(A, int(A->size().y)));
+void MLPPMatrix::adjointo(Ref<MLPPMatrix> out) const {
+	ERR_FAIL_COND(!out.is_valid());
+
+	ERR_FAIL_COND(_size.x != _size.y);
+
+	//Resizing the initial adjoint matrix
+
+	if (unlikely(out->size() != _size)) {
+		out->resize(_size);
+	}
+
+	// Checking for the case where the given N x N matrix is a scalar
+	if (_size.y == 1) {
+		out->set_element(0, 0, 1);
+		return;
+	}
+
+	if (_size.y == 2) {
+		out->set_element(0, 0, get_element(1, 1));
+		out->set_element(1, 1, get_element(0, 0));
+
+		out->set_element(0, 1, -get_element(0, 1));
+		out->set_element(1, 0, -get_element(1, 0));
+
+		return;
+	}
+
+	for (int i = 0; i < _size.y; i++) {
+		for (int j = 0; j < _size.x; j++) {
+			Ref<MLPPMatrix> cof = cofactor(_size.y, i, j);
+			// 1 if even, -1 if odd
+			int sign = (i + j) % 2 == 0 ? 1 : -1;
+			out->set_element(j, i, sign * cof->det(int(_size.y) - 1));
+		}
+	}
 }
-Ref<MLPPMatrix> MLPPMatrix::pinversenm(const Ref<MLPPMatrix> &A) {
-	return inversenm(A->multn(A)->transposen())->multn(A->transposen());
+
+Ref<MLPPMatrix> MLPPMatrix::inverse() const {
+	return adjoint()->scalar_multiplyn(1 / det());
 }
-Ref<MLPPMatrix> MLPPMatrix::zeromatnm(int n, int m) {
+void MLPPMatrix::inverseo(Ref<MLPPMatrix> out) const {
+	ERR_FAIL_COND(!out.is_valid());
+
+	out->set_from_mlpp_matrix(adjoint()->scalar_multiplyn(1 / det()));
+}
+
+Ref<MLPPMatrix> MLPPMatrix::pinverse() const {
+	return multn(Ref<MLPPMatrix>(this))->transposen()->inverse()->multn(transposen());
+}
+void MLPPMatrix::pinverseo(Ref<MLPPMatrix> out) const {
+	ERR_FAIL_COND(!out.is_valid());
+
+	out->set_from_mlpp_matrix(multn(Ref<MLPPMatrix>(this))->transposen()->inverse()->multn(transposen()));
+}
+
+Ref<MLPPMatrix> MLPPMatrix::zero_mat(int n, int m) const {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
@@ -1042,7 +1144,7 @@ Ref<MLPPMatrix> MLPPMatrix::zeromatnm(int n, int m) {
 
 	return mat;
 }
-Ref<MLPPMatrix> MLPPMatrix::onematnm(int n, int m) {
+Ref<MLPPMatrix> MLPPMatrix::one_mat(int n, int m) const {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
@@ -1051,7 +1153,7 @@ Ref<MLPPMatrix> MLPPMatrix::onematnm(int n, int m) {
 
 	return mat;
 }
-Ref<MLPPMatrix> MLPPMatrix::fullnm(int n, int m, int k) {
+Ref<MLPPMatrix> MLPPMatrix::full_mat(int n, int m, int k) const {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
@@ -1061,41 +1163,88 @@ Ref<MLPPMatrix> MLPPMatrix::fullnm(int n, int m, int k) {
 	return mat;
 }
 
-Ref<MLPPMatrix> MLPPMatrix::sinnm(const Ref<MLPPMatrix> &A) {
-	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
+void MLPPMatrix::sin() {
+	int ds = data_size();
 
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::sin(out_ptr[i]);
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::sinn() const {
 	Ref<MLPPMatrix> out;
 	out.instance();
+	out->resize(size());
 
-	int data_size = A->data_size();
-	out->resize(A->size());
+	int ds = data_size();
 
-	const real_t *a_ptr = A->ptr();
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < data_size; ++i) {
+	for (int i = 0; i < ds; ++i) {
 		out_ptr[i] = Math::sin(a_ptr[i]);
 	}
 
 	return out;
 }
-Ref<MLPPMatrix> MLPPMatrix::cosnm(const Ref<MLPPMatrix> &A) {
-	ERR_FAIL_COND_V(!A.is_valid(), Ref<MLPPVector>());
+void MLPPMatrix::sinb(const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND(!A.is_valid());
 
-	Ref<MLPPMatrix> out;
-	out.instance();
+	if (A->size() != _size) {
+		resize(A->size());
+	}
 
-	int data_size = A->data_size();
-	out->resize(A->size());
+	int ds = A->data_size();
 
 	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::sin(a_ptr[i]);
+	}
+}
+
+void MLPPMatrix::cos() {
+	int ds = data_size();
+
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::cos(out_ptr[i]);
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::cosn() const {
+	Ref<MLPPMatrix> out;
+	out.instance();
+	out->resize(size());
+
+	int ds = data_size();
+
+	const real_t *a_ptr = ptr();
 	real_t *out_ptr = out->ptrw();
 
-	for (int i = 0; i < data_size; ++i) {
+	for (int i = 0; i < ds; ++i) {
 		out_ptr[i] = Math::cos(a_ptr[i]);
 	}
 
 	return out;
+}
+void MLPPMatrix::cosb(const Ref<MLPPMatrix> &A) {
+	ERR_FAIL_COND(!A.is_valid());
+
+	if (A->size() != _size) {
+		resize(A->size());
+	}
+
+	int ds = A->data_size();
+
+	const real_t *a_ptr = A->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < ds; ++i) {
+		out_ptr[i] = Math::cos(a_ptr[i]);
+	}
 }
 
 /*
@@ -1113,22 +1262,57 @@ std::vector<std::vector<real_t>> MLPPMatrix::rotate(std::vector<std::vector<real
 }
 */
 
-Ref<MLPPMatrix> MLPPMatrix::maxnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+void MLPPMatrix::max(const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND(!B.is_valid());
+	ERR_FAIL_COND(_size != B->size());
+
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] = MAX(c_ptr[i], b_ptr[i]);
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::maxn(const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPMatrix>());
+	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPMatrix>());
+
 	Ref<MLPPMatrix> C;
 	C.instance();
-	C->resize(A->size());
+	C->resize(_size);
 
-	const real_t *a_ptr = A->ptr();
+	const real_t *a_ptr = ptr();
 	const real_t *b_ptr = B->ptr();
 	real_t *c_ptr = C->ptrw();
 
-	int size = A->data_size();
+	int ds = data_size();
 
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < ds; ++i) {
 		c_ptr[i] = MAX(a_ptr[i], b_ptr[i]);
 	}
 
 	return C;
+}
+void MLPPMatrix::maxb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
+	Size2i a_size = A->size();
+	ERR_FAIL_COND(a_size != B->size());
+
+	if (_size != a_size) {
+		resize(a_size);
+	}
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int data_size = A->data_size();
+
+	for (int i = 0; i < data_size; ++i) {
+		c_ptr[i] = MAX(a_ptr[i], b_ptr[i]);
+	}
 }
 
 /*
@@ -1167,7 +1351,26 @@ real_t MLPPMatrix::norm_2(std::vector<std::vector<real_t>> A) {
 }
 */
 
-Ref<MLPPMatrix> MLPPMatrix::identitym(int d) {
+void MLPPMatrix::identity() {
+	fill(0);
+
+	real_t *im_ptr = ptrw();
+
+	int d = MIN(_size.x, _size.y);
+
+	for (int i = 0; i < d; i++) {
+		im_ptr[calculate_index(i, i)] = 1;
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::identityn() const {
+	Ref<MLPPMatrix> identity_mat;
+	identity_mat.instance();
+	identity_mat->resize(_size);
+	identity_mat->identity();
+
+	return identity_mat;
+}
+Ref<MLPPMatrix> MLPPMatrix::identity_mat(int d) const {
 	Ref<MLPPMatrix> identity_mat;
 	identity_mat.instance();
 	identity_mat->resize(Size2i(d, d));
@@ -1182,35 +1385,60 @@ Ref<MLPPMatrix> MLPPMatrix::identitym(int d) {
 	return identity_mat;
 }
 
-Ref<MLPPMatrix> MLPPMatrix::covnm(const Ref<MLPPMatrix> &A) {
+Ref<MLPPMatrix> MLPPMatrix::cov() const {
 	MLPPStat stat;
 
 	Ref<MLPPMatrix> cov_mat;
 	cov_mat.instance();
 
-	Size2i a_size = A->size();
-
-	cov_mat->resize(a_size);
+	cov_mat->resize(_size);
 
 	Ref<MLPPVector> a_i_row_tmp;
 	a_i_row_tmp.instance();
-	a_i_row_tmp->resize(a_size.x);
+	a_i_row_tmp->resize(_size.x);
 
 	Ref<MLPPVector> a_j_row_tmp;
 	a_j_row_tmp.instance();
-	a_j_row_tmp->resize(a_size.x);
+	a_j_row_tmp->resize(_size.x);
 
-	for (int i = 0; i < a_size.y; ++i) {
-		A->get_row_into_mlpp_vector(i, a_i_row_tmp);
+	for (int i = 0; i < _size.y; ++i) {
+		get_row_into_mlpp_vector(i, a_i_row_tmp);
 
-		for (int j = 0; j < a_size.x; ++j) {
-			A->get_row_into_mlpp_vector(j, a_j_row_tmp);
+		for (int j = 0; j < _size.x; ++j) {
+			get_row_into_mlpp_vector(j, a_j_row_tmp);
 
 			cov_mat->set_element(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
 		}
 	}
 
 	return cov_mat;
+}
+void MLPPMatrix::covo(Ref<MLPPMatrix> out) const {
+	ERR_FAIL_COND(!out.is_valid());
+
+	MLPPStat stat;
+
+	if (unlikely(out->size() != _size)) {
+		out->resize(_size);
+	}
+
+	Ref<MLPPVector> a_i_row_tmp;
+	a_i_row_tmp.instance();
+	a_i_row_tmp->resize(_size.x);
+
+	Ref<MLPPVector> a_j_row_tmp;
+	a_j_row_tmp.instance();
+	a_j_row_tmp->resize(_size.x);
+
+	for (int i = 0; i < _size.y; ++i) {
+		get_row_into_mlpp_vector(i, a_i_row_tmp);
+
+		for (int j = 0; j < _size.x; ++j) {
+			get_row_into_mlpp_vector(j, a_j_row_tmp);
+
+			out->set_element(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
+		}
+	}
 }
 
 MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
@@ -1228,7 +1456,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
 
 	HashMap<int, int> val_to_vec;
 	Ref<MLPPMatrix> a_new;
-	Ref<MLPPMatrix> eigenvectors = identitym(A->size().y);
+	Ref<MLPPMatrix> eigenvectors = identity_mat(A->size().y);
 	Size2i a_size = A->size();
 
 	do {
@@ -1265,13 +1493,13 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen(Ref<MLPPMatrix> A) {
 			theta = 0.5 * atan(2 * a_ij / (a_ii - a_jj));
 		}
 
-		Ref<MLPPMatrix> P = identitym(A->size().y);
+		Ref<MLPPMatrix> P = identity_mat(A->size().y);
 		P->set_element(sub_i, sub_j, -Math::sin(theta));
 		P->set_element(sub_i, sub_i, Math::cos(theta));
 		P->set_element(sub_j, sub_j, Math::cos(theta));
 		P->set_element(sub_j, sub_i, Math::sin(theta));
 
-		a_new = inversenm(P)->multn(A)->multn(P);
+		a_new = P->inverse()->multn(A)->multn(P);
 
 		Size2i a_new_size = a_new->size();
 
@@ -1364,7 +1592,7 @@ MLPPMatrix::SVDResult MLPPMatrix::svd(const Ref<MLPPMatrix> &A) {
 	EigenResult right_eigen = eigen(A->transposen()->multn(A));
 
 	Ref<MLPPMatrix> singularvals = left_eigen.eigen_values->sqrtn();
-	Ref<MLPPMatrix> sigma = zeromatnm(a_size.y, a_size.x);
+	Ref<MLPPMatrix> sigma = zero_mat(a_size.y, a_size.x);
 
 	Size2i singularvals_size = singularvals->size();
 
