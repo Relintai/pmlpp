@@ -32,7 +32,7 @@
 	<members>
 		<member name="a" type="MLPPVector" setter="set_a" getter="get_a">
 		</member>
-		<member name="a_test" type="MLPPVector" setter="set_a_test" getter="get_a_test">
+		<member name="a_test" type="float" setter="set_a_test" getter="get_a_test" default="0.0">
 		</member>
 		<member name="activation" type="int" setter="set_activation" getter="get_activation" enum="MLPPActivation.ActivationFunction" default="0">
 		</member>
@@ -50,7 +50,7 @@
 		</member>
 		<member name="n_hidden" type="int" setter="set_n_hidden" getter="get_n_hidden" default="0">
 		</member>
-		<member name="reg" type="int" setter="set_reg" getter="get_reg" enum="MLPPReg.RegularizationType" default="0">
+		<member name="reg" type="int" setter="set_reg" getter="get_reg" enum="MLPPReg.RegularizationType" default="155700368">
 		</member>
 		<member name="set_weight_init" type="int" setter="set_weight_init" getter="get_weight_init" enum="MLPPUtilities.WeightDistributionType" default="0">
 		</member>
@@ -58,7 +58,7 @@
 		</member>
 		<member name="z" type="MLPPVector" setter="set_z" getter="get_z">
 		</member>
-		<member name="z_test" type="MLPPVector" setter="set_z_test" getter="get_z_test">
+		<member name="z_test" type="float" setter="set_z_test" getter="get_z_test" default="0.0">
 		</member>
 	</members>
 	<constants>

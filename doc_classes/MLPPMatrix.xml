@@ -7,6 +7,28 @@
 	<tutorials>
 	</tutorials>
 	<methods>
+		<method name="abs">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="absb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="absn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="add">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
 		<method name="add_row">
 			<return type="void" />
 			<argument index="0" name="row" type="PoolRealArray" />
@@ -25,8 +47,111 @@
 			<description>
 			</description>
 		</method>
+		<method name="add_vec">
+			<return type="void" />
+			<argument index="0" name="b" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="add_vecb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<argument index="1" name="b" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="add_vecn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="b" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="addb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<argument index="1" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="addn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="adjoint" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="adjointo" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="out" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="cbrt">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="cbrtb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="cbrtn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
 		<method name="clear">
 			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="cofactor" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="n" type="int" />
+			<argument index="1" name="i" type="int" />
+			<argument index="2" name="j" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="cofactoro" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="n" type="int" />
+			<argument index="1" name="i" type="int" />
+			<argument index="2" name="j" type="int" />
+			<argument index="3" name="out" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="cos">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="cosb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="cosn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="cov" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="covo" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="out" type="MLPPMatrix" />
 			<description>
 			</description>
 		</method>
@@ -35,13 +160,119 @@
 			<description>
 			</description>
 		</method>
+		<method name="det" qualifiers="const">
+			<return type="float" />
+			<argument index="0" name="d" type="int" default="-1" />
+			<description>
+			</description>
+		</method>
+		<method name="detb" qualifiers="const">
+			<return type="float" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<argument index="1" name="d" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="diagonal_zeroed">
+			<return type="void" />
+			<argument index="0" name="a" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="diagonal_zeroedn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="a" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
 		<method name="duplicate" qualifiers="const">
 			<return type="MLPPMatrix" />
 			<description>
 			</description>
 		</method>
+		<method name="eigen">
+			<return type="Array" />
+			<description>
+			</description>
+		</method>
+		<method name="eigenb">
+			<return type="Array" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="element_wise_division">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="element_wise_divisionb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<argument index="1" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="element_wise_divisionn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
 		<method name="empty" qualifiers="const">
 			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="erf">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="erfb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="erfn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="exp">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="expb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="expn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="exponentiate">
+			<return type="void" />
+			<argument index="0" name="p" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="exponentiateb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<argument index="1" name="p" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="exponentiaten" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="p" type="float" />
 			<description>
 			</description>
 		</method>
@@ -51,10 +282,58 @@
 			<description>
 			</description>
 		</method>
+		<method name="flatten" qualifiers="const">
+			<return type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="flatteno" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="out" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="full_mat" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="n" type="int" />
+			<argument index="1" name="m" type="int" />
+			<argument index="2" name="k" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gaussian_noise" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="n" type="int" />
+			<argument index="1" name="m" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="gaussian_noise_fill">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="get_as_image" qualifiers="const">
+			<return type="Image" />
+			<description>
+			</description>
+		</method>
 		<method name="get_element" qualifiers="const">
 			<return type="float" />
-			<argument index="0" name="index_x" type="int" />
-			<argument index="1" name="index_y" type="int" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="index_x" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_element_index" qualifiers="const">
+			<return type="float" />
+			<argument index="0" name="index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_into_image" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="out" type="Image" />
 			<description>
 			</description>
 		</method>
@@ -65,15 +344,61 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_row_mlpp_vector">
+		<method name="get_row_mlpp_vector" qualifiers="const">
 			<return type="MLPPVector" />
 			<argument index="0" name="index_y" type="int" />
 			<description>
 			</description>
 		</method>
-		<method name="get_row_pool_vector">
+		<method name="get_row_pool_vector" qualifiers="const">
 			<return type="PoolRealArray" />
 			<argument index="0" name="index_y" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="hadamard_product">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="hadamard_productb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<argument index="1" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="hadamard_productn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="identity">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="identity_mat" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="d" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="identityn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="inverse" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="inverseo" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="out" type="MLPPMatrix" />
 			<description>
 			</description>
 		</method>
@@ -84,9 +409,143 @@
 			<description>
 			</description>
 		</method>
+		<method name="kronecker_product">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="kronecker_productb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<argument index="1" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="kronecker_productn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="log">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="log10">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="log10b">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="log10n" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="logb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="logn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="max">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="maxb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<argument index="1" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="maxn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="mult">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="mult_vec" qualifiers="const">
+			<return type="MLPPVector" />
+			<argument index="0" name="b" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="mult_veco">
+			<return type="void" />
+			<argument index="0" name="b" type="MLPPVector" />
+			<argument index="1" name="out" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="multb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<argument index="1" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="multn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="one_mat" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="n" type="int" />
+			<argument index="1" name="m" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="outer_product">
+			<return type="void" />
+			<argument index="0" name="a" type="MLPPVector" />
+			<argument index="1" name="b" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="outer_productn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="a" type="MLPPVector" />
+			<argument index="1" name="b" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="pinverse" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="pinverseo" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="out" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
 		<method name="remove_row">
 			<return type="void" />
-			<argument index="0" name="index" type="float" />
+			<argument index="0" name="index" type="int" />
 			<description>
 			</description>
 		</method>
@@ -107,17 +566,81 @@
 			<description>
 			</description>
 		</method>
+		<method name="scalar_add">
+			<return type="void" />
+			<argument index="0" name="scalar" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="scalar_addb">
+			<return type="void" />
+			<argument index="0" name="scalar" type="float" />
+			<argument index="1" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="scalar_addn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="scalar" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="scalar_multiply">
+			<return type="void" />
+			<argument index="0" name="scalar" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="scalar_multiplyb">
+			<return type="void" />
+			<argument index="0" name="scalar" type="float" />
+			<argument index="1" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="scalar_multiplyn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="scalar" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_diagonal">
+			<return type="void" />
+			<argument index="0" name="a" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="set_diagonaln" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="a" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
 		<method name="set_element">
 			<return type="void" />
-			<argument index="0" name="index_x" type="int" />
-			<argument index="1" name="index_y" type="int" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="index_x" type="int" />
 			<argument index="2" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_element_index">
+			<return type="void" />
+			<argument index="0" name="index" type="int" />
+			<argument index="1" name="val" type="float" />
 			<description>
 			</description>
 		</method>
 		<method name="set_from_arrays">
 			<return type="void" />
 			<argument index="0" name="from" type="Array" />
+			<description>
+			</description>
+		</method>
+		<method name="set_from_image">
+			<return type="void" />
+			<argument index="0" name="img" type="Image" />
+			<argument index="1" name="image_channel" type="int" />
 			<description>
 			</description>
 		</method>
@@ -147,8 +670,70 @@
 			<description>
 			</description>
 		</method>
+		<method name="sin">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="sinb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sinn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
 		<method name="size" qualifiers="const">
 			<return type="Vector2i" />
+			<description>
+			</description>
+		</method>
+		<method name="sqrt">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="sqrtb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sqrtn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="sub">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="subb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<argument index="1" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="subn" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="B" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="svd">
+			<return type="Array" />
+			<description>
+			</description>
+		</method>
+		<method name="svdb">
+			<return type="Array" />
+			<argument index="0" name="A" type="MLPPMatrix" />
 			<description>
 			</description>
 		</method>
@@ -166,6 +751,29 @@
 		</method>
 		<method name="to_flat_pool_vector" qualifiers="const">
 			<return type="PoolRealArray" />
+			<description>
+			</description>
+		</method>
+		<method name="transpose">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="transposeb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="transposen" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="zero_mat" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="n" type="int" />
+			<argument index="1" name="m" type="int" />
 			<description>
 			</description>
 		</method>

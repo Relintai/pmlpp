@@ -11,7 +11,7 @@
 	<members>
 		<member name="input_set" type="MLPPMatrix" setter="set_input_set" getter="get_input_set">
 		</member>
-		<member name="n_hidden" type="int" setter="set_n_hidden" getter="get_n_hidden" default="0">
+		<member name="n_hidden" type="int" setter="set_n_hidden" getter="get_n_hidden" default="-1288584995">
 		</member>
 	</members>
 	<constants>

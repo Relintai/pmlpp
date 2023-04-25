@@ -48,7 +48,7 @@
 		</member>
 		<member name="n_hidden" type="int" setter="set_n_hidden" getter="get_n_hidden" default="0">
 		</member>
-		<member name="reg" type="int" setter="set_reg" getter="get_reg" enum="MLPPReg.RegularizationType" default="136122720">
+		<member name="reg" type="int" setter="set_reg" getter="get_reg" enum="MLPPReg.RegularizationType" default="155258464">
 		</member>
 		<member name="set_weight_init" type="int" setter="set_weight_init" getter="get_weight_init" enum="MLPPUtilities.WeightDistributionType" default="0">
 		</member>

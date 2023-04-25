@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MLPPTensor3" inherits="Reference" version="3.11">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="abs">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="absb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="absn" qualifiers="const">
+			<return type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="add">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="add_z_slice_mlpp_matrix">
+			<return type="void" />
+			<argument index="0" name="matrix" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="add_z_slice_mlpp_vector">
+			<return type="void" />
+			<argument index="0" name="row" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="add_z_slice_pool_vector">
+			<return type="void" />
+			<argument index="0" name="row" type="PoolRealArray" />
+			<description>
+			</description>
+		</method>
+		<method name="add_z_slices_image">
+			<return type="void" />
+			<argument index="0" name="img" type="Image" />
+			<argument index="1" name="channels" type="int" default="15" />
+			<description>
+			</description>
+		</method>
+		<method name="addb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPTensor3" />
+			<argument index="1" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="addn" qualifiers="const">
+			<return type="MLPPTensor3" />
+			<argument index="0" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="calculate_index" qualifiers="const">
+			<return type="int" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="index_x" type="int" />
+			<argument index="2" name="index_z" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="calculate_z_slice_index" qualifiers="const">
+			<return type="int" />
+			<argument index="0" name="index_z" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="clear">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="data_size" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="duplicate" qualifiers="const">
+			<return type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="element_wise_division">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="element_wise_divisionb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPTensor3" />
+			<argument index="1" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="element_wise_divisionn" qualifiers="const">
+			<return type="MLPPTensor3" />
+			<argument index="0" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="empty" qualifiers="const">
+			<return type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="exponentiate">
+			<return type="void" />
+			<argument index="0" name="p" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="exponentiateb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPTensor3" />
+			<argument index="1" name="p" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="exponentiaten" qualifiers="const">
+			<return type="MLPPTensor3" />
+			<argument index="0" name="p" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="fill">
+			<return type="void" />
+			<argument index="0" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="flatten" qualifiers="const">
+			<return type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="flatteno" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="out" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="get_element" qualifiers="const">
+			<return type="float" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="index_x" type="int" />
+			<argument index="2" name="index_z" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_element_index" qualifiers="const">
+			<return type="float" />
+			<argument index="0" name="index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_row_into_mlpp_vector" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="index_z" type="int" />
+			<argument index="2" name="target" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="get_row_mlpp_vector" qualifiers="const">
+			<return type="MLPPVector" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="index_z" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_row_pool_vector" qualifiers="const">
+			<return type="PoolRealArray" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="index_z" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_x_slice" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="index_x" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_x_slice_image" qualifiers="const">
+			<return type="Image" />
+			<argument index="0" name="index_x" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_x_slice_into" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="index_x" type="int" />
+			<argument index="1" name="target" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="get_x_slice_into_image" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="target" type="Image" />
+			<argument index="1" name="index_x" type="int" />
+			<argument index="2" name="target_channels" type="int" default="7" />
+			<description>
+			</description>
+		</method>
+		<method name="get_y_slice" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="index_y" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_y_slice_image" qualifiers="const">
+			<return type="Image" />
+			<argument index="0" name="index_x" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_y_slice_into" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="target" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="get_y_slice_into_image" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="target" type="Image" />
+			<argument index="1" name="index_x" type="int" />
+			<argument index="2" name="target_channels" type="int" default="7" />
+			<description>
+			</description>
+		</method>
+		<method name="get_z_slice_image" qualifiers="const">
+			<return type="Image" />
+			<argument index="0" name="index_z" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_z_slice_into_image" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="target" type="Image" />
+			<argument index="1" name="index_z" type="int" />
+			<argument index="2" name="target_channels" type="int" default="7" />
+			<description>
+			</description>
+		</method>
+		<method name="get_z_slice_into_mlpp_matrix" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="index_z" type="int" />
+			<argument index="1" name="target" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="get_z_slice_into_mlpp_vector" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="index_z" type="int" />
+			<argument index="1" name="target" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="get_z_slice_mlpp_matrix" qualifiers="const">
+			<return type="MLPPMatrix" />
+			<argument index="0" name="index_z" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_z_slice_mlpp_vector" qualifiers="const">
+			<return type="MLPPVector" />
+			<argument index="0" name="index_z" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_z_slice_pool_vector" qualifiers="const">
+			<return type="PoolRealArray" />
+			<argument index="0" name="index_z" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="get_z_slices_image" qualifiers="const">
+			<return type="Image" />
+			<argument index="0" name="index_r" type="int" default="-1" />
+			<argument index="1" name="index_g" type="int" default="-1" />
+			<argument index="2" name="index_b" type="int" default="-1" />
+			<argument index="3" name="index_a" type="int" default="-1" />
+			<description>
+			</description>
+		</method>
+		<method name="get_z_slices_into_image" qualifiers="const">
+			<return type="void" />
+			<argument index="0" name="target" type="Image" />
+			<argument index="1" name="index_r" type="int" default="-1" />
+			<argument index="2" name="index_g" type="int" default="-1" />
+			<argument index="3" name="index_b" type="int" default="-1" />
+			<argument index="4" name="index_a" type="int" default="-1" />
+			<description>
+			</description>
+		</method>
+		<method name="hadamard_product">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="hadamard_productb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPTensor3" />
+			<argument index="1" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="hadamard_productn" qualifiers="const">
+			<return type="MLPPTensor3" />
+			<argument index="0" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="is_equal_approx" qualifiers="const">
+			<return type="bool" />
+			<argument index="0" name="with" type="MLPPTensor3" />
+			<argument index="1" name="tolerance" type="float" default="1e-05" />
+			<description>
+			</description>
+		</method>
+		<method name="max">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="maxb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPTensor3" />
+			<argument index="1" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="maxn" qualifiers="const">
+			<return type="MLPPTensor3" />
+			<argument index="0" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="remove_z_slice">
+			<return type="void" />
+			<argument index="0" name="index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="remove_z_slice_unordered">
+			<return type="void" />
+			<argument index="0" name="index" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="reset">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="resize">
+			<return type="void" />
+			<argument index="0" name="size" type="Vector3i" />
+			<description>
+			</description>
+		</method>
+		<method name="scalar_add">
+			<return type="void" />
+			<argument index="0" name="scalar" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="scalar_addb">
+			<return type="void" />
+			<argument index="0" name="scalar" type="float" />
+			<argument index="1" name="A" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="scalar_addn" qualifiers="const">
+			<return type="MLPPTensor3" />
+			<argument index="0" name="scalar" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="scalar_multiply">
+			<return type="void" />
+			<argument index="0" name="scalar" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="scalar_multiplyb">
+			<return type="void" />
+			<argument index="0" name="scalar" type="float" />
+			<argument index="1" name="A" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="scalar_multiplyn" qualifiers="const">
+			<return type="MLPPTensor3" />
+			<argument index="0" name="scalar" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_element">
+			<return type="void" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="index_x" type="int" />
+			<argument index="2" name="index_z" type="int" />
+			<argument index="3" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_element_index">
+			<return type="void" />
+			<argument index="0" name="index" type="int" />
+			<argument index="1" name="val" type="float" />
+			<description>
+			</description>
+		</method>
+		<method name="set_from_image">
+			<return type="void" />
+			<argument index="0" name="img" type="Image" />
+			<argument index="1" name="channels" type="int" default="15" />
+			<description>
+			</description>
+		</method>
+		<method name="set_from_mlpp_matrices_array">
+			<return type="void" />
+			<argument index="0" name="from" type="Array" />
+			<description>
+			</description>
+		</method>
+		<method name="set_from_mlpp_matrix">
+			<return type="void" />
+			<argument index="0" name="from" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="set_from_mlpp_tensor3">
+			<return type="void" />
+			<argument index="0" name="from" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="set_from_mlpp_vectors_array">
+			<return type="void" />
+			<argument index="0" name="from" type="Array" />
+			<description>
+			</description>
+		</method>
+		<method name="set_row_mlpp_vector">
+			<return type="void" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="index_z" type="int" />
+			<argument index="2" name="row" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="set_row_pool_vector">
+			<return type="void" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="index_z" type="int" />
+			<argument index="2" name="row" type="PoolRealArray" />
+			<description>
+			</description>
+		</method>
+		<method name="set_shape">
+			<return type="void" />
+			<argument index="0" name="size" type="Vector3i" />
+			<description>
+			</description>
+		</method>
+		<method name="set_x_slice">
+			<return type="void" />
+			<argument index="0" name="index_x" type="int" />
+			<argument index="1" name="mat" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="set_x_slice_image">
+			<return type="void" />
+			<argument index="0" name="img" type="Image" />
+			<argument index="1" name="index_x" type="int" />
+			<argument index="2" name="image_channel_flag" type="int" default="1" />
+			<description>
+			</description>
+		</method>
+		<method name="set_y_slice">
+			<return type="void" />
+			<argument index="0" name="index_y" type="int" />
+			<argument index="1" name="mat" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="set_y_slice_image">
+			<return type="void" />
+			<argument index="0" name="img" type="Image" />
+			<argument index="1" name="index_x" type="int" />
+			<argument index="2" name="image_channel_flag" type="int" default="1" />
+			<description>
+			</description>
+		</method>
+		<method name="set_z_slice_image">
+			<return type="void" />
+			<argument index="0" name="img" type="Image" />
+			<argument index="1" name="index_z" type="int" />
+			<argument index="2" name="image_channel_flag" type="int" default="1" />
+			<description>
+			</description>
+		</method>
+		<method name="set_z_slice_mlpp_matrix">
+			<return type="void" />
+			<argument index="0" name="index_z" type="int" />
+			<argument index="1" name="mat" type="MLPPMatrix" />
+			<description>
+			</description>
+		</method>
+		<method name="set_z_slice_mlpp_vector">
+			<return type="void" />
+			<argument index="0" name="index_z" type="int" />
+			<argument index="1" name="row" type="MLPPVector" />
+			<description>
+			</description>
+		</method>
+		<method name="set_z_slice_pool_vector">
+			<return type="void" />
+			<argument index="0" name="index_z" type="int" />
+			<argument index="1" name="row" type="PoolRealArray" />
+			<description>
+			</description>
+		</method>
+		<method name="set_z_slices_image">
+			<return type="void" />
+			<argument index="0" name="img" type="Image" />
+			<argument index="1" name="index_r" type="int" />
+			<argument index="2" name="index_g" type="int" />
+			<argument index="3" name="index_b" type="int" />
+			<argument index="4" name="index_a" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="size" qualifiers="const">
+			<return type="Vector3i" />
+			<description>
+			</description>
+		</method>
+		<method name="sqrt">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="sqrtb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="sqrtn" qualifiers="const">
+			<return type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="sub">
+			<return type="void" />
+			<argument index="0" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="subb">
+			<return type="void" />
+			<argument index="0" name="A" type="MLPPTensor3" />
+			<argument index="1" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="subn" qualifiers="const">
+			<return type="MLPPTensor3" />
+			<argument index="0" name="B" type="MLPPTensor3" />
+			<description>
+			</description>
+		</method>
+		<method name="swap_z_slice">
+			<return type="void" />
+			<argument index="0" name="index_1" type="int" />
+			<argument index="1" name="index_2" type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="to_flat_byte_array" qualifiers="const">
+			<return type="PoolByteArray" />
+			<description>
+			</description>
+		</method>
+		<method name="to_flat_pool_vector" qualifiers="const">
+			<return type="PoolRealArray" />
+			<description>
+			</description>
+		</method>
+		<method name="z_slice_data_size" qualifiers="const">
+			<return type="int" />
+			<description>
+			</description>
+		</method>
+		<method name="z_slice_size" qualifiers="const">
+			<return type="Vector2i" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<constants>
+		<constant name="IMAGE_CHANNEL_FLAG_R" value="1" enum="ImageChannelFlags">
+		</constant>
+		<constant name="IMAGE_CHANNEL_FLAG_G" value="2" enum="ImageChannelFlags">
+		</constant>
+		<constant name="IMAGE_CHANNEL_FLAG_B" value="4" enum="ImageChannelFlags">
+		</constant>
+		<constant name="IMAGE_CHANNEL_FLAG_A" value="8" enum="ImageChannelFlags">
+		</constant>
+		<constant name="IMAGE_CHANNEL_FLAG_NONE" value="0" enum="ImageChannelFlags">
+		</constant>
+		<constant name="IMAGE_CHANNEL_FLAG_RG" value="3" enum="ImageChannelFlags">
+		</constant>
+		<constant name="IMAGE_CHANNEL_FLAG_RGB" value="7" enum="ImageChannelFlags">
+		</constant>
+		<constant name="IMAGE_CHANNEL_FLAG_GB" value="6" enum="ImageChannelFlags">
+		</constant>
+		<constant name="IMAGE_CHANNEL_FLAG_GBA" value="14" enum="ImageChannelFlags">
+		</constant>
+		<constant name="IMAGE_CHANNEL_FLAG_BA" value="12" enum="ImageChannelFlags">
+		</constant>
+		<constant name="IMAGE_CHANNEL_FLAG_RGBA" value="15" enum="ImageChannelFlags">
+		</constant>
+	</constants>
+</class>
