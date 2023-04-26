@@ -90,6 +90,7 @@ sources = [
     "mlpp/activation/activation_old.cpp",
 
     "test/mlpp_tests.cpp",
+    "test/mlpp_matrix_tests.cpp",
 ]
 
 

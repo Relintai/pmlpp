@@ -70,6 +70,7 @@ SOFTWARE.
 #include "mlpp/wgan/wgan.h"
 
 #include "test/mlpp_tests.h"
+#include "test/mlpp_matrix_tests.h"
 
 void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 	if (p_level == MODULE_REGISTRATION_LEVEL_SCENE) {
@@ -125,6 +126,7 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPData>();
 
 		ClassDB::register_class<MLPPTests>();
+		ClassDB::register_class<MLPPMatrixTests>();
 	}
 }
 
