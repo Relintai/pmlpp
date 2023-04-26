@@ -1333,7 +1333,9 @@ void MLPPTests::test_mlpp_vector() {
 
 void MLPPTests::is_approx_equalsd(real_t a, real_t b, const String &str) {
 	if (!Math::is_equal_approx(a, b)) {
-		ERR_PRINT("TEST FAILED: " + str + " Got: " + String::num(a) + " Should be: " + String::num(b));
+		PLOG_ERR("TEST FAILED: " + str + " Got: " + String::num(a) + " Should be: " + String::num(b));
+	} else {
+		PLOG_MSG("TEST PASSED: " + str);
 	}
 }
 
@@ -1347,6 +1349,8 @@ void MLPPTests::is_approx_equals_dvec(const Vector<real_t> &a, const Vector<real
 			goto IAEDVEC_FAILED;
 		}
 	}
+
+	PLOG_MSG("TEST PASSED: " + str);
 
 	return;
 
@@ -1370,7 +1374,7 @@ IAEDVEC_FAILED:
 
 	fail_str += "].";
 
-	ERR_PRINT(fail_str);
+	PLOG_ERR(fail_str);
 }
 
 String vmat_to_str(const Vector<Vector<real_t>> &a) {
@@ -1416,6 +1420,8 @@ void MLPPTests::is_approx_equals_dmat(const Vector<Vector<real_t>> &a, const Vec
 		}
 	}
 
+	PLOG_MSG("TEST PASSED: " + str);
+
 	return;
 
 IAEDMAT_FAILED:
@@ -1427,7 +1433,7 @@ IAEDMAT_FAILED:
 	fail_str += "Should be:\n";
 	fail_str += vmat_to_str(b);
 
-	ERR_PRINT(fail_str);
+	PLOG_ERR(fail_str);
 }
 
 void MLPPTests::is_approx_equals_mat(Ref<MLPPMatrix> a, Ref<MLPPMatrix> b, const String &str) {
@@ -1452,6 +1458,8 @@ void MLPPTests::is_approx_equals_mat(Ref<MLPPMatrix> a, Ref<MLPPMatrix> b, const
 		}
 	}
 
+	PLOG_MSG("TEST PASSED: " + str);
+
 	return;
 
 IAEMAT_FAILED:
@@ -1463,7 +1471,7 @@ IAEMAT_FAILED:
 	fail_str += "\nShould be:\n";
 	fail_str += b->to_string();
 
-	ERR_PRINT(fail_str);
+	PLOG_ERR(fail_str);
 }
 void MLPPTests::is_approx_equals_vec(Ref<MLPPVector> a, Ref<MLPPVector> b, const String &str) {
 	ERR_FAIL_COND(!a.is_valid());
@@ -1479,6 +1487,8 @@ void MLPPTests::is_approx_equals_vec(Ref<MLPPVector> a, Ref<MLPPVector> b, const
 		}
 	}
 
+	PLOG_MSG("TEST PASSED: " + str);
+
 	return;
 
 IAEDVEC_FAILED:
@@ -1491,7 +1501,7 @@ IAEDVEC_FAILED:
 	fail_str += b->to_string();
 	fail_str += "\n.";
 
-	ERR_PRINT(fail_str);
+	PLOG_ERR(fail_str);
 }
 
 MLPPTests::MLPPTests() {
