@@ -1353,6 +1353,50 @@ void MLPPTests::test_mlpp_matrix() {
 	is_approx_equals_mat(rmat, rmat2, "re-set_from_std_vectors test.");
 }
 
+void MLPPTests::test_mlpp_matrix_mul() {
+	std::vector<std::vector<real_t>> A = {
+		{ 1, 2 },
+		{ 3, 4 },
+		{ 5, 6 },
+		{ 7, 8 }
+	};
+
+	std::vector<std::vector<real_t>> B = {
+		{ 1, 2, 3, 4 },
+		{ 5, 6, 7, 8 }
+	};
+
+	std::vector<std::vector<real_t>> C = {
+		{ 11, 14, 17, 20 },
+		{ 23, 30, 37, 44 },
+		{ 35, 46, 57, 68 },
+		{ 47, 62, 77, 92 }
+	};
+
+	Ref<MLPPMatrix> rmata;
+	rmata.instance();
+	rmata->set_from_std_vectors(A);
+
+	Ref<MLPPMatrix> rmatb;
+	rmatb.instance();
+	rmatb->set_from_std_vectors(B);
+
+	Ref<MLPPMatrix> rmatc;
+	rmatc.instance();
+	rmatc->set_from_std_vectors(C);
+
+	Ref<MLPPMatrix> rmatr1 = rmata->multn(rmatb);
+	is_approx_equals_mat(rmatr1, rmatc, "Ref<MLPPMatrix> rmatr1 = rmata->multn(rmatb);");
+
+	Ref<MLPPMatrix> rmatr2;
+	rmatr2.instance();
+	rmatr2->multb(rmata, rmatb);
+	is_approx_equals_mat(rmatr2, rmatc, "rmatr2->multb(rmata, rmatb);");
+
+	rmata->mult(rmatb);
+	is_approx_equals_mat(rmata, rmatc, "rmata->mult(rmatb);");
+}
+
 void MLPPTests::is_approx_equalsd(real_t a, real_t b, const String &str) {
 	if (!Math::is_equal_approx(a, b)) {
 		ERR_PRINT("TEST FAILED: " + str + " Got: " + String::num(a) + " Should be: " + String::num(b));
@@ -1580,4 +1624,5 @@ void MLPPTests::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("test_mlpp_vector"), &MLPPTests::test_mlpp_vector);
 	ClassDB::bind_method(D_METHOD("test_mlpp_matrix"), &MLPPTests::test_mlpp_matrix);
+	ClassDB::bind_method(D_METHOD("test_mlpp_matrix_mul"), &MLPPTests::test_mlpp_matrix_mul);
 }

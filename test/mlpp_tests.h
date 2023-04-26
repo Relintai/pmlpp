@@ -66,6 +66,7 @@ public:
 
 	void test_mlpp_vector();
 	void test_mlpp_matrix();
+	void test_mlpp_matrix_mul();
 
 	void is_approx_equalsd(real_t a, real_t b, const String &str);
 	void is_approx_equals_dvec(const Vector<real_t> &a, const Vector<real_t> &b, const String &str);
