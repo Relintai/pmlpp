@@ -154,10 +154,12 @@ void MLPPMatrix::remove_row_unordered(int p_index) {
 	}
 
 	int start_ind = p_index * _size.x;
-	int end_ind = (p_index + 1) * _size.x;
+	int last_row_start_ind = _size.y * _size.x;
 
-	for (int i = start_ind; i < end_ind; ++i) {
-		_data[i] = _data[ds + i];
+	if (start_ind != last_row_start_ind) {
+		for (int i = 0; i < _size.x; ++i) {
+			_data[start_ind + i] = _data[last_row_start_ind + i];
+		}
 	}
 
 	_data = (real_t *)memrealloc(_data, data_size() * sizeof(real_t));
