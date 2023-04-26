@@ -711,6 +711,7 @@ Ref<MLPPMatrix> MLPPMatrix::multn(const Ref<MLPPMatrix> &B) const {
 	Ref<MLPPMatrix> C;
 	C.instance();
 	C->resize(rs);
+	C->fill(0);
 
 	const real_t *a_ptr = ptr();
 	const real_t *b_ptr = B->ptr();
@@ -744,6 +745,8 @@ void MLPPMatrix::multb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
 	if (unlikely(_size != rs)) {
 		resize(rs);
 	}
+
+	fill(0);
 
 	const real_t *a_ptr = A->ptr();
 	const real_t *b_ptr = B->ptr();
