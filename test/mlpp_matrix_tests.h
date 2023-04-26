@@ -21,7 +21,19 @@ class MLPPMatrixTests : public MLPPTests {
 	GDCLASS(MLPPMatrixTests, MLPPTests);
 
 public:
+	void run_tests();
+
 	void test_mlpp_matrix();
+
+	void test_add_row();
+	void test_add_row_pool_vector();
+	void test_add_row_mlpp_vector();
+	void test_add_rows_mlpp_matrix();
+
+	void test_remove_row();
+	void test_remove_row_unordered();
+
+
 	void test_mlpp_matrix_mul();
 
 	MLPPMatrixTests();
