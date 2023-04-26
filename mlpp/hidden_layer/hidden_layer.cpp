@@ -147,10 +147,11 @@ void MLPPHiddenLayer::forward_pass() {
 		initialize();
 	}
 
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	_z = alg.mat_vec_addnm(alg.matmultnm(_input, _weights), _bias);
+	_z->multb(_input, _weights);
+	_z->add_vec(_bias);
+
 	_a = avn.run_activation_norm_matrix(_activation, _z);
 }
 
@@ -159,10 +160,11 @@ void MLPPHiddenLayer::test(const Ref<MLPPVector> &x) {
 		initialize();
 	}
 
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	_z_test = alg.additionnm(alg.mat_vec_multnv(alg.transposenm(_weights), x), _bias);
+	_z_test = _weights->transposen()->mult_vec(x);
+	_z_test->add(_bias);
+
 	_a_test = avn.run_activation_norm_matrix(_activation, _z_test);
 }
 

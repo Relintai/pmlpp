@@ -665,26 +665,28 @@ void MLPPMatrix::subb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
 }
 
 void MLPPMatrix::mult(const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_MSG("TODO");
+
 	ERR_FAIL_COND(!B.is_valid());
 
 	Size2i b_size = B->size();
 
-	ERR_FAIL_COND(_size != b_size);
+	ERR_FAIL_COND(_size.x != b_size.y || _size.y != b_size.x);
+
+	//TODO need to make a copy of this, resize, and use that to get results into this
 
 	const real_t *b_ptr = B->ptr();
 	real_t *c_ptr = ptrw();
 
-	for (int i = 0; i < _size.y; i++) {
-		for (int k = 0; k < b_size.y; k++) {
-			int ind_i_k = calculate_index(i, k);
+	for (int ay = 0; ay < _size.y; ay++) {
+		for (int by = 0; by < b_size.y; by++) {
+			int ind_ay_by = calculate_index(ay, by);
 
-			for (int j = 0; j < b_size.x; j++) {
-				int ind_i_j = calculate_index(i, j);
-				int ind_k_j = B->calculate_index(k, j);
+			for (int bx = 0; bx < b_size.x; bx++) {
+				int ind_ay_bx = calculate_index(ay, bx);
+				int ind_by_bx = B->calculate_index(by, bx);
 
-				c_ptr[ind_i_j] += c_ptr[ind_i_k] * b_ptr[ind_k_j];
-
-				//C->set_element(i, j, get_element(i, j) + get_element(i, k) * B->get_element(k, j
+				c_ptr[ind_ay_bx] += c_ptr[ind_ay_by] * b_ptr[ind_by_bx];
 			}
 		}
 	}
@@ -694,11 +696,13 @@ Ref<MLPPMatrix> MLPPMatrix::multn(const Ref<MLPPMatrix> &B) const {
 
 	Size2i b_size = B->size();
 
-	ERR_FAIL_COND_V(_size != b_size, Ref<MLPPMatrix>());
+	ERR_FAIL_COND_V_MSG(_size.y != b_size.x || _size.x != b_size.y, Ref<MLPPMatrix>(), "_size.y != b_size.x || _size.x != b_size.y _size: " + _size.operator String() + " b_size: " + b_size.operator String());
+
+	Size2i rs = Size2i(b_size.x, _size.y);
 
 	Ref<MLPPMatrix> C;
 	C.instance();
-	C->resize(_size);
+	C->resize(rs);
 
 	const real_t *a_ptr = ptr();
 	const real_t *b_ptr = B->ptr();
@@ -727,10 +731,12 @@ void MLPPMatrix::multb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
 	Size2i a_size = A->size();
 	Size2i b_size = B->size();
 
-	ERR_FAIL_COND(a_size != b_size);
+	ERR_FAIL_COND_MSG(a_size.y != b_size.x || a_size.x != b_size.y, "a_size.y != b_size.x || a_size.x != b_size.y: a_size: " + a_size.operator String() + " b_size: " + b_size.operator String());
 
-	if (_size != a_size) {
-		resize(a_size);
+	Size2i rs = Size2i(b_size.x, a_size.y);
+
+	if (unlikely(_size != rs)) {
+		resize(rs);
 	}
 
 	const real_t *a_ptr = A->ptr();
