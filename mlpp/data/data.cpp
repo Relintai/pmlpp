@@ -10,10 +10,13 @@
 #include "core/os/file_access.h"
 
 #include "../lin_alg/lin_alg.h"
+#include "../stat/stat.h"
+
+#ifdef OLD_CLASSES_ENABLED
 #include "../lin_alg/lin_alg_old.h"
 #include "../softmax_net/softmax_net_old.h"
-#include "../stat/stat.h"
 #include "../stat/stat_old.h"
+#endif
 
 #include <algorithm>
 #include <cmath>
@@ -515,6 +518,7 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, s
 // MULTIVARIATE SUPERVISED
 
 void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real_t>> &inputSet, std::vector<real_t> &outputSet) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::string inputTemp;
 	std::string outputTemp;
@@ -540,9 +544,11 @@ void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real
 	}
 	inputSet = alg.transpose(inputSet);
 	dataFile.close();
+#endif
 }
 
 void MLPPData::printData(std::vector<std::string> inputName, std::string outputName, std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	inputSet = alg.transpose(inputSet);
 	for (uint32_t i = 0; i < inputSet.size(); i++) {
@@ -556,11 +562,13 @@ void MLPPData::printData(std::vector<std::string> inputName, std::string outputN
 	for (uint32_t i = 0; i < outputSet.size(); i++) {
 		std::cout << outputSet[i] << std::endl;
 	}
+#endif
 }
 
 // UNSUPERVISED
 
 void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real_t>> &inputSet) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::string inputTemp;
 
@@ -582,9 +590,11 @@ void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real
 	}
 	inputSet = alg.transpose(inputSet);
 	dataFile.close();
+#endif
 }
 
 void MLPPData::printData(std::vector<std::string> inputName, std::vector<std::vector<real_t>> inputSet) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	inputSet = alg.transpose(inputSet);
 	for (uint32_t i = 0; i < inputSet.size(); i++) {
@@ -593,6 +603,7 @@ void MLPPData::printData(std::vector<std::string> inputName, std::vector<std::ve
 			std::cout << inputSet[i][j] << std::endl;
 		}
 	}
+#endif
 }
 
 // SIMPLE
@@ -648,6 +659,7 @@ std::vector<std::vector<real_t>> MLPPData::rgb2gray(std::vector<std::vector<std:
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2ycbcr(std::vector<std::vector<std::vector<real_t>>> input) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> YCbCr;
 	YCbCr = alg.resize(YCbCr, input);
@@ -659,11 +671,15 @@ std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2ycbcr(std::vector<st
 		}
 	}
 	return YCbCr;
+#else
+	return std::vector<std::vector<std::vector<real_t>>>();
+#endif
 }
 
 // Conversion formulas available here:
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2hsv(std::vector<std::vector<std::vector<real_t>>> input) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> HSV;
 	HSV = alg.resize(HSV, input);
@@ -702,23 +718,34 @@ std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2hsv(std::vector<std:
 		}
 	}
 	return HSV;
+#else
+	return std::vector<std::vector<std::vector<real_t>>>();
+#endif
 }
 
 // http://machinethatsees.blogspot.com/2013/07/how-to-convert-rgb-to-xyz-or-vice-versa.html
 std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2xyz(std::vector<std::vector<std::vector<real_t>>> input) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> XYZ;
 	XYZ = alg.resize(XYZ, input);
 	std::vector<std::vector<real_t>> RGB2XYZ = { { 0.4124564, 0.3575761, 0.1804375 }, { 0.2126726, 0.7151522, 0.0721750 }, { 0.0193339, 0.1191920, 0.9503041 } };
 	return alg.vector_wise_tensor_product(input, RGB2XYZ);
+#else
+	return std::vector<std::vector<std::vector<real_t>>>();
+#endif
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPData::xyz2rgb(std::vector<std::vector<std::vector<real_t>>> input) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> XYZ;
 	XYZ = alg.resize(XYZ, input);
 	std::vector<std::vector<real_t>> RGB2XYZ = alg.inverse({ { 0.4124564, 0.3575761, 0.1804375 }, { 0.2126726, 0.7151522, 0.0721750 }, { 0.0193339, 0.1191920, 0.9503041 } });
 	return alg.vector_wise_tensor_product(input, RGB2XYZ);
+#else
+	return std::vector<std::vector<std::vector<real_t>>>();
+#endif
 }
 
 // TEXT-BASED & NLP
@@ -909,6 +936,7 @@ std::vector<std::vector<real_t>> MLPPData::BOW(std::vector<std::string> sentence
 }
 
 std::vector<std::vector<real_t>> MLPPData::TFIDF(std::vector<std::string> sentences) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::vector<std::string> wordList = removeNullByte(removeStopWords(createWordList(sentences)));
 
@@ -962,9 +990,13 @@ std::vector<std::vector<real_t>> MLPPData::TFIDF(std::vector<std::string> senten
 	}
 
 	return TFIDF;
+#else
+	return std::vector<std::vector<real_t>>();
+#endif
 }
 
 std::tuple<std::vector<std::vector<real_t>>, std::vector<std::string>> MLPPData::word2Vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, real_t learning_rate, int max_epoch) {
+#ifdef OLD_CLASSES_ENABLED
 	std::vector<std::string> wordList = removeNullByte(removeStopWords(createWordList(sentences)));
 
 	std::vector<std::vector<std::string>> segmented_sentences;
@@ -1023,6 +1055,9 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::string>> MLPPData:
 	std::vector<std::vector<real_t>> wordEmbeddings = model->getEmbeddings();
 	delete model;
 	return { wordEmbeddings, wordList };
+#else
+	return std::tuple<std::vector<std::vector<real_t>>, std::vector<std::string>>();
+#endif
 }
 
 struct WordsToVecResult {
@@ -1033,6 +1068,7 @@ struct WordsToVecResult {
 MLPPData::WordsToVecResult MLPPData::word_to_vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, real_t learning_rate, int max_epoch) {
 	WordsToVecResult res;
 
+#ifdef OLD_CLASSES_ENABLED
 	res.word_list = removeNullByte(removeStopWords(createWordList(sentences)));
 
 	std::vector<std::vector<std::string>> segmented_sentences;
@@ -1090,11 +1126,13 @@ MLPPData::WordsToVecResult MLPPData::word_to_vec(std::vector<std::string> senten
 
 	res.word_embeddings = model->getEmbeddings();
 	delete model;
+#endif
 
 	return res;
 }
 
 std::vector<std::vector<real_t>> MLPPData::LSA(std::vector<std::string> sentences, int dim) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<real_t>> docWordData = BOW(sentences, "Binary");
 
@@ -1108,6 +1146,9 @@ std::vector<std::vector<real_t>> MLPPData::LSA(std::vector<std::string> sentence
 
 	std::vector<std::vector<real_t>> embeddings = alg.matmult(S_trunc, Vt_trunc);
 	return embeddings;
+#else
+	return std::vector<std::vector<real_t>>();
+#endif
 }
 
 std::vector<std::string> MLPPData::createWordList(std::vector<std::string> sentences) {
@@ -1138,6 +1179,7 @@ void MLPPData::setInputNames(std::string fileName, std::vector<std::string> &inp
 }
 
 std::vector<std::vector<real_t>> MLPPData::featureScaling(std::vector<std::vector<real_t>> X) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	X = alg.transpose(X);
 	std::vector<real_t> max_elements, min_elements;
@@ -1155,9 +1197,13 @@ std::vector<std::vector<real_t>> MLPPData::featureScaling(std::vector<std::vecto
 		}
 	}
 	return alg.transpose(X);
+#else
+	return std::vector<std::vector<real_t>>();
+#endif
 }
 
 std::vector<std::vector<real_t>> MLPPData::meanNormalization(std::vector<std::vector<real_t>> X) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	MLPPStatOld stat;
 	// (X_j - mu_j) / std_j, for every j
@@ -1167,9 +1213,13 @@ std::vector<std::vector<real_t>> MLPPData::meanNormalization(std::vector<std::ve
 		X[i] = alg.scalarMultiply(1 / stat.standardDeviation(X[i]), X[i]);
 	}
 	return X;
+#else
+	return std::vector<std::vector<real_t>>();
+#endif
 }
 
 std::vector<std::vector<real_t>> MLPPData::meanCentering(std::vector<std::vector<real_t>> X) {
+#ifdef OLD_CLASSES_ENABLED
 	MLPPStatOld stat;
 	for (uint32_t i = 0; i < X.size(); i++) {
 		real_t mean_i = stat.mean(X[i]);
@@ -1178,6 +1228,9 @@ std::vector<std::vector<real_t>> MLPPData::meanCentering(std::vector<std::vector
 		}
 	}
 	return X;
+#else
+	return std::vector<std::vector<real_t>>();
+#endif
 }
 
 std::vector<std::vector<real_t>> MLPPData::oneHotRep(std::vector<real_t> tempOutputSet, int n_class) {
@@ -1262,7 +1315,6 @@ Ref<MLPPMatrix> MLPPData::one_hot_rep(const Ref<MLPPVector> &temp_output_set, in
 
 	return output_set;
 }
-
 
 void MLPPData::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("load_breast_cancer", "path"), &MLPPData::load_breast_cancer);
