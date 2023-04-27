@@ -52,14 +52,17 @@ sources = [
     "mlpp/wgan/wgan.cpp",
 ]
 
-if env.pmlpp_build_tests:
+if module_env.pmlpp_build_tests:
+    module_env.Prepend(CPPDEFINES=["TESTS_ENABLED"])
+
     sources += [
         "test/mlpp_tests.cpp",
         "test/mlpp_matrix_tests.cpp",
     ]
 
-if env.pmlpp_build_old_classes:
-    print("asdasdasd")
+if module_env.pmlpp_build_old_classes:
+    module_env.Prepend(CPPDEFINES=["OLD_CLASSES_ENABLED"])
+
     sources += [
         "mlpp/wgan/wgan_old.cpp",
         "mlpp/output_layer/output_layer_old.cpp",
@@ -99,7 +102,6 @@ if env.pmlpp_build_old_classes:
         "mlpp/convolutions/convolutions_old.cpp",
         "mlpp/activation/activation_old.cpp",
     ]
-
 
 
 module_env.add_source_files(env.modules_sources, sources)
