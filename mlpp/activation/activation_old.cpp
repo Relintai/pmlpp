@@ -11,6 +11,10 @@
 #include <cmath>
 #include <iostream>
 
+#ifndef M_PI
+#define M_PI 3.141592653
+#endif
+
 real_t MLPPActivationOld::linear(real_t z, bool deriv) {
 	if (deriv) {
 		return 1;

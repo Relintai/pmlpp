@@ -6,6 +6,9 @@
 
 #include "activation.h"
 #include "../lin_alg/lin_alg.h"
+
+#include "core/math/math_defs.h"
+
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -1285,18 +1288,18 @@ Ref<MLPPMatrix> MLPPActivation::gaussian_cdf_normm(const Ref<MLPPMatrix> &z) {
 }
 
 real_t MLPPActivation::gaussian_cdf_derivr(real_t z) {
-	return (1 / sqrt(2 * M_PI)) * exp(-z * z / 2);
+	return (1 / sqrt(2 * Math_PI)) * exp(-z * z / 2);
 }
 Ref<MLPPVector> MLPPActivation::gaussian_cdf_derivv(const Ref<MLPPVector> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalar_multiplynv(1 / Math::sqrt(2 * M_PI), alg.expnv(alg.scalar_multiplynv(-1 / 2.0, alg.hadamard_productnv(z, z))));
+	return alg.scalar_multiplynv(1 / Math::sqrt(2 * Math_PI), alg.expnv(alg.scalar_multiplynv(-1 / 2.0, alg.hadamard_productnv(z, z))));
 }
 
 Ref<MLPPMatrix> MLPPActivation::gaussian_cdf_derivm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
 
-	return alg.scalar_multiplynm(1 / Math::sqrt(2 * M_PI), alg.expnm(alg.scalar_multiplynm(-1 / 2.0, alg.hadamard_productnm(z, z))));
+	return alg.scalar_multiplynm(1 / Math::sqrt(2 * Math_PI), alg.expnm(alg.scalar_multiplynm(-1 / 2.0, alg.hadamard_productnm(z, z))));
 }
 
 //CLOGLOG
@@ -1844,7 +1847,7 @@ Ref<MLPPMatrix> MLPPActivation::selu_derivm(const Ref<MLPPMatrix> &z, real_t lam
 //GELU
 
 real_t MLPPActivation::gelu_normr(real_t z) {
-	return 0.5 * z * (1 + tanh(sqrt(2 / M_PI) * (z + 0.044715 * Math::pow(z, 3))));
+	return 0.5 * z * (1 + tanh(sqrt(2 / Math_PI) * (z + 0.044715 * Math::pow(z, 3))));
 }
 Ref<MLPPVector> MLPPActivation::gelu_normv(const Ref<MLPPVector> &z) {
 	Ref<MLPPVector> a;

@@ -14,6 +14,10 @@
 #include <iostream>
 #include <random>
 
+#ifndef M_PI
+#define M_PI 3.141592653
+#endif
+
 MLPPProbitRegOld::MLPPProbitRegOld(std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet, std::string reg, real_t lambda, real_t alpha) :
 		inputSet(inputSet), outputSet(outputSet), n(inputSet.size()), k(inputSet[0].size()), reg(reg), lambda(lambda), alpha(alpha) {
 	y_hat.resize(n);

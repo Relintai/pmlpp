@@ -5,6 +5,9 @@
 //
 
 #include "gaussian_nb.h"
+
+#include "core/math/math_defs.h"
+
 #include "../lin_alg/lin_alg.h"
 #include "../stat/stat.h"
 #include "../utilities/utilities.h"
@@ -61,7 +64,7 @@ real_t MLPPGaussianNB::model_test(const Ref<MLPPVector> &x) {
 		real_t x_i = x->get_element(i);
 		real_t mu_i = _mu->get_element(i);
 
-		y_hat_i += Math::log(_priors->get_element(i) * (1 / Math::sqrt(2 * M_PI * sigma_i * sigma_i)) * Math::exp(-(x_i * mu_i) * (x_i * mu_i) / (2 * sigma_i * sigma_i)));
+		y_hat_i += Math::log(_priors->get_element(i) * (1 / Math::sqrt(2 * Math_PI * sigma_i * sigma_i)) * Math::exp(-(x_i * mu_i) * (x_i * mu_i) / (2 * sigma_i * sigma_i)));
 		score[i] = Math::exp(y_hat_i);
 	}
 
@@ -171,7 +174,7 @@ void MLPPGaussianNB::evaluate() {
 				real_t mu_j = _mu->get_element(j);
 				real_t input_set_i_k = _input_set->get_element(i, k);
 
-				y_hat_i += Math::log(_priors->get_element(j) * (1 / Math::sqrt(2 * M_PI * sigma_j * sigma_j)) * Math::exp(-(input_set_i_k * mu_j) * (input_set_i_k * mu_j) / (2 * sigma_j * sigma_j)));
+				y_hat_i += Math::log(_priors->get_element(j) * (1 / Math::sqrt(2 * Math_PI * sigma_j * sigma_j)) * Math::exp(-(input_set_i_k * mu_j) * (input_set_i_k * mu_j) / (2 * sigma_j * sigma_j)));
 			}
 
 			score[j] = Math::exp(y_hat_i);

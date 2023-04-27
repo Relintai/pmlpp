@@ -203,7 +203,7 @@ std::vector<real_t> MLPPConvolutions::global_pool_3d(std::vector<std::vector<std
 
 real_t MLPPConvolutions::gaussian_2d(real_t x, real_t y, real_t std) {
 	real_t std_sq = std * std;
-	return 1 / (2 * M_PI * std_sq) * std::exp(-(x * x + y * y) / 2 * std_sq);
+	return 1 / (2 * Math_PI * std_sq) * std::exp(-(x * x + y * y) / 2 * std_sq);
 }
 
 std::vector<std::vector<real_t>> MLPPConvolutions::gaussian_filter_2d(int size, real_t std) {

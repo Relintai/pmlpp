@@ -10,6 +10,10 @@
 #include <iostream>
 #include <string>
 
+#ifndef M_PI
+#define M_PI 3.141592653
+#endif
+
 // DCT ii.
 // https://www.mathworks.com/help/images/discrete-cosine-transform.html
 std::vector<std::vector<real_t>> MLPPTransformsOld::discreteCosineTransform(std::vector<std::vector<real_t>> A) {

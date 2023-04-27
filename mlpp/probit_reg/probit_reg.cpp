@@ -186,11 +186,11 @@ void MLPPProbitReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 		real_t error = y_hat - output_set_entry;
 
 		// Weight Updation
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * error * ((1 / Math::sqrt(2 * M_PI)) * Math::exp(-z * z / 2)), input_set_row_tmp));
+		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * error * ((1 / Math::sqrt(2 * Math_PI)) * Math::exp(-z * z / 2)), input_set_row_tmp));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Bias updation
-		_bias -= learning_rate * error * ((1 / Math::sqrt(2 * M_PI)) * Math::exp(-z * z / 2));
+		_bias -= learning_rate * error * ((1 / Math::sqrt(2 * Math_PI)) * Math::exp(-z * z / 2));
 
 		y_hat = evaluatev(input_set_row_tmp);
 

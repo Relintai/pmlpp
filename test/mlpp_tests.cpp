@@ -156,7 +156,7 @@ void MLPPTests::test_linear_algebra() {
 	std::vector<std::vector<real_t>> square = { { 1, 1 }, { -1, 1 }, { 1, -1 }, { -1, -1 } };
 	std::vector<std::vector<real_t>> square_rot_res = { { 1.41421, 1.11022e-16 }, { -1.11022e-16, 1.41421 }, { 1.11022e-16, -1.41421 }, { -1.41421, -1.11022e-16 } };
 
-	is_approx_equals_dmat(dstd_mat_to_mat(alg.rotate(square, M_PI / 4)), dstd_mat_to_mat(square_rot_res), "alg.rotate(square, M_PI / 4)");
+	is_approx_equals_dmat(dstd_mat_to_mat(alg.rotate(square, Math_PI / 4)), dstd_mat_to_mat(square_rot_res), "alg.rotate(square, Math_PI / 4)");
 
 	std::vector<std::vector<real_t>> A = {
 		{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },

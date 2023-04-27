@@ -11,6 +11,10 @@
 #include <cmath>
 #include <iostream>
 
+#ifndef M_PI
+#define M_PI 3.141592653
+#endif
+
 std::vector<std::vector<real_t>> MLPPConvolutionsOld::convolve_2d(std::vector<std::vector<real_t>> input, std::vector<std::vector<real_t>> filter, int S, int P) {
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<real_t>> feature_map;

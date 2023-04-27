@@ -15,6 +15,10 @@
 #include <map>
 #include <random>
 
+#ifndef M_PI
+#define M_PI 3.141592653
+#endif
+
 std::vector<std::vector<real_t>> MLPPLinAlgOld::gramMatrix(std::vector<std::vector<real_t>> A) {
 	return matmult(transpose(A), A); // AtA
 }

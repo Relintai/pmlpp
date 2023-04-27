@@ -2003,7 +2003,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 		real_t theta;
 
 		if (a_ii == a_jj) {
-			theta = M_PI / 4;
+			theta = Math_PI / 4;
 		} else {
 			theta = 0.5 * atan(2 * a_ij / (a_ii - a_jj));
 		}
@@ -2143,7 +2143,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 		real_t theta;
 
 		if (a_ii == a_jj) {
-			theta = M_PI / 4;
+			theta = Math_PI / 4;
 		} else {
 			theta = 0.5 * atan(2 * a_ij / (a_ii - a_jj));
 		}

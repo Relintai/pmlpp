@@ -14,6 +14,10 @@
 #include <iostream>
 #include <random>
 
+#ifndef M_PI
+#define M_PI 3.141592653
+#endif
+
 MLPPGaussianNBOld::MLPPGaussianNBOld(std::vector<std::vector<real_t>> p_inputSet, std::vector<real_t> p_outputSet, int p_class_num) {
 	inputSet = p_inputSet;
 	outputSet = p_outputSet;

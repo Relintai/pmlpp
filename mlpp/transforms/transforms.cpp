@@ -43,7 +43,7 @@ std::vector<std::vector<real_t>> MLPPTransforms::discreteCosineTransform(std::ve
 
 			for (uint32_t k = 0; k < B.size(); k++) {
 				for (uint32_t f = 0; f < B[k].size(); f++) {
-					sum += A[k][f] * std::cos((M_PI * i * (2 * k + 1)) / (2 * M)) * std::cos((M_PI * j * (2 * f + 1)) / (2 * M));
+					sum += A[k][f] * std::cos((Math_PI * i * (2 * k + 1)) / (2 * M)) * std::cos((Math_PI * j * (2 * f + 1)) / (2 * M));
 				}
 			}
 			B[i][j] = sum;
