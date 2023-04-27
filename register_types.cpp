@@ -69,8 +69,10 @@ SOFTWARE.
 #include "mlpp/uni_lin_reg/uni_lin_reg.h"
 #include "mlpp/wgan/wgan.h"
 
-#include "test/mlpp_tests.h"
+#ifdef TESTS_ENABLED
 #include "test/mlpp_matrix_tests.h"
+#include "test/mlpp_tests.h"
+#endif
 
 void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 	if (p_level == MODULE_REGISTRATION_LEVEL_SCENE) {
@@ -125,8 +127,10 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 		ClassDB::register_class<MLPPDataComplex>();
 		ClassDB::register_class<MLPPData>();
 
+#ifdef TESTS_ENABLED
 		ClassDB::register_class<MLPPTests>();
 		ClassDB::register_class<MLPPMatrixTests>();
+#endif
 	}
 }
 

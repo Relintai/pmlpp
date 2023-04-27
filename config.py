@@ -6,7 +6,6 @@ def configure(env):
     env.pmlpp_build_old_classes = True
     env.pmlpp_build_tests = True
 
-
 def get_doc_classes():
     return [
         "MLPPVector",
