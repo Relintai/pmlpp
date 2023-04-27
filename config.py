@@ -61,6 +61,8 @@ def get_doc_classes():
 
         "MLPPTests",
         "MLPPMatrixTests",
+
+        "MLPPTestsOld",
     ]
 
 def get_doc_path():

@@ -103,6 +103,10 @@ if module_env.pmlpp_build_old_classes:
         "mlpp/activation/activation_old.cpp",
     ]
 
+if module_env.pmlpp_build_tests and module_env.pmlpp_build_old_classes:
+    sources += [
+        "test/mlpp_tests_old.cpp",
+    ]
 
 module_env.add_source_files(env.modules_sources, sources)
 

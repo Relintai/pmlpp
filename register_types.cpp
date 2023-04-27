@@ -72,6 +72,10 @@ SOFTWARE.
 #ifdef TESTS_ENABLED
 #include "test/mlpp_matrix_tests.h"
 #include "test/mlpp_tests.h"
+
+#ifdef OLD_CLASSES_ENABLED
+#include "test/mlpp_tests_old.h"
+#endif
 #endif
 
 void register_pmlpp_types(ModuleRegistrationLevel p_level) {
@@ -130,6 +134,10 @@ void register_pmlpp_types(ModuleRegistrationLevel p_level) {
 #ifdef TESTS_ENABLED
 		ClassDB::register_class<MLPPTests>();
 		ClassDB::register_class<MLPPMatrixTests>();
+
+#ifdef OLD_CLASSES_ENABLED
+		ClassDB::register_class<MLPPTestsOld>();
+#endif
 #endif
 	}
 }
