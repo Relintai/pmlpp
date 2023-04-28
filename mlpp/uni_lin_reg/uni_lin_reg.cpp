@@ -43,7 +43,7 @@ void MLPPUniLinReg::set_b1(const real_t val) {
 	_b1 = val;
 }
 
-void MLPPUniLinReg::fit() {
+void MLPPUniLinReg::train() {
 	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
 
 	MLPPStat estimator;
@@ -66,7 +66,7 @@ MLPPUniLinReg::MLPPUniLinReg(const Ref<MLPPVector> &p_input_set, const Ref<MLPPV
 	_input_set = p_input_set;
 	_output_set = p_output_set;
 
-	fit();
+	train();
 }
 
 MLPPUniLinReg::MLPPUniLinReg() {
@@ -93,7 +93,7 @@ void MLPPUniLinReg::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_b1", "val"), &MLPPUniLinReg::set_b1);
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "b1"), "set_b1", "get_b1");
 
-	ClassDB::bind_method(D_METHOD("fit"), &MLPPUniLinReg::fit);
+	ClassDB::bind_method(D_METHOD("train"), &MLPPUniLinReg::train);
 
 	ClassDB::bind_method(D_METHOD("model_set_test", "x"), &MLPPUniLinReg::model_set_test);
 	ClassDB::bind_method(D_METHOD("model_test", "x"), &MLPPUniLinReg::model_test);

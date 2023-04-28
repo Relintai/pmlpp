@@ -10,13 +10,13 @@
 
 #include "core/math/math_defs.h"
 
-#include "core/object/reference.h"
+#include "core/object/resource.h"
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
 
-class MLPPUniLinReg : public Reference {
-	GDCLASS(MLPPUniLinReg, Reference);
+class MLPPUniLinReg : public Resource {
+	GDCLASS(MLPPUniLinReg, Resource);
 
 public:
 	Ref<MLPPVector> get_input_set() const;
@@ -31,7 +31,7 @@ public:
 	real_t get_b1() const;
 	void set_b1(const real_t val);
 
-	void fit();
+	void train();
 
 	Ref<MLPPVector> model_set_test(const Ref<MLPPVector> &x);
 	real_t model_test(real_t x);
