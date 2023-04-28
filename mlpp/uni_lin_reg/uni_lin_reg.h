@@ -19,16 +19,19 @@ class MLPPUniLinReg : public Reference {
 	GDCLASS(MLPPUniLinReg, Reference);
 
 public:
-	Ref<MLPPVector> get_input_set();
+	Ref<MLPPVector> get_input_set() const;
 	void set_input_set(const Ref<MLPPVector> &val);
 
-	Ref<MLPPVector> get_output_set();
+	Ref<MLPPVector> get_output_set() const;
 	void set_output_set(const Ref<MLPPVector> &val);
 
-	real_t get_b0();
-	real_t get_b1();
+	real_t get_b0() const;
+	void set_b0(const real_t val);
 
-	void initialize();
+	real_t get_b1() const;
+	void set_b1(const real_t val);
+
+	void fit();
 
 	Ref<MLPPVector> model_set_test(const Ref<MLPPVector> &x);
 	real_t model_test(real_t x);
