@@ -67,6 +67,11 @@ protected:
 
 	Ref<MLPPMatrix> _input_set;
 	Ref<MLPPMatrix> _output_set;
+	// Regularization Params
+	MLPPReg::RegularizationType _reg;
+	real_t _lambda;
+	real_t _alpha; /* This is the controlling param for Elastic Net*/
+
 	Ref<MLPPMatrix> _y_hat;
 	Ref<MLPPMatrix> _weights;
 	Ref<MLPPVector> _bias;
@@ -74,11 +79,6 @@ protected:
 	int _n;
 	int _k;
 	int _n_class;
-
-	// Regularization Params
-	MLPPReg::RegularizationType _reg;
-	real_t _lambda;
-	real_t _alpha; /* This is the controlling param for Elastic Net*/
 
 	bool _initialized;
 };
