@@ -345,7 +345,7 @@ void MLPPTests::test_softmax_regression(bool ui) {
 
 	// SOFTMAX REGRESSION
 	MLPPSoftmaxReg model(dt->get_input(), dt->get_output());
-	model.sgd(0.1, 10000, ui);
+	model.train_sgd(0.1, 10000, ui);
 	PLOG_MSG(model.model_set_test(dt->get_input())->to_string());
 	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
