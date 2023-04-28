@@ -14,65 +14,130 @@
 
 #include <random>
 
-Ref<MLPPMatrix> MLPPTanhReg::get_input_set() {
+Ref<MLPPMatrix> MLPPTanhReg::get_input_set() const {
 	return _input_set;
 }
 void MLPPTanhReg::set_input_set(const Ref<MLPPMatrix> &val) {
 	_input_set = val;
-
-	_initialized = false;
 }
 
-Ref<MLPPMatrix> MLPPTanhReg::get_output_set() {
+Ref<MLPPMatrix> MLPPTanhReg::get_output_set() const {
 	return _output_set;
 }
 void MLPPTanhReg::set_output_set(const Ref<MLPPMatrix> &val) {
 	_output_set = val;
-
-	_initialized = false;
 }
 
-MLPPReg::RegularizationType MLPPTanhReg::get_reg() {
+MLPPReg::RegularizationType MLPPTanhReg::get_reg() const {
 	return _reg;
 }
 void MLPPTanhReg::set_reg(const MLPPReg::RegularizationType val) {
 	_reg = val;
 }
 
-real_t MLPPTanhReg::get_lambda() {
+real_t MLPPTanhReg::get_lambda() const {
 	return _lambda;
 }
 void MLPPTanhReg::set_lambda(const real_t val) {
 	_lambda = val;
 }
 
-real_t MLPPTanhReg::get_alpha() {
+real_t MLPPTanhReg::get_alpha() const {
 	return _alpha;
 }
 void MLPPTanhReg::set_alpha(const real_t val) {
 	_alpha = val;
 }
 
+Ref<MLPPVector> MLPPTanhReg::data_z_get() const {
+	return _z;
+}
+void MLPPTanhReg::data_z_set(const Ref<MLPPVector> &val) {
+	_z = val;
+}
+
+Ref<MLPPVector> MLPPTanhReg::data_y_hat_get() const {
+	return _y_hat;
+}
+void MLPPTanhReg::data_y_hat_set(const Ref<MLPPVector> &val) {
+	_y_hat = val;
+}
+
+Ref<MLPPVector> MLPPTanhReg::data_weights_get() const {
+	return _weights;
+}
+void MLPPTanhReg::data_weights_set(const Ref<MLPPVector> &val) {
+	_weights = val;
+}
+
+real_t MLPPTanhReg::data_bias_get() const {
+	return _bias;
+}
+void MLPPTanhReg::data_bias_set(const real_t val) {
+	_bias = val;
+}
+
+bool MLPPTanhReg::needs_init() const {
+	if (!_input_set.is_valid()) {
+		return true;
+	}
+
+	if (!_output_set.is_valid()) {
+		return true;
+	}
+
+	int n = _input_set->size().y;
+	int k = _input_set->size().x;
+
+	if (_y_hat->size() != n) {
+		return true;
+	}
+
+	if (_weights->size() != k) {
+		return true;
+	}
+
+	return false;
+}
+
+void MLPPTanhReg::initialize() {
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+
+	int n = _input_set->size().y;
+	int k = _input_set->size().x;
+
+	_y_hat->resize(n);
+	_weights->resize(k);
+
+	MLPPUtilities utils;
+
+	utils.weight_initializationv(_weights);
+	_bias = utils.bias_initializationr();
+}
+
 Ref<MLPPVector> MLPPTanhReg::model_set_test(const Ref<MLPPMatrix> &X) {
-	ERR_FAIL_COND_V(!_initialized, Ref<MLPPVector>());
+	ERR_FAIL_COND_V(needs_init(), Ref<MLPPVector>());
 
 	return evaluatem(X);
 }
 
 real_t MLPPTanhReg::model_test(const Ref<MLPPVector> &x) {
-	ERR_FAIL_COND_V(!_initialized, 0);
+	ERR_FAIL_COND_V(needs_init(), 0);
 
 	return evaluatev(x);
 }
 
-void MLPPTanhReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
-	ERR_FAIL_COND(!_initialized);
+void MLPPTanhReg::train_gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	ERR_FAIL_COND(needs_init());
 
 	MLPPActivation avn;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
+
+	int n = _input_set->size().y;
 
 	forward_pass();
 
@@ -81,11 +146,11 @@ void MLPPTanhReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui)
 
 		Ref<MLPPVector> error = _y_hat->subn(_output_set);
 
-		_weights->sub(_input_set->transposen()->mult_vec(error->hadamard_productn(avn.tanh_derivv(_z)))->scalar_multiplyn(learning_rate / _n));
+		_weights->sub(_input_set->transposen()->mult_vec(error->hadamard_productn(avn.tanh_derivv(_z)))->scalar_multiplyn(learning_rate / n));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		_bias -= learning_rate * error->hadamard_productn(avn.tanh_derivv(_z))->sum_elements() / _n;
+		_bias -= learning_rate * error->hadamard_productn(avn.tanh_derivv(_z))->sum_elements() / n;
 
 		forward_pass();
 
@@ -103,8 +168,11 @@ void MLPPTanhReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui)
 	}
 }
 
-void MLPPTanhReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
-	ERR_FAIL_COND(!_initialized);
+void MLPPTanhReg::train_sgd(real_t learning_rate, int max_epoch, bool ui) {
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	ERR_FAIL_COND(needs_init());
+
+	int n = _input_set->size().y;
 
 	MLPPReg regularization;
 
@@ -113,7 +181,7 @@ void MLPPTanhReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 
 	std::random_device rd;
 	std::default_random_engine generator(rd());
-	std::uniform_int_distribution<int> distribution(0, int(_n - 1));
+	std::uniform_int_distribution<int> distribution(0, int(n - 1));
 
 	Ref<MLPPVector> input_set_row_tmp;
 	input_set_row_tmp.instance();
@@ -165,8 +233,11 @@ void MLPPTanhReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	forward_pass();
 }
 
-void MLPPTanhReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui) {
-	ERR_FAIL_COND(!_initialized);
+void MLPPTanhReg::train_mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui) {
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	ERR_FAIL_COND(needs_init());
+
+	int n = _input_set->size().y;
 
 	MLPPActivation avn;
 	MLPPReg regularization;
@@ -175,7 +246,7 @@ void MLPPTanhReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size,
 	int epoch = 1;
 
 	// Creating the mini-batches
-	int n_mini_batch = _n / mini_batch_size;
+	int n_mini_batch = n / mini_batch_size;
 	MLPPUtilities::CreateMiniBatchMVBatch batches = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
 	while (true) {
@@ -191,11 +262,11 @@ void MLPPTanhReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size,
 
 			// Calculating the weight gradients
 
-			_weights->sub(current_input_batch_entry->transposen()->mult_vec(error->hadamard_productn(avn.tanh_derivv(z)))->scalar_multiplyn(learning_rate / _n));
+			_weights->sub(current_input_batch_entry->transposen()->mult_vec(error->hadamard_productn(avn.tanh_derivv(z)))->scalar_multiplyn(learning_rate / n));
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * error->hadamard_productn(avn.tanh_derivv(_z))->sum_elements() / _n;
+			_bias -= learning_rate * error->hadamard_productn(avn.tanh_derivv(_z))->sum_elements() / n;
 
 			forward_pass();
 
@@ -218,42 +289,12 @@ void MLPPTanhReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size,
 }
 
 real_t MLPPTanhReg::score() {
-	ERR_FAIL_COND_V(!_initialized, 0);
+	ERR_FAIL_COND_V(!_input_set.is_valid() || !_output_set.is_valid(), 0);
+	ERR_FAIL_COND_V(needs_init(), 0);
 
 	MLPPUtilities util;
 
 	return util.performance_vec(_y_hat, _output_set);
-}
-
-void MLPPTanhReg::save(const String &file_name) {
-	//MLPPUtilities util;
-
-	//util.saveParameters(file_name, _weights, _bias);
-}
-
-bool MLPPTanhReg::is_initialized() {
-	return _initialized;
-}
-void MLPPTanhReg::initialize() {
-	if (_initialized) {
-		return;
-	}
-
-	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
-
-	_n = _input_set->size().y;
-	_k = _input_set->size().x;
-
-	_y_hat->resize(_n);
-	_weights->resize(_k);
-
-	MLPPUtilities utils;
-
-	utils.weight_initializationv(_weights);
-
-	_bias = utils.bias_initializationr();
-
-	_initialized = true;
 }
 
 MLPPTanhReg::MLPPTanhReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
@@ -263,17 +304,22 @@ MLPPTanhReg::MLPPTanhReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVecto
 	_lambda = p_lambda;
 	_alpha = p_alpha;
 
+	_bias = 0;
+
+	_z.instance();
 	_y_hat.instance();
 	_weights.instance();
-
-	_initialized = false;
 
 	initialize();
 }
 
 MLPPTanhReg::MLPPTanhReg() {
-	_initialized = false;
+	_reg = MLPPReg::REGULARIZATION_TYPE_NONE;
+	_lambda = 0;
+	_alpha = 0;
+	_bias = 0;
 
+	_z.instance();
 	_y_hat.instance();
 	_weights.instance();
 }
@@ -336,17 +382,31 @@ void MLPPTanhReg::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_alpha", "val"), &MLPPTanhReg::set_alpha);
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "alpha"), "set_alpha", "get_alpha");
 
+	ClassDB::bind_method(D_METHOD("data_z_get"), &MLPPTanhReg::data_z_get);
+	ClassDB::bind_method(D_METHOD("data_z_set", "val"), &MLPPTanhReg::set_output_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_z", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_z_set", "data_z_get");
+
+	ClassDB::bind_method(D_METHOD("data_y_hat_get"), &MLPPTanhReg::data_y_hat_get);
+	ClassDB::bind_method(D_METHOD("data_y_hat_set", "val"), &MLPPTanhReg::data_y_hat_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_y_hat", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_y_hat_set", "data_y_hat_get");
+
+	ClassDB::bind_method(D_METHOD("data_weights_get"), &MLPPTanhReg::data_weights_get);
+	ClassDB::bind_method(D_METHOD("data_weights_set", "val"), &MLPPTanhReg::data_weights_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_weights", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_weights_set", "data_weights_get");
+
+	ClassDB::bind_method(D_METHOD("data_bias_get"), &MLPPTanhReg::data_bias_get);
+	ClassDB::bind_method(D_METHOD("data_bias_set", "val"), &MLPPTanhReg::data_bias_set);
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "data_bias"), "data_bias_set", "data_bias_get");
+
+	ClassDB::bind_method(D_METHOD("needs_init"), &MLPPTanhReg::needs_init);
+	ClassDB::bind_method(D_METHOD("initialize"), &MLPPTanhReg::initialize);
+
 	ClassDB::bind_method(D_METHOD("model_test", "x"), &MLPPTanhReg::model_test);
 	ClassDB::bind_method(D_METHOD("model_set_test", "X"), &MLPPTanhReg::model_set_test);
 
-	ClassDB::bind_method(D_METHOD("gradient_descent", "learning_rate", "max_epoch", "ui"), &MLPPTanhReg::gradient_descent, false);
-	ClassDB::bind_method(D_METHOD("sgd", "learning_rate", "max_epoch", "ui"), &MLPPTanhReg::sgd, false);
-	ClassDB::bind_method(D_METHOD("mbgd", "learning_rate", "max_epoch", "mini_batch_size", "ui"), &MLPPTanhReg::mbgd, false);
+	ClassDB::bind_method(D_METHOD("train_gradient_descent", "learning_rate", "max_epoch", "ui"), &MLPPTanhReg::train_gradient_descent, false);
+	ClassDB::bind_method(D_METHOD("train_sgd", "learning_rate", "max_epoch", "ui"), &MLPPTanhReg::train_sgd, false);
+	ClassDB::bind_method(D_METHOD("train_mbgd", "learning_rate", "max_epoch", "mini_batch_size", "ui"), &MLPPTanhReg::train_mbgd, false);
 
 	ClassDB::bind_method(D_METHOD("score"), &MLPPTanhReg::score);
-
-	ClassDB::bind_method(D_METHOD("save", "file_name"), &MLPPTanhReg::save);
-
-	ClassDB::bind_method(D_METHOD("is_initialized"), &MLPPTanhReg::is_initialized);
-	ClassDB::bind_method(D_METHOD("initialize"), &MLPPTanhReg::initialize);
 }
