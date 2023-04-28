@@ -8,7 +8,6 @@
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
 #include "../utilities/utilities.h"
 

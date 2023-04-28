@@ -5,8 +5,6 @@
 //
 
 #include "uni_lin_reg.h"
-
-#include "../lin_alg/lin_alg.h"
 #include "../stat/stat.h"
 
 // General Multivariate Linear Regression Model
@@ -53,9 +51,7 @@ void MLPPUniLinReg::train() {
 }
 
 Ref<MLPPVector> MLPPUniLinReg::model_set_test(const Ref<MLPPVector> &x) {
-	MLPPLinAlg alg;
-
-	return alg.scalar_addnv(_b0, alg.scalar_multiplynv(_b1, x));
+	return x->scalar_multiplyn(_b1)->scalar_addn(_b0);
 }
 
 real_t MLPPUniLinReg::model_test(real_t x) {
