@@ -14,47 +14,72 @@
 
 #include <random>
 
-Ref<MLPPMatrix> MLPPSVC::get_input_set() {
+Ref<MLPPMatrix> MLPPSVC::get_input_set() const {
 	return _input_set;
 }
 void MLPPSVC::set_input_set(const Ref<MLPPMatrix> &val) {
 	_input_set = val;
-
-	_initialized = false;
 }
 
-Ref<MLPPVector> MLPPSVC::get_output_set() {
+Ref<MLPPVector> MLPPSVC::get_output_set() const {
 	return _output_set;
 }
 void MLPPSVC::set_output_set(const Ref<MLPPMatrix> &val) {
 	_output_set = val;
-
-	_initialized = false;
 }
 
-real_t MLPPSVC::get_c() {
+real_t MLPPSVC::get_c() const {
 	return _c;
 }
 void MLPPSVC::set_c(const real_t val) {
 	_c = val;
+}
 
-	_initialized = false;
+Ref<MLPPVector> MLPPSVC::data_z_get() const {
+	return _z;
+}
+void MLPPSVC::data_z_set(const Ref<MLPPVector> &val) {
+	_z = val;
+}
+
+Ref<MLPPVector> MLPPSVC::data_y_hat_get() const {
+	return _y_hat;
+}
+void MLPPSVC::data_y_hat_set(const Ref<MLPPVector> &val) {
+	_y_hat = val;
+}
+
+Ref<MLPPVector> MLPPSVC::data_weights_get() const {
+	return _weights;
+}
+void MLPPSVC::data_weights_set(const Ref<MLPPVector> &val) {
+	_weights = val;
+}
+
+real_t MLPPSVC::data_bias_get() const {
+	return _bias;
+}
+void MLPPSVC::data_bias_set(const real_t val) {
+	_bias = val;
 }
 
 Ref<MLPPVector> MLPPSVC::model_set_test(const Ref<MLPPMatrix> &X) {
-	ERR_FAIL_COND_V(!_initialized, Ref<MLPPVector>());
+	ERR_FAIL_COND_V(needs_init(), Ref<MLPPVector>());
 
 	return evaluatem(X);
 }
 
 real_t MLPPSVC::model_test(const Ref<MLPPVector> &x) {
-	ERR_FAIL_COND_V(!_initialized, 0);
+	ERR_FAIL_COND_V(needs_init(), 0);
 
 	return evaluatev(x);
 }
 
-void MLPPSVC::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
-	ERR_FAIL_COND(!_initialized);
+void MLPPSVC::train_gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	ERR_FAIL_COND(needs_init());
+
+	int n = _input_set->size().y;
 
 	MLPPCost mlpp_cost;
 	MLPPActivation avn;
@@ -68,11 +93,11 @@ void MLPPSVC::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set, _weights, _c);
 
-		_weights->sub(_input_set->transposen()->mult_vec(mlpp_cost.hinge_loss_derivwv(_z, _output_set, _c))->scalar_multiplyn(learning_rate / _n));
-		_weights = regularization.reg_weightsv(_weights, learning_rate / _n, 0, MLPPReg::REGULARIZATION_TYPE_RIDGE);
+		_weights->sub(_input_set->transposen()->mult_vec(mlpp_cost.hinge_loss_derivwv(_z, _output_set, _c))->scalar_multiplyn(learning_rate / n));
+		_weights = regularization.reg_weightsv(_weights, learning_rate / n, 0, MLPPReg::REGULARIZATION_TYPE_RIDGE);
 
 		// Calculating the bias gradients
-		_bias += learning_rate * mlpp_cost.hinge_loss_derivwv(_y_hat, _output_set, _c)->sum_elements() / _n;
+		_bias += learning_rate * mlpp_cost.hinge_loss_derivwv(_y_hat, _output_set, _c)->sum_elements() / n;
 
 		forward_pass();
 
@@ -90,8 +115,11 @@ void MLPPSVC::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 	}
 }
 
-void MLPPSVC::sgd(real_t learning_rate, int max_epoch, bool ui) {
-	ERR_FAIL_COND(!_initialized);
+void MLPPSVC::train_sgd(real_t learning_rate, int max_epoch, bool ui) {
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	ERR_FAIL_COND(needs_init());
+
+	int n = _input_set->size().y;
 
 	MLPPCost mlpp_cost;
 	MLPPActivation avn;
@@ -99,7 +127,7 @@ void MLPPSVC::sgd(real_t learning_rate, int max_epoch, bool ui) {
 
 	std::random_device rd;
 	std::default_random_engine generator(rd());
-	std::uniform_int_distribution<int> distribution(0, int(_n - 1));
+	std::uniform_int_distribution<int> distribution(0, int(n - 1));
 
 	Ref<MLPPVector> input_set_row_tmp;
 	input_set_row_tmp.instance();
@@ -161,8 +189,11 @@ void MLPPSVC::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	forward_pass();
 }
 
-void MLPPSVC::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui) {
-	ERR_FAIL_COND(!_initialized);
+void MLPPSVC::train_mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui) {
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	ERR_FAIL_COND(needs_init());
+
+	int n = _input_set->size().y;
 
 	MLPPCost mlpp_cost;
 	MLPPActivation avn;
@@ -172,7 +203,7 @@ void MLPPSVC::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 	int epoch = 1;
 
 	// Creating the mini-batches
-	int n_mini_batch = _n / mini_batch_size;
+	int n_mini_batch = n / mini_batch_size;
 	MLPPUtilities::CreateMiniBatchMVBatch batches = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
 	forward_pass();
@@ -187,11 +218,11 @@ void MLPPSVC::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 			cost_prev = cost(z, current_output_batch_entry, _weights, _c);
 
 			// Calculating the weight gradients
-			_weights->subn(current_input_batch_entry->transposen()->mult_vec(mlpp_cost.hinge_loss_derivwv(z, current_output_batch_entry, _c))->scalar_multiplyn(learning_rate / _n));
-			_weights = regularization.reg_weightsv(_weights, learning_rate / _n, 0, MLPPReg::REGULARIZATION_TYPE_RIDGE);
+			_weights->subn(current_input_batch_entry->transposen()->mult_vec(mlpp_cost.hinge_loss_derivwv(z, current_output_batch_entry, _c))->scalar_multiplyn(learning_rate / n));
+			_weights = regularization.reg_weightsv(_weights, learning_rate / n, 0, MLPPReg::REGULARIZATION_TYPE_RIDGE);
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * mlpp_cost.hinge_loss_derivwv(y_hat, current_output_batch_entry, _c)->sum_elements() / _n;
+			_bias -= learning_rate * mlpp_cost.hinge_loss_derivwv(y_hat, current_output_batch_entry, _c)->sum_elements() / n;
 
 			forward_pass();
 
@@ -214,84 +245,70 @@ void MLPPSVC::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 }
 
 real_t MLPPSVC::score() {
-	ERR_FAIL_COND_V(!_initialized, 0);
+	ERR_FAIL_COND_V(needs_init(), 0);
 
 	MLPPUtilities util;
 	return util.performance_vec(_y_hat, _output_set);
 }
 
-void MLPPSVC::save(const String &file_name) {
-	ERR_FAIL_COND(!_initialized);
+bool MLPPSVC::needs_init() const {
+	if (!_input_set.is_valid()) {
+		return true;
+	}
 
-	MLPPUtilities util;
+	if (!_output_set.is_valid()) {
+		return true;
+	}
 
-	//util.saveParameters(_file_name, _weights, _bias);
-}
+	int n = _input_set->size().y;
+	int k = _input_set->size().x;
 
-bool MLPPSVC::is_initialized() {
-	return _initialized;
+	if (_y_hat->size() != n) {
+		return true;
+	}
+
+	if (_weights->size() != k) {
+		return true;
+	}
+
+	return false;
 }
 void MLPPSVC::initialize() {
-	if (_initialized) {
-		return;
-	}
-
 	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
 
-	_n = _input_set->size().y;
-	_k = _input_set->size().x;
+	int n = _input_set->size().y;
+	int k = _input_set->size().x;
 
-	if (!_y_hat.is_valid()) {
-		_y_hat.instance();
-	}
-
-	_y_hat->resize(_n);
+	_y_hat->resize(n);
 
 	MLPPUtilities util;
 
-	if (!_weights.is_valid()) {
-		_weights.instance();
-	}
-
-	_weights->resize(_k);
+	_weights->resize(k);
 
 	util.weight_initializationv(_weights);
 	_bias = util.bias_initializationr();
-
-	_initialized = true;
 }
 
 MLPPSVC::MLPPSVC(const Ref<MLPPMatrix> &input_set, const Ref<MLPPVector> &output_set, real_t c) {
 	_input_set = input_set;
 	_output_set = output_set;
-
-	_n = _input_set->size().y;
-	_k = _input_set->size().x;
 	_c = c;
 
+	_z.instance();
 	_y_hat.instance();
-
-	_y_hat->resize(_n);
-
-	MLPPUtilities util;
-
 	_weights.instance();
-	_weights->resize(_k);
-	util.weight_initializationv(_weights);
-	_bias = util.bias_initializationr();
+	_bias = 0;
 
-	_initialized = true;
+	initialize();
 }
 
 MLPPSVC::MLPPSVC() {
+	_c = 0;
+
+	_z.instance();
 	_y_hat.instance();
 	_weights.instance();
-
-	_c = 0;
-	_n = 0;
-	_k = 0;
-
-	_initialized = false;
+	_bias = 0;
 }
 MLPPSVC::~MLPPSVC() {
 }
@@ -343,17 +360,31 @@ void MLPPSVC::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_c", "val"), &MLPPSVC::set_c);
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "c"), "set_c", "get_c");
 
+	ClassDB::bind_method(D_METHOD("data_z_get"), &MLPPSVC::data_z_get);
+	ClassDB::bind_method(D_METHOD("data_z_set", "val"), &MLPPSVC::set_output_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_z", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_z_set", "data_z_get");
+
+	ClassDB::bind_method(D_METHOD("data_y_hat_get"), &MLPPSVC::data_y_hat_get);
+	ClassDB::bind_method(D_METHOD("data_y_hat_set", "val"), &MLPPSVC::data_y_hat_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_y_hat", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_y_hat_set", "data_y_hat_get");
+
+	ClassDB::bind_method(D_METHOD("data_weights_get"), &MLPPSVC::data_weights_get);
+	ClassDB::bind_method(D_METHOD("data_weights_set", "val"), &MLPPSVC::data_weights_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_weights", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_weights_set", "data_weights_get");
+
+	ClassDB::bind_method(D_METHOD("data_bias_get"), &MLPPSVC::data_bias_get);
+	ClassDB::bind_method(D_METHOD("data_bias_set", "val"), &MLPPSVC::data_bias_set);
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "data_bias"), "data_bias_set", "data_bias_get");
+
 	ClassDB::bind_method(D_METHOD("model_set_test", "X"), &MLPPSVC::model_set_test);
 	ClassDB::bind_method(D_METHOD("model_test", "x"), &MLPPSVC::model_test);
 
-	ClassDB::bind_method(D_METHOD("gradient_descent", "learning_rate", "max_epoch", "ui"), &MLPPSVC::gradient_descent, false);
-	ClassDB::bind_method(D_METHOD("sgd", "learning_rate", "max_epoch", "ui"), &MLPPSVC::sgd, false);
-	ClassDB::bind_method(D_METHOD("mbgd", "learning_rate", "max_epoch", "mini_batch_size", "ui"), &MLPPSVC::mbgd, false);
+	ClassDB::bind_method(D_METHOD("train_gradient_descent", "learning_rate", "max_epoch", "ui"), &MLPPSVC::train_gradient_descent, false);
+	ClassDB::bind_method(D_METHOD("train_sgd", "learning_rate", "max_epoch", "ui"), &MLPPSVC::train_sgd, false);
+	ClassDB::bind_method(D_METHOD("train_mbgd", "learning_rate", "max_epoch", "mini_batch_size", "ui"), &MLPPSVC::train_mbgd, false);
 
 	ClassDB::bind_method(D_METHOD("score"), &MLPPSVC::score);
 
-	ClassDB::bind_method(D_METHOD("save", "file_name"), &MLPPSVC::save);
-
-	ClassDB::bind_method(D_METHOD("is_initialized"), &MLPPSVC::is_initialized);
+	ClassDB::bind_method(D_METHOD("needs_init"), &MLPPSVC::needs_init);
 	ClassDB::bind_method(D_METHOD("initialize"), &MLPPSVC::initialize);
 }

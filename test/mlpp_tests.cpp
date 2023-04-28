@@ -361,7 +361,7 @@ void MLPPTests::test_support_vector_classification(bool ui) {
 	Ref<MLPPDataSimple> dt = data.load_breast_cancer_svc(_breast_cancer_svm_data_path);
 
 	MLPPSVC model(dt->get_input(), dt->get_output(), ui);
-	model.sgd(0.00001, 100000, ui);
+	model.train_sgd(0.00001, 100000, ui);
 	PLOG_MSG((model.model_set_test(dt->get_input())->to_string()));
 	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
