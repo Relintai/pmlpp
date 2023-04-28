@@ -14,7 +14,6 @@
 
 #include <random>
 
-/*
 Ref<MLPPMatrix> MLPPTanhReg::get_input_set() {
 	return _input_set;
 }
@@ -38,8 +37,6 @@ MLPPReg::RegularizationType MLPPTanhReg::get_reg() {
 }
 void MLPPTanhReg::set_reg(const MLPPReg::RegularizationType val) {
 	_reg = val;
-
-	_initialized = false;
 }
 
 real_t MLPPTanhReg::get_lambda() {
@@ -47,8 +44,6 @@ real_t MLPPTanhReg::get_lambda() {
 }
 void MLPPTanhReg::set_lambda(const real_t val) {
 	_lambda = val;
-
-	_initialized = false;
 }
 
 real_t MLPPTanhReg::get_alpha() {
@@ -56,25 +51,24 @@ real_t MLPPTanhReg::get_alpha() {
 }
 void MLPPTanhReg::set_alpha(const real_t val) {
 	_alpha = val;
-
-	_initialized = false;
 }
-*/
-
-//	Ref<MLPPVector> model_set_test(const Ref<MLPPMatrix> &X);
-//	real_t model_test(const Ref<MLPPVector> &x);
 
 Ref<MLPPVector> MLPPTanhReg::model_set_test(const Ref<MLPPMatrix> &X) {
+	ERR_FAIL_COND_V(!_initialized, Ref<MLPPVector>());
+
 	return evaluatem(X);
 }
 
 real_t MLPPTanhReg::model_test(const Ref<MLPPVector> &x) {
+	ERR_FAIL_COND_V(!_initialized, 0);
+
 	return evaluatev(x);
 }
 
 void MLPPTanhReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
+	ERR_FAIL_COND(!_initialized);
+
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -85,13 +79,13 @@ void MLPPTanhReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui)
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
+		Ref<MLPPVector> error = _y_hat->subn(_output_set);
 
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.tanh_derivv(_z)))));
+		_weights->sub(_input_set->transposen()->mult_vec(error->hadamard_productn(avn.tanh_derivv(_z)))->scalar_multiplyn(learning_rate / _n));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		_bias -= learning_rate * alg.sum_elementsv(alg.hadamard_productnv(error, avn.tanh_derivv(_z))) / _n;
+		_bias -= learning_rate * error->hadamard_productn(avn.tanh_derivv(_z))->sum_elements() / _n;
 
 		forward_pass();
 
@@ -110,7 +104,8 @@ void MLPPTanhReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui)
 }
 
 void MLPPTanhReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
-	MLPPLinAlg alg;
+	ERR_FAIL_COND(!_initialized);
+
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -147,7 +142,7 @@ void MLPPTanhReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 		real_t error = y_hat - output_set_entry;
 
 		// Weight Updation
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * error * (1 - y_hat * y_hat), input_set_row_tmp));
+		_weights->subn(input_set_row_tmp->scalar_multiplyn(learning_rate * error * (1 - y_hat * y_hat)));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Bias updation
@@ -171,8 +166,9 @@ void MLPPTanhReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 }
 
 void MLPPTanhReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui) {
+	ERR_FAIL_COND(!_initialized);
+
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -191,14 +187,15 @@ void MLPPTanhReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size,
 			Ref<MLPPVector> z = propagatem(current_input_batch_entry);
 			cost_prev = cost(y_hat, current_output_batch_entry);
 
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_batch_entry);
+			Ref<MLPPVector> error = y_hat->subn(current_output_batch_entry);
 
 			// Calculating the weight gradients
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(current_input_batch_entry), alg.hadamard_productnv(error, avn.tanh_derivv(z)))));
+
+			_weights->sub(current_input_batch_entry->transposen()->mult_vec(error->hadamard_productn(avn.tanh_derivv(z)))->scalar_multiplyn(learning_rate / _n));
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(alg.hadamard_productnv(error, avn.tanh_derivv(_z))) / _n;
+			_bias -= learning_rate * error->hadamard_productn(avn.tanh_derivv(_z))->sum_elements() / _n;
 
 			forward_pass();
 
@@ -221,6 +218,8 @@ void MLPPTanhReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size,
 }
 
 real_t MLPPTanhReg::score() {
+	ERR_FAIL_COND_V(!_initialized, 0);
+
 	MLPPUtilities util;
 
 	return util.performance_vec(_y_hat, _output_set);
@@ -240,27 +239,15 @@ void MLPPTanhReg::initialize() {
 		return;
 	}
 
-	//ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
 
-	_initialized = true;
-}
-
-MLPPTanhReg::MLPPTanhReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
-	_input_set = p_input_set;
-	_output_set = p_output_set;
 	_n = _input_set->size().y;
 	_k = _input_set->size().x;
-	_reg = p_reg;
-	_lambda = p_lambda;
-	_alpha = p_alpha;
 
-	_y_hat.instance();
 	_y_hat->resize(_n);
+	_weights->resize(_k);
 
 	MLPPUtilities utils;
-
-	_weights.instance();
-	_weights->resize(_k);
 
 	utils.weight_initializationv(_weights);
 
@@ -269,8 +256,26 @@ MLPPTanhReg::MLPPTanhReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVecto
 	_initialized = true;
 }
 
+MLPPTanhReg::MLPPTanhReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
+	_input_set = p_input_set;
+	_output_set = p_output_set;
+	_reg = p_reg;
+	_lambda = p_lambda;
+	_alpha = p_alpha;
+
+	_y_hat.instance();
+	_weights.instance();
+
+	_initialized = false;
+
+	initialize();
+}
+
 MLPPTanhReg::MLPPTanhReg() {
 	_initialized = false;
+
+	_y_hat.instance();
+	_weights.instance();
 }
 MLPPTanhReg::~MLPPTanhReg() {
 }
@@ -283,29 +288,23 @@ real_t MLPPTanhReg::cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y)
 }
 
 real_t MLPPTanhReg::evaluatev(const Ref<MLPPVector> &x) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.tanh_normr(alg.dotnv(_weights, x) + _bias);
+	return avn.tanh_normr(_weights->dot(x) + _bias);
 }
 
 real_t MLPPTanhReg::propagatev(const Ref<MLPPVector> &x) {
-	MLPPLinAlg alg;
-
-	return alg.dotnv(_weights, x) + _bias;
+	return _weights->dot(x) + _bias;
 }
 
 Ref<MLPPVector> MLPPTanhReg::evaluatem(const Ref<MLPPMatrix> &X) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.tanh_normv(alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights)));
+	return avn.tanh_normv(X->mult_vec(_weights)->scalar_addn(_bias));
 }
 
 Ref<MLPPVector> MLPPTanhReg::propagatem(const Ref<MLPPMatrix> &X) {
-	MLPPLinAlg alg;
-
-	return alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights));
+	return X->mult_vec(_weights)->scalar_addn(_bias);
 }
 
 // Tanh ( wTx + b )
@@ -317,7 +316,6 @@ void MLPPTanhReg::forward_pass() {
 }
 
 void MLPPTanhReg::_bind_methods() {
-	/*
 	ClassDB::bind_method(D_METHOD("get_input_set"), &MLPPTanhReg::get_input_set);
 	ClassDB::bind_method(D_METHOD("set_input_set", "val"), &MLPPTanhReg::set_input_set);
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "input_set", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_input_set", "get_input_set");
@@ -351,5 +349,4 @@ void MLPPTanhReg::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("is_initialized"), &MLPPTanhReg::is_initialized);
 	ClassDB::bind_method(D_METHOD("initialize"), &MLPPTanhReg::initialize);
-	*/
 }

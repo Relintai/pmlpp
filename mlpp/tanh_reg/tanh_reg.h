@@ -21,7 +21,6 @@ class MLPPTanhReg : public Reference {
 	GDCLASS(MLPPTanhReg, Reference);
 
 public:
-	/*
 	Ref<MLPPMatrix> get_input_set();
 	void set_input_set(const Ref<MLPPMatrix> &val);
 
@@ -36,7 +35,6 @@ public:
 
 	real_t get_alpha();
 	void set_alpha(const real_t val);
-	*/
 
 	Ref<MLPPVector> model_set_test(const Ref<MLPPMatrix> &X);
 	real_t model_test(const Ref<MLPPVector> &x);
