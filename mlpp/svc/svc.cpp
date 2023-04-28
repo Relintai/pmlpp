@@ -58,7 +58,6 @@ void MLPPSVC::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 
 	MLPPCost mlpp_cost;
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -69,11 +68,11 @@ void MLPPSVC::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set, _weights, _c);
 
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), mlpp_cost.hinge_loss_derivwv(_z, _output_set, _c))));
+		_weights->sub(_input_set->transposen()->mult_vec(mlpp_cost.hinge_loss_derivwv(_z, _output_set, _c))->scalar_multiplyn(learning_rate / _n));
 		_weights = regularization.reg_weightsv(_weights, learning_rate / _n, 0, MLPPReg::REGULARIZATION_TYPE_RIDGE);
 
 		// Calculating the bias gradients
-		_bias += learning_rate * alg.sum_elementsv(mlpp_cost.hinge_loss_derivwv(_y_hat, _output_set, _c)) / _n;
+		_bias += learning_rate * mlpp_cost.hinge_loss_derivwv(_y_hat, _output_set, _c)->sum_elements() / _n;
 
 		forward_pass();
 
@@ -96,7 +95,6 @@ void MLPPSVC::sgd(real_t learning_rate, int max_epoch, bool ui) {
 
 	MLPPCost mlpp_cost;
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	std::random_device rd;
@@ -140,7 +138,7 @@ void MLPPSVC::sgd(real_t learning_rate, int max_epoch, bool ui) {
 		real_t cost_deriv = cost_deriv_vec->get_element(0);
 
 		// Weight Updation
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * cost_deriv, input_set_row_tmp));
+		_weights->sub(input_set_row_tmp->scalar_multiplyn(learning_rate * cost_deriv));
 		_weights = regularization.reg_weightsv(_weights, learning_rate, 0, MLPPReg::REGULARIZATION_TYPE_RIDGE);
 
 		// Bias updation
@@ -168,7 +166,6 @@ void MLPPSVC::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 
 	MLPPCost mlpp_cost;
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -190,11 +187,11 @@ void MLPPSVC::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 			cost_prev = cost(z, current_output_batch_entry, _weights, _c);
 
 			// Calculating the weight gradients
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(current_input_batch_entry), mlpp_cost.hinge_loss_derivwv(z, current_output_batch_entry, _c))));
+			_weights->subn(current_input_batch_entry->transposen()->mult_vec(mlpp_cost.hinge_loss_derivwv(z, current_output_batch_entry, _c))->scalar_multiplyn(learning_rate / _n));
 			_weights = regularization.reg_weightsv(_weights, learning_rate / _n, 0, MLPPReg::REGULARIZATION_TYPE_RIDGE);
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(mlpp_cost.hinge_loss_derivwv(y_hat, current_output_batch_entry, _c)) / _n;
+			_bias -= learning_rate * mlpp_cost.hinge_loss_derivwv(y_hat, current_output_batch_entry, _c)->sum_elements() / _n;
 
 			forward_pass();
 
@@ -305,27 +302,24 @@ real_t MLPPSVC::cost(const Ref<MLPPVector> &z, const Ref<MLPPVector> &y, const R
 }
 
 Ref<MLPPVector> MLPPSVC::evaluatem(const Ref<MLPPMatrix> &X) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
-	return avn.sign_normv(alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights)));
+
+	return avn.sign_normv(X->mult_vec(_weights)->scalar_addn(_bias));
 }
 
 Ref<MLPPVector> MLPPSVC::propagatem(const Ref<MLPPMatrix> &X) {
-	MLPPLinAlg alg;
-	MLPPActivation avn;
-	return alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights));
+	return X->mult_vec(_weights)->scalar_addn(_bias);
 }
 
 real_t MLPPSVC::evaluatev(const Ref<MLPPVector> &x) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
-	return avn.sign_normr(alg.dotnv(_weights, x) + _bias);
+
+	return avn.sign_normr(_weights->dot(x) + _bias);
 }
 
 real_t MLPPSVC::propagatev(const Ref<MLPPVector> &x) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
-	return alg.dotnv(_weights, x) + _bias;
+	return _weights->dot(x) + _bias;
 }
 
 // sign ( wTx + b )
