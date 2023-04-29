@@ -8,7 +8,6 @@
 
 #include "core/containers/local_vector.h"
 
-#include "../lin_alg/lin_alg.h"
 #include "../utilities/utilities.h"
 
 #include <random>
@@ -92,7 +91,7 @@ real_t MLPPMultinomialNB::model_test(const Ref<MLPPVector> &x) {
 	}
 
 	for (int i = 0; i < _priors->size(); i++) {
-		score[i] += std::log(_priors->element_get(i));
+		score[i] += Math::log(_priors->element_get(i));
 	}
 
 	int max_index = 0;
@@ -181,8 +180,6 @@ void MLPPMultinomialNB::compute_theta() {
 }
 
 void MLPPMultinomialNB::evaluate() {
-	MLPPLinAlg alg;
-
 	int output_set_size = _output_set->size();
 	Size2i input_set_size = _input_set->size();
 
@@ -198,7 +195,7 @@ void MLPPMultinomialNB::evaluate() {
 			_priors->element_set(osii, _priors->element_get(osii) + 1);
 		}
 
-		_priors = alg.scalar_multiplynv(real_t(1) / real_t(output_set_size), _priors);
+		_priors->scalar_multiply(real_t(1) / real_t(output_set_size));
 
 		// Evaluating Theta...
 		compute_theta();

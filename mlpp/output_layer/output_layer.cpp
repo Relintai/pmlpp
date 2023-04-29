@@ -5,7 +5,6 @@
 //
 
 #include "output_layer.h"
-#include "../lin_alg/lin_alg.h"
 #include "../utilities/utilities.h"
 
 int MLPPOutputLayer::get_n_hidden() {
@@ -150,10 +149,9 @@ void MLPPOutputLayer::forward_pass() {
 		initialize();
 	}
 
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	_z = alg.scalar_addnv(_bias, alg.mat_vec_multnv(_input, _weights));
+	_z = _input->mult_vec(_weights)->scalar_addn(_bias);
 	_a = avn.run_activation_norm_vector(_activation, _z);
 }
 
@@ -162,10 +160,9 @@ void MLPPOutputLayer::test(const Ref<MLPPVector> &x) {
 		initialize();
 	}
 
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	_z_test = alg.dotnv(_weights, x) + _bias;
+	_z_test = _weights->dot(x) + _bias;
 	_a_test = avn.run_activation_norm_real(_activation, _z_test);
 }
 

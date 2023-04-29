@@ -6,7 +6,6 @@
 
 #include "pca.h"
 #include "../data/data.h"
-#include "../lin_alg/lin_alg.h"
 
 Ref<MLPPMatrix> MLPPPCA::get_input_set() {
 	return _input_set;
@@ -25,10 +24,9 @@ void MLPPPCA::set_k(const int val) {
 Ref<MLPPMatrix> MLPPPCA::principal_components() {
 	ERR_FAIL_COND_V(!_input_set.is_valid() || _k == 0, Ref<MLPPMatrix>());
 
-	MLPPLinAlg alg;
 	MLPPData data;
 
-	MLPPLinAlg::SVDResult svr_res = alg.svd(alg.covnm(_input_set));
+	MLPPMatrix::SVDResult svr_res = _input_set->cov()->svd();
 	_x_normalized = data.mean_centering(_input_set);
 
 	Size2i svr_res_u_size = svr_res.U->size();
@@ -41,7 +39,7 @@ Ref<MLPPMatrix> MLPPPCA::principal_components() {
 		}
 	}
 
-	_z = alg.matmultnm(alg.transposenm(_u_reduce), _x_normalized);
+	_z = _u_reduce->transposen()->multn(_x_normalized);
 
 	return _z;
 }
@@ -50,9 +48,7 @@ Ref<MLPPMatrix> MLPPPCA::principal_components() {
 real_t MLPPPCA::score() {
 	ERR_FAIL_COND_V(!_input_set.is_valid() || _k == 0, 0);
 
-	MLPPLinAlg alg;
-
-	Ref<MLPPMatrix> x_approx = alg.matmultnm(_u_reduce, _z);
+	Ref<MLPPMatrix> x_approx = _u_reduce->multn(_z);
 	real_t num = 0;
 	real_t den = 0;
 
@@ -72,7 +68,7 @@ real_t MLPPPCA::score() {
 		_x_normalized->row_get_into_mlpp_vector(i, x_normalized_row_tmp);
 		x_approx->row_get_into_mlpp_vector(i, x_approx_row_tmp);
 
-		num += alg.norm_sqv(alg.subtractionnv(x_normalized_row_tmp, x_approx_row_tmp));
+		num += x_normalized_row_tmp->subn(x_approx_row_tmp)->norm_sq();
 	}
 
 	num /= x_normalized_size_y;
@@ -80,7 +76,7 @@ real_t MLPPPCA::score() {
 	for (int i = 0; i < x_normalized_size_y; ++i) {
 		_x_normalized->row_get_into_mlpp_vector(i, x_normalized_row_tmp);
 
-		den += alg.norm_sqv(x_normalized_row_tmp);
+		den += x_normalized_row_tmp->norm_sq();
 	}
 
 	den /= x_normalized_size_y;
