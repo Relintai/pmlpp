@@ -387,7 +387,7 @@ void MLPPVector::hadamard_productb(const Ref<MLPPVector> &a, const Ref<MLPPVecto
 	}
 }
 
-void MLPPVector::element_wise_division(const Ref<MLPPVector> &b) {
+void MLPPVector::division_element_wise(const Ref<MLPPVector> &b) {
 	ERR_FAIL_COND(!b.is_valid());
 
 	Ref<MLPPVector> out;
@@ -404,7 +404,7 @@ void MLPPVector::element_wise_division(const Ref<MLPPVector> &b) {
 	}
 }
 
-Ref<MLPPVector> MLPPVector::element_wise_divisionn(const Ref<MLPPVector> &b) const {
+Ref<MLPPVector> MLPPVector::division_element_wisen(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -425,7 +425,7 @@ Ref<MLPPVector> MLPPVector::element_wise_divisionn(const Ref<MLPPVector> &b) con
 	return out;
 }
 
-void MLPPVector::element_wise_divisionb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+void MLPPVector::division_element_wiseb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
 	ERR_FAIL_COND(!a.is_valid() || !b.is_valid());
 
 	int s = a->size();
@@ -1396,9 +1396,9 @@ void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("hadamard_productn", "b"), &MLPPVector::hadamard_productn);
 	ClassDB::bind_method(D_METHOD("hadamard_productb", "a", "b"), &MLPPVector::hadamard_productb);
 
-	ClassDB::bind_method(D_METHOD("element_wise_division", "b"), &MLPPVector::element_wise_division);
-	ClassDB::bind_method(D_METHOD("element_wise_divisionn", "b"), &MLPPVector::element_wise_divisionn);
-	ClassDB::bind_method(D_METHOD("element_wise_divisionb", "a", "b"), &MLPPVector::element_wise_divisionb);
+	ClassDB::bind_method(D_METHOD("division_element_wise", "b"), &MLPPVector::division_element_wise);
+	ClassDB::bind_method(D_METHOD("division_element_wisen", "b"), &MLPPVector::division_element_wisen);
+	ClassDB::bind_method(D_METHOD("division_element_wiseb", "a", "b"), &MLPPVector::division_element_wiseb);
 
 	ClassDB::bind_method(D_METHOD("scalar_multiply", "scalar"), &MLPPVector::scalar_multiply);
 	ClassDB::bind_method(D_METHOD("scalar_multiplyn", "scalar"), &MLPPVector::scalar_multiplyn);

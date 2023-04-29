@@ -96,20 +96,20 @@
 			<description>
 			</description>
 		</method>
-		<method name="element_wise_division">
+		<method name="division_element_wise">
 			<return type="void" />
 			<argument index="0" name="B" type="MLPPTensor3" />
 			<description>
 			</description>
 		</method>
-		<method name="element_wise_divisionb">
+		<method name="division_element_wiseb">
 			<return type="void" />
 			<argument index="0" name="A" type="MLPPTensor3" />
 			<argument index="1" name="B" type="MLPPTensor3" />
 			<description>
 			</description>
 		</method>
-		<method name="element_wise_divisionn" qualifiers="const">
+		<method name="division_element_wisen" qualifiers="const">
 			<return type="MLPPTensor3" />
 			<argument index="0" name="B" type="MLPPTensor3" />
 			<description>
@@ -480,7 +480,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="set_shape">
+		<method name="shape_set">
 			<return type="void" />
 			<argument index="0" name="size" type="Vector3i" />
 			<description>

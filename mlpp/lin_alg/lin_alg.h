@@ -37,7 +37,7 @@ public:
 
 	Ref<MLPPMatrix> hadamard_productnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 	Ref<MLPPMatrix> kronecker_productnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> element_wise_divisionnvnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> division_element_wisenvnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	Ref<MLPPMatrix> transposenm(const Ref<MLPPMatrix> &A);
 	Ref<MLPPMatrix> scalar_multiplynm(real_t scalar, const Ref<MLPPMatrix> &A);
@@ -144,7 +144,7 @@ public:
 	Ref<MLPPVector> hadamard_productnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 	void hadamard_productv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b, Ref<MLPPVector> out);
 
-	Ref<MLPPVector> element_wise_divisionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	Ref<MLPPVector> division_element_wisenv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	Ref<MLPPVector> scalar_multiplynv(real_t scalar, const Ref<MLPPVector> &a);
 	void scalar_multiplyv(real_t scalar, const Ref<MLPPVector> &a, Ref<MLPPVector> out);
@@ -210,7 +210,7 @@ public:
 	// TENSOR FUNCTIONS
 	Vector<Ref<MLPPMatrix>> additionnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
 
-	Vector<Ref<MLPPMatrix>> element_wise_divisionnvnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
+	Vector<Ref<MLPPMatrix>> division_element_wisenvnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
 
 	Vector<Ref<MLPPMatrix>> sqrtnvt(const Vector<Ref<MLPPMatrix>> &A);
 

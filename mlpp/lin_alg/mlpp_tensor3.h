@@ -60,7 +60,7 @@ public:
 	_FORCE_INLINE_ Size3i size() const { return _size; }
 
 	void resize(const Size3i &p_size);
-	void set_shape(const Size3i &p_size);
+	void shape_set(const Size3i &p_size);
 
 	_FORCE_INLINE_ int calculate_index(int p_index_y, int p_index_x, int p_index_z) const {
 		return p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z;
@@ -193,9 +193,9 @@ public:
 	Ref<MLPPTensor3> subn(const Ref<MLPPTensor3> &B) const;
 	void subb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
 
-	void element_wise_division(const Ref<MLPPTensor3> &B);
-	Ref<MLPPTensor3> element_wise_divisionn(const Ref<MLPPTensor3> &B) const;
-	void element_wise_divisionb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
+	void division_element_wise(const Ref<MLPPTensor3> &B);
+	Ref<MLPPTensor3> division_element_wisen(const Ref<MLPPTensor3> &B) const;
+	void division_element_wiseb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B);
 
 	void sqrt();
 	Ref<MLPPTensor3> sqrtn() const;

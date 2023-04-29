@@ -231,7 +231,7 @@ void MLPPTensor3::resize(const Size3i &p_size) {
 	CRASH_COND_MSG(!_data, "Out of memory");
 }
 
-void MLPPTensor3::set_shape(const Size3i &p_size) {
+void MLPPTensor3::shape_set(const Size3i &p_size) {
 	int ds = data_size();
 	int new_data_size = p_size.x * p_size.y * p_size.z;
 
@@ -1437,7 +1437,7 @@ void MLPPTensor3::subb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B) {
 	}
 }
 
-void MLPPTensor3::element_wise_division(const Ref<MLPPTensor3> &B) {
+void MLPPTensor3::division_element_wise(const Ref<MLPPTensor3> &B) {
 	ERR_FAIL_COND(!B.is_valid());
 	ERR_FAIL_COND(_size != B->size());
 
@@ -1450,7 +1450,7 @@ void MLPPTensor3::element_wise_division(const Ref<MLPPTensor3> &B) {
 		c_ptr[i] /= b_ptr[i];
 	}
 }
-Ref<MLPPTensor3> MLPPTensor3::element_wise_divisionn(const Ref<MLPPTensor3> &B) const {
+Ref<MLPPTensor3> MLPPTensor3::division_element_wisen(const Ref<MLPPTensor3> &B) const {
 	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPTensor3>());
 	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPTensor3>());
 
@@ -1470,7 +1470,7 @@ Ref<MLPPTensor3> MLPPTensor3::element_wise_divisionn(const Ref<MLPPTensor3> &B) 
 
 	return C;
 }
-void MLPPTensor3::element_wise_divisionb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B) {
+void MLPPTensor3::division_element_wiseb(const Ref<MLPPTensor3> &A, const Ref<MLPPTensor3> &B) {
 	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
 	Size3i a_size = A->size();
 	ERR_FAIL_COND(a_size != B->size());
@@ -2278,7 +2278,7 @@ void MLPPTensor3::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "data"), "set_data", "get_data");
 
 	ClassDB::bind_method(D_METHOD("z_slice_add_pool_vector", "row"), &MLPPTensor3::z_slice_add_pool_vector);
-	ClassDB::bind_method(D_METHOD("z_add_slice_mlpp_vector", "row"), &MLPPTensor3::z_slice_add_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("z_slice_add_mlpp_vector", "row"), &MLPPTensor3::z_slice_add_mlpp_vector);
 	ClassDB::bind_method(D_METHOD("z_slice_add_mlpp_matrix", "matrix"), &MLPPTensor3::z_slice_add_mlpp_matrix);
 
 	ClassDB::bind_method(D_METHOD("z_slice_remove", "index"), &MLPPTensor3::z_slice_remove);
@@ -2298,7 +2298,7 @@ void MLPPTensor3::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("resize", "size"), &MLPPTensor3::resize);
 
-	ClassDB::bind_method(D_METHOD("set_shape", "size"), &MLPPTensor3::set_shape);
+	ClassDB::bind_method(D_METHOD("shape_set", "size"), &MLPPTensor3::shape_set);
 	ClassDB::bind_method(D_METHOD("calculate_index", "index_y", "index_x", "index_z"), &MLPPTensor3::calculate_index);
 	ClassDB::bind_method(D_METHOD("calculate_z_slice_index", "index_z"), &MLPPTensor3::calculate_z_slice_index);
 
@@ -2381,9 +2381,9 @@ void MLPPTensor3::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("hadamard_productn", "B"), &MLPPTensor3::hadamard_productn);
 	ClassDB::bind_method(D_METHOD("hadamard_productb", "A", "B"), &MLPPTensor3::hadamard_productb);
 
-	ClassDB::bind_method(D_METHOD("element_wise_division", "B"), &MLPPTensor3::element_wise_division);
-	ClassDB::bind_method(D_METHOD("element_wise_divisionn", "B"), &MLPPTensor3::element_wise_divisionn);
-	ClassDB::bind_method(D_METHOD("element_wise_divisionb", "A", "B"), &MLPPTensor3::element_wise_divisionb);
+	ClassDB::bind_method(D_METHOD("division_element_wise", "B"), &MLPPTensor3::division_element_wise);
+	ClassDB::bind_method(D_METHOD("division_element_wisen", "B"), &MLPPTensor3::division_element_wisen);
+	ClassDB::bind_method(D_METHOD("division_element_wiseb", "A", "B"), &MLPPTensor3::division_element_wiseb);
 
 	ClassDB::bind_method(D_METHOD("scalar_multiply", "scalar"), &MLPPTensor3::scalar_multiply);
 	ClassDB::bind_method(D_METHOD("scalar_multiplyn", "scalar"), &MLPPTensor3::scalar_multiplyn);

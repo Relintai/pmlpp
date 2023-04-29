@@ -121,9 +121,9 @@ public:
 	Ref<MLPPVector> hadamard_productn(const Ref<MLPPVector> &b) const;
 	void hadamard_productb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
-	void element_wise_division(const Ref<MLPPVector> &b);
-	Ref<MLPPVector> element_wise_divisionn(const Ref<MLPPVector> &b) const;
-	void element_wise_divisionb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	void division_element_wise(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> division_element_wisen(const Ref<MLPPVector> &b) const;
+	void division_element_wiseb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	void scalar_multiply(real_t scalar);
 	Ref<MLPPVector> scalar_multiplyn(real_t scalar) const;

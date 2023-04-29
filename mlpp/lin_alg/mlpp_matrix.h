@@ -148,9 +148,9 @@ public:
 	Ref<MLPPMatrix> kronecker_productn(const Ref<MLPPMatrix> &B) const;
 	void kronecker_productb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
-	void element_wise_division(const Ref<MLPPMatrix> &B);
-	Ref<MLPPMatrix> element_wise_divisionn(const Ref<MLPPMatrix> &B) const;
-	void element_wise_divisionb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+	void division_element_wise(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> division_element_wisen(const Ref<MLPPMatrix> &B) const;
+	void division_element_wiseb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	void transpose();
 	Ref<MLPPMatrix> transposen() const;

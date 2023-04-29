@@ -999,7 +999,7 @@ void MLPPMatrix::kronecker_productb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatr
 	}
 }
 
-void MLPPMatrix::element_wise_division(const Ref<MLPPMatrix> &B) {
+void MLPPMatrix::division_element_wise(const Ref<MLPPMatrix> &B) {
 	ERR_FAIL_COND(!B.is_valid());
 	ERR_FAIL_COND(_size != B->size());
 
@@ -1012,7 +1012,7 @@ void MLPPMatrix::element_wise_division(const Ref<MLPPMatrix> &B) {
 		c_ptr[i] /= b_ptr[i];
 	}
 }
-Ref<MLPPMatrix> MLPPMatrix::element_wise_divisionn(const Ref<MLPPMatrix> &B) const {
+Ref<MLPPMatrix> MLPPMatrix::division_element_wisen(const Ref<MLPPMatrix> &B) const {
 	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPMatrix>());
 	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPMatrix>());
 
@@ -1032,7 +1032,7 @@ Ref<MLPPMatrix> MLPPMatrix::element_wise_divisionn(const Ref<MLPPMatrix> &B) con
 
 	return C;
 }
-void MLPPMatrix::element_wise_divisionb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+void MLPPMatrix::division_element_wiseb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
 	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
 	Size2i a_size = A->size();
 	ERR_FAIL_COND(a_size != B->size());
@@ -3071,9 +3071,9 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("kronecker_productn", "B"), &MLPPMatrix::kronecker_productn);
 	ClassDB::bind_method(D_METHOD("kronecker_productb", "A", "B"), &MLPPMatrix::kronecker_productb);
 
-	ClassDB::bind_method(D_METHOD("element_wise_division", "B"), &MLPPMatrix::element_wise_division);
-	ClassDB::bind_method(D_METHOD("element_wise_divisionn", "B"), &MLPPMatrix::element_wise_divisionn);
-	ClassDB::bind_method(D_METHOD("element_wise_divisionb", "A", "B"), &MLPPMatrix::element_wise_divisionb);
+	ClassDB::bind_method(D_METHOD("division_element_wise", "B"), &MLPPMatrix::division_element_wise);
+	ClassDB::bind_method(D_METHOD("division_element_wisen", "B"), &MLPPMatrix::division_element_wisen);
+	ClassDB::bind_method(D_METHOD("division_element_wiseb", "A", "B"), &MLPPMatrix::division_element_wiseb);
 
 	ClassDB::bind_method(D_METHOD("transpose"), &MLPPMatrix::transpose);
 	ClassDB::bind_method(D_METHOD("transposen"), &MLPPMatrix::transposen);

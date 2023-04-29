@@ -201,20 +201,20 @@
 			<description>
 			</description>
 		</method>
-		<method name="element_wise_division">
+		<method name="division_element_wise">
 			<return type="void" />
 			<argument index="0" name="B" type="MLPPMatrix" />
 			<description>
 			</description>
 		</method>
-		<method name="element_wise_divisionb">
+		<method name="division_element_wiseb">
 			<return type="void" />
 			<argument index="0" name="A" type="MLPPMatrix" />
 			<argument index="1" name="B" type="MLPPMatrix" />
 			<description>
 			</description>
 		</method>
-		<method name="element_wise_divisionn" qualifiers="const">
+		<method name="division_element_wisen" qualifiers="const">
 			<return type="MLPPMatrix" />
 			<argument index="0" name="B" type="MLPPMatrix" />
 			<description>

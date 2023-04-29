@@ -193,7 +193,7 @@ Ref<MLPPMatrix> MLPPLinAlg::kronecker_productnm(const Ref<MLPPMatrix> &A, const 
 
 	return C;
 }
-Ref<MLPPMatrix> MLPPLinAlg::element_wise_divisionnvnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+Ref<MLPPMatrix> MLPPLinAlg::division_element_wisenvnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
 	ERR_FAIL_COND_V(!A.is_valid() || !B.is_valid(), Ref<MLPPMatrix>());
 	Size2i a_size = A->size();
 	ERR_FAIL_COND_V(a_size != B->size(), Ref<MLPPMatrix>());
@@ -1095,7 +1095,7 @@ void MLPPLinAlg::hadamard_productv(const Ref<MLPPVector> &a, const Ref<MLPPVecto
 	}
 }
 
-Ref<MLPPVector> MLPPLinAlg::element_wise_divisionnv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+Ref<MLPPVector> MLPPLinAlg::division_element_wisenv(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
 	ERR_FAIL_COND_V(!a.is_valid() || !b.is_valid(), Ref<MLPPVector>());
 
 	Ref<MLPPVector> out;
@@ -1783,12 +1783,12 @@ Vector<Ref<MLPPMatrix>> MLPPLinAlg::additionnvt(const Vector<Ref<MLPPMatrix>> &A
 	return res;
 }
 
-Vector<Ref<MLPPMatrix>> MLPPLinAlg::element_wise_divisionnvnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::division_element_wisenvnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
 	Vector<Ref<MLPPMatrix>> res;
 	res.resize(A.size());
 
 	for (int i = 0; i < A.size(); i++) {
-		res.write[i] = element_wise_divisionnvnm(A[i], B[i]);
+		res.write[i] = division_element_wisenvnm(A[i], B[i]);
 	}
 
 	return res;

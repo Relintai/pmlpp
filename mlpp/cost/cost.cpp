@@ -250,15 +250,15 @@ real_t MLPPCost::log_lossm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &
 Ref<MLPPVector> MLPPCost::log_loss_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
 	MLPPLinAlg alg;
 	return alg.additionnv(
-			alg.scalar_multiplynv(-1, alg.element_wise_divisionnv(y, y_hat)),
-			alg.element_wise_divisionnv(alg.scalar_multiplynv(-1, alg.scalar_addnv(-1, y)), alg.scalar_multiplynv(-1, alg.scalar_addnv(-1, y_hat))));
+			alg.scalar_multiplynv(-1, alg.division_element_wisenv(y, y_hat)),
+			alg.division_element_wisenv(alg.scalar_multiplynv(-1, alg.scalar_addnv(-1, y)), alg.scalar_multiplynv(-1, alg.scalar_addnv(-1, y_hat))));
 }
 
 Ref<MLPPMatrix> MLPPCost::log_loss_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
 	MLPPLinAlg alg;
 	return alg.additionnm(
-			alg.scalar_multiplynm(-1, alg.element_wise_divisionnvnm(y, y_hat)),
-			alg.element_wise_divisionnvnm(alg.scalar_multiplynm(-1, alg.scalar_addnm(-1, y)), alg.scalar_multiplynm(-1, alg.scalar_addnm(-1, y_hat))));
+			alg.scalar_multiplynm(-1, alg.division_element_wisenvnm(y, y_hat)),
+			alg.division_element_wisenvnm(alg.scalar_multiplynm(-1, alg.scalar_addnm(-1, y)), alg.scalar_multiplynm(-1, alg.scalar_addnm(-1, y_hat))));
 }
 
 real_t MLPPCost::cross_entropyv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
@@ -294,11 +294,11 @@ real_t MLPPCost::cross_entropym(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatr
 
 Ref<MLPPVector> MLPPCost::cross_entropy_derivv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
 	MLPPLinAlg alg;
-	return alg.scalar_multiplynv(-1, alg.element_wise_divisionnv(y, y_hat));
+	return alg.scalar_multiplynv(-1, alg.division_element_wisenv(y, y_hat));
 }
 Ref<MLPPMatrix> MLPPCost::cross_entropy_derivm(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
 	MLPPLinAlg alg;
-	return alg.scalar_multiplynm(-1, alg.element_wise_divisionnvnm(y, y_hat));
+	return alg.scalar_multiplynm(-1, alg.division_element_wisenvnm(y, y_hat));
 }
 
 real_t MLPPCost::huber_lossv(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y, real_t delta) {
