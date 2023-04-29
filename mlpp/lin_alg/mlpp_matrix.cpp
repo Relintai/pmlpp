@@ -1876,6 +1876,59 @@ void MLPPMatrix::maxb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
 	}
 }
 
+void MLPPMatrix::min(const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND(!B.is_valid());
+	ERR_FAIL_COND(_size != B->size());
+
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] = MIN(c_ptr[i], b_ptr[i]);
+	}
+}
+Ref<MLPPMatrix> MLPPMatrix::minn(const Ref<MLPPMatrix> &B) const {
+	ERR_FAIL_COND_V(!B.is_valid(), Ref<MLPPMatrix>());
+	ERR_FAIL_COND_V(_size != B->size(), Ref<MLPPMatrix>());
+
+	Ref<MLPPMatrix> C;
+	C.instance();
+	C->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = C->ptrw();
+
+	int ds = data_size();
+
+	for (int i = 0; i < ds; ++i) {
+		c_ptr[i] = MIN(a_ptr[i], b_ptr[i]);
+	}
+
+	return C;
+}
+void MLPPMatrix::minb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
+	ERR_FAIL_COND(!A.is_valid() || !B.is_valid());
+	Size2i a_size = A->size();
+	ERR_FAIL_COND(a_size != B->size());
+
+	if (_size != a_size) {
+		resize(a_size);
+	}
+
+	const real_t *a_ptr = A->ptr();
+	const real_t *b_ptr = B->ptr();
+	real_t *c_ptr = ptrw();
+
+	int data_size = A->data_size();
+
+	for (int i = 0; i < data_size; ++i) {
+		c_ptr[i] = MIN(a_ptr[i], b_ptr[i]);
+	}
+}
+
 /*
 real_t MLPPMatrix::max(std::vector<std::vector<real_t>> A) {
 	return max(flatten(A));
@@ -3149,6 +3202,10 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("max", "B"), &MLPPMatrix::max);
 	ClassDB::bind_method(D_METHOD("maxn", "B"), &MLPPMatrix::maxn);
 	ClassDB::bind_method(D_METHOD("maxb", "A", "B"), &MLPPMatrix::maxb);
+
+	ClassDB::bind_method(D_METHOD("min", "B"), &MLPPMatrix::min);
+	ClassDB::bind_method(D_METHOD("minn", "B"), &MLPPMatrix::minn);
+	ClassDB::bind_method(D_METHOD("minb", "A", "B"), &MLPPMatrix::minb);
 
 	ClassDB::bind_method(D_METHOD("identity"), &MLPPMatrix::identity);
 	ClassDB::bind_method(D_METHOD("identityn"), &MLPPMatrix::identityn);

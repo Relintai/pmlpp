@@ -233,6 +233,10 @@ public:
 	Ref<MLPPMatrix> maxn(const Ref<MLPPMatrix> &B) const;
 	void maxb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
+	void min(const Ref<MLPPMatrix> &B);
+	Ref<MLPPMatrix> minn(const Ref<MLPPMatrix> &B) const;
+	void minb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
+
 	//real_t max(std::vector<std::vector<real_t>> A);
 	//real_t min(std::vector<std::vector<real_t>> A);
 
