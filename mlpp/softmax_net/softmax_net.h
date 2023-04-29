@@ -9,48 +9,68 @@
 
 #include "core/math/math_defs.h"
 
-#include "core/object/reference.h"
+#include "core/object/resource.h"
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"
 
 #include "../regularization/reg.h"
 
-class MLPPSoftmaxNet : public Reference {
-	GDCLASS(MLPPSoftmaxNet, Reference);
+class MLPPSoftmaxNet : public Resource {
+	GDCLASS(MLPPSoftmaxNet, Resource);
 
 public:
-	/*
-	Ref<MLPPMatrix> get_input_set();
+	Ref<MLPPMatrix> get_input_set() const;
 	void set_input_set(const Ref<MLPPMatrix> &val);
 
-	Ref<MLPPMatrix> get_output_set();
+	Ref<MLPPMatrix> get_output_set() const;
 	void set_output_set(const Ref<MLPPMatrix> &val);
 
-	MLPPReg::RegularizationType get_reg();
+	int get_n_hidden() const;
+	void set_n_hidden(const int val);
+
+	MLPPReg::RegularizationType get_reg() const;
 	void set_reg(const MLPPReg::RegularizationType val);
 
-	real_t get_lambda();
+	real_t get_lambda() const;
 	void set_lambda(const real_t val);
 
-	real_t get_alpha();
+	real_t get_alpha() const;
 	void set_alpha(const real_t val);
-	*/
+
+	Ref<MLPPMatrix> data_y_hat_get() const;
+	void data_y_hat_set(const Ref<MLPPMatrix> &val);
+
+	Ref<MLPPMatrix> data_weights1_get() const;
+	void data_weights1_set(const Ref<MLPPMatrix> &val);
+
+	Ref<MLPPMatrix> data_weights2_get() const;
+	void data_weights2_set(const Ref<MLPPMatrix> &val);
+
+	Ref<MLPPVector> data_bias1_get() const;
+	void data_bias1_set(const Ref<MLPPVector> &val);
+
+	Ref<MLPPVector> data_bias2_get() const;
+	void data_bias2_set(const Ref<MLPPVector> &val);
+
+	Ref<MLPPMatrix> data_z2_get() const;
+	void data_z2_set(const Ref<MLPPMatrix> &val);
+
+	Ref<MLPPMatrix> data_a2_get() const;
+	void data_a2_set(const Ref<MLPPMatrix> &val);
 
 	Ref<MLPPVector> model_test(const Ref<MLPPVector> &x);
 	Ref<MLPPMatrix> model_set_test(const Ref<MLPPMatrix> &X);
 
-	void gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
-	void sgd(real_t learning_rate, int max_epoch, bool ui = false);
-	void mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui = false);
+	void train_gradient_descent(real_t learning_rate, int max_epoch, bool ui = false);
+	void train_sgd(real_t learning_rate, int max_epoch, bool ui = false);
+	void train_mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui = false);
 
 	real_t score();
 
-	void save(const String &file_name);
-
 	Ref<MLPPMatrix> get_embeddings(); // This class is used (mostly) for word2Vec. This function returns our embeddings.
 
-	bool is_initialized();
+	bool needs_init() const;
 	void initialize();
 
 	MLPPSoftmaxNet(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, int p_n_hidden, MLPPReg::RegularizationType p_reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t p_lambda = 0.5, real_t p_alpha = 0.5);
@@ -101,12 +121,6 @@ protected:
 
 	Ref<MLPPMatrix> _z2;
 	Ref<MLPPMatrix> _a2;
-
-	int _n;
-	int _k;
-	int _n_class;
-
-	bool _initialized;
 };
 
 #endif /* SoftmaxNet_hpp */

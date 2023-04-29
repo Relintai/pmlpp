@@ -16,62 +16,115 @@
 
 #include <random>
 
-/*
-Ref<MLPPMatrix> MLPPSoftmaxNet::get_input_set() {
+Ref<MLPPMatrix> MLPPSoftmaxNet::get_input_set() const {
 	return _input_set;
 }
 void MLPPSoftmaxNet::set_input_set(const Ref<MLPPMatrix> &val) {
 	_input_set = val;
-
-	_initialized = false;
 }
 
-Ref<MLPPMatrix> MLPPSoftmaxNet::get_output_set() {
+Ref<MLPPMatrix> MLPPSoftmaxNet::get_output_set() const {
 	return _output_set;
 }
 void MLPPSoftmaxNet::set_output_set(const Ref<MLPPMatrix> &val) {
 	_output_set = val;
-
-	_initialized = false;
 }
 
-MLPPReg::RegularizationType MLPPSoftmaxNet::get_reg() {
+int MLPPSoftmaxNet::get_n_hidden() const {
+	return _n_hidden;
+}
+void MLPPSoftmaxNet::set_n_hidden(const int val) {
+	_n_hidden = val;
+}
+
+MLPPReg::RegularizationType MLPPSoftmaxNet::get_reg() const {
 	return _reg;
 }
 void MLPPSoftmaxNet::set_reg(const MLPPReg::RegularizationType val) {
 	_reg = val;
-
-	_initialized = false;
 }
 
-real_t MLPPSoftmaxNet::get_lambda() {
+real_t MLPPSoftmaxNet::get_lambda() const {
 	return _lambda;
 }
 void MLPPSoftmaxNet::set_lambda(const real_t val) {
 	_lambda = val;
-
-	_initialized = false;
 }
 
-real_t MLPPSoftmaxNet::get_alpha() {
+real_t MLPPSoftmaxNet::get_alpha() const {
 	return _alpha;
 }
 void MLPPSoftmaxNet::set_alpha(const real_t val) {
 	_alpha = val;
-
-	_initialized = false;
 }
-*/
+
+Ref<MLPPMatrix> MLPPSoftmaxNet::data_y_hat_get() const {
+	return _y_hat;
+}
+void MLPPSoftmaxNet::data_y_hat_set(const Ref<MLPPMatrix> &val) {
+	_y_hat = val;
+}
+
+Ref<MLPPMatrix> MLPPSoftmaxNet::data_weights1_get() const {
+	return _weights1;
+}
+void MLPPSoftmaxNet::data_weights1_set(const Ref<MLPPMatrix> &val) {
+	_weights1 = val;
+}
+
+Ref<MLPPMatrix> MLPPSoftmaxNet::data_weights2_get() const {
+	return _weights2;
+}
+void MLPPSoftmaxNet::data_weights2_set(const Ref<MLPPMatrix> &val) {
+	_weights2 = val;
+}
+
+Ref<MLPPVector> MLPPSoftmaxNet::data_bias1_get() const {
+	return _bias1;
+}
+void MLPPSoftmaxNet::data_bias1_set(const Ref<MLPPVector> &val) {
+	_bias1 = val;
+}
+
+Ref<MLPPVector> MLPPSoftmaxNet::data_bias2_get() const {
+	return _bias2;
+}
+void MLPPSoftmaxNet::data_bias2_set(const Ref<MLPPVector> &val) {
+	_bias2 = val;
+}
+
+Ref<MLPPMatrix> MLPPSoftmaxNet::data_z2_get() const {
+	return _z2;
+}
+void MLPPSoftmaxNet::data_z2_set(const Ref<MLPPMatrix> &val) {
+	_z2 = val;
+}
+
+Ref<MLPPMatrix> MLPPSoftmaxNet::data_a2_get() const {
+	return _a2;
+}
+void MLPPSoftmaxNet::data_a2_set(const Ref<MLPPMatrix> &val) {
+	_a2 = val;
+}
 
 Ref<MLPPVector> MLPPSoftmaxNet::model_test(const Ref<MLPPVector> &x) {
+	ERR_FAIL_COND_V(!_input_set.is_valid() || !_output_set.is_valid(), Ref<MLPPVector>());
+	ERR_FAIL_COND_V(needs_init(), Ref<MLPPVector>());
+
 	return evaluatev(x);
 }
 
 Ref<MLPPMatrix> MLPPSoftmaxNet::model_set_test(const Ref<MLPPMatrix> &X) {
+	ERR_FAIL_COND_V(!_input_set.is_valid() || !_output_set.is_valid(), Ref<MLPPVector>());
+	ERR_FAIL_COND_V(needs_init(), Ref<MLPPVector>());
+
 	return evaluatem(X);
 }
 
-void MLPPSoftmaxNet::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
+void MLPPSoftmaxNet::train_gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	ERR_FAIL_COND(needs_init());
+
 	MLPPActivation avn;
 	MLPPReg regularization;
 
@@ -125,16 +178,21 @@ void MLPPSoftmaxNet::gradient_descent(real_t learning_rate, int max_epoch, bool 
 	}
 }
 
-void MLPPSoftmaxNet::sgd(real_t learning_rate, int max_epoch, bool ui) {
+void MLPPSoftmaxNet::train_sgd(real_t learning_rate, int max_epoch, bool ui) {
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	ERR_FAIL_COND(needs_init());
+
 	MLPPActivation avn;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
 	int epoch = 1;
 
+	int n = _input_set->size().y;
+
 	std::random_device rd;
 	std::default_random_engine generator(rd());
-	std::uniform_int_distribution<int> distribution(0, int(_n - 1));
+	std::uniform_int_distribution<int> distribution(0, int(n - 1));
 
 	Ref<MLPPVector> input_set_row_tmp;
 	input_set_row_tmp.instance();
@@ -209,14 +267,19 @@ void MLPPSoftmaxNet::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	forward_pass();
 }
 
-void MLPPSoftmaxNet::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui) {
+void MLPPSoftmaxNet::train_mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui) {
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	ERR_FAIL_COND(needs_init());
+
 	MLPPActivation avn;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
+	int n = _input_set->size().y;
+
 	// Creating the mini-batches
-	int n_mini_batch = _n / mini_batch_size;
+	int n_mini_batch = n / mini_batch_size;
 
 	MLPPUtilities::CreateMiniBatchMMBatch batches = MLPPUtilities::create_mini_batchesmm(_input_set, _output_set, n_mini_batch);
 
@@ -278,72 +341,117 @@ void MLPPSoftmaxNet::mbgd(real_t learning_rate, int max_epoch, int mini_batch_si
 }
 
 real_t MLPPSoftmaxNet::score() {
+	ERR_FAIL_COND_V(!_input_set.is_valid() || !_output_set.is_valid(), 0);
+	ERR_FAIL_COND_V(needs_init(), 0);
+
 	MLPPUtilities util;
 
 	return util.performance_mat(_y_hat, _output_set);
-}
-
-void MLPPSoftmaxNet::save(const String &file_name) {
-	MLPPUtilities util;
-
-	//util.saveParameters(fileName, _weights1, _bias1, false, 1);
-	//util.saveParameters(fileName, _weights2, _bias2, true, 2);
 }
 
 Ref<MLPPMatrix> MLPPSoftmaxNet::get_embeddings() {
 	return _weights1;
 }
 
-bool MLPPSoftmaxNet::is_initialized() {
-	return _initialized;
-}
-void MLPPSoftmaxNet::initialize() {
-	if (_initialized) {
-		return;
+bool MLPPSoftmaxNet::needs_init() const {
+	if (!_input_set.is_valid()) {
+		return true;
 	}
 
-	//ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	if (!_output_set.is_valid()) {
+		return true;
+	}
 
-	_initialized = true;
+	int n = _input_set->size().y;
+	int k = _input_set->size().x;
+	int n_class = _output_set->size().x;
+
+	if (_y_hat->size().y != n) {
+		return true;
+	}
+
+	if (_weights1->size() != Size2i(_n_hidden, k)) {
+		return true;
+	}
+
+	if (_weights2->size() != Size2i(n_class, _n_hidden)) {
+		return true;
+	}
+
+	if (_bias1->size() != _n_hidden) {
+		return true;
+	}
+
+	if (_bias2->size() != n_class) {
+		return true;
+	}
+
+	return false;
+}
+
+void MLPPSoftmaxNet::initialize() {
+	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
+	ERR_FAIL_COND(needs_init());
+
+	int n = _input_set->size().y;
+	int k = _input_set->size().x;
+	int n_class = _output_set->size().x;
+
+	_y_hat->resize(Size2i(0, n));
+
+	MLPPUtilities utils;
+
+	_weights1->resize(Size2i(_n_hidden, k));
+	utils.weight_initializationm(_weights1);
+
+	_weights2->resize(Size2i(n_class, _n_hidden));
+	utils.weight_initializationm(_weights2);
+
+	_bias1->resize(_n_hidden);
+	utils.bias_initializationv(_bias1);
+
+	_bias2->resize(n_class);
+	utils.bias_initializationv(_bias2);
 }
 
 MLPPSoftmaxNet::MLPPSoftmaxNet(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, int p_n_hidden, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
 	_input_set = p_input_set;
 	_output_set = p_output_set;
-	_n = p_input_set->size().y;
-	_k = p_input_set->size().x;
 	_n_hidden = p_n_hidden;
-	_n_class = p_output_set->size().x;
 	_reg = p_reg;
 	_lambda = p_lambda;
 	_alpha = p_alpha;
 
 	_y_hat.instance();
-	_y_hat->resize(Size2i(0, _n));
-
-	MLPPUtilities utils;
 
 	_weights1.instance();
-	_weights1->resize(Size2i(_n_hidden, _k));
-	utils.weight_initializationm(_weights1);
-
 	_weights2.instance();
-	_weights2->resize(Size2i(_n_class, _n_hidden));
-	utils.weight_initializationm(_weights2);
 
 	_bias1.instance();
-	_bias1->resize(_n_hidden);
-	utils.bias_initializationv(_bias1);
-
 	_bias2.instance();
-	_bias2->resize(_n_class);
-	utils.bias_initializationv(_bias2);
 
-	_initialized = true;
+	_z2.instance();
+	_a2.instance();
+
+	initialize();
 }
 
 MLPPSoftmaxNet::MLPPSoftmaxNet() {
-	_initialized = false;
+	_n_hidden = 0;
+	_reg = MLPPReg::REGULARIZATION_TYPE_NONE;
+	_lambda = 0;
+	_alpha = 0;
+
+	_y_hat.instance();
+
+	_weights1.instance();
+	_weights2.instance();
+
+	_bias1.instance();
+	_bias2.instance();
+
+	_z2.instance();
+	_a2.instance();
 }
 MLPPSoftmaxNet::~MLPPSoftmaxNet() {
 }
@@ -406,7 +514,6 @@ void MLPPSoftmaxNet::forward_pass() {
 }
 
 void MLPPSoftmaxNet::_bind_methods() {
-	/*
 	ClassDB::bind_method(D_METHOD("get_input_set"), &MLPPSoftmaxNet::get_input_set);
 	ClassDB::bind_method(D_METHOD("set_input_set", "val"), &MLPPSoftmaxNet::set_input_set);
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "input_set", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "set_input_set", "get_input_set");
@@ -427,18 +534,46 @@ void MLPPSoftmaxNet::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_alpha", "val"), &MLPPSoftmaxNet::set_alpha);
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "alpha"), "set_alpha", "get_alpha");
 
+	ADD_GROUP("Data", "data");
+	ClassDB::bind_method(D_METHOD("data_y_hat_get"), &MLPPSoftmaxNet::data_y_hat_get);
+	ClassDB::bind_method(D_METHOD("data_y_hat_set", "val"), &MLPPSoftmaxNet::data_y_hat_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_y_hat", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "data_y_hat_set", "data_y_hat_get");
+
+	ClassDB::bind_method(D_METHOD("data_weights1_get"), &MLPPSoftmaxNet::data_weights1_get);
+	ClassDB::bind_method(D_METHOD("data_weights1_set", "val"), &MLPPSoftmaxNet::data_weights1_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_weights1", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "data_weights1_set", "data_weights1_get");
+
+	ClassDB::bind_method(D_METHOD("data_weights2_get"), &MLPPSoftmaxNet::data_weights2_get);
+	ClassDB::bind_method(D_METHOD("data_weights2_set", "val"), &MLPPSoftmaxNet::data_weights2_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_weights2", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "data_weights2_set", "data_weights2_get");
+
+	ClassDB::bind_method(D_METHOD("data_bias1_get"), &MLPPSoftmaxNet::data_bias1_get);
+	ClassDB::bind_method(D_METHOD("data_bias1_set", "val"), &MLPPSoftmaxNet::data_bias1_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_bias1", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_bias1_set", "data_bias1_get");
+
+	ClassDB::bind_method(D_METHOD("data_bias2_get"), &MLPPSoftmaxNet::data_bias2_get);
+	ClassDB::bind_method(D_METHOD("data_bias2_set", "val"), &MLPPSoftmaxNet::data_bias2_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_bias2", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_bias2_set", "data_bias2_get");
+
+	ClassDB::bind_method(D_METHOD("data_z2_get"), &MLPPSoftmaxNet::data_z2_get);
+	ClassDB::bind_method(D_METHOD("data_z2_set", "val"), &MLPPSoftmaxNet::data_z2_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_z2", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "data_z2_set", "data_z2_get");
+
+	ClassDB::bind_method(D_METHOD("data_a2_get"), &MLPPSoftmaxNet::data_a2_get);
+	ClassDB::bind_method(D_METHOD("data_a2_set", "val"), &MLPPSoftmaxNet::data_a2_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_a2", PROPERTY_HINT_RESOURCE_TYPE, "MLPPMatrix"), "data_a2_set", "data_a2_get");
+
 	ClassDB::bind_method(D_METHOD("model_test", "x"), &MLPPSoftmaxNet::model_test);
 	ClassDB::bind_method(D_METHOD("model_set_test", "X"), &MLPPSoftmaxNet::model_set_test);
 
-	ClassDB::bind_method(D_METHOD("gradient_descent", "learning_rate", "max_epoch", "ui"), &MLPPSoftmaxNet::gradient_descent, false);
-	ClassDB::bind_method(D_METHOD("sgd", "learning_rate", "max_epoch", "ui"), &MLPPSoftmaxNet::sgd, false);
-	ClassDB::bind_method(D_METHOD("mbgd", "learning_rate", "max_epoch", "mini_batch_size", "ui"), &MLPPSoftmaxNet::mbgd, false);
+	ClassDB::bind_method(D_METHOD("train_gradient_descent", "learning_rate", "max_epoch", "ui"), &MLPPSoftmaxNet::train_gradient_descent, false);
+	ClassDB::bind_method(D_METHOD("train_sgd", "learning_rate", "max_epoch", "ui"), &MLPPSoftmaxNet::train_sgd, false);
+	ClassDB::bind_method(D_METHOD("train_mbgd", "learning_rate", "max_epoch", "mini_batch_size", "ui"), &MLPPSoftmaxNet::train_mbgd, false);
 
 	ClassDB::bind_method(D_METHOD("score"), &MLPPSoftmaxNet::score);
 
-	ClassDB::bind_method(D_METHOD("save", "file_name"), &MLPPSoftmaxNet::save);
+	ClassDB::bind_method(D_METHOD("get_embeddings"), &MLPPSoftmaxNet::get_embeddings);
 
-	ClassDB::bind_method(D_METHOD("is_initialized"), &MLPPSoftmaxNet::is_initialized);
+	ClassDB::bind_method(D_METHOD("needs_init"), &MLPPSoftmaxNet::needs_init);
 	ClassDB::bind_method(D_METHOD("initialize"), &MLPPSoftmaxNet::initialize);
-	*/
 }

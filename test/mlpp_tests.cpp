@@ -415,7 +415,7 @@ void MLPPTests::test_soft_max_network(bool ui) {
 	Ref<MLPPDataComplex> dt = data.load_wine(_wine_data_path);
 
 	MLPPSoftmaxNet model(dt->get_input(), dt->get_output(), 1);
-	model.gradient_descent(0.01, 100000, ui);
+	model.train_gradient_descent(0.01, 100000, ui);
 	PLOG_MSG(model.model_set_test(dt->get_input())->to_string());
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
