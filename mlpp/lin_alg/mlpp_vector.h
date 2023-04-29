@@ -189,9 +189,13 @@ public:
 	Ref<MLPPVector> cosn() const;
 	void cosb(const Ref<MLPPVector> &a);
 
-	void maxv(const Ref<MLPPVector> &b);
-	Ref<MLPPVector> maxvn(const Ref<MLPPVector> &b) const;
-	void maxvb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+	void max(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> maxn(const Ref<MLPPVector> &b) const;
+	void maxb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
+
+	void min(const Ref<MLPPVector> &b);
+	Ref<MLPPVector> minn(const Ref<MLPPVector> &b) const;
+	void minb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	real_t max_element() const;
 	int max_element_index() const;

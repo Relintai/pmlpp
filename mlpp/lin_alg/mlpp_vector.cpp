@@ -997,7 +997,7 @@ void MLPPVector::cosb(const Ref<MLPPVector> &a) {
 	}
 }
 
-void MLPPVector::maxv(const Ref<MLPPVector> &b) {
+void MLPPVector::max(const Ref<MLPPVector> &b) {
 	ERR_FAIL_COND(!b.is_valid());
 	ERR_FAIL_COND(_size != b->size());
 
@@ -1016,7 +1016,7 @@ void MLPPVector::maxv(const Ref<MLPPVector> &b) {
 		}
 	}
 }
-Ref<MLPPVector> MLPPVector::maxvn(const Ref<MLPPVector> &b) const {
+Ref<MLPPVector> MLPPVector::maxn(const Ref<MLPPVector> &b) const {
 	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
 	ERR_FAIL_COND_V(_size != b->size(), Ref<MLPPVector>());
 
@@ -1041,7 +1041,7 @@ Ref<MLPPVector> MLPPVector::maxvn(const Ref<MLPPVector> &b) const {
 
 	return out;
 }
-void MLPPVector::maxvb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+void MLPPVector::maxb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
 	ERR_FAIL_COND(!a.is_valid() || !b.is_valid());
 
 	int s = a->size();
@@ -1061,6 +1061,77 @@ void MLPPVector::maxvb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
 		real_t bb_i = b_ptr[i];
 
 		if (aa_i > bb_i) {
+			out_ptr[i] = aa_i;
+		} else {
+			out_ptr[i] = bb_i;
+		}
+	}
+}
+
+void MLPPVector::min(const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!b.is_valid());
+	ERR_FAIL_COND(_size != b->size());
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < _size; ++i) {
+		real_t aa_i = a_ptr[i];
+		real_t bb_i = b_ptr[i];
+
+		if (aa_i < bb_i) {
+			out_ptr[i] = aa_i;
+		} else {
+			out_ptr[i] = bb_i;
+		}
+	}
+}
+Ref<MLPPVector> MLPPVector::minn(const Ref<MLPPVector> &b) const {
+	ERR_FAIL_COND_V(!b.is_valid(), Ref<MLPPVector>());
+	ERR_FAIL_COND_V(_size != b->size(), Ref<MLPPVector>());
+
+	Ref<MLPPVector> out;
+	out.instance();
+	out->resize(_size);
+
+	const real_t *a_ptr = ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = out->ptrw();
+
+	for (int i = 0; i < _size; ++i) {
+		real_t aa_i = a_ptr[i];
+		real_t bb_i = b_ptr[i];
+
+		if (aa_i < bb_i) {
+			out_ptr[i] = aa_i;
+		} else {
+			out_ptr[i] = bb_i;
+		}
+	}
+
+	return out;
+}
+void MLPPVector::minb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	ERR_FAIL_COND(!a.is_valid() || !b.is_valid());
+
+	int s = a->size();
+
+	ERR_FAIL_COND(s != b->size());
+
+	if (unlikely(size() != s)) {
+		resize(s);
+	}
+
+	const real_t *a_ptr = a->ptr();
+	const real_t *b_ptr = b->ptr();
+	real_t *out_ptr = ptrw();
+
+	for (int i = 0; i < s; ++i) {
+		real_t aa_i = a_ptr[i];
+		real_t bb_i = b_ptr[i];
+
+		if (aa_i < bb_i) {
 			out_ptr[i] = aa_i;
 		} else {
 			out_ptr[i] = bb_i;
@@ -1497,9 +1568,13 @@ void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("cosn"), &MLPPVector::cosn);
 	ClassDB::bind_method(D_METHOD("cosb", "a"), &MLPPVector::cosb);
 
-	ClassDB::bind_method(D_METHOD("maxv", "b"), &MLPPVector::maxv);
-	ClassDB::bind_method(D_METHOD("maxvn", "b"), &MLPPVector::maxvn);
-	ClassDB::bind_method(D_METHOD("maxvb", "a", "b"), &MLPPVector::maxvb);
+	ClassDB::bind_method(D_METHOD("max", "b"), &MLPPVector::max);
+	ClassDB::bind_method(D_METHOD("maxn", "b"), &MLPPVector::maxn);
+	ClassDB::bind_method(D_METHOD("maxb", "a", "b"), &MLPPVector::maxb);
+
+	ClassDB::bind_method(D_METHOD("min", "b"), &MLPPVector::min);
+	ClassDB::bind_method(D_METHOD("minn", "b"), &MLPPVector::minn);
+	ClassDB::bind_method(D_METHOD("minb", "a", "b"), &MLPPVector::minb);
 
 	ClassDB::bind_method(D_METHOD("max_element"), &MLPPVector::max_element);
 	ClassDB::bind_method(D_METHOD("max_element_index"), &MLPPVector::max_element_index);
