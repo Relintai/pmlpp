@@ -565,7 +565,7 @@ real_t MLPPCost::dual_form_svm(const Ref<MLPPVector> &alpha, const Ref<MLPPMatri
 
 	Ref<MLPPMatrix> alpha_m_res = alg.matmultnm(alg.matmultnm(alpha_m, Q), alg.transposenm(alpha_m));
 
-	real_t alphaQ = alpha_m_res->get_element(0, 0);
+	real_t alphaQ = alpha_m_res->element_get(0, 0);
 	Ref<MLPPVector> one = alg.onevecnv(alpha->size());
 
 	return -alg.dotnv(one, alpha) + 0.5 * alphaQ;

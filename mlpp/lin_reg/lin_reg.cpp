@@ -182,15 +182,15 @@ void MLPPLinReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 		int output_index = distribution(generator);
 
 		_input_set->get_row_into_mlpp_vector(output_index, input_set_row_tmp);
-		real_t output_set_element = _output_set->get_element(output_index);
-		output_set_row_tmp->set_element(0, output_set_element);
+		real_t output_element_set = _output_set->element_get(output_index);
+		output_set_row_tmp->element_set(0, output_element_set);
 
 		real_t y_hat = evaluatev(input_set_row_tmp);
-		y_hat_tmp->set_element(0, output_set_element);
+		y_hat_tmp->element_set(0, output_element_set);
 
 		cost_prev = cost(y_hat_tmp, output_set_row_tmp);
 
-		real_t error = y_hat - output_set_element;
+		real_t error = y_hat - output_element_set;
 
 		// Weight updation
 		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * error, input_set_row_tmp));
@@ -678,14 +678,14 @@ void MLPPLinReg::normal_equation() {
 	for (int i = 0; i < input_set_t->size().y; i++) {
 		input_set_t->get_row_into_mlpp_vector(i, input_set_t_row_tmp);
 
-		x_means->set_element(i, stat.meanv(input_set_t_row_tmp));
+		x_means->element_set(i, stat.meanv(input_set_t_row_tmp));
 	}
 
 	Ref<MLPPVector> temp;
 	//temp.resize(_k);
 	temp = alg.mat_vec_multnv(alg.inversenm(alg.matmultnm(alg.transposenm(_input_set), _input_set)), alg.mat_vec_multnv(alg.transposenm(_input_set), _output_set));
 
-	ERR_FAIL_COND_MSG(Math::is_nan(temp->get_element(0)), "ERR: Resulting matrix was noninvertible/degenerate, and so the normal equation could not be performed. Try utilizing gradient descent.");
+	ERR_FAIL_COND_MSG(Math::is_nan(temp->element_get(0)), "ERR: Resulting matrix was noninvertible/degenerate, and so the normal equation could not be performed. Try utilizing gradient descent.");
 
 	if (_reg == MLPPReg::REGULARIZATION_TYPE_RIDGE) {
 		_weights = alg.mat_vec_multnv(alg.inversenm(alg.additionnm(alg.matmultnm(alg.transposenm(_input_set), _input_set), alg.scalar_multiplynm(_lambda, alg.identitym(_k)))), alg.mat_vec_multnv(alg.transposenm(_input_set), _output_set));

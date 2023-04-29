@@ -1285,7 +1285,7 @@ Ref<MLPPMatrix> MLPPData::mean_centering(const Ref<MLPPMatrix> &p_X) {
 		real_t mean_i = stat.meanv(x_row_tmp);
 
 		for (int j = 0; j < x_size.x; ++j) {
-			X->set_element(i, j, p_X->get_element(i, j) - mean_i);
+			X->element_set(i, j, p_X->element_get(i, j) - mean_i);
 		}
 	}
 
@@ -1306,9 +1306,9 @@ Ref<MLPPMatrix> MLPPData::one_hot_rep(const Ref<MLPPVector> &temp_output_set, in
 	for (int i = 0; i < temp_output_set_size; ++i) {
 		for (int j = 0; j <= n_class - 1; ++j) {
 			if (static_cast<int>(temp_output_set_ptr[i]) == j) {
-				output_set->set_element(i, j, 1);
+				output_set->element_set(i, j, 1);
 			} else {
-				output_set->set_element(i, j, 0);
+				output_set->element_set(i, j, 0);
 			}
 		}
 	}

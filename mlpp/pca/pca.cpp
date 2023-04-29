@@ -37,7 +37,7 @@ Ref<MLPPMatrix> MLPPPCA::principal_components() {
 
 	for (int i = 0; i < _k; ++i) {
 		for (int j = 0; j < svr_res_u_size.y; ++j) {
-			_u_reduce->set_element(j, i, svr_res.U->get_element(j, i));
+			_u_reduce->element_set(j, i, svr_res.U->element_get(j, i));
 		}
 	}
 

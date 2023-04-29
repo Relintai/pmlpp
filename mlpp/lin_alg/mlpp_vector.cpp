@@ -1249,7 +1249,7 @@ Ref<MLPPMatrix> MLPPVector::outer_product(const Ref<MLPPVector> &b) const {
 		real_t curr_a = a_ptr[i];
 
 		for (int j = 0; j < sm.x; ++j) {
-			C->set_element(i, j, curr_a * b_ptr[j]);
+			C->element_set(i, j, curr_a * b_ptr[j]);
 		}
 	}
 
@@ -1373,8 +1373,8 @@ void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("size"), &MLPPVector::size);
 	ClassDB::bind_method(D_METHOD("resize", "size"), &MLPPVector::resize);
 
-	ClassDB::bind_method(D_METHOD("get_element", "index"), &MLPPVector::get_element);
-	ClassDB::bind_method(D_METHOD("set_element", "index", "val"), &MLPPVector::set_element);
+	ClassDB::bind_method(D_METHOD("element_get", "index"), &MLPPVector::element_get);
+	ClassDB::bind_method(D_METHOD("element_set", "index", "val"), &MLPPVector::element_set);
 
 	ClassDB::bind_method(D_METHOD("fill", "val"), &MLPPVector::fill);
 	ClassDB::bind_method(D_METHOD("insert", "pos", "val"), &MLPPVector::insert);

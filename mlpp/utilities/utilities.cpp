@@ -311,7 +311,7 @@ real_t MLPPUtilities::performance_vec(const Ref<MLPPVector> &y_hat, const Ref<ML
 
 	real_t correct = 0;
 	for (int i = 0; i < y_hat->size(); i++) {
-		if (Math::is_equal_approx(y_hat->get_element(i), output_set->get_element(i))) {
+		if (Math::is_equal_approx(y_hat->element_get(i), output_set->element_get(i))) {
 			correct++;
 		}
 	}
@@ -326,7 +326,7 @@ real_t MLPPUtilities::performance_mat(const Ref<MLPPMatrix> &y_hat, const Ref<ML
 		int sub_correct = 0;
 
 		for (int j = 0; j < y_hat->size().x; j++) {
-			if (Math::round(y_hat->get_element(i, j)) == y->get_element(i, j)) {
+			if (Math::round(y_hat->element_get(i, j)) == y->element_get(i, j)) {
 				sub_correct++;
 			}
 
@@ -342,7 +342,7 @@ real_t MLPPUtilities::performance_pool_int_array_vec(PoolIntArray y_hat, const R
 
 	real_t correct = 0;
 	for (int i = 0; i < y_hat.size(); i++) {
-		if (y_hat[i] == Math::round(output_set->get_element(i))) {
+		if (y_hat[i] == Math::round(output_set->element_get(i))) {
 			correct++;
 		}
 	}
@@ -663,7 +663,7 @@ MLPPUtilities::CreateMiniBatchMVBatch MLPPUtilities::create_mini_batchesmv(const
 			input_set->get_row_into_mlpp_vector(main_indx, row_tmp);
 			current_input_set->set_row_mlpp_vector(j, row_tmp);
 
-			current_output_set->set_element(j, output_set->get_element(j));
+			current_output_set->element_set(j, output_set->element_get(j));
 		}
 
 		ret.input_sets.push_back(current_input_set);

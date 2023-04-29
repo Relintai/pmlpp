@@ -151,19 +151,19 @@ void MLPPSVC::train_sgd(real_t learning_rate, int max_epoch, bool ui) {
 
 		_input_set->get_row_into_mlpp_vector(output_index, input_set_row_tmp);
 
-		real_t output_set_indx = _output_set->get_element(output_index);
-		output_set_row_tmp->set_element(0, output_set_indx);
+		real_t output_set_indx = _output_set->element_get(output_index);
+		output_set_row_tmp->element_set(0, output_set_indx);
 
 		//real_t y_hat = Evaluate(input_set_row_tmp);
 		real_t z = propagatev(input_set_row_tmp);
 
-		z_row_tmp->set_element(0, z);
+		z_row_tmp->element_set(0, z);
 
 		cost_prev = cost(z_row_tmp, output_set_row_tmp, _weights, _c);
 
 		Ref<MLPPVector> cost_deriv_vec = mlpp_cost.hinge_loss_derivwv(z_row_tmp, output_set_row_tmp, _c);
 
-		real_t cost_deriv = cost_deriv_vec->get_element(0);
+		real_t cost_deriv = cost_deriv_vec->element_get(0);
 
 		// Weight Updation
 		_weights->sub(input_set_row_tmp->scalar_multiplyn(learning_rate * cost_deriv));

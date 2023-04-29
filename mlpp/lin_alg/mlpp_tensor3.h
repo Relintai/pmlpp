@@ -23,7 +23,7 @@ class MLPPTensor3 : public Resource {
 public:
 	Array get_data();
 	void set_data(const Array &p_from);
-	
+
 	_FORCE_INLINE_ real_t *ptrw() {
 		return _data;
 	}
@@ -32,17 +32,17 @@ public:
 		return _data;
 	}
 
-	void add_z_slice(const Vector<real_t> &p_row);
-	void add_z_slice_pool_vector(const PoolRealArray &p_row);
-	void add_z_slice_mlpp_vector(const Ref<MLPPVector> &p_row);
-	void add_z_slice_mlpp_matrix(const Ref<MLPPMatrix> &p_matrix);
-	void remove_z_slice(int p_index);
+	void z_slice_add(const Vector<real_t> &p_row);
+	void z_slice_add_pool_vector(const PoolRealArray &p_row);
+	void z_slice_add_mlpp_vector(const Ref<MLPPVector> &p_row);
+	void z_slice_add_mlpp_matrix(const Ref<MLPPMatrix> &p_matrix);
+	void z_slice_remove(int p_index);
 
 	// Removes the item copying the last value into the position of the one to
 	// remove. It's generally faster than `remove`.
-	void remove_z_slice_unordered(int p_index);
+	void z_slice_remove_unordered(int p_index);
 
-	void swap_z_slice(int p_index_1, int p_index_2);
+	void z_slice_swap(int p_index_1, int p_index_2);
 
 	_FORCE_INLINE_ void clear() { resize(Size3i()); }
 	_FORCE_INLINE_ void reset() {
@@ -79,19 +79,19 @@ public:
 		return _data[p_index];
 	}
 
-	_FORCE_INLINE_ real_t get_element_index(int p_index) const {
+	_FORCE_INLINE_ real_t element_get_index(int p_index) const {
 		ERR_FAIL_INDEX_V(p_index, data_size(), 0);
 
 		return _data[p_index];
 	}
 
-	_FORCE_INLINE_ void set_element_index(int p_index, real_t p_val) {
+	_FORCE_INLINE_ void element_set_index(int p_index, real_t p_val) {
 		ERR_FAIL_INDEX(p_index, data_size());
 
 		_data[p_index] = p_val;
 	}
 
-	_FORCE_INLINE_ real_t get_element(int p_index_y, int p_index_x, int p_index_z) const {
+	_FORCE_INLINE_ real_t element_get(int p_index_y, int p_index_x, int p_index_z) const {
 		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, 0);
@@ -99,7 +99,7 @@ public:
 		return _data[p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z];
 	}
 
-	_FORCE_INLINE_ void set_element(int p_index_y, int p_index_x, int p_index_z, real_t p_val) {
+	_FORCE_INLINE_ void element_set(int p_index_y, int p_index_x, int p_index_z, real_t p_val) {
 		ERR_FAIL_INDEX(p_index_x, _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
 		ERR_FAIL_INDEX(p_index_z, _size.z);
@@ -107,39 +107,39 @@ public:
 		_data[p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z] = p_val;
 	}
 
-	Vector<real_t> get_row_vector(int p_index_y, int p_index_z) const;
-	PoolRealArray get_row_pool_vector(int p_index_y, int p_index_z) const;
-	Ref<MLPPVector> get_row_mlpp_vector(int p_index_y, int p_index_z) const;
-	void get_row_into_mlpp_vector(int p_index_y, int p_index_z, Ref<MLPPVector> target) const;
+	Vector<real_t> row_get_vector(int p_index_y, int p_index_z) const;
+	PoolRealArray row_get_pool_vector(int p_index_y, int p_index_z) const;
+	Ref<MLPPVector> row_get_mlpp_vector(int p_index_y, int p_index_z) const;
+	void row_get_into_mlpp_vector(int p_index_y, int p_index_z, Ref<MLPPVector> target) const;
 
-	void set_row_vector(int p_index_y, int p_index_z, const Vector<real_t> &p_row);
-	void set_row_pool_vector(int p_index_y, int p_index_z, const PoolRealArray &p_row);
-	void set_row_mlpp_vector(int p_index_y, int p_index_z, const Ref<MLPPVector> &p_row);
+	void row_set_vector(int p_index_y, int p_index_z, const Vector<real_t> &p_row);
+	void row_set_pool_vector(int p_index_y, int p_index_z, const PoolRealArray &p_row);
+	void row_set_mlpp_vector(int p_index_y, int p_index_z, const Ref<MLPPVector> &p_row);
 
-	Vector<real_t> get_z_slice_vector(int p_index_z) const;
-	PoolRealArray get_z_slice_pool_vector(int p_index_z) const;
-	Ref<MLPPVector> get_z_slice_mlpp_vector(int p_index_z) const;
-	void get_z_slice_into_mlpp_vector(int p_index_z, Ref<MLPPVector> target) const;
-	Ref<MLPPMatrix> get_z_slice_mlpp_matrix(int p_index_z) const;
-	void get_z_slice_into_mlpp_matrix(int p_index_z, Ref<MLPPMatrix> target) const;
+	Vector<real_t> z_slice_get_vector(int p_index_z) const;
+	PoolRealArray z_slice_get_pool_vector(int p_index_z) const;
+	Ref<MLPPVector> z_slice_get_mlpp_vector(int p_index_z) const;
+	void z_slice_get_into_mlpp_vector(int p_index_z, Ref<MLPPVector> target) const;
+	Ref<MLPPMatrix> z_slice_get_mlpp_matrix(int p_index_z) const;
+	void z_slice_get_into_mlpp_matrix(int p_index_z, Ref<MLPPMatrix> target) const;
 
-	void set_z_slice_vector(int p_index_z, const Vector<real_t> &p_row);
-	void set_z_slice_pool_vector(int p_index_z, const PoolRealArray &p_row);
-	void set_z_slice_mlpp_vector(int p_index_z, const Ref<MLPPVector> &p_row);
-	void set_z_slice_mlpp_matrix(int p_index_z, const Ref<MLPPMatrix> &p_mat);
+	void z_slice_set_vector(int p_index_z, const Vector<real_t> &p_row);
+	void z_slice_set_pool_vector(int p_index_z, const PoolRealArray &p_row);
+	void z_slice_set_mlpp_vector(int p_index_z, const Ref<MLPPVector> &p_row);
+	void z_slice_set_mlpp_matrix(int p_index_z, const Ref<MLPPMatrix> &p_mat);
 
 	//TODO resize() need to be reworked for add and remove to work, in any other direction than z
-	//void add_x_slice(const Ref<MLPPMatrix> &p_matrix);
-	//void remove_x_slice(int p_index);
-	void get_x_slice_into(int p_index_x, Ref<MLPPMatrix> target) const;
-	Ref<MLPPMatrix> get_x_slice(int p_index_x) const;
-	void set_x_slice(int p_index_x, const Ref<MLPPMatrix> &p_mat);
+	//void x_slice_add(const Ref<MLPPMatrix> &p_matrix);
+	//void x_slice_remove(int p_index);
+	void x_slice_get_into(int p_index_x, Ref<MLPPMatrix> target) const;
+	Ref<MLPPMatrix> x_slice_get(int p_index_x) const;
+	void x_slice_set(int p_index_x, const Ref<MLPPMatrix> &p_mat);
 
-	//void add_y_slice(const Ref<MLPPMatrix> &p_matrix);
-	//void remove_y_slice(int p_index);
-	void get_y_slice_into(int p_index_y, Ref<MLPPMatrix> target) const;
-	Ref<MLPPMatrix> get_y_slice(int p_index_y) const;
-	void set_y_slice(int p_index_y, const Ref<MLPPMatrix> &p_mat);
+	//void y_slice_add(const Ref<MLPPMatrix> &p_matrix);
+	//void y_slice_remove(int p_index);
+	void y_slice_get_into(int p_index_y, Ref<MLPPMatrix> target) const;
+	Ref<MLPPMatrix> y_slice_get(int p_index_y) const;
+	void y_slice_set(int p_index_y, const Ref<MLPPMatrix> &p_mat);
 
 public:
 	//Image api
@@ -159,28 +159,28 @@ public:
 		IMAGE_CHANNEL_FLAG_RGBA = IMAGE_CHANNEL_FLAG_R | IMAGE_CHANNEL_FLAG_G | IMAGE_CHANNEL_FLAG_B | IMAGE_CHANNEL_FLAG_A,
 	};
 
-	void add_z_slices_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
+	void z_slices_add_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
 
-	Ref<Image> get_z_slice_image(const int p_index_z) const;
-	Ref<Image> get_z_slices_image(const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
+	Ref<Image> z_slice_get_image(const int p_index_z) const;
+	Ref<Image> z_slices_get_image(const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
 
-	void get_z_slice_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
-	void get_z_slices_into_image(Ref<Image> p_target, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
+	void z_slice_get_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
+	void z_slices_get_into_image(Ref<Image> p_target, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1) const;
 
-	void set_z_slice_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel_flag = IMAGE_CHANNEL_FLAG_R);
-	void set_z_slices_image(const Ref<Image> &p_img, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);
+	void z_slice_set_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel_flag = IMAGE_CHANNEL_FLAG_R);
+	void z_slices_set_image(const Ref<Image> &p_img, const int p_index_r = -1, const int p_index_g = -1, const int p_index_b = -1, const int p_index_a = -1);
 
 	void set_from_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
 
-	//void add_x_slices_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
-	Ref<Image> get_x_slice_image(const int p_index_x) const;
-	void get_x_slice_into_image(Ref<Image> p_target, const int p_index_x, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
-	void set_x_slice_image(const Ref<Image> &p_img, const int p_index_x, const int p_image_channel_flag = IMAGE_CHANNEL_FLAG_R);
+	//void x_slices_add_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
+	Ref<Image> x_slice_get_image(const int p_index_x) const;
+	void x_slice_get_into_image(Ref<Image> p_target, const int p_index_x, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
+	void x_slice_set_image(const Ref<Image> &p_img, const int p_index_x, const int p_image_channel_flag = IMAGE_CHANNEL_FLAG_R);
 
-	//void add_y_slices_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
-	Ref<Image> get_y_slice_image(const int p_index_y) const;
-	void get_y_slice_into_image(Ref<Image> p_target, const int p_index_y, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
-	void set_y_slice_image(const Ref<Image> &p_img, const int p_index_y, const int p_image_channel_flag = IMAGE_CHANNEL_FLAG_R);
+	//void y_slices_add_image(const Ref<Image> &p_img, const int p_channels = IMAGE_CHANNEL_FLAG_RGBA);
+	Ref<Image> y_slice_get_image(const int p_index_y) const;
+	void y_slice_get_into_image(Ref<Image> p_target, const int p_index_y, const int p_target_channels = IMAGE_CHANNEL_FLAG_RGB) const;
+	void y_slice_set_image(const Ref<Image> &p_img, const int p_index_y, const int p_image_channel_flag = IMAGE_CHANNEL_FLAG_R);
 
 public:
 	//math api

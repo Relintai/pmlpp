@@ -58,7 +58,7 @@ Ref<MLPPVector> MLPPMultinomialNB::model_set_test(const Ref<MLPPMatrix> &X) {
 	for (int i = 0; i < x_size.y; i++) {
 		X->get_row_into_mlpp_vector(i, x_row_tmp);
 
-		y_hat->set_element(i, model_test(x_row_tmp));
+		y_hat->element_set(i, model_test(x_row_tmp));
 	}
 
 	return y_hat;
@@ -78,8 +78,8 @@ real_t MLPPMultinomialNB::model_test(const Ref<MLPPVector> &x) {
 
 	for (int j = 0; j < x_size; j++) {
 		for (int k = 0; k < vocab_size; k++) {
-			real_t x_j = x->get_element(j);
-			real_t vocab_k = _vocab->get_element(k);
+			real_t x_j = x->element_get(j);
+			real_t vocab_k = _vocab->element_get(k);
 
 			if (Math::is_equal_approx(x_j, vocab_k)) {
 				for (int p = _class_num - 1; p >= 0; p--) {
@@ -92,7 +92,7 @@ real_t MLPPMultinomialNB::model_test(const Ref<MLPPVector> &x) {
 	}
 
 	for (int i = 0; i < _priors->size(); i++) {
-		score[i] += std::log(_priors->get_element(i));
+		score[i] += std::log(_priors->element_get(i));
 	}
 
 	int max_index = 0;
@@ -159,7 +159,7 @@ void MLPPMultinomialNB::compute_theta() {
 	// Setting all values in the hasmap by default to 0.
 	for (int i = _class_num - 1; i >= 0; i--) {
 		for (int j = 0; j < vocab_size; j++) {
-			_theta.write[i][_vocab->get_element(j)] = 0;
+			_theta.write[i][_vocab->element_get(j)] = 0;
 		}
 	}
 
@@ -167,7 +167,7 @@ void MLPPMultinomialNB::compute_theta() {
 
 	for (int i = 0; i < input_set_size.y; i++) {
 		for (int j = 0; j < input_set_size.x; j++) {
-			_theta.write[_output_set->get_element(i)][_input_set->get_element(i, j)]++;
+			_theta.write[_output_set->element_get(i)][_input_set->element_get(i, j)]++;
 		}
 	}
 
@@ -175,7 +175,7 @@ void MLPPMultinomialNB::compute_theta() {
 		uint32_t theta_i_size = _theta[i].size();
 
 		for (uint32_t j = 0; j < theta_i_size; j++) {
-			_theta.write[i][j] /= _priors->get_element(i) * _y_hat->size();
+			_theta.write[i][j] /= _priors->element_get(i) * _y_hat->size();
 		}
 	}
 }
@@ -194,8 +194,8 @@ void MLPPMultinomialNB::evaluate() {
 		// Easy computation of priors, i.e. Pr(C_k)
 		_priors->resize(_class_num);
 		for (int ii = 0; ii < _output_set->size(); ii++) {
-			int osii = static_cast<int>(_output_set->get_element(ii));
-			_priors->set_element(osii, _priors->get_element(osii) + 1);
+			int osii = static_cast<int>(_output_set->element_get(ii));
+			_priors->element_set(osii, _priors->element_get(osii) + 1);
 		}
 
 		_priors = alg.scalar_multiplynv(real_t(1) / real_t(output_set_size), _priors);
@@ -205,8 +205,8 @@ void MLPPMultinomialNB::evaluate() {
 
 		for (int j = 0; j < input_set_size.y; j++) {
 			for (int k = 0; k < _vocab->size(); k++) {
-				real_t input_set_i_j = _input_set->get_element(i, j);
-				real_t vocab_k = _vocab->get_element(k);
+				real_t input_set_i_j = _input_set->element_get(i, j);
+				real_t vocab_k = _vocab->element_get(k);
 
 				if (Math::is_equal_approx(input_set_i_j, vocab_k)) {
 					real_t theta_i_k = _theta[i][vocab_k];
@@ -222,7 +222,7 @@ void MLPPMultinomialNB::evaluate() {
 		int priors_size = _priors->size();
 
 		for (int ii = 0; ii < priors_size; ii++) {
-			score[ii] += Math::log(_priors->get_element(ii));
+			score[ii] += Math::log(_priors->element_get(ii));
 			score[ii] = Math::exp(score[ii]);
 		}
 
@@ -240,7 +240,7 @@ void MLPPMultinomialNB::evaluate() {
 			}
 		}
 
-		_y_hat->set_element(i, max_index);
+		_y_hat->element_set(i, max_index);
 	}
 }
 

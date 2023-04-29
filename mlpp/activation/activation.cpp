@@ -1093,9 +1093,9 @@ Ref<MLPPMatrix> MLPPActivation::softmax_deriv_normv(const Ref<MLPPVector> &z) {
 	for (int i = 0; i < z_size; ++i) {
 		for (int j = 0; j < z_size; ++j) {
 			if (i == j) {
-				deriv->set_element(i, j, a_ptr[i] * (1 - a_ptr[i]));
+				deriv->element_set(i, j, a_ptr[i] * (1 - a_ptr[i]));
 			} else {
-				deriv->set_element(i, j, -a_ptr[i] * a_ptr[j]);
+				deriv->element_set(i, j, -a_ptr[i] * a_ptr[j]);
 			}
 		}
 	}
@@ -1161,9 +1161,9 @@ Ref<MLPPMatrix> MLPPActivation::softmax_deriv_derivv(const Ref<MLPPVector> &z) {
 	for (int i = 0; i < z_size; ++i) {
 		for (int j = 0; j < z_size; ++j) {
 			if (i == j) {
-				deriv->set_element(i, j, a_ptr[i] * (1 - a_ptr[i]));
+				deriv->element_set(i, j, a_ptr[i] * (1 - a_ptr[i]));
 			} else {
-				deriv->set_element(i, j, -a_ptr[i] * a_ptr[j]);
+				deriv->element_set(i, j, -a_ptr[i] * a_ptr[j]);
 			}
 		}
 	}

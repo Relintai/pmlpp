@@ -35,7 +35,7 @@ Vector<Vector<real_t>> MLPPOutlierFinder::model_set_test(const Ref<MLPPMatrix> &
 		real_t s_dev_v = stat.standard_deviationv(input_set_i_row_tmp);
 
 		for (int j = 0; j < input_set_size.x; ++j) {
-			real_t input_set_i_j = input_set->get_element(i, j);
+			real_t input_set_i_j = input_set->element_get(i, j);
 
 			real_t z = (input_set_i_j - meanv) / s_dev_v;
 
@@ -80,7 +80,7 @@ PoolVector2iArray MLPPOutlierFinder::model_set_test_indices(const Ref<MLPPMatrix
 		real_t s_dev_v = stat.standard_deviationv(input_set_i_row_tmp);
 
 		for (int j = 0; j < input_set_size.x; ++j) {
-			real_t z = (input_set->get_element(i, j) - meanv) / s_dev_v;
+			real_t z = (input_set->element_get(i, j) - meanv) / s_dev_v;
 
 			if (ABS(z) > _threshold) {
 				outliers.push_back(Vector2i(j, i));

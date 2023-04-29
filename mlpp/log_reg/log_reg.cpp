@@ -170,23 +170,23 @@ void MLPPLogReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	y_hat_tmp.instance();
 	y_hat_tmp->resize(1);
 
-	Ref<MLPPVector> output_set_element_tmp;
-	output_set_element_tmp.instance();
-	output_set_element_tmp->resize(1);
+	Ref<MLPPVector> output_element_set_tmp;
+	output_element_set_tmp.instance();
+	output_element_set_tmp->resize(1);
 
 	while (true) {
 		int output_index = distribution(generator);
 
 		_input_set->get_row_into_mlpp_vector(output_index, input_row_tmp);
-		real_t output_set_element = _output_set->get_element(output_index);
-		output_set_element_tmp->set_element(0, output_set_element);
+		real_t output_element_set = _output_set->element_get(output_index);
+		output_element_set_tmp->element_set(0, output_element_set);
 
 		real_t y_hat = evaluatev(input_row_tmp);
-		y_hat_tmp->set_element(0, y_hat);
+		y_hat_tmp->element_set(0, y_hat);
 
-		cost_prev = cost(y_hat_tmp, output_set_element_tmp);
+		cost_prev = cost(y_hat_tmp, output_element_set_tmp);
 
-		real_t error = y_hat - output_set_element;
+		real_t error = y_hat - output_element_set;
 
 		// Weight updation
 		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * error, input_row_tmp));
@@ -198,7 +198,7 @@ void MLPPLogReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 		y_hat = evaluatev(input_row_tmp);
 
 		if (ui) {
-			MLPPUtilities::cost_info(epoch, cost_prev, cost(y_hat_tmp, output_set_element_tmp));
+			MLPPUtilities::cost_info(epoch, cost_prev, cost(y_hat_tmp, output_element_set_tmp));
 			MLPPUtilities::print_ui_vb(_weights, _bias);
 		}
 

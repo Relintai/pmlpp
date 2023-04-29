@@ -50,18 +50,18 @@ void MLPPDualSVC::gradient_descent(real_t learning_rate, int max_epoch, bool ui)
 		real_t biasGradient = 0;
 		for (int i = 0; i < _alpha->size(); i++) {
 			real_t sum = 0;
-			if (_alpha->get_element(i) < _C && _alpha->get_element(i) > 0) {
+			if (_alpha->element_get(i) < _C && _alpha->element_get(i) > 0) {
 				for (int j = 0; j < _alpha->size(); j++) {
-					if (_alpha->get_element(j) > 0) {
+					if (_alpha->element_get(j) > 0) {
 						_input_set->get_row_into_mlpp_vector(i, input_set_i_row_tmp);
 						_input_set->get_row_into_mlpp_vector(j, input_set_j_row_tmp);
 
-						sum += _alpha->get_element(j) * _output_set->get_element(j) * alg.dotnv(input_set_j_row_tmp, input_set_i_row_tmp); // TO DO: DON'T forget to add non-linear kernelizations.
+						sum += _alpha->element_get(j) * _output_set->element_get(j) * alg.dotnv(input_set_j_row_tmp, input_set_i_row_tmp); // TO DO: DON'T forget to add non-linear kernelizations.
 					}
 				}
 			}
 
-			biasGradient = (1 - _output_set->get_element(i) * sum) / _output_set->get_element(i);
+			biasGradient = (1 - _output_set->element_get(i) * sum) / _output_set->element_get(i);
 
 			break;
 		}
@@ -215,9 +215,9 @@ real_t MLPPDualSVC::propagatev(const Ref<MLPPVector> &x) {
 	input_set_row_tmp->resize(_input_set->size().x);
 
 	for (int j = 0; j < _alpha->size(); j++) {
-		if (_alpha->get_element(j) != 0) {
+		if (_alpha->element_get(j) != 0) {
 			_input_set->get_row_into_mlpp_vector(j, input_set_row_tmp);
-			z += _alpha->get_element(j) * _output_set->get_element(j) * alg.dotnv(input_set_row_tmp, x); // TO DO: DON'T forget to add non-linear kernelizations.
+			z += _alpha->element_get(j) * _output_set->element_get(j) * alg.dotnv(input_set_row_tmp, x); // TO DO: DON'T forget to add non-linear kernelizations.
 		}
 	}
 	z += _bias;
@@ -248,17 +248,17 @@ Ref<MLPPVector> MLPPDualSVC::propagatem(const Ref<MLPPMatrix> &X) {
 		real_t sum = 0;
 
 		for (int j = 0; j < _alpha->size(); j++) {
-			if (_alpha->get_element(j) != 0) {
+			if (_alpha->element_get(j) != 0) {
 				_input_set->get_row_into_mlpp_vector(j, input_set_row_tmp);
 				X->get_row_into_mlpp_vector(i, x_row_tmp);
 
-				sum += _alpha->get_element(j) * _output_set->get_element(j) * alg.dotnv(input_set_row_tmp, x_row_tmp); // TO DO: DON'T forget to add non-linear kernelizations.
+				sum += _alpha->element_get(j) * _output_set->element_get(j) * alg.dotnv(input_set_row_tmp, x_row_tmp); // TO DO: DON'T forget to add non-linear kernelizations.
 			}
 		}
 
 		sum += _bias;
 
-		z->set_element(i, sum);
+		z->element_set(i, sum);
 	}
 	return z;
 }
@@ -272,10 +272,10 @@ void MLPPDualSVC::forward_pass() {
 
 void MLPPDualSVC::alpha_projection() {
 	for (int i = 0; i < _alpha->size(); i++) {
-		if (_alpha->get_element(i) > _C) {
-			_alpha->set_element(i, _C);
-		} else if (_alpha->get_element(i) < 0) {
-			_alpha->set_element(i, 0);
+		if (_alpha->element_get(i) > _C) {
+			_alpha->element_set(i, _C);
+		} else if (_alpha->element_get(i) < 0) {
+			_alpha->element_set(i, 0);
 		}
 	}
 }

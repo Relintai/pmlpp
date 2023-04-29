@@ -173,11 +173,11 @@ void MLPPMLP::sgd(real_t learning_rate, int max_epoch, bool UI) {
 		int output_Index = distribution(generator);
 
 		_input_set->get_row_into_mlpp_vector(output_Index, input_set_row_tmp);
-		real_t output_element = _output_set->get_element(output_Index);
-		output_set_row_tmp->set_element(0, output_element);
+		real_t output_element = _output_set->element_get(output_Index);
+		output_set_row_tmp->element_set(0, output_element);
 
 		real_t ly_hat = evaluatev(input_set_row_tmp);
-		y_hat_row_tmp->set_element(0, ly_hat);
+		y_hat_row_tmp->element_set(0, ly_hat);
 		propagatev(input_set_row_tmp, lz2, la2);
 		cost_prev = cost(y_hat_row_tmp, output_set_row_tmp);
 		real_t error = ly_hat - output_element;

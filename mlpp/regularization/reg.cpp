@@ -164,7 +164,7 @@ void MLPPReg::_bind_methods() {
 real_t MLPPReg::reg_deriv_termvr(const Ref<MLPPVector> &weights, real_t lambda, real_t alpha, MLPPReg::RegularizationType reg, int j) {
 	MLPPActivation act;
 
-	real_t wj = weights->get_element(j);
+	real_t wj = weights->element_get(j);
 
 	if (reg == REGULARIZATION_TYPE_RIDGE) {
 		return lambda * wj;
@@ -189,7 +189,7 @@ real_t MLPPReg::reg_deriv_termvr(const Ref<MLPPVector> &weights, real_t lambda, 
 real_t MLPPReg::reg_deriv_termmr(const Ref<MLPPMatrix> &weights, real_t lambda, real_t alpha, MLPPReg::RegularizationType reg, int i, int j) {
 	MLPPActivation act;
 
-	real_t wj = weights->get_element(i, j);
+	real_t wj = weights->element_get(i, j);
 
 	if (reg == REGULARIZATION_TYPE_RIDGE) {
 		return lambda * wj;

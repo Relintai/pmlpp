@@ -1524,7 +1524,7 @@ real_t MLPPMatrix::detb(const Ref<MLPPMatrix> &A, int d) const {
 	Recursion is performed unless and until we reach this base case,
 	such that we recieve a scalar as the result. */
 	if (d == 2) {
-		return A->get_element(0, 0) * A->get_element(1, 1) - A->get_element(0, 1) * A->get_element(1, 0);
+		return A->element_get(0, 0) * A->element_get(1, 1) - A->element_get(0, 1) * A->element_get(1, 0);
 	} else {
 		for (int i = 0; i < d; i++) {
 			int sub_i = 0;
@@ -1535,13 +1535,13 @@ real_t MLPPMatrix::detb(const Ref<MLPPMatrix> &A, int d) const {
 						continue;
 					}
 
-					B->set_element(sub_i, sub_j, A->get_element(j, k));
+					B->element_set(sub_i, sub_j, A->element_get(j, k));
 					sub_j++;
 				}
 				sub_i++;
 			}
 
-			deter += Math::pow(static_cast<real_t>(-1), static_cast<real_t>(i)) * A->get_element(0, i) * B->det(d - 1);
+			deter += Math::pow(static_cast<real_t>(-1), static_cast<real_t>(i)) * A->element_get(0, i) * B->det(d - 1);
 		}
 	}
 
@@ -1569,7 +1569,7 @@ Ref<MLPPMatrix> MLPPMatrix::cofactor(int n, int i, int j) const {
 	for (int row = 0; row < n; row++) {
 		for (int col = 0; col < n; col++) {
 			if (row != i && col != j) {
-				cof->set_element(sub_i, sub_j++, get_element(row, col));
+				cof->element_set(sub_i, sub_j++, element_get(row, col));
 
 				if (sub_j == n - 1) {
 					sub_j = 0;
@@ -1594,7 +1594,7 @@ void MLPPMatrix::cofactoro(int n, int i, int j, Ref<MLPPMatrix> out) const {
 	for (int row = 0; row < n; row++) {
 		for (int col = 0; col < n; col++) {
 			if (row != i && col != j) {
-				out->set_element(sub_i, sub_j++, get_element(row, col));
+				out->element_set(sub_i, sub_j++, element_get(row, col));
 
 				if (sub_j == n - 1) {
 					sub_j = 0;
@@ -1617,16 +1617,16 @@ Ref<MLPPMatrix> MLPPMatrix::adjoint() const {
 
 	// Checking for the case where the given N x N matrix is a scalar
 	if (_size.y == 1) {
-		adj->set_element(0, 0, 1);
+		adj->element_set(0, 0, 1);
 		return adj;
 	}
 
 	if (_size.y == 2) {
-		adj->set_element(0, 0, get_element(1, 1));
-		adj->set_element(1, 1, get_element(0, 0));
+		adj->element_set(0, 0, element_get(1, 1));
+		adj->element_set(1, 1, element_get(0, 0));
 
-		adj->set_element(0, 1, -get_element(0, 1));
-		adj->set_element(1, 0, -get_element(1, 0));
+		adj->element_set(0, 1, -element_get(0, 1));
+		adj->element_set(1, 0, -element_get(1, 0));
 
 		return adj;
 	}
@@ -1636,7 +1636,7 @@ Ref<MLPPMatrix> MLPPMatrix::adjoint() const {
 			Ref<MLPPMatrix> cof = cofactor(_size.y, i, j);
 			// 1 if even, -1 if odd
 			int sign = (i + j) % 2 == 0 ? 1 : -1;
-			adj->set_element(j, i, sign * cof->det(int(_size.y) - 1));
+			adj->element_set(j, i, sign * cof->det(int(_size.y) - 1));
 		}
 	}
 	return adj;
@@ -1654,16 +1654,16 @@ void MLPPMatrix::adjointo(Ref<MLPPMatrix> out) const {
 
 	// Checking for the case where the given N x N matrix is a scalar
 	if (_size.y == 1) {
-		out->set_element(0, 0, 1);
+		out->element_set(0, 0, 1);
 		return;
 	}
 
 	if (_size.y == 2) {
-		out->set_element(0, 0, get_element(1, 1));
-		out->set_element(1, 1, get_element(0, 0));
+		out->element_set(0, 0, element_get(1, 1));
+		out->element_set(1, 1, element_get(0, 0));
 
-		out->set_element(0, 1, -get_element(0, 1));
-		out->set_element(1, 0, -get_element(1, 0));
+		out->element_set(0, 1, -element_get(0, 1));
+		out->element_set(1, 0, -element_get(1, 0));
 
 		return;
 	}
@@ -1673,7 +1673,7 @@ void MLPPMatrix::adjointo(Ref<MLPPMatrix> out) const {
 			Ref<MLPPMatrix> cof = cofactor(_size.y, i, j);
 			// 1 if even, -1 if odd
 			int sign = (i + j) % 2 == 0 ? 1 : -1;
-			out->set_element(j, i, sign * cof->det(int(_size.y) - 1));
+			out->element_set(j, i, sign * cof->det(int(_size.y) - 1));
 		}
 	}
 }
@@ -1968,7 +1968,7 @@ Ref<MLPPMatrix> MLPPMatrix::cov() const {
 		for (int j = 0; j < _size.x; ++j) {
 			get_row_into_mlpp_vector(j, a_j_row_tmp);
 
-			cov_mat->set_element(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
+			cov_mat->element_set(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
 		}
 	}
 
@@ -1997,7 +1997,7 @@ void MLPPMatrix::covo(Ref<MLPPMatrix> out) const {
 		for (int j = 0; j < _size.x; ++j) {
 			get_row_into_mlpp_vector(j, a_j_row_tmp);
 
-			out->set_element(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
+			out->element_set(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
 		}
 	}
 }
@@ -2020,12 +2020,12 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 	Size2i a_size = a_mat->size();
 
 	do {
-		real_t a_ij = a_mat->get_element(0, 1);
+		real_t a_ij = a_mat->element_get(0, 1);
 		real_t sub_i = 0;
 		real_t sub_j = 1;
 		for (int i = 0; i < a_size.y; ++i) {
 			for (int j = 0; j < a_size.x; ++j) {
-				real_t ca_ij = a_mat->get_element(i, j);
+				real_t ca_ij = a_mat->element_get(i, j);
 				real_t abs_ca_ij = ABS(ca_ij);
 
 				if (i != j && abs_ca_ij > a_ij) {
@@ -2042,9 +2042,9 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 			}
 		}
 
-		real_t a_ii = a_mat->get_element(sub_i, sub_i);
-		real_t a_jj = a_mat->get_element(sub_j, sub_j);
-		//real_t a_ji = a_mat->get_element(sub_j, sub_i);
+		real_t a_ii = a_mat->element_get(sub_i, sub_i);
+		real_t a_jj = a_mat->element_get(sub_j, sub_j);
+		//real_t a_ji = a_mat->element_get(sub_j, sub_i);
 		real_t theta;
 
 		if (a_ii == a_jj) {
@@ -2054,10 +2054,10 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 		}
 
 		Ref<MLPPMatrix> P = identity_mat(a_mat->size().y);
-		P->set_element(sub_i, sub_j, -Math::sin(theta));
-		P->set_element(sub_i, sub_i, Math::cos(theta));
-		P->set_element(sub_j, sub_j, Math::cos(theta));
-		P->set_element(sub_j, sub_i, Math::sin(theta));
+		P->element_set(sub_i, sub_j, -Math::sin(theta));
+		P->element_set(sub_i, sub_i, Math::cos(theta));
+		P->element_set(sub_j, sub_j, Math::cos(theta));
+		P->element_set(sub_j, sub_i, Math::sin(theta));
 
 		a_new = P->inverse()->multn(a_mat)->multn(P);
 
@@ -2065,8 +2065,8 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 
 		for (int i = 0; i < a_new_size.y; ++i) {
 			for (int j = 0; j < a_new_size.x; ++j) {
-				if (i != j && Math::is_zero_approx(Math::round(a_new->get_element(i, j)))) {
-					a_new->set_element(i, j, 0);
+				if (i != j && Math::is_zero_approx(Math::round(a_new->element_get(i, j)))) {
+					a_new->element_set(i, j, 0);
 				}
 			}
 		}
@@ -2074,7 +2074,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 		bool non_zero = false;
 		for (int i = 0; i < a_new_size.y; ++i) {
 			for (int j = 0; j < a_new_size.x; ++j) {
-				if (i != j && Math::is_zero_approx(Math::round(a_new->get_element(i, j)))) {
+				if (i != j && Math::is_zero_approx(Math::round(a_new->element_get(i, j)))) {
 					non_zero = true;
 				}
 			}
@@ -2091,7 +2091,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 			for (int i = 0; i < a_new_size.y; ++i) {
 				for (int j = 0; j < a_new_size.x; ++j) {
 					if (i != j) {
-						a_new->set_element(i, j, 0);
+						a_new->element_set(i, j, 0);
 					}
 				}
 			}
@@ -2109,17 +2109,17 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 	// Bubble Sort. Should change this later.
 	for (int i = 0; i < a_new_size.y - 1; ++i) {
 		for (int j = 0; j < a_new_size.x - 1 - i; ++j) {
-			if (a_new->get_element(j, j) < a_new->get_element(j + 1, j + 1)) {
-				real_t temp = a_new->get_element(j + 1, j + 1);
-				a_new->set_element(j + 1, j + 1, a_new->get_element(j, j));
-				a_new->set_element(j, j, temp);
+			if (a_new->element_get(j, j) < a_new->element_get(j + 1, j + 1)) {
+				real_t temp = a_new->element_get(j + 1, j + 1);
+				a_new->element_set(j + 1, j + 1, a_new->element_get(j, j));
+				a_new->element_set(j, j, temp);
 			}
 		}
 	}
 
 	for (int i = 0; i < a_new_size.y; ++i) {
 		for (int j = 0; j < a_new_size.x; ++j) {
-			if (a_new->get_element(i, i) == a_new_prior->get_element(j, j)) {
+			if (a_new->element_get(i, i) == a_new_prior->element_get(j, j)) {
 				val_to_vec[i] = j;
 			}
 		}
@@ -2131,7 +2131,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 
 	for (int i = 0; i < eigenvectors_size.y; ++i) {
 		for (int j = 0; j < eigenvectors_size.x; ++j) {
-			eigenvectors->set_element(i, j, eigen_temp->get_element(i, val_to_vec[j]));
+			eigenvectors->element_set(i, j, eigen_temp->element_get(i, val_to_vec[j]));
 		}
 	}
 
@@ -2160,12 +2160,12 @@ MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 	Size2i a_size = a_mat->size();
 
 	do {
-		real_t a_ij = a_mat->get_element(0, 1);
+		real_t a_ij = a_mat->element_get(0, 1);
 		real_t sub_i = 0;
 		real_t sub_j = 1;
 		for (int i = 0; i < a_size.y; ++i) {
 			for (int j = 0; j < a_size.x; ++j) {
-				real_t ca_ij = a_mat->get_element(i, j);
+				real_t ca_ij = a_mat->element_get(i, j);
 				real_t abs_ca_ij = ABS(ca_ij);
 
 				if (i != j && abs_ca_ij > a_ij) {
@@ -2182,9 +2182,9 @@ MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 			}
 		}
 
-		real_t a_ii = a_mat->get_element(sub_i, sub_i);
-		real_t a_jj = a_mat->get_element(sub_j, sub_j);
-		//real_t a_ji = a_mat->get_element(sub_j, sub_i);
+		real_t a_ii = a_mat->element_get(sub_i, sub_i);
+		real_t a_jj = a_mat->element_get(sub_j, sub_j);
+		//real_t a_ji = a_mat->element_get(sub_j, sub_i);
 		real_t theta;
 
 		if (a_ii == a_jj) {
@@ -2194,10 +2194,10 @@ MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 		}
 
 		Ref<MLPPMatrix> P = identity_mat(a_mat->size().y);
-		P->set_element(sub_i, sub_j, -Math::sin(theta));
-		P->set_element(sub_i, sub_i, Math::cos(theta));
-		P->set_element(sub_j, sub_j, Math::cos(theta));
-		P->set_element(sub_j, sub_i, Math::sin(theta));
+		P->element_set(sub_i, sub_j, -Math::sin(theta));
+		P->element_set(sub_i, sub_i, Math::cos(theta));
+		P->element_set(sub_j, sub_j, Math::cos(theta));
+		P->element_set(sub_j, sub_i, Math::sin(theta));
 
 		a_new = P->inverse()->multn(a_mat)->multn(P);
 
@@ -2205,8 +2205,8 @@ MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 
 		for (int i = 0; i < a_new_size.y; ++i) {
 			for (int j = 0; j < a_new_size.x; ++j) {
-				if (i != j && Math::is_zero_approx(Math::round(a_new->get_element(i, j)))) {
-					a_new->set_element(i, j, 0);
+				if (i != j && Math::is_zero_approx(Math::round(a_new->element_get(i, j)))) {
+					a_new->element_set(i, j, 0);
 				}
 			}
 		}
@@ -2214,7 +2214,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 		bool non_zero = false;
 		for (int i = 0; i < a_new_size.y; ++i) {
 			for (int j = 0; j < a_new_size.x; ++j) {
-				if (i != j && Math::is_zero_approx(Math::round(a_new->get_element(i, j)))) {
+				if (i != j && Math::is_zero_approx(Math::round(a_new->element_get(i, j)))) {
 					non_zero = true;
 				}
 			}
@@ -2231,7 +2231,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 			for (int i = 0; i < a_new_size.y; ++i) {
 				for (int j = 0; j < a_new_size.x; ++j) {
 					if (i != j) {
-						a_new->set_element(i, j, 0);
+						a_new->element_set(i, j, 0);
 					}
 				}
 			}
@@ -2249,17 +2249,17 @@ MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 	// Bubble Sort. Should change this later.
 	for (int i = 0; i < a_new_size.y - 1; ++i) {
 		for (int j = 0; j < a_new_size.x - 1 - i; ++j) {
-			if (a_new->get_element(j, j) < a_new->get_element(j + 1, j + 1)) {
-				real_t temp = a_new->get_element(j + 1, j + 1);
-				a_new->set_element(j + 1, j + 1, a_new->get_element(j, j));
-				a_new->set_element(j, j, temp);
+			if (a_new->element_get(j, j) < a_new->element_get(j + 1, j + 1)) {
+				real_t temp = a_new->element_get(j + 1, j + 1);
+				a_new->element_set(j + 1, j + 1, a_new->element_get(j, j));
+				a_new->element_set(j, j, temp);
 			}
 		}
 	}
 
 	for (int i = 0; i < a_new_size.y; ++i) {
 		for (int j = 0; j < a_new_size.x; ++j) {
-			if (a_new->get_element(i, i) == a_new_prior->get_element(j, j)) {
+			if (a_new->element_get(i, i) == a_new_prior->element_get(j, j)) {
 				val_to_vec[i] = j;
 			}
 		}
@@ -2271,7 +2271,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 
 	for (int i = 0; i < eigenvectors_size.y; ++i) {
 		for (int j = 0; j < eigenvectors_size.x; ++j) {
-			eigenvectors->set_element(i, j, eigen_temp->get_element(i, val_to_vec[j]));
+			eigenvectors->element_set(i, j, eigen_temp->element_get(i, val_to_vec[j]));
 		}
 	}
 
@@ -2316,7 +2316,7 @@ MLPPMatrix::SVDResult MLPPMatrix::svd() const {
 
 	for (int i = 0; i < singularvals_size.y; ++i) {
 		for (int j = 0; j < singularvals_size.x; ++j) {
-			sigma->set_element(i, j, singularvals->get_element(i, j));
+			sigma->element_set(i, j, singularvals->element_get(i, j));
 		}
 	}
 
@@ -2344,7 +2344,7 @@ MLPPMatrix::SVDResult MLPPMatrix::svdb(const Ref<MLPPMatrix> &A) const {
 
 	for (int i = 0; i < singularvals_size.y; ++i) {
 		for (int j = 0; j < singularvals_size.x; ++j) {
-			sigma->set_element(i, j, singularvals->get_element(i, j));
+			sigma->element_set(i, j, singularvals->element_get(i, j));
 		}
 	}
 
@@ -2679,7 +2679,7 @@ void MLPPMatrix::outer_product(const Ref<MLPPVector> &a, const Ref<MLPPVector> &
 		real_t curr_a = a_ptr[i];
 
 		for (int j = 0; j < s.x; ++j) {
-			set_element(i, j, curr_a * b_ptr[j]);
+			element_set(i, j, curr_a * b_ptr[j]);
 		}
 	}
 }
@@ -2699,7 +2699,7 @@ Ref<MLPPMatrix> MLPPMatrix::outer_productn(const Ref<MLPPVector> &a, const Ref<M
 		real_t curr_a = a_ptr[i];
 
 		for (int j = 0; j < s.x; ++j) {
-			C->set_element(i, j, curr_a * b_ptr[j]);
+			C->element_set(i, j, curr_a * b_ptr[j]);
 		}
 	}
 
@@ -2865,7 +2865,7 @@ void MLPPMatrix::set_from_image(const Ref<Image> &p_img, const int p_image_chann
 		for (int x = 0; x < _size.x; ++x) {
 			Color c = img->get_pixel(x, y);
 
-			set_element(y, x, c[p_image_channel]);
+			element_set(y, x, c[p_image_channel]);
 		}
 	}
 
@@ -3018,11 +3018,11 @@ void MLPPMatrix::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("resize", "size"), &MLPPMatrix::resize);
 
-	ClassDB::bind_method(D_METHOD("get_element_index", "index"), &MLPPMatrix::get_element_index);
-	ClassDB::bind_method(D_METHOD("set_element_index", "index", "val"), &MLPPMatrix::set_element_index);
+	ClassDB::bind_method(D_METHOD("element_get_index", "index"), &MLPPMatrix::element_get_index);
+	ClassDB::bind_method(D_METHOD("element_set_index", "index", "val"), &MLPPMatrix::element_set_index);
 
-	ClassDB::bind_method(D_METHOD("get_element", "index_y", "index_x"), &MLPPMatrix::get_element);
-	ClassDB::bind_method(D_METHOD("set_element", "index_y", "index_x", "val"), &MLPPMatrix::set_element);
+	ClassDB::bind_method(D_METHOD("element_get", "index_y", "index_x"), &MLPPMatrix::element_get);
+	ClassDB::bind_method(D_METHOD("element_set", "index_y", "index_x", "val"), &MLPPMatrix::element_set);
 
 	ClassDB::bind_method(D_METHOD("get_row_pool_vector", "index_y"), &MLPPMatrix::get_row_pool_vector);
 	ClassDB::bind_method(D_METHOD("get_row_mlpp_vector", "index_y"), &MLPPMatrix::get_row_mlpp_vector);

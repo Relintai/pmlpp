@@ -271,17 +271,17 @@ Ref<MLPPVector> MLPPKMeans::silhouette_scores() {
 			}
 		}
 
-		silhouette_scores->set_element(i, (b - a) / fmax(a, b));
+		silhouette_scores->element_set(i, (b - a) / fmax(a, b));
 
 		// Or the expanded version:
 		// if(a < b) {
-		//     silhouette_scores->set_element(i, 1 - a/b);
+		//     silhouette_scores->element_set(i, 1 - a/b);
 		// }
 		// else if(a == b){
-		//     silhouette_scores->set_element(i, 0);
+		//     silhouette_scores->element_set(i, 0);
 		// }
 		// else{
-		//     silhouette_scores->set_element(i, b/a - 1);
+		//     silhouette_scores->element_set(i, b/a - 1);
 		// }
 	}
 
@@ -349,7 +349,7 @@ void MLPPKMeans::_evaluate() {
 			}
 		}
 
-		_r->set_element(i, closest_centroid_index, 1);
+		_r->element_set(i, closest_centroid_index, 1);
 	}
 }
 
@@ -383,9 +383,9 @@ void MLPPKMeans::_compute_mu() {
 		for (int j = 0; j < r_size_y; ++j) {
 			_input_set->get_row_into_mlpp_vector(j, input_set_j_tempv);
 
-			real_t r_j_i = _r->get_element(j, i);
+			real_t r_j_i = _r->element_get(j, i);
 
-			alg.scalar_multiplyv(_r->get_element(j, i), input_set_j_tempv, mat_tempv);
+			alg.scalar_multiplyv(_r->element_get(j, i), input_set_j_tempv, mat_tempv);
 			alg.additionv(num, mat_tempv, num);
 
 			den += r_j_i;
@@ -501,7 +501,7 @@ real_t MLPPKMeans::_cost() {
 			_mu->get_row_into_mlpp_vector(j, mu_j_tempv);
 
 			alg.subtractionv(input_set_i_tempv, mu_j_tempv, sub_tempv);
-			sum += _r->get_element(i, j) * alg.norm_sqv(sub_tempv);
+			sum += _r->element_get(i, j) * alg.norm_sqv(sub_tempv);
 		}
 	}
 

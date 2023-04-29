@@ -222,13 +222,13 @@ public:
 			bool new_element = true;
 
 			for (int j = 0; j < set_input_set.size(); j++) {
-				if (set_input_set[j] == input_set->get_element(i)) {
+				if (set_input_set[j] == input_set->element_get(i)) {
 					new_element = false;
 				}
 			}
 
 			if (new_element) {
-				set_input_set.push_back(input_set->get_element(i));
+				set_input_set.push_back(input_set->element_get(i));
 			}
 		}
 

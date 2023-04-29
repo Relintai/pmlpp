@@ -156,7 +156,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_element" qualifiers="const">
+		<method name="element_get" qualifiers="const">
 			<return type="float" />
 			<argument index="0" name="index_y" type="int" />
 			<argument index="1" name="index_x" type="int" />
@@ -164,7 +164,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_element_index" qualifiers="const">
+		<method name="element_get_index" qualifiers="const">
 			<return type="float" />
 			<argument index="0" name="index" type="int" />
 			<description>
@@ -417,7 +417,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="set_element">
+		<method name="element_set">
 			<return type="void" />
 			<argument index="0" name="index_y" type="int" />
 			<argument index="1" name="index_x" type="int" />
@@ -426,7 +426,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="set_element_index">
+		<method name="element_set_index">
 			<return type="void" />
 			<argument index="0" name="index" type="int" />
 			<argument index="1" name="val" type="float" />

@@ -220,7 +220,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_element" qualifiers="const">
+		<method name="element_get" qualifiers="const">
 			<return type="float" />
 			<argument index="0" name="index" type="int" />
 			<description>
@@ -415,7 +415,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="set_element">
+		<method name="element_set">
 			<return type="void" />
 			<argument index="0" name="index" type="int" />
 			<argument index="1" name="val" type="float" />

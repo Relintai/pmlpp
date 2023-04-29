@@ -117,7 +117,7 @@ Ref<MLPPMatrix> MLPPLinAlg::matmultnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMa
 
 				c_ptr[ind_i_j] += a_ptr[ind_i_k] * b_ptr[ind_k_j];
 
-				//C->set_element(i, j, C->get_element(i, j) + A->get_element(i, k) * B->get_element(k, j
+				//C->element_set(i, j, C->element_get(i, j) + A->element_get(i, k) * B->element_get(k, j
 			}
 		}
 	}
@@ -421,7 +421,7 @@ real_t MLPPLinAlg::detm(const Ref<MLPPMatrix> &A, int d) {
 	Recursion is performed unless and until we reach this base case,
 	such that we recieve a scalar as the result. */
 	if (d == 2) {
-		return A->get_element(0, 0) * A->get_element(1, 1) - A->get_element(0, 1) * A->get_element(1, 0);
+		return A->element_get(0, 0) * A->element_get(1, 1) - A->element_get(0, 1) * A->element_get(1, 0);
 	} else {
 		for (int i = 0; i < d; i++) {
 			int sub_i = 0;
@@ -432,13 +432,13 @@ real_t MLPPLinAlg::detm(const Ref<MLPPMatrix> &A, int d) {
 						continue;
 					}
 
-					B->set_element(sub_i, sub_j, A->get_element(j, k));
+					B->element_set(sub_i, sub_j, A->element_get(j, k));
 					sub_j++;
 				}
 				sub_i++;
 			}
 
-			deter += Math::pow(static_cast<real_t>(-1), static_cast<real_t>(i)) * A->get_element(0, i) * detm(B, d - 1);
+			deter += Math::pow(static_cast<real_t>(-1), static_cast<real_t>(i)) * A->element_get(0, i) * detm(B, d - 1);
 		}
 	}
 
@@ -466,7 +466,7 @@ Ref<MLPPMatrix> MLPPLinAlg::cofactornm(const Ref<MLPPMatrix> &A, int n, int i, i
 	for (int row = 0; row < n; row++) {
 		for (int col = 0; col < n; col++) {
 			if (row != i && col != j) {
-				cof->set_element(sub_i, sub_j++, A->get_element(row, col));
+				cof->element_set(sub_i, sub_j++, A->element_get(row, col));
 
 				if (sub_j == n - 1) {
 					sub_j = 0;
@@ -494,16 +494,16 @@ Ref<MLPPMatrix> MLPPLinAlg::adjointnm(const Ref<MLPPMatrix> &A) {
 
 	// Checking for the case where the given N x N matrix is a scalar
 	if (a_size.y == 1) {
-		adj->set_element(0, 0, 1);
+		adj->element_set(0, 0, 1);
 		return adj;
 	}
 
 	if (a_size.y == 2) {
-		adj->set_element(0, 0, A->get_element(1, 1));
-		adj->set_element(1, 1, A->get_element(0, 0));
+		adj->element_set(0, 0, A->element_get(1, 1));
+		adj->element_set(1, 1, A->element_get(0, 0));
 
-		adj->set_element(0, 1, -A->get_element(0, 1));
-		adj->set_element(1, 0, -A->get_element(1, 0));
+		adj->element_set(0, 1, -A->element_get(0, 1));
+		adj->element_set(1, 0, -A->element_get(1, 0));
 
 		return adj;
 	}
@@ -513,7 +513,7 @@ Ref<MLPPMatrix> MLPPLinAlg::adjointnm(const Ref<MLPPMatrix> &A) {
 			Ref<MLPPMatrix> cof = cofactornm(A, a_size.y, i, j);
 			// 1 if even, -1 if odd
 			int sign = (i + j) % 2 == 0 ? 1 : -1;
-			adj->set_element(j, i, sign * detm(cof, int(a_size.y) - 1));
+			adj->element_set(j, i, sign * detm(cof, int(a_size.y) - 1));
 		}
 	}
 	return adj;
@@ -694,7 +694,7 @@ Ref<MLPPMatrix> MLPPLinAlg::covnm(const Ref<MLPPMatrix> &A) {
 		for (int j = 0; j < a_size.x; ++j) {
 			A->get_row_into_mlpp_vector(j, a_j_row_tmp);
 
-			cov_mat->set_element(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
+			cov_mat->element_set(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
 		}
 	}
 
@@ -720,12 +720,12 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 	Size2i a_size = A->size();
 
 	do {
-		real_t a_ij = A->get_element(0, 1);
+		real_t a_ij = A->element_get(0, 1);
 		real_t sub_i = 0;
 		real_t sub_j = 1;
 		for (int i = 0; i < a_size.y; ++i) {
 			for (int j = 0; j < a_size.x; ++j) {
-				real_t ca_ij = A->get_element(i, j);
+				real_t ca_ij = A->element_get(i, j);
 				real_t abs_ca_ij = ABS(ca_ij);
 
 				if (i != j && abs_ca_ij > a_ij) {
@@ -742,9 +742,9 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 			}
 		}
 
-		real_t a_ii = A->get_element(sub_i, sub_i);
-		real_t a_jj = A->get_element(sub_j, sub_j);
-		//real_t a_ji = A->get_element(sub_j, sub_i);
+		real_t a_ii = A->element_get(sub_i, sub_i);
+		real_t a_jj = A->element_get(sub_j, sub_j);
+		//real_t a_ji = A->element_get(sub_j, sub_i);
 		real_t theta;
 
 		if (a_ii == a_jj) {
@@ -754,10 +754,10 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 		}
 
 		Ref<MLPPMatrix> P = identitym(A->size().y);
-		P->set_element(sub_i, sub_j, -Math::sin(theta));
-		P->set_element(sub_i, sub_i, Math::cos(theta));
-		P->set_element(sub_j, sub_j, Math::cos(theta));
-		P->set_element(sub_j, sub_i, Math::sin(theta));
+		P->element_set(sub_i, sub_j, -Math::sin(theta));
+		P->element_set(sub_i, sub_i, Math::cos(theta));
+		P->element_set(sub_j, sub_j, Math::cos(theta));
+		P->element_set(sub_j, sub_i, Math::sin(theta));
 
 		a_new = matmultnm(matmultnm(inversenm(P), A), P);
 
@@ -765,8 +765,8 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 
 		for (int i = 0; i < a_new_size.y; ++i) {
 			for (int j = 0; j < a_new_size.x; ++j) {
-				if (i != j && Math::is_zero_approx(Math::round(a_new->get_element(i, j)))) {
-					a_new->set_element(i, j, 0);
+				if (i != j && Math::is_zero_approx(Math::round(a_new->element_get(i, j)))) {
+					a_new->element_set(i, j, 0);
 				}
 			}
 		}
@@ -774,7 +774,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 		bool non_zero = false;
 		for (int i = 0; i < a_new_size.y; ++i) {
 			for (int j = 0; j < a_new_size.x; ++j) {
-				if (i != j && Math::is_zero_approx(Math::round(a_new->get_element(i, j)))) {
+				if (i != j && Math::is_zero_approx(Math::round(a_new->element_get(i, j)))) {
 					non_zero = true;
 				}
 			}
@@ -791,7 +791,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 			for (int i = 0; i < a_new_size.y; ++i) {
 				for (int j = 0; j < a_new_size.x; ++j) {
 					if (i != j) {
-						a_new->set_element(i, j, 0);
+						a_new->element_set(i, j, 0);
 					}
 				}
 			}
@@ -809,17 +809,17 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 	// Bubble Sort. Should change this later.
 	for (int i = 0; i < a_new_size.y - 1; ++i) {
 		for (int j = 0; j < a_new_size.x - 1 - i; ++j) {
-			if (a_new->get_element(j, j) < a_new->get_element(j + 1, j + 1)) {
-				real_t temp = a_new->get_element(j + 1, j + 1);
-				a_new->set_element(j + 1, j + 1, a_new->get_element(j, j));
-				a_new->set_element(j, j, temp);
+			if (a_new->element_get(j, j) < a_new->element_get(j + 1, j + 1)) {
+				real_t temp = a_new->element_get(j + 1, j + 1);
+				a_new->element_set(j + 1, j + 1, a_new->element_get(j, j));
+				a_new->element_set(j, j, temp);
 			}
 		}
 	}
 
 	for (int i = 0; i < a_new_size.y; ++i) {
 		for (int j = 0; j < a_new_size.x; ++j) {
-			if (a_new->get_element(i, i) == a_new_prior->get_element(j, j)) {
+			if (a_new->element_get(i, i) == a_new_prior->element_get(j, j)) {
 				val_to_vec[i] = j;
 			}
 		}
@@ -831,7 +831,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 
 	for (int i = 0; i < eigenvectors_size.y; ++i) {
 		for (int j = 0; j < eigenvectors_size.x; ++j) {
-			eigenvectors->set_element(i, j, eigen_temp->get_element(i, val_to_vec[j]));
+			eigenvectors->element_set(i, j, eigen_temp->element_get(i, val_to_vec[j]));
 		}
 	}
 
@@ -858,7 +858,7 @@ MLPPLinAlg::SVDResult MLPPLinAlg::svd(const Ref<MLPPMatrix> &A) {
 
 	for (int i = 0; i < singularvals_size.y; ++i) {
 		for (int j = 0; j < singularvals_size.x; ++j) {
-			sigma->set_element(i, j, singularvals->get_element(i, j));
+			sigma->element_set(i, j, singularvals->element_get(i, j));
 		}
 	}
 
@@ -1720,7 +1720,7 @@ Ref<MLPPMatrix> MLPPLinAlg::outer_product(const Ref<MLPPVector> &a, const Ref<ML
 		real_t curr_a = a_ptr[i];
 
 		for (int j = 0; j < size.x; ++j) {
-			C->set_element(i, j, curr_a * b_ptr[j]);
+			C->element_set(i, j, curr_a * b_ptr[j]);
 		}
 	}
 

@@ -48,7 +48,7 @@ void MLPPTensor3::set_data(const Array &p_from) {
 	}
 }
 
-void MLPPTensor3::add_z_slice(const Vector<real_t> &p_row) {
+void MLPPTensor3::z_slice_add(const Vector<real_t> &p_row) {
 	if (p_row.size() == 0) {
 		return;
 	}
@@ -71,7 +71,7 @@ void MLPPTensor3::add_z_slice(const Vector<real_t> &p_row) {
 	}
 }
 
-void MLPPTensor3::add_z_slice_pool_vector(const PoolRealArray &p_row) {
+void MLPPTensor3::z_slice_add_pool_vector(const PoolRealArray &p_row) {
 	if (p_row.size() == 0) {
 		return;
 	}
@@ -95,7 +95,7 @@ void MLPPTensor3::add_z_slice_pool_vector(const PoolRealArray &p_row) {
 	}
 }
 
-void MLPPTensor3::add_z_slice_mlpp_vector(const Ref<MLPPVector> &p_row) {
+void MLPPTensor3::z_slice_add_mlpp_vector(const Ref<MLPPVector> &p_row) {
 	ERR_FAIL_COND(!p_row.is_valid());
 
 	int p_row_size = p_row->size();
@@ -122,7 +122,7 @@ void MLPPTensor3::add_z_slice_mlpp_vector(const Ref<MLPPVector> &p_row) {
 	}
 }
 
-void MLPPTensor3::add_z_slice_mlpp_matrix(const Ref<MLPPMatrix> &p_matrix) {
+void MLPPTensor3::z_slice_add_mlpp_matrix(const Ref<MLPPMatrix> &p_matrix) {
 	ERR_FAIL_COND(!p_matrix.is_valid());
 
 	int other_data_size = p_matrix->data_size();
@@ -150,7 +150,7 @@ void MLPPTensor3::add_z_slice_mlpp_matrix(const Ref<MLPPMatrix> &p_matrix) {
 	}
 }
 
-void MLPPTensor3::remove_z_slice(int p_index) {
+void MLPPTensor3::z_slice_remove(int p_index) {
 	ERR_FAIL_INDEX(p_index, _size.z);
 
 	--_size.z;
@@ -175,7 +175,7 @@ void MLPPTensor3::remove_z_slice(int p_index) {
 
 // Removes the item copying the last value into the position of the one to
 // remove. It's generally faster than `remove`.
-void MLPPTensor3::remove_z_slice_unordered(int p_index) {
+void MLPPTensor3::z_slice_remove_unordered(int p_index) {
 	ERR_FAIL_INDEX(p_index, _size.z);
 
 	--_size.z;
@@ -199,7 +199,7 @@ void MLPPTensor3::remove_z_slice_unordered(int p_index) {
 	CRASH_COND_MSG(!_data, "Out of memory");
 }
 
-void MLPPTensor3::swap_z_slice(int p_index_1, int p_index_2) {
+void MLPPTensor3::z_slice_swap(int p_index_1, int p_index_2) {
 	ERR_FAIL_INDEX(p_index_1, _size.z);
 	ERR_FAIL_INDEX(p_index_2, _size.z);
 
@@ -240,7 +240,7 @@ void MLPPTensor3::set_shape(const Size3i &p_size) {
 	_size = p_size;
 }
 
-Vector<real_t> MLPPTensor3::get_row_vector(int p_index_y, int p_index_z) const {
+Vector<real_t> MLPPTensor3::row_get_vector(int p_index_y, int p_index_z) const {
 	ERR_FAIL_INDEX_V(p_index_y, _size.y, Vector<real_t>());
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, Vector<real_t>());
 
@@ -263,7 +263,7 @@ Vector<real_t> MLPPTensor3::get_row_vector(int p_index_y, int p_index_z) const {
 	return ret;
 }
 
-PoolRealArray MLPPTensor3::get_row_pool_vector(int p_index_y, int p_index_z) const {
+PoolRealArray MLPPTensor3::row_get_pool_vector(int p_index_y, int p_index_z) const {
 	ERR_FAIL_INDEX_V(p_index_y, _size.y, PoolRealArray());
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, PoolRealArray());
 
@@ -287,7 +287,7 @@ PoolRealArray MLPPTensor3::get_row_pool_vector(int p_index_y, int p_index_z) con
 	return ret;
 }
 
-Ref<MLPPVector> MLPPTensor3::get_row_mlpp_vector(int p_index_y, int p_index_z) const {
+Ref<MLPPVector> MLPPTensor3::row_get_mlpp_vector(int p_index_y, int p_index_z) const {
 	ERR_FAIL_INDEX_V(p_index_y, _size.y, Ref<MLPPVector>());
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<MLPPVector>());
 
@@ -311,7 +311,7 @@ Ref<MLPPVector> MLPPTensor3::get_row_mlpp_vector(int p_index_y, int p_index_z) c
 	return ret;
 }
 
-void MLPPTensor3::get_row_into_mlpp_vector(int p_index_y, int p_index_z, Ref<MLPPVector> target) const {
+void MLPPTensor3::row_get_into_mlpp_vector(int p_index_y, int p_index_z, Ref<MLPPVector> target) const {
 	ERR_FAIL_COND(!target.is_valid());
 	ERR_FAIL_INDEX(p_index_y, _size.y);
 	ERR_FAIL_INDEX(p_index_z, _size.z);
@@ -329,7 +329,7 @@ void MLPPTensor3::get_row_into_mlpp_vector(int p_index_y, int p_index_z, Ref<MLP
 	}
 }
 
-void MLPPTensor3::set_row_vector(int p_index_y, int p_index_z, const Vector<real_t> &p_row) {
+void MLPPTensor3::row_set_vector(int p_index_y, int p_index_z, const Vector<real_t> &p_row) {
 	ERR_FAIL_COND(p_row.size() != _size.x);
 	ERR_FAIL_INDEX(p_index_y, _size.y);
 	ERR_FAIL_INDEX(p_index_z, _size.z);
@@ -343,7 +343,7 @@ void MLPPTensor3::set_row_vector(int p_index_y, int p_index_z, const Vector<real
 	}
 }
 
-void MLPPTensor3::set_row_pool_vector(int p_index_y, int p_index_z, const PoolRealArray &p_row) {
+void MLPPTensor3::row_set_pool_vector(int p_index_y, int p_index_z, const PoolRealArray &p_row) {
 	ERR_FAIL_COND(p_row.size() != _size.x);
 	ERR_FAIL_INDEX(p_index_y, _size.y);
 	ERR_FAIL_INDEX(p_index_z, _size.z);
@@ -358,7 +358,7 @@ void MLPPTensor3::set_row_pool_vector(int p_index_y, int p_index_z, const PoolRe
 	}
 }
 
-void MLPPTensor3::set_row_mlpp_vector(int p_index_y, int p_index_z, const Ref<MLPPVector> &p_row) {
+void MLPPTensor3::row_set_mlpp_vector(int p_index_y, int p_index_z, const Ref<MLPPVector> &p_row) {
 	ERR_FAIL_COND(!p_row.is_valid());
 	ERR_FAIL_COND(p_row->size() != _size.x);
 	ERR_FAIL_INDEX(p_index_y, _size.y);
@@ -373,7 +373,7 @@ void MLPPTensor3::set_row_mlpp_vector(int p_index_y, int p_index_z, const Ref<ML
 	}
 }
 
-Vector<real_t> MLPPTensor3::get_z_slice_vector(int p_index_z) const {
+Vector<real_t> MLPPTensor3::z_slice_get_vector(int p_index_z) const {
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, Vector<real_t>());
 
 	Vector<real_t> ret;
@@ -397,7 +397,7 @@ Vector<real_t> MLPPTensor3::get_z_slice_vector(int p_index_z) const {
 	return ret;
 }
 
-PoolRealArray MLPPTensor3::get_z_slice_pool_vector(int p_index_z) const {
+PoolRealArray MLPPTensor3::z_slice_get_pool_vector(int p_index_z) const {
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, PoolRealArray());
 
 	PoolRealArray ret;
@@ -422,7 +422,7 @@ PoolRealArray MLPPTensor3::get_z_slice_pool_vector(int p_index_z) const {
 	return ret;
 }
 
-Ref<MLPPVector> MLPPTensor3::get_z_slice_mlpp_vector(int p_index_z) const {
+Ref<MLPPVector> MLPPTensor3::z_slice_get_mlpp_vector(int p_index_z) const {
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<MLPPVector>());
 
 	Ref<MLPPVector> ret;
@@ -447,7 +447,7 @@ Ref<MLPPVector> MLPPTensor3::get_z_slice_mlpp_vector(int p_index_z) const {
 	return ret;
 }
 
-void MLPPTensor3::get_z_slice_into_mlpp_vector(int p_index_z, Ref<MLPPVector> target) const {
+void MLPPTensor3::z_slice_get_into_mlpp_vector(int p_index_z, Ref<MLPPVector> target) const {
 	ERR_FAIL_INDEX(p_index_z, _size.z);
 
 	int fmds = z_slice_data_size();
@@ -465,7 +465,7 @@ void MLPPTensor3::get_z_slice_into_mlpp_vector(int p_index_z, Ref<MLPPVector> ta
 	}
 }
 
-Ref<MLPPMatrix> MLPPTensor3::get_z_slice_mlpp_matrix(int p_index_z) const {
+Ref<MLPPMatrix> MLPPTensor3::z_slice_get_mlpp_matrix(int p_index_z) const {
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<MLPPMatrix>());
 
 	Ref<MLPPMatrix> ret;
@@ -490,7 +490,7 @@ Ref<MLPPMatrix> MLPPTensor3::get_z_slice_mlpp_matrix(int p_index_z) const {
 	return ret;
 }
 
-void MLPPTensor3::get_z_slice_into_mlpp_matrix(int p_index_z, Ref<MLPPMatrix> target) const {
+void MLPPTensor3::z_slice_get_into_mlpp_matrix(int p_index_z, Ref<MLPPMatrix> target) const {
 	ERR_FAIL_INDEX(p_index_z, _size.z);
 
 	int fmds = z_slice_data_size();
@@ -509,7 +509,7 @@ void MLPPTensor3::get_z_slice_into_mlpp_matrix(int p_index_z, Ref<MLPPMatrix> ta
 	}
 }
 
-void MLPPTensor3::set_z_slice_vector(int p_index_z, const Vector<real_t> &p_row) {
+void MLPPTensor3::z_slice_set_vector(int p_index_z, const Vector<real_t> &p_row) {
 	ERR_FAIL_INDEX(p_index_z, _size.z);
 
 	int fmds = z_slice_data_size();
@@ -525,7 +525,7 @@ void MLPPTensor3::set_z_slice_vector(int p_index_z, const Vector<real_t> &p_row)
 	}
 }
 
-void MLPPTensor3::set_z_slice_pool_vector(int p_index_z, const PoolRealArray &p_row) {
+void MLPPTensor3::z_slice_set_pool_vector(int p_index_z, const PoolRealArray &p_row) {
 	ERR_FAIL_INDEX(p_index_z, _size.z);
 
 	int fmds = z_slice_data_size();
@@ -542,7 +542,7 @@ void MLPPTensor3::set_z_slice_pool_vector(int p_index_z, const PoolRealArray &p_
 	}
 }
 
-void MLPPTensor3::set_z_slice_mlpp_vector(int p_index_z, const Ref<MLPPVector> &p_row) {
+void MLPPTensor3::z_slice_set_mlpp_vector(int p_index_z, const Ref<MLPPVector> &p_row) {
 	ERR_FAIL_INDEX(p_index_z, _size.z);
 	ERR_FAIL_COND(!p_row.is_valid());
 
@@ -559,7 +559,7 @@ void MLPPTensor3::set_z_slice_mlpp_vector(int p_index_z, const Ref<MLPPVector> &
 	}
 }
 
-void MLPPTensor3::set_z_slice_mlpp_matrix(int p_index_z, const Ref<MLPPMatrix> &p_mat) {
+void MLPPTensor3::z_slice_set_mlpp_matrix(int p_index_z, const Ref<MLPPMatrix> &p_mat) {
 	ERR_FAIL_INDEX(p_index_z, _size.z);
 	ERR_FAIL_COND(!p_mat.is_valid());
 
@@ -576,7 +576,7 @@ void MLPPTensor3::set_z_slice_mlpp_matrix(int p_index_z, const Ref<MLPPMatrix> &
 	}
 }
 
-void MLPPTensor3::get_x_slice_into(int p_index_x, Ref<MLPPMatrix> target) const {
+void MLPPTensor3::x_slice_get_into(int p_index_x, Ref<MLPPMatrix> target) const {
 	ERR_FAIL_INDEX(p_index_x, _size.x);
 	ERR_FAIL_COND(!target.is_valid());
 
@@ -586,33 +586,33 @@ void MLPPTensor3::get_x_slice_into(int p_index_x, Ref<MLPPMatrix> target) const 
 
 	for (int z = 0; z < _size.z; ++z) {
 		for (int y = 0; y < _size.y; ++y) {
-			target->set_element(z, y, get_element(p_index_x, y, z));
+			target->element_set(z, y, element_get(p_index_x, y, z));
 		}
 	}
 }
-Ref<MLPPMatrix> MLPPTensor3::get_x_slice(int p_index_x) const {
+Ref<MLPPMatrix> MLPPTensor3::x_slice_get(int p_index_x) const {
 	ERR_FAIL_INDEX_V(p_index_x, _size.x, Ref<MLPPMatrix>());
 
 	Ref<MLPPMatrix> m;
 	m.instance();
 
-	get_x_slice_into(p_index_x, m);
+	x_slice_get_into(p_index_x, m);
 
 	return m;
 }
-void MLPPTensor3::set_x_slice(int p_index_x, const Ref<MLPPMatrix> &p_mat) {
+void MLPPTensor3::x_slice_set(int p_index_x, const Ref<MLPPMatrix> &p_mat) {
 	ERR_FAIL_INDEX(p_index_x, _size.x);
 	ERR_FAIL_COND(!p_mat.is_valid());
 	ERR_FAIL_COND(p_mat->size() != Size2i(_size.y, _size.z));
 
 	for (int z = 0; z < _size.z; ++z) {
 		for (int y = 0; y < _size.y; ++y) {
-			set_element(p_index_x, y, z, p_mat->get_element(z, y));
+			element_set(p_index_x, y, z, p_mat->element_get(z, y));
 		}
 	}
 }
 
-void MLPPTensor3::get_y_slice_into(int p_index_y, Ref<MLPPMatrix> target) const {
+void MLPPTensor3::y_slice_get_into(int p_index_y, Ref<MLPPMatrix> target) const {
 	ERR_FAIL_INDEX(p_index_y, _size.y);
 	ERR_FAIL_COND(!target.is_valid());
 
@@ -622,33 +622,33 @@ void MLPPTensor3::get_y_slice_into(int p_index_y, Ref<MLPPMatrix> target) const 
 
 	for (int z = 0; z < _size.z; ++z) {
 		for (int x = 0; x < _size.x; ++x) {
-			target->set_element(z, x, get_element(x, p_index_y, z));
+			target->element_set(z, x, element_get(x, p_index_y, z));
 		}
 	}
 }
-Ref<MLPPMatrix> MLPPTensor3::get_y_slice(int p_index_y) const {
+Ref<MLPPMatrix> MLPPTensor3::y_slice_get(int p_index_y) const {
 	ERR_FAIL_INDEX_V(p_index_y, _size.y, Ref<MLPPMatrix>());
 
 	Ref<MLPPMatrix> m;
 	m.instance();
 
-	get_y_slice_into(p_index_y, m);
+	y_slice_get_into(p_index_y, m);
 
 	return m;
 }
-void MLPPTensor3::set_y_slice(int p_index_y, const Ref<MLPPMatrix> &p_mat) {
+void MLPPTensor3::y_slice_set(int p_index_y, const Ref<MLPPMatrix> &p_mat) {
 	ERR_FAIL_INDEX(p_index_y, _size.y);
 	ERR_FAIL_COND(!p_mat.is_valid());
 	ERR_FAIL_COND(p_mat->size() != Size2i(_size.y, _size.z));
 
 	for (int z = 0; z < _size.z; ++z) {
 		for (int x = 0; x < _size.x; ++x) {
-			set_element(x, p_index_y, z, p_mat->get_element(z, x));
+			element_set(x, p_index_y, z, p_mat->element_get(z, x));
 		}
 	}
 }
 
-void MLPPTensor3::add_z_slices_image(const Ref<Image> &p_img, const int p_channels) {
+void MLPPTensor3::z_slices_add_image(const Ref<Image> &p_img, const int p_channels) {
 	ERR_FAIL_COND(!p_img.is_valid());
 
 	Size2i img_size = Size2i(p_img->get_width(), p_img->get_height());
@@ -701,7 +701,7 @@ void MLPPTensor3::add_z_slices_image(const Ref<Image> &p_img, const int p_channe
 			Color c = img->get_pixel(x, y);
 
 			for (int i = 0; i < channel_count; ++i) {
-				set_element(y, x, start_channel + i, c[channels[i]]);
+				element_set(y, x, start_channel + i, c[channels[i]]);
 			}
 		}
 	}
@@ -709,7 +709,7 @@ void MLPPTensor3::add_z_slices_image(const Ref<Image> &p_img, const int p_channe
 	img->unlock();
 }
 
-Ref<Image> MLPPTensor3::get_z_slice_image(const int p_index_z) const {
+Ref<Image> MLPPTensor3::z_slice_get_image(const int p_index_z) const {
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<Image>());
 
 	Ref<Image> image;
@@ -737,7 +737,7 @@ Ref<Image> MLPPTensor3::get_z_slice_image(const int p_index_z) const {
 
 	return image;
 }
-Ref<Image> MLPPTensor3::get_z_slices_image(const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) const {
+Ref<Image> MLPPTensor3::z_slices_get_image(const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) const {
 	if (p_index_r != -1) {
 		ERR_FAIL_INDEX_V(p_index_r, _size.z, Ref<Image>());
 	}
@@ -772,19 +772,19 @@ Ref<Image> MLPPTensor3::get_z_slices_image(const int p_index_r, const int p_inde
 			Color c;
 
 			if (p_index_r != -1) {
-				c.r = get_element(y, x, p_index_r);
+				c.r = element_get(y, x, p_index_r);
 			}
 
 			if (p_index_g != -1) {
-				c.g = get_element(y, x, p_index_g);
+				c.g = element_get(y, x, p_index_g);
 			}
 
 			if (p_index_b != -1) {
-				c.b = get_element(y, x, p_index_b);
+				c.b = element_get(y, x, p_index_b);
 			}
 
 			if (p_index_a != -1) {
-				c.a = get_element(y, x, p_index_a);
+				c.a = element_get(y, x, p_index_a);
 			}
 
 			image->set_pixel(x, y, c);
@@ -796,7 +796,7 @@ Ref<Image> MLPPTensor3::get_z_slices_image(const int p_index_r, const int p_inde
 	return image;
 }
 
-void MLPPTensor3::get_z_slice_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels) const {
+void MLPPTensor3::z_slice_get_into_image(Ref<Image> p_target, const int p_index_z, const int p_target_channels) const {
 	ERR_FAIL_INDEX(p_index_z, _size.z);
 	ERR_FAIL_COND(!p_target.is_valid());
 
@@ -851,7 +851,7 @@ void MLPPTensor3::get_z_slice_into_image(Ref<Image> p_target, const int p_index_
 		for (int x = 0; x < fms.x; ++x) {
 			Color c;
 
-			float e = get_element(y, x, p_index_z);
+			float e = element_get(y, x, p_index_z);
 
 			for (int i = 0; i < channel_count; ++i) {
 				c[channels[i]] = e;
@@ -863,7 +863,7 @@ void MLPPTensor3::get_z_slice_into_image(Ref<Image> p_target, const int p_index_
 
 	p_target->unlock();
 }
-void MLPPTensor3::get_z_slices_into_image(Ref<Image> p_target, const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) const {
+void MLPPTensor3::z_slices_get_into_image(Ref<Image> p_target, const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) const {
 	ERR_FAIL_COND(!p_target.is_valid());
 
 	if (p_index_r != -1) {
@@ -909,19 +909,19 @@ void MLPPTensor3::get_z_slices_into_image(Ref<Image> p_target, const int p_index
 			Color c;
 
 			if (p_index_r != -1) {
-				c.r = get_element(y, x, p_index_r);
+				c.r = element_get(y, x, p_index_r);
 			}
 
 			if (p_index_g != -1) {
-				c.g = get_element(y, x, p_index_g);
+				c.g = element_get(y, x, p_index_g);
 			}
 
 			if (p_index_b != -1) {
-				c.b = get_element(y, x, p_index_b);
+				c.b = element_get(y, x, p_index_b);
 			}
 
 			if (p_index_a != -1) {
-				c.a = get_element(y, x, p_index_a);
+				c.a = element_get(y, x, p_index_a);
 			}
 
 			p_target->set_pixel(x, y, c);
@@ -931,7 +931,7 @@ void MLPPTensor3::get_z_slices_into_image(Ref<Image> p_target, const int p_index
 	p_target->unlock();
 }
 
-void MLPPTensor3::set_z_slice_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel_flag) {
+void MLPPTensor3::z_slice_set_image(const Ref<Image> &p_img, const int p_index_z, const int p_image_channel_flag) {
 	ERR_FAIL_COND(!p_img.is_valid());
 	ERR_FAIL_INDEX(p_index_z, _size.z);
 
@@ -959,13 +959,13 @@ void MLPPTensor3::set_z_slice_image(const Ref<Image> &p_img, const int p_index_z
 		for (int x = 0; x < fms.x; ++x) {
 			Color c = img->get_pixel(x, y);
 
-			set_element(y, x, p_index_z, c[channel_index]);
+			element_set(y, x, p_index_z, c[channel_index]);
 		}
 	}
 
 	img->unlock();
 }
-void MLPPTensor3::set_z_slices_image(const Ref<Image> &p_img, const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) {
+void MLPPTensor3::z_slices_set_image(const Ref<Image> &p_img, const int p_index_r, const int p_index_g, const int p_index_b, const int p_index_a) {
 	ERR_FAIL_COND(!p_img.is_valid());
 
 	if (p_index_r != -1) {
@@ -998,19 +998,19 @@ void MLPPTensor3::set_z_slices_image(const Ref<Image> &p_img, const int p_index_
 			Color c = img->get_pixel(x, y);
 
 			if (p_index_r != -1) {
-				set_element(y, x, p_index_r, c.r);
+				element_set(y, x, p_index_r, c.r);
 			}
 
 			if (p_index_g != -1) {
-				set_element(y, x, p_index_g, c.g);
+				element_set(y, x, p_index_g, c.g);
 			}
 
 			if (p_index_b != -1) {
-				set_element(y, x, p_index_b, c.b);
+				element_set(y, x, p_index_b, c.b);
 			}
 
 			if (p_index_a != -1) {
-				set_element(y, x, p_index_a, c.a);
+				element_set(y, x, p_index_a, c.a);
 			}
 		}
 	}
@@ -1061,7 +1061,7 @@ void MLPPTensor3::set_from_image(const Ref<Image> &p_img, const int p_channels) 
 			Color c = img->get_pixel(x, y);
 
 			for (int i = 0; i < channel_count; ++i) {
-				set_element(y, x, i, c[channels[i]]);
+				element_set(y, x, i, c[channels[i]]);
 			}
 		}
 	}
@@ -1069,7 +1069,7 @@ void MLPPTensor3::set_from_image(const Ref<Image> &p_img, const int p_channels) 
 	img->unlock();
 }
 
-Ref<Image> MLPPTensor3::get_x_slice_image(const int p_index_x) const {
+Ref<Image> MLPPTensor3::x_slice_get_image(const int p_index_x) const {
 	ERR_FAIL_INDEX_V(p_index_x, _size.x, Ref<Image>());
 
 	Ref<Image> image;
@@ -1088,7 +1088,7 @@ Ref<Image> MLPPTensor3::get_x_slice_image(const int p_index_x) const {
 
 	for (int z = 0; z < _size.z; ++z) {
 		for (int y = 0; y < _size.y; ++y) {
-			wptr[i] = static_cast<uint8_t>(get_element(p_index_x, y, z) * 255.0);
+			wptr[i] = static_cast<uint8_t>(element_get(p_index_x, y, z) * 255.0);
 
 			++i;
 		}
@@ -1098,7 +1098,7 @@ Ref<Image> MLPPTensor3::get_x_slice_image(const int p_index_x) const {
 
 	return image;
 }
-void MLPPTensor3::get_x_slice_into_image(Ref<Image> p_target, const int p_index_x, const int p_target_channels) const {
+void MLPPTensor3::x_slice_get_into_image(Ref<Image> p_target, const int p_index_x, const int p_target_channels) const {
 	ERR_FAIL_INDEX(p_index_x, _size.x);
 	ERR_FAIL_COND(!p_target.is_valid());
 
@@ -1153,7 +1153,7 @@ void MLPPTensor3::get_x_slice_into_image(Ref<Image> p_target, const int p_index_
 		for (int z = 0; z < fms.x; ++z) {
 			Color c;
 
-			float e = get_element(y, p_index_x, z);
+			float e = element_get(y, p_index_x, z);
 
 			for (int i = 0; i < channel_count; ++i) {
 				c[channels[i]] = e;
@@ -1165,7 +1165,7 @@ void MLPPTensor3::get_x_slice_into_image(Ref<Image> p_target, const int p_index_
 
 	p_target->unlock();
 }
-void MLPPTensor3::set_x_slice_image(const Ref<Image> &p_img, const int p_index_x, const int p_image_channel_flag) {
+void MLPPTensor3::x_slice_set_image(const Ref<Image> &p_img, const int p_index_x, const int p_image_channel_flag) {
 	ERR_FAIL_COND(!p_img.is_valid());
 	ERR_FAIL_INDEX(p_index_x, _size.x);
 
@@ -1193,14 +1193,14 @@ void MLPPTensor3::set_x_slice_image(const Ref<Image> &p_img, const int p_index_x
 		for (int z = 0; z < fms.x; ++z) {
 			Color c = img->get_pixel(z, y);
 
-			set_element(y, p_index_x, z, c[channel_index]);
+			element_set(y, p_index_x, z, c[channel_index]);
 		}
 	}
 
 	img->unlock();
 }
 
-Ref<Image> MLPPTensor3::get_y_slice_image(const int p_index_y) const {
+Ref<Image> MLPPTensor3::y_slice_get_image(const int p_index_y) const {
 	ERR_FAIL_INDEX_V(p_index_y, _size.y, Ref<Image>());
 
 	Ref<Image> image;
@@ -1219,7 +1219,7 @@ Ref<Image> MLPPTensor3::get_y_slice_image(const int p_index_y) const {
 
 	for (int z = 0; z < _size.z; ++z) {
 		for (int x = 0; x < _size.x; ++x) {
-			wptr[i] = static_cast<uint8_t>(get_element(x, p_index_y, z) * 255.0);
+			wptr[i] = static_cast<uint8_t>(element_get(x, p_index_y, z) * 255.0);
 
 			++i;
 		}
@@ -1229,7 +1229,7 @@ Ref<Image> MLPPTensor3::get_y_slice_image(const int p_index_y) const {
 
 	return image;
 }
-void MLPPTensor3::get_y_slice_into_image(Ref<Image> p_target, const int p_index_y, const int p_target_channels) const {
+void MLPPTensor3::y_slice_get_into_image(Ref<Image> p_target, const int p_index_y, const int p_target_channels) const {
 	ERR_FAIL_INDEX(p_index_y, _size.y);
 	ERR_FAIL_COND(!p_target.is_valid());
 
@@ -1284,7 +1284,7 @@ void MLPPTensor3::get_y_slice_into_image(Ref<Image> p_target, const int p_index_
 		for (int z = 0; z < fms.x; ++z) {
 			Color c;
 
-			float e = get_element(p_index_y, x, z);
+			float e = element_get(p_index_y, x, z);
 
 			for (int i = 0; i < channel_count; ++i) {
 				c[channels[i]] = e;
@@ -1296,7 +1296,7 @@ void MLPPTensor3::get_y_slice_into_image(Ref<Image> p_target, const int p_index_
 
 	p_target->unlock();
 }
-void MLPPTensor3::set_y_slice_image(const Ref<Image> &p_img, const int p_index_y, const int p_image_channel_flag) {
+void MLPPTensor3::y_slice_set_image(const Ref<Image> &p_img, const int p_index_y, const int p_image_channel_flag) {
 	ERR_FAIL_COND(!p_img.is_valid());
 	ERR_FAIL_INDEX(p_index_y, _size.y);
 
@@ -1324,7 +1324,7 @@ void MLPPTensor3::set_y_slice_image(const Ref<Image> &p_img, const int p_index_y
 		for (int x = 0; x < fms.x; ++x) {
 			Color c = img->get_pixel(x, z);
 
-			set_element(p_index_y, x, z, c[channel_index]);
+			element_set(p_index_y, x, z, c[channel_index]);
 		}
 	}
 
@@ -2277,14 +2277,14 @@ void MLPPTensor3::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_data", "data"), &MLPPTensor3::set_data);
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "data"), "set_data", "get_data");
 
-	ClassDB::bind_method(D_METHOD("add_z_slice_pool_vector", "row"), &MLPPTensor3::add_z_slice_pool_vector);
-	ClassDB::bind_method(D_METHOD("add_z_slice_mlpp_vector", "row"), &MLPPTensor3::add_z_slice_mlpp_vector);
-	ClassDB::bind_method(D_METHOD("add_z_slice_mlpp_matrix", "matrix"), &MLPPTensor3::add_z_slice_mlpp_matrix);
+	ClassDB::bind_method(D_METHOD("z_slice_add_pool_vector", "row"), &MLPPTensor3::z_slice_add_pool_vector);
+	ClassDB::bind_method(D_METHOD("z_add_slice_mlpp_vector", "row"), &MLPPTensor3::z_slice_add_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("z_slice_add_mlpp_matrix", "matrix"), &MLPPTensor3::z_slice_add_mlpp_matrix);
 
-	ClassDB::bind_method(D_METHOD("remove_z_slice", "index"), &MLPPTensor3::remove_z_slice);
-	ClassDB::bind_method(D_METHOD("remove_z_slice_unordered", "index"), &MLPPTensor3::remove_z_slice_unordered);
+	ClassDB::bind_method(D_METHOD("z_slice_remove", "index"), &MLPPTensor3::z_slice_remove);
+	ClassDB::bind_method(D_METHOD("z_slice_remove_unordered", "index"), &MLPPTensor3::z_slice_remove_unordered);
 
-	ClassDB::bind_method(D_METHOD("swap_z_slice", "index_1", "index_2"), &MLPPTensor3::swap_z_slice);
+	ClassDB::bind_method(D_METHOD("z_slice_swap", "index_1", "index_2"), &MLPPTensor3::z_slice_swap);
 
 	ClassDB::bind_method(D_METHOD("clear"), &MLPPTensor3::clear);
 	ClassDB::bind_method(D_METHOD("reset"), &MLPPTensor3::reset);
@@ -2302,58 +2302,58 @@ void MLPPTensor3::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("calculate_index", "index_y", "index_x", "index_z"), &MLPPTensor3::calculate_index);
 	ClassDB::bind_method(D_METHOD("calculate_z_slice_index", "index_z"), &MLPPTensor3::calculate_z_slice_index);
 
-	ClassDB::bind_method(D_METHOD("get_element_index", "index"), &MLPPTensor3::get_element_index);
-	ClassDB::bind_method(D_METHOD("set_element_index", "index", "val"), &MLPPTensor3::set_element_index);
+	ClassDB::bind_method(D_METHOD("element_get_index", "index"), &MLPPTensor3::element_get_index);
+	ClassDB::bind_method(D_METHOD("element_set_index", "index", "val"), &MLPPTensor3::element_set_index);
 
-	ClassDB::bind_method(D_METHOD("get_element", "index_y", "index_x", "index_z"), &MLPPTensor3::get_element);
-	ClassDB::bind_method(D_METHOD("set_element", "index_y", "index_x", "index_z", "val"), &MLPPTensor3::set_element);
+	ClassDB::bind_method(D_METHOD("element_get", "index_y", "index_x", "index_z"), &MLPPTensor3::element_get);
+	ClassDB::bind_method(D_METHOD("element_set", "index_y", "index_x", "index_z", "val"), &MLPPTensor3::element_set);
 
-	ClassDB::bind_method(D_METHOD("get_row_pool_vector", "index_y", "index_z"), &MLPPTensor3::get_row_pool_vector);
-	ClassDB::bind_method(D_METHOD("get_row_mlpp_vector", "index_y", "index_z"), &MLPPTensor3::get_row_mlpp_vector);
-	ClassDB::bind_method(D_METHOD("get_row_into_mlpp_vector", "index_y", "index_z", "target"), &MLPPTensor3::get_row_into_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("row_get_pool_vector", "index_y", "index_z"), &MLPPTensor3::row_get_pool_vector);
+	ClassDB::bind_method(D_METHOD("row_get_mlpp_vector", "index_y", "index_z"), &MLPPTensor3::row_get_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("row_get_into_mlpp_vector", "index_y", "index_z", "target"), &MLPPTensor3::row_get_into_mlpp_vector);
 
-	ClassDB::bind_method(D_METHOD("set_row_pool_vector", "index_y", "index_z", "row"), &MLPPTensor3::set_row_pool_vector);
-	ClassDB::bind_method(D_METHOD("set_row_mlpp_vector", "index_y", "index_z", "row"), &MLPPTensor3::set_row_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("row_set_pool_vector", "index_y", "index_z", "row"), &MLPPTensor3::row_set_pool_vector);
+	ClassDB::bind_method(D_METHOD("row_set_mlpp_vector", "index_y", "index_z", "row"), &MLPPTensor3::row_set_mlpp_vector);
 
-	ClassDB::bind_method(D_METHOD("get_z_slice_pool_vector", "index_z"), &MLPPTensor3::get_z_slice_pool_vector);
-	ClassDB::bind_method(D_METHOD("get_z_slice_mlpp_vector", "index_z"), &MLPPTensor3::get_z_slice_mlpp_vector);
-	ClassDB::bind_method(D_METHOD("get_z_slice_into_mlpp_vector", "index_z", "target"), &MLPPTensor3::get_z_slice_into_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("z_slice_get_pool_vector", "index_z"), &MLPPTensor3::z_slice_get_pool_vector);
+	ClassDB::bind_method(D_METHOD("z_slice_get_mlpp_vector", "index_z"), &MLPPTensor3::z_slice_get_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("z_slice_get_into_mlpp_vector", "index_z", "target"), &MLPPTensor3::z_slice_get_into_mlpp_vector);
 
-	ClassDB::bind_method(D_METHOD("get_z_slice_mlpp_matrix", "index_z"), &MLPPTensor3::get_z_slice_mlpp_matrix);
-	ClassDB::bind_method(D_METHOD("get_z_slice_into_mlpp_matrix", "index_z", "target"), &MLPPTensor3::get_z_slice_into_mlpp_matrix);
+	ClassDB::bind_method(D_METHOD("z_slice_get_mlpp_matrix", "index_z"), &MLPPTensor3::z_slice_get_mlpp_matrix);
+	ClassDB::bind_method(D_METHOD("z_slice_get_into_mlpp_matrix", "index_z", "target"), &MLPPTensor3::z_slice_get_into_mlpp_matrix);
 
-	ClassDB::bind_method(D_METHOD("set_z_slice_pool_vector", "index_z", "row"), &MLPPTensor3::set_z_slice_pool_vector);
-	ClassDB::bind_method(D_METHOD("set_z_slice_mlpp_vector", "index_z", "row"), &MLPPTensor3::set_z_slice_mlpp_vector);
-	ClassDB::bind_method(D_METHOD("set_z_slice_mlpp_matrix", "index_z", "mat"), &MLPPTensor3::set_z_slice_mlpp_matrix);
+	ClassDB::bind_method(D_METHOD("z_slice_set_pool_vector", "index_z", "row"), &MLPPTensor3::z_slice_set_pool_vector);
+	ClassDB::bind_method(D_METHOD("z_slice_set_mlpp_vector", "index_z", "row"), &MLPPTensor3::z_slice_set_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("z_slice_set_mlpp_matrix", "index_z", "mat"), &MLPPTensor3::z_slice_set_mlpp_matrix);
 
-	ClassDB::bind_method(D_METHOD("get_x_slice_into", "index_x", "target"), &MLPPTensor3::get_x_slice_into);
-	ClassDB::bind_method(D_METHOD("get_x_slice", "index_x"), &MLPPTensor3::get_x_slice);
-	ClassDB::bind_method(D_METHOD("set_x_slice", "index_x", "mat"), &MLPPTensor3::set_x_slice);
+	ClassDB::bind_method(D_METHOD("x_slice_get_into", "index_x", "target"), &MLPPTensor3::x_slice_get_into);
+	ClassDB::bind_method(D_METHOD("x_slice_get", "index_x"), &MLPPTensor3::x_slice_get);
+	ClassDB::bind_method(D_METHOD("x_slice_set", "index_x", "mat"), &MLPPTensor3::x_slice_set);
 
-	ClassDB::bind_method(D_METHOD("get_y_slice_into", "index_y", "target"), &MLPPTensor3::get_y_slice_into);
-	ClassDB::bind_method(D_METHOD("get_y_slice", "index_y"), &MLPPTensor3::get_y_slice);
-	ClassDB::bind_method(D_METHOD("set_y_slice", "index_y", "mat"), &MLPPTensor3::set_y_slice);
+	ClassDB::bind_method(D_METHOD("y_slice_get_into", "index_y", "target"), &MLPPTensor3::y_slice_get_into);
+	ClassDB::bind_method(D_METHOD("y_slice_get", "index_y"), &MLPPTensor3::y_slice_get);
+	ClassDB::bind_method(D_METHOD("y_slice_set", "index_y", "mat"), &MLPPTensor3::y_slice_set);
 
-	ClassDB::bind_method(D_METHOD("add_z_slices_image", "img", "channels"), &MLPPTensor3::add_z_slices_image, IMAGE_CHANNEL_FLAG_RGBA);
+	ClassDB::bind_method(D_METHOD("z_slices_add_image", "img", "channels"), &MLPPTensor3::z_slices_add_image, IMAGE_CHANNEL_FLAG_RGBA);
 
-	ClassDB::bind_method(D_METHOD("get_z_slice_image", "index_z"), &MLPPTensor3::get_z_slice_image);
-	ClassDB::bind_method(D_METHOD("get_z_slices_image", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::get_z_slices_image, -1, -1, -1, -1);
+	ClassDB::bind_method(D_METHOD("z_slice_get_image", "index_z"), &MLPPTensor3::z_slice_get_image);
+	ClassDB::bind_method(D_METHOD("z_slices_get_image", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::z_slices_get_image, -1, -1, -1, -1);
 
-	ClassDB::bind_method(D_METHOD("get_z_slice_into_image", "target", "index_z", "target_channels"), &MLPPTensor3::get_z_slice_into_image, IMAGE_CHANNEL_FLAG_RGB);
-	ClassDB::bind_method(D_METHOD("get_z_slices_into_image", "target", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::get_z_slices_into_image, -1, -1, -1, -1);
+	ClassDB::bind_method(D_METHOD("z_slice_get_into_image", "target", "index_z", "target_channels"), &MLPPTensor3::z_slice_get_into_image, IMAGE_CHANNEL_FLAG_RGB);
+	ClassDB::bind_method(D_METHOD("z_slices_get_into_image", "target", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::z_slices_get_into_image, -1, -1, -1, -1);
 
-	ClassDB::bind_method(D_METHOD("set_z_slice_image", "img", "index_z", "image_channel_flag"), &MLPPTensor3::set_z_slice_image, IMAGE_CHANNEL_FLAG_R);
-	ClassDB::bind_method(D_METHOD("set_z_slices_image", "img", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::set_z_slices_image);
+	ClassDB::bind_method(D_METHOD("z_slice_set_image", "img", "index_z", "image_channel_flag"), &MLPPTensor3::z_slice_set_image, IMAGE_CHANNEL_FLAG_R);
+	ClassDB::bind_method(D_METHOD("z_slices_set_image", "img", "index_r", "index_g", "index_b", "index_a"), &MLPPTensor3::z_slices_set_image);
 
 	ClassDB::bind_method(D_METHOD("set_from_image", "img", "channels"), &MLPPTensor3::set_from_image, IMAGE_CHANNEL_FLAG_RGBA);
 
-	ClassDB::bind_method(D_METHOD("get_x_slice_image", "index_x"), &MLPPTensor3::get_x_slice_image);
-	ClassDB::bind_method(D_METHOD("get_x_slice_into_image", "target", "index_x", "target_channels"), &MLPPTensor3::get_x_slice_into_image, IMAGE_CHANNEL_FLAG_RGB);
-	ClassDB::bind_method(D_METHOD("set_x_slice_image", "img", "index_x", "image_channel_flag"), &MLPPTensor3::set_x_slice_image, IMAGE_CHANNEL_FLAG_R);
+	ClassDB::bind_method(D_METHOD("x_slice_get_image", "index_x"), &MLPPTensor3::x_slice_get_image);
+	ClassDB::bind_method(D_METHOD("x_slice_get_into_image", "target", "index_x", "target_channels"), &MLPPTensor3::x_slice_get_into_image, IMAGE_CHANNEL_FLAG_RGB);
+	ClassDB::bind_method(D_METHOD("x_slice_set_image", "img", "index_x", "image_channel_flag"), &MLPPTensor3::x_slice_set_image, IMAGE_CHANNEL_FLAG_R);
 
-	ClassDB::bind_method(D_METHOD("get_y_slice_image", "index_x"), &MLPPTensor3::get_y_slice_image);
-	ClassDB::bind_method(D_METHOD("get_y_slice_into_image", "target", "index_x", "target_channels"), &MLPPTensor3::get_y_slice_into_image, IMAGE_CHANNEL_FLAG_RGB);
-	ClassDB::bind_method(D_METHOD("set_y_slice_image", "img", "index_x", "image_channel_flag"), &MLPPTensor3::set_y_slice_image, IMAGE_CHANNEL_FLAG_R);
+	ClassDB::bind_method(D_METHOD("y_slice_get_image", "index_x"), &MLPPTensor3::y_slice_get_image);
+	ClassDB::bind_method(D_METHOD("y_slice_get_into_image", "target", "index_x", "target_channels"), &MLPPTensor3::y_slice_get_into_image, IMAGE_CHANNEL_FLAG_RGB);
+	ClassDB::bind_method(D_METHOD("y_slice_set_image", "img", "index_x", "image_channel_flag"), &MLPPTensor3::y_slice_set_image, IMAGE_CHANNEL_FLAG_R);
 
 	ClassDB::bind_method(D_METHOD("fill", "val"), &MLPPTensor3::fill);
 

@@ -24,7 +24,7 @@ Ref<MLPPVector> MLPPBernoulliNB::model_set_test(const Ref<MLPPMatrix> &X) {
 	for (int i = 0; i < X->size().y; i++) {
 		X->get_row_into_mlpp_vector(i, x_row_tmp);
 
-		y_hat->set_element(i, model_test(x_row_tmp));
+		y_hat->element_set(i, model_test(x_row_tmp));
 	}
 
 	return y_hat;
@@ -38,9 +38,9 @@ real_t MLPPBernoulliNB::model_test(const Ref<MLPPVector> &x) {
 
 	for (int j = 0; j < x->size(); j++) {
 		for (int k = 0; k < _vocab->size(); k++) {
-			if (x->get_element(j) == _vocab->get_element(k)) {
-				score_0 *= _theta[0][_vocab->get_element(k)];
-				score_1 *= _theta[1][_vocab->get_element(k)];
+			if (x->element_get(j) == _vocab->element_get(k)) {
+				score_0 *= _theta[0][_vocab->element_get(k)];
+				score_1 *= _theta[1][_vocab->element_get(k)];
 
 				found_indices.push_back(k);
 			}
@@ -50,13 +50,13 @@ real_t MLPPBernoulliNB::model_test(const Ref<MLPPVector> &x) {
 	for (int i = 0; i < _vocab->size(); i++) {
 		bool found = false;
 		for (int j = 0; j < found_indices.size(); j++) {
-			if (_vocab->get_element(i) == _vocab->get_element(found_indices[j])) {
+			if (_vocab->element_get(i) == _vocab->element_get(found_indices[j])) {
 				found = true;
 			}
 		}
 		if (!found) {
-			score_0 *= 1 - _theta[0][_vocab->get_element(i)];
-			score_1 *= 1 - _theta[1][_vocab->get_element(i)];
+			score_0 *= 1 - _theta[0][_vocab->element_get(i)];
+			score_1 *= 1 - _theta[1][_vocab->element_get(i)];
 		}
 	}
 
@@ -113,13 +113,13 @@ void MLPPBernoulliNB::compute_theta() {
 	// Setting all values in the hasmap by default to 0.
 	for (int i = _class_num - 1; i >= 0; i--) {
 		for (int j = 0; j < _vocab->size(); j++) {
-			_theta.write[i][_vocab->get_element(j)] = 0;
+			_theta.write[i][_vocab->element_get(j)] = 0;
 		}
 	}
 
 	for (int i = 0; i < _input_set->size().y; i++) {
 		for (int j = 0; j < _input_set->size().x; j++) {
-			_theta.write[_output_set->get_element(i)][_input_set->get_element(i, j)]++;
+			_theta.write[_output_set->element_get(i)][_input_set->element_get(i, j)]++;
 		}
 	}
 
@@ -142,7 +142,7 @@ void MLPPBernoulliNB::evaluate() {
 
 		real_t sum = 0;
 		for (int ii = 0; ii < _output_set->size(); ii++) {
-			if (_output_set->get_element(ii) == 1) {
+			if (_output_set->element_get(ii) == 1) {
 				sum += 1;
 			}
 		}
@@ -161,9 +161,9 @@ void MLPPBernoulliNB::evaluate() {
 
 		for (int j = 0; j < _input_set->size().y; j++) {
 			for (int k = 0; k < _vocab->size(); k++) {
-				if (_input_set->get_element(i, j) == _vocab->get_element(k)) {
-					score_0 += Math::log(static_cast<real_t>(_theta[0][_vocab->get_element(k)]));
-					score_1 += Math::log(static_cast<real_t>(_theta[1][_vocab->get_element(k)]));
+				if (_input_set->element_get(i, j) == _vocab->element_get(k)) {
+					score_0 += Math::log(static_cast<real_t>(_theta[0][_vocab->element_get(k)]));
+					score_1 += Math::log(static_cast<real_t>(_theta[1][_vocab->element_get(k)]));
 
 					found_indices.push_back(k);
 				}
@@ -173,13 +173,13 @@ void MLPPBernoulliNB::evaluate() {
 		for (int ii = 0; ii < _vocab->size(); ii++) {
 			bool found = false;
 			for (int j = 0; j < found_indices.size(); j++) {
-				if (_vocab->get_element(ii) == _vocab->get_element(found_indices[j])) {
+				if (_vocab->element_get(ii) == _vocab->element_get(found_indices[j])) {
 					found = true;
 				}
 			}
 			if (!found) {
-				score_0 += Math::log(1.0 - _theta[0][_vocab->get_element(ii)]);
-				score_1 += Math::log(1.0 - _theta[1][_vocab->get_element(ii)]);
+				score_0 += Math::log(1.0 - _theta[0][_vocab->element_get(ii)]);
+				score_1 += Math::log(1.0 - _theta[1][_vocab->element_get(ii)]);
 			}
 		}
 
@@ -192,9 +192,9 @@ void MLPPBernoulliNB::evaluate() {
 		// Assigning the traning example to a class
 
 		if (score_0 > score_1) {
-			_y_hat->set_element(i, 0);
+			_y_hat->element_set(i, 0);
 		} else {
-			_y_hat->set_element(i, 1);
+			_y_hat->element_set(i, 1);
 		}
 	}
 }

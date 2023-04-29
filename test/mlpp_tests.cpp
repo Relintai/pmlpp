@@ -1259,7 +1259,7 @@ void MLPPTests::is_approx_equals_vec(Ref<MLPPVector> a, Ref<MLPPVector> b, const
 	}
 
 	for (int i = 0; i < a->size(); ++i) {
-		if (!Math::is_equal_approx(a->get_element(i), b->get_element(i))) {
+		if (!Math::is_equal_approx(a->element_get(i), b->element_get(i))) {
 			goto IAEDVEC_FAILED;
 		}
 	}

@@ -47,7 +47,7 @@ Ref<MLPPVector> MLPPGaussianNB::model_set_test(const Ref<MLPPMatrix> &X) {
 	for (int i = 0; i < X->size().y; i++) {
 		X->get_row_into_mlpp_vector(i, x_row_tmp);
 
-		y_hat->set_element(i, model_test(x_row_tmp));
+		y_hat->element_set(i, model_test(x_row_tmp));
 	}
 
 	return y_hat;
@@ -60,11 +60,11 @@ real_t MLPPGaussianNB::model_test(const Ref<MLPPVector> &x) {
 	real_t y_hat_i = 1;
 
 	for (int i = _class_num - 1; i >= 0; i--) {
-		real_t sigma_i = _sigma->get_element(i);
-		real_t x_i = x->get_element(i);
-		real_t mu_i = _mu->get_element(i);
+		real_t sigma_i = _sigma->element_get(i);
+		real_t x_i = x->element_get(i);
+		real_t mu_i = _mu->element_get(i);
 
-		y_hat_i += Math::log(_priors->get_element(i) * (1 / Math::sqrt(2 * Math_PI * sigma_i * sigma_i)) * Math::exp(-(x_i * mu_i) * (x_i * mu_i) / (2 * sigma_i * sigma_i)));
+		y_hat_i += Math::log(_priors->element_get(i) * (1 / Math::sqrt(2 * Math_PI * sigma_i * sigma_i)) * Math::exp(-(x_i * mu_i) * (x_i * mu_i) / (2 * sigma_i * sigma_i)));
 		score[i] = Math::exp(y_hat_i);
 	}
 
@@ -140,24 +140,24 @@ void MLPPGaussianNB::evaluate() {
 
 		for (int j = 0; j < _input_set->size().y; j++) {
 			for (int k = 0; k < _input_set->size().x; k++) {
-				if (_output_set->get_element(j) == i) {
-					set.push_back(_input_set->get_element(j, k));
+				if (_output_set->element_get(j) == i) {
+					set.push_back(_input_set->element_get(j, k));
 				}
 			}
 		}
 
 		set_vec->set_from_pool_vector(set);
 
-		_mu->set_element(i, stat.meanv(set_vec));
-		_sigma->set_element(i, stat.standard_deviationv(set_vec));
+		_mu->element_set(i, stat.meanv(set_vec));
+		_sigma->element_set(i, stat.standard_deviationv(set_vec));
 	}
 
 	// Priors
 	_priors->resize(_class_num);
 	_priors->fill(0);
 	for (int i = 0; i < _output_set->size(); i++) {
-		int indx = static_cast<int>(_output_set->get_element(i));
-		_priors->set_element(indx, _priors->get_element(indx));
+		int indx = static_cast<int>(_output_set->element_get(i));
+		_priors->element_set(indx, _priors->element_get(indx));
 	}
 
 	_priors = alg.scalar_multiplynv(real_t(1) / real_t(_output_set->size()), _priors);
@@ -170,11 +170,11 @@ void MLPPGaussianNB::evaluate() {
 
 		for (int j = _class_num - 1; j >= 0; j--) {
 			for (int k = 0; k < _input_set->size().x; k++) {
-				real_t sigma_j = _sigma->get_element(j);
-				real_t mu_j = _mu->get_element(j);
-				real_t input_set_i_k = _input_set->get_element(i, k);
+				real_t sigma_j = _sigma->element_get(j);
+				real_t mu_j = _mu->element_get(j);
+				real_t input_set_i_k = _input_set->element_get(i, k);
 
-				y_hat_i += Math::log(_priors->get_element(j) * (1 / Math::sqrt(2 * Math_PI * sigma_j * sigma_j)) * Math::exp(-(input_set_i_k * mu_j) * (input_set_i_k * mu_j) / (2 * sigma_j * sigma_j)));
+				y_hat_i += Math::log(_priors->element_get(j) * (1 / Math::sqrt(2 * Math_PI * sigma_j * sigma_j)) * Math::exp(-(input_set_i_k * mu_j) * (input_set_i_k * mu_j) / (2 * sigma_j * sigma_j)));
 			}
 
 			score[j] = Math::exp(y_hat_i);
@@ -192,7 +192,7 @@ void MLPPGaussianNB::evaluate() {
 			}
 		}
 
-		_y_hat->set_element(i, max_element_index);
+		_y_hat->element_set(i, max_element_index);
 	}
 }
 

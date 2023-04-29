@@ -40,21 +40,21 @@ void MLPPExpReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) 
 			// Calculating the weight gradient
 			real_t sum = 0;
 			for (int j = 0; j < _n; j++) {
-				sum += error->get_element(j) * _input_set->get_element(j, i) * Math::pow(_weights->get_element(i), _input_set->get_element(j, i) - 1);
+				sum += error->element_get(j) * _input_set->element_get(j, i) * Math::pow(_weights->element_get(i), _input_set->element_get(j, i) - 1);
 			}
 			real_t w_gradient = sum / _n;
 
 			// Calculating the initial gradient
 			real_t sum2 = 0;
 			for (int j = 0; j < _n; j++) {
-				sum2 += error->get_element(j) * Math::pow(_weights->get_element(i), _input_set->get_element(j, i));
+				sum2 += error->element_get(j) * Math::pow(_weights->element_get(i), _input_set->element_get(j, i));
 			}
 
 			real_t i_gradient = sum2 / _n;
 
 			// Weight/initial updation
-			_weights->set_element(i, _weights->get_element(i) - learning_rate * w_gradient);
-			_initial->set_element(i, _initial->get_element(i) - learning_rate * i_gradient);
+			_weights->element_set(i, _weights->element_get(i) - learning_rate * w_gradient);
+			_initial->element_set(i, _initial->element_get(i) - learning_rate * i_gradient);
 		}
 
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
@@ -62,7 +62,7 @@ void MLPPExpReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) 
 		// Calculating the bias gradient
 		real_t sum = 0;
 		for (int j = 0; j < _n; j++) {
-			sum += (_y_hat->get_element(j) - _output_set->get_element(j));
+			sum += (_y_hat->element_get(j) - _output_set->element_get(j));
 		}
 		real_t b_gradient = sum / _n;
 
@@ -110,29 +110,29 @@ void MLPPExpReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 		int output_index = distribution(generator);
 
 		_input_set->get_row_into_mlpp_vector(output_index, input_set_row_tmp);
-		real_t output_set_element = _output_set->get_element(output_index);
-		output_set_row_tmp->set_element(0, output_set_element);
+		real_t output_element_set = _output_set->element_get(output_index);
+		output_set_row_tmp->element_set(0, output_element_set);
 
 		real_t y_hat = evaluatev(input_set_row_tmp);
-		y_hat_row_tmp->set_element(0, y_hat);
+		y_hat_row_tmp->element_set(0, y_hat);
 
 		cost_prev = cost(y_hat_row_tmp, output_set_row_tmp);
 
 		for (int i = 0; i < _k; i++) {
 			// Calculating the weight gradients
 
-			real_t w_gradient = (y_hat - output_set_element) * input_set_row_tmp->get_element(i) * Math::pow(_weights->get_element(i), _input_set->get_element(output_index, i) - 1);
-			real_t i_gradient = (y_hat - output_set_element) * Math::pow(_weights->get_element(i), _input_set->get_element(output_index, i));
+			real_t w_gradient = (y_hat - output_element_set) * input_set_row_tmp->element_get(i) * Math::pow(_weights->element_get(i), _input_set->element_get(output_index, i) - 1);
+			real_t i_gradient = (y_hat - output_element_set) * Math::pow(_weights->element_get(i), _input_set->element_get(output_index, i));
 
 			// Weight/initial updation
-			_weights->set_element(i, _weights->get_element(i) - learning_rate * w_gradient);
-			_initial->set_element(i, _initial->get_element(i) - learning_rate * i_gradient);
+			_weights->element_set(i, _weights->element_get(i) - learning_rate * w_gradient);
+			_initial->element_set(i, _initial->element_get(i) - learning_rate * i_gradient);
 		}
 
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		real_t b_gradient = (y_hat - output_set_element);
+		real_t b_gradient = (y_hat - output_element_set);
 
 		// Bias updation
 		_bias -= learning_rate * b_gradient;
@@ -177,21 +177,21 @@ void MLPPExpReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, 
 				// Calculating the weight gradient
 				real_t sum = 0;
 				for (int k = 0; k < current_output_batch->size(); k++) {
-					sum += error->get_element(k) * current_input_batch->get_element(k, j) * Math::pow(_weights->get_element(j), current_input_batch->get_element(k, j) - 1);
+					sum += error->element_get(k) * current_input_batch->element_get(k, j) * Math::pow(_weights->element_get(j), current_input_batch->element_get(k, j) - 1);
 				}
 				real_t w_gradient = sum / current_output_batch->size();
 
 				// Calculating the initial gradient
 				real_t sum2 = 0;
 				for (int k = 0; k < current_output_batch->size(); k++) {
-					sum2 += error->get_element(k) * Math::pow(_weights->get_element(j), current_input_batch->get_element(k, j));
+					sum2 += error->element_get(k) * Math::pow(_weights->element_get(j), current_input_batch->element_get(k, j));
 				}
 
 				real_t i_gradient = sum2 / current_output_batch->size();
 
 				// Weight/initial updation
-				_weights->set_element(i, _weights->get_element(i) - learning_rate * w_gradient);
-				_initial->set_element(i, _initial->get_element(i) - learning_rate * i_gradient);
+				_weights->element_set(i, _weights->element_get(i) - learning_rate * w_gradient);
+				_initial->element_set(i, _initial->element_get(i) - learning_rate * i_gradient);
 			}
 
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
@@ -199,7 +199,7 @@ void MLPPExpReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			// Calculating the bias gradient
 			//real_t sum = 0;
 			//for (int j = 0; j < current_output_batch->size(); j++) {
-			//	sum += (y_hat->get_element(j) - current_output_batch->get_element(j));
+			//	sum += (y_hat->element_get(j) - current_output_batch->element_get(j));
 			//}
 
 			//real_t b_gradient = sum / output_mini_batches[i].size();
@@ -276,7 +276,7 @@ real_t MLPPExpReg::evaluatev(const Ref<MLPPVector> &x) {
 	real_t y_hat = 0;
 
 	for (int i = 0; i < x->size(); i++) {
-		y_hat += _initial->get_element(i) * Math::pow(_weights->get_element(i), x->get_element(i));
+		y_hat += _initial->element_get(i) * Math::pow(_weights->element_get(i), x->element_get(i));
 	}
 
 	return y_hat + _bias;
@@ -291,12 +291,12 @@ Ref<MLPPVector> MLPPExpReg::evaluatem(const Ref<MLPPMatrix> &X) {
 		real_t y = 0;
 
 		for (int j = 0; j < X->size().x; j++) {
-			y += _initial->get_element(j) * Math::pow(_weights->get_element(j), X->get_element(i, j));
+			y += _initial->element_get(j) * Math::pow(_weights->element_get(j), X->element_get(i, j));
 		}
 
 		y += _bias;
 
-		y_hat->set_element(i, y);
+		y_hat->element_set(i, y);
 	}
 
 	return y_hat;
