@@ -3,6 +3,30 @@
 
 #include "mlpp_matrix.h"
 
+PoolRealArray MLPPVector::get_data() {
+	PoolRealArray pl;
+	if (size()) {
+		pl.resize(size());
+		PoolRealArray::Write w = pl.write();
+		real_t *dest = w.ptr();
+
+		for (int i = 0; i < size(); ++i) {
+			dest[i] = _data[i];
+		}
+	}
+	return pl;
+}
+void MLPPVector::set_data(const PoolRealArray &p_from) {
+	if (_size != p_from.size()) {
+		resize(p_from.size());
+	}
+
+	PoolRealArray::Read r = p_from.read();
+	for (int i = 0; i < _size; i++) {
+		_data[i] = r[i];
+	}
+}
+
 void MLPPVector::push_back(real_t p_elem) {
 	++_size;
 
@@ -166,7 +190,7 @@ PoolRealArray MLPPVector::to_pool_vector() const {
 	PoolRealArray pl;
 	if (size()) {
 		pl.resize(size());
-		typename PoolRealArray::Write w = pl.write();
+		PoolRealArray::Write w = pl.write();
 		real_t *dest = w.ptr();
 
 		for (int i = 0; i < size(); ++i) {
@@ -1293,7 +1317,7 @@ MLPPVector::MLPPVector(const PoolRealArray &p_from) {
 	_data = NULL;
 
 	resize(p_from.size());
-	typename PoolRealArray::Read r = p_from.read();
+	PoolRealArray::Read r = p_from.read();
 	for (int i = 0; i < _size; i++) {
 		_data[i] = r[i];
 	}
@@ -1331,6 +1355,10 @@ MLPPVector::MLPPVector(const std::vector<real_t> &p_from) {
 }
 
 void MLPPVector::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_data"), &MLPPVector::get_data);
+	ClassDB::bind_method(D_METHOD("set_data", "data"), &MLPPVector::set_data);
+	ADD_PROPERTY(PropertyInfo(Variant::POOL_REAL_ARRAY, "data"), "set_data", "get_data");
+
 	ClassDB::bind_method(D_METHOD("push_back", "elem"), &MLPPVector::push_back);
 	ClassDB::bind_method(D_METHOD("add_mlpp_vector", "other"), &MLPPVector::push_back);
 	ClassDB::bind_method(D_METHOD("remove", "index"), &MLPPVector::remove);

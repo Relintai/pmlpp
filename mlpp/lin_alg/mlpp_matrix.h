@@ -20,6 +20,9 @@ class MLPPMatrix : public Resource {
 	GDCLASS(MLPPMatrix, Resource);
 
 public:
+	Array get_data();
+	void set_data(const Array &p_from);
+
 	_FORCE_INLINE_ real_t *ptrw() {
 		return _data;
 	}

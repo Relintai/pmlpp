@@ -21,6 +21,9 @@ class MLPPVector : public Resource {
 	GDCLASS(MLPPVector, Resource);
 
 public:
+	PoolRealArray get_data();
+	void set_data(const PoolRealArray &p_from);
+
 	_FORCE_INLINE_ real_t *ptrw() {
 		return _data;
 	}

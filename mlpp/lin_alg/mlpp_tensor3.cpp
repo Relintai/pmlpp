@@ -3,6 +3,51 @@
 
 #include "core/io/image.h"
 
+Array MLPPTensor3::get_data() {
+	PoolRealArray pl;
+
+	int ds = data_size();
+
+	if (ds) {
+		pl.resize(ds);
+		PoolRealArray::Write w = pl.write();
+		real_t *dest = w.ptr();
+
+		for (int i = 0; i < ds; ++i) {
+			dest[i] = _data[i];
+		}
+	}
+
+	Array arr;
+	arr.push_back(size());
+	arr.push_back(pl);
+
+	return arr;
+}
+void MLPPTensor3::set_data(const Array &p_from) {
+	if (p_from.size() != 2) {
+		return;
+	}
+
+	Size3i s = p_from[0];
+	PoolRealArray pl = p_from[1];
+
+	int ds = s.x * s.y * s.z;
+
+	if (ds != pl.size()) {
+		return;
+	}
+
+	if (_size != s) {
+		resize(s);
+	}
+
+	PoolRealArray::Read r = pl.read();
+	for (int i = 0; i < ds; ++i) {
+		_data[i] = r[i];
+	}
+}
+
 void MLPPTensor3::add_z_slice(const Vector<real_t> &p_row) {
 	if (p_row.size() == 0) {
 		return;
@@ -2228,6 +2273,10 @@ MLPPTensor3::MLPPTensor3(const std::vector<std::vector<std::vector<real_t>>> &p_
 }
 
 void MLPPTensor3::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_data"), &MLPPTensor3::get_data);
+	ClassDB::bind_method(D_METHOD("set_data", "data"), &MLPPTensor3::set_data);
+	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "data"), "set_data", "get_data");
+
 	ClassDB::bind_method(D_METHOD("add_z_slice_pool_vector", "row"), &MLPPTensor3::add_z_slice_pool_vector);
 	ClassDB::bind_method(D_METHOD("add_z_slice_mlpp_vector", "row"), &MLPPTensor3::add_z_slice_mlpp_vector);
 	ClassDB::bind_method(D_METHOD("add_z_slice_mlpp_matrix", "matrix"), &MLPPTensor3::add_z_slice_mlpp_matrix);

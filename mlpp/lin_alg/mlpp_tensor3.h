@@ -21,6 +21,9 @@ class MLPPTensor3 : public Resource {
 	GDCLASS(MLPPTensor3, Resource);
 
 public:
+	Array get_data();
+	void set_data(const Array &p_from);
+	
 	_FORCE_INLINE_ real_t *ptrw() {
 		return _data;
 	}
