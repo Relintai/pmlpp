@@ -8,7 +8,6 @@
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
 #include "../utilities/utilities.h"
 
@@ -71,7 +70,6 @@ void MLPPProbitReg::gradient_descent(real_t learning_rate, int max_epoch, bool u
 	ERR_FAIL_COND(!_initialized);
 
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -81,14 +79,14 @@ void MLPPProbitReg::gradient_descent(real_t learning_rate, int max_epoch, bool u
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
+		Ref<MLPPVector> error = _y_hat->subn(_output_set);
 
 		// Calculating the weight gradients
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z)))));
+		_weights->sub(_input_set->transposen()->mult_vec(error->hadamard_productn(avn.gaussian_cdf_derivv(_z)))->scalar_multiplyn(learning_rate / _n));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		_bias -= learning_rate * alg.sum_elementsv(alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z))) / _n;
+		_bias -= learning_rate * error->hadamard_productn(avn.gaussian_cdf_derivv(_z))->sum_elements() / _n;
 
 		forward_pass();
 
@@ -109,7 +107,6 @@ void MLPPProbitReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -119,14 +116,14 @@ void MLPPProbitReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		Ref<MLPPVector> error = alg.subtractionnv(_output_set, _y_hat);
+		Ref<MLPPVector> error = _output_set->subn(_y_hat);
 
 		// Calculating the weight gradients
-		_weights = alg.additionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z)))));
+		_weights->add(_input_set->transposen()->mult_vec(error->hadamard_productn(avn.gaussian_cdf_derivv(_z)))->scalar_multiplyn(learning_rate / _n));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		_bias += learning_rate * alg.sum_elementsv(alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(_z))) / _n;
+		_bias += learning_rate * error->hadamard_productn(avn.gaussian_cdf_derivv(_z))->sum_elements() / _n;
 
 		forward_pass();
 
@@ -148,7 +145,6 @@ void MLPPProbitReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 
 	// NOTE: ∂y_hat/∂z is sparse
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -186,7 +182,7 @@ void MLPPProbitReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 		real_t error = y_hat - output_set_entry;
 
 		// Weight Updation
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * error * ((1 / Math::sqrt(2 * Math_PI)) * Math::exp(-z * z / 2)), input_set_row_tmp));
+		_weights->sub(input_set_row_tmp->scalar_multiplyn(learning_rate * error * ((1 / Math::sqrt(2 * Math_PI)) * Math::exp(-z * z / 2))));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Bias updation
@@ -213,7 +209,6 @@ void MLPPProbitReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_siz
 	ERR_FAIL_COND(!_initialized);
 
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -239,14 +234,15 @@ void MLPPProbitReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_siz
 
 			cost_prev = cost(y_hat, current_output);
 
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output);
+			Ref<MLPPVector> error = y_hat->subn(current_output);
 
 			// Calculating the weight gradients
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / batches.input_sets.size(), alg.mat_vec_multnv(alg.transposenm(current_input), alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(z_tmp)))));
+			_weights->sub(current_input->transposen()->mult_vec(error->hadamard_productn(avn.gaussian_cdf_derivv(z_tmp)))->scalar_multiplyn(learning_rate / batches.input_sets.size()));
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(alg.hadamard_productnv(error, avn.gaussian_cdf_derivv(z_tmp))) / batches.input_sets.size();
+
+			_bias -= learning_rate * error->hadamard_productn(avn.gaussian_cdf_derivv(z_tmp))->sum_elements() / batches.input_sets.size();
 			y_hat = evaluatev(current_input);
 
 			if (ui) {
@@ -361,29 +357,23 @@ real_t MLPPProbitReg::cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &
 }
 
 Ref<MLPPVector> MLPPProbitReg::evaluatem(const Ref<MLPPMatrix> &X) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.gaussian_cdf_normv(alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights)));
+	return avn.gaussian_cdf_normv(X->mult_vec(_weights)->scalar_addn(_bias));
 }
 
 Ref<MLPPVector> MLPPProbitReg::propagatem(const Ref<MLPPMatrix> &X) {
-	MLPPLinAlg alg;
-
-	return alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights));
+	return X->mult_vec(_weights)->scalar_addn(_bias);
 }
 
 real_t MLPPProbitReg::evaluatev(const Ref<MLPPVector> &x) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.gaussian_cdf_normr(alg.dotnv(_weights, x) + _bias);
+	return avn.gaussian_cdf_normr(_weights->dot(x) + _bias);
 }
 
 real_t MLPPProbitReg::propagatev(const Ref<MLPPVector> &x) {
-	MLPPLinAlg alg;
-
-	return alg.dotnv(_weights, x) + _bias;
+	return _weights->dot(x) + _bias;
 }
 
 // gaussianCDF ( wTx + b )
