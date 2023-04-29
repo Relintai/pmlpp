@@ -33,7 +33,7 @@ public:
 	}
 
 	void push_back(real_t p_elem);
-	void add_mlpp_vector(const Ref<MLPPVector> &p_other);
+	void append_mlpp_vector(const Ref<MLPPVector> &p_other);
 
 	void remove(real_t p_index);
 
@@ -177,9 +177,9 @@ public:
 	Ref<MLPPVector> absn() const;
 	void absb(const Ref<MLPPVector> &a);
 
-	Ref<MLPPVector> zero_vec(int n) const;
-	Ref<MLPPVector> one_vec(int n) const;
-	Ref<MLPPVector> full_vec(int n, int k) const;
+	Ref<MLPPVector> vecn_zero(int n) const;
+	Ref<MLPPVector> vecn_one(int n) const;
+	Ref<MLPPVector> vecn_full(int n, int k) const;
 
 	void sin();
 	Ref<MLPPVector> sinn() const;

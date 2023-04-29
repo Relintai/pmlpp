@@ -71,7 +71,7 @@ void MLPPWGAN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 			ly_hat = model_set_test_discriminator(discriminator_input_set);
 			loutput_set = alg.scalar_multiplynv(-1, alg.onevecnv(_n)); // WGAN changes y_i = 1 and y_i = 0 to y_i = 1 and y_i = -1
 			Ref<MLPPVector> output_set_real = alg.onevecnv(_n);
-			loutput_set->add_mlpp_vector(output_set_real); // Fake + real output scores.
+			loutput_set->append_mlpp_vector(output_set_real); // Fake + real output scores.
 
 			DiscriminatorGradientResult discriminator_gradient_results = compute_discriminator_gradients(ly_hat, loutput_set);
 			Vector<Ref<MLPPMatrix>> cumulative_discriminator_hidden_layer_w_grad = discriminator_gradient_results.cumulative_hidden_layer_w_grad;

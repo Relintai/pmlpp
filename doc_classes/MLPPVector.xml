@@ -29,7 +29,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="add_mlpp_vector">
+		<method name="append_mlpp_vector">
 			<return type="void" />
 			<argument index="0" name="other" type="float" />
 			<description>

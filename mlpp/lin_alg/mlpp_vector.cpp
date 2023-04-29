@@ -36,7 +36,7 @@ void MLPPVector::push_back(real_t p_elem) {
 	_data[_size - 1] = p_elem;
 }
 
-void MLPPVector::add_mlpp_vector(const Ref<MLPPVector> &p_other) {
+void MLPPVector::append_mlpp_vector(const Ref<MLPPVector> &p_other) {
 	ERR_FAIL_COND(!p_other.is_valid());
 
 	int other_size = p_other->size();
@@ -899,7 +899,7 @@ void MLPPVector::absb(const Ref<MLPPVector> &a) {
 	}
 }
 
-Ref<MLPPVector> MLPPVector::zero_vec(int n) const {
+Ref<MLPPVector> MLPPVector::vecn_zero(int n) const {
 	Ref<MLPPVector> vec;
 	vec.instance();
 
@@ -908,7 +908,7 @@ Ref<MLPPVector> MLPPVector::zero_vec(int n) const {
 
 	return vec;
 }
-Ref<MLPPVector> MLPPVector::one_vec(int n) const {
+Ref<MLPPVector> MLPPVector::vecn_one(int n) const {
 	Ref<MLPPVector> vec;
 	vec.instance();
 
@@ -917,7 +917,7 @@ Ref<MLPPVector> MLPPVector::one_vec(int n) const {
 
 	return vec;
 }
-Ref<MLPPVector> MLPPVector::full_vec(int n, int k) const {
+Ref<MLPPVector> MLPPVector::vecn_full(int n, int k) const {
 	Ref<MLPPVector> vec;
 	vec.instance();
 
@@ -1360,7 +1360,7 @@ void MLPPVector::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::POOL_REAL_ARRAY, "data"), "set_data", "get_data");
 
 	ClassDB::bind_method(D_METHOD("push_back", "elem"), &MLPPVector::push_back);
-	ClassDB::bind_method(D_METHOD("add_mlpp_vector", "other"), &MLPPVector::push_back);
+	ClassDB::bind_method(D_METHOD("append_mlpp_vector", "other"), &MLPPVector::append_mlpp_vector);
 	ClassDB::bind_method(D_METHOD("remove", "index"), &MLPPVector::remove);
 	ClassDB::bind_method(D_METHOD("remove_unordered", "index"), &MLPPVector::remove_unordered);
 	ClassDB::bind_method(D_METHOD("erase", "val"), &MLPPVector::erase);
@@ -1450,9 +1450,9 @@ void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("absn"), &MLPPVector::absn);
 	ClassDB::bind_method(D_METHOD("absb", "a"), &MLPPVector::absb);
 
-	ClassDB::bind_method(D_METHOD("zero_vec", "n"), &MLPPVector::zero_vec);
-	ClassDB::bind_method(D_METHOD("one_vec", "n"), &MLPPVector::one_vec);
-	ClassDB::bind_method(D_METHOD("full_vec", "n", "k"), &MLPPVector::full_vec);
+	ClassDB::bind_method(D_METHOD("vecn_zero", "n"), &MLPPVector::vecn_zero);
+	ClassDB::bind_method(D_METHOD("vecn_one", "n"), &MLPPVector::vecn_one);
+	ClassDB::bind_method(D_METHOD("vecn_full", "n", "k"), &MLPPVector::vecn_full);
 
 	ClassDB::bind_method(D_METHOD("sin"), &MLPPVector::sin);
 	ClassDB::bind_method(D_METHOD("sinn"), &MLPPVector::sinn);

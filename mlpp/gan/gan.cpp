@@ -65,7 +65,7 @@ void MLPPGAN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 		Ref<MLPPVector> y_hat = model_set_test_discriminator(discriminator_input_set);
 		Ref<MLPPVector> output_set = alg.zerovecnv(_n);
 		Ref<MLPPVector> output_set_real = alg.onevecnv(_n);
-		output_set->add_mlpp_vector(output_set_real); // Fake + real output scores.
+		output_set->append_mlpp_vector(output_set_real); // Fake + real output scores.
 
 		ComputeDiscriminatorGradientsResult dgrads = compute_discriminator_gradients(y_hat, _output_set);
 
