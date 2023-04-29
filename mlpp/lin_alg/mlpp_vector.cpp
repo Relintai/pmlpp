@@ -1083,6 +1083,24 @@ real_t MLPPVector::max_element() const {
 
 	return max_element;
 }
+int MLPPVector::max_element_index() const {
+	const real_t *aa = ptr();
+
+	real_t max_element = -Math_INF;
+	int index = -1;
+
+	for (int i = 0; i < _size; i++) {
+		real_t current_element = aa[i];
+
+		if (current_element > max_element) {
+			max_element = current_element;
+			index = i;
+		}
+	}
+
+	return index;
+}
+
 real_t MLPPVector::min_element() const {
 	const real_t *aa = ptr();
 
@@ -1097,6 +1115,23 @@ real_t MLPPVector::min_element() const {
 	}
 
 	return min_element;
+}
+int MLPPVector::min_element_index() const {
+	const real_t *aa = ptr();
+
+	real_t min_element = Math_INF;
+	int index = -1;
+
+	for (int i = 0; i < _size; i++) {
+		real_t current_element = aa[i];
+
+		if (current_element > min_element) {
+			min_element = current_element;
+			index = i;
+		}
+	}
+
+	return index;
 }
 
 /*
@@ -1467,7 +1502,10 @@ void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("maxvb", "a", "b"), &MLPPVector::maxvb);
 
 	ClassDB::bind_method(D_METHOD("max_element"), &MLPPVector::max_element);
+	ClassDB::bind_method(D_METHOD("max_element_index"), &MLPPVector::max_element_index);
+
 	ClassDB::bind_method(D_METHOD("min_element"), &MLPPVector::min_element);
+	ClassDB::bind_method(D_METHOD("min_element_index"), &MLPPVector::min_element_index);
 
 	ClassDB::bind_method(D_METHOD("euclidean_distance", "b"), &MLPPVector::euclidean_distance);
 	ClassDB::bind_method(D_METHOD("euclidean_distance_squared", "b"), &MLPPVector::euclidean_distance_squared);

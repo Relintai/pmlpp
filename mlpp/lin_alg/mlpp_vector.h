@@ -194,7 +194,10 @@ public:
 	void maxvb(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
 	real_t max_element() const;
+	int max_element_index() const;
+
 	real_t min_element() const;
+	int min_element_index() const;
 
 	//std::vector<real_t> round(std::vector<real_t> a);
 
