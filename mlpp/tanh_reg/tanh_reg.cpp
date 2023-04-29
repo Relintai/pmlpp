@@ -52,6 +52,10 @@ Ref<MLPPVector> MLPPTanhReg::data_z_get() const {
 	return _z;
 }
 void MLPPTanhReg::data_z_set(const Ref<MLPPVector> &val) {
+	if (!val.is_valid()) {
+		return;
+	}
+
 	_z = val;
 }
 
@@ -59,6 +63,10 @@ Ref<MLPPVector> MLPPTanhReg::data_y_hat_get() const {
 	return _y_hat;
 }
 void MLPPTanhReg::data_y_hat_set(const Ref<MLPPVector> &val) {
+	if (!val.is_valid()) {
+		return;
+	}
+
 	_y_hat = val;
 }
 
@@ -66,6 +74,10 @@ Ref<MLPPVector> MLPPTanhReg::data_weights_get() const {
 	return _weights;
 }
 void MLPPTanhReg::data_weights_set(const Ref<MLPPVector> &val) {
+	if (!val.is_valid()) {
+		return;
+	}
+
 	_weights = val;
 }
 
@@ -381,6 +393,7 @@ void MLPPTanhReg::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_alpha", "val"), &MLPPTanhReg::set_alpha);
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "alpha"), "set_alpha", "get_alpha");
 
+	ADD_GROUP("Data", "data");
 	ClassDB::bind_method(D_METHOD("data_z_get"), &MLPPTanhReg::data_z_get);
 	ClassDB::bind_method(D_METHOD("data_z_set", "val"), &MLPPTanhReg::set_output_set);
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_z", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_z_set", "data_z_get");
