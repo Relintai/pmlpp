@@ -363,7 +363,7 @@ Vector<uint8_t> MLPPMatrix::to_flat_byte_array() const {
 	return ret;
 }
 
-Ref<MLPPMatrix> MLPPMatrix::duplicate() const {
+Ref<MLPPMatrix> MLPPMatrix::duplicate_fast() const {
 	Ref<MLPPMatrix> ret;
 	ret.instance();
 
@@ -673,7 +673,7 @@ void MLPPMatrix::mult(const Ref<MLPPMatrix> &B) {
 
 	ERR_FAIL_COND(_size.x != b_size.y || _size.y != b_size.x);
 
-	Ref<MLPPMatrix> A = duplicate();
+	Ref<MLPPMatrix> A = duplicate_fast();
 	Size2i a_size = A->size();
 
 	Size2i rs = Size2i(b_size.x, a_size.y);
@@ -840,7 +840,7 @@ void MLPPMatrix::kronecker_product(const Ref<MLPPMatrix> &B) {
 	Size2i a_size = size();
 	Size2i b_size = B->size();
 
-	Ref<MLPPMatrix> A = duplicate();
+	Ref<MLPPMatrix> A = duplicate_fast();
 
 	resize(Size2i(b_size.x * a_size.x, b_size.y * a_size.y));
 
@@ -1008,7 +1008,7 @@ void MLPPMatrix::element_wise_divisionb(const Ref<MLPPMatrix> &A, const Ref<MLPP
 }
 
 void MLPPMatrix::transpose() {
-	Ref<MLPPMatrix> A = duplicate();
+	Ref<MLPPMatrix> A = duplicate_fast();
 	Size2i a_size = A->size();
 
 	resize(Size2i(a_size.y, a_size.x));
@@ -1067,7 +1067,7 @@ void MLPPMatrix::scalar_multiply(const real_t scalar) {
 	}
 }
 Ref<MLPPMatrix> MLPPMatrix::scalar_multiplyn(const real_t scalar) const {
-	Ref<MLPPMatrix> AN = duplicate();
+	Ref<MLPPMatrix> AN = duplicate_fast();
 	int ds = AN->data_size();
 	real_t *an_ptr = AN->ptrw();
 
@@ -1100,7 +1100,7 @@ void MLPPMatrix::scalar_add(const real_t scalar) {
 	}
 }
 Ref<MLPPMatrix> MLPPMatrix::scalar_addn(const real_t scalar) const {
-	Ref<MLPPMatrix> AN = duplicate();
+	Ref<MLPPMatrix> AN = duplicate_fast();
 	int ds = AN->data_size();
 	real_t *an_ptr = AN->ptrw();
 
@@ -2057,7 +2057,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 
 	} while (!diagonal);
 
-	Ref<MLPPMatrix> a_new_prior = a_new->duplicate();
+	Ref<MLPPMatrix> a_new_prior = a_new->duplicate_fast();
 
 	Size2i a_new_size = a_new->size();
 
@@ -2080,7 +2080,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigen() const {
 		}
 	}
 
-	Ref<MLPPMatrix> eigen_temp = eigenvectors->duplicate();
+	Ref<MLPPMatrix> eigen_temp = eigenvectors->duplicate_fast();
 
 	Size2i eigenvectors_size = eigenvectors->size();
 
@@ -2197,7 +2197,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 
 	} while (!diagonal);
 
-	Ref<MLPPMatrix> a_new_prior = a_new->duplicate();
+	Ref<MLPPMatrix> a_new_prior = a_new->duplicate_fast();
 
 	Size2i a_new_size = a_new->size();
 
@@ -2220,7 +2220,7 @@ MLPPMatrix::EigenResult MLPPMatrix::eigenb(const Ref<MLPPMatrix> &A) const {
 		}
 	}
 
-	Ref<MLPPMatrix> eigen_temp = eigenvectors->duplicate();
+	Ref<MLPPMatrix> eigen_temp = eigenvectors->duplicate_fast();
 
 	Size2i eigenvectors_size = eigenvectors->size();
 
@@ -2682,7 +2682,7 @@ void MLPPMatrix::set_diagonal(const Ref<MLPPVector> &a) {
 Ref<MLPPMatrix> MLPPMatrix::set_diagonaln(const Ref<MLPPVector> &a) const {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPMatrix>());
 
-	Ref<MLPPMatrix> B = duplicate();
+	Ref<MLPPMatrix> B = duplicate_fast();
 
 	int a_size = a->size();
 	int ms = MIN(_size.x, _size.y);
@@ -2987,7 +2987,7 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("to_flat_pool_vector"), &MLPPMatrix::to_flat_pool_vector);
 	ClassDB::bind_method(D_METHOD("to_flat_byte_array"), &MLPPMatrix::to_flat_byte_array);
 
-	ClassDB::bind_method(D_METHOD("duplicate"), &MLPPMatrix::duplicate);
+	ClassDB::bind_method(D_METHOD("duplicate_fast"), &MLPPMatrix::duplicate_fast);
 
 	ClassDB::bind_method(D_METHOD("set_from_mlpp_vectors_array", "from"), &MLPPMatrix::set_from_mlpp_vectors_array);
 	ClassDB::bind_method(D_METHOD("set_from_arrays", "from"), &MLPPMatrix::set_from_arrays);

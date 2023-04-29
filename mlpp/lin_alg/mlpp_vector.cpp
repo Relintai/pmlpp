@@ -184,7 +184,7 @@ Vector<uint8_t> MLPPVector::to_byte_array() const {
 	return ret;
 }
 
-Ref<MLPPVector> MLPPVector::duplicate() const {
+Ref<MLPPVector> MLPPVector::duplicate_fast() const {
 	Ref<MLPPVector> ret;
 	ret.instance();
 
@@ -1178,7 +1178,7 @@ void MLPPVector::subtract_matrix_rows(const Ref<MLPPMatrix> &B) {
 	}
 }
 Ref<MLPPVector> MLPPVector::subtract_matrix_rowsn(const Ref<MLPPMatrix> &B) const {
-	Ref<MLPPVector> c = duplicate();
+	Ref<MLPPVector> c = duplicate_fast();
 
 	Size2i b_size = B->size();
 
@@ -1357,7 +1357,7 @@ void MLPPVector::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("to_pool_vector"), &MLPPVector::to_pool_vector);
 	ClassDB::bind_method(D_METHOD("to_byte_array"), &MLPPVector::to_byte_array);
 
-	ClassDB::bind_method(D_METHOD("duplicate"), &MLPPVector::duplicate);
+	ClassDB::bind_method(D_METHOD("duplicate_fast"), &MLPPVector::duplicate_fast);
 
 	ClassDB::bind_method(D_METHOD("set_from_mlpp_vector", "from"), &MLPPVector::set_from_mlpp_vector);
 	ClassDB::bind_method(D_METHOD("set_from_pool_vector", "from"), &MLPPVector::set_from_pool_vector);

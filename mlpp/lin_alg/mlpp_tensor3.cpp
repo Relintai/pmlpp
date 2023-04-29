@@ -1541,7 +1541,7 @@ void MLPPTensor3::scalar_multiply(const real_t scalar) {
 	}
 }
 Ref<MLPPTensor3> MLPPTensor3::scalar_multiplyn(const real_t scalar) const {
-	Ref<MLPPTensor3> AN = duplicate();
+	Ref<MLPPTensor3> AN = duplicate_fast();
 	int ds = AN->data_size();
 	real_t *an_ptr = AN->ptrw();
 
@@ -1574,7 +1574,7 @@ void MLPPTensor3::scalar_add(const real_t scalar) {
 	}
 }
 Ref<MLPPTensor3> MLPPTensor3::scalar_addn(const real_t scalar) const {
-	Ref<MLPPTensor3> AN = duplicate();
+	Ref<MLPPTensor3> AN = duplicate_fast();
 	int ds = AN->data_size();
 	real_t *an_ptr = AN->ptrw();
 
@@ -1878,7 +1878,7 @@ Vector<uint8_t> MLPPTensor3::to_flat_byte_array() const {
 	return ret;
 }
 
-Ref<MLPPTensor3> MLPPTensor3::duplicate() const {
+Ref<MLPPTensor3> MLPPTensor3::duplicate_fast() const {
 	Ref<MLPPTensor3> ret;
 	ret.instance();
 
@@ -2311,7 +2311,7 @@ void MLPPTensor3::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("to_flat_pool_vector"), &MLPPTensor3::to_flat_pool_vector);
 	ClassDB::bind_method(D_METHOD("to_flat_byte_array"), &MLPPTensor3::to_flat_byte_array);
 
-	ClassDB::bind_method(D_METHOD("duplicate"), &MLPPTensor3::duplicate);
+	ClassDB::bind_method(D_METHOD("duplicate_fast"), &MLPPTensor3::duplicate_fast);
 
 	ClassDB::bind_method(D_METHOD("set_from_mlpp_tensor3", "from"), &MLPPTensor3::set_from_mlpp_tensor3);
 	ClassDB::bind_method(D_METHOD("set_from_mlpp_matrix", "from"), &MLPPTensor3::set_from_mlpp_matrix);

@@ -10,15 +10,15 @@
 #include "core/math/vector2i.h"
 #include "core/os/memory.h"
 
-#include "core/object/reference.h"
+#include "core/object/resource.h"
 
 #include "mlpp_matrix.h"
 #include "mlpp_vector.h"
 
 class Image;
 
-class MLPPTensor3 : public Reference {
-	GDCLASS(MLPPTensor3, Reference);
+class MLPPTensor3 : public Resource {
+	GDCLASS(MLPPTensor3, Resource);
 
 public:
 	_FORCE_INLINE_ real_t *ptrw() {
@@ -237,7 +237,7 @@ public:
 	PoolRealArray to_flat_pool_vector() const;
 	Vector<uint8_t> to_flat_byte_array() const;
 
-	Ref<MLPPTensor3> duplicate() const;
+	Ref<MLPPTensor3> duplicate_fast() const;
 
 	void set_from_mlpp_tensor3(const Ref<MLPPTensor3> &p_from);
 	void set_from_mlpp_tensor3r(const MLPPTensor3 &p_from);

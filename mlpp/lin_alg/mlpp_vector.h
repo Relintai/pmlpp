@@ -10,15 +10,15 @@
 #include "core/error/error_macros.h"
 #include "core/os/memory.h"
 
-#include "core/object/reference.h"
+#include "core/object/resource.h"
 
 //REMOVE
 #include <vector>
 
 class MLPPMatrix;
 
-class MLPPVector : public Reference {
-	GDCLASS(MLPPVector, Reference);
+class MLPPVector : public Resource {
+	GDCLASS(MLPPVector, Resource);
 
 public:
 	_FORCE_INLINE_ real_t *ptrw() {
@@ -102,7 +102,7 @@ public:
 	PoolRealArray to_pool_vector() const;
 	Vector<uint8_t> to_byte_array() const;
 
-	Ref<MLPPVector> duplicate() const;
+	Ref<MLPPVector> duplicate_fast() const;
 
 	void set_from_mlpp_vectorr(const MLPPVector &p_from);
 	void set_from_mlpp_vector(const Ref<MLPPVector> &p_from);

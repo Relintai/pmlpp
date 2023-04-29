@@ -830,10 +830,10 @@ real_t MLPPActivation::linear_normr(real_t z) {
 	return z;
 }
 Ref<MLPPVector> MLPPActivation::linear_normv(const Ref<MLPPVector> &z) {
-	return z->duplicate();
+	return z->duplicate_fast();
 }
 Ref<MLPPMatrix> MLPPActivation::linear_normm(const Ref<MLPPMatrix> &z) {
-	return z->duplicate();
+	return z->duplicate_fast();
 }
 
 real_t MLPPActivation::linear_derivr(real_t z) {
@@ -1012,7 +1012,7 @@ Ref<MLPPVector> MLPPActivation::adj_softmax_normv(const Ref<MLPPVector> &z) {
 	return softmax_normv(n);
 }
 Ref<MLPPMatrix> MLPPActivation::adj_softmax_normm(const Ref<MLPPMatrix> &z) {
-	Ref<MLPPMatrix> n = z->duplicate();
+	Ref<MLPPMatrix> n = z->duplicate_fast();
 
 	Size2i size = z->size();
 
@@ -1057,7 +1057,7 @@ Ref<MLPPVector> MLPPActivation::adj_softmax_derivv(const Ref<MLPPVector> &z) {
 	return adj_softmax_normv(n);
 }
 Ref<MLPPMatrix> MLPPActivation::adj_softmax_derivm(const Ref<MLPPMatrix> &z) {
-	Ref<MLPPMatrix> n = z->duplicate();
+	Ref<MLPPMatrix> n = z->duplicate_fast();
 
 	Size2i size = z->size();
 

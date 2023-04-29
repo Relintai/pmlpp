@@ -235,7 +235,7 @@ Ref<MLPPMatrix> MLPPLinAlg::transposenm(const Ref<MLPPMatrix> &A) {
 	return AT;
 }
 Ref<MLPPMatrix> MLPPLinAlg::scalar_multiplynm(real_t scalar, const Ref<MLPPMatrix> &A) {
-	Ref<MLPPMatrix> AN = A->duplicate();
+	Ref<MLPPMatrix> AN = A->duplicate_fast();
 	Size2i a_size = AN->size();
 	real_t *an_ptr = AN->ptrw();
 
@@ -249,7 +249,7 @@ Ref<MLPPMatrix> MLPPLinAlg::scalar_multiplynm(real_t scalar, const Ref<MLPPMatri
 }
 
 Ref<MLPPMatrix> MLPPLinAlg::scalar_addnm(real_t scalar, const Ref<MLPPMatrix> &A) {
-	Ref<MLPPMatrix> AN = A->duplicate();
+	Ref<MLPPMatrix> AN = A->duplicate_fast();
 	Size2i a_size = AN->size();
 	real_t *an_ptr = AN->ptrw();
 
@@ -802,7 +802,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 
 	} while (!diagonal);
 
-	Ref<MLPPMatrix> a_new_prior = a_new->duplicate();
+	Ref<MLPPMatrix> a_new_prior = a_new->duplicate_fast();
 
 	Size2i a_new_size = a_new->size();
 
@@ -825,7 +825,7 @@ MLPPLinAlg::EigenResult MLPPLinAlg::eigen(Ref<MLPPMatrix> A) {
 		}
 	}
 
-	Ref<MLPPMatrix> eigen_temp = eigenvectors->duplicate();
+	Ref<MLPPMatrix> eigen_temp = eigenvectors->duplicate_fast();
 
 	Size2i eigenvectors_size = eigenvectors->size();
 
@@ -1689,7 +1689,7 @@ Ref<MLPPVector> MLPPLinAlg::mat_vec_multnv(const Ref<MLPPMatrix> &A, const Ref<M
 }
 
 Ref<MLPPVector> MLPPLinAlg::subtract_matrix_rowsnv(const Ref<MLPPVector> &a, const Ref<MLPPMatrix> &B) {
-	Ref<MLPPVector> c = a->duplicate();
+	Ref<MLPPVector> c = a->duplicate_fast();
 
 	Size2i b_size = B->size();
 
