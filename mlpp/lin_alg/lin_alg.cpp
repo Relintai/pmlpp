@@ -178,7 +178,7 @@ Ref<MLPPMatrix> MLPPLinAlg::kronecker_productnm(const Ref<MLPPMatrix> &A, const 
 
 	for (int i = 0; i < a_size.y; ++i) {
 		for (int j = 0; j < b_size.y; ++j) {
-			B->get_row_into_mlpp_vector(j, row_tmp);
+			B->row_get_into_mlpp_vector(j, row_tmp);
 
 			Vector<Ref<MLPPVector>> row;
 			for (int k = 0; k < a_size.x; ++k) {
@@ -187,7 +187,7 @@ Ref<MLPPMatrix> MLPPLinAlg::kronecker_productnm(const Ref<MLPPMatrix> &A, const 
 
 			Ref<MLPPVector> flattened_row = flattenmnv(row);
 
-			C->set_row_mlpp_vector(i * b_size.y + j, flattened_row);
+			C->row_set_mlpp_vector(i * b_size.y + j, flattened_row);
 		}
 	}
 
@@ -689,10 +689,10 @@ Ref<MLPPMatrix> MLPPLinAlg::covnm(const Ref<MLPPMatrix> &A) {
 	a_j_row_tmp->resize(a_size.x);
 
 	for (int i = 0; i < a_size.y; ++i) {
-		A->get_row_into_mlpp_vector(i, a_i_row_tmp);
+		A->row_get_into_mlpp_vector(i, a_i_row_tmp);
 
 		for (int j = 0; j < a_size.x; ++j) {
-			A->get_row_into_mlpp_vector(j, a_j_row_tmp);
+			A->row_get_into_mlpp_vector(j, a_j_row_tmp);
 
 			cov_mat->element_set(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
 		}

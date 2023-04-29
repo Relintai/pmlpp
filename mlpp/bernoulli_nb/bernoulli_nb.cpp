@@ -22,7 +22,7 @@ Ref<MLPPVector> MLPPBernoulliNB::model_set_test(const Ref<MLPPMatrix> &X) {
 	x_row_tmp->resize(X->size().x);
 
 	for (int i = 0; i < X->size().y; i++) {
-		X->get_row_into_mlpp_vector(i, x_row_tmp);
+		X->row_get_into_mlpp_vector(i, x_row_tmp);
 
 		y_hat->element_set(i, model_test(x_row_tmp));
 	}

@@ -170,7 +170,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_row_into_mlpp_vector" qualifiers="const">
+		<method name="row_get_into_mlpp_vector" qualifiers="const">
 			<return type="void" />
 			<argument index="0" name="index_y" type="int" />
 			<argument index="1" name="index_z" type="int" />
@@ -178,14 +178,14 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_row_mlpp_vector" qualifiers="const">
+		<method name="row_get_mlpp_vector" qualifiers="const">
 			<return type="MLPPVector" />
 			<argument index="0" name="index_y" type="int" />
 			<argument index="1" name="index_z" type="int" />
 			<description>
 			</description>
 		</method>
-		<method name="get_row_pool_vector" qualifiers="const">
+		<method name="row_get_pool_vector" qualifiers="const">
 			<return type="PoolRealArray" />
 			<argument index="0" name="index_y" type="int" />
 			<argument index="1" name="index_z" type="int" />
@@ -464,7 +464,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="set_row_mlpp_vector">
+		<method name="row_set_mlpp_vector">
 			<return type="void" />
 			<argument index="0" name="index_y" type="int" />
 			<argument index="1" name="index_z" type="int" />
@@ -472,7 +472,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="set_row_pool_vector">
+		<method name="row_set_pool_vector">
 			<return type="void" />
 			<argument index="0" name="index_y" type="int" />
 			<argument index="1" name="index_z" type="int" />

@@ -66,7 +66,7 @@ void MLPPWGAN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 		for (int i = 0; i < CRITIC_INTERATIONS; i++) {
 			generator_input_set = alg.gaussian_noise(_n, _k);
 			discriminator_input_set->set_from_mlpp_matrix(model_set_test_generator(generator_input_set));
-			discriminator_input_set->add_rows_mlpp_matrix(_output_set); // Fake + real inputs.
+			discriminator_input_set->rows_add_mlpp_matrix(_output_set); // Fake + real inputs.
 
 			ly_hat = model_set_test_discriminator(discriminator_input_set);
 			loutput_set = alg.scalar_multiplynv(-1, alg.onevecnv(_n)); // WGAN changes y_i = 1 and y_i = 0 to y_i = 1 and y_i = -1

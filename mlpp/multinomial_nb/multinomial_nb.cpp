@@ -56,7 +56,7 @@ Ref<MLPPVector> MLPPMultinomialNB::model_set_test(const Ref<MLPPMatrix> &X) {
 	y_hat->resize(x_size.y);
 
 	for (int i = 0; i < x_size.y; i++) {
-		X->get_row_into_mlpp_vector(i, x_row_tmp);
+		X->row_get_into_mlpp_vector(i, x_row_tmp);
 
 		y_hat->element_set(i, model_test(x_row_tmp));
 	}

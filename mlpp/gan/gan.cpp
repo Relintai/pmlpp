@@ -60,7 +60,7 @@ void MLPPGAN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 
 		Ref<MLPPMatrix> generator_input_set = alg.gaussian_noise(_n, _k);
 		Ref<MLPPMatrix> discriminator_input_set = model_set_test_generator(generator_input_set);
-		discriminator_input_set->add_rows_mlpp_matrix(_output_set); // Fake + real inputs.
+		discriminator_input_set->rows_add_mlpp_matrix(_output_set); // Fake + real inputs.
 
 		Ref<MLPPVector> y_hat = model_set_test_discriminator(discriminator_input_set);
 		Ref<MLPPVector> output_set = alg.zerovecnv(_n);

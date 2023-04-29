@@ -160,14 +160,14 @@ void MLPPSoftmaxReg::train_sgd(real_t learning_rate, int max_epoch, bool ui) {
 	while (true) {
 		real_t output_index = distribution(generator);
 
-		_input_set->get_row_into_mlpp_vector(output_index, input_set_row_tmp);
+		_input_set->row_get_into_mlpp_vector(output_index, input_set_row_tmp);
 
 		Ref<MLPPVector> y_hat = evaluatev(input_set_row_tmp);
 		y_hat_matrix_tmp->resize(Size2i(y_hat->size(), 1));
-		y_hat_matrix_tmp->set_row_mlpp_vector(0, y_hat);
+		y_hat_matrix_tmp->row_set_mlpp_vector(0, y_hat);
 
-		_output_set->get_row_into_mlpp_vector(output_index, output_set_row_tmp);
-		output_set_row_matrix_tmp->set_row_mlpp_vector(0, output_set_row_tmp);
+		_output_set->row_get_into_mlpp_vector(output_index, output_set_row_tmp);
+		output_set_row_matrix_tmp->row_set_mlpp_vector(0, output_set_row_tmp);
 
 		cost_prev = cost(y_hat_matrix_tmp, output_set_row_matrix_tmp);
 

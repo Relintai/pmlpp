@@ -53,8 +53,8 @@ void MLPPDualSVC::gradient_descent(real_t learning_rate, int max_epoch, bool ui)
 			if (_alpha->element_get(i) < _C && _alpha->element_get(i) > 0) {
 				for (int j = 0; j < _alpha->size(); j++) {
 					if (_alpha->element_get(j) > 0) {
-						_input_set->get_row_into_mlpp_vector(i, input_set_i_row_tmp);
-						_input_set->get_row_into_mlpp_vector(j, input_set_j_row_tmp);
+						_input_set->row_get_into_mlpp_vector(i, input_set_i_row_tmp);
+						_input_set->row_get_into_mlpp_vector(j, input_set_j_row_tmp);
 
 						sum += _alpha->element_get(j) * _output_set->element_get(j) * alg.dotnv(input_set_j_row_tmp, input_set_i_row_tmp); // TO DO: DON'T forget to add non-linear kernelizations.
 					}
@@ -216,7 +216,7 @@ real_t MLPPDualSVC::propagatev(const Ref<MLPPVector> &x) {
 
 	for (int j = 0; j < _alpha->size(); j++) {
 		if (_alpha->element_get(j) != 0) {
-			_input_set->get_row_into_mlpp_vector(j, input_set_row_tmp);
+			_input_set->row_get_into_mlpp_vector(j, input_set_row_tmp);
 			z += _alpha->element_get(j) * _output_set->element_get(j) * alg.dotnv(input_set_row_tmp, x); // TO DO: DON'T forget to add non-linear kernelizations.
 		}
 	}
@@ -249,8 +249,8 @@ Ref<MLPPVector> MLPPDualSVC::propagatem(const Ref<MLPPMatrix> &X) {
 
 		for (int j = 0; j < _alpha->size(); j++) {
 			if (_alpha->element_get(j) != 0) {
-				_input_set->get_row_into_mlpp_vector(j, input_set_row_tmp);
-				X->get_row_into_mlpp_vector(i, x_row_tmp);
+				_input_set->row_get_into_mlpp_vector(j, input_set_row_tmp);
+				X->row_get_into_mlpp_vector(i, x_row_tmp);
 
 				sum += _alpha->element_get(j) * _output_set->element_get(j) * alg.dotnv(input_set_row_tmp, x_row_tmp); // TO DO: DON'T forget to add non-linear kernelizations.
 			}

@@ -369,11 +369,11 @@ MLPPData::SplitComplexData MLPPData::train_test_split(Ref<MLPPDataComplex> data,
 	for (int i = 0; i < test_input_number; ++i) {
 		int index = indices[i];
 
-		orig_input->get_row_into_mlpp_vector(index, orig_input_row_tmp);
-		orig_output->get_row_into_mlpp_vector(index, orig_output_row_tmp);
+		orig_input->row_get_into_mlpp_vector(index, orig_input_row_tmp);
+		orig_output->row_get_into_mlpp_vector(index, orig_output_row_tmp);
 
-		res_test_input->set_row_mlpp_vector(i, orig_input);
-		res_test_output->set_row_mlpp_vector(i, orig_output);
+		res_test_input->row_set_mlpp_vector(i, orig_input);
+		res_test_output->row_set_mlpp_vector(i, orig_output);
 	}
 
 	Ref<MLPPMatrix> res_train_input = res.train->get_input();
@@ -387,11 +387,11 @@ MLPPData::SplitComplexData MLPPData::train_test_split(Ref<MLPPDataComplex> data,
 	for (int i = 0; i < train_input_number; ++i) {
 		int index = indices[train_input_number + i];
 
-		orig_input->get_row_into_mlpp_vector(index, orig_input_row_tmp);
-		orig_output->get_row_into_mlpp_vector(index, orig_output_row_tmp);
+		orig_input->row_get_into_mlpp_vector(index, orig_input_row_tmp);
+		orig_output->row_get_into_mlpp_vector(index, orig_output_row_tmp);
 
-		res_train_input->set_row_mlpp_vector(i, orig_input);
-		res_train_output->set_row_mlpp_vector(i, orig_output);
+		res_train_input->row_set_mlpp_vector(i, orig_input);
+		res_train_output->row_set_mlpp_vector(i, orig_output);
 	}
 
 	return res;
@@ -1280,7 +1280,7 @@ Ref<MLPPMatrix> MLPPData::mean_centering(const Ref<MLPPMatrix> &p_X) {
 	x_row_tmp->resize(x_size.x);
 
 	for (int i = 0; i < x_size.y; ++i) {
-		X->get_row_into_mlpp_vector(i, x_row_tmp);
+		X->row_get_into_mlpp_vector(i, x_row_tmp);
 
 		real_t mean_i = stat.meanv(x_row_tmp);
 

@@ -69,8 +69,8 @@ real_t MLPPPCA::score() {
 	x_normalized_row_tmp->resize(x_normalized_size.x);
 
 	for (int i = 0; i < x_normalized_size_y; ++i) {
-		_x_normalized->get_row_into_mlpp_vector(i, x_normalized_row_tmp);
-		x_approx->get_row_into_mlpp_vector(i, x_approx_row_tmp);
+		_x_normalized->row_get_into_mlpp_vector(i, x_normalized_row_tmp);
+		x_approx->row_get_into_mlpp_vector(i, x_approx_row_tmp);
 
 		num += alg.norm_sqv(alg.subtractionnv(x_normalized_row_tmp, x_approx_row_tmp));
 	}
@@ -78,7 +78,7 @@ real_t MLPPPCA::score() {
 	num /= x_normalized_size_y;
 
 	for (int i = 0; i < x_normalized_size_y; ++i) {
-		_x_normalized->get_row_into_mlpp_vector(i, x_normalized_row_tmp);
+		_x_normalized->row_get_into_mlpp_vector(i, x_normalized_row_tmp);
 
 		den += alg.norm_sqv(x_normalized_row_tmp);
 	}

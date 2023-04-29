@@ -561,7 +561,7 @@ real_t MLPPCost::dual_form_svm(const Ref<MLPPVector> &alpha, const Ref<MLPPMatri
 	Ref<MLPPMatrix> alpha_m;
 	alpha_m.instance();
 	alpha_m->resize(Size2i(alpha->size(), 1));
-	alpha_m->set_row_mlpp_vector(0, alpha);
+	alpha_m->row_set_mlpp_vector(0, alpha);
 
 	Ref<MLPPMatrix> alpha_m_res = alg.matmultnm(alg.matmultnm(alpha_m, Q), alg.transposenm(alpha_m));
 

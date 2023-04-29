@@ -149,7 +149,7 @@ void MLPPSVC::train_sgd(real_t learning_rate, int max_epoch, bool ui) {
 	while (true) {
 		int output_index = distribution(generator);
 
-		_input_set->get_row_into_mlpp_vector(output_index, input_set_row_tmp);
+		_input_set->row_get_into_mlpp_vector(output_index, input_set_row_tmp);
 
 		real_t output_set_indx = _output_set->element_get(output_index);
 		output_set_row_tmp->element_set(0, output_set_indx);

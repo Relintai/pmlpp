@@ -181,7 +181,7 @@ void MLPPLinReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	while (true) {
 		int output_index = distribution(generator);
 
-		_input_set->get_row_into_mlpp_vector(output_index, input_set_row_tmp);
+		_input_set->row_get_into_mlpp_vector(output_index, input_set_row_tmp);
 		real_t output_element_set = _output_set->element_get(output_index);
 		output_set_row_tmp->element_set(0, output_element_set);
 
@@ -676,7 +676,7 @@ void MLPPLinReg::normal_equation() {
 	x_means->resize(input_set_t->size().y);
 
 	for (int i = 0; i < input_set_t->size().y; i++) {
-		input_set_t->get_row_into_mlpp_vector(i, input_set_t_row_tmp);
+		input_set_t->row_get_into_mlpp_vector(i, input_set_t_row_tmp);
 
 		x_means->element_set(i, stat.meanv(input_set_t_row_tmp));
 	}

@@ -924,11 +924,11 @@ Ref<MLPPMatrix> MLPPActivation::softmax_normm(const Ref<MLPPMatrix> &z) {
 	row_tmp->resize(z_size.x);
 
 	for (int i = 0; i < z_size.y; ++i) {
-		z->get_row_into_mlpp_vector(i, row_tmp);
+		z->row_get_into_mlpp_vector(i, row_tmp);
 
 		Ref<MLPPVector> sfn = softmax_normv(row_tmp);
 
-		a->set_row_mlpp_vector(i, sfn);
+		a->row_set_mlpp_vector(i, sfn);
 	}
 
 	return a;
@@ -974,11 +974,11 @@ Ref<MLPPMatrix> MLPPActivation::softmax_derivm(const Ref<MLPPMatrix> &z) {
 	row_tmp->resize(z_size.x);
 
 	for (int i = 0; i < z_size.y; ++i) {
-		z->get_row_into_mlpp_vector(i, row_tmp);
+		z->row_get_into_mlpp_vector(i, row_tmp);
 
 		Ref<MLPPVector> sfn = softmax_derivm(z);
 
-		a->set_row_mlpp_vector(i, sfn);
+		a->row_set_mlpp_vector(i, sfn);
 	}
 
 	return a;
@@ -1021,11 +1021,11 @@ Ref<MLPPMatrix> MLPPActivation::adj_softmax_normm(const Ref<MLPPMatrix> &z) {
 	row_rmp->resize(size.x);
 
 	for (int i = 0; i < size.y; ++i) {
-		z->get_row_into_mlpp_vector(i, row_rmp);
+		z->row_get_into_mlpp_vector(i, row_rmp);
 
 		Ref<MLPPVector> nv = adj_softmax_normv(row_rmp);
 
-		n->set_row_mlpp_vector(i, nv);
+		n->row_set_mlpp_vector(i, nv);
 	}
 
 	return n;
@@ -1066,11 +1066,11 @@ Ref<MLPPMatrix> MLPPActivation::adj_softmax_derivm(const Ref<MLPPMatrix> &z) {
 	row_rmp->resize(size.x);
 
 	for (int i = 0; i < size.y; ++i) {
-		z->get_row_into_mlpp_vector(i, row_rmp);
+		z->row_get_into_mlpp_vector(i, row_rmp);
 
 		Ref<MLPPVector> nv = adj_softmax_derivv(row_rmp);
 
-		n->set_row_mlpp_vector(i, nv);
+		n->row_set_mlpp_vector(i, nv);
 	}
 
 	return n;
@@ -1128,15 +1128,15 @@ Vector<Ref<MLPPMatrix>> MLPPActivation::softmax_deriv_normm(const Ref<MLPPMatrix
 		d->resize(Size2i(a_size_x, z_size_y));
 
 		for (int j = 0; j < z_size_y; ++j) {
-			a->get_row_into_mlpp_vector(i, a_i_tmp);
+			a->row_get_into_mlpp_vector(i, a_i_tmp);
 
 			if (i == j) {
 				Ref<MLPPVector> d_j = alg.subtractionnv(a_i_tmp, alg.hadamard_productnv(a_i_tmp, a_i_tmp));
-				d->set_row_mlpp_vector(j, d_j);
+				d->row_set_mlpp_vector(j, d_j);
 			} else {
-				a->get_row_into_mlpp_vector(j, a_j_tmp);
+				a->row_get_into_mlpp_vector(j, a_j_tmp);
 				Ref<MLPPVector> d_j = alg.scalar_multiplynv(-1, alg.hadamard_productnv(a_i_tmp, a_j_tmp));
-				d->set_row_mlpp_vector(j, d_j);
+				d->row_set_mlpp_vector(j, d_j);
 			}
 		}
 
@@ -1196,15 +1196,15 @@ Vector<Ref<MLPPMatrix>> MLPPActivation::softmax_deriv_derivm(const Ref<MLPPMatri
 		d->resize(Size2i(a_size_x, z_size_y));
 
 		for (int j = 0; j < z_size_y; ++j) {
-			a->get_row_into_mlpp_vector(i, a_i_tmp);
+			a->row_get_into_mlpp_vector(i, a_i_tmp);
 
 			if (i == j) {
 				Ref<MLPPVector> d_j = alg.subtractionnv(a_i_tmp, alg.hadamard_productnv(a_i_tmp, a_i_tmp));
-				d->set_row_mlpp_vector(j, d_j);
+				d->row_set_mlpp_vector(j, d_j);
 			} else {
-				a->get_row_into_mlpp_vector(j, a_j_tmp);
+				a->row_get_into_mlpp_vector(j, a_j_tmp);
 				Ref<MLPPVector> d_j = alg.scalar_multiplynv(-1, alg.hadamard_productnv(a_i_tmp, a_j_tmp));
-				d->set_row_mlpp_vector(j, d_j);
+				d->row_set_mlpp_vector(j, d_j);
 			}
 		}
 

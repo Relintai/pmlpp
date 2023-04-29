@@ -618,8 +618,8 @@ Vector<Ref<MLPPMatrix>> MLPPUtilities::create_mini_batchesm(const Ref<MLPPMatrix
 		current_input_set->resize(Size2i(size.x, mini_batch_element_count));
 
 		for (int j = 0; j < mini_batch_element_count; j++) {
-			input_set->get_row_into_mlpp_vector(mini_batch_start_offset + j, row_tmp);
-			current_input_set->set_row_mlpp_vector(j, row_tmp);
+			input_set->row_get_into_mlpp_vector(mini_batch_start_offset + j, row_tmp);
+			current_input_set->row_set_mlpp_vector(j, row_tmp);
 		}
 
 		input_mini_batches.push_back(current_input_set);
@@ -660,8 +660,8 @@ MLPPUtilities::CreateMiniBatchMVBatch MLPPUtilities::create_mini_batchesmv(const
 		for (int j = 0; j < mini_batch_element_count; j++) {
 			int main_indx = mini_batch_start_offset + j;
 
-			input_set->get_row_into_mlpp_vector(main_indx, row_tmp);
-			current_input_set->set_row_mlpp_vector(j, row_tmp);
+			input_set->row_get_into_mlpp_vector(main_indx, row_tmp);
+			current_input_set->row_set_mlpp_vector(j, row_tmp);
 
 			current_output_set->element_set(j, output_set->element_get(j));
 		}
@@ -711,11 +711,11 @@ MLPPUtilities::CreateMiniBatchMMBatch MLPPUtilities::create_mini_batchesmm(const
 		for (int j = 0; j < mini_batch_element_count; j++) {
 			int main_indx = mini_batch_start_offset + j;
 
-			input_set->get_row_into_mlpp_vector(main_indx, input_row_tmp);
-			current_input_set->set_row_mlpp_vector(j, input_row_tmp);
+			input_set->row_get_into_mlpp_vector(main_indx, input_row_tmp);
+			current_input_set->row_set_mlpp_vector(j, input_row_tmp);
 
-			output_set->get_row_into_mlpp_vector(main_indx, output_row_tmp);
-			current_output_set->set_row_mlpp_vector(j, output_row_tmp);
+			output_set->row_get_into_mlpp_vector(main_indx, output_row_tmp);
+			current_output_set->row_set_mlpp_vector(j, output_row_tmp);
 		}
 
 		ret.input_sets.push_back(current_input_set);

@@ -172,7 +172,7 @@ void MLPPMLP::sgd(real_t learning_rate, int max_epoch, bool UI) {
 	while (true) {
 		int output_Index = distribution(generator);
 
-		_input_set->get_row_into_mlpp_vector(output_Index, input_set_row_tmp);
+		_input_set->row_get_into_mlpp_vector(output_Index, input_set_row_tmp);
 		real_t output_element = _output_set->element_get(output_Index);
 		output_set_row_tmp->element_set(0, output_element);
 

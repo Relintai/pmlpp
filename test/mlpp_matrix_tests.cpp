@@ -14,19 +14,19 @@ void MLPPMatrixTests::run_tests() {
 	PLOG_MSG("test_mlpp_matrix()");
 	test_mlpp_matrix();
 
-	PLOG_MSG("test_add_row()");
-	test_add_row();
-	PLOG_MSG("test_add_row_pool_vector()");
-	test_add_row_pool_vector();
-	PLOG_MSG("test_add_row_mlpp_vector()");
-	test_add_row_mlpp_vector();
-	PLOG_MSG("test_add_rows_mlpp_matrix()");
-	test_add_rows_mlpp_matrix();
+	PLOG_MSG("test_row_add()");
+	test_row_add();
+	PLOG_MSG("test_row_add_pool_vector()");
+	test_row_add_pool_vector();
+	PLOG_MSG("test_row_add_mlpp_vector()");
+	test_row_add_mlpp_vector();
+	PLOG_MSG("test_rows_add_mlpp_matrix()");
+	test_rows_add_mlpp_matrix();
 
-	PLOG_MSG("test_remove_row()");
-	test_remove_row();
-	PLOG_MSG("test_remove_row_unordered()");
-	test_remove_row_unordered();
+	PLOG_MSG("test_row_remove()");
+	test_row_remove();
+	PLOG_MSG("test_row_remove_unordered()");
+	test_row_remove_unordered();
 
 	PLOG_MSG("test_mlpp_matrix_mul()");
 	test_mlpp_matrix_mul();
@@ -55,7 +55,7 @@ void MLPPMatrixTests::test_mlpp_matrix() {
 	is_approx_equals_mat(rmat, rmat2, "re-set_from_std_vectors test.");
 }
 
-void MLPPMatrixTests::test_add_row() {
+void MLPPMatrixTests::test_row_add() {
 	std::vector<std::vector<real_t>> A = {
 		{ 1, 2, 3, 4 },
 	};
@@ -92,16 +92,16 @@ void MLPPMatrixTests::test_add_row() {
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
 
-	rmat->add_row(rv);
-	is_approx_equals_mat(rmata, rmat, "rmat->add_row(rv);");
+	rmat->row_add(rv);
+	is_approx_equals_mat(rmata, rmat, "rmat->row_add(rv);");
 
-	rmat->add_row(rv);
-	is_approx_equals_mat(rmatb, rmat, "rmat->add_row(rv);");
+	rmat->row_add(rv);
+	is_approx_equals_mat(rmatb, rmat, "rmat->row_add(rv);");
 
-	rmat->add_row(rv);
-	is_approx_equals_mat(rmatc, rmat, "rmat->add_row(rv);");
+	rmat->row_add(rv);
+	is_approx_equals_mat(rmatc, rmat, "rmat->row_add(rv);");
 }
-void MLPPMatrixTests::test_add_row_pool_vector() {
+void MLPPMatrixTests::test_row_add_pool_vector() {
 	std::vector<std::vector<real_t>> A = {
 		{ 1, 2, 3, 4 },
 	};
@@ -138,16 +138,16 @@ void MLPPMatrixTests::test_add_row_pool_vector() {
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
 
-	rmat->add_row_pool_vector(rv);
-	is_approx_equals_mat(rmata, rmat, "rmat->add_row_pool_vector(rv);");
+	rmat->row_add_pool_vector(rv);
+	is_approx_equals_mat(rmata, rmat, "rmat->row_add_pool_vector(rv);");
 
-	rmat->add_row_pool_vector(rv);
-	is_approx_equals_mat(rmatb, rmat, "rmat->add_row_pool_vector(rv);");
+	rmat->row_add_pool_vector(rv);
+	is_approx_equals_mat(rmatb, rmat, "rmat->row_add_pool_vector(rv);");
 
-	rmat->add_row_pool_vector(rv);
-	is_approx_equals_mat(rmatc, rmat, "rmat->add_row_pool_vector(rv);");
+	rmat->row_add_pool_vector(rv);
+	is_approx_equals_mat(rmatc, rmat, "rmat->row_add_pool_vector(rv);");
 }
-void MLPPMatrixTests::test_add_row_mlpp_vector() {
+void MLPPMatrixTests::test_row_add_mlpp_vector() {
 	std::vector<std::vector<real_t>> A = {
 		{ 1, 2, 3, 4 },
 	};
@@ -185,16 +185,16 @@ void MLPPMatrixTests::test_add_row_mlpp_vector() {
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
 
-	rmat->add_row_mlpp_vector(rv);
-	is_approx_equals_mat(rmata, rmat, "rmat->add_row_mlpp_vector(rv);");
+	rmat->row_add_mlpp_vector(rv);
+	is_approx_equals_mat(rmata, rmat, "rmat->row_add_mlpp_vector(rv);");
 
-	rmat->add_row_mlpp_vector(rv);
-	is_approx_equals_mat(rmatb, rmat, "rmat->add_row_mlpp_vector(rv);");
+	rmat->row_add_mlpp_vector(rv);
+	is_approx_equals_mat(rmatb, rmat, "rmat->row_add_mlpp_vector(rv);");
 
-	rmat->add_row_mlpp_vector(rv);
-	is_approx_equals_mat(rmatc, rmat, "rmat->add_row_mlpp_vector(rv);");
+	rmat->row_add_mlpp_vector(rv);
+	is_approx_equals_mat(rmatc, rmat, "rmat->row_add_mlpp_vector(rv);");
 }
-void MLPPMatrixTests::test_add_rows_mlpp_matrix() {
+void MLPPMatrixTests::test_rows_add_mlpp_matrix() {
 	std::vector<std::vector<real_t>> A = {
 		{ 1, 2, 3, 4 },
 	};
@@ -220,7 +220,7 @@ void MLPPMatrixTests::test_add_rows_mlpp_matrix() {
 
 	Ref<MLPPMatrix> rv;
 	rv.instance();
-	rv->add_row_pool_vector(rvp);
+	rv->row_add_pool_vector(rvp);
 
 	Ref<MLPPMatrix> rmata;
 	rmata.instance();
@@ -237,17 +237,17 @@ void MLPPMatrixTests::test_add_rows_mlpp_matrix() {
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
 
-	rmat->add_rows_mlpp_matrix(rv);
-	is_approx_equals_mat(rmata, rmat, "rmat->add_rows_mlpp_matrix(rv);");
+	rmat->rows_add_mlpp_matrix(rv);
+	is_approx_equals_mat(rmata, rmat, "rmat->rows_add_mlpp_matrix(rv);");
 
-	rmat->add_rows_mlpp_matrix(rv);
-	is_approx_equals_mat(rmatb, rmat, "rmat->add_rows_mlpp_matrix(rv);");
+	rmat->rows_add_mlpp_matrix(rv);
+	is_approx_equals_mat(rmatb, rmat, "rmat->rows_add_mlpp_matrix(rv);");
 
-	rmat->add_rows_mlpp_matrix(rv);
-	is_approx_equals_mat(rmatc, rmat, "rmat->add_rows_mlpp_matrix(rv);");
+	rmat->rows_add_mlpp_matrix(rv);
+	is_approx_equals_mat(rmatc, rmat, "rmat->rows_add_mlpp_matrix(rv);");
 }
 
-void MLPPMatrixTests::test_remove_row() {
+void MLPPMatrixTests::test_row_remove() {
 	std::vector<std::vector<real_t>> A = {
 		{ 1, 2, 3, 4 },
 		{ 5, 6, 7, 8 },
@@ -286,16 +286,16 @@ void MLPPMatrixTests::test_remove_row() {
 	rmat.instance();
 	rmat->set_from_std_vectors(D);
 
-	rmat->remove_row(2);
-	is_approx_equals_mat(rmat, rmata, "rmat->remove_row(2);");
+	rmat->row_remove(2);
+	is_approx_equals_mat(rmat, rmata, "rmat->row_remove(2);");
 
-	rmat->remove_row(2);
-	is_approx_equals_mat(rmat, rmatb, "rmat->remove_row(2);");
+	rmat->row_remove(2);
+	is_approx_equals_mat(rmat, rmatb, "rmat->row_remove(2);");
 
-	rmat->remove_row(1);
-	is_approx_equals_mat(rmat, rmatc, "rmat->remove_row(1);");
+	rmat->row_remove(1);
+	is_approx_equals_mat(rmat, rmatc, "rmat->row_remove(1);");
 }
-void MLPPMatrixTests::test_remove_row_unordered() {
+void MLPPMatrixTests::test_row_remove_unordered() {
 	std::vector<std::vector<real_t>> A = {
 		{ 1, 2, 3, 4 },
 		{ 13, 14, 15, 16 },
@@ -334,14 +334,14 @@ void MLPPMatrixTests::test_remove_row_unordered() {
 	rmat.instance();
 	rmat->set_from_std_vectors(D);
 
-	rmat->remove_row_unordered(1);
-	is_approx_equals_mat(rmat, rmata, "rmat->remove_row_unordered(1);");
+	rmat->row_remove_unordered(1);
+	is_approx_equals_mat(rmat, rmata, "rmat->row_remove_unordered(1);");
 
-	rmat->remove_row_unordered(0);
-	is_approx_equals_mat(rmat, rmatb, "rmat->remove_row(0);");
+	rmat->row_remove_unordered(0);
+	is_approx_equals_mat(rmat, rmatb, "rmat->row_remove(0);");
 
-	rmat->remove_row_unordered(1);
-	is_approx_equals_mat(rmat, rmatc, "rmat->remove_row_unordered(1);");
+	rmat->row_remove_unordered(1);
+	is_approx_equals_mat(rmat, rmatc, "rmat->row_remove_unordered(1);");
 }
 
 void MLPPMatrixTests::test_mlpp_matrix_mul() {

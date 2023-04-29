@@ -51,7 +51,7 @@ void MLPPMatrix::set_data(const Array &p_from) {
 	}
 }
 
-void MLPPMatrix::add_row(const Vector<real_t> &p_row) {
+void MLPPMatrix::row_add(const Vector<real_t> &p_row) {
 	if (p_row.size() == 0) {
 		return;
 	}
@@ -76,7 +76,7 @@ void MLPPMatrix::add_row(const Vector<real_t> &p_row) {
 	}
 }
 
-void MLPPMatrix::add_row_pool_vector(const PoolRealArray &p_row) {
+void MLPPMatrix::row_add_pool_vector(const PoolRealArray &p_row) {
 	if (p_row.size() == 0) {
 		return;
 	}
@@ -102,7 +102,7 @@ void MLPPMatrix::add_row_pool_vector(const PoolRealArray &p_row) {
 	}
 }
 
-void MLPPMatrix::add_row_mlpp_vector(const Ref<MLPPVector> &p_row) {
+void MLPPMatrix::row_add_mlpp_vector(const Ref<MLPPVector> &p_row) {
 	ERR_FAIL_COND(!p_row.is_valid());
 
 	int p_row_size = p_row->size();
@@ -131,7 +131,7 @@ void MLPPMatrix::add_row_mlpp_vector(const Ref<MLPPVector> &p_row) {
 	}
 }
 
-void MLPPMatrix::add_rows_mlpp_matrix(const Ref<MLPPMatrix> &p_other) {
+void MLPPMatrix::rows_add_mlpp_matrix(const Ref<MLPPMatrix> &p_other) {
 	ERR_FAIL_COND(!p_other.is_valid());
 
 	int other_data_size = p_other->data_size();
@@ -162,7 +162,7 @@ void MLPPMatrix::add_rows_mlpp_matrix(const Ref<MLPPMatrix> &p_other) {
 	}
 }
 
-void MLPPMatrix::remove_row(int p_index) {
+void MLPPMatrix::row_remove(int p_index) {
 	ERR_FAIL_INDEX(p_index, _size.y);
 
 	--_size.y;
@@ -185,7 +185,7 @@ void MLPPMatrix::remove_row(int p_index) {
 
 // Removes the item copying the last value into the position of the one to
 // remove. It's generally faster than `remove`.
-void MLPPMatrix::remove_row_unordered(int p_index) {
+void MLPPMatrix::row_remove_unordered(int p_index) {
 	ERR_FAIL_INDEX(p_index, _size.y);
 
 	--_size.y;
@@ -211,7 +211,7 @@ void MLPPMatrix::remove_row_unordered(int p_index) {
 	CRASH_COND_MSG(!_data, "Out of memory");
 }
 
-void MLPPMatrix::swap_row(int p_index_1, int p_index_2) {
+void MLPPMatrix::row_swap(int p_index_1, int p_index_2) {
 	ERR_FAIL_INDEX(p_index_1, _size.y);
 	ERR_FAIL_INDEX(p_index_2, _size.y);
 
@@ -241,7 +241,7 @@ void MLPPMatrix::resize(const Size2i &p_size) {
 	CRASH_COND_MSG(!_data, "Out of memory");
 }
 
-Vector<real_t> MLPPMatrix::get_row_vector(int p_index_y) const {
+Vector<real_t> MLPPMatrix::row_get_vector(int p_index_y) const {
 	ERR_FAIL_INDEX_V(p_index_y, _size.y, Vector<real_t>());
 
 	Vector<real_t> ret;
@@ -263,7 +263,7 @@ Vector<real_t> MLPPMatrix::get_row_vector(int p_index_y) const {
 	return ret;
 }
 
-PoolRealArray MLPPMatrix::get_row_pool_vector(int p_index_y) const {
+PoolRealArray MLPPMatrix::row_get_pool_vector(int p_index_y) const {
 	ERR_FAIL_INDEX_V(p_index_y, _size.y, PoolRealArray());
 
 	PoolRealArray ret;
@@ -286,7 +286,7 @@ PoolRealArray MLPPMatrix::get_row_pool_vector(int p_index_y) const {
 	return ret;
 }
 
-Ref<MLPPVector> MLPPMatrix::get_row_mlpp_vector(int p_index_y) const {
+Ref<MLPPVector> MLPPMatrix::row_get_mlpp_vector(int p_index_y) const {
 	ERR_FAIL_INDEX_V(p_index_y, _size.y, Ref<MLPPVector>());
 
 	Ref<MLPPVector> ret;
@@ -309,7 +309,7 @@ Ref<MLPPVector> MLPPMatrix::get_row_mlpp_vector(int p_index_y) const {
 	return ret;
 }
 
-void MLPPMatrix::get_row_into_mlpp_vector(int p_index_y, Ref<MLPPVector> target) const {
+void MLPPMatrix::row_get_into_mlpp_vector(int p_index_y, Ref<MLPPVector> target) const {
 	ERR_FAIL_COND(!target.is_valid());
 	ERR_FAIL_INDEX(p_index_y, _size.y);
 
@@ -326,7 +326,7 @@ void MLPPMatrix::get_row_into_mlpp_vector(int p_index_y, Ref<MLPPVector> target)
 	}
 }
 
-void MLPPMatrix::set_row_vector(int p_index_y, const Vector<real_t> &p_row) {
+void MLPPMatrix::row_set_vector(int p_index_y, const Vector<real_t> &p_row) {
 	ERR_FAIL_COND(p_row.size() != _size.x);
 	ERR_FAIL_INDEX(p_index_y, _size.y);
 
@@ -339,7 +339,7 @@ void MLPPMatrix::set_row_vector(int p_index_y, const Vector<real_t> &p_row) {
 	}
 }
 
-void MLPPMatrix::set_row_pool_vector(int p_index_y, const PoolRealArray &p_row) {
+void MLPPMatrix::row_set_pool_vector(int p_index_y, const PoolRealArray &p_row) {
 	ERR_FAIL_COND(p_row.size() != _size.x);
 	ERR_FAIL_INDEX(p_index_y, _size.y);
 
@@ -353,7 +353,7 @@ void MLPPMatrix::set_row_pool_vector(int p_index_y, const PoolRealArray &p_row) 
 	}
 }
 
-void MLPPMatrix::set_row_mlpp_vector(int p_index_y, const Ref<MLPPVector> &p_row) {
+void MLPPMatrix::row_set_mlpp_vector(int p_index_y, const Ref<MLPPVector> &p_row) {
 	ERR_FAIL_COND(!p_row.is_valid());
 	ERR_FAIL_COND(p_row->size() != _size.x);
 	ERR_FAIL_INDEX(p_index_y, _size.y);
@@ -897,7 +897,7 @@ void MLPPMatrix::kronecker_product(const Ref<MLPPMatrix> &B) {
 
 	for (int i = 0; i < _size.y; ++i) {
 		for (int j = 0; j < b_size.y; ++j) {
-			B->get_row_into_mlpp_vector(j, row_tmp);
+			B->row_get_into_mlpp_vector(j, row_tmp);
 
 			Vector<Ref<MLPPVector>> row;
 			for (int k = 0; k < _size.x; ++k) {
@@ -906,7 +906,7 @@ void MLPPMatrix::kronecker_product(const Ref<MLPPMatrix> &B) {
 
 			Ref<MLPPVector> flattened_row = row_tmp->flatten_vectorsn(row);
 
-			set_row_mlpp_vector(i * b_size.y + j, flattened_row);
+			row_set_mlpp_vector(i * b_size.y + j, flattened_row);
 		}
 	}
 }
@@ -941,7 +941,7 @@ Ref<MLPPMatrix> MLPPMatrix::kronecker_productn(const Ref<MLPPMatrix> &B) const {
 
 	for (int i = 0; i < a_size.y; ++i) {
 		for (int j = 0; j < b_size.y; ++j) {
-			B->get_row_into_mlpp_vector(j, row_tmp);
+			B->row_get_into_mlpp_vector(j, row_tmp);
 
 			Vector<Ref<MLPPVector>> row;
 			for (int k = 0; k < a_size.x; ++k) {
@@ -950,7 +950,7 @@ Ref<MLPPMatrix> MLPPMatrix::kronecker_productn(const Ref<MLPPMatrix> &B) const {
 
 			Ref<MLPPVector> flattened_row = row_tmp->flatten_vectorsn(row);
 
-			C->set_row_mlpp_vector(i * b_size.y + j, flattened_row);
+			C->row_set_mlpp_vector(i * b_size.y + j, flattened_row);
 		}
 	}
 
@@ -985,7 +985,7 @@ void MLPPMatrix::kronecker_productb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatr
 
 	for (int i = 0; i < a_size.y; ++i) {
 		for (int j = 0; j < b_size.y; ++j) {
-			B->get_row_into_mlpp_vector(j, row_tmp);
+			B->row_get_into_mlpp_vector(j, row_tmp);
 
 			Vector<Ref<MLPPVector>> row;
 			for (int k = 0; k < a_size.x; ++k) {
@@ -994,7 +994,7 @@ void MLPPMatrix::kronecker_productb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatr
 
 			Ref<MLPPVector> flattened_row = row_tmp->flatten_vectorsn(row);
 
-			set_row_mlpp_vector(i * b_size.y + j, flattened_row);
+			row_set_mlpp_vector(i * b_size.y + j, flattened_row);
 		}
 	}
 }
@@ -1696,7 +1696,7 @@ void MLPPMatrix::pinverseo(Ref<MLPPMatrix> out) const {
 	out->set_from_mlpp_matrix(multn(Ref<MLPPMatrix>(this))->transposen()->inverse()->multn(transposen()));
 }
 
-Ref<MLPPMatrix> MLPPMatrix::zero_mat(int n, int m) const {
+Ref<MLPPMatrix> MLPPMatrix::matn_zero(int n, int m) const {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
@@ -1705,7 +1705,7 @@ Ref<MLPPMatrix> MLPPMatrix::zero_mat(int n, int m) const {
 
 	return mat;
 }
-Ref<MLPPMatrix> MLPPMatrix::one_mat(int n, int m) const {
+Ref<MLPPMatrix> MLPPMatrix::matn_one(int n, int m) const {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
@@ -1714,7 +1714,7 @@ Ref<MLPPMatrix> MLPPMatrix::one_mat(int n, int m) const {
 
 	return mat;
 }
-Ref<MLPPMatrix> MLPPMatrix::full_mat(int n, int m, int k) const {
+Ref<MLPPMatrix> MLPPMatrix::matn_full(int n, int m, int k) const {
 	Ref<MLPPMatrix> mat;
 	mat.instance();
 
@@ -1963,10 +1963,10 @@ Ref<MLPPMatrix> MLPPMatrix::cov() const {
 	a_j_row_tmp->resize(_size.x);
 
 	for (int i = 0; i < _size.y; ++i) {
-		get_row_into_mlpp_vector(i, a_i_row_tmp);
+		row_get_into_mlpp_vector(i, a_i_row_tmp);
 
 		for (int j = 0; j < _size.x; ++j) {
-			get_row_into_mlpp_vector(j, a_j_row_tmp);
+			row_get_into_mlpp_vector(j, a_j_row_tmp);
 
 			cov_mat->element_set(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
 		}
@@ -1992,10 +1992,10 @@ void MLPPMatrix::covo(Ref<MLPPMatrix> out) const {
 	a_j_row_tmp->resize(_size.x);
 
 	for (int i = 0; i < _size.y; ++i) {
-		get_row_into_mlpp_vector(i, a_i_row_tmp);
+		row_get_into_mlpp_vector(i, a_i_row_tmp);
 
 		for (int j = 0; j < _size.x; ++j) {
-			get_row_into_mlpp_vector(j, a_j_row_tmp);
+			row_get_into_mlpp_vector(j, a_j_row_tmp);
 
 			out->element_set(i, j, stat.covariancev(a_i_row_tmp, a_j_row_tmp));
 		}
@@ -2310,7 +2310,7 @@ MLPPMatrix::SVDResult MLPPMatrix::svd() const {
 	EigenResult right_eigen = transposen()->multn(Ref<MLPPMatrix>(this))->eigen();
 
 	Ref<MLPPMatrix> singularvals = left_eigen.eigen_values->sqrtn();
-	Ref<MLPPMatrix> sigma = zero_mat(_size.y, _size.x);
+	Ref<MLPPMatrix> sigma = matn_zero(_size.y, _size.x);
 
 	Size2i singularvals_size = singularvals->size();
 
@@ -2338,7 +2338,7 @@ MLPPMatrix::SVDResult MLPPMatrix::svdb(const Ref<MLPPMatrix> &A) const {
 	EigenResult right_eigen = A->transposen()->multn(A)->eigen();
 
 	Ref<MLPPMatrix> singularvals = left_eigen.eigen_values->sqrtn();
-	Ref<MLPPMatrix> sigma = zero_mat(a_size.y, a_size.x);
+	Ref<MLPPMatrix> sigma = matn_zero(a_size.y, a_size.x);
 
 	Size2i singularvals_size = singularvals->size();
 
@@ -2706,7 +2706,7 @@ Ref<MLPPMatrix> MLPPMatrix::outer_productn(const Ref<MLPPVector> &a, const Ref<M
 	return C;
 }
 
-void MLPPMatrix::set_diagonal(const Ref<MLPPVector> &a) {
+void MLPPMatrix::diagonal_set(const Ref<MLPPVector> &a) {
 	ERR_FAIL_COND(!a.is_valid());
 
 	int a_size = a->size();
@@ -2724,7 +2724,7 @@ void MLPPMatrix::set_diagonal(const Ref<MLPPVector> &a) {
 		b_ptr[calculate_index(i, i)] = a_ptr[i];
 	}
 }
-Ref<MLPPMatrix> MLPPMatrix::set_diagonaln(const Ref<MLPPVector> &a) const {
+Ref<MLPPMatrix> MLPPMatrix::diagonal_setn(const Ref<MLPPVector> &a) const {
 	ERR_FAIL_COND_V(!a.is_valid(), Ref<MLPPMatrix>());
 
 	Ref<MLPPMatrix> B = duplicate_fast();
@@ -3001,13 +3001,13 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_data", "data"), &MLPPMatrix::set_data);
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "data"), "set_data", "get_data");
 
-	ClassDB::bind_method(D_METHOD("add_row", "row"), &MLPPMatrix::add_row_pool_vector);
-	ClassDB::bind_method(D_METHOD("add_row_mlpp_vector", "row"), &MLPPMatrix::add_row_mlpp_vector);
-	ClassDB::bind_method(D_METHOD("add_rows_mlpp_matrix", "other"), &MLPPMatrix::add_rows_mlpp_matrix);
+	ClassDB::bind_method(D_METHOD("row_add", "row"), &MLPPMatrix::row_add_pool_vector);
+	ClassDB::bind_method(D_METHOD("row_add_mlpp_vector", "row"), &MLPPMatrix::row_add_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("rows_add_mlpp_matrix", "other"), &MLPPMatrix::rows_add_mlpp_matrix);
 
-	ClassDB::bind_method(D_METHOD("remove_row", "index"), &MLPPMatrix::remove_row);
-	ClassDB::bind_method(D_METHOD("remove_row_unordered", "index"), &MLPPMatrix::remove_row_unordered);
-	ClassDB::bind_method(D_METHOD("swap_row", "index_1", "index_2"), &MLPPMatrix::swap_row);
+	ClassDB::bind_method(D_METHOD("row_remove", "index"), &MLPPMatrix::row_remove);
+	ClassDB::bind_method(D_METHOD("row_remove_unordered", "index"), &MLPPMatrix::row_remove_unordered);
+	ClassDB::bind_method(D_METHOD("row_swap", "index_1", "index_2"), &MLPPMatrix::row_swap);
 
 	ClassDB::bind_method(D_METHOD("clear"), &MLPPMatrix::clear);
 	ClassDB::bind_method(D_METHOD("reset"), &MLPPMatrix::reset);
@@ -3024,12 +3024,12 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("element_get", "index_y", "index_x"), &MLPPMatrix::element_get);
 	ClassDB::bind_method(D_METHOD("element_set", "index_y", "index_x", "val"), &MLPPMatrix::element_set);
 
-	ClassDB::bind_method(D_METHOD("get_row_pool_vector", "index_y"), &MLPPMatrix::get_row_pool_vector);
-	ClassDB::bind_method(D_METHOD("get_row_mlpp_vector", "index_y"), &MLPPMatrix::get_row_mlpp_vector);
-	ClassDB::bind_method(D_METHOD("get_row_into_mlpp_vector", "index_y", "target"), &MLPPMatrix::get_row_into_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("row_get_pool_vector", "index_y"), &MLPPMatrix::row_get_pool_vector);
+	ClassDB::bind_method(D_METHOD("row_get_mlpp_vector", "index_y"), &MLPPMatrix::row_get_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("row_get_into_mlpp_vector", "index_y", "target"), &MLPPMatrix::row_get_into_mlpp_vector);
 
-	ClassDB::bind_method(D_METHOD("set_row_pool_vector", "index_y", "row"), &MLPPMatrix::set_row_pool_vector);
-	ClassDB::bind_method(D_METHOD("set_row_mlpp_vector", "index_y", "row"), &MLPPMatrix::set_row_mlpp_vector);
+	ClassDB::bind_method(D_METHOD("row_set_pool_vector", "index_y", "row"), &MLPPMatrix::row_set_pool_vector);
+	ClassDB::bind_method(D_METHOD("row_set_mlpp_vector", "index_y", "row"), &MLPPMatrix::row_set_mlpp_vector);
 
 	ClassDB::bind_method(D_METHOD("fill", "val"), &MLPPMatrix::fill);
 
@@ -3134,9 +3134,9 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("pinverse"), &MLPPMatrix::pinverse);
 	ClassDB::bind_method(D_METHOD("pinverseo", "out"), &MLPPMatrix::pinverseo);
 
-	ClassDB::bind_method(D_METHOD("zero_mat", "n", "m"), &MLPPMatrix::zero_mat);
-	ClassDB::bind_method(D_METHOD("one_mat", "n", "m"), &MLPPMatrix::one_mat);
-	ClassDB::bind_method(D_METHOD("full_mat", "n", "m", "k"), &MLPPMatrix::full_mat);
+	ClassDB::bind_method(D_METHOD("matn_zero", "n", "m"), &MLPPMatrix::matn_zero);
+	ClassDB::bind_method(D_METHOD("matn_one", "n", "m"), &MLPPMatrix::matn_one);
+	ClassDB::bind_method(D_METHOD("matn_full", "n", "m", "k"), &MLPPMatrix::matn_full);
 
 	ClassDB::bind_method(D_METHOD("sin"), &MLPPMatrix::sin);
 	ClassDB::bind_method(D_METHOD("sinn"), &MLPPMatrix::sinn);
@@ -3176,8 +3176,8 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("outer_product", "a", "b"), &MLPPMatrix::outer_product);
 	ClassDB::bind_method(D_METHOD("outer_productn", "a", "b"), &MLPPMatrix::outer_productn);
 
-	ClassDB::bind_method(D_METHOD("set_diagonal", "a"), &MLPPMatrix::set_diagonal);
-	ClassDB::bind_method(D_METHOD("set_diagonaln", "a"), &MLPPMatrix::set_diagonaln);
+	ClassDB::bind_method(D_METHOD("diagonal_set", "a"), &MLPPMatrix::diagonal_set);
+	ClassDB::bind_method(D_METHOD("diagonal_setn", "a"), &MLPPMatrix::diagonal_setn);
 
 	ClassDB::bind_method(D_METHOD("diagonal_zeroed", "a"), &MLPPMatrix::diagonal_zeroed);
 	ClassDB::bind_method(D_METHOD("diagonal_zeroedn", "a"), &MLPPMatrix::diagonal_zeroedn);

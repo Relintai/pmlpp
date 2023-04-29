@@ -44,7 +44,7 @@ PoolIntArray MLPPKNN::model_set_test(const Ref<MLPPMatrix> &X) {
 	y_hat.resize(y_size);
 
 	for (int i = 0; i < y_size; i++) {
-		X->get_row_into_mlpp_vector(i, v);
+		X->row_get_into_mlpp_vector(i, v);
 
 		y_hat.set(i, model_test(v));
 	}
@@ -94,8 +94,8 @@ PoolIntArray MLPPKNN::nearest_neighbors(const Ref<MLPPVector> &x) {
 				continue;
 			}
 
-			_input_set->get_row_into_mlpp_vector(j, tmpv1);
-			_input_set->get_row_into_mlpp_vector(neighbor, tmpv2);
+			_input_set->row_get_into_mlpp_vector(j, tmpv1);
+			_input_set->row_get_into_mlpp_vector(neighbor, tmpv2);
 
 			bool is_neighbor_nearer = alg.euclidean_distance(x, tmpv1) < alg.euclidean_distance(x, tmpv2);
 

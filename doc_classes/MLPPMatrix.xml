@@ -29,19 +29,19 @@
 			<description>
 			</description>
 		</method>
-		<method name="add_row">
+		<method name="row_add">
 			<return type="void" />
 			<argument index="0" name="row" type="PoolRealArray" />
 			<description>
 			</description>
 		</method>
-		<method name="add_row_mlpp_vector">
+		<method name="row_add_mlpp_vector">
 			<return type="void" />
 			<argument index="0" name="row" type="MLPPVector" />
 			<description>
 			</description>
 		</method>
-		<method name="add_rows_mlpp_matrix">
+		<method name="rows_add_mlpp_matrix">
 			<return type="void" />
 			<argument index="0" name="other" type="MLPPMatrix" />
 			<description>
@@ -293,7 +293,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="full_mat" qualifiers="const">
+		<method name="matn_full" qualifiers="const">
 			<return type="MLPPMatrix" />
 			<argument index="0" name="n" type="int" />
 			<argument index="1" name="m" type="int" />
@@ -337,20 +337,20 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_row_into_mlpp_vector" qualifiers="const">
+		<method name="row_get_into_mlpp_vector" qualifiers="const">
 			<return type="void" />
 			<argument index="0" name="index_y" type="int" />
 			<argument index="1" name="target" type="MLPPVector" />
 			<description>
 			</description>
 		</method>
-		<method name="get_row_mlpp_vector" qualifiers="const">
+		<method name="row_get_mlpp_vector" qualifiers="const">
 			<return type="MLPPVector" />
 			<argument index="0" name="index_y" type="int" />
 			<description>
 			</description>
 		</method>
-		<method name="get_row_pool_vector" qualifiers="const">
+		<method name="row_get_pool_vector" qualifiers="const">
 			<return type="PoolRealArray" />
 			<argument index="0" name="index_y" type="int" />
 			<description>
@@ -511,7 +511,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="one_mat" qualifiers="const">
+		<method name="matn_one" qualifiers="const">
 			<return type="MLPPMatrix" />
 			<argument index="0" name="n" type="int" />
 			<argument index="1" name="m" type="int" />
@@ -543,13 +543,13 @@
 			<description>
 			</description>
 		</method>
-		<method name="remove_row">
+		<method name="row_remove">
 			<return type="void" />
 			<argument index="0" name="index" type="int" />
 			<description>
 			</description>
 		</method>
-		<method name="remove_row_unordered">
+		<method name="row_remove_unordered">
 			<return type="void" />
 			<argument index="0" name="index" type="int" />
 			<description>
@@ -604,13 +604,13 @@
 			<description>
 			</description>
 		</method>
-		<method name="set_diagonal">
+		<method name="diagonal_set">
 			<return type="void" />
 			<argument index="0" name="a" type="MLPPVector" />
 			<description>
 			</description>
 		</method>
-		<method name="set_diagonaln" qualifiers="const">
+		<method name="diagonal_setn" qualifiers="const">
 			<return type="MLPPMatrix" />
 			<argument index="0" name="a" type="MLPPVector" />
 			<description>
@@ -656,14 +656,14 @@
 			<description>
 			</description>
 		</method>
-		<method name="set_row_mlpp_vector">
+		<method name="row_set_mlpp_vector">
 			<return type="void" />
 			<argument index="0" name="index_y" type="int" />
 			<argument index="1" name="row" type="MLPPVector" />
 			<description>
 			</description>
 		</method>
-		<method name="set_row_pool_vector">
+		<method name="row_set_pool_vector">
 			<return type="void" />
 			<argument index="0" name="index_y" type="int" />
 			<argument index="1" name="row" type="PoolRealArray" />
@@ -737,7 +737,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="swap_row">
+		<method name="row_swap">
 			<return type="void" />
 			<argument index="0" name="index_1" type="int" />
 			<argument index="1" name="index_2" type="int" />
@@ -770,7 +770,7 @@
 			<description>
 			</description>
 		</method>
-		<method name="zero_mat" qualifiers="const">
+		<method name="matn_zero" qualifiers="const">
 			<return type="MLPPMatrix" />
 			<argument index="0" name="n" type="int" />
 			<argument index="1" name="m" type="int" />

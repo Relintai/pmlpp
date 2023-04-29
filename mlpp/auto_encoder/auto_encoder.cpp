@@ -128,11 +128,11 @@ void MLPPAutoEncoder::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	while (true) {
 		int output_index = distribution(generator);
 
-		_input_set->get_row_into_mlpp_vector(output_index, input_set_row_tmp);
-		input_set_mat_tmp->set_row_mlpp_vector(0, input_set_row_tmp);
+		_input_set->row_get_into_mlpp_vector(output_index, input_set_row_tmp);
+		input_set_mat_tmp->row_set_mlpp_vector(0, input_set_row_tmp);
 
 		Ref<MLPPVector> y_hat = evaluatev(input_set_row_tmp);
-		y_hat_mat_tmp->set_row_mlpp_vector(0, y_hat);
+		y_hat_mat_tmp->row_set_mlpp_vector(0, y_hat);
 
 		PropagateVResult prop_res = propagatev(input_set_row_tmp);
 

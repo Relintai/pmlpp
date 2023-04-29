@@ -31,18 +31,18 @@ public:
 		return _data;
 	}
 
-	void add_row(const Vector<real_t> &p_row);
-	void add_row_pool_vector(const PoolRealArray &p_row);
-	void add_row_mlpp_vector(const Ref<MLPPVector> &p_row);
-	void add_rows_mlpp_matrix(const Ref<MLPPMatrix> &p_other);
+	void row_add(const Vector<real_t> &p_row);
+	void row_add_pool_vector(const PoolRealArray &p_row);
+	void row_add_mlpp_vector(const Ref<MLPPVector> &p_row);
+	void rows_add_mlpp_matrix(const Ref<MLPPMatrix> &p_other);
 
-	void remove_row(int p_index);
+	void row_remove(int p_index);
 
 	// Removes the item copying the last value into the position of the one to
 	// remove. It's generally faster than `remove`.
-	void remove_row_unordered(int p_index);
+	void row_remove_unordered(int p_index);
 
-	void swap_row(int p_index_1, int p_index_2);
+	void row_swap(int p_index_1, int p_index_2);
 
 	_FORCE_INLINE_ void clear() { resize(Size2i()); }
 	_FORCE_INLINE_ void reset() {
@@ -98,14 +98,14 @@ public:
 		_data[p_index_y * _size.x + p_index_x] = p_val;
 	}
 
-	Vector<real_t> get_row_vector(int p_index_y) const;
-	PoolRealArray get_row_pool_vector(int p_index_y) const;
-	Ref<MLPPVector> get_row_mlpp_vector(int p_index_y) const;
-	void get_row_into_mlpp_vector(int p_index_y, Ref<MLPPVector> target) const;
+	Vector<real_t> row_get_vector(int p_index_y) const;
+	PoolRealArray row_get_pool_vector(int p_index_y) const;
+	Ref<MLPPVector> row_get_mlpp_vector(int p_index_y) const;
+	void row_get_into_mlpp_vector(int p_index_y, Ref<MLPPVector> target) const;
 
-	void set_row_vector(int p_index_y, const Vector<real_t> &p_row);
-	void set_row_pool_vector(int p_index_y, const PoolRealArray &p_row);
-	void set_row_mlpp_vector(int p_index_y, const Ref<MLPPVector> &p_row);
+	void row_set_vector(int p_index_y, const Vector<real_t> &p_row);
+	void row_set_pool_vector(int p_index_y, const PoolRealArray &p_row);
+	void row_set_mlpp_vector(int p_index_y, const Ref<MLPPVector> &p_row);
 
 	void fill(real_t p_val);
 
@@ -215,9 +215,9 @@ public:
 	Ref<MLPPMatrix> pinverse() const;
 	void pinverseo(Ref<MLPPMatrix> out) const;
 
-	Ref<MLPPMatrix> zero_mat(int n, int m) const;
-	Ref<MLPPMatrix> one_mat(int n, int m) const;
-	Ref<MLPPMatrix> full_mat(int n, int m, int k) const;
+	Ref<MLPPMatrix> matn_zero(int n, int m) const;
+	Ref<MLPPMatrix> matn_one(int n, int m) const;
+	Ref<MLPPMatrix> matn_full(int n, int m, int k) const;
 
 	void sin();
 	Ref<MLPPMatrix> sinn() const;
@@ -317,8 +317,8 @@ public:
 	Ref<MLPPMatrix> outer_productn(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) const;
 
 	// Just sets the diagonal
-	void set_diagonal(const Ref<MLPPVector> &a);
-	Ref<MLPPMatrix> set_diagonaln(const Ref<MLPPVector> &a) const;
+	void diagonal_set(const Ref<MLPPVector> &a);
+	Ref<MLPPMatrix> diagonal_setn(const Ref<MLPPVector> &a) const;
 
 	// Sets the diagonals, everythign else will get zeroed
 	void diagonal_zeroed(const Ref<MLPPVector> &a);
