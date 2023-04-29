@@ -283,7 +283,7 @@ void MLPPTests::test_probit_regression(bool ui) {
 	Ref<MLPPDataSimple> dt = data.load_breast_cancer(_breast_cancer_data_path);
 
 	MLPPProbitReg model(dt->get_input(), dt->get_output());
-	model.sgd(0.001, 10000, ui);
+	model.train_sgd(0.001, 10000, ui);
 	PLOG_MSG(model.model_set_test(dt->get_input())->to_string());
 	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }

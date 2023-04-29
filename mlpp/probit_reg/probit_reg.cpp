@@ -18,8 +18,6 @@ Ref<MLPPMatrix> MLPPProbitReg::get_input_set() {
 }
 void MLPPProbitReg::set_input_set(const Ref<MLPPMatrix> &val) {
 	_input_set = val;
-
-	_initialized = false;
 }
 
 Ref<MLPPVector> MLPPProbitReg::get_output_set() {
@@ -27,8 +25,6 @@ Ref<MLPPVector> MLPPProbitReg::get_output_set() {
 }
 void MLPPProbitReg::set_output_set(const Ref<MLPPVector> &val) {
 	_output_set = val;
-
-	_initialized = false;
 }
 
 MLPPReg::RegularizationType MLPPProbitReg::get_reg() {
@@ -36,8 +32,6 @@ MLPPReg::RegularizationType MLPPProbitReg::get_reg() {
 }
 void MLPPProbitReg::set_reg(const MLPPReg::RegularizationType val) {
 	_reg = val;
-
-	_initialized = false;
 }
 
 real_t MLPPProbitReg::get_lambda() {
@@ -45,8 +39,6 @@ real_t MLPPProbitReg::get_lambda() {
 }
 void MLPPProbitReg::set_lambda(const real_t val) {
 	_lambda = val;
-
-	_initialized = false;
 }
 
 real_t MLPPProbitReg::get_alpha() {
@@ -54,25 +46,68 @@ real_t MLPPProbitReg::get_alpha() {
 }
 void MLPPProbitReg::set_alpha(const real_t val) {
 	_alpha = val;
+}
 
-	_initialized = false;
+Ref<MLPPVector> MLPPProbitReg::data_z_get() const {
+	return _z;
+}
+void MLPPProbitReg::data_z_set(const Ref<MLPPVector> &val) {
+	if (!val.is_valid()) {
+		return;
+	}
+
+	_z = val;
+}
+
+Ref<MLPPVector> MLPPProbitReg::data_y_hat_get() const {
+	return _y_hat;
+}
+void MLPPProbitReg::data_y_hat_set(const Ref<MLPPVector> &val) {
+	if (!val.is_valid()) {
+		return;
+	}
+
+	_y_hat = val;
+}
+
+Ref<MLPPVector> MLPPProbitReg::data_weights_get() const {
+	return _weights;
+}
+void MLPPProbitReg::data_weights_set(const Ref<MLPPVector> &val) {
+	if (!val.is_valid()) {
+		return;
+	}
+
+	_weights = val;
+}
+
+real_t MLPPProbitReg::data_bias_get() const {
+	return _bias;
+}
+void MLPPProbitReg::data_bias_set(const real_t val) {
+	_bias = val;
 }
 
 Ref<MLPPVector> MLPPProbitReg::model_set_test(const Ref<MLPPMatrix> &X) {
+	ERR_FAIL_COND_V(needs_init(), Ref<MLPPVector>());
+
 	return evaluatem(X);
 }
 
 real_t MLPPProbitReg::model_test(const Ref<MLPPVector> &x) {
+	ERR_FAIL_COND_V(needs_init(), 0);
+
 	return evaluatev(x);
 }
 
-void MLPPProbitReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
-	ERR_FAIL_COND(!_initialized);
+void MLPPProbitReg::train_gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
+	ERR_FAIL_COND(needs_init());
 
 	MLPPActivation avn;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
+	int n = _input_set->size().y;
 
 	forward_pass();
 
@@ -82,11 +117,11 @@ void MLPPProbitReg::gradient_descent(real_t learning_rate, int max_epoch, bool u
 		Ref<MLPPVector> error = _y_hat->subn(_output_set);
 
 		// Calculating the weight gradients
-		_weights->sub(_input_set->transposen()->mult_vec(error->hadamard_productn(avn.gaussian_cdf_derivv(_z)))->scalar_multiplyn(learning_rate / _n));
+		_weights->sub(_input_set->transposen()->mult_vec(error->hadamard_productn(avn.gaussian_cdf_derivv(_z)))->scalar_multiplyn(learning_rate / n));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		_bias -= learning_rate * error->hadamard_productn(avn.gaussian_cdf_derivv(_z))->sum_elements() / _n;
+		_bias -= learning_rate * error->hadamard_productn(avn.gaussian_cdf_derivv(_z))->sum_elements() / n;
 
 		forward_pass();
 
@@ -103,13 +138,14 @@ void MLPPProbitReg::gradient_descent(real_t learning_rate, int max_epoch, bool u
 	}
 }
 
-void MLPPProbitReg::mle(real_t learning_rate, int max_epoch, bool ui) {
-	ERR_FAIL_COND(!_initialized);
+void MLPPProbitReg::train_mle(real_t learning_rate, int max_epoch, bool ui) {
+	ERR_FAIL_COND(needs_init());
 
 	MLPPActivation avn;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
+	int n = _input_set->size().y;
 
 	forward_pass();
 
@@ -119,11 +155,11 @@ void MLPPProbitReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 		Ref<MLPPVector> error = _output_set->subn(_y_hat);
 
 		// Calculating the weight gradients
-		_weights->add(_input_set->transposen()->mult_vec(error->hadamard_productn(avn.gaussian_cdf_derivv(_z)))->scalar_multiplyn(learning_rate / _n));
+		_weights->add(_input_set->transposen()->mult_vec(error->hadamard_productn(avn.gaussian_cdf_derivv(_z)))->scalar_multiplyn(learning_rate / n));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		_bias += learning_rate * error->hadamard_productn(avn.gaussian_cdf_derivv(_z))->sum_elements() / _n;
+		_bias += learning_rate * error->hadamard_productn(avn.gaussian_cdf_derivv(_z))->sum_elements() / n;
 
 		forward_pass();
 
@@ -140,14 +176,15 @@ void MLPPProbitReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 	}
 }
 
-void MLPPProbitReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
-	ERR_FAIL_COND(!_initialized);
+void MLPPProbitReg::train_sgd(real_t learning_rate, int max_epoch, bool ui) {
+	ERR_FAIL_COND(needs_init());
 
 	// NOTE: ∂y_hat/∂z is sparse
 	MLPPActivation avn;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
+	int n = _input_set->size().y;
 
 	Ref<MLPPVector> input_set_row_tmp;
 	input_set_row_tmp.instance();
@@ -163,7 +200,7 @@ void MLPPProbitReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 
 	std::random_device rd;
 	std::default_random_engine generator(rd());
-	std::uniform_int_distribution<int> distribution(0, int(_n - 1));
+	std::uniform_int_distribution<int> distribution(0, int(n - 1));
 
 	while (true) {
 		int output_index = distribution(generator);
@@ -205,20 +242,21 @@ void MLPPProbitReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	forward_pass();
 }
 
-void MLPPProbitReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui) {
-	ERR_FAIL_COND(!_initialized);
+void MLPPProbitReg::train_mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui) {
+	ERR_FAIL_COND(needs_init());
 
 	MLPPActivation avn;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
+	int n = _input_set->size().y;
 
 	Ref<MLPPVector> z_tmp;
 	z_tmp.instance();
 	z_tmp->resize(1);
 
 	// Creating the mini-batches
-	int n_mini_batch = _n / mini_batch_size;
+	int n_mini_batch = n / mini_batch_size;
 
 	MLPPUtilities::CreateMiniBatchMVBatch batches = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
@@ -262,89 +300,77 @@ void MLPPProbitReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_siz
 }
 
 real_t MLPPProbitReg::score() {
+	ERR_FAIL_COND_V(needs_init(), 0);
+
 	MLPPUtilities util;
 
 	return util.performance_vec(_y_hat, _output_set);
 }
 
-void MLPPProbitReg::save(const String &file_name) {
-	MLPPUtilities util;
-
-	//util.saveParameters(file_name, _weights, _bias);
-}
-
-bool MLPPProbitReg::is_initialized() {
-	return _initialized;
-}
-void MLPPProbitReg::initialize() {
-	if (_initialized) {
-		return;
+bool MLPPProbitReg::needs_init() const {
+	if (!_input_set.is_valid()) {
+		return true;
 	}
 
+	if (!_output_set.is_valid()) {
+		return true;
+	}
+
+	int n = _input_set->size().y;
+	int k = _input_set->size().x;
+
+	if (_y_hat->size() != n) {
+		return true;
+	}
+
+	if (_weights->size() != k) {
+		return true;
+	}
+
+	return false;
+}
+
+void MLPPProbitReg::initialize() {
 	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
 
-	_n = _input_set->size().y;
-	_k = _input_set->size().x;
+	int n = _input_set->size().y;
+	int k = _input_set->size().x;
 
-	if (!_y_hat.is_valid()) {
-		_y_hat.instance();
-	}
-
-	_y_hat->resize(_n);
+	_y_hat->resize(n);
 
 	MLPPUtilities util;
-
-	if (!_weights.is_valid()) {
-		_weights.instance();
-	}
-
-	_weights->resize(_k);
+	_weights->resize(k);
 
 	util.weight_initializationv(_weights);
 	_bias = util.bias_initializationr();
-
-	_initialized = true;
 }
 
 MLPPProbitReg::MLPPProbitReg(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
 	_input_set = p_input_set;
 	_output_set = p_output_set;
 
-	_n = _input_set->size().y;
-	_k = _input_set->size().x;
-
 	_reg = p_reg;
 	_lambda = p_lambda;
 	_alpha = p_alpha;
 
+	_z.instance();
 	_y_hat.instance();
-	_y_hat->resize(_n);
-
-	MLPPUtilities util;
-
 	_weights.instance();
-	_weights->resize(_k);
+	_bias = 0;
 
-	util.weight_initializationv(_weights);
-	_bias = util.bias_initializationr();
-
-	_initialized = true;
+	initialize();
 }
 
 MLPPProbitReg::MLPPProbitReg() {
-	_y_hat.instance();
-
-	_bias = 0;
-
-	_n = 0;
-	_k = 0;
-
 	// Regularization Params
 	_reg = MLPPReg::REGULARIZATION_TYPE_NONE;
 	_lambda = 0.5;
 	_alpha = 0.5;
 
-	_initialized = false;
+	_z.instance();
+	_y_hat.instance();
+	_weights.instance();
+	_bias = 0;
 }
 MLPPProbitReg::~MLPPProbitReg() {
 }
@@ -405,18 +431,33 @@ void MLPPProbitReg::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_alpha", "val"), &MLPPProbitReg::set_alpha);
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "alpha"), "set_alpha", "get_alpha");
 
+	ADD_GROUP("Data", "data");
+	ClassDB::bind_method(D_METHOD("data_z_get"), &MLPPProbitReg::data_z_get);
+	ClassDB::bind_method(D_METHOD("data_z_set", "val"), &MLPPProbitReg::set_output_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_z", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_z_set", "data_z_get");
+
+	ClassDB::bind_method(D_METHOD("data_y_hat_get"), &MLPPProbitReg::data_y_hat_get);
+	ClassDB::bind_method(D_METHOD("data_y_hat_set", "val"), &MLPPProbitReg::data_y_hat_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_y_hat", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_y_hat_set", "data_y_hat_get");
+
+	ClassDB::bind_method(D_METHOD("data_weights_get"), &MLPPProbitReg::data_weights_get);
+	ClassDB::bind_method(D_METHOD("data_weights_set", "val"), &MLPPProbitReg::data_weights_set);
+	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "data_weights", PROPERTY_HINT_RESOURCE_TYPE, "MLPPVector"), "data_weights_set", "data_weights_get");
+
+	ClassDB::bind_method(D_METHOD("data_bias_get"), &MLPPProbitReg::data_bias_get);
+	ClassDB::bind_method(D_METHOD("data_bias_set", "val"), &MLPPProbitReg::data_bias_set);
+	ADD_PROPERTY(PropertyInfo(Variant::REAL, "data_bias"), "data_bias_set", "data_bias_get");
+
 	ClassDB::bind_method(D_METHOD("model_set_test", "X"), &MLPPProbitReg::model_set_test);
 	ClassDB::bind_method(D_METHOD("model_test", "x"), &MLPPProbitReg::model_test);
 
-	ClassDB::bind_method(D_METHOD("gradient_descent", "learning_rate", "max_epoch", "ui"), &MLPPProbitReg::gradient_descent, 0, false);
-	ClassDB::bind_method(D_METHOD("mle", "learning_rate", "max_epoch", "ui"), &MLPPProbitReg::mle, 0, false);
-	ClassDB::bind_method(D_METHOD("sgd", "learning_rate", "max_epoch", "ui"), &MLPPProbitReg::sgd, 0, false);
-	ClassDB::bind_method(D_METHOD("mbgd", "learning_rate", "max_epoch", "mini_batch_size", "ui"), &MLPPProbitReg::mbgd, false);
+	ClassDB::bind_method(D_METHOD("train_gradient_descent", "learning_rate", "max_epoch", "ui"), &MLPPProbitReg::train_gradient_descent, 0, false);
+	ClassDB::bind_method(D_METHOD("train_mle", "learning_rate", "max_epoch", "ui"), &MLPPProbitReg::train_mle, 0, false);
+	ClassDB::bind_method(D_METHOD("train_sgd", "learning_rate", "max_epoch", "ui"), &MLPPProbitReg::train_sgd, 0, false);
+	ClassDB::bind_method(D_METHOD("train_mbgd", "learning_rate", "max_epoch", "mini_batch_size", "ui"), &MLPPProbitReg::train_mbgd, false);
 
 	ClassDB::bind_method(D_METHOD("score"), &MLPPProbitReg::score);
 
-	ClassDB::bind_method(D_METHOD("save", "file_name"), &MLPPProbitReg::save);
-
-	ClassDB::bind_method(D_METHOD("is_initialized"), &MLPPProbitReg::is_initialized);
+	ClassDB::bind_method(D_METHOD("needs_init"), &MLPPProbitReg::needs_init);
 	ClassDB::bind_method(D_METHOD("initialize"), &MLPPProbitReg::initialize);
 }
