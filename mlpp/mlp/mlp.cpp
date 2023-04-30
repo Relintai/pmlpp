@@ -10,7 +10,6 @@
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
 #include "../utilities/utilities.h"
 
@@ -83,7 +82,6 @@ void MLPPMLP::gradient_descent(real_t learning_rate, int max_epoch, bool UI) {
 	ERR_FAIL_COND(!_initialized);
 
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -96,29 +94,29 @@ void MLPPMLP::gradient_descent(real_t learning_rate, int max_epoch, bool UI) {
 		cost_prev = cost(_y_hat, _output_set);
 
 		// Calculating the errors
-		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
+		Ref<MLPPVector> error = _y_hat->subn(_output_set);
 
 		// Calculating the weight/bias gradients for layer 2
 
-		Ref<MLPPVector> D2_1 = alg.mat_vec_multnv(alg.transposenm(_a2), error);
+		Ref<MLPPVector> D2_1 = _a2->transposen()->mult_vec(error);
 
 		// weights and bias updation for layer 2
-		_weights2->set_from_mlpp_vector(alg.subtractionnv(_weights2, alg.scalar_multiplynv(learning_rate / static_cast<real_t>(_n), D2_1)));
+		_weights2->sub(D2_1->scalar_multiplyn(learning_rate / static_cast<real_t>(_n)));
 		_weights2->set_from_mlpp_vector(regularization.reg_weightsv(_weights2, _lambda, _alpha, _reg));
 
-		_bias2 -= learning_rate * alg.sum_elementsv(error) / static_cast<real_t>(_n);
+		_bias2 -= learning_rate * error->sum_elements() / static_cast<real_t>(_n);
 
 		// Calculating the weight/bias for layer 1
 
-		Ref<MLPPMatrix> D1_1 = alg.outer_product(error, _weights2);
-		Ref<MLPPMatrix> D1_2 = alg.hadamard_productnm(alg.transposenm(D1_1), avn.sigmoid_derivm(_z2));
-		Ref<MLPPMatrix> D1_3 = alg.matmultnm(alg.transposenm(_input_set), D1_2);
+		Ref<MLPPMatrix> D1_1 = error->outer_product(_weights2);
+		Ref<MLPPMatrix> D1_2 = D1_1->transposen()->hadamard_productn(avn.sigmoid_derivm(_z2));
+		Ref<MLPPMatrix> D1_3 = _input_set->transposen()->multn(D1_2);
 
 		// weight an bias updation for layer 1
-		_weights1->set_from_mlpp_matrix(alg.subtractionnm(_weights1, alg.scalar_multiplynm(learning_rate / _n, D1_3)));
+		_weights1->sub(D1_3->scalar_multiplyn(learning_rate / _n));
 		_weights1->set_from_mlpp_matrix(regularization.reg_weightsm(_weights1, _lambda, _alpha, _reg));
 
-		_bias1->set_from_mlpp_vector(alg.subtract_matrix_rowsnv(_bias1, alg.scalar_multiplynm(learning_rate / _n, D1_2)));
+		_bias1->subtract_matrix_rows(D1_2->scalar_multiplyn(learning_rate / _n));
 
 		forward_pass();
 
@@ -143,7 +141,6 @@ void MLPPMLP::sgd(real_t learning_rate, int max_epoch, bool UI) {
 	ERR_FAIL_COND(!_initialized);
 
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -183,24 +180,24 @@ void MLPPMLP::sgd(real_t learning_rate, int max_epoch, bool UI) {
 		real_t error = ly_hat - output_element;
 
 		// Weight updation for layer 2
-		Ref<MLPPVector> D2_1 = alg.scalar_multiplynv(error, la2);
+		Ref<MLPPVector> D2_1 = la2->scalar_multiplyn(error);
 
-		_weights2->set_from_mlpp_vector(alg.subtractionnv(_weights2, alg.scalar_multiplynv(learning_rate, D2_1)));
+		_weights2->sub(D2_1->scalar_multiplyn(learning_rate));
 		_weights2->set_from_mlpp_vector(regularization.reg_weightsv(_weights2, _lambda, _alpha, _reg));
 
 		// Bias updation for layer 2
 		_bias2 -= learning_rate * error;
 
 		// Weight updation for layer 1
-		Ref<MLPPVector> D1_1 = alg.scalar_multiplynv(error, _weights2);
-		Ref<MLPPVector> D1_2 = alg.hadamard_productnv(D1_1, avn.sigmoid_derivv(lz2));
-		Ref<MLPPMatrix> D1_3 = alg.outer_product(input_set_row_tmp, D1_2);
+		Ref<MLPPVector> D1_1 = _weights2->scalar_multiplyn(error);
+		Ref<MLPPVector> D1_2 = D1_1->hadamard_productn(avn.sigmoid_derivv(lz2));
+		Ref<MLPPMatrix> D1_3 = input_set_row_tmp->outer_product(D1_2);
 
-		_weights1->set_from_mlpp_matrix(alg.subtractionnm(_weights1, alg.scalar_multiplynm(learning_rate, D1_3)));
+		_weights1->sub(D1_3->scalar_multiplyn(learning_rate));
 		_weights1->set_from_mlpp_matrix(regularization.reg_weightsm(_weights1, _lambda, _alpha, _reg));
 		// Bias updation for layer 1
 
-		_bias1->set_from_mlpp_vector(alg.subtractionnv(_bias1, alg.scalar_multiplynv(learning_rate, D1_2)));
+		_bias1->sub(D1_2->scalar_multiplyn(learning_rate));
 
 		ly_hat = evaluatev(input_set_row_tmp);
 
@@ -226,7 +223,6 @@ void MLPPMLP::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 	ERR_FAIL_COND(!_initialized);
 
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -251,33 +247,33 @@ void MLPPMLP::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, boo
 			cost_prev = cost(ly_hat, current_output);
 
 			// Calculating the errors
-			Ref<MLPPVector> error = alg.subtractionnv(ly_hat, current_output);
+			Ref<MLPPVector> error = ly_hat->subn(current_output);
 
 			// Calculating the weight/bias gradients for layer 2
-			Ref<MLPPVector> D2_1 = alg.mat_vec_multnv(alg.transposenm(la2), error);
+			Ref<MLPPVector> D2_1 = la2->transposen()->mult_vec(error);
 
 			real_t lr_d_cos = learning_rate / static_cast<real_t>(current_output->size());
 
 			// weights and bias updation for layser 2
-			_weights2->set_from_mlpp_vector(alg.subtractionnv(_weights2, alg.scalar_multiplynv(lr_d_cos, D2_1)));
+			_weights2->sub(D2_1->scalar_multiplyn(lr_d_cos));
 			_weights2->set_from_mlpp_vector(regularization.reg_weightsv(_weights2, _lambda, _alpha, _reg));
 
 			// Calculating the bias gradients for layer 2
-			real_t b_gradient = alg.sum_elementsv(error);
+			real_t b_gradient = error->sum_elements();
 
 			// Bias Updation for layer 2
 			_bias2 -= learning_rate * b_gradient / current_output->size();
 
 			//Calculating the weight/bias for layer 1
-			Ref<MLPPMatrix> D1_1 = alg.outer_product(error, _weights2);
-			Ref<MLPPMatrix> D1_2 = alg.hadamard_productnm(D1_1, avn.sigmoid_derivm(lz2));
-			Ref<MLPPMatrix> D1_3 = alg.matmultnm(alg.transposenm(current_input), D1_2);
+			Ref<MLPPMatrix> D1_1 = error->outer_product(_weights2);
+			Ref<MLPPMatrix> D1_2 = D1_1->hadamard_productn(avn.sigmoid_derivm(lz2));
+			Ref<MLPPMatrix> D1_3 = current_input->transposen()->multn(D1_2);
 
 			// weight an bias updation for layer 1
-			_weights1->set_from_mlpp_matrix(alg.subtractionnm(_weights1, alg.scalar_multiplynm(lr_d_cos, D1_3)));
+			_weights1->sub(D1_3->scalar_multiplyn(lr_d_cos));
 			_weights1->set_from_mlpp_matrix(regularization.reg_weightsm(_weights1, _lambda, _alpha, _reg));
 
-			_bias1->set_from_mlpp_vector(alg.subtract_matrix_rowsnv(_bias1, alg.scalar_multiplynm(lr_d_cos, D1_2)));
+			_bias1->subtract_matrix_rows(D1_2->scalar_multiplyn(lr_d_cos));
 
 			_y_hat = evaluatem(current_input);
 
@@ -356,49 +352,44 @@ real_t MLPPMLP::cost(const Ref<MLPPVector> &p_y_hat, const Ref<MLPPVector> &p_y)
 }
 
 Ref<MLPPVector> MLPPMLP::evaluatem(const Ref<MLPPMatrix> &X) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	Ref<MLPPMatrix> pz2 = alg.mat_vec_addnm(alg.matmultnm(X, _weights1), _bias1);
+	Ref<MLPPMatrix> pz2 = X->multn(_weights1)->add_vecn(_bias1);
 	Ref<MLPPMatrix> pa2 = avn.sigmoid_normm(pz2);
 
-	return avn.sigmoid_normv(alg.scalar_addnv(_bias2, alg.mat_vec_multnv(pa2, _weights2)));
+	return avn.sigmoid_normv(pa2->mult_vec(_weights2)->scalar_addn(_bias2));
 }
 
 void MLPPMLP::propagatem(const Ref<MLPPMatrix> &X, Ref<MLPPMatrix> z2_out, Ref<MLPPMatrix> a2_out) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	z2_out->set_from_mlpp_matrix(alg.mat_vec_addnm(alg.matmultnm(X, _weights1), _bias1));
+	z2_out->set_from_mlpp_matrix(X->multn(_weights1)->add_vecn(_bias1));
 	a2_out->set_from_mlpp_matrix(avn.sigmoid_normm(z2_out));
 }
 
 real_t MLPPMLP::evaluatev(const Ref<MLPPVector> &x) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	Ref<MLPPVector> pz2 = alg.additionnv(alg.mat_vec_multnv(alg.transposenm(_weights1), x), _bias1);
+	Ref<MLPPVector> pz2 = _weights1->transposen()->mult_vec(x)->addn(_bias1);
 	Ref<MLPPVector> pa2 = avn.sigmoid_normv(pz2);
 
-	return avn.sigmoid_normr(alg.dotnv(_weights2, pa2) + _bias2);
+	return avn.sigmoid_normr(_weights2->dot(pa2) + _bias2);
 }
 
 void MLPPMLP::propagatev(const Ref<MLPPVector> &x, Ref<MLPPVector> z2_out, Ref<MLPPVector> a2_out) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	z2_out->set_from_mlpp_vector(alg.additionnv(alg.mat_vec_multnv(alg.transposenm(_weights1), x), _bias1));
+	z2_out->set_from_mlpp_vector(_weights1->transposen()->mult_vec(x)->addn(_bias1));
 	a2_out->set_from_mlpp_vector(avn.sigmoid_normv(z2_out));
 }
 
 void MLPPMLP::forward_pass() {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	_z2->set_from_mlpp_matrix(alg.mat_vec_addnm(alg.matmultnm(_input_set, _weights1), _bias1));
+	_z2->set_from_mlpp_matrix(_input_set->multn(_weights1)->add_vecn(_bias1));
 	_a2->set_from_mlpp_matrix(avn.sigmoid_normm(_z2));
 
-	_y_hat->set_from_mlpp_vector(avn.sigmoid_normv(alg.scalar_addnv(_bias2, alg.mat_vec_multnv(_a2, _weights2))));
+	_y_hat->set_from_mlpp_vector(avn.sigmoid_normv(_a2->mult_vec(_weights2)->scalar_addn(_bias2)));
 }
 
 MLPPMLP::MLPPMLP(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, int p_n_hidden, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {

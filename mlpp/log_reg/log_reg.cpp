@@ -8,7 +8,6 @@
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
 #include "../utilities/utilities.h"
 
@@ -77,7 +76,6 @@ real_t MLPPLogReg::model_test(const Ref<MLPPVector> &x) {
 void MLPPLogReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -88,14 +86,14 @@ void MLPPLogReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) 
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
+		Ref<MLPPVector> error = _y_hat->subn(_output_set);
 
 		// Calculating the weight gradients
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), error)));
+		_weights->sub(_input_set->transposen()->mult_vec(error)->scalar_multiplyn(learning_rate / _n));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		_bias -= learning_rate * alg.sum_elementsv(error) / _n;
+		_bias -= learning_rate * error->sum_elements() / _n;
 
 		forward_pass();
 
@@ -115,7 +113,6 @@ void MLPPLogReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) 
 void MLPPLogReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -126,14 +123,14 @@ void MLPPLogReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		Ref<MLPPVector> error = alg.subtractionnv(_output_set, _y_hat);
+		Ref<MLPPVector> error = _output_set->subn(_y_hat);
 
 		// Calculating the weight gradients
-		_weights = alg.additionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), error)));
+		_weights->add(_input_set->transposen()->mult_vec(error)->scalar_multiplyn(learning_rate / _n));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		_bias += learning_rate * alg.sum_elementsv(error) / _n;
+		_bias += learning_rate * error->sum_elements() / _n;
 
 		forward_pass();
 
@@ -153,7 +150,6 @@ void MLPPLogReg::mle(real_t learning_rate, int max_epoch, bool ui) {
 void MLPPLogReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -189,7 +185,7 @@ void MLPPLogReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 		real_t error = y_hat - output_element_set;
 
 		// Weight updation
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * error, input_row_tmp));
+		_weights->sub(input_row_tmp->scalar_multiplyn(learning_rate * error));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Bias updation
@@ -215,7 +211,6 @@ void MLPPLogReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 void MLPPLogReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool UI) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -232,14 +227,14 @@ void MLPPLogReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			Ref<MLPPVector> y_hat = evaluatem(current_mini_batch_input_entry);
 			cost_prev = cost(y_hat, current_mini_batch_output_entry);
 
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_mini_batch_output_entry);
+			Ref<MLPPVector> error = y_hat->subn(current_mini_batch_output_entry);
 
 			// Calculating the weight gradients
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / current_mini_batch_output_entry->size(), alg.mat_vec_multnv(alg.transposenm(current_mini_batch_input_entry), error)));
+			_weights->sub(current_mini_batch_input_entry->transposen()->mult_vec(error)->scalar_multiplyn(learning_rate / current_mini_batch_output_entry->size()));
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(error) / current_mini_batch_output_entry->size();
+			_bias -= learning_rate * error->sum_elements() / current_mini_batch_output_entry->size();
 			y_hat = evaluatem(current_mini_batch_input_entry);
 
 			if (UI) {
@@ -322,17 +317,15 @@ real_t MLPPLogReg::cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) 
 }
 
 real_t MLPPLogReg::evaluatev(const Ref<MLPPVector> &x) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.sigmoid_normr(alg.dotnv(_weights, x) + _bias);
+	return avn.sigmoid_normr(_weights->dot(x) + _bias);
 }
 
 Ref<MLPPVector> MLPPLogReg::evaluatem(const Ref<MLPPMatrix> &X) {
-	MLPPLinAlg alg;
 	MLPPActivation avn;
 
-	return avn.sigmoid_normv(alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights)));
+	return avn.sigmoid_normv(X->mult_vec(_weights)->scalar_addn(_bias));
 }
 
 // sigmoid ( wTx + b )

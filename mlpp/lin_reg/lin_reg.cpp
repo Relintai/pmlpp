@@ -7,7 +7,6 @@
 #include "lin_reg.h"
 
 #include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
 #include "../stat/stat.h"
 #include "../utilities/utilities.h"
@@ -78,7 +77,6 @@ real_t MLPPLinReg::model_test(const Ref<MLPPVector> &x) {
 void MLPPLinReg::newton_raphson(real_t learning_rate, int max_epoch, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -89,16 +87,18 @@ void MLPPLinReg::newton_raphson(real_t learning_rate, int max_epoch, bool ui) {
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
+		Ref<MLPPVector> error = _y_hat->subn(_output_set);
 
 		// Calculating the weight gradients (2nd derivative)
-		Ref<MLPPVector> first_derivative = alg.mat_vec_multnv(alg.transposenm(_input_set), error);
-		Ref<MLPPMatrix> second_derivative = alg.matmultnm(alg.transposenm(_input_set), _input_set);
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(alg.inversenm(second_derivative)), first_derivative)));
+
+		Ref<MLPPVector> first_derivative = _input_set->transposen()->mult_vec(error);
+		Ref<MLPPMatrix> second_derivative = _input_set->transposen()->multn(_input_set);
+
+		_weights->sub(second_derivative->inverse()->transposen()->mult_vec(first_derivative)->scalar_multiplyn(learning_rate / _n));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients (2nd derivative)
-		_bias -= learning_rate * alg.sum_elementsv(error) / _n; // We keep this the same. The 2nd derivative is just [1].
+		_bias -= learning_rate * error->sum_elements() / _n; // We keep this the same. The 2nd derivative is just [1].
 
 		forward_pass();
 
@@ -118,7 +118,6 @@ void MLPPLinReg::newton_raphson(real_t learning_rate, int max_epoch, bool ui) {
 void MLPPLinReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -129,14 +128,14 @@ void MLPPLinReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) 
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
+		Ref<MLPPVector> error = _y_hat->subn(_output_set);
 
 		// Calculating the weight gradients
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / _n, alg.mat_vec_multnv(alg.transposenm(_input_set), error)));
+		_weights->sub(_input_set->transposen()->mult_vec(error)->scalar_multiplyn(learning_rate / _n));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Calculating the bias gradients
-		_bias -= learning_rate * alg.sum_elementsv(error) / _n;
+		_bias -= learning_rate * error->sum_elements() / _n;
 
 		forward_pass();
 
@@ -156,7 +155,6 @@ void MLPPLinReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) 
 void MLPPLinReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -193,7 +191,7 @@ void MLPPLinReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 		real_t error = y_hat - output_element_set;
 
 		// Weight updation
-		_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate * error, input_set_row_tmp));
+		_weights->sub(input_set_row_tmp->scalar_multiplyn(learning_rate * error));
 		_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 		// Bias updation
@@ -219,7 +217,6 @@ void MLPPLinReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 void MLPPLinReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -237,14 +234,14 @@ void MLPPLinReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			Ref<MLPPVector> y_hat = evaluatem(current_input_mini_batch);
 			cost_prev = cost(y_hat, current_output_mini_batch);
 
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_mini_batch);
+			Ref<MLPPVector> error = y_hat->subn(current_output_mini_batch);
 
 			// Calculating the weight gradients
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate / current_output_mini_batch->size(), alg.mat_vec_multnv(alg.transposenm(current_input_mini_batch), error)));
+			_weights->sub(current_input_mini_batch->transposen()->mult_vec(error)->scalar_multiplyn(learning_rate / current_output_mini_batch->size()));
 			_weights = regularization.reg_weightsv(_weights, _lambda, _alpha, _reg);
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size();
+			_bias -= learning_rate * error->sum_elements() / current_output_mini_batch->size();
 			y_hat = evaluatem(current_input_mini_batch);
 
 			if (ui) {
@@ -266,7 +263,6 @@ void MLPPLinReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, 
 void MLPPLinReg::momentum(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -276,7 +272,7 @@ void MLPPLinReg::momentum(real_t learning_rate, int max_epoch, int mini_batch_si
 	MLPPUtilities::CreateMiniBatchMVBatch batches = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
 	// Initializing necessary components for Momentum.
-	Ref<MLPPVector> v = alg.zerovecnv(_weights->size());
+	Ref<MLPPVector> v = MLPPVector::create_vec_zero(_weights->size());
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -286,19 +282,20 @@ void MLPPLinReg::momentum(real_t learning_rate, int max_epoch, int mini_batch_si
 			Ref<MLPPVector> y_hat = evaluatem(current_input_mini_batch);
 			cost_prev = cost(y_hat, current_output_mini_batch);
 
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_mini_batch);
+			Ref<MLPPVector> error = y_hat->subn(current_output_mini_batch);
 
 			// Calculating the weight gradients
-			Ref<MLPPVector> gradient = alg.scalar_multiplynv(1 / current_output_mini_batch->size(), alg.mat_vec_multnv(alg.transposenm(current_input_mini_batch), error));
+
+			Ref<MLPPVector> gradient = current_input_mini_batch->transposen()->mult_vec(error)->scalar_multiplyn(1 / current_output_mini_batch->size());
+
 			Ref<MLPPVector> reg_deriv_term = regularization.reg_deriv_termv(_weights, _lambda, _alpha, _reg);
-			Ref<MLPPVector> weight_grad = alg.additionnv(gradient, reg_deriv_term); // Weight_grad_final
+			Ref<MLPPVector> weight_grad = gradient->addn(reg_deriv_term); // Weight_grad_final
 
-			v = alg.additionnv(alg.scalar_multiplynv(gamma, v), alg.scalar_multiplynv(learning_rate, weight_grad));
-
-			_weights = alg.subtractionnv(_weights, v);
+			v = v->scalar_multiplyn(gamma)->addn(weight_grad->scalar_multiplyn(learning_rate));
+			_weights->sub(v);
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
+			_bias -= learning_rate * error->sum_elements() / current_output_mini_batch->size(); // As normal
 			y_hat = evaluatem(current_input_mini_batch);
 
 			if (ui) {
@@ -320,7 +317,6 @@ void MLPPLinReg::momentum(real_t learning_rate, int max_epoch, int mini_batch_si
 void MLPPLinReg::nag(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -330,31 +326,32 @@ void MLPPLinReg::nag(real_t learning_rate, int max_epoch, int mini_batch_size, r
 	MLPPUtilities::CreateMiniBatchMVBatch batches = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
 	// Initializing necessary components for Momentum.
-	Ref<MLPPVector> v = alg.zerovecnv(_weights->size());
+	Ref<MLPPVector> v = MLPPVector::create_vec_zero(_weights->size());
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
 			Ref<MLPPMatrix> current_input_mini_batch = batches.input_sets[i];
 			Ref<MLPPVector> current_output_mini_batch = batches.output_sets[i];
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(gamma, v)); // "Aposterori" calculation
+			_weights->sub(v->scalar_multiplyn(gamma)); // "Aposterori" calculation
 
 			Ref<MLPPVector> y_hat = evaluatem(current_input_mini_batch);
 			cost_prev = cost(y_hat, current_output_mini_batch);
 
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_mini_batch);
+			Ref<MLPPVector> error = y_hat->subn(current_output_mini_batch);
 
 			// Calculating the weight gradients
-			Ref<MLPPVector> gradient = alg.scalar_multiplynv(1 / current_output_mini_batch->size(), alg.mat_vec_multnv(alg.transposenm(current_input_mini_batch), error));
+
+			Ref<MLPPVector> gradient = current_input_mini_batch->transposen()->mult_vec(error)->scalar_multiplyn(1 / current_output_mini_batch->size());
 			Ref<MLPPVector> reg_deriv_term = regularization.reg_deriv_termv(_weights, _lambda, _alpha, _reg);
-			Ref<MLPPVector> weight_grad = alg.additionnv(gradient, reg_deriv_term); // Weight_grad_final
+			Ref<MLPPVector> weight_grad = gradient->addn(reg_deriv_term); // Weight_grad_final
 
-			v = alg.additionnv(alg.scalar_multiplynv(gamma, v), alg.scalar_multiplynv(learning_rate, weight_grad));
+			v = v->scalar_multiplyn(gamma)->addn(weight_grad->scalar_multiplyn(learning_rate));
 
-			_weights = alg.subtractionnv(_weights, v);
+			_weights->sub(v);
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
+			_bias -= learning_rate * error->sum_elements() / current_output_mini_batch->size(); // As normal
 			y_hat = evaluatem(current_input_mini_batch);
 
 			if (ui) {
@@ -376,7 +373,6 @@ void MLPPLinReg::nag(real_t learning_rate, int max_epoch, int mini_batch_size, r
 void MLPPLinReg::adagrad(real_t learning_rate, int max_epoch, int mini_batch_size, real_t e, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -386,7 +382,7 @@ void MLPPLinReg::adagrad(real_t learning_rate, int max_epoch, int mini_batch_siz
 	MLPPUtilities::CreateMiniBatchMVBatch batches = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
 	// Initializing necessary components for Adagrad.
-	Ref<MLPPVector> v = alg.zerovecnv(_weights->size());
+	Ref<MLPPVector> v = MLPPVector::create_vec_zero(_weights->size());
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -396,19 +392,18 @@ void MLPPLinReg::adagrad(real_t learning_rate, int max_epoch, int mini_batch_siz
 			Ref<MLPPVector> y_hat = evaluatem(current_input_mini_batch);
 			cost_prev = cost(y_hat, current_output_mini_batch);
 
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_mini_batch);
+			Ref<MLPPVector> error = y_hat->subn(current_output_mini_batch);
 
 			// Calculating the weight gradients
-			Ref<MLPPVector> gradient = alg.scalar_multiplynv(1 / current_output_mini_batch->size(), alg.mat_vec_multnv(alg.transposenm(current_input_mini_batch), error));
+			Ref<MLPPVector> gradient = current_input_mini_batch->transposen()->mult_vec(error)->scalar_multiplyn(1 / current_output_mini_batch->size());
 			Ref<MLPPVector> reg_deriv_term = regularization.reg_deriv_termv(_weights, _lambda, _alpha, _reg);
-			Ref<MLPPVector> weight_grad = alg.additionnv(gradient, reg_deriv_term); // Weight_grad_final
+			Ref<MLPPVector> weight_grad = gradient->addn(reg_deriv_term); // Weight_grad_final
 
-			v = alg.hadamard_productnv(weight_grad, weight_grad);
-
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.division_element_wisenv(weight_grad, alg.sqrtnv(alg.scalar_addnv(e, v)))));
+			v = weight_grad->hadamard_productn(weight_grad);
+			_weights->sub(weight_grad->division_element_wisen(v->scalar_addn(e)->sqrtn())->scalar_multiplyn(learning_rate));
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
+			_bias -= learning_rate * error->sum_elements() / current_output_mini_batch->size(); // As normal
 			y_hat = evaluatem(current_input_mini_batch);
 
 			if (ui) {
@@ -431,7 +426,6 @@ void MLPPLinReg::adadelta(real_t learning_rate, int max_epoch, int mini_batch_si
 	ERR_FAIL_COND(!_initialized);
 
 	// Adagrad upgrade. Momentum is applied.
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -441,7 +435,7 @@ void MLPPLinReg::adadelta(real_t learning_rate, int max_epoch, int mini_batch_si
 	MLPPUtilities::CreateMiniBatchMVBatch batches = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
 	// Initializing necessary components for Adagrad.
-	Ref<MLPPVector> v = alg.zerovecnv(_weights->size());
+	Ref<MLPPVector> v = MLPPVector::create_vec_zero(_weights->size());
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -451,19 +445,18 @@ void MLPPLinReg::adadelta(real_t learning_rate, int max_epoch, int mini_batch_si
 			Ref<MLPPVector> y_hat = evaluatem(current_input_mini_batch);
 			cost_prev = cost(y_hat, current_output_mini_batch);
 
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_mini_batch);
+			Ref<MLPPVector> error = y_hat->subn(current_output_mini_batch);
 
 			// Calculating the weight gradients
-			Ref<MLPPVector> gradient = alg.scalar_multiplynv(1 / current_output_mini_batch->size(), alg.mat_vec_multnv(alg.transposenm(current_input_mini_batch), error));
+			Ref<MLPPVector> gradient = current_input_mini_batch->transposen()->mult_vec(error)->scalar_multiplyn(1 / current_output_mini_batch->size());
 			Ref<MLPPVector> reg_deriv_term = regularization.reg_deriv_termv(_weights, _lambda, _alpha, _reg);
-			Ref<MLPPVector> weight_grad = alg.additionnv(gradient, reg_deriv_term); // Weight_grad_final
+			Ref<MLPPVector> weight_grad = gradient->addn(reg_deriv_term); // Weight_grad_final
 
-			v = alg.additionnv(alg.scalar_multiplynv(b1, v), alg.scalar_multiplynv(1 - b1, alg.hadamard_productnv(weight_grad, weight_grad)));
-
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.division_element_wisenv(weight_grad, alg.sqrtnv(alg.scalar_addnv(e, v)))));
+			v = v->scalar_multiplyn(b1)->addn(weight_grad->hadamard_productn(weight_grad)->scalar_multiplyn(1 - b1));
+			_weights->sub(weight_grad->division_element_wisen(v->scalar_addn(e)->sqrtn())->scalar_multiplyn(learning_rate));
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
+			_bias -= learning_rate * error->sum_elements() / current_output_mini_batch->size(); // As normal
 			y_hat = evaluatem(current_input_mini_batch);
 
 			if (ui) {
@@ -485,7 +478,6 @@ void MLPPLinReg::adadelta(real_t learning_rate, int max_epoch, int mini_batch_si
 void MLPPLinReg::adam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -495,8 +487,8 @@ void MLPPLinReg::adam(real_t learning_rate, int max_epoch, int mini_batch_size, 
 	MLPPUtilities::CreateMiniBatchMVBatch batches = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
 	// Initializing necessary components for Adam.
-	Ref<MLPPVector> m = alg.zerovecnv(_weights->size());
-	Ref<MLPPVector> v = alg.zerovecnv(_weights->size());
+	Ref<MLPPVector> m = MLPPVector::create_vec_zero(_weights->size());
+	Ref<MLPPVector> v = MLPPVector::create_vec_zero(_weights->size());
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -506,23 +498,23 @@ void MLPPLinReg::adam(real_t learning_rate, int max_epoch, int mini_batch_size, 
 			Ref<MLPPVector> y_hat = evaluatem(current_input_mini_batch);
 			cost_prev = cost(y_hat, current_output_mini_batch);
 
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_mini_batch);
+			Ref<MLPPVector> error = y_hat->subn(current_output_mini_batch);
 
 			// Calculating the weight gradients
-			Ref<MLPPVector> gradient = alg.scalar_multiplynv(1 / current_output_mini_batch->size(), alg.mat_vec_multnv(alg.transposenm(current_input_mini_batch), error));
+			Ref<MLPPVector> gradient = current_input_mini_batch->transposen()->mult_vec(error)->scalar_multiplyn(1 / current_output_mini_batch->size());
 			Ref<MLPPVector> reg_deriv_term = regularization.reg_deriv_termv(_weights, _lambda, _alpha, _reg);
-			Ref<MLPPVector> weight_grad = alg.additionnv(gradient, reg_deriv_term); // Weight_grad_final
+			Ref<MLPPVector> weight_grad = gradient->addn(reg_deriv_term); // Weight_grad_final
 
-			m = alg.additionnv(alg.scalar_multiplynv(b1, m), alg.scalar_multiplynv(1 - b1, weight_grad));
-			v = alg.additionnv(alg.scalar_multiplynv(b2, v), alg.scalar_multiplynv(1 - b2, alg.exponentiatenv(weight_grad, 2)));
+			m = m->scalar_multiplyn(b1)->addn(weight_grad->scalar_multiplyn(1 - b1));
+			v = v->scalar_multiplyn(b2)->addn(weight_grad->exponentiaten(2)->scalar_multiplyn(1 - b2));
 
-			Ref<MLPPVector> m_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b1, epoch)), m);
-			Ref<MLPPVector> v_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b2, epoch)), v);
+			Ref<MLPPVector> m_hat = m->scalar_multiplyn(1 / (1 - Math::pow(b1, epoch)));
+			Ref<MLPPVector> v_hat = v->scalar_multiplyn(1 / (1 - Math::pow(b2, epoch)));
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.division_element_wisenvnm(m_hat, alg.scalar_addnv(e, alg.sqrtnv(v_hat)))));
+			_weights->sub(m_hat->division_element_wisen(v_hat->sqrtn()->scalar_addn(e))->scalar_multiplyn(learning_rate));
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
+			_bias -= learning_rate * error->sum_elements() / current_output_mini_batch->size(); // As normal
 			y_hat = evaluatem(current_input_mini_batch);
 
 			if (ui) {
@@ -544,7 +536,6 @@ void MLPPLinReg::adam(real_t learning_rate, int max_epoch, int mini_batch_size, 
 void MLPPLinReg::adamax(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -553,8 +544,8 @@ void MLPPLinReg::adamax(real_t learning_rate, int max_epoch, int mini_batch_size
 	int n_mini_batch = _n / mini_batch_size;
 	MLPPUtilities::CreateMiniBatchMVBatch batches = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
-	Ref<MLPPVector> m = alg.zerovecnv(_weights->size());
-	Ref<MLPPVector> u = alg.zerovecnv(_weights->size());
+	Ref<MLPPVector> m = MLPPVector::create_vec_zero(_weights->size());
+	Ref<MLPPVector> u = MLPPVector::create_vec_zero(_weights->size());
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -564,22 +555,21 @@ void MLPPLinReg::adamax(real_t learning_rate, int max_epoch, int mini_batch_size
 			Ref<MLPPVector> y_hat = evaluatem(current_input_mini_batch);
 			cost_prev = cost(y_hat, current_output_mini_batch);
 
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_mini_batch);
+			Ref<MLPPVector> error = y_hat->subn(current_output_mini_batch);
 
 			// Calculating the weight gradients
-			Ref<MLPPVector> gradient = alg.scalar_multiplynv(1 / current_output_mini_batch->size(), alg.mat_vec_multnv(alg.transposenm(current_input_mini_batch), error));
+			Ref<MLPPVector> gradient = current_input_mini_batch->transposen()->mult_vec(error)->scalar_multiplyn(1 / current_output_mini_batch->size());
 			Ref<MLPPVector> reg_deriv_term = regularization.reg_deriv_termv(_weights, _lambda, _alpha, _reg);
-			Ref<MLPPVector> weight_grad = alg.additionnv(gradient, reg_deriv_term); // Weight_grad_final
+			Ref<MLPPVector> weight_grad = gradient->addn(reg_deriv_term); // Weight_grad_final
 
-			m = alg.additionnv(alg.scalar_multiplynv(b1, m), alg.scalar_multiplynv(1 - b1, weight_grad));
-			u = alg.maxnvv(alg.scalar_multiplynv(b2, u), alg.absv(weight_grad));
+			m = m->scalar_multiplyn(b1)->addn(weight_grad->scalar_multiplyn(1 - b1));
+			u = u->scalar_multiplyn(b2)->maxn(weight_grad->absn());
 
-			Ref<MLPPVector> m_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b1, epoch)), m);
-
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.division_element_wisenv(m_hat, u)));
+			Ref<MLPPVector> m_hat = m->scalar_multiplyn(1 / (1 - Math::pow(b1, epoch)));
+			_weights->sub(m_hat->division_element_wisen(u)->scalar_multiplyn(learning_rate));
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
+			_bias -= learning_rate * error->sum_elements() / current_output_mini_batch->size(); // As normal
 			y_hat = evaluatem(current_input_mini_batch);
 
 			if (ui) {
@@ -601,7 +591,6 @@ void MLPPLinReg::adamax(real_t learning_rate, int max_epoch, int mini_batch_size
 void MLPPLinReg::nadam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool ui) {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -611,9 +600,9 @@ void MLPPLinReg::nadam(real_t learning_rate, int max_epoch, int mini_batch_size,
 	MLPPUtilities::CreateMiniBatchMVBatch batches = MLPPUtilities::create_mini_batchesmv(_input_set, _output_set, n_mini_batch);
 
 	// Initializing necessary components for Adam.
-	Ref<MLPPVector> m = alg.zerovecnv(_weights->size());
-	Ref<MLPPVector> v = alg.zerovecnv(_weights->size());
-	Ref<MLPPVector> m_final = alg.zerovecnv(_weights->size());
+	Ref<MLPPVector> m = MLPPVector::create_vec_zero(_weights->size());
+	Ref<MLPPVector> v = MLPPVector::create_vec_zero(_weights->size());
+	Ref<MLPPVector> m_final = MLPPVector::create_vec_zero(_weights->size());
 
 	while (true) {
 		for (int i = 0; i < n_mini_batch; i++) {
@@ -623,24 +612,25 @@ void MLPPLinReg::nadam(real_t learning_rate, int max_epoch, int mini_batch_size,
 			Ref<MLPPVector> y_hat = evaluatem(current_input_mini_batch);
 			cost_prev = cost(y_hat, current_output_mini_batch);
 
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_mini_batch);
+			Ref<MLPPVector> error = y_hat->subn(current_output_mini_batch);
 
 			// Calculating the weight gradients
-			Ref<MLPPVector> gradient = alg.scalar_multiplynv(1 / current_output_mini_batch->size(), alg.mat_vec_multnv(alg.transposenm(current_input_mini_batch), error));
+			Ref<MLPPVector> gradient = current_input_mini_batch->transposen()->mult_vec(error)->scalar_multiplyn(1 / current_output_mini_batch->size());
 			Ref<MLPPVector> reg_deriv_term = regularization.reg_deriv_termv(_weights, _lambda, _alpha, _reg);
-			Ref<MLPPVector> weight_grad = alg.additionnv(gradient, reg_deriv_term); // Weight_grad_final
+			Ref<MLPPVector> weight_grad = gradient->addn(reg_deriv_term); // Weight_grad_final
 
-			m = alg.additionnv(alg.scalar_multiplynv(b1, m), alg.scalar_multiplynv(1 - b1, weight_grad));
-			v = alg.additionnv(alg.scalar_multiplynv(b2, v), alg.scalar_multiplynv(1 - b2, alg.exponentiatenv(weight_grad, 2)));
-			m_final = alg.additionnv(alg.scalar_multiplynv(b1, m), alg.scalar_multiplynv((1 - b1) / (1 - Math::pow(b1, epoch)), weight_grad));
+			m = m->scalar_multiplyn(b1)->addn(weight_grad->scalar_multiplyn(1 - b1));
+			v = v->scalar_multiplyn(b2)->addn(weight_grad->exponentiaten(2)->scalar_multiplyn(1 - b2));
 
-			Ref<MLPPVector> m_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b1, epoch)), m);
-			Ref<MLPPVector> v_hat = alg.scalar_multiplynv(1 / (1 - Math::pow(b2, epoch)), v);
+			m_final = m->scalar_multiplyn(b1)->addn(weight_grad->scalar_multiplyn((1 - b1) / (1 - Math::pow(b1, epoch))));
 
-			_weights = alg.subtractionnv(_weights, alg.scalar_multiplynv(learning_rate, alg.division_element_wisenv(m_final, alg.scalar_addnv(e, alg.sqrtnv(v_hat)))));
+			Ref<MLPPVector> m_hat = m->scalar_multiplyn(1 / (1 - Math::pow(b1, epoch)));
+			Ref<MLPPVector> v_hat = v->scalar_multiplyn(1 / (1 - Math::pow(b2, epoch)));
+
+			_weights->sub(m_final->division_element_wisen(v_hat->sqrtn()->scalar_addn(e))->scalar_multiplyn(learning_rate));
 
 			// Calculating the bias gradients
-			_bias -= learning_rate * alg.sum_elementsv(error) / current_output_mini_batch->size(); // As normal
+			_bias -= learning_rate * error->sum_elements() / current_output_mini_batch->size(); // As normal
 			y_hat = evaluatem(current_input_mini_batch);
 
 			if (ui) {
@@ -662,10 +652,9 @@ void MLPPLinReg::nadam(real_t learning_rate, int max_epoch, int mini_batch_size,
 void MLPPLinReg::normal_equation() {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
 	MLPPStat stat;
 
-	Ref<MLPPMatrix> input_set_t = alg.transposenm(_input_set);
+	Ref<MLPPMatrix> input_set_t = _input_set->transposen();
 
 	Ref<MLPPVector> input_set_t_row_tmp;
 	input_set_t_row_tmp.instance();
@@ -683,17 +672,18 @@ void MLPPLinReg::normal_equation() {
 
 	Ref<MLPPVector> temp;
 	//temp.resize(_k);
-	temp = alg.mat_vec_multnv(alg.inversenm(alg.matmultnm(alg.transposenm(_input_set), _input_set)), alg.mat_vec_multnv(alg.transposenm(_input_set), _output_set));
+
+	temp = _input_set->transposen()->multn(_input_set)->inverse()->mult_vec(_input_set->transposen()->mult_vec(_output_set));
 
 	ERR_FAIL_COND_MSG(Math::is_nan(temp->element_get(0)), "ERR: Resulting matrix was noninvertible/degenerate, and so the normal equation could not be performed. Try utilizing gradient descent.");
 
 	if (_reg == MLPPReg::REGULARIZATION_TYPE_RIDGE) {
-		_weights = alg.mat_vec_multnv(alg.inversenm(alg.additionnm(alg.matmultnm(alg.transposenm(_input_set), _input_set), alg.scalar_multiplynm(_lambda, alg.identitym(_k)))), alg.mat_vec_multnv(alg.transposenm(_input_set), _output_set));
+		_weights = _input_set->transposen()->multn(_input_set)->addn(MLPPMatrix::create_identity_mat(_k)->scalar_multiplyn(_lambda))->inverse()->mult_vec(_input_set->transposen()->mult_vec(_output_set));
 	} else {
-		_weights = alg.mat_vec_multnv(alg.inversenm(alg.matmultnm(alg.transposenm(_input_set), _input_set)), alg.mat_vec_multnv(alg.transposenm(_input_set), _output_set));
+		_weights = _input_set->transposen()->multn(_input_set)->inverse()->mult_vec(_input_set->transposen()->mult_vec(_output_set));
 	}
 
-	_bias = stat.meanv(_output_set) - alg.dotnv(_weights, x_means);
+	_bias = stat.meanv(_output_set) - _weights->dot(x_means);
 
 	forward_pass();
 }
@@ -764,15 +754,11 @@ real_t MLPPLinReg::cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) 
 }
 
 real_t MLPPLinReg::evaluatev(const Ref<MLPPVector> &x) {
-	MLPPLinAlg alg;
-
-	return alg.dotnv(_weights, x) + _bias;
+	return _weights->dot(x) + _bias;
 }
 
 Ref<MLPPVector> MLPPLinReg::evaluatem(const Ref<MLPPMatrix> &X) {
-	MLPPLinAlg alg;
-
-	return alg.scalar_addnv(_bias, alg.mat_vec_multnv(X, _weights));
+	return X->mult_vec(_weights)->scalar_addn(_bias);
 }
 
 // wTx + b
