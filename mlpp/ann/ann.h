@@ -12,6 +12,7 @@
 #include "core/object/reference.h"
 
 #include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_tensor3.h"
 #include "../lin_alg/mlpp_vector.h"
 
 #include "../hidden_layer/hidden_layer.h"
@@ -69,11 +70,16 @@ protected:
 	real_t cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
 
 	void forward_pass();
-	void update_parameters(const Vector<Ref<MLPPMatrix>> &hidden_layer_updations, const Ref<MLPPVector> &output_layer_updation, real_t learning_rate);
+	void update_parameters(const Ref<MLPPTensor3> &hidden_layer_updations, const Ref<MLPPVector> &output_layer_updation, real_t learning_rate);
 
 	struct ComputeGradientsResult {
-		Vector<Ref<MLPPMatrix>> cumulative_hidden_layer_w_grad;
+		Ref<MLPPTensor3> cumulative_hidden_layer_w_grad;
 		Ref<MLPPVector> output_w_grad;
+
+		ComputeGradientsResult() {
+			cumulative_hidden_layer_w_grad.instance();
+			output_w_grad.instance();
+		}
 	};
 
 	ComputeGradientsResult compute_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &_output_set);
