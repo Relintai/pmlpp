@@ -1999,6 +1999,21 @@ Ref<MLPPMatrix> MLPPMatrix::identity_mat(int d) const {
 	return identity_mat;
 }
 
+Ref<MLPPMatrix> MLPPMatrix::create_identity_mat(int d) {
+	Ref<MLPPMatrix> identity_mat;
+	identity_mat.instance();
+	identity_mat->resize(Size2i(d, d));
+	identity_mat->fill(0);
+
+	real_t *im_ptr = identity_mat->ptrw();
+
+	for (int i = 0; i < d; i++) {
+		im_ptr[identity_mat->calculate_index(i, i)] = 1;
+	}
+
+	return identity_mat;
+}
+
 Ref<MLPPMatrix> MLPPMatrix::cov() const {
 	MLPPStat stat;
 

@@ -248,6 +248,8 @@ public:
 	Ref<MLPPMatrix> identityn() const;
 	Ref<MLPPMatrix> identity_mat(int d) const;
 
+	static Ref<MLPPMatrix> create_identity_mat(int d);
+
 	Ref<MLPPMatrix> cov() const;
 	void covo(Ref<MLPPMatrix> out) const;
 
