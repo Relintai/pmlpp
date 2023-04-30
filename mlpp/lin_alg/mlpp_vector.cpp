@@ -927,6 +927,34 @@ Ref<MLPPVector> MLPPVector::vecn_full(int n, int k) const {
 	return vec;
 }
 
+Ref<MLPPVector> MLPPVector::create_vec_zero(int n) {
+	Ref<MLPPVector> vec;
+	vec.instance();
+
+	vec->resize(n);
+	vec->fill(0);
+
+	return vec;
+}
+Ref<MLPPVector> MLPPVector::create_vec_one(int n) {
+	Ref<MLPPVector> vec;
+	vec.instance();
+
+	vec->resize(n);
+	vec->fill(1);
+
+	return vec;
+}
+Ref<MLPPVector> MLPPVector::create_vec_full(int n, int k) {
+	Ref<MLPPVector> vec;
+	vec.instance();
+
+	vec->resize(n);
+	vec->fill(k);
+
+	return vec;
+}
+
 void MLPPVector::sin() {
 	real_t *out_ptr = ptrw();
 

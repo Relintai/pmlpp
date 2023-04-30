@@ -181,6 +181,10 @@ public:
 	Ref<MLPPVector> vecn_one(int n) const;
 	Ref<MLPPVector> vecn_full(int n, int k) const;
 
+	static Ref<MLPPVector> create_vec_zero(int n);
+	static Ref<MLPPVector> create_vec_one(int n);
+	static Ref<MLPPVector> create_vec_full(int n, int k);
+
 	void sin();
 	Ref<MLPPVector> sinn() const;
 	void sinb(const Ref<MLPPVector> &a);
