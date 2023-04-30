@@ -6,7 +6,6 @@
 
 #include "hidden_layer.h"
 #include "../activation/activation.h"
-#include "../lin_alg/lin_alg.h"
 
 #include <iostream>
 #include <random>

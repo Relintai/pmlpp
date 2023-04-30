@@ -5,7 +5,6 @@
 //
 
 #include "kmeans.h"
-#include "../lin_alg/lin_alg.h"
 #include "../utilities/utilities.h"
 
 #include "core/math/random_pcg.h"
@@ -54,8 +53,6 @@ Ref<MLPPMatrix> MLPPKMeans::model_set_test(const Ref<MLPPMatrix> &X) {
 	ERR_FAIL_COND_V(!X.is_valid(), Ref<MLPPMatrix>());
 	ERR_FAIL_COND_V(!_initialized, Ref<MLPPMatrix>());
 
-	MLPPLinAlg alg;
-
 	int input_set_size_y = _input_set->size().y;
 
 	Ref<MLPPMatrix> closest_centroids;
@@ -83,7 +80,7 @@ Ref<MLPPMatrix> MLPPKMeans::model_set_test(const Ref<MLPPMatrix> &X) {
 		for (int j = 0; j < r0_size; ++j) {
 			_mu->row_get_into_mlpp_vector(j, tmp_mujv);
 
-			bool is_centroid_closer = alg.euclidean_distance(tmp_xiv, tmp_mujv) < alg.euclidean_distance(tmp_xiv, closest_centroid);
+			bool is_centroid_closer = tmp_xiv->euclidean_distance(tmp_mujv) < tmp_xiv->euclidean_distance(closest_centroid);
 
 			if (is_centroid_closer) {
 				closest_centroid->set_from_mlpp_vector(tmp_mujv);
@@ -98,8 +95,6 @@ Ref<MLPPMatrix> MLPPKMeans::model_set_test(const Ref<MLPPMatrix> &X) {
 Ref<MLPPVector> MLPPKMeans::model_test(const Ref<MLPPVector> &x) {
 	ERR_FAIL_COND_V(!x.is_valid(), Ref<MLPPVector>());
 	ERR_FAIL_COND_V(!_initialized, Ref<MLPPVector>());
-
-	MLPPLinAlg alg;
 
 	Ref<MLPPVector> closest_centroid;
 	closest_centroid.instance();
@@ -116,7 +111,7 @@ Ref<MLPPVector> MLPPKMeans::model_test(const Ref<MLPPVector> &x) {
 	for (int j = 0; j < mu_size_y; ++j) {
 		_mu->row_get_into_mlpp_vector(j, tmp_mujv);
 
-		if (alg.euclidean_distance(x, tmp_mujv) < alg.euclidean_distance(x, closest_centroid)) {
+		if (x->euclidean_distance(tmp_mujv) < x->euclidean_distance(closest_centroid)) {
 			closest_centroid->set_from_mlpp_vector(tmp_mujv);
 		}
 	}
@@ -167,8 +162,6 @@ real_t MLPPKMeans::score() {
 
 Ref<MLPPVector> MLPPKMeans::silhouette_scores() {
 	ERR_FAIL_COND_V(!_initialized, Ref<MLPPVector>());
-
-	MLPPLinAlg alg;
 
 	Ref<MLPPMatrix> closest_centroids = model_set_test(_input_set);
 
@@ -233,7 +226,7 @@ Ref<MLPPVector> MLPPKMeans::silhouette_scores() {
 			if (r_i_tempv->is_equal_approx(r_j_tempv)) {
 				_input_set->row_get_into_mlpp_vector(j, input_set_j_tempv);
 
-				a += alg.euclidean_distance(input_set_i_tempv, input_set_j_tempv);
+				a += input_set_i_tempv->euclidean_distance(input_set_j_tempv);
 			}
 		}
 
@@ -252,7 +245,7 @@ Ref<MLPPVector> MLPPKMeans::silhouette_scores() {
 				for (int k = 0; k < input_set_size_y; ++k) {
 					_input_set->row_get_into_mlpp_vector(k, input_set_k_tempv);
 
-					sum += alg.euclidean_distance(input_set_i_tempv, input_set_k_tempv);
+					sum += input_set_i_tempv->euclidean_distance(input_set_k_tempv);
 				}
 
 				// NORMALIZE b[i]
@@ -305,8 +298,6 @@ MLPPKMeans::~MLPPKMeans() {
 void MLPPKMeans::_evaluate() {
 	ERR_FAIL_COND(!_initialized);
 
-	MLPPLinAlg alg;
-
 	if (_r->size() != Size2i(_k, _input_set->size().y)) {
 		_r->resize(Size2i(_k, _input_set->size().y));
 	}
@@ -335,16 +326,16 @@ void MLPPKMeans::_evaluate() {
 		_mu->row_get_into_mlpp_vector(0, closest_centroid);
 		_input_set->row_get_into_mlpp_vector(i, input_set_i_tempv);
 
-		closest_centroid_current_dist = alg.euclidean_distance(input_set_i_tempv, closest_centroid);
+		closest_centroid_current_dist = input_set_i_tempv->euclidean_distance(closest_centroid);
 
 		for (int j = 0; j < r_size_x; ++j) {
 			_mu->row_get_into_mlpp_vector(j, mu_j_tempv);
 
-			bool is_centroid_closer = alg.euclidean_distance(input_set_i_tempv, mu_j_tempv) < closest_centroid_current_dist;
+			bool is_centroid_closer = input_set_i_tempv->euclidean_distance(mu_j_tempv) < closest_centroid_current_dist;
 
 			if (is_centroid_closer) {
 				_mu->row_get_into_mlpp_vector(j, closest_centroid);
-				closest_centroid_current_dist = alg.euclidean_distance(input_set_i_tempv, closest_centroid);
+				closest_centroid_current_dist = input_set_i_tempv->euclidean_distance(closest_centroid);
 				closest_centroid_index = j;
 			}
 		}
@@ -355,8 +346,6 @@ void MLPPKMeans::_evaluate() {
 
 // This simply computes or re-computes mu_k
 void MLPPKMeans::_compute_mu() {
-	MLPPLinAlg alg;
-
 	int mu_size_y = _mu->size().y;
 	int r_size_y = _r->size().y;
 
@@ -385,13 +374,13 @@ void MLPPKMeans::_compute_mu() {
 
 			real_t r_j_i = _r->element_get(j, i);
 
-			alg.scalar_multiplyv(_r->element_get(j, i), input_set_j_tempv, mat_tempv);
-			alg.additionv(num, mat_tempv, num);
+			mat_tempv->scalar_multiplyb(_r->element_get(j, i), input_set_j_tempv);
+			num->add(mat_tempv);
 
 			den += r_j_i;
 		}
 
-		alg.scalar_multiplyv(real_t(1) / real_t(den), num, mu_tempv);
+		mu_tempv->scalar_multiplyb(real_t(1) / real_t(den), num);
 
 		_mu->row_set_mlpp_vector(i, mu_tempv);
 	}
@@ -422,8 +411,6 @@ void MLPPKMeans::_centroid_initialization() {
 }
 
 void MLPPKMeans::_kmeanspp_initialization() {
-	MLPPLinAlg alg;
-
 	RandomPCG rand;
 	rand.randomize();
 
@@ -461,7 +448,7 @@ void MLPPKMeans::_kmeanspp_initialization() {
 			for (int k = 0; k < i; k++) {
 				_mu->row_get_into_mlpp_vector(k, mu_tempv);
 
-				sum += alg.euclidean_distance(input_set_j_tempv, mu_tempv);
+				sum += input_set_j_tempv->euclidean_distance(mu_tempv);
 			}
 
 			if (sum * sum > max_dist) {
@@ -475,8 +462,6 @@ void MLPPKMeans::_kmeanspp_initialization() {
 }
 real_t MLPPKMeans::_cost() {
 	ERR_FAIL_COND_V(!_initialized, 0);
-
-	MLPPLinAlg alg;
 
 	Ref<MLPPVector> input_set_i_tempv;
 	input_set_i_tempv.instance();
@@ -500,8 +485,8 @@ real_t MLPPKMeans::_cost() {
 		for (int j = 0; j < r_size_x; j++) {
 			_mu->row_get_into_mlpp_vector(j, mu_j_tempv);
 
-			alg.subtractionv(input_set_i_tempv, mu_j_tempv, sub_tempv);
-			sum += _r->element_get(i, j) * alg.norm_sqv(sub_tempv);
+			sub_tempv->subb(input_set_i_tempv, mu_j_tempv);
+			sum += _r->element_get(i, j) * sub_tempv->norm_sq();
 		}
 	}
 

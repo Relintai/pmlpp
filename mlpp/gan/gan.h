@@ -15,6 +15,8 @@
 #include "../hidden_layer/hidden_layer.h"
 #include "../output_layer/output_layer.h"
 
+#include "../lin_alg/mlpp_tensor3.h"
+
 #include "../activation/activation.h"
 #include "../utilities/utilities.h"
 
@@ -57,16 +59,21 @@ protected:
 
 	void forward_pass();
 
-	void update_discriminator_parameters(const Vector<Ref<MLPPMatrix>> &hidden_layer_updations, const Ref<MLPPVector> &output_layer_updation, real_t learning_rate);
-	void update_generator_parameters(const Vector<Ref<MLPPMatrix>> &hidden_layer_updations, real_t learning_rate);
+	void update_discriminator_parameters(const Ref<MLPPTensor3> &hidden_layer_updations, const Ref<MLPPVector> &output_layer_updation, real_t learning_rate);
+	void update_generator_parameters(const Ref<MLPPTensor3> &hidden_layer_updations, real_t learning_rate);
 
 	struct ComputeDiscriminatorGradientsResult {
-		Vector<Ref<MLPPMatrix>> cumulative_hidden_layer_w_grad; // Tensor containing ALL hidden grads.
+		Ref<MLPPTensor3> cumulative_hidden_layer_w_grad; // Tensor containing ALL hidden grads.
 		Ref<MLPPVector> output_w_grad;
+
+		ComputeDiscriminatorGradientsResult() {
+			cumulative_hidden_layer_w_grad.instance();
+			output_w_grad.instance();
+		}
 	};
 
 	ComputeDiscriminatorGradientsResult compute_discriminator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
-	Vector<Ref<MLPPMatrix>> compute_generator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
+	Ref<MLPPTensor3> compute_generator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
 
 	void print_ui(int epoch, real_t cost_prev, const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
 

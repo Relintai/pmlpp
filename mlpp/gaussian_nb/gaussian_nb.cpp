@@ -8,7 +8,6 @@
 
 #include "core/math/math_defs.h"
 
-#include "../lin_alg/lin_alg.h"
 #include "../stat/stat.h"
 #include "../utilities/utilities.h"
 
@@ -126,7 +125,6 @@ MLPPGaussianNB::~MLPPGaussianNB() {
 
 void MLPPGaussianNB::evaluate() {
 	MLPPStat stat;
-	MLPPLinAlg alg;
 
 	// Computing mu_k_y and sigma_k_y
 	_mu->resize(_class_num);
@@ -160,7 +158,7 @@ void MLPPGaussianNB::evaluate() {
 		_priors->element_set(indx, _priors->element_get(indx));
 	}
 
-	_priors = alg.scalar_multiplynv(real_t(1) / real_t(_output_set->size()), _priors);
+	_priors->scalar_multiply(real_t(1) / real_t(_output_set->size()));
 
 	for (int i = 0; i < _output_set->size(); i++) {
 		LocalVector<real_t> score;

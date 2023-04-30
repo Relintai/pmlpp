@@ -5,7 +5,6 @@
 //
 
 #include "knn.h"
-#include "../lin_alg/lin_alg.h"
 #include "../utilities/utilities.h"
 
 #include "core/containers/hash_map.h"
@@ -72,7 +71,6 @@ MLPPKNN::~MLPPKNN() {
 PoolIntArray MLPPKNN::nearest_neighbors(const Ref<MLPPVector> &x) {
 	ERR_FAIL_COND_V(!_input_set.is_valid(), PoolIntArray());
 
-	MLPPLinAlg alg;
 	// The nearest neighbors
 	PoolIntArray knn;
 
@@ -97,7 +95,7 @@ PoolIntArray MLPPKNN::nearest_neighbors(const Ref<MLPPVector> &x) {
 			_input_set->row_get_into_mlpp_vector(j, tmpv1);
 			_input_set->row_get_into_mlpp_vector(neighbor, tmpv2);
 
-			bool is_neighbor_nearer = alg.euclidean_distance(x, tmpv1) < alg.euclidean_distance(x, tmpv2);
+			bool is_neighbor_nearer = x->euclidean_distance(tmpv1) < x->euclidean_distance(tmpv2);
 
 			if (is_neighbor_nearer) {
 				neighbor = j;
