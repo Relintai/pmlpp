@@ -7,7 +7,6 @@
 #include "dual_svc.h"
 #include "../activation/activation.h"
 #include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
 #include "../utilities/utilities.h"
 
@@ -24,7 +23,6 @@ real_t MLPPDualSVC::model_test(const Ref<MLPPVector> &x) {
 void MLPPDualSVC::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 	MLPPCost mlpp_cost;
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 	real_t cost_prev = 0;
 	int epoch = 1;
@@ -42,7 +40,7 @@ void MLPPDualSVC::gradient_descent(real_t learning_rate, int max_epoch, bool ui)
 	while (true) {
 		cost_prev = cost(_alpha, _input_set, _output_set);
 
-		_alpha = alg.subtractionnv(_alpha, alg.scalar_multiplynv(learning_rate, mlpp_cost.dual_form_svm_deriv(_alpha, _input_set, _output_set)));
+		_alpha->sub(mlpp_cost.dual_form_svm_deriv(_alpha, _input_set, _output_set)->scalar_multiplyn(learning_rate));
 
 		alpha_projection();
 
@@ -56,7 +54,7 @@ void MLPPDualSVC::gradient_descent(real_t learning_rate, int max_epoch, bool ui)
 						_input_set->row_get_into_mlpp_vector(i, input_set_i_row_tmp);
 						_input_set->row_get_into_mlpp_vector(j, input_set_j_row_tmp);
 
-						sum += _alpha->element_get(j) * _output_set->element_get(j) * alg.dotnv(input_set_j_row_tmp, input_set_i_row_tmp); // TO DO: DON'T forget to add non-linear kernelizations.
+						sum += _alpha->element_get(j) * _output_set->element_get(j) * input_set_j_row_tmp->dot(input_set_i_row_tmp); // TO DO: DON'T forget to add non-linear kernelizations.
 					}
 				}
 			}
@@ -207,7 +205,6 @@ real_t MLPPDualSVC::evaluatev(const Ref<MLPPVector> &x) {
 }
 
 real_t MLPPDualSVC::propagatev(const Ref<MLPPVector> &x) {
-	MLPPLinAlg alg;
 	real_t z = 0;
 
 	Ref<MLPPVector> input_set_row_tmp;
@@ -217,7 +214,7 @@ real_t MLPPDualSVC::propagatev(const Ref<MLPPVector> &x) {
 	for (int j = 0; j < _alpha->size(); j++) {
 		if (_alpha->element_get(j) != 0) {
 			_input_set->row_get_into_mlpp_vector(j, input_set_row_tmp);
-			z += _alpha->element_get(j) * _output_set->element_get(j) * alg.dotnv(input_set_row_tmp, x); // TO DO: DON'T forget to add non-linear kernelizations.
+			z += _alpha->element_get(j) * _output_set->element_get(j) * input_set_row_tmp->dot(x); // TO DO: DON'T forget to add non-linear kernelizations.
 		}
 	}
 	z += _bias;
@@ -231,7 +228,6 @@ Ref<MLPPVector> MLPPDualSVC::evaluatem(const Ref<MLPPMatrix> &X) {
 }
 
 Ref<MLPPVector> MLPPDualSVC::propagatem(const Ref<MLPPMatrix> &X) {
-	MLPPLinAlg alg;
 	Ref<MLPPVector> z;
 	z.instance();
 	z->resize(X->size().y);
@@ -252,7 +248,7 @@ Ref<MLPPVector> MLPPDualSVC::propagatem(const Ref<MLPPMatrix> &X) {
 				_input_set->row_get_into_mlpp_vector(j, input_set_row_tmp);
 				X->row_get_into_mlpp_vector(i, x_row_tmp);
 
-				sum += _alpha->element_get(j) * _output_set->element_get(j) * alg.dotnv(input_set_row_tmp, x_row_tmp); // TO DO: DON'T forget to add non-linear kernelizations.
+				sum += _alpha->element_get(j) * _output_set->element_get(j) * input_set_row_tmp->dot(x_row_tmp); // TO DO: DON'T forget to add non-linear kernelizations.
 			}
 		}
 
@@ -281,20 +277,16 @@ void MLPPDualSVC::alpha_projection() {
 }
 
 real_t MLPPDualSVC::kernel_functionv(const Ref<MLPPVector> &v, const Ref<MLPPVector> &u, KernelMethod kernel) {
-	MLPPLinAlg alg;
-
 	if (kernel == KERNEL_METHOD_LINEAR) {
-		return alg.dotnv(u, v);
+		return u->dot(v);
 	}
 
 	return 0;
 }
 
 Ref<MLPPMatrix> MLPPDualSVC::kernel_functionm(const Ref<MLPPMatrix> &U, const Ref<MLPPMatrix> &V, KernelMethod kernel) {
-	MLPPLinAlg alg;
-
 	if (kernel == KERNEL_METHOD_LINEAR) {
-		return alg.matmultnm(_input_set, alg.transposenm(_input_set));
+		return _input_set->multn(_input_set->transposen());
 	}
 
 	Ref<MLPPMatrix> m;

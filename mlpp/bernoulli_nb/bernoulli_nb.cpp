@@ -6,7 +6,6 @@
 
 #include "bernoulli_nb.h"
 #include "../data/data.h"
-#include "../lin_alg/lin_alg.h"
 #include "../utilities/utilities.h"
 
 #include <iostream>
@@ -100,10 +99,9 @@ MLPPBernoulliNB::~MLPPBernoulliNB() {
 }
 
 void MLPPBernoulliNB::compute_vocab() {
-	MLPPLinAlg alg;
 	MLPPData data;
 
-	_vocab = data.vec_to_setnv(alg.flattenvvnv(_input_set));
+	_vocab = data.vec_to_setnv(_input_set->flatten());
 }
 
 void MLPPBernoulliNB::compute_theta() {

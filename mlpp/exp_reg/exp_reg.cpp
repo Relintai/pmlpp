@@ -6,7 +6,6 @@
 
 #include "exp_reg.h"
 #include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
 #include "../stat/stat.h"
 #include "../utilities/utilities.h"
@@ -23,7 +22,6 @@ real_t MLPPExpReg::model_test(const Ref<MLPPVector> &x) {
 }
 
 void MLPPExpReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -34,7 +32,7 @@ void MLPPExpReg::gradient_descent(real_t learning_rate, int max_epoch, bool ui) 
 	while (true) {
 		cost_prev = cost(_y_hat, _output_set);
 
-		Ref<MLPPVector> error = alg.subtractionnv(_y_hat, _output_set);
+		Ref<MLPPVector> error = _y_hat->subn(_output_set);
 
 		for (int i = 0; i < _k; i++) {
 			// Calculating the weight gradient
@@ -154,7 +152,6 @@ void MLPPExpReg::sgd(real_t learning_rate, int max_epoch, bool ui) {
 }
 
 void MLPPExpReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, bool ui) {
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	real_t cost_prev = 0;
@@ -171,7 +168,7 @@ void MLPPExpReg::mbgd(real_t learning_rate, int max_epoch, int mini_batch_size, 
 
 			Ref<MLPPVector> y_hat = evaluatem(current_input_batch);
 			cost_prev = cost(y_hat, current_output_batch);
-			Ref<MLPPVector> error = alg.subtractionnv(y_hat, current_output_batch);
+			Ref<MLPPVector> error = y_hat->subn(current_output_batch);
 
 			for (int j = 0; j < _k; j++) {
 				// Calculating the weight gradient
