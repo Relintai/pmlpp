@@ -605,6 +605,25 @@ void MLPPMatrix::gaussian_noise_fill() {
 	}
 }
 
+Ref<MLPPMatrix> MLPPMatrix::create_gaussian_noise(int n, int m) {
+	std::random_device rd;
+	std::default_random_engine generator(rd());
+	std::normal_distribution<real_t> distribution(0, 1); // Standard normal distribution. Mean of 0, std of 1.
+
+	Ref<MLPPMatrix> A;
+	A.instance();
+	A->resize(Size2i(m, n));
+
+	int a_data_size = A->data_size();
+	real_t *a_ptr = A->ptrw();
+
+	for (int i = 0; i < a_data_size; ++i) {
+		a_ptr[i] = distribution(generator);
+	}
+
+	return A;
+}
+
 void MLPPMatrix::add(const Ref<MLPPMatrix> &B) {
 	ERR_FAIL_COND(!B.is_valid());
 	ERR_FAIL_COND(_size != B->size());

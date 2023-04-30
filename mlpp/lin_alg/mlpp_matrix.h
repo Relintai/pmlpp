@@ -128,6 +128,8 @@ public:
 	Ref<MLPPMatrix> gaussian_noise(int n, int m) const;
 	void gaussian_noise_fill();
 
+	static Ref<MLPPMatrix> create_gaussian_noise(int n, int m);
+
 	void add(const Ref<MLPPMatrix> &B);
 	Ref<MLPPMatrix> addn(const Ref<MLPPMatrix> &B) const;
 	void addb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
