@@ -49,7 +49,7 @@ public:
 
 	void add_output_layer(MLPPUtilities::WeightDistributionType weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT, MLPPReg::RegularizationType reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t lambda = 0.5, real_t alpha = 0.5);
 
-	MLPPWGAN(real_t k, const Ref<MLPPMatrix> &output_set);
+	MLPPWGAN(int k, const Ref<MLPPMatrix> &output_set);
 
 	MLPPWGAN();
 	~MLPPWGAN();
@@ -82,13 +82,12 @@ protected:
 	static void _bind_methods();
 
 	Ref<MLPPMatrix> _output_set;
-	Ref<MLPPVector> _y_hat;
+	int _k;
 
 	Vector<Ref<MLPPHiddenLayer>> _network;
 	Ref<MLPPOutputLayer> _output_layer;
 
-	int _n;
-	int _k;
+	Ref<MLPPVector> _y_hat;
 };
 
 #endif /* WGAN_hpp */
