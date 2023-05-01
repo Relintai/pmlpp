@@ -499,9 +499,9 @@ void MLPPTests::test_wgan(bool ui) {
 	output_set = output_set->transposen();
 
 	MLPPWGAN gan(2, output_set); // our gan is a wasserstein gan (wgan)
-	gan.add_layer(5, MLPPActivation::ACTIVATION_FUNCTION_SIGMOID);
-	gan.add_layer(2, MLPPActivation::ACTIVATION_FUNCTION_RELU);
-	gan.add_layer(5, MLPPActivation::ACTIVATION_FUNCTION_SIGMOID);
+	gan.create_layer(5, MLPPActivation::ACTIVATION_FUNCTION_SIGMOID);
+	gan.create_layer(2, MLPPActivation::ACTIVATION_FUNCTION_RELU);
+	gan.create_layer(5, MLPPActivation::ACTIVATION_FUNCTION_SIGMOID);
 	gan.add_output_layer(); // User can specify weight init- if necessary.
 	gan.gradient_descent(0.1, 55000, ui);
 

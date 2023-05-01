@@ -10,7 +10,6 @@
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
 #include "../regularization/reg.h"
 #include "../utilities/utilities.h"
 
@@ -37,14 +36,11 @@ void MLPPWGAN::set_k(const int val) {
 }
 
 Ref<MLPPMatrix> MLPPWGAN::generate_example(int n) {
-	MLPPLinAlg alg;
-
-	return model_set_test_generator(alg.gaussian_noise(n, _k));
+	return model_set_test_generator(MLPPMatrix::create_gaussian_noise(n, _k));
 }
 
 void MLPPWGAN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 	//MLPPCost mlpp_cost;
-	MLPPLinAlg alg;
 	real_t cost_prev = 0;
 	int epoch = 1;
 
@@ -53,7 +49,7 @@ void MLPPWGAN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 	const int CRITIC_INTERATIONS = 5; // Wasserstein GAN specific parameter.
 
 	while (true) {
-		cost_prev = cost(_y_hat, alg.onevecnv(_n));
+		cost_prev = cost(_y_hat, MLPPVector::create_vec_one(_n));
 
 		Ref<MLPPMatrix> generator_input_set;
 		Ref<MLPPMatrix> discriminator_input_set;
@@ -64,38 +60,38 @@ void MLPPWGAN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 
 		// Training of the discriminator.
 		for (int i = 0; i < CRITIC_INTERATIONS; i++) {
-			generator_input_set = alg.gaussian_noise(_n, _k);
+			generator_input_set = MLPPMatrix::create_gaussian_noise(_n, _k);
 			discriminator_input_set->set_from_mlpp_matrix(model_set_test_generator(generator_input_set));
 			discriminator_input_set->rows_add_mlpp_matrix(_output_set); // Fake + real inputs.
 
 			ly_hat = model_set_test_discriminator(discriminator_input_set);
-			loutput_set = alg.scalar_multiplynv(-1, alg.onevecnv(_n)); // WGAN changes y_i = 1 and y_i = 0 to y_i = 1 and y_i = -1
-			Ref<MLPPVector> output_set_real = alg.onevecnv(_n);
+			loutput_set = MLPPVector::create_vec_one(_n)->scalar_multiplyn(-1); // WGAN changes y_i = 1 and y_i = 0 to y_i = 1 and y_i = -1
+			Ref<MLPPVector> output_set_real = MLPPVector::create_vec_one(_n);
 			loutput_set->append_mlpp_vector(output_set_real); // Fake + real output scores.
 
 			DiscriminatorGradientResult discriminator_gradient_results = compute_discriminator_gradients(ly_hat, loutput_set);
-			Vector<Ref<MLPPMatrix>> cumulative_discriminator_hidden_layer_w_grad = discriminator_gradient_results.cumulative_hidden_layer_w_grad;
+			Ref<MLPPTensor3> cumulative_discriminator_hidden_layer_w_grad = discriminator_gradient_results.cumulative_hidden_layer_w_grad;
 			Ref<MLPPVector> output_discriminator_w_grad = discriminator_gradient_results.output_w_grad;
 
-			cumulative_discriminator_hidden_layer_w_grad = alg.scalar_multiplynvt(learning_rate / _n, cumulative_discriminator_hidden_layer_w_grad);
-			output_discriminator_w_grad = alg.scalar_multiplynv(learning_rate / _n, output_discriminator_w_grad);
+			cumulative_discriminator_hidden_layer_w_grad->scalar_multiply(learning_rate / _n);
+			output_discriminator_w_grad->scalar_multiply(learning_rate / _n);
 			update_discriminator_parameters(cumulative_discriminator_hidden_layer_w_grad, output_discriminator_w_grad, learning_rate);
 		}
 
 		// Training of the generator.
-		generator_input_set = alg.gaussian_noise(_n, _k);
+		generator_input_set = MLPPMatrix::create_gaussian_noise(_n, _k);
 		discriminator_input_set->set_from_mlpp_matrix(model_set_test_generator(generator_input_set));
 		ly_hat = model_set_test_discriminator(discriminator_input_set);
-		loutput_set = alg.onevecnv(_n);
+		loutput_set = MLPPVector::create_vec_one(_n);
 
-		Vector<Ref<MLPPMatrix>> cumulative_generator_hidden_layer_w_grad = compute_generator_gradients(_y_hat, loutput_set);
-		cumulative_generator_hidden_layer_w_grad = alg.scalar_multiplynvt(learning_rate / _n, cumulative_generator_hidden_layer_w_grad);
+		Ref<MLPPTensor3> cumulative_generator_hidden_layer_w_grad = compute_generator_gradients(_y_hat, loutput_set);
+		cumulative_generator_hidden_layer_w_grad->scalar_multiply(learning_rate / _n);
 		update_generator_parameters(cumulative_generator_hidden_layer_w_grad, learning_rate);
 
 		forward_pass();
 
 		if (ui) {
-			handle_ui(epoch, cost_prev, _y_hat, alg.onevecnv(_n));
+			handle_ui(epoch, cost_prev, _y_hat, MLPPVector::create_vec_one(_n));
 		}
 
 		epoch++;
@@ -106,10 +102,9 @@ void MLPPWGAN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 }
 
 real_t MLPPWGAN::score() {
-	MLPPLinAlg alg;
 	MLPPUtilities util;
 	forward_pass();
-	return util.performance_vec(_y_hat, alg.onevecnv(_n));
+	return util.performance_vec(_y_hat, MLPPVector::create_vec_one(_n));
 }
 
 void MLPPWGAN::save(const String &file_name) {
@@ -128,9 +123,7 @@ void MLPPWGAN::save(const String &file_name) {
 	*/
 }
 
-void MLPPWGAN::add_layer(int n_hidden, MLPPActivation::ActivationFunction activation, MLPPUtilities::WeightDistributionType weight_init, MLPPReg::RegularizationType reg, real_t lambda, real_t alpha) {
-	MLPPLinAlg alg;
-
+void MLPPWGAN::create_layer(int n_hidden, MLPPActivation::ActivationFunction activation, MLPPUtilities::WeightDistributionType weight_init, MLPPReg::RegularizationType reg, real_t lambda, real_t alpha) {
 	Ref<MLPPHiddenLayer> layer;
 	layer.instance();
 
@@ -142,13 +135,40 @@ void MLPPWGAN::add_layer(int n_hidden, MLPPActivation::ActivationFunction activa
 	layer->set_alpha(alpha);
 
 	if (_network.empty()) {
-		layer->set_input(alg.gaussian_noise(_n, _k));
+		layer->set_input(MLPPMatrix::create_gaussian_noise(_n, _k));
 	} else {
 		layer->set_input(_network.write[_network.size() - 1]->get_a());
 	}
 
 	_network.push_back(layer);
 	layer->forward_pass();
+}
+void MLPPWGAN::add_layer(Ref<MLPPHiddenLayer> layer) {
+	if (!layer.is_valid()) {
+		return;
+	}
+
+	if (_network.empty()) {
+		layer->set_input(MLPPMatrix::create_gaussian_noise(_n, _k));
+	} else {
+		layer->set_input(_network.write[_network.size() - 1]->get_a());
+	}
+
+	_network.push_back(layer);
+	layer->forward_pass();
+}
+Ref<MLPPHiddenLayer> MLPPWGAN::get_layer(const int index) {
+	ERR_FAIL_INDEX_V(index, _network.size(), Ref<MLPPHiddenLayer>());
+
+	return _network[index];
+}
+void MLPPWGAN::remove_layer(const int index) {
+	ERR_FAIL_INDEX(index, _network.size());
+
+	_network.remove(index);
+}
+int MLPPWGAN::get_layer_count() const {
+	return _network.size();
 }
 
 void MLPPWGAN::add_output_layer(MLPPUtilities::WeightDistributionType weight_init, MLPPReg::RegularizationType reg, real_t lambda, real_t alpha) {
@@ -236,12 +256,10 @@ real_t MLPPWGAN::cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y) {
 }
 
 void MLPPWGAN::forward_pass() {
-	MLPPLinAlg alg;
-
 	if (!_network.empty()) {
 		Ref<MLPPHiddenLayer> layer = _network[0];
 
-		layer->set_input(alg.gaussian_noise(_n, _k));
+		layer->set_input(MLPPMatrix::create_gaussian_noise(_n, _k));
 		layer->forward_pass();
 
 		for (int i = 1; i < _network.size(); i++) {
@@ -253,7 +271,7 @@ void MLPPWGAN::forward_pass() {
 
 		_output_layer->set_input(_network.write[_network.size() - 1]->get_a());
 	} else { // Should never happen, though.
-		_output_layer->set_input(alg.gaussian_noise(_n, _k));
+		_output_layer->set_input(MLPPMatrix::create_gaussian_noise(_n, _k));
 	}
 
 	_output_layer->forward_pass();
@@ -261,38 +279,46 @@ void MLPPWGAN::forward_pass() {
 	_y_hat->set_from_mlpp_vector(_output_layer->get_a());
 }
 
-void MLPPWGAN::update_discriminator_parameters(Vector<Ref<MLPPMatrix>> hidden_layer_updations, const Ref<MLPPVector> &output_layer_updation, real_t learning_rate) {
-	MLPPLinAlg alg;
-
-	_output_layer->set_weights(alg.subtractionnv(_output_layer->get_weights(), output_layer_updation));
-	_output_layer->set_bias(_output_layer->get_bias() - learning_rate * alg.sum_elementsv(_output_layer->get_delta()) / _n);
+void MLPPWGAN::update_discriminator_parameters(Ref<MLPPTensor3> hidden_layer_updations, const Ref<MLPPVector> &output_layer_updation, real_t learning_rate) {
+	_output_layer->set_weights(_output_layer->get_weights()->subn(output_layer_updation));
+	_output_layer->set_bias(_output_layer->get_bias() - learning_rate * _output_layer->get_delta()->sum_elements() / _n);
 
 	if (!_network.empty()) {
 		Ref<MLPPHiddenLayer> layer = _network[_network.size() - 1];
 
-		layer->set_weights(alg.subtractionnm(layer->get_weights(), hidden_layer_updations[0]));
-		layer->set_bias(alg.subtract_matrix_rowsnv(layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, layer->get_delta())));
+		Ref<MLPPMatrix> slice;
+		slice.instance();
+
+		hidden_layer_updations->z_slice_get_into_mlpp_matrix(0, slice);
+
+		layer->set_weights(layer->get_weights()->subn(slice));
+		layer->set_bias(layer->get_bias()->subtract_matrix_rowsn(layer->get_delta()->scalar_multiplyn(learning_rate / _n)));
 
 		for (int i = _network.size() - 2; i > _network.size() / 2; i--) {
 			layer = _network[i];
 
-			layer->set_weights(alg.subtractionnm(layer->get_weights(), hidden_layer_updations[(_network.size() - 2) - i + 1]));
-			layer->set_bias(alg.subtract_matrix_rowsnv(layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, layer->get_delta())));
+			hidden_layer_updations->z_slice_get_into_mlpp_matrix((_network.size() - 2) - i + 1, slice);
+
+			layer->set_weights(layer->get_weights()->subn(slice));
+			layer->set_bias(layer->get_bias()->subtract_matrix_rowsn(layer->get_delta()->scalar_multiplyn(learning_rate / _n)));
 		}
 	}
 }
 
-void MLPPWGAN::update_generator_parameters(Vector<Ref<MLPPMatrix>> hidden_layer_updations, real_t learning_rate) {
-	MLPPLinAlg alg;
-
+void MLPPWGAN::update_generator_parameters(Ref<MLPPTensor3> hidden_layer_updations, real_t learning_rate) {
 	if (!_network.empty()) {
+		Ref<MLPPMatrix> slice;
+		slice.instance();
+
 		for (int i = _network.size() / 2; i >= 0; i--) {
 			Ref<MLPPHiddenLayer> layer = _network[i];
 
+			hidden_layer_updations->z_slice_get_into_mlpp_matrix((_network.size() - 2) - i + 1, slice);
+
 			//std::cout << network[i].weights.size() << "x" << network[i].weights[0].size() << std::endl;
 			//std::cout << hiddenLayerUpdations[(network.size() - 2) - i + 1].size() << "x" << hiddenLayerUpdations[(network.size() - 2) - i + 1][0].size() << std::endl;
-			layer->set_weights(alg.subtractionnm(layer->get_weights(), hidden_layer_updations[(_network.size() - 2) - i + 1]));
-			layer->set_bias(alg.subtract_matrix_rowsnv(layer->get_bias(), alg.scalar_multiplynm(learning_rate / _n, layer->get_delta())));
+			layer->set_weights(layer->get_weights()->subn(slice));
+			layer->set_bias(layer->get_bias()->subtract_matrix_rowsn(layer->get_delta()->scalar_multiplyn(learning_rate / _n)));
 		}
 	}
 }
@@ -300,24 +326,23 @@ void MLPPWGAN::update_generator_parameters(Vector<Ref<MLPPMatrix>> hidden_layer_
 MLPPWGAN::DiscriminatorGradientResult MLPPWGAN::compute_discriminator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set) {
 	MLPPCost mlpp_cost;
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
 	DiscriminatorGradientResult data;
 
-	_output_layer->set_delta(alg.hadamard_productnv(mlpp_cost.run_cost_deriv_vector(_output_layer->get_cost(), y_hat, output_set), avn.run_activation_deriv_vector(_output_layer->get_activation(), _output_layer->get_z())));
+	_output_layer->set_delta(mlpp_cost.run_cost_deriv_vector(_output_layer->get_cost(), y_hat, output_set)->hadamard_productn(avn.run_activation_deriv_vector(_output_layer->get_activation(), _output_layer->get_z())));
 
-	data.output_w_grad = alg.mat_vec_multnv(alg.transposenm(_output_layer->get_input()), _output_layer->get_delta());
-	data.output_w_grad = alg.additionnv(data.output_w_grad, regularization.reg_deriv_termv(_output_layer->get_weights(), _output_layer->get_lambda(), _output_layer->get_alpha(), _output_layer->get_reg()));
+	data.output_w_grad = _output_layer->get_input()->transposen()->mult_vec(_output_layer->get_delta());
+	data.output_w_grad->add(regularization.reg_deriv_termv(_output_layer->get_weights(), _output_layer->get_lambda(), _output_layer->get_alpha(), _output_layer->get_reg()));
 
 	if (!_network.empty()) {
 		Ref<MLPPHiddenLayer> layer = _network[_network.size() - 1];
 
-		layer->set_delta(alg.hadamard_productnm(alg.outer_product(_output_layer->get_delta(), _output_layer->get_weights()), avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
+		layer->set_delta(_output_layer->get_delta()->outer_product(_output_layer->get_weights())->hadamard_productn(avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
 
-		Ref<MLPPMatrix> hidden_layer_w_grad = alg.matmultnm(alg.transposenm(layer->get_input()), layer->get_delta());
+		Ref<MLPPMatrix> hidden_layer_w_grad = layer->get_input()->transposen()->multn(layer->get_delta());
 
-		data.cumulative_hidden_layer_w_grad.push_back(alg.additionnm(hidden_layer_w_grad, regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+		data.cumulative_hidden_layer_w_grad->z_slice_add_mlpp_matrix(hidden_layer_w_grad->addn(regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 
 		//std::cout << "HIDDENLAYER FIRST:" << hiddenLayerWGrad.size() << "x" << hiddenLayerWGrad[0].size() << std::endl;
 		//std::cout << "WEIGHTS SECOND:" << layer.weights.size() << "x" << layer.weights[0].size() << std::endl;
@@ -326,41 +351,39 @@ MLPPWGAN::DiscriminatorGradientResult MLPPWGAN::compute_discriminator_gradients(
 			layer = _network[i];
 			Ref<MLPPHiddenLayer> next_layer = _network[i + 1];
 
-			layer->set_delta(alg.hadamard_productnm(alg.matmultnm(next_layer->get_delta(), alg.transposenm(next_layer->get_weights())), avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
+			layer->set_delta(next_layer->get_delta()->multn(next_layer->get_weights()->transposen())->hadamard_productn(avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
 
-			hidden_layer_w_grad = alg.matmultnm(alg.transposenm(layer->get_input()), layer->get_delta());
-
-			data.cumulative_hidden_layer_w_grad.push_back(alg.additionnm(hidden_layer_w_grad, regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+			hidden_layer_w_grad = layer->get_input()->transposen()->multn(layer->get_delta());
+			data.cumulative_hidden_layer_w_grad->z_slice_add_mlpp_matrix(hidden_layer_w_grad->addn(regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 		}
 	}
 
 	return data;
 }
 
-Vector<Ref<MLPPMatrix>> MLPPWGAN::compute_generator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set) {
+Ref<MLPPTensor3> MLPPWGAN::compute_generator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set) {
 	class MLPPCost cost;
 	MLPPActivation avn;
-	MLPPLinAlg alg;
 	MLPPReg regularization;
 
-	Vector<Ref<MLPPMatrix>> cumulative_hidden_layer_w_grad; // Tensor containing ALL hidden grads.
+	Ref<MLPPTensor3> cumulative_hidden_layer_w_grad; // Tensor containing ALL hidden grads.
 
 	Ref<MLPPVector> cost_deriv_vector = cost.run_cost_deriv_vector(_output_layer->get_cost(), y_hat, output_set);
 	Ref<MLPPVector> activation_deriv_vector = avn.run_activation_deriv_vector(_output_layer->get_activation(), _output_layer->get_z());
 
-	_output_layer->set_delta(alg.hadamard_productnv(cost_deriv_vector, activation_deriv_vector));
+	_output_layer->set_delta(cost_deriv_vector->hadamard_productn(activation_deriv_vector));
 
-	Ref<MLPPVector> output_w_grad = alg.mat_vec_multnv(alg.transposenm(_output_layer->get_input()), _output_layer->get_delta());
-	output_w_grad = alg.additionnv(output_w_grad, regularization.reg_deriv_termv(_output_layer->get_weights(), _output_layer->get_lambda(), _output_layer->get_alpha(), _output_layer->get_reg()));
+	Ref<MLPPVector> output_w_grad = _output_layer->get_input()->transposen()->mult_vec(_output_layer->get_delta());
+	output_w_grad->add(regularization.reg_deriv_termv(_output_layer->get_weights(), _output_layer->get_lambda(), _output_layer->get_alpha(), _output_layer->get_reg()));
 
 	if (!_network.empty()) {
 		Ref<MLPPHiddenLayer> layer = _network[_network.size() - 1];
 
 		Ref<MLPPMatrix> activation_deriv_matrix = avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z());
-		layer->set_delta(alg.hadamard_productnm(alg.outer_product(_output_layer->get_delta(), _output_layer->get_weights()), activation_deriv_matrix));
+		layer->set_delta(_output_layer->get_delta()->outer_product(_output_layer->get_weights())->hadamard_productn(activation_deriv_matrix));
 
-		Ref<MLPPMatrix> hidden_layer_w_grad = alg.matmultnm(alg.transposenm(layer->get_input()), layer->get_delta());
-		cumulative_hidden_layer_w_grad.push_back(alg.additionnm(hidden_layer_w_grad, regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+		Ref<MLPPMatrix> hidden_layer_w_grad = layer->get_input()->transposen()->multn(layer->get_delta());
+		cumulative_hidden_layer_w_grad->z_slice_add_mlpp_matrix(hidden_layer_w_grad->addn(regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 
 		for (int i = _network.size() - 2; i >= 0; i--) {
 			layer = _network[i];
@@ -368,9 +391,10 @@ Vector<Ref<MLPPMatrix>> MLPPWGAN::compute_generator_gradients(const Ref<MLPPVect
 
 			activation_deriv_matrix = avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z());
 
-			layer->set_delta(alg.hadamard_productnm(alg.matmultnm(next_layer->get_delta(), alg.transposenm(next_layer->get_weights())), activation_deriv_matrix));
-			hidden_layer_w_grad = alg.matmultnm(alg.transposenm(layer->get_input()), layer->get_delta());
-			cumulative_hidden_layer_w_grad.push_back(alg.additionnm(hidden_layer_w_grad, regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+			layer->set_delta(next_layer->get_delta()->multn(next_layer->get_weights()->transposen())->hadamard_productn(activation_deriv_matrix));
+			hidden_layer_w_grad = layer->get_input()->transposen()->multn(layer->get_delta());
+
+			cumulative_hidden_layer_w_grad->z_slice_add_mlpp_matrix(hidden_layer_w_grad->addn(regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 		}
 	}
 
@@ -409,6 +433,11 @@ void MLPPWGAN::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("score"), &MLPPWGAN::score);
 	ClassDB::bind_method(D_METHOD("save", "file_name"), &MLPPWGAN::save);
 
-	ClassDB::bind_method(D_METHOD("add_layer", "activation", "weight_init", "reg", "lambda", "alpha"), &MLPPWGAN::add_layer, MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT, MLPPReg::REGULARIZATION_TYPE_NONE, 0.5, 0.5);
+	ClassDB::bind_method(D_METHOD("create_layer", "activation", "weight_init", "reg", "lambda", "alpha"), &MLPPWGAN::create_layer, MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT, MLPPReg::REGULARIZATION_TYPE_NONE, 0.5, 0.5);
+	ClassDB::bind_method(D_METHOD("add_layer", "layer"), &MLPPWGAN::add_layer);
+	ClassDB::bind_method(D_METHOD("get_layer", "index"), &MLPPWGAN::get_layer);
+	ClassDB::bind_method(D_METHOD("remove_layer", "index"), &MLPPWGAN::remove_layer);
+	ClassDB::bind_method(D_METHOD("get_layer_count"), &MLPPWGAN::score);
+
 	ClassDB::bind_method(D_METHOD("add_output_layer", "weight_init", "reg", "lambda", "alpha"), &MLPPWGAN::add_output_layer, MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT, MLPPReg::REGULARIZATION_TYPE_NONE, 0.5, 0.5);
 }

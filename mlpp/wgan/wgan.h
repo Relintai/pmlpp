@@ -15,6 +15,7 @@
 #include "core/object/reference.h"
 
 #include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_tensor3.h"
 #include "../lin_alg/mlpp_vector.h"
 
 #include "../hidden_layer/hidden_layer.h"
@@ -40,7 +41,12 @@ public:
 	real_t score();
 	void save(const String &file_name);
 
-	void add_layer(int n_hidden, MLPPActivation::ActivationFunction activation, MLPPUtilities::WeightDistributionType weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT, MLPPReg::RegularizationType reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t lambda = 0.5, real_t alpha = 0.5);
+	void create_layer(int n_hidden, MLPPActivation::ActivationFunction activation, MLPPUtilities::WeightDistributionType weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT, MLPPReg::RegularizationType reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t lambda = 0.5, real_t alpha = 0.5);
+	void add_layer(Ref<MLPPHiddenLayer> layer);
+	Ref<MLPPHiddenLayer> get_layer(const int index);
+	void remove_layer(const int index);
+	int get_layer_count() const;
+
 	void add_output_layer(MLPPUtilities::WeightDistributionType weight_init = MLPPUtilities::WEIGHT_DISTRIBUTION_TYPE_DEFAULT, MLPPReg::RegularizationType reg = MLPPReg::REGULARIZATION_TYPE_NONE, real_t lambda = 0.5, real_t alpha = 0.5);
 
 	MLPPWGAN(real_t k, const Ref<MLPPMatrix> &output_set);
@@ -55,16 +61,21 @@ protected:
 	real_t cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
 
 	void forward_pass();
-	void update_discriminator_parameters(Vector<Ref<MLPPMatrix>> hidden_layer_updations, const Ref<MLPPVector> &output_layer_updation, real_t learning_rate);
-	void update_generator_parameters(Vector<Ref<MLPPMatrix>> hidden_layer_updations, real_t learning_rate);
+	void update_discriminator_parameters(Ref<MLPPTensor3> hidden_layer_updations, const Ref<MLPPVector> &output_layer_updation, real_t learning_rate);
+	void update_generator_parameters(Ref<MLPPTensor3> hidden_layer_updations, real_t learning_rate);
 
 	struct DiscriminatorGradientResult {
-		Vector<Ref<MLPPMatrix>> cumulative_hidden_layer_w_grad; // Tensor containing ALL hidden grads.
+		Ref<MLPPTensor3> cumulative_hidden_layer_w_grad; // Tensor containing ALL hidden grads.
 		Ref<MLPPVector> output_w_grad;
+
+		DiscriminatorGradientResult() {
+			cumulative_hidden_layer_w_grad.instance();
+			output_w_grad.instance();
+		}
 	};
 
 	DiscriminatorGradientResult compute_discriminator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
-	Vector<Ref<MLPPMatrix>> compute_generator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
+	Ref<MLPPTensor3> compute_generator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
 
 	void handle_ui(int epoch, real_t cost_prev, const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
 
