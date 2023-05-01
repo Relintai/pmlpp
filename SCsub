@@ -13,6 +13,10 @@ if ARGUMENTS.get('pmlpp_build_old_classes', 'yes') == 'no':
 if ARGUMENTS.get('pmlpp_build_tests', 'yes') == 'no':
     module_env.pmlpp_build_tests = False
 
+if env.msvc:
+    # Old classes can't build on MSVC
+    module_env.pmlpp_build_old_classes = False
+
 sources = [
     "register_types.cpp",
 
