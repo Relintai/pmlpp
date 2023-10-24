@@ -1,6 +1,8 @@
 #ifndef MLPP_MATRIX_H
 #define MLPP_MATRIX_H
 
+#ifndef GDNATIVE
+
 #include "core/math/math_defs.h"
 
 #include "core/containers/pool_vector.h"
@@ -11,6 +13,19 @@
 #include "core/os/memory.h"
 
 #include "core/object/resource.h"
+
+#else 
+
+#include "core/defs.h"
+#include "core/math_funcs.h"
+#include "core/pool_arrays.h"
+#include "core/containers/vector.h"
+#include "core/os/memory.h"
+
+#include "gen/resource.h"
+
+#endif
+
 
 #include "mlpp_vector.h"
 

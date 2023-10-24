@@ -6,3 +6,8 @@
 *.pyc
 *.bc
 *.os
+*.so
+
+.sconsign.dblite
+
+gdnative_cpp/
