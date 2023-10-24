@@ -3,9 +3,6 @@
 
 #include "core/log/logger.h"
 
-//TODO remove
-#include <vector>
-
 #include "../mlpp/lin_alg/mlpp_matrix.h"
 
 void MLPPMatrixTests::run_tests() {
@@ -33,42 +30,42 @@ void MLPPMatrixTests::run_tests() {
 }
 
 void MLPPMatrixTests::test_mlpp_matrix() {
-	std::vector<std::vector<real_t>> A = {
-		{ 1, 0, 0, 0 },
-		{ 0, 1, 0, 0 },
-		{ 0, 0, 1, 0 },
-		{ 0, 0, 0, 1 }
+	const real_t A[] = {
+		1, 0, 0, 0, //
+		0, 1, 0, 0, //
+		0, 0, 1, 0, //
+		0, 0, 0, 1, //
 	};
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
-	rmat->set_from_std_vectors(A);
+	rmat->set_from_ptr(A, 4, 4);
 
 	Ref<MLPPMatrix> rmat2;
 	rmat2.instance();
-	rmat2->set_from_std_vectors(A);
+	rmat2->set_from_ptr(A, 4, 4);
 
-	is_approx_equals_mat(rmat, rmat2, "set_from_std_vectors test.");
+	is_approx_equals_mat(rmat, rmat2, "set_from_ptr test.");
 
-	rmat2->set_from_std_vectors(A);
+	rmat2->set_from_ptr(A, 4, 4);
 
-	is_approx_equals_mat(rmat, rmat2, "re-set_from_std_vectors test.");
+	is_approx_equals_mat(rmat, rmat2, "re-set_from_ptr test.");
 }
 
 void MLPPMatrixTests::test_row_add() {
-	std::vector<std::vector<real_t>> A = {
-		{ 1, 2, 3, 4 },
+	const real_t A[] = {
+		1, 2, 3, 4, //
 	};
 
-	std::vector<std::vector<real_t>> B = {
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
+	const real_t B[] = {
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
 	};
 
-	std::vector<std::vector<real_t>> C = {
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
+	const real_t C[] = {
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
 	};
 
 	Vector<real_t> rv;
@@ -79,15 +76,15 @@ void MLPPMatrixTests::test_row_add() {
 
 	Ref<MLPPMatrix> rmata;
 	rmata.instance();
-	rmata->set_from_std_vectors(A);
+	rmata->set_from_ptr(A, 1, 4);
 
 	Ref<MLPPMatrix> rmatb;
 	rmatb.instance();
-	rmatb->set_from_std_vectors(B);
+	rmatb->set_from_ptr(B, 2, 4);
 
 	Ref<MLPPMatrix> rmatc;
 	rmatc.instance();
-	rmatc->set_from_std_vectors(C);
+	rmatc->set_from_ptr(C, 3, 4);
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
@@ -102,19 +99,19 @@ void MLPPMatrixTests::test_row_add() {
 	is_approx_equals_mat(rmatc, rmat, "rmat->row_add(rv);");
 }
 void MLPPMatrixTests::test_row_add_pool_vector() {
-	std::vector<std::vector<real_t>> A = {
-		{ 1, 2, 3, 4 },
+	const real_t A[] = {
+		1, 2, 3, 4, //
 	};
 
-	std::vector<std::vector<real_t>> B = {
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
+	const real_t B[] = {
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
 	};
 
-	std::vector<std::vector<real_t>> C = {
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
+	const real_t C[] = {
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
 	};
 
 	PoolVector<real_t> rv;
@@ -125,15 +122,15 @@ void MLPPMatrixTests::test_row_add_pool_vector() {
 
 	Ref<MLPPMatrix> rmata;
 	rmata.instance();
-	rmata->set_from_std_vectors(A);
+	rmata->set_from_ptr(A, 1, 4);
 
 	Ref<MLPPMatrix> rmatb;
 	rmatb.instance();
-	rmatb->set_from_std_vectors(B);
+	rmatb->set_from_ptr(B, 2, 4);
 
 	Ref<MLPPMatrix> rmatc;
 	rmatc.instance();
-	rmatc->set_from_std_vectors(C);
+	rmatc->set_from_ptr(C, 3, 4);
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
@@ -148,19 +145,19 @@ void MLPPMatrixTests::test_row_add_pool_vector() {
 	is_approx_equals_mat(rmatc, rmat, "rmat->row_add_pool_vector(rv);");
 }
 void MLPPMatrixTests::test_row_add_mlpp_vector() {
-	std::vector<std::vector<real_t>> A = {
-		{ 1, 2, 3, 4 },
+	const real_t A[] = {
+		1, 2, 3, 4, //
 	};
 
-	std::vector<std::vector<real_t>> B = {
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
+	const real_t B[] = {
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
 	};
 
-	std::vector<std::vector<real_t>> C = {
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
+	const real_t C[] = {
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
 	};
 
 	Ref<MLPPVector> rv;
@@ -172,15 +169,15 @@ void MLPPMatrixTests::test_row_add_mlpp_vector() {
 
 	Ref<MLPPMatrix> rmata;
 	rmata.instance();
-	rmata->set_from_std_vectors(A);
+	rmata->set_from_ptr(A, 1, 4);
 
 	Ref<MLPPMatrix> rmatb;
 	rmatb.instance();
-	rmatb->set_from_std_vectors(B);
+	rmatb->set_from_ptr(B, 2, 4);
 
 	Ref<MLPPMatrix> rmatc;
 	rmatc.instance();
-	rmatc->set_from_std_vectors(C);
+	rmatc->set_from_ptr(C, 3, 4);
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
@@ -195,22 +192,24 @@ void MLPPMatrixTests::test_row_add_mlpp_vector() {
 	is_approx_equals_mat(rmatc, rmat, "rmat->row_add_mlpp_vector(rv);");
 }
 void MLPPMatrixTests::test_rows_add_mlpp_matrix() {
-	std::vector<std::vector<real_t>> A = {
-		{ 1, 2, 3, 4 },
+	const real_t A[] = {
+		1, 2, 3, 4 //
 	};
 
-	std::vector<std::vector<real_t>> B = {
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
+	const real_t B[] = {
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
 	};
 
-	std::vector<std::vector<real_t>> C = {
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
-		{ 1, 2, 3, 4 },
+	const real_t C[] = {
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
+		1, 2, 3, 4, //
 	};
 
-	std::vector<real_t> r = { 1, 2, 3, 4 };
+	//const real_t r[] = {
+	//	1, 2, 3, 4
+	//};
 
 	PoolVector<real_t> rvp;
 	rvp.push_back(1);
@@ -224,15 +223,15 @@ void MLPPMatrixTests::test_rows_add_mlpp_matrix() {
 
 	Ref<MLPPMatrix> rmata;
 	rmata.instance();
-	rmata->set_from_std_vectors(A);
+	rmata->set_from_ptr(A, 1, 4);
 
 	Ref<MLPPMatrix> rmatb;
 	rmatb.instance();
-	rmatb->set_from_std_vectors(B);
+	rmatb->set_from_ptr(B, 2, 4);
 
 	Ref<MLPPMatrix> rmatc;
 	rmatc.instance();
-	rmatc->set_from_std_vectors(C);
+	rmatc->set_from_ptr(C, 3, 4);
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
@@ -248,43 +247,43 @@ void MLPPMatrixTests::test_rows_add_mlpp_matrix() {
 }
 
 void MLPPMatrixTests::test_row_remove() {
-	std::vector<std::vector<real_t>> A = {
-		{ 1, 2, 3, 4 },
-		{ 5, 6, 7, 8 },
-		{ 9, 10, 11, 12 },
+	const real_t A[] = {
+		1, 2, 3, 4, //
+		5, 6, 7, 8, //
+		9, 10, 11, 12, //
 	};
 
-	std::vector<std::vector<real_t>> B = {
-		{ 1, 2, 3, 4 },
-		{ 5, 6, 7, 8 },
+	const real_t B[] = {
+		1, 2, 3, 4, //
+		5, 6, 7, 8, //
 	};
 
-	std::vector<std::vector<real_t>> C = {
-		{ 1, 2, 3, 4 },
+	const real_t C[] = {
+		1, 2, 3, 4, //
 	};
 
-	std::vector<std::vector<real_t>> D = {
-		{ 1, 2, 3, 4 },
-		{ 5, 6, 7, 8 },
-		{ 13, 14, 15, 16 },
-		{ 9, 10, 11, 12 },
+	const real_t D[] = {
+		1, 2, 3, 4, //
+		5, 6, 7, 8, //
+		13, 14, 15, 16, //
+		9, 10, 11, 12, //
 	};
 
 	Ref<MLPPMatrix> rmata;
 	rmata.instance();
-	rmata->set_from_std_vectors(A);
+	rmata->set_from_ptr(A, 3, 4);
 
 	Ref<MLPPMatrix> rmatb;
 	rmatb.instance();
-	rmatb->set_from_std_vectors(B);
+	rmatb->set_from_ptr(B, 2, 4);
 
 	Ref<MLPPMatrix> rmatc;
 	rmatc.instance();
-	rmatc->set_from_std_vectors(C);
+	rmatc->set_from_ptr(C, 1, 4);
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
-	rmat->set_from_std_vectors(D);
+	rmat->set_from_ptr(D, 4, 4);
 
 	rmat->row_remove(2);
 	is_approx_equals_mat(rmat, rmata, "rmat->row_remove(2);");
@@ -296,43 +295,43 @@ void MLPPMatrixTests::test_row_remove() {
 	is_approx_equals_mat(rmat, rmatc, "rmat->row_remove(1);");
 }
 void MLPPMatrixTests::test_row_remove_unordered() {
-	std::vector<std::vector<real_t>> A = {
-		{ 1, 2, 3, 4 },
-		{ 13, 14, 15, 16 },
-		{ 9, 10, 11, 12 },
+	const real_t A[] = {
+		1, 2, 3, 4, //
+		13, 14, 15, 16, //
+		9, 10, 11, 12, //
 	};
 
-	std::vector<std::vector<real_t>> B = {
-		{ 9, 10, 11, 12 },
-		{ 13, 14, 15, 16 },
+	const real_t B[] = {
+		9, 10, 11, 12, //
+		13, 14, 15, 16, //
 	};
 
-	std::vector<std::vector<real_t>> C = {
-		{ 9, 10, 11, 12 },
+	const real_t C[] = {
+		9, 10, 11, 12, //
 	};
 
-	std::vector<std::vector<real_t>> D = {
-		{ 1, 2, 3, 4 },
-		{ 5, 6, 7, 8 },
-		{ 9, 10, 11, 12 },
-		{ 13, 14, 15, 16 },
+	const real_t D[] = {
+		1, 2, 3, 4, //
+		5, 6, 7, 8, //
+		9, 10, 11, 12, //
+		13, 14, 15, 16, //
 	};
 
 	Ref<MLPPMatrix> rmata;
 	rmata.instance();
-	rmata->set_from_std_vectors(A);
+	rmata->set_from_ptr(A, 3, 4);
 
 	Ref<MLPPMatrix> rmatb;
 	rmatb.instance();
-	rmatb->set_from_std_vectors(B);
+	rmatb->set_from_ptr(B, 2, 4);
 
 	Ref<MLPPMatrix> rmatc;
 	rmatc.instance();
-	rmatc->set_from_std_vectors(C);
+	rmatc->set_from_ptr(C, 1, 4);
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
-	rmat->set_from_std_vectors(D);
+	rmat->set_from_ptr(D, 4, 4);
 
 	rmat->row_remove_unordered(1);
 	is_approx_equals_mat(rmat, rmata, "rmat->row_remove_unordered(1);");
@@ -345,36 +344,36 @@ void MLPPMatrixTests::test_row_remove_unordered() {
 }
 
 void MLPPMatrixTests::test_mlpp_matrix_mul() {
-	std::vector<std::vector<real_t>> A = {
-		{ 1, 2 },
-		{ 3, 4 },
-		{ 5, 6 },
-		{ 7, 8 }
+	const real_t A[] = {
+		1, 2, //
+		3, 4, //
+		5, 6, //
+		7, 8, //
 	};
 
-	std::vector<std::vector<real_t>> B = {
-		{ 1, 2, 3, 4 },
-		{ 5, 6, 7, 8 }
+	const real_t B[] = {
+		1, 2, 3, 4, //
+		5, 6, 7, 8, //
 	};
 
-	std::vector<std::vector<real_t>> C = {
-		{ 11, 14, 17, 20 },
-		{ 23, 30, 37, 44 },
-		{ 35, 46, 57, 68 },
-		{ 47, 62, 77, 92 }
+	const real_t C[] = {
+		11, 14, 17, 20, //
+		23, 30, 37, 44, //
+		35, 46, 57, 68, //
+		47, 62, 77, 92, //
 	};
 
 	Ref<MLPPMatrix> rmata;
 	rmata.instance();
-	rmata->set_from_std_vectors(A);
+	rmata->set_from_ptr(A, 4, 2);
 
 	Ref<MLPPMatrix> rmatb;
 	rmatb.instance();
-	rmatb->set_from_std_vectors(B);
+	rmatb->set_from_ptr(B, 2, 4);
 
 	Ref<MLPPMatrix> rmatc;
 	rmatc.instance();
-	rmatc->set_from_std_vectors(C);
+	rmatc->set_from_ptr(C, 4, 4);
 
 	Ref<MLPPMatrix> rmatr1 = rmata->multn(rmatb);
 	is_approx_equals_mat(rmatr1, rmatc, "Ref<MLPPMatrix> rmatr1 = rmata->multn(rmatb);");
