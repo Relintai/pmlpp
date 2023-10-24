@@ -558,6 +558,18 @@ void MLPPMatrix::set_from_arrays(const Array &p_from) {
 	}
 }
 
+void MLPPMatrix::set_from_ptr(const real_t *p_from, const int p_size_y, const int p_size_x) {
+	_data = NULL;
+
+	ERR_FAIL_COND(!p_from);
+
+	resize(Size2i(p_size_x, p_size_y));
+	int ds = data_size();
+	for (int i = 0; i < ds; ++i) {
+		_data[i] = p_from[i];
+	}
+}
+
 /*
 std::vector<std::vector<real_t>> MLPPMatrix::gramMatrix(std::vector<std::vector<real_t>> A) {
 	return matmult(transpose(A), A); // AtA
@@ -3003,6 +3015,18 @@ MLPPMatrix::MLPPMatrix(const Array &p_from) {
 	_data = NULL;
 
 	set_from_arrays(p_from);
+}
+
+MLPPMatrix::MLPPMatrix(const real_t *p_from, const int p_size_y, const int p_size_x) {
+	_data = NULL;
+
+	ERR_FAIL_COND(!p_from);
+
+	resize(Size2i(p_size_x, p_size_y));
+	int ds = data_size();
+	for (int i = 0; i < ds; ++i) {
+		_data[i] = p_from[i];
+	}
 }
 
 MLPPMatrix::~MLPPMatrix() {

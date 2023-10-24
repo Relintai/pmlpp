@@ -136,6 +136,7 @@ public:
 	void set_from_mlpp_vectors_array(const Array &p_from);
 	void set_from_vectors(const Vector<Vector<real_t>> &p_from);
 	void set_from_arrays(const Array &p_from);
+	void set_from_ptr(const real_t *p_from, const int p_size_y, const int p_size_x);
 
 	//std::vector<std::vector<real_t>> gramMatrix(std::vector<std::vector<real_t>> A);
 	//bool linearIndependenceChecker(std::vector<std::vector<real_t>> A);
@@ -359,6 +360,7 @@ public:
 	MLPPMatrix(const MLPPMatrix &p_from);
 	MLPPMatrix(const Vector<Vector<real_t>> &p_from);
 	MLPPMatrix(const Array &p_from);
+	MLPPMatrix(const real_t *p_from, const int p_size_y, const int p_size_x);
 
 	~MLPPMatrix();
 
