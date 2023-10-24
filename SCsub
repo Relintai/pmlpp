@@ -4,7 +4,7 @@ Import('env')
 
 module_env = env.Clone()
 
-module_env.pmlpp_build_old_classes = True
+module_env.pmlpp_build_old_classes = False
 module_env.pmlpp_build_tests = True
 
 if ARGUMENTS.get('pmlpp_build_old_classes', 'yes') == 'no':
