@@ -1112,7 +1112,7 @@ void MLPPTests::is_approx_equalsd(real_t a, real_t b, const String &str) {
 	if (!Math::is_equal_approx(a, b)) {
 		PLOG_ERR("TEST FAILED: " + str + " Got: " + String::num(a) + " Should be: " + String::num(b));
 	} else {
-		PLOG_MSG("TEST PASSED: " + str);
+		PLOG_TRACE("TEST PASSED: " + str);
 	}
 }
 
@@ -1127,7 +1127,7 @@ void MLPPTests::is_approx_equals_dvec(const Vector<real_t> &a, const Vector<real
 		}
 	}
 
-	PLOG_MSG("TEST PASSED: " + str);
+	PLOG_TRACE("TEST PASSED: " + str);
 
 	return;
 
@@ -1197,7 +1197,7 @@ void MLPPTests::is_approx_equals_dmat(const Vector<Vector<real_t>> &a, const Vec
 		}
 	}
 
-	PLOG_MSG("TEST PASSED: " + str);
+	PLOG_TRACE("TEST PASSED: " + str);
 
 	return;
 
@@ -1235,7 +1235,7 @@ void MLPPTests::is_approx_equals_mat(Ref<MLPPMatrix> a, Ref<MLPPMatrix> b, const
 		}
 	}
 
-	PLOG_MSG("TEST PASSED: " + str);
+	PLOG_TRACE("TEST PASSED: " + str);
 
 	return;
 
@@ -1264,7 +1264,7 @@ void MLPPTests::is_approx_equals_vec(Ref<MLPPVector> a, Ref<MLPPVector> b, const
 		}
 	}
 
-	PLOG_MSG("TEST PASSED: " + str);
+	PLOG_TRACE("TEST PASSED: " + str);
 
 	return;
 

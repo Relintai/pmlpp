@@ -8,24 +8,24 @@
 void MLPPMatrixTests::run_tests() {
 	PLOG_MSG("RUNNIG MLPPMatrixTests!");
 
-	PLOG_MSG("test_mlpp_matrix()");
+	PLOG_TRACE("test_mlpp_matrix()");
 	test_mlpp_matrix();
 
-	PLOG_MSG("test_row_add()");
+	PLOG_TRACE("test_row_add()");
 	test_row_add();
-	PLOG_MSG("test_row_add_pool_vector()");
+	PLOG_TRACE("test_row_add_pool_vector()");
 	test_row_add_pool_vector();
-	PLOG_MSG("test_row_add_mlpp_vector()");
+	PLOG_TRACE("test_row_add_mlpp_vector()");
 	test_row_add_mlpp_vector();
-	PLOG_MSG("test_rows_add_mlpp_matrix()");
+	PLOG_TRACE("test_rows_add_mlpp_matrix()");
 	test_rows_add_mlpp_matrix();
 
-	PLOG_MSG("test_row_remove()");
+	PLOG_TRACE("test_row_remove()");
 	test_row_remove();
-	PLOG_MSG("test_row_remove_unordered()");
+	PLOG_TRACE("test_row_remove_unordered()");
 	test_row_remove_unordered();
 
-	PLOG_MSG("test_mlpp_matrix_mul()");
+	PLOG_TRACE("test_mlpp_matrix_mul()");
 	test_mlpp_matrix_mul();
 }
 
