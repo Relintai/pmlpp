@@ -37,9 +37,7 @@ void MLPPMatrixTests::test_mlpp_matrix() {
 		0, 0, 0, 1, //
 	};
 
-	Ref<MLPPMatrix> rmat;
-	rmat.instance();
-	rmat->set_from_ptr(A, 4, 4);
+	Ref<MLPPMatrix> rmat(memnew(MLPPMatrix(A, 4, 4)));
 
 	Ref<MLPPMatrix> rmat2;
 	rmat2.instance();
@@ -74,17 +72,9 @@ void MLPPMatrixTests::test_row_add() {
 	rv.push_back(3);
 	rv.push_back(4);
 
-	Ref<MLPPMatrix> rmata;
-	rmata.instance();
-	rmata->set_from_ptr(A, 1, 4);
-
-	Ref<MLPPMatrix> rmatb;
-	rmatb.instance();
-	rmatb->set_from_ptr(B, 2, 4);
-
-	Ref<MLPPMatrix> rmatc;
-	rmatc.instance();
-	rmatc->set_from_ptr(C, 3, 4);
+	Ref<MLPPMatrix> rmata(memnew(MLPPMatrix(A, 1, 4)));
+	Ref<MLPPMatrix> rmatb(memnew(MLPPMatrix(B, 2, 4)));
+	Ref<MLPPMatrix> rmatc(memnew(MLPPMatrix(C, 3, 4)));
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
@@ -120,17 +110,9 @@ void MLPPMatrixTests::test_row_add_pool_vector() {
 	rv.push_back(3);
 	rv.push_back(4);
 
-	Ref<MLPPMatrix> rmata;
-	rmata.instance();
-	rmata->set_from_ptr(A, 1, 4);
-
-	Ref<MLPPMatrix> rmatb;
-	rmatb.instance();
-	rmatb->set_from_ptr(B, 2, 4);
-
-	Ref<MLPPMatrix> rmatc;
-	rmatc.instance();
-	rmatc->set_from_ptr(C, 3, 4);
+	Ref<MLPPMatrix> rmata(memnew(MLPPMatrix(A, 1, 4)));
+	Ref<MLPPMatrix> rmatb(memnew(MLPPMatrix(B, 2, 4)));
+	Ref<MLPPMatrix> rmatc(memnew(MLPPMatrix(C, 3, 4)));
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
@@ -167,17 +149,9 @@ void MLPPMatrixTests::test_row_add_mlpp_vector() {
 	rv->push_back(3);
 	rv->push_back(4);
 
-	Ref<MLPPMatrix> rmata;
-	rmata.instance();
-	rmata->set_from_ptr(A, 1, 4);
-
-	Ref<MLPPMatrix> rmatb;
-	rmatb.instance();
-	rmatb->set_from_ptr(B, 2, 4);
-
-	Ref<MLPPMatrix> rmatc;
-	rmatc.instance();
-	rmatc->set_from_ptr(C, 3, 4);
+	Ref<MLPPMatrix> rmata(memnew(MLPPMatrix(A, 1, 4)));
+	Ref<MLPPMatrix> rmatb(memnew(MLPPMatrix(B, 2, 4)));
+	Ref<MLPPMatrix> rmatc(memnew(MLPPMatrix(C, 3, 4)));
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
@@ -221,17 +195,9 @@ void MLPPMatrixTests::test_rows_add_mlpp_matrix() {
 	rv.instance();
 	rv->row_add_pool_vector(rvp);
 
-	Ref<MLPPMatrix> rmata;
-	rmata.instance();
-	rmata->set_from_ptr(A, 1, 4);
-
-	Ref<MLPPMatrix> rmatb;
-	rmatb.instance();
-	rmatb->set_from_ptr(B, 2, 4);
-
-	Ref<MLPPMatrix> rmatc;
-	rmatc.instance();
-	rmatc->set_from_ptr(C, 3, 4);
+	Ref<MLPPMatrix> rmata(memnew(MLPPMatrix(A, 1, 4)));
+	Ref<MLPPMatrix> rmatb(memnew(MLPPMatrix(B, 2, 4)));
+	Ref<MLPPMatrix> rmatc(memnew(MLPPMatrix(C, 3, 4)));
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
@@ -269,17 +235,9 @@ void MLPPMatrixTests::test_row_remove() {
 		9, 10, 11, 12, //
 	};
 
-	Ref<MLPPMatrix> rmata;
-	rmata.instance();
-	rmata->set_from_ptr(A, 3, 4);
-
-	Ref<MLPPMatrix> rmatb;
-	rmatb.instance();
-	rmatb->set_from_ptr(B, 2, 4);
-
-	Ref<MLPPMatrix> rmatc;
-	rmatc.instance();
-	rmatc->set_from_ptr(C, 1, 4);
+	Ref<MLPPMatrix> rmata(memnew(MLPPMatrix(A, 3, 4)));
+	Ref<MLPPMatrix> rmatb(memnew(MLPPMatrix(B, 2, 4)));
+	Ref<MLPPMatrix> rmatc(memnew(MLPPMatrix(C, 1, 4)));
 
 	Ref<MLPPMatrix> rmat;
 	rmat.instance();
@@ -317,21 +275,10 @@ void MLPPMatrixTests::test_row_remove_unordered() {
 		13, 14, 15, 16, //
 	};
 
-	Ref<MLPPMatrix> rmata;
-	rmata.instance();
-	rmata->set_from_ptr(A, 3, 4);
-
-	Ref<MLPPMatrix> rmatb;
-	rmatb.instance();
-	rmatb->set_from_ptr(B, 2, 4);
-
-	Ref<MLPPMatrix> rmatc;
-	rmatc.instance();
-	rmatc->set_from_ptr(C, 1, 4);
-
-	Ref<MLPPMatrix> rmat;
-	rmat.instance();
-	rmat->set_from_ptr(D, 4, 4);
+	Ref<MLPPMatrix> rmata(memnew(MLPPMatrix(A, 3, 4)));
+	Ref<MLPPMatrix> rmatb(memnew(MLPPMatrix(B, 2, 4)));
+	Ref<MLPPMatrix> rmatc(memnew(MLPPMatrix(C, 1, 4)));
+	Ref<MLPPMatrix> rmat(memnew(MLPPMatrix(D, 4, 4)));
 
 	rmat->row_remove_unordered(1);
 	is_approx_equals_mat(rmat, rmata, "rmat->row_remove_unordered(1);");
@@ -363,17 +310,9 @@ void MLPPMatrixTests::test_mlpp_matrix_mul() {
 		47, 62, 77, 92, //
 	};
 
-	Ref<MLPPMatrix> rmata;
-	rmata.instance();
-	rmata->set_from_ptr(A, 4, 2);
-
-	Ref<MLPPMatrix> rmatb;
-	rmatb.instance();
-	rmatb->set_from_ptr(B, 2, 4);
-
-	Ref<MLPPMatrix> rmatc;
-	rmatc.instance();
-	rmatc->set_from_ptr(C, 4, 4);
+	Ref<MLPPMatrix> rmata(memnew(MLPPMatrix(A, 4, 2)));
+	Ref<MLPPMatrix> rmatb(memnew(MLPPMatrix(B, 2, 4)));
+	Ref<MLPPMatrix> rmatc(memnew(MLPPMatrix(C, 4, 4)));
 
 	Ref<MLPPMatrix> rmatr1 = rmata->multn(rmatb);
 	is_approx_equals_mat(rmatr1, rmatc, "Ref<MLPPMatrix> rmatr1 = rmata->multn(rmatb);");
