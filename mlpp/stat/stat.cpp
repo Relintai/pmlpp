@@ -86,7 +86,7 @@ real_t MLPPStat::range(const Ref<MLPPVector> &x) {
 	ERR_FAIL_COND_V(!x.is_valid(), 0);
 
 	MLPPLinAlg alg;
-	return alg.minvr(x) - alg.minvr(x);
+	return alg.maxvr(x) - alg.minvr(x);
 }
 
 real_t MLPPStat::midrange(const Ref<MLPPVector> &x) {
