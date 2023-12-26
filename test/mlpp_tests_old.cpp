@@ -71,48 +71,6 @@ Vector<Vector<real_t>> dstd_mat_to_mat_old(const std::vector<std::vector<real_t>
 }
 
 void MLPPTestsOld::test_statistics() {
-	ERR_PRINT("MLPPTestsOld::test_statistics() Started!");
-
-	MLPPStatOld stat;
-
-	// STATISTICS
-	std::vector<real_t> x = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-	std::vector<real_t> y = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
-	std::vector<real_t> w = { 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1 };
-
-	is_approx_equalsd(stat.mean(x), 5.5, "Arithmetic Mean");
-	is_approx_equalsd(stat.mean(x), 5.5, "Median");
-
-	is_approx_equals_dvec(dstd_vec_to_vec_old(stat.mode(x)), dstd_vec_to_vec_old(x), "stat.mode(x)");
-
-	is_approx_equalsd(stat.range(x), 9, "Range");
-	is_approx_equalsd(stat.midrange(x), 4.5, "Midrange");
-	is_approx_equalsd(stat.absAvgDeviation(x), 2.5, "Absolute Average Deviation");
-	is_approx_equalsd(stat.standardDeviation(x), 3.02765, "Standard Deviation");
-	is_approx_equalsd(stat.variance(x), 9.16667, "Variance");
-	is_approx_equalsd(stat.covariance(x, y), -9.16667, "Covariance");
-	is_approx_equalsd(stat.correlation(x, y), -1, "Correlation");
-	is_approx_equalsd(stat.R2(x, y), 1, "R^2");
-
-	// Returns 1 - (1/k^2)
-	is_approx_equalsd(stat.chebyshevIneq(2), 0.75, "Chebyshev Inequality");
-	is_approx_equalsd(stat.weightedMean(x, w), 5.5, "Weighted Mean");
-	is_approx_equalsd(stat.geometricMean(x), 4.52873, "Geometric Mean");
-	is_approx_equalsd(stat.harmonicMean(x), 3.41417, "Harmonic Mean");
-	is_approx_equalsd(stat.RMS(x), 6.20484, "Root Mean Square (Quadratic mean)");
-	is_approx_equalsd(stat.powerMean(x, 5), 7.39281, "Power Mean (p = 5)");
-	is_approx_equalsd(stat.lehmerMean(x, 5), 8.71689, "Lehmer Mean (p = 5)");
-	is_approx_equalsd(stat.weightedLehmerMean(x, w, 5), 8.71689, "Weighted Lehmer Mean (p = 5)");
-	is_approx_equalsd(stat.contraHarmonicMean(x), 7, "Contraharmonic Mean");
-	is_approx_equalsd(stat.heronianMean(1, 10), 4.72076, "Hernonian Mean");
-	is_approx_equalsd(stat.heinzMean(1, 10, 1), 5.5, "Heinz Mean (x = 1)");
-	is_approx_equalsd(stat.neumanSandorMean(1, 10), 3.36061, "Neuman-Sandor Mean");
-	is_approx_equalsd(stat.stolarskyMean(1, 10, 5), 6.86587, "Stolarsky Mean (p = 5)");
-	is_approx_equalsd(stat.identricMean(1, 10), 4.75135, "Identric Mean");
-	is_approx_equalsd(stat.logMean(1, 10), 3.90865, "Logarithmic Mean");
-	is_approx_equalsd(stat.absAvgDeviation(x), 2.5, "Absolute Average Deviation");
-
-	ERR_PRINT("MLPPTestsOld::test_statistics() Finished!");
 }
 
 void MLPPTestsOld::test_linear_algebra() {
