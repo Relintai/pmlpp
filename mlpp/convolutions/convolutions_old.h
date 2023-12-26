@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "core/math/math_defs.h"
+#include "core/int_types.h"
 
 class MLPPConvolutionsOld {
 public:

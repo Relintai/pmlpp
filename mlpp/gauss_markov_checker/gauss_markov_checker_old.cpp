@@ -6,6 +6,7 @@
 
 #include "gauss_markov_checker_old.h"
 #include "../stat/stat_old.h"
+#include "core/int_types.h"
 #include <iostream>
 
 void MLPPGaussMarkovCheckerOld::checkGMConditions(std::vector<real_t> eps) {

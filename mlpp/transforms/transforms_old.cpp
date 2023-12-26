@@ -6,6 +6,7 @@
 
 #include "transforms_old.h"
 #include "../lin_alg/lin_alg_old.h"
+#include "core/int_types.h"
 #include <cmath>
 #include <iostream>
 #include <string>
