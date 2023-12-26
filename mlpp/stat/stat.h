@@ -26,16 +26,14 @@ public:
 	real_t b1_estimation(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
 
 	// Statistical Functions
-	/*
-	real_t median(std::vector<real_t> x);
-	std::vector<real_t> mode(const std::vector<real_t> &x);
-	real_t range(const std::vector<real_t> &x);
-	real_t midrange(const std::vector<real_t> &x);
-	real_t absAvgDeviation(const std::vector<real_t> &x);
-	real_t correlation(const std::vector<real_t> &x, const std::vector<real_t> &y);
-	real_t R2(const std::vector<real_t> &x, const std::vector<real_t> &y);
-	real_t chebyshevIneq(const real_t k);
-	*/
+	real_t median(const Ref<MLPPVector> &x);
+	Ref<MLPPVector> mode(const Ref<MLPPVector> &x);
+	real_t range(const Ref<MLPPVector> &x);
+	real_t midrange(const Ref<MLPPVector> &x);
+	real_t abs_avg_deviation(const Ref<MLPPVector> &x);
+	real_t correlation(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
+	real_t r2(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
+	real_t chebyshev_ineq(const real_t k);
 
 	real_t meanv(const Ref<MLPPVector> &x);
 	real_t standard_deviationv(const Ref<MLPPVector> &x);
@@ -43,22 +41,20 @@ public:
 	real_t covariancev(const Ref<MLPPVector> &x, const Ref<MLPPVector> &y);
 
 	// Extras
-	/*
-	real_t weightedMean(const std::vector<real_t> &x, const std::vector<real_t> &weights);
-	real_t geometricMean(const std::vector<real_t> &x);
-	real_t harmonicMean(const std::vector<real_t> &x);
-	real_t RMS(const std::vector<real_t> &x);
-	real_t powerMean(const std::vector<real_t> &x, const real_t p);
-	real_t lehmerMean(const std::vector<real_t> &x, const real_t p);
-	real_t weightedLehmerMean(const std::vector<real_t> &x, const std::vector<real_t> &weights, const real_t p);
-	real_t contraHarmonicMean(const std::vector<real_t> &x);
-	real_t heronianMean(const real_t A, const real_t B);
-	real_t heinzMean(const real_t A, const real_t B, const real_t x);
-	real_t neumanSandorMean(const real_t a, const real_t b);
-	real_t stolarskyMean(const real_t x, const real_t y, const real_t p);
-	real_t identricMean(const real_t x, const real_t y);
-	real_t logMean(const real_t x, const real_t y);
-	*/
+	real_t weighted_mean(const Ref<MLPPVector> &x, const Ref<MLPPVector> &weights);
+	real_t geometric_mean(const Ref<MLPPVector> &x);
+	real_t harmonic_mean(const Ref<MLPPVector> &x);
+	real_t rms(const Ref<MLPPVector> &x);
+	real_t power_mean(const Ref<MLPPVector> &x, const real_t p);
+	real_t lehmer_mean(const Ref<MLPPVector> &x, const real_t p);
+	real_t weighted_lehmer_mean(const Ref<MLPPVector> &x, const Ref<MLPPVector> &weights, const real_t p);
+	real_t contraharmonic_mean(const Ref<MLPPVector> &x);
+	real_t heronian_mean(const real_t A, const real_t B);
+	real_t heinz_mean(const real_t A, const real_t B, const real_t x);
+	real_t neuman_sandor_mean(const real_t a, const real_t b);
+	real_t stolarsky_mean(const real_t x, const real_t y, const real_t p);
+	real_t identric_mean(const real_t x, const real_t y);
+	real_t log_mean(const real_t x, const real_t y);
 
 protected:
 	static void _bind_methods();
