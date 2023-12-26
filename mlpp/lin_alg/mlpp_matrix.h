@@ -14,18 +14,17 @@
 
 #include "core/object/resource.h"
 
-#else 
+#else
 
+#include "core/containers/vector.h"
 #include "core/defs.h"
 #include "core/math_funcs.h"
-#include "core/pool_arrays.h"
-#include "core/containers/vector.h"
 #include "core/os/memory.h"
+#include "core/pool_arrays.h"
 
 #include "gen/resource.h"
 
 #endif
-
 
 #include "mlpp_vector.h"
 
@@ -245,7 +244,11 @@ public:
 	Ref<MLPPMatrix> cosn() const;
 	void cosb(const Ref<MLPPMatrix> &A);
 
-	//std::vector<std::vector<real_t>> rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis = -1);
+	Ref<MLPPMatrix> create_rotation_matrix(real_t theta, int axis = -1);
+
+	void rotate(real_t theta, int axis = -1);
+	Ref<MLPPMatrix> rotaten(real_t theta, int axis = -1);
+	void rotateb(const Ref<MLPPMatrix> &A, real_t theta, int axis = -1);
 
 	void max(const Ref<MLPPMatrix> &B);
 	Ref<MLPPMatrix> maxn(const Ref<MLPPMatrix> &B) const;

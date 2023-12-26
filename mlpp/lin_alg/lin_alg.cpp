@@ -1501,21 +1501,6 @@ Ref<MLPPVector> MLPPLinAlg::cosnv(const Ref<MLPPVector> &a) {
 	return out;
 }
 
-/*
-std::vector<std::vector<real_t>> MLPPLinAlg::rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis) {
-	std::vector<std::vector<real_t>> rotationMatrix = { { Math::cos(theta), -Math::sin(theta) }, { Math::sin(theta), Math::cos(theta) } };
-	if (axis == 0) {
-		rotationMatrix = { { 1, 0, 0 }, { 0, Math::cos(theta), -Math::sin(theta) }, { 0, Math::sin(theta), Math::cos(theta) } };
-	} else if (axis == 1) {
-		rotationMatrix = { { Math::cos(theta), 0, Math::sin(theta) }, { 0, 1, 0 }, { -Math::sin(theta), 0, Math::cos(theta) } };
-	} else if (axis == 2) {
-		rotationMatrix = { { Math::cos(theta), -Math::sin(theta), 0 }, { Math::sin(theta), Math::cos(theta), 0 }, { 1, 0, 0 } };
-	}
-
-	return matmult(A, rotationMatrix);
-}
-*/
-
 Ref<MLPPMatrix> MLPPLinAlg::maxnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
 	Ref<MLPPMatrix> C;
 	C.instance();

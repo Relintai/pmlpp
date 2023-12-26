@@ -1839,20 +1839,85 @@ void MLPPMatrix::cosb(const Ref<MLPPMatrix> &A) {
 	}
 }
 
-/*
-std::vector<std::vector<real_t>> MLPPMatrix::rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis) {
-	std::vector<std::vector<real_t>> rotationMatrix = { { Math::cos(theta), -Math::sin(theta) }, { Math::sin(theta), Math::cos(theta) } };
-	if (axis == 0) {
-		rotationMatrix = { { 1, 0, 0 }, { 0, Math::cos(theta), -Math::sin(theta) }, { 0, Math::sin(theta), Math::cos(theta) } };
+Ref<MLPPMatrix> MLPPMatrix::create_rotation_matrix(real_t theta, int axis) {
+	Ref<MLPPMatrix> rotation_matrix;
+	rotation_matrix.instance();
+
+	if (axis == -1) {
+		rotation_matrix->resize(Size2(2, 2));
+		real_t *rptr = rotation_matrix->ptrw();
+
+		rptr[rotation_matrix->calculate_index(0, 0)] = Math::cos(theta);
+		rptr[rotation_matrix->calculate_index(0, 1)] = -Math::sin(theta);
+
+		rptr[rotation_matrix->calculate_index(1, 0)] = Math::cos(theta);
+		rptr[rotation_matrix->calculate_index(1, 1)] = Math::cos(theta);
+	} else if (axis == 0) {
+		rotation_matrix->resize(Size2(3, 3));
+		real_t *rptr = rotation_matrix->ptrw();
+
+		rptr[rotation_matrix->calculate_index(0, 0)] = 1;
+		rptr[rotation_matrix->calculate_index(0, 1)] = 0;
+		rptr[rotation_matrix->calculate_index(0, 2)] = 0;
+
+		rptr[rotation_matrix->calculate_index(1, 0)] = 0;
+		rptr[rotation_matrix->calculate_index(1, 1)] = Math::cos(theta);
+		rptr[rotation_matrix->calculate_index(1, 2)] = -Math::sin(theta);
+
+		rptr[rotation_matrix->calculate_index(2, 0)] = 0;
+		rptr[rotation_matrix->calculate_index(2, 1)] = Math::sin(theta);
+		rptr[rotation_matrix->calculate_index(2, 2)] = Math::cos(theta);
 	} else if (axis == 1) {
-		rotationMatrix = { { Math::cos(theta), 0, Math::sin(theta) }, { 0, 1, 0 }, { -Math::sin(theta), 0, Math::cos(theta) } };
+		rotation_matrix->resize(Size2(3, 3));
+		real_t *rptr = rotation_matrix->ptrw();
+
+		rptr[rotation_matrix->calculate_index(0, 0)] = Math::cos(theta);
+		rptr[rotation_matrix->calculate_index(0, 1)] = 0;
+		rptr[rotation_matrix->calculate_index(0, 2)] = Math::sin(theta);
+
+		rptr[rotation_matrix->calculate_index(1, 0)] = 0;
+		rptr[rotation_matrix->calculate_index(1, 1)] = 1;
+		rptr[rotation_matrix->calculate_index(1, 2)] = 0;
+
+		rptr[rotation_matrix->calculate_index(2, 0)] = -Math::sin(theta);
+		rptr[rotation_matrix->calculate_index(2, 1)] = 0;
+		rptr[rotation_matrix->calculate_index(2, 2)] = Math::cos(theta);
+
 	} else if (axis == 2) {
-		rotationMatrix = { { Math::cos(theta), -Math::sin(theta), 0 }, { Math::sin(theta), Math::cos(theta), 0 }, { 1, 0, 0 } };
+		rotation_matrix->resize(Size2(3, 3));
+		real_t *rptr = rotation_matrix->ptrw();
+
+		rptr[rotation_matrix->calculate_index(0, 0)] = Math::cos(theta);
+		rptr[rotation_matrix->calculate_index(0, 1)] = -Math::sin(theta);
+		rptr[rotation_matrix->calculate_index(0, 2)] = 0;
+
+		rptr[rotation_matrix->calculate_index(1, 0)] = Math::sin(theta);
+		rptr[rotation_matrix->calculate_index(1, 1)] = Math::cos(theta);
+		rptr[rotation_matrix->calculate_index(1, 2)] = 0;
+
+		rptr[rotation_matrix->calculate_index(2, 0)] = 1;
+		rptr[rotation_matrix->calculate_index(2, 1)] = 0;
+		rptr[rotation_matrix->calculate_index(2, 2)] = 0;
 	}
 
-	return matmult(A, rotationMatrix);
+	return rotation_matrix;
 }
-*/
+
+void MLPPMatrix::rotate(real_t theta, int axis) {
+	Ref<MLPPMatrix> rm = create_rotation_matrix(theta, axis);
+
+	mult(rm);
+}
+Ref<MLPPMatrix> MLPPMatrix::rotaten(real_t theta, int axis) {
+	Ref<MLPPMatrix> rm = create_rotation_matrix(theta, axis);
+
+	return multn(rm);
+}
+void MLPPMatrix::rotateb(const Ref<MLPPMatrix> &A, real_t theta, int axis) {
+	Ref<MLPPMatrix> rm = create_rotation_matrix(theta, axis);
+
+	multb(A, rm);
+}
 
 void MLPPMatrix::max(const Ref<MLPPMatrix> &B) {
 	ERR_FAIL_COND(!B.is_valid());
@@ -3256,6 +3321,12 @@ void MLPPMatrix::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("cos"), &MLPPMatrix::cos);
 	ClassDB::bind_method(D_METHOD("cosn"), &MLPPMatrix::cosn);
 	ClassDB::bind_method(D_METHOD("cosb", "A"), &MLPPMatrix::cosb);
+
+	ClassDB::bind_method(D_METHOD("create_rotation_matrix", "theta", "axis"), &MLPPMatrix::create_rotation_matrix, -1);
+
+	ClassDB::bind_method(D_METHOD("rotate", "theta", "axis"), &MLPPMatrix::rotate, -1);
+	ClassDB::bind_method(D_METHOD("rotaten", "theta", "axis"), &MLPPMatrix::rotaten, -1);
+	ClassDB::bind_method(D_METHOD("rotateb", "A", "theta", "axis"), &MLPPMatrix::rotateb, -1);
 
 	ClassDB::bind_method(D_METHOD("max", "B"), &MLPPMatrix::max);
 	ClassDB::bind_method(D_METHOD("maxn", "B"), &MLPPMatrix::maxn);

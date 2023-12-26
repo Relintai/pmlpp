@@ -82,8 +82,6 @@ public:
 	Ref<MLPPMatrix> sinnm(const Ref<MLPPMatrix> &A);
 	Ref<MLPPMatrix> cosnm(const Ref<MLPPMatrix> &A);
 
-	//std::vector<std::vector<real_t>> rotate(std::vector<std::vector<real_t>> A, real_t theta, int axis = -1);
-
 	Ref<MLPPMatrix> maxnm(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B);
 
 	//real_t max(std::vector<std::vector<real_t>> A);
