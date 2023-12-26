@@ -294,7 +294,7 @@ real_t MLPPStat::heronian_mean(const real_t A, const real_t B) {
 	return (A + sqrt(A * B) + B) / 3;
 }
 
-real_t MLPPStat::contraharmonic_mean(const Ref<MLPPVector> &x) {
+real_t MLPPStat::contra_harmonic_mean(const Ref<MLPPVector> &x) {
 	ERR_FAIL_COND_V(!x.is_valid(), 0);
 
 	return lehmer_mean(x, 2);
@@ -359,7 +359,7 @@ void MLPPStat::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("weighted_lehmer_mean", "x", "weights", "p"), &MLPPStat::weighted_lehmer_mean);
 
-	ClassDB::bind_method(D_METHOD("contraharmonic_mean", "x"), &MLPPStat::contraharmonic_mean);
+	ClassDB::bind_method(D_METHOD("contra_harmonic_mean", "x"), &MLPPStat::contra_harmonic_mean);
 
 	ClassDB::bind_method(D_METHOD("heronian_mean", "A", "B"), &MLPPStat::heronian_mean);
 	ClassDB::bind_method(D_METHOD("heinz_mean", "A", "B", "x"), &MLPPStat::heinz_mean);

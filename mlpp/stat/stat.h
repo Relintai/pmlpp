@@ -48,7 +48,7 @@ public:
 	real_t power_mean(const Ref<MLPPVector> &x, const real_t p);
 	real_t lehmer_mean(const Ref<MLPPVector> &x, const real_t p);
 	real_t weighted_lehmer_mean(const Ref<MLPPVector> &x, const Ref<MLPPVector> &weights, const real_t p);
-	real_t contraharmonic_mean(const Ref<MLPPVector> &x);
+	real_t contra_harmonic_mean(const Ref<MLPPVector> &x);
 	real_t heronian_mean(const real_t A, const real_t B);
 	real_t heinz_mean(const real_t A, const real_t B, const real_t x);
 	real_t neuman_sandor_mean(const real_t a, const real_t b);
