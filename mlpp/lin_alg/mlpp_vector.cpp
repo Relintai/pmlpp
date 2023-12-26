@@ -1457,6 +1457,16 @@ MLPPVector::MLPPVector(const PoolRealArray &p_from) {
 	}
 }
 
+MLPPVector::MLPPVector(const real_t *p_from, const int p_size) {
+	_size = 0;
+	_data = NULL;
+
+	resize(p_size);
+	for (int i = 0; i < _size; i++) {
+		_data[i] = p_from[i];
+	}
+}
+
 MLPPVector::~MLPPVector() {
 	if (_data) {
 		reset();

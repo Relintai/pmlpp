@@ -252,6 +252,7 @@ public:
 	MLPPVector(const MLPPVector &p_from);
 	MLPPVector(const Vector<real_t> &p_from);
 	MLPPVector(const PoolRealArray &p_from);
+	MLPPVector(const real_t *p_from, const int p_size);
 
 	~MLPPVector();
 
