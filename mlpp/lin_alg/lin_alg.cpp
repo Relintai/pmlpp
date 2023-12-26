@@ -1565,7 +1565,7 @@ real_t MLPPLinAlg::minvr(const Ref<MLPPVector> &a) {
 	for (int i = 0; i < a_size; i++) {
 		real_t current_element = aa[i];
 
-		if (current_element > min_element) {
+		if (current_element < min_element) {
 			min_element = current_element;
 		}
 	}
