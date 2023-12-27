@@ -61,21 +61,20 @@ protected:
 	real_t cost(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &y);
 
 	void forward_pass();
-	void update_discriminator_parameters(Ref<MLPPTensor3> hidden_layer_updations, const Ref<MLPPVector> &output_layer_updation, real_t learning_rate);
-	void update_generator_parameters(Ref<MLPPTensor3> hidden_layer_updations, real_t learning_rate);
+	void update_discriminator_parameters(const Vector<Ref<MLPPMatrix>> &hidden_layer_updations, const Ref<MLPPVector> &output_layer_updation, real_t learning_rate);
+	void update_generator_parameters(const Vector<Ref<MLPPMatrix>> &hidden_layer_updations, real_t learning_rate);
 
 	struct DiscriminatorGradientResult {
-		Ref<MLPPTensor3> cumulative_hidden_layer_w_grad; // Tensor containing ALL hidden grads.
+		Vector<Ref<MLPPMatrix>> cumulative_hidden_layer_w_grad; // Tensor containing ALL hidden grads.
 		Ref<MLPPVector> output_w_grad;
 
 		DiscriminatorGradientResult() {
-			cumulative_hidden_layer_w_grad.instance();
 			output_w_grad.instance();
 		}
 	};
 
 	DiscriminatorGradientResult compute_discriminator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
-	Ref<MLPPTensor3> compute_generator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
+	Vector<Ref<MLPPMatrix>> compute_generator_gradients(const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
 
 	void handle_ui(int epoch, real_t cost_prev, const Ref<MLPPVector> &y_hat, const Ref<MLPPVector> &output_set);
 
