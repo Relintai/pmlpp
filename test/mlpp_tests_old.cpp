@@ -77,21 +77,6 @@ void MLPPTestsOld::test_linear_algebra() {
 }
 
 void MLPPTestsOld::test_univariate_linear_regression() {
-	// Univariate, simple linear regression, case where k = 1
-	MLPPData data;
-
-	Ref<MLPPDataESimple> ds = data.load_fires_and_crime(_fires_and_crime_data_path);
-
-	MLPPUniLinRegOld model_old(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector());
-
-	std::vector<real_t> slr_res = {
-		24.1095, 28.4829, 29.8082, 26.0974, 27.2902, 61.0851, 30.4709, 25.0372, 25.5673, 35.9046,
-		54.4587, 18.8083, 23.4468, 18.5432, 19.2059, 21.1938, 23.0492, 18.8083, 25.4348, 35.9046,
-		37.76, 40.278, 63.8683, 68.5068, 40.4106, 46.772, 32.0612, 23.3143, 44.784, 44.519,
-		27.8203, 20.6637, 22.5191, 53.796, 38.9527, 30.8685, 20.3986
-	};
-
-	is_approx_equals_dvec(dstd_vec_to_vec_old(model_old.modelSetTest(ds->get_input()->to_std_vector())), dstd_vec_to_vec_old(slr_res), "stat.mode(x)");
 }
 
 void MLPPTestsOld::test_multivariate_linear_regression_gradient_descent(bool ui) {

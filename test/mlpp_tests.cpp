@@ -195,32 +195,24 @@ void MLPPTests::test_linear_algebra() {
 }
 
 void MLPPTests::test_univariate_linear_regression() {
-	// Univariate, simple linear regression, case where k = 1
-	MLPPData data;
-
-	Ref<MLPPDataESimple> ds = data.load_fires_and_crime(_fires_and_crime_data_path);
-
-	MLPPUniLinReg model(ds->get_input(), ds->get_output());
-
-	std::vector<real_t> slr_res_n = {
-		24.109467, 28.482935, 29.808228, 26.097408, 27.290173, 61.085152, 30.470875, 25.037172, 25.567291,
-		35.904579, 54.458687, 18.808294, 23.446819, 18.543236, 19.205883, 21.193821, 23.049232, 18.808294,
-		25.434761, 35.904579, 37.759987, 40.278046, 63.868271, 68.50679, 40.410576, 46.77198, 32.061226,
-		23.314291, 44.784042, 44.518982, 27.82029, 20.663704, 22.519115, 53.796036, 38.952751,
-		30.868464, 20.398645
+	const real_t slr_res_n_arr[] = {
+		24.109467, 28.482935, 29.808228, 26.097408, 27.290173, 61.085152, 30.470875, 25.037172, 25.567291, //
+		35.904579, 54.458687, 18.808294, 23.446819, 18.543236, 19.205883, 21.193821, 23.049232, 18.808294, //
+		25.434761, 35.904579, 37.759987, 40.278046, 63.868271, 68.50679, 40.410576, 46.77198, 32.061226, //
+		23.314291, 44.784042, 44.518982, 27.82029, 20.663704, 22.519115, 53.796036, 38.952751, //
+		30.868464, 20.398645 //
 	};
 
-	Ref<MLPPVector> slr_res_v;
-	slr_res_v.instance();
-	slr_res_v->set_from_std_vector(slr_res_n);
+	Ref<MLPPVector> slr_res_v(memnew(MLPPVector(slr_res_n_arr, 37)));
+
+	// Univariate, simple linear regression, case where k = 1
+	MLPPData data;
+	Ref<MLPPDataESimple> ds = data.load_fires_and_crime(_fires_and_crime_data_path);
+	MLPPUniLinReg model(ds->get_input(), ds->get_output());
 
 	Ref<MLPPVector> res = model.model_set_test(ds->get_input());
 
-	if (!slr_res_v->is_equal_approx(res)) {
-		ERR_PRINT("!slr_res_v->is_equal_approx(res)");
-		ERR_PRINT(res->to_string());
-		ERR_PRINT(slr_res_v->to_string());
-	}
+	is_approx_equals_vec(res, slr_res_v, "test_univariate_linear_regression()");
 }
 
 void MLPPTests::test_multivariate_linear_regression_gradient_descent(bool ui) {
