@@ -291,7 +291,7 @@ MLPPAutoEncoder::~MLPPAutoEncoder() {
 real_t MLPPAutoEncoder::cost(const Ref<MLPPMatrix> &y_hat, const Ref<MLPPMatrix> &y) {
 	MLPPCost mlpp_cost;
 
-	return mlpp_cost.msem(y_hat, _input_set);
+	return mlpp_cost.msem(y_hat, y);
 }
 
 Ref<MLPPVector> MLPPAutoEncoder::evaluatev(const Ref<MLPPVector> &x) {
