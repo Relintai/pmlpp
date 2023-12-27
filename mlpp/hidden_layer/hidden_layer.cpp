@@ -164,7 +164,7 @@ void MLPPHiddenLayer::test(const Ref<MLPPVector> &x) {
 	_z_test = _weights->transposen()->mult_vec(x);
 	_z_test->add(_bias);
 
-	_a_test = avn.run_activation_norm_matrix(_activation, _z_test);
+	_a_test = avn.run_activation_norm_vector(_activation, _z_test);
 }
 
 MLPPHiddenLayer::MLPPHiddenLayer(int p_n_hidden, MLPPActivation::ActivationFunction p_activation, Ref<MLPPMatrix> p_input, MLPPUtilities::WeightDistributionType p_weight_init, MLPPReg::RegularizationType p_reg, real_t p_lambda, real_t p_alpha) {
