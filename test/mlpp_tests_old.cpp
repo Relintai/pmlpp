@@ -121,54 +121,10 @@ void MLPPTestsOld::test_support_vector_classification(bool ui) {
 void MLPPTestsOld::test_mlp(bool ui) {
 }
 void MLPPTestsOld::test_soft_max_network(bool ui) {
-	MLPPLinAlgOld alg;
-	MLPPData data;
-
-	// SOFTMAX NETWORK
-	Ref<MLPPDataComplex> dt = data.load_wine(_wine_data_path);
-
-	MLPPSoftmaxNetOld model_old(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), 1);
-	model_old.gradientDescent(0.01, 100000, ui);
-	alg.printMatrix(model_old.modelSetTest(dt->get_input()->to_std_vector()));
-	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
 }
 void MLPPTestsOld::test_autoencoder(bool ui) {
-	MLPPLinAlgOld alg;
-
-	std::vector<std::vector<real_t>> inputSet = { { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }, { 3, 5, 9, 12, 15, 18, 21, 24, 27, 30 } };
-
-	// AUTOENCODER
-	MLPPAutoEncoderOld model_old(alg.transpose(inputSet), 5);
-	model_old.SGD(0.001, 300000, ui);
-	alg.printMatrix(model_old.modelSetTest(alg.transpose(inputSet)));
-	std::cout << "ACCURACY (Old): " << 100 * model_old.score() << "%" << std::endl;
-
-	Ref<MLPPMatrix> input_set;
-	input_set.instance();
-	input_set->set_from_std_vectors(inputSet);
 }
 void MLPPTestsOld::test_dynamically_sized_ann(bool ui) {
-	MLPPLinAlgOld alg;
-
-	// DYNAMICALLY SIZED ANN
-	// Possible Weight Init Methods: Default, Uniform, HeNormal, HeUniform, XavierNormal, XavierUniform
-	// Possible Activations: Linear, Sigmoid, Swish, Softplus, Softsign, CLogLog, Ar{Sinh, Cosh, Tanh, Csch, Sech, Coth},  GaussianCDF, GELU, UnitStep
-	// Possible Loss Functions: MSE, RMSE, MBE, LogLoss, CrossEntropy, HingeLoss
-	std::vector<std::vector<real_t>> inputSet = { { 0, 0, 1, 1 }, { 0, 1, 0, 1 } };
-	std::vector<real_t> outputSet = { 0, 1, 1, 0 };
-
-	MLPPANNOld ann_old(alg.transpose(inputSet), outputSet);
-	ann_old.addLayer(2, "Cosh");
-	ann_old.addOutputLayer("Sigmoid", "LogLoss");
-
-	ann_old.AMSGrad(0.1, 10000, 1, 0.9, 0.999, 0.000001, ui);
-	ann_old.Adadelta(1, 1000, 2, 0.9, 0.000001, ui);
-	ann_old.Momentum(0.1, 8000, 2, 0.9, true, ui);
-
-	ann_old.setLearningRateScheduler("Step", 0.5, 1000);
-	ann_old.gradientDescent(0.01, 30000);
-	alg.printVector(ann_old.modelSetTest(alg.transpose(inputSet)));
-	std::cout << "ACCURACY: " << 100 * ann_old.score() << "%" << std::endl;
 }
 void MLPPTestsOld::test_wgan_old(bool ui) {
 	//MLPPStat stat;

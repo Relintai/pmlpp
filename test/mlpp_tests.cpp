@@ -562,7 +562,7 @@ void MLPPTests::test_soft_max_network(bool ui) {
 	Ref<MLPPDataComplex> dt = data.load_wine(_wine_data_path);
 
 	MLPPSoftmaxNet model(dt->get_input(), dt->get_output(), 1);
-	model.train_gradient_descent(0.01, 100000, ui);
+	model.train_gradient_descent(0.000001, 300, ui);
 	PLOG_MSG(model.model_set_test(dt->get_input())->to_string());
 	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
@@ -602,30 +602,20 @@ void MLPPTests::test_dynamically_sized_ann(bool ui) {
 	output_set->set_from_std_vector(outputSet);
 
 	MLPPANN ann(algn.transposenm(input_set), output_set);
+
 	ann.add_layer(2, MLPPActivation::ACTIVATION_FUNCTION_COSH);
 	ann.add_output_layer(MLPPActivation::ACTIVATION_FUNCTION_SIGMOID, MLPPCost::COST_TYPE_LOGISTIC_LOSS);
 
 	ann.amsgrad(0.1, 10000, 1, 0.9, 0.999, 0.000001, ui);
 	ann.adadelta(1, 1000, 2, 0.9, 0.000001, ui);
 	ann.momentum(0.1, 8000, 2, 0.9, true, ui);
-
 	ann.set_learning_rate_scheduler_drop(MLPPANN::SCHEDULER_TYPE_STEP, 0.5, 1000);
 	ann.gradient_descent(0.01, 30000);
+
 	PLOG_MSG(ann.model_set_test(algn.transposenm(input_set))->to_string());
 	PLOG_MSG("ACCURACY: " + String::num(100 * ann.score()) + "%");
 }
 void MLPPTests::test_wgan_old(bool ui) {
-	//MLPPStat stat;
-	MLPPLinAlg alg;
-	//MLPPActivation avn;
-	//MLPPCost cost;
-	//MLPPData data;
-	//MLPPConvolutions conv;
-
-	std::vector<std::vector<real_t>> outputSet = {
-		{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 },
-		{ 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40 }
-	};
 }
 void MLPPTests::test_wgan(bool ui) {
 	//MLPPStat stat;
