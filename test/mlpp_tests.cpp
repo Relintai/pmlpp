@@ -71,8 +71,6 @@ Vector<Vector<real_t>> dstd_mat_to_mat(const std::vector<std::vector<real_t>> &i
 }
 
 void MLPPTests::test_statistics() {
-	ERR_PRINT("MLPPTests::test_statistics() Started!");
-
 	MLPPStat stat;
 	MLPPConvolutions conv;
 
@@ -116,8 +114,6 @@ void MLPPTests::test_statistics() {
 	is_approx_equalsd(stat.identric_mean(1, 10), 4.75135, "Identric Mean");
 	is_approx_equalsd(stat.log_mean(1, 10), 3.90865, "Logarithmic Mean");
 	is_approx_equalsd(stat.abs_avg_deviation(x), 2.5, "Absolute Average Deviation");
-
-	ERR_PRINT("MLPPTests::test_statistics() Finished!");
 }
 
 void MLPPTests::test_linear_algebra() {
