@@ -388,7 +388,7 @@ void MLPPTests::test_multivariate_linear_regression_newton_raphson(bool ui) {
 
 	MLPPCost mlpp_cost;
 
-	int rmse = (int)mlpp_cost.rmsev(ds->get_output(), res);
+	//int rmse = (int)mlpp_cost.rmsev(ds->get_output(), res);
 
 	//Lose the bottom X bits (This should allow for 2^X difference.)
 	//rmse = rmse >> 15;
