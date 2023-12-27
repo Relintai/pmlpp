@@ -889,18 +889,21 @@ MLPPANN::ComputeGradientsResult MLPPANN::compute_gradients(const Ref<MLPPVector>
 
 	if (!_network.empty()) {
 		Ref<MLPPHiddenLayer> layer = _network[_network.size() - 1];
-
-		layer->set_delta(_output_layer->get_delta()->outer_product(_output_layer->get_weights())->hadamard_productn(avn.run_activation_deriv_vector(layer->get_activation(), layer->get_z())));
+		layer->set_delta(_output_layer->get_delta()->outer_product(_output_layer->get_weights())->hadamard_productn(avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
 
 		Ref<MLPPMatrix> hidden_layer_w_grad = layer->get_input()->transposen()->multn(layer->get_delta());
 
-		res.cumulative_hidden_layer_w_grad->z_slice_add_mlpp_matrix(hidden_layer_w_grad->addn(regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+		// TODO Are these always uniform in size?
+		res.cumulative_hidden_layer_w_grad->resize(Size3i(hidden_layer_w_grad->size().x, hidden_layer_w_grad->size().y, 0));
+
+		// Adding to our cumulative hidden layer grads. Maintain reg terms as well.
+		res.cumulative_hidden_layer_w_grad->z_slice_add_mlpp_matrix(hidden_layer_w_grad->addn(regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg())));
 
 		for (int i = _network.size() - 2; i >= 0; i--) {
 			layer = _network[i];
 			Ref<MLPPHiddenLayer> next_layer = _network[i + 1];
 
-			layer->set_delta(next_layer->get_delta()->multn(next_layer->get_weights()->transposen())->hadamard_productn(avn.run_activation_deriv_vector(layer->get_activation(), layer->get_z())));
+			layer->set_delta(next_layer->get_delta()->multn(next_layer->get_weights()->transposen())->hadamard_productn(avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
 			hidden_layer_w_grad = layer->get_input()->transposen()->multn(layer->get_delta());
 			res.cumulative_hidden_layer_w_grad->z_slice_add_mlpp_matrix(hidden_layer_w_grad->addn(regularization.reg_deriv_termm(layer->get_weights(), layer->get_lambda(), layer->get_alpha(), layer->get_reg()))); // Adding to our cumulative hidden layer grads. Maintain reg terms as well.
 		}
