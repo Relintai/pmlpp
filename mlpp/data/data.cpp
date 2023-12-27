@@ -243,8 +243,6 @@ void MLPPData::set_data_supervised(int k, const String &file_name, Ref<MLPPMatri
 	MLPPLinAlg alg;
 
 	Vector<Vector<real_t>> input_set_tmp;
-	input_set_tmp.resize(k);
-
 	Vector<real_t> output_set_tmp;
 
 	FileAccess *file = FileAccess::open(file_name, FileAccess::READ);
@@ -254,10 +252,13 @@ void MLPPData::set_data_supervised(int k, const String &file_name, Ref<MLPPMatri
 	while (!file->eof_reached()) {
 		Vector<String> ll = file->get_csv_line();
 
+		Vector<real_t> row;
+
 		for (int i = 0; i < k; ++i) {
-			input_set_tmp.write[i].push_back(static_cast<real_t>(ll[i].to_double()));
+			row.push_back(static_cast<real_t>(ll[i].to_double()));
 		}
 
+		input_set_tmp.push_back(row);
 		output_set_tmp.push_back(static_cast<real_t>(ll[k].to_double()));
 	}
 
@@ -265,9 +266,7 @@ void MLPPData::set_data_supervised(int k, const String &file_name, Ref<MLPPMatri
 	memdelete(file);
 
 	output_set->set_from_vector(output_set_tmp);
-
 	input_set->set_from_vectors(input_set_tmp);
-	input_set = alg.transposenm(input_set);
 }
 
 void MLPPData::set_data_unsupervised(int k, const String &file_name, Ref<MLPPMatrix> input_set) {
