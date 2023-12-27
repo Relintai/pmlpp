@@ -2033,7 +2033,7 @@ Ref<MLPPVector> MLPPActivation::cosh_normv(const Ref<MLPPVector> &z) {
 }
 Ref<MLPPMatrix> MLPPActivation::cosh_normm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
-	return alg.scalar_multiplynm(0.5, alg.additionnv(alg.expnm(z), alg.expnm(alg.scalar_multiplynm(-1, z))));
+	return alg.scalar_multiplynm(0.5, alg.additionnm(alg.expnm(z), alg.expnm(alg.scalar_multiplynm(-1, z))));
 }
 
 real_t MLPPActivation::cosh_derivr(real_t z) {
