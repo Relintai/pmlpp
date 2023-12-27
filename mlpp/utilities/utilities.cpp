@@ -648,7 +648,7 @@ MLPPUtilities::CreateMiniBatchMVBatch MLPPUtilities::create_mini_batchesmv(const
 	CreateMiniBatchMVBatch ret;
 
 	for (int i = 0; i < n_mini_batch; i++) {
-		int mini_batch_start_offset = n_mini_batch * i;
+		int mini_batch_start_offset = mini_batch_element_count * i;
 		Ref<MLPPMatrix> current_input_set;
 		current_input_set.instance();
 		current_input_set->resize(Size2i(size.x, mini_batch_element_count));
