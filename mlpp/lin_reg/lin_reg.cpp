@@ -673,7 +673,7 @@ void MLPPLinReg::normal_equation() {
 	Ref<MLPPVector> temp;
 	//temp.resize(_k);
 
-	temp = _input_set->transposen()->multn(_input_set)->inverse()->mult_vec(_input_set->transposen()->mult_vec(_output_set));
+	temp = input_set_t->multn(_input_set)->inverse()->mult_vec(input_set_t->mult_vec(_output_set));
 
 	ERR_FAIL_COND_MSG(Math::is_nan(temp->element_get(0)), "ERR: Resulting matrix was noninvertible/degenerate, and so the normal equation could not be performed. Try utilizing gradient descent.");
 
