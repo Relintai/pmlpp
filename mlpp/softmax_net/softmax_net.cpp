@@ -391,7 +391,6 @@ bool MLPPSoftmaxNet::needs_init() const {
 
 void MLPPSoftmaxNet::initialize() {
 	ERR_FAIL_COND(!_input_set.is_valid() || !_output_set.is_valid());
-	ERR_FAIL_COND(needs_init());
 
 	int n = _input_set->size().y;
 	int k = _input_set->size().x;
