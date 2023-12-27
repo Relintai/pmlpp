@@ -747,7 +747,7 @@ void MLPPMatrix::mult(const Ref<MLPPMatrix> &B) {
 
 	Size2i b_size = B->size();
 
-	ERR_FAIL_COND(_size.x != b_size.y || _size.y != b_size.x);
+	ERR_FAIL_COND(_size.x != b_size.y);
 
 	Ref<MLPPMatrix> A = duplicate_fast();
 	Size2i a_size = A->size();
@@ -782,7 +782,7 @@ Ref<MLPPMatrix> MLPPMatrix::multn(const Ref<MLPPMatrix> &B) const {
 
 	Size2i b_size = B->size();
 
-	ERR_FAIL_COND_V_MSG(_size.y != b_size.x || _size.x != b_size.y, Ref<MLPPMatrix>(), "_size.y != b_size.x || _size.x != b_size.y _size: " + _size.operator String() + " b_size: " + b_size.operator String());
+	ERR_FAIL_COND_V_MSG(_size.x != b_size.y, Ref<MLPPMatrix>(), "_size.x != b_size.y _size: " + _size.operator String() + " b_size: " + b_size.operator String());
 
 	Size2i rs = Size2i(b_size.x, _size.y);
 
@@ -816,7 +816,7 @@ void MLPPMatrix::multb(const Ref<MLPPMatrix> &A, const Ref<MLPPMatrix> &B) {
 	Size2i a_size = A->size();
 	Size2i b_size = B->size();
 
-	ERR_FAIL_COND_MSG(a_size.y != b_size.x || a_size.x != b_size.y, "a_size.y != b_size.x || a_size.x != b_size.y: a_size: " + a_size.operator String() + " b_size: " + b_size.operator String());
+	ERR_FAIL_COND_MSG(a_size.x != b_size.y, "a_size.x != b_size.y: a_size: " + a_size.operator String() + " b_size: " + b_size.operator String());
 
 	Size2i rs = Size2i(b_size.x, a_size.y);
 
