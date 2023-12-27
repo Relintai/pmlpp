@@ -27,7 +27,7 @@ public:
 	void test_multivariate_linear_regression_sgd(bool ui = false);
 	void test_multivariate_linear_regression_mbgd(bool ui = false);
 	void test_multivariate_linear_regression_normal_equation(bool ui = false);
-	void test_multivariate_linear_regression_adam();
+	void test_multivariate_linear_regression_adam(bool ui = false);
 	void test_multivariate_linear_regression_score_sgd_adam(bool ui = false);
 	void test_multivariate_linear_regression_epochs_gradient_descent(bool ui = false);
 	void test_multivariate_linear_regression_newton_raphson(bool ui = false);

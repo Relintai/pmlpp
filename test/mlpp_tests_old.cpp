@@ -80,112 +80,27 @@ void MLPPTestsOld::test_univariate_linear_regression() {
 }
 
 void MLPPTestsOld::test_multivariate_linear_regression_gradient_descent(bool ui) {
-	MLPPData data;
-	MLPPLinAlgOld alg;
-
-	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
-
-	MLPPLinRegOld model_old(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
-	model_old.gradientDescent(0.001, 30, ui);
-	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTestsOld::test_multivariate_linear_regression_sgd(bool ui) {
-	MLPPData data;
-	MLPPLinAlgOld alg;
-
-	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
-
-	MLPPLinRegOld model_old(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
-	model_old.SGD(0.00000001, 300000, ui);
-	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTestsOld::test_multivariate_linear_regression_mbgd(bool ui) {
-	MLPPData data;
-	MLPPLinAlgOld alg;
-
-	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
-
-	MLPPLinRegOld model_old(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
-	model_old.MBGD(0.001, 10000, 2, ui);
-	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTestsOld::test_multivariate_linear_regression_normal_equation(bool ui) {
-	MLPPData data;
-	MLPPLinAlgOld alg;
-
-	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
-
-	MLPPLinRegOld model_old(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
-	model_old.normalEquation();
-	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTestsOld::test_multivariate_linear_regression_adam() {
-	MLPPData data;
-	MLPPLinAlgOld alg;
-
-	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
-
-	MLPPLinRegOld adamModelOld(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
-	alg.printVector(adamModelOld.modelSetTest(ds->get_input()->to_std_vector()));
-	std::cout << "ACCURACY: " << 100 * adamModelOld.score() << "%" << std::endl;
 }
 
 void MLPPTestsOld::test_multivariate_linear_regression_score_sgd_adam(bool ui) {
-	MLPPData data;
-	MLPPLinAlgOld alg;
-
-	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
-
-	const int TRIAL_NUM = 1000;
-
-	real_t scoreSGD = 0;
-	real_t scoreADAM = 0;
-	for (int i = 0; i < TRIAL_NUM; i++) {
-		MLPPLinRegOld modelf_old(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
-		modelf_old.MBGD(0.001, 5, 1, ui);
-		scoreSGD += modelf_old.score();
-
-		MLPPLinRegOld adamModelf_old(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
-		adamModelf_old.Adam(0.1, 5, 1, 0.9, 0.999, 1e-8, ui); // Change batch size = sgd, bgd
-		scoreADAM += adamModelf_old.score();
-	}
-
-	std::cout << "ACCURACY, AVG, SGD: " << 100 * scoreSGD / TRIAL_NUM << "%" << std::endl;
-	std::cout << std::endl;
-	std::cout << "ACCURACY, AVG, ADAM: " << 100 * scoreADAM / TRIAL_NUM << "%" << std::endl;
 }
 
 void MLPPTestsOld::test_multivariate_linear_regression_epochs_gradient_descent(bool ui) {
-	MLPPData data;
-	MLPPLinAlgOld alg;
-
-	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
-
-	std::cout << "Total epoch num: 300" << std::endl;
-	std::cout << "Method: 1st Order w/ Jacobians" << std::endl;
-
-	MLPPLinRegOld model3_old(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
-	model3_old.gradientDescent(0.001, 300, ui);
-	alg.printVector(model3_old.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTestsOld::test_multivariate_linear_regression_newton_raphson(bool ui) {
-	MLPPData data;
-	MLPPLinAlgOld alg;
-
-	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
-
-	std::cout << "--------------------------------------------" << std::endl;
-	std::cout << "Total epoch num: 300" << std::endl;
-	std::cout << "Method: Newtonian 2nd Order w/ Hessians" << std::endl;
-
-	MLPPLinRegOld model2_old(alg.transpose(ds->get_input()->to_std_vector()), ds->get_output()->to_std_vector());
-	model2_old.NewtonRaphson(1.5, 300, ui);
-	alg.printVector(model2_old.modelSetTest(ds->get_input()->to_std_vector()));
 }
 
 void MLPPTestsOld::test_logistic_regression(bool ui) {

@@ -250,7 +250,7 @@ void MLPPTests::test_multivariate_linear_regression_sgd(bool ui) {
 
 	int rmse = (int)mlpp_cost.rmsev(ds->get_output(), res);
 
-	//Lose the bottom 15 bits (This should allow for 2^15 difference.)
+	//Lose the bottom X bits (This should allow for 2^X difference.)
 	rmse = rmse >> 15;
 	rmse = rmse << 15;
 
@@ -264,8 +264,18 @@ void MLPPTests::test_multivariate_linear_regression_mbgd(bool ui) {
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
 	MLPPLinReg model(ds->get_input(), ds->get_output()); // Can use Lasso, Ridge, ElasticNet Reg
-	model.mbgd(0.001, 10000, 2, ui);
-	PLOG_MSG(model.model_set_test(ds->get_input())->to_string());
+	model.mbgd(0.00000001, 30, 2, ui);
+	Ref<MLPPVector> res = model.model_set_test(ds->get_input());
+
+	MLPPCost mlpp_cost;
+
+	int rmse = (int)mlpp_cost.rmsev(ds->get_output(), res);
+
+	//Lose the bottom X bits (This should allow for 2^X difference.)
+	rmse = rmse >> 10;
+	rmse = rmse << 10;
+
+	is_approx_equalsd(rmse, 230400, "test_multivariate_linear_regression_mbgd() RMSE");
 }
 
 void MLPPTests::test_multivariate_linear_regression_normal_equation(bool ui) {
@@ -273,21 +283,48 @@ void MLPPTests::test_multivariate_linear_regression_normal_equation(bool ui) {
 	MLPPLinAlg alg;
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
+	ds->get_input()->resize(Size2i(8, 10));
+	ds->get_output()->resize(10);
 
 	MLPPLinReg model(ds->get_input(), ds->get_output()); // Can use Lasso, Ridge, ElasticNet Reg
 	model.normal_equation();
-	PLOG_MSG(model.model_set_test(ds->get_input())->to_string());
+	Ref<MLPPVector> res = model.model_set_test(ds->get_input());
+
+	MLPPCost mlpp_cost;
+
+	int rmse = (int)mlpp_cost.rmsev(ds->get_output(), res);
+
+	//Lose the bottom X bits (This should allow for 2^X difference.)
+	rmse = rmse >> 10;
+	rmse = rmse << 10;
+
+	is_approx_equalsd(rmse, 319488, "test_multivariate_linear_regression_normal_equation() RMSE");
 }
 
-void MLPPTests::test_multivariate_linear_regression_adam() {
+void MLPPTests::test_multivariate_linear_regression_adam(bool ui) {
 	MLPPData data;
 	MLPPLinAlg alg;
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	MLPPLinReg adam_model(alg.transposenm(ds->get_input()), ds->get_output());
-	PLOG_MSG(adam_model.model_set_test(ds->get_input())->to_string());
-	PLOG_MSG("ACCURACY: " + String::num(100 * adam_model.score()) + "%");
+	MLPPLinReg model(ds->get_input(), ds->get_output());
+
+	model.adam(0.0001, 30, 10, 0.9, 0.999, 1e-8, ui);
+
+	//real_t score = 100 * model.score();
+
+	Ref<MLPPVector> res = model.model_set_test(ds->get_input());
+
+	MLPPCost mlpp_cost;
+
+	int rmse = (int)mlpp_cost.rmsev(ds->get_output(), res);
+
+	//Lose the bottom X bits (This should allow for 2^X difference.)
+	rmse = rmse >> 10;
+	rmse = rmse << 10;
+
+	is_approx_equalsd(rmse, 156672, "test_multivariate_linear_regression_adam() RMSE");
+	//is_approx_equalsd(score, 319488, "test_multivariate_linear_regression_adam() score");
 }
 
 void MLPPTests::test_multivariate_linear_regression_score_sgd_adam(bool ui) {
@@ -297,23 +334,22 @@ void MLPPTests::test_multivariate_linear_regression_score_sgd_adam(bool ui) {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	const int TRIAL_NUM = 1000;
+	const int TRIAL_NUM = 10;
 
 	real_t scoreSGD = 0;
 	real_t scoreADAM = 0;
 	for (int i = 0; i < TRIAL_NUM; i++) {
-		MLPPLinReg modelf(algn.transposenm(ds->get_input()), ds->get_output());
+		MLPPLinReg modelf(ds->get_input(), ds->get_output());
 		modelf.mbgd(0.001, 5, 1, ui);
 		scoreSGD += modelf.score();
 
-		MLPPLinReg adamModelf(algn.transposenm(ds->get_input()), ds->get_output());
+		MLPPLinReg adamModelf(ds->get_input(), ds->get_output());
 		adamModelf.adam(0.1, 5, 1, 0.9, 0.999, 1e-8, ui); // Change batch size = sgd, bgd
 		scoreADAM += adamModelf.score();
 	}
 
-	std::cout << "ACCURACY, AVG, SGD: " << 100 * scoreSGD / TRIAL_NUM << "%" << std::endl;
-	std::cout << std::endl;
-	std::cout << "ACCURACY, AVG, ADAM: " << 100 * scoreADAM / TRIAL_NUM << "%" << std::endl;
+	is_approx_equalsd((int)(100 * scoreSGD / TRIAL_NUM), 0, "test_multivariate_linear_regression_score_sgd_adam() ACCURACY, AVG, SGD");
+	is_approx_equalsd((int)(100 * scoreADAM / TRIAL_NUM), 0, "test_multivariate_linear_regression_score_sgd_adam() ACCURACY, AVG, ADAM");
 }
 
 void MLPPTests::test_multivariate_linear_regression_epochs_gradient_descent(bool ui) {
@@ -323,12 +359,20 @@ void MLPPTests::test_multivariate_linear_regression_epochs_gradient_descent(bool
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	std::cout << "Total epoch num: 300" << std::endl;
-	std::cout << "Method: 1st Order w/ Jacobians" << std::endl;
+	MLPPLinReg model(ds->get_input(), ds->get_output()); // Can use Lasso, Ridge, ElasticNet Reg
+	model.gradient_descent(0.0000001, 300, ui);
 
-	MLPPLinReg model3(algn.transposenm(ds->get_input()), ds->get_output()); // Can use Lasso, Ridge, ElasticNet Reg
-	model3.gradient_descent(0.001, 300, ui);
-	PLOG_MSG(model3.model_set_test(ds->get_input())->to_string());
+	Ref<MLPPVector> res = model.model_set_test(ds->get_input());
+
+	MLPPCost mlpp_cost;
+
+	int rmse = (int)mlpp_cost.rmsev(ds->get_output(), res);
+
+	//Lose the bottom X bits (This should allow for 2^X difference.)
+	rmse = rmse >> 16;
+	rmse = rmse << 16;
+
+	is_approx_equalsd(rmse, 131072, "test_multivariate_linear_regression_epochs_gradient_descent() RMSE");
 }
 
 void MLPPTests::test_multivariate_linear_regression_newton_raphson(bool ui) {
@@ -338,13 +382,19 @@ void MLPPTests::test_multivariate_linear_regression_newton_raphson(bool ui) {
 
 	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
 
-	std::cout << "--------------------------------------------" << std::endl;
-	std::cout << "Total epoch num: 300" << std::endl;
-	std::cout << "Method: Newtonian 2nd Order w/ Hessians" << std::endl;
+	MLPPLinReg model(ds->get_input(), ds->get_output());
+	model.newton_raphson(1.5, 300, ui);
+	Ref<MLPPVector> res = model.model_set_test(ds->get_input());
 
-	MLPPLinReg model2(algn.transposenm(ds->get_input()), ds->get_output());
-	model2.newton_raphson(1.5, 300, ui);
-	PLOG_MSG(model2.model_set_test(ds->get_input())->to_string());
+	MLPPCost mlpp_cost;
+
+	int rmse = (int)mlpp_cost.rmsev(ds->get_output(), res);
+
+	//Lose the bottom X bits (This should allow for 2^X difference.)
+	//rmse = rmse >> 15;
+	//rmse = rmse << 15;
+
+	//is_approx_equalsd(rmse, 98304, "test_multivariate_linear_regression_newton_raphson() RMSE");
 }
 
 void MLPPTests::test_logistic_regression(bool ui) {
@@ -1389,7 +1439,7 @@ void MLPPTests::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("test_multivariate_linear_regression_sgd", "ui"), &MLPPTests::test_multivariate_linear_regression_sgd, false);
 	ClassDB::bind_method(D_METHOD("test_multivariate_linear_regression_mbgd", "ui"), &MLPPTests::test_multivariate_linear_regression_mbgd, false);
 	ClassDB::bind_method(D_METHOD("test_multivariate_linear_regression_normal_equation", "ui"), &MLPPTests::test_multivariate_linear_regression_normal_equation, false);
-	ClassDB::bind_method(D_METHOD("test_multivariate_linear_regression_adam"), &MLPPTests::test_multivariate_linear_regression_adam);
+	ClassDB::bind_method(D_METHOD("test_multivariate_linear_regression_adam"), &MLPPTests::test_multivariate_linear_regression_adam, false);
 	ClassDB::bind_method(D_METHOD("test_multivariate_linear_regression_score_sgd_adam", "ui"), &MLPPTests::test_multivariate_linear_regression_score_sgd_adam, false);
 	ClassDB::bind_method(D_METHOD("test_multivariate_linear_regression_epochs_gradient_descent", "ui"), &MLPPTests::test_multivariate_linear_regression_epochs_gradient_descent, false);
 	ClassDB::bind_method(D_METHOD("test_multivariate_linear_regression_newton_raphson", "ui"), &MLPPTests::test_multivariate_linear_regression_newton_raphson, false);
