@@ -858,7 +858,7 @@ Ref<MLPPVector> MLPPActivation::sigmoid_normv(const Ref<MLPPVector> &z) {
 }
 Ref<MLPPMatrix> MLPPActivation::sigmoid_normm(const Ref<MLPPMatrix> &z) {
 	MLPPLinAlg alg;
-	return alg.division_element_wisenvnm(alg.onematnm(z->size().x, z->size().y), alg.additionnm(alg.onematnm(z->size().x, z->size().y), alg.expnm(alg.scalar_multiplynm(-1, z))));
+	return alg.division_element_wisenvnm(alg.onematnm(z->size().y, z->size().x), alg.additionnm(alg.onematnm(z->size().y, z->size().x), alg.expnm(alg.scalar_multiplynm(-1, z))));
 }
 
 real_t MLPPActivation::sigmoid_derivr(real_t z) {
