@@ -191,15 +191,9 @@ MLPPHiddenLayer::MLPPHiddenLayer(int p_n_hidden, MLPPActivation::ActivationFunct
 	_weights.instance();
 	_bias.instance();
 
-	_weights->resize(Size2i(_n_hidden, _input->size().x));
-	_bias->resize(_n_hidden);
+	_initialized = false;
 
-	MLPPUtilities utils;
-
-	utils.weight_initializationm(_weights, _weight_init);
-	utils.bias_initializationv(_bias);
-
-	_initialized = true;
+	initialize();
 }
 
 MLPPHiddenLayer::MLPPHiddenLayer() {
