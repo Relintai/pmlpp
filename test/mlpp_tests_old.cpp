@@ -104,101 +104,18 @@ void MLPPTestsOld::test_multivariate_linear_regression_newton_raphson(bool ui) {
 }
 
 void MLPPTestsOld::test_logistic_regression(bool ui) {
-	MLPPLinAlgOld alg;
-	MLPPData data;
-
-	Ref<MLPPDataSimple> dt = data.load_breast_cancer(_breast_cancer_data_path);
-
-	// LOGISTIC REGRESSION
-
-	MLPPLogRegOld model_old(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
-	model_old.SGD(0.001, 100000, ui);
-	alg.printVector(model_old.modelSetTest(dt->get_input()->to_std_vector()));
-	std::cout << "ACCURACY (Old): " << 100 * model_old.score() << "%" << std::endl;
 }
 void MLPPTestsOld::test_probit_regression(bool ui) {
-	MLPPLinAlgOld alg;
-	MLPPData data;
-
-	// PROBIT REGRESSION
-	Ref<MLPPDataSimple> dt = data.load_breast_cancer(_breast_cancer_data_path);
-
-	MLPPProbitRegOld model_old(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
-	model_old.SGD(0.001, 10000, ui);
-	alg.printVector(model_old.modelSetTest(dt->get_input()->to_std_vector()));
-	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
 }
 void MLPPTestsOld::test_c_log_log_regression(bool ui) {
-	MLPPLinAlgOld alg;
-	// CLOGLOG REGRESSION
-	std::vector<std::vector<real_t>> inputSet = { { 1, 2, 3, 4, 5, 6, 7, 8 }, { 0, 0, 0, 0, 1, 1, 1, 1 } };
-	std::vector<real_t> outputSet = { 0, 0, 0, 0, 1, 1, 1, 1 };
-
-	MLPPCLogLogRegOld model_old(alg.transpose(inputSet), outputSet);
-	model_old.SGD(0.1, 10000, ui);
-	alg.printVector(model_old.modelSetTest(alg.transpose(inputSet)));
-	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
 }
 void MLPPTestsOld::test_exp_reg_regression(bool ui) {
-	MLPPLinAlgOld alg;
-
-	// EXPREG REGRESSION
-	std::vector<std::vector<real_t>> inputSet = { { 0, 1, 2, 3, 4 } };
-	std::vector<real_t> outputSet = { 1, 2, 4, 8, 16 };
-
-	MLPPExpRegOld model_old(alg.transpose(inputSet), outputSet);
-	model_old.SGD(0.001, 10000, ui);
-	alg.printVector(model_old.modelSetTest(alg.transpose(inputSet)));
-	std::cout << "ACCURACY: " << 100 * model_old.score() << "%" << std::endl;
-
-	Ref<MLPPMatrix> input_set;
-	input_set.instance();
-	input_set->set_from_std_vectors(inputSet);
-
-	Ref<MLPPVector> output_set;
-	output_set.instance();
-	output_set->set_from_std_vector(outputSet);
 }
 void MLPPTestsOld::test_tanh_regression(bool ui) {
-	MLPPLinAlgOld alg;
-
-	// TANH REGRESSION
-	std::vector<std::vector<real_t>> inputSet = { { 4, 3, 0, -3, -4 }, { 0, 0, 0, 1, 1 } };
-	std::vector<real_t> outputSet = { 1, 1, 0, -1, -1 };
-
-	MLPPTanhRegOld model_old(alg.transpose(inputSet), outputSet);
-	model_old.SGD(0.1, 10000, ui);
-	alg.printVector(model_old.modelSetTest(alg.transpose(inputSet)));
-	std::cout << "ACCURACY (Old): " << 100 * model_old.score() << "%" << std::endl;
 }
 void MLPPTestsOld::test_softmax_regression(bool ui) {
-	MLPPLinAlgOld alg;
-	MLPPData data;
-
-	Ref<MLPPDataComplex> dt = data.load_iris(_iris_data_path);
-
-	// SOFTMAX REGRESSION
-
-	MLPPSoftmaxRegOld model_old(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector());
-	model_old.SGD(0.1, 10000, ui);
-	alg.printMatrix(model_old.modelSetTest(dt->get_input()->to_std_vector()));
-	std::cout << "ACCURACY (Old): " << 100 * model_old.score() << "%" << std::endl;
 }
 void MLPPTestsOld::test_support_vector_classification(bool ui) {
-	//MLPPStat stat;
-	MLPPLinAlgOld alg;
-	//MLPPActivation avn;
-	//MLPPCost cost;
-	MLPPData data;
-	//MLPPConvolutions conv;
-
-	// SUPPORT VECTOR CLASSIFICATION
-	Ref<MLPPDataSimple> dt = data.load_breast_cancer_svc(_breast_cancer_svm_data_path);
-
-	MLPPSVCOld model_old(dt->get_input()->to_std_vector(), dt->get_output()->to_std_vector(), ui);
-	model_old.SGD(0.00001, 100000, ui);
-	alg.printVector(model_old.modelSetTest(dt->get_input()->to_std_vector()));
-	std::cout << "ACCURACY (old): " << 100 * model_old.score() << "%" << std::endl;
 }
 
 void MLPPTestsOld::test_mlp(bool ui) {

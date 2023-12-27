@@ -446,7 +446,6 @@ void MLPPTests::test_c_log_log_regression(bool ui) {
 }
 void MLPPTests::test_exp_reg_regression(bool ui) {
 	MLPPLinAlg alg;
-	MLPPLinAlg algn;
 
 	// EXPREG REGRESSION
 	std::vector<std::vector<real_t>> inputSet = { { 0, 1, 2, 3, 4 } };
@@ -460,9 +459,9 @@ void MLPPTests::test_exp_reg_regression(bool ui) {
 	output_set.instance();
 	output_set->set_from_std_vector(outputSet);
 
-	MLPPExpReg model(algn.transposenm(input_set), output_set);
+	MLPPExpReg model(alg.transposenm(input_set), output_set);
 	model.sgd(0.001, 10000, ui);
-	PLOG_MSG(model.model_set_test(algn.transposenm(input_set))->to_string());
+	PLOG_MSG(model.model_set_test(alg.transposenm(input_set))->to_string());
 	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
 void MLPPTests::test_tanh_regression(bool ui) {
@@ -471,6 +470,19 @@ void MLPPTests::test_tanh_regression(bool ui) {
 	// TANH REGRESSION
 	std::vector<std::vector<real_t>> inputSet = { { 4, 3, 0, -3, -4 }, { 0, 0, 0, 1, 1 } };
 	std::vector<real_t> outputSet = { 1, 1, 0, -1, -1 };
+
+	Ref<MLPPMatrix> input_set;
+	input_set.instance();
+	input_set->set_from_std_vectors(inputSet);
+
+	Ref<MLPPVector> output_set;
+	output_set.instance();
+	output_set->set_from_std_vector(outputSet);
+
+	MLPPTanhReg model(alg.transposenm(input_set), output_set);
+	model.train_sgd(0.1, 10000, ui);
+	//PLOG_MSG(model.model_set_test(alg.transposenm(input_set))->to_string());
+	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
 void MLPPTests::test_softmax_regression(bool ui) {
 	MLPPLinAlg alg;
@@ -481,7 +493,7 @@ void MLPPTests::test_softmax_regression(bool ui) {
 	// SOFTMAX REGRESSION
 	MLPPSoftmaxReg model(dt->get_input(), dt->get_output());
 	model.train_sgd(0.1, 10000, ui);
-	PLOG_MSG(model.model_set_test(dt->get_input())->to_string());
+	//PLOG_MSG(model.model_set_test(dt->get_input())->to_string());
 	PLOG_MSG("ACCURACY: " + String::num(100 * model.score()) + "%");
 }
 void MLPPTests::test_support_vector_classification(bool ui) {
