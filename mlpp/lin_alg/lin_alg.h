@@ -219,6 +219,7 @@ public:
 	// TENSOR FUNCTIONS
 	Vector<Ref<MLPPMatrix>> additionnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
 
+	void division_element_wisevt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
 	Vector<Ref<MLPPMatrix>> division_element_wisenvnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
 
 	Vector<Ref<MLPPMatrix>> sqrtnvt(const Vector<Ref<MLPPMatrix>> &A);
@@ -232,7 +233,8 @@ public:
 	Vector<Ref<MLPPMatrix>> scalar_multiplynvt(real_t scalar, Vector<Ref<MLPPMatrix>> A);
 	Vector<Ref<MLPPMatrix>> scalar_addnvt(real_t scalar, Vector<Ref<MLPPMatrix>> A);
 
-	Vector<Ref<MLPPMatrix>> resizenvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B);
+	void resizevt(Vector<Ref<MLPPMatrix>> &r_target, const Vector<Ref<MLPPMatrix>> &A);
+	Vector<Ref<MLPPMatrix>> resizencvt(const Vector<Ref<MLPPMatrix>> &A);
 
 	//std::vector<std::vector<std::vector<real_t>>> hadamard_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<std::vector<real_t>>> B);
 

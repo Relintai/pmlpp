@@ -1768,6 +1768,14 @@ Vector<Ref<MLPPMatrix>> MLPPLinAlg::additionnvt(const Vector<Ref<MLPPMatrix>> &A
 	return res;
 }
 
+void MLPPLinAlg::division_element_wisevt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+	for (int i = 0; i < A.size(); i++) {
+		Ref<MLPPMatrix> m = A[i];
+
+		m->division_element_wise(B[i]);
+	}
+}
+
 Vector<Ref<MLPPMatrix>> MLPPLinAlg::division_element_wisenvnvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
 	Vector<Ref<MLPPMatrix>> res;
 	res.resize(A.size());
@@ -1841,14 +1849,26 @@ Vector<Ref<MLPPMatrix>> MLPPLinAlg::scalar_addnvt(real_t scalar, Vector<Ref<MLPP
 	return A;
 }
 
-Vector<Ref<MLPPMatrix>> MLPPLinAlg::resizenvt(const Vector<Ref<MLPPMatrix>> &A, const Vector<Ref<MLPPMatrix>> &B) {
+void MLPPLinAlg::resizevt(Vector<Ref<MLPPMatrix>> &r_target, const Vector<Ref<MLPPMatrix>> &A) {
+	r_target.resize(A.size());
+
+	for (int i = 0; i < r_target.size(); i++) {
+		Ref<MLPPMatrix> m;
+		m.instance();
+		m->resize(A[i]->size());
+
+		r_target.write[i] = m;
+	}
+}
+
+Vector<Ref<MLPPMatrix>> MLPPLinAlg::resizencvt(const Vector<Ref<MLPPMatrix>> &A) {
 	Vector<Ref<MLPPMatrix>> res;
-	res.resize(B.size());
+	res.resize(A.size());
 
 	for (int i = 0; i < res.size(); i++) {
 		Ref<MLPPMatrix> m;
 		m.instance();
-		m->resize(B[i]->size());
+		m->resize(A[i]->size());
 
 		res.write[i] = m;
 	}
