@@ -119,21 +119,6 @@ void MLPPTestsOld::test_support_vector_classification(bool ui) {
 }
 
 void MLPPTestsOld::test_mlp(bool ui) {
-	MLPPLinAlgOld alg;
-
-	// MLP
-	std::vector<std::vector<real_t>> inputSet = {
-		{ 0, 0 },
-		{ 1, 1 },
-		{ 0, 1 },
-		{ 1, 0 }
-	};
-	std::vector<real_t> outputSet = { 0, 1, 1, 0 };
-
-	MLPPMLPOld model(inputSet, outputSet, 2);
-	model.gradientDescent(0.1, 10000, ui);
-	alg.printVector(model.modelSetTest(inputSet));
-	std::cout << "ACCURACY: " << 100 * model.score() << "%" << std::endl;
 }
 void MLPPTestsOld::test_soft_max_network(bool ui) {
 	MLPPLinAlgOld alg;
