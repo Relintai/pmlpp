@@ -109,7 +109,7 @@ void MLPPMLP::gradient_descent(real_t learning_rate, int max_epoch, bool UI) {
 		// Calculating the weight/bias for layer 1
 
 		Ref<MLPPMatrix> D1_1 = error->outer_product(_weights2);
-		Ref<MLPPMatrix> D1_2 = D1_1->transposen()->hadamard_productn(avn.sigmoid_derivm(_z2));
+		Ref<MLPPMatrix> D1_2 = D1_1->hadamard_productn(avn.sigmoid_derivm(_z2));
 		Ref<MLPPMatrix> D1_3 = _input_set->transposen()->multn(D1_2);
 
 		// weight an bias updation for layer 1
@@ -328,7 +328,7 @@ void MLPPMLP::initialize() {
 
 	MLPPUtilities util;
 
-	_weights1->resize(Size2i(_k, _n_hidden));
+	_weights1->resize(Size2i(_n_hidden, _k));
 	_weights2->resize(_n_hidden);
 	_bias1->resize(_n_hidden);
 
@@ -397,38 +397,20 @@ MLPPMLP::MLPPMLP(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_ou
 	_output_set = p_output_set;
 
 	_y_hat.instance();
+	_weights1.instance();
+	_weights2.instance();
+	_z2.instance();
+	_a2.instance();
+	_bias1.instance();
 
 	_n_hidden = p_n_hidden;
-	_n = _input_set->size().y;
-	_k = _input_set->size().x;
 	_reg = p_reg;
 	_lambda = p_lambda;
 	_alpha = p_alpha;
 
-	MLPPActivation avn;
-	_y_hat->resize(_n);
+	_initialized = false;
 
-	MLPPUtilities util;
-
-	_weights1.instance();
-	_weights1->resize(Size2i(_k, _n_hidden));
-
-	_weights2.instance();
-	_weights2->resize(_n_hidden);
-
-	_bias1.instance();
-	_bias1->resize(_n_hidden);
-
-	util.weight_initializationm(_weights1);
-	util.weight_initializationv(_weights2);
-	util.bias_initializationv(_bias1);
-
-	_bias2 = util.bias_initializationr();
-
-	_z2.instance();
-	_a2.instance();
-
-	_initialized = true;
+	initialize();
 }
 
 MLPPMLP::MLPPMLP() {
