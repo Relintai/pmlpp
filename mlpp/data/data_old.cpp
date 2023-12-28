@@ -637,7 +637,7 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::string>> MLPPDataO
 		model = new MLPPSoftmaxNetOld(inputSet, outputSet, dimension);
 	}
 
-	model->gradientDescent(learning_rate, max_epoch, true);
+	model->gradientDescent(learning_rate, max_epoch, false);
 
 	std::vector<std::vector<real_t>> wordEmbeddings = model->getEmbeddings();
 	delete model;
