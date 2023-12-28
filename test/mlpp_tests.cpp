@@ -882,40 +882,31 @@ void MLPPTests::test_convolution_tensors_etc() {
 	ERR_PRINT(conv.convolve_2d(conv.gaussian_filter_2d(5, 1), laplacian, 1)->to_string());
 }
 void MLPPTests::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
-	/*
 	MLPPLinAlg alg;
 
-	// PCA, SVD, eigenvalues & eigenvectors
-	std::vector<std::vector<real_t>> inputSet = { { 1, 1 }, { 1, 1 } };
+	const real_t input_set_arr[] = {
+		1, 1, //
+		1, 1 //
+	};
 
-	MLPPLinAlg::EigenResultOld eigen = alg.eigen_old(inputSet);
+	Ref<MLPPMatrix> input_set = Ref<MLPPMatrix>(memnew(MLPPMatrix(input_set_arr, 2, 2)));
 
-	std::cout << "Eigenvectors:" << std::endl;
-	alg.printMatrix(eigen.eigen_vectors);
-	std::cout << std::endl;
-	std::cout << "Eigenvalues:" << std::endl;
-	alg.printMatrix(eigen.eigen_values);
+	// eigenvalues & eigenvectors
 
-	std::cout << "SVD OLD START" << std::endl;
+	MLPPLinAlg::EigenResult eigen = alg.eigen(input_set);
 
-	MLPPLinAlg::SVDResultOld svd_old = alg.SVD(inputSet);
+	PLOG_MSG("== Eigen ==");
 
-	std::cout << "U:" << std::endl;
-	alg.printMatrix(svd_old.U);
-	std::cout << "S:" << std::endl;
-	alg.printMatrix(svd_old.S);
-	std::cout << "Vt:" << std::endl;
-	alg.printMatrix(svd_old.Vt);
+	PLOG_MSG("Eigenvectors:");
+	PLOG_MSG(eigen.eigen_vectors->to_string());
+	PLOG_MSG("Eigenvalues:");
+	PLOG_MSG(eigen.eigen_values->to_string());
 
-	std::cout << "SVD OLD FIN" << std::endl;
+	// SVD
 
-	Ref<MLPPMatrix> input_set;
-	input_set.instance();
-	input_set->set_from_std_vectors(inputSet);
-	*/
+	PLOG_MSG("== SVD ==");
 
-	/*
-	String str_svd = "SVD\n";
+	String str_svd;
 
 	MLPPLinAlg::SVDResult svd = alg.svd(input_set);
 
@@ -928,17 +919,10 @@ void MLPPTests::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
 	str_svd += "\n";
 
 	PLOG_MSG(str_svd);
-	*/
 
-	/*
-	std::cout << "PCA" << std::endl;
+	// PCA
 
-	// PCA done using Jacobi's method to approximate eigenvalues and eigenvectors.
-	MLPPPCAOld dr_old(inputSet, 1); // 1 dimensional representation.
-	std::cout << std::endl;
-	std::cout << "OLD Dimensionally reduced representation:" << std::endl;
-	alg.printMatrix(dr_old.principalComponents());
-	std::cout << "SCORE: " << dr_old.score() << std::endl;
+	PLOG_MSG("== PCA ==");
 
 	// PCA done using Jacobi's method to approximate eigenvalues and eigenvectors.
 	MLPPPCA dr(input_set, 1); // 1 dimensional representation.
@@ -947,47 +931,54 @@ void MLPPTests::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
 	str += dr.principal_components()->to_string();
 	str += "\nSCORE: " + String::num(dr.score()) + "\n";
 	PLOG_MSG(str);
-	*/
 }
 
 void MLPPTests::test_nlp_and_data(bool ui) {
-	/*
 	MLPPLinAlg alg;
 	MLPPData data;
 
 	// NLP/DATA
-	std::string verbText = "I am appearing and thinking, as well as conducting.";
-	std::cout << "Stemming Example:" << std::endl;
-	std::cout << data.stemming(verbText) << std::endl;
-	std::cout << std::endl;
+	String verb_text = "I am appearing and thinking, as well as conducting.";
 
-	std::vector<std::string> sentences = { "He is a good boy", "She is a good girl", "The boy and girl are good" };
-	std::cout << "Bag of Words Example:" << std::endl;
-	alg.printMatrix(data.BOW(sentences, "Default"));
-	std::cout << std::endl;
-	std::cout << "TFIDF Example:" << std::endl;
-	alg.printMatrix(data.TFIDF(sentences));
-	std::cout << std::endl;
+	data.load_default_suffixes();
+	data.load_default_stop_words();
 
-	std::cout << "Tokenization:" << std::endl;
-	alg.printVector(data.tokenize(verbText));
-	std::cout << std::endl;
+	PLOG_MSG("Stemming Example:");
+	PLOG_MSG(data.stemming(verb_text));
 
-	std::cout << "Word2Vec:" << std::endl;
-	std::string textArchive = { "He is a good boy. She is a good girl. The boy and girl are good." };
-	std::vector<std::string> corpus = data.splitSentences(textArchive);
+	Vector<String> sentences = String("He is a good boy|She is a good girl|The boy and girl are good").split("|");
 
-	MLPPData::WordsToVecResult wtvres = data.word_to_vec(corpus, "CBOW", 2, 2, 0.1, 10000); // Can use either CBOW or Skip-n-gram.
+	PLOG_MSG("Bag of Words Example (BAG_OF_WORDS_TYPE_DEFAULT):");
+	PLOG_MSG(data.bag_of_words(sentences, MLPPData::BAG_OF_WORDS_TYPE_DEFAULT)->to_string());
 
-	alg.printMatrix(wtvres.word_embeddings);
-	std::cout << std::endl;
+	PLOG_MSG("Bag of Words Example (BAG_OF_WORDS_TYPE_BINARY):");
+	PLOG_MSG(data.bag_of_words(sentences, MLPPData::BAG_OF_WORDS_TYPE_BINARY)->to_string());
 
-	std::vector<std::string> textArchive2 = { "pizza", "pizza hamburger cookie", "hamburger", "ramen", "sushi", "ramen sushi" };
+	PLOG_MSG("TFIDF Example:");
+	PLOG_MSG(data.tfidf(sentences)->to_string());
 
-	alg.printMatrix(data.LSA(textArchive2, 2));
-	//alg.printMatrix(data.BOW(textArchive, "Default"));
-	std::cout << std::endl;
+	PLOG_MSG("Tokenization:");
+	PLOG_MSG(String(Variant(data.tokenize(verb_text))));
 
+	String text_archive = "He is a good boy. She is a good girl. The boy and girl are good.";
+	Vector<String> corpus = data.split_sentences(text_archive);
+
+	PLOG_MSG("Word2Vec (WORD_TO_VEC_TYPE_CBOW):");
+
+	MLPPData::WordsToVecResult wtvres = data.word_to_vec(corpus, MLPPData::WORD_TO_VEC_TYPE_CBOW, 2, 2, 0.1, 10000); // Can use either CBOW or Skip-n-gram.
+	PLOG_MSG(wtvres.word_embeddings->to_string());
+
+	PLOG_MSG("Word2Vec (WORD_TO_VEC_TYPE_SKIPGRAM):");
+
+	MLPPData::WordsToVecResult wtvres2 = data.word_to_vec(corpus, MLPPData::WORD_TO_VEC_TYPE_SKIPGRAM, 2, 2, 0.1, 10000); // Can use either CBOW or Skip-n-gram.
+	PLOG_MSG(wtvres2.word_embeddings->to_string());
+
+	Vector<String> text_archive2 = String("pizza|pizza hamburger cookie|hamburger|ramen|sushi|ramen sushi").split("|");
+
+	PLOG_MSG("LSA:");
+	PLOG_MSG(data.lsa(text_archive2, 2)->to_string());
+
+	/*
 	std::vector<std::vector<real_t>> inputSet = { { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 5 }, { 5, 6 } };
 	std::cout << "Feature Scaling Example:" << std::endl;
 	alg.printMatrix(data.featureScaling(inputSet));

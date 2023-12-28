@@ -348,7 +348,7 @@ void MLPPTestsOld::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
 
 void MLPPTestsOld::test_nlp_and_data(bool ui) {
 	MLPPLinAlgOld alg;
-	MLPPData data;
+	MLPPDataOld data;
 
 	// NLP/DATA
 	std::string verbText = "I am appearing and thinking, as well as conducting.";
@@ -372,15 +372,15 @@ void MLPPTestsOld::test_nlp_and_data(bool ui) {
 	std::string textArchive = { "He is a good boy. She is a good girl. The boy and girl are good." };
 	std::vector<std::string> corpus = data.splitSentences(textArchive);
 
-	MLPPData::WordsToVecResult wtvres = data.word_to_vec(corpus, "CBOW", 2, 2, 0.1, 10000); // Can use either CBOW or Skip-n-gram.
+	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::string>> wtvres = data.word2Vec(corpus, "CBOW", 2, 2, 0.1, 10000); // Can use either CBOW or Skip-n-gram.
 
-	alg.printMatrix(wtvres.word_embeddings);
+	alg.printMatrix(std::get<0>(wtvres));
 	std::cout << std::endl;
 
 	std::vector<std::string> textArchive2 = { "pizza", "pizza hamburger cookie", "hamburger", "ramen", "sushi", "ramen sushi" };
 
 	alg.printMatrix(data.LSA(textArchive2, 2));
-	//alg.printMatrix(data.BOW(textArchive, "Default"));
+	alg.printMatrix(data.BOW(textArchive2, "Default"));
 	std::cout << std::endl;
 
 	std::vector<std::vector<real_t>> inputSet = { { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 5 }, { 5, 6 } };
