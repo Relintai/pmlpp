@@ -854,10 +854,10 @@ MLPPLinAlg::SVDResult MLPPLinAlg::svd(const Ref<MLPPMatrix> &A) {
 	Ref<MLPPMatrix> singularvals = sqrtnm(left_eigen.eigen_values);
 	Ref<MLPPMatrix> sigma = zeromatnm(a_size.y, a_size.x);
 
-	Size2i singularvals_size = singularvals->size();
+	Size2i sigma_size = sigma->size();
 
-	for (int i = 0; i < singularvals_size.y; ++i) {
-		for (int j = 0; j < singularvals_size.x; ++j) {
+	for (int i = 0; i < sigma_size.y; ++i) {
+		for (int j = 0; j < sigma_size.x; ++j) {
 			sigma->element_set(i, j, singularvals->element_get(i, j));
 		}
 	}
