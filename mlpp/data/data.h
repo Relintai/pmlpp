@@ -140,31 +140,39 @@ public:
 	// Text-Based & NLP
 	std::string toLower(std::string text);
 	std::vector<char> split(std::string text);
-	std::vector<std::string> splitSentences(std::string data);
-	std::vector<std::string> removeSpaces(std::vector<std::string> data);
-	std::vector<std::string> removeNullByte(std::vector<std::string> data);
-	std::vector<std::string> segment(std::string text);
-	std::vector<real_t> tokenize(std::string text);
-	std::vector<std::string> removeStopWords(std::string text);
-	std::vector<std::string> removeStopWords(std::vector<std::string> segmented_data);
+	Vector<String> split_sentences(String data);
+	Vector<String> remove_spaces(Vector<String> data);
+	Vector<String> remove_empty(Vector<String> data);
+	Vector<String> segment(String text);
+	Vector<int> tokenize(String text);
+	Vector<String> remove_stop_words(String text);
+	Vector<String> remove_stop_words_vec(Vector<String> segmented_data);
 
-	std::string stemming(std::string text);
+	String stemming(String text);
 
-	std::vector<std::vector<real_t>> BOW(std::vector<std::string> sentences, std::string = "Default");
-	std::vector<std::vector<real_t>> TFIDF(std::vector<std::string> sentences);
-
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::string>> word2Vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, real_t learning_rate, int max_epoch);
-
-	struct WordsToVecResult {
-		std::vector<std::vector<real_t>> word_embeddings;
-		std::vector<std::string> word_list;
+	enum BagOfWordsType {
+		BAG_OF_WORDS_TYPE_DEFAULT = 0,
+		BAG_OF_WORDS_TYPE_BINARY,
 	};
 
-	WordsToVecResult word_to_vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, real_t learning_rate, int max_epoch);
+	Ref<MLPPMatrix> bag_of_words(Vector<String> sentences, BagOfWordsType type = BAG_OF_WORDS_TYPE_DEFAULT);
+	Ref<MLPPMatrix> tfidf(Vector<String> sentences);
 
-	std::vector<std::vector<real_t>> LSA(std::vector<std::string> sentences, int dim);
+	struct WordsToVecResult {
+		Ref<MLPPMatrix> word_embeddings;
+		Vector<String> word_list;
+	};
 
-	std::vector<std::string> createWordList(std::vector<std::string> sentences);
+	enum WordToVecType {
+		WORD_TO_VEC_TYPE_CBOW = 0,
+		WORD_TO_VEC_TYPE_SKIPGRAM,
+	};
+
+	WordsToVecResult word_to_vec(Vector<String> sentences, WordToVecType type, int windowSize, int dimension, real_t learning_rate, int max_epoch);
+
+	Ref<MLPPMatrix> lsa(Vector<String> sentences, int dim);
+
+	Vector<String> create_word_list(Vector<String> sentences);
 
 	// Extra
 	void setInputNames(std::string fileName, std::vector<std::string> &inputNames);
@@ -238,6 +246,12 @@ public:
 
 		return ret;
 	}
+
+	void load_default_suffixes();
+	void load_default_stop_words();
+
+	Vector<String> suffixes;
+	Vector<String> stop_words;
 
 protected:
 	static void _bind_methods();

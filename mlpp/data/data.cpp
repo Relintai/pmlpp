@@ -12,11 +12,9 @@
 #include "../lin_alg/lin_alg.h"
 #include "../stat/stat.h"
 
-#ifdef OLD_CLASSES_ENABLED
 #include "../lin_alg/lin_alg_old.h"
-#include "../softmax_net/softmax_net_old.h"
+#include "../softmax_net/softmax_net.h"
 #include "../stat/stat_old.h"
-#endif
 
 #include <algorithm>
 #include <cmath>
@@ -520,7 +518,6 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, s
 // MULTIVARIATE SUPERVISED
 
 void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real_t>> &inputSet, std::vector<real_t> &outputSet) {
-#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::string inputTemp;
 	std::string outputTemp;
@@ -546,11 +543,9 @@ void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real
 	}
 	inputSet = alg.transpose(inputSet);
 	dataFile.close();
-#endif
 }
 
 void MLPPData::printData(std::vector<std::string> inputName, std::string outputName, std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet) {
-#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	inputSet = alg.transpose(inputSet);
 	for (uint32_t i = 0; i < inputSet.size(); i++) {
@@ -564,13 +559,11 @@ void MLPPData::printData(std::vector<std::string> inputName, std::string outputN
 	for (uint32_t i = 0; i < outputSet.size(); i++) {
 		std::cout << outputSet[i] << std::endl;
 	}
-#endif
 }
 
 // UNSUPERVISED
 
 void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real_t>> &inputSet) {
-#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::string inputTemp;
 
@@ -592,11 +585,9 @@ void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real
 	}
 	inputSet = alg.transpose(inputSet);
 	dataFile.close();
-#endif
 }
 
 void MLPPData::printData(std::vector<std::string> inputName, std::vector<std::vector<real_t>> inputSet) {
-#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	inputSet = alg.transpose(inputSet);
 	for (uint32_t i = 0; i < inputSet.size(); i++) {
@@ -605,7 +596,6 @@ void MLPPData::printData(std::vector<std::string> inputName, std::vector<std::ve
 			std::cout << inputSet[i][j] << std::endl;
 		}
 	}
-#endif
 }
 
 // SIMPLE
@@ -661,7 +651,6 @@ std::vector<std::vector<real_t>> MLPPData::rgb2gray(std::vector<std::vector<std:
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2ycbcr(std::vector<std::vector<std::vector<real_t>>> input) {
-#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> YCbCr;
 	YCbCr = alg.resize(YCbCr, input);
@@ -673,15 +662,11 @@ std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2ycbcr(std::vector<st
 		}
 	}
 	return YCbCr;
-#else
-	return std::vector<std::vector<std::vector<real_t>>>();
-#endif
 }
 
 // Conversion formulas available here:
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2hsv(std::vector<std::vector<std::vector<real_t>>> input) {
-#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> HSV;
 	HSV = alg.resize(HSV, input);
@@ -720,34 +705,23 @@ std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2hsv(std::vector<std:
 		}
 	}
 	return HSV;
-#else
-	return std::vector<std::vector<std::vector<real_t>>>();
-#endif
 }
 
 // http://machinethatsees.blogspot.com/2013/07/how-to-convert-rgb-to-xyz-or-vice-versa.html
 std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2xyz(std::vector<std::vector<std::vector<real_t>>> input) {
-#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> XYZ;
 	XYZ = alg.resize(XYZ, input);
 	std::vector<std::vector<real_t>> RGB2XYZ = { { 0.4124564, 0.3575761, 0.1804375 }, { 0.2126726, 0.7151522, 0.0721750 }, { 0.0193339, 0.1191920, 0.9503041 } };
 	return alg.vector_wise_tensor_product(input, RGB2XYZ);
-#else
-	return std::vector<std::vector<std::vector<real_t>>>();
-#endif
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPData::xyz2rgb(std::vector<std::vector<std::vector<real_t>>> input) {
-#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> XYZ;
 	XYZ = alg.resize(XYZ, input);
 	std::vector<std::vector<real_t>> RGB2XYZ = alg.inverse({ { 0.4124564, 0.3575761, 0.1804375 }, { 0.2126726, 0.7151522, 0.0721750 }, { 0.0193339, 0.1191920, 0.9503041 } });
 	return alg.vector_wise_tensor_product(input, RGB2XYZ);
-#else
-	return std::vector<std::vector<std::vector<real_t>>>();
-#endif
 }
 
 // TEXT-BASED & NLP
@@ -766,54 +740,58 @@ std::vector<char> MLPPData::split(std::string text) {
 	return split_data;
 }
 
-std::vector<std::string> MLPPData::splitSentences(std::string data) {
-	std::vector<std::string> sentences;
-	std::string currentStr = "";
+Vector<String> MLPPData::split_sentences(String data) {
+	Vector<String> sentences;
 
-	for (uint32_t i = 0; i < data.length(); i++) {
-		currentStr.push_back(data[i]);
+	int start_index = 0;
+
+	for (int i = 0; i < data.length() - 1; ++i) {
 		if (data[i] == '.' && data[i + 1] != '.') {
-			sentences.push_back(currentStr);
-			currentStr = "";
-			i++;
+			continue;
+		}
+
+		if (data[i] == '.') {
+			sentences.push_back(data.substr_index(start_index, i));
+			start_index = i + 1;
 		}
 	}
+
+	if (start_index != data.length() - 1) {
+		sentences.push_back(data.substr_index(start_index, data.length() - 1));
+	}
+
 	return sentences;
 }
 
-std::vector<std::string> MLPPData::removeSpaces(std::vector<std::string> data) {
-	for (uint32_t i = 0; i < data.size(); i++) {
-		auto it = data[i].begin();
-		for (uint32_t j = 0; j < data[i].length(); j++) {
-			if (data[i][j] == ' ') {
-				data[i].erase(it);
-			}
-			it++;
-		}
+Vector<String> MLPPData::remove_spaces(Vector<String> data) {
+	for (int i = 0; i < data.size(); i++) {
+		data.write[i] = data[i].replace(" ", "");
 	}
 	return data;
 }
 
-std::vector<std::string> MLPPData::removeNullByte(std::vector<std::string> data) {
-	for (uint32_t i = 0; i < data.size(); i++) {
-		if (data[i] == "\0") {
-			data.erase(data.begin() + i);
+Vector<String> MLPPData::remove_empty(Vector<String> data) {
+	for (int i = 0; i < data.size(); ++i) {
+		if (data[i].empty()) {
+			data.remove(i);
 		}
 	}
+
 	return data;
 }
 
-std::vector<std::string> MLPPData::segment(std::string text) {
-	std::vector<std::string> segmented_data;
+Vector<String> MLPPData::segment(String text) {
+	Vector<String> segmented_data;
 	int prev_delim = 0;
-	for (uint32_t i = 0; i < text.length(); i++) {
+
+	for (int i = 0; i < text.length(); i++) {
 		if (text[i] == ' ') {
 			segmented_data.push_back(text.substr(prev_delim, i - prev_delim));
 			prev_delim = i + 1;
 		} else if (text[i] == ',' || text[i] == '!' || text[i] == '.' || text[i] == '-') {
 			segmented_data.push_back(text.substr(prev_delim, i - prev_delim));
-			std::string punc;
-			punc.push_back(text[i]);
+			String punc;
+			punc += text[i];
 			segmented_data.push_back(punc);
 			prev_delim = i + 2;
 			i++;
@@ -825,16 +803,17 @@ std::vector<std::string> MLPPData::segment(std::string text) {
 	return segmented_data;
 }
 
-std::vector<real_t> MLPPData::tokenize(std::string text) {
+Vector<int> MLPPData::tokenize(String text) {
 	int max_num = 0;
 	bool new_num = true;
-	std::vector<std::string> segmented_data = segment(text);
-	std::vector<real_t> tokenized_data;
+	Vector<String> segmented_data = segment(text);
+	Vector<int> tokenized_data;
 	tokenized_data.resize(segmented_data.size());
-	for (uint32_t i = 0; i < segmented_data.size(); i++) {
+
+	for (int i = 0; i < segmented_data.size(); i++) {
 		for (int j = i - 1; j >= 0; j--) {
 			if (segmented_data[i] == segmented_data[j]) {
-				tokenized_data[i] = tokenized_data[j];
+				tokenized_data.write[i] = tokenized_data[j];
 				new_num = false;
 			}
 		}
@@ -842,50 +821,49 @@ std::vector<real_t> MLPPData::tokenize(std::string text) {
 			new_num = true;
 		} else {
 			max_num++;
-			tokenized_data[i] = max_num;
+			tokenized_data.write[i] = max_num;
 		}
 	}
+
 	return tokenized_data;
 }
 
-std::vector<std::string> MLPPData::removeStopWords(std::string text) {
-	std::vector<std::string> stopWords = { "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now" };
-	std::vector<std::string> segmented_data = removeSpaces(segment(toLower(text)));
+Vector<String> MLPPData::remove_stop_words(String text) {
+	Vector<String> segmented_data = remove_spaces(segment(text.to_lower()));
 
-	for (uint32_t i = 0; i < stopWords.size(); i++) {
-		for (uint32_t j = 0; j < segmented_data.size(); j++) {
-			if (segmented_data[j] == stopWords[i]) {
-				segmented_data.erase(segmented_data.begin() + j);
+	for (int i = 0; i < stop_words.size(); i++) {
+		for (int j = 0; j < segmented_data.size(); j++) {
+			if (segmented_data[j] == stop_words[i]) {
+				segmented_data.remove(j);
+				--j;
 			}
 		}
 	}
+
 	return segmented_data;
 }
 
-std::vector<std::string> MLPPData::removeStopWords(std::vector<std::string> segmented_data) {
-	std::vector<std::string> stopWords = { "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now" };
-	for (uint32_t i = 0; i < segmented_data.size(); i++) {
-		for (uint32_t j = 0; j < stopWords.size(); j++) {
-			if (segmented_data[i] == stopWords[j]) {
-				segmented_data.erase(segmented_data.begin() + i);
+Vector<String> MLPPData::remove_stop_words_vec(Vector<String> segmented_data) {
+	for (int i = 0; i < segmented_data.size(); i++) {
+		for (int j = 0; j < stop_words.size(); j++) {
+			if (segmented_data[i] == stop_words[j]) {
+				segmented_data.remove(i);
+				--i;
 			}
 		}
 	}
+
 	return segmented_data;
 }
 
-std::string MLPPData::stemming(std::string text) {
-	// Our list of suffixes which we use to compare against
-	std::vector<std::string> suffixes = { "eer", "er", "ion", "ity", "ment", "ness", "or", "sion", "ship", "th", "able", "ible", "al", "ant", "ary", "ful", "ic", "ious", "ous", "ive", "less", "y", "ed", "en", "ing", "ize", "ise", "ly", "ward", "wise" };
+String MLPPData::stemming(String text) {
 	int padding_size = 4;
-	char padding = ' '; // our padding
+	String padding = " "; // our padding
 
-	for (int i = 0; i < padding_size; i++) {
-		text[text.length() + i] = padding; // ' ' will be our padding value
-	}
+	text += String(padding).repeat(padding_size); // ' ' will be our padding value
 
-	for (uint32_t i = 0; i < text.size(); i++) {
-		for (uint32_t j = 0; j < suffixes.size(); j++) {
+	for (int i = 0; i < text.length(); i++) {
+		for (int j = 0; j < suffixes.size(); j++) {
 			if (text.substr(i, suffixes[j].length()) == suffixes[j] && (text[i + suffixes[j].length()] == ' ' || text[i + suffixes[j].length()] == ',' || text[i + suffixes[j].length()] == '-' || text[i + suffixes[j].length()] == '.' || text[i + suffixes[j].length()] == '!')) {
 				text.erase(i, suffixes[j].length());
 			}
@@ -895,196 +873,130 @@ std::string MLPPData::stemming(std::string text) {
 	return text;
 }
 
-std::vector<std::vector<real_t>> MLPPData::BOW(std::vector<std::string> sentences, std::string type) {
+Ref<MLPPMatrix> MLPPData::bag_of_words(Vector<String> sentences, BagOfWordsType type) {
 	/*
 	STEPS OF BOW:
-		1) To lowercase (done by removeStopWords function by def)
+		1) To lowercase (done by remove_stop_words function by def)
 		2) Removing stop words
 		3) Obtain a list of the used words
 		4) Create a one hot encoded vector of the words and sentences
 		5) Sentence.size() x list.size() matrix
 	*/
 
-	std::vector<std::string> wordList = removeNullByte(removeStopWords(createWordList(sentences)));
+	Vector<String> word_list = remove_empty(remove_stop_words_vec(create_word_list(sentences)));
 
-	std::vector<std::vector<std::string>> segmented_sentences;
+	Vector<Vector<String>> segmented_sentences;
 	segmented_sentences.resize(sentences.size());
 
-	for (uint32_t i = 0; i < sentences.size(); i++) {
-		segmented_sentences[i] = removeStopWords(sentences[i]);
+	for (int i = 0; i < sentences.size(); i++) {
+		segmented_sentences.write[i] = remove_stop_words(sentences[i]);
 	}
 
-	std::vector<std::vector<real_t>> bow;
+	Ref<MLPPMatrix> bow;
+	bow.instance();
+	bow->resize(Size2i(word_list.size(), sentences.size()));
+	bow->fill(0);
 
-	bow.resize(sentences.size());
-	for (uint32_t i = 0; i < bow.size(); i++) {
-		bow[i].resize(wordList.size());
-	}
-
-	for (uint32_t i = 0; i < segmented_sentences.size(); i++) {
-		for (uint32_t j = 0; j < segmented_sentences[i].size(); j++) {
-			for (uint32_t k = 0; k < wordList.size(); k++) {
-				if (segmented_sentences[i][j] == wordList[k]) {
-					if (type == "Binary") {
-						bow[i][k] = 1;
+	for (int i = 0; i < segmented_sentences.size(); i++) {
+		for (int j = 0; j < segmented_sentences[i].size(); j++) {
+			for (int k = 0; k < word_list.size(); k++) {
+				if (segmented_sentences[i][j] == word_list[k]) {
+					if (type == BAG_OF_WORDS_TYPE_BINARY) {
+						bow->element_set(i, k, 1);
 					} else {
-						bow[i][k]++;
+						bow->element_set(i, k, bow->element_get(i, k) + 1);
 					}
 				}
 			}
 		}
 	}
+
 	return bow;
 }
 
-std::vector<std::vector<real_t>> MLPPData::TFIDF(std::vector<std::string> sentences) {
-#ifdef OLD_CLASSES_ENABLED
-	MLPPLinAlgOld alg;
-	std::vector<std::string> wordList = removeNullByte(removeStopWords(createWordList(sentences)));
+Ref<MLPPMatrix> MLPPData::tfidf(Vector<String> sentences) {
+	Vector<String> word_list = remove_empty(remove_stop_words_vec(create_word_list(sentences)));
 
-	std::vector<std::vector<std::string>> segmented_sentences;
+	Vector<Vector<String>> segmented_sentences;
 	segmented_sentences.resize(sentences.size());
 
-	for (uint32_t i = 0; i < sentences.size(); i++) {
-		segmented_sentences[i] = removeStopWords(sentences[i]);
+	for (int i = 0; i < sentences.size(); i++) {
+		segmented_sentences.write[i] = remove_stop_words(sentences[i]);
 	}
 
-	std::vector<std::vector<real_t>> TF;
-	std::vector<int> frequency;
-	frequency.resize(wordList.size());
-	TF.resize(segmented_sentences.size());
-	for (uint32_t i = 0; i < TF.size(); i++) {
-		TF[i].resize(wordList.size());
-	}
-	for (uint32_t i = 0; i < segmented_sentences.size(); i++) {
-		std::vector<bool> present(wordList.size(), false);
-		for (uint32_t j = 0; j < segmented_sentences[i].size(); j++) {
-			for (uint32_t k = 0; k < wordList.size(); k++) {
-				if (segmented_sentences[i][j] == wordList[k]) {
-					TF[i][k]++;
+	Ref<MLPPMatrix> TF;
+	TF.instance();
+	TF->resize(Size2i(word_list.size(), segmented_sentences.size()));
+
+	Vector<int> frequency;
+	frequency.resize(word_list.size());
+	frequency.fill(0);
+
+	Ref<MLPPVector> TF_row;
+	TF_row.instance();
+	TF_row->resize(word_list.size());
+
+	for (int i = 0; i < segmented_sentences.size(); i++) {
+		Vector<bool> present;
+		present.resize(word_list.size());
+		present.fill(false);
+
+		for (int j = 0; j < segmented_sentences[i].size(); j++) {
+			for (int k = 0; k < word_list.size(); k++) {
+				if (segmented_sentences[i][j] == word_list[k]) {
+					TF->element_set(i, k, TF->element_get(i, k) + 1);
+
 					if (!present[k]) {
-						frequency[k]++;
-						present[k] = true;
+						frequency.write[k]++;
+						present.write[k] = true;
 					}
 				}
 			}
 		}
-		TF[i] = alg.scalarMultiply(real_t(1) / real_t(segmented_sentences[i].size()), TF[i]);
+
+		TF->row_get_into_mlpp_vector(i, TF_row);
+		TF_row->scalar_multiply(real_t(1) / real_t(segmented_sentences[i].size()));
+		TF->row_set_mlpp_vector(i, TF_row);
 	}
 
-	std::vector<real_t> IDF;
+	Vector<real_t> IDF;
 	IDF.resize(frequency.size());
 
-	for (uint32_t i = 0; i < IDF.size(); i++) {
-		IDF[i] = std::log((real_t)segmented_sentences.size() / (real_t)frequency[i]);
+	for (int i = 0; i < IDF.size(); i++) {
+		IDF.write[i] = Math::log((real_t)segmented_sentences.size() / (real_t)frequency[i]);
 	}
 
-	std::vector<std::vector<real_t>> TFIDF;
-	TFIDF.resize(segmented_sentences.size());
-	for (uint32_t i = 0; i < TFIDF.size(); i++) {
-		TFIDF[i].resize(wordList.size());
-	}
+	Ref<MLPPMatrix> TFIDF;
+	TFIDF.instance();
+	Size2i tfidf_size = Size2i(word_list.size(), segmented_sentences.size());
+	TFIDF->resize(tfidf_size);
 
-	for (uint32_t i = 0; i < TFIDF.size(); i++) {
-		for (uint32_t j = 0; j < TFIDF[i].size(); j++) {
-			TFIDF[i][j] = TF[i][j] * IDF[j];
+	for (int i = 0; i < tfidf_size.y; i++) {
+		for (int j = 0; j < tfidf_size.x; j++) {
+			TFIDF->element_set(i, j, TF->element_get(i, j) * IDF[j]);
 		}
 	}
 
 	return TFIDF;
-#else
-	return std::vector<std::vector<real_t>>();
-#endif
 }
 
-std::tuple<std::vector<std::vector<real_t>>, std::vector<std::string>> MLPPData::word2Vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, real_t learning_rate, int max_epoch) {
-#ifdef OLD_CLASSES_ENABLED
-	std::vector<std::string> wordList = removeNullByte(removeStopWords(createWordList(sentences)));
-
-	std::vector<std::vector<std::string>> segmented_sentences;
-	segmented_sentences.resize(sentences.size());
-
-	for (uint32_t i = 0; i < sentences.size(); i++) {
-		segmented_sentences[i] = removeStopWords(sentences[i]);
-	}
-
-	std::vector<std::string> inputStrings;
-	std::vector<std::string> outputStrings;
-
-	for (uint32_t i = 0; i < segmented_sentences.size(); i++) {
-		for (uint32_t j = 0; j < segmented_sentences[i].size(); j++) {
-			for (int k = windowSize; k > 0; k--) {
-				if (j - k >= 0) {
-					inputStrings.push_back(segmented_sentences[i][j]);
-
-					outputStrings.push_back(segmented_sentences[i][j - k]);
-				}
-				if (j + k <= segmented_sentences[i].size() - 1) {
-					inputStrings.push_back(segmented_sentences[i][j]);
-					outputStrings.push_back(segmented_sentences[i][j + k]);
-				}
-			}
-		}
-	}
-
-	uint32_t inputSize = inputStrings.size();
-
-	inputStrings.insert(inputStrings.end(), outputStrings.begin(), outputStrings.end());
-
-	std::vector<std::vector<real_t>> BOW = MLPPData::BOW(inputStrings, "Binary");
-
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<std::vector<real_t>> outputSet;
-
-	for (uint32_t i = 0; i < inputSize; i++) {
-		inputSet.push_back(BOW[i]);
-	}
-
-	for (uint32_t i = inputSize; i < BOW.size(); i++) {
-		outputSet.push_back(BOW[i]);
-	}
-
-	MLPPSoftmaxNetOld *model;
-
-	if (type == "Skipgram") {
-		model = new MLPPSoftmaxNetOld(outputSet, inputSet, dimension);
-	} else { // else = CBOW. We maintain it is a default.
-		model = new MLPPSoftmaxNetOld(inputSet, outputSet, dimension);
-	}
-
-	model->gradientDescent(learning_rate, max_epoch, true);
-
-	std::vector<std::vector<real_t>> wordEmbeddings = model->getEmbeddings();
-	delete model;
-	return { wordEmbeddings, wordList };
-#else
-	return std::tuple<std::vector<std::vector<real_t>>, std::vector<std::string>>();
-#endif
-}
-
-struct WordsToVecResult {
-	std::vector<std::vector<real_t>> word_embeddings;
-	std::vector<std::string> word_list;
-};
-
-MLPPData::WordsToVecResult MLPPData::word_to_vec(std::vector<std::string> sentences, std::string type, int windowSize, int dimension, real_t learning_rate, int max_epoch) {
+MLPPData::WordsToVecResult MLPPData::word_to_vec(Vector<String> sentences, WordToVecType type, int windowSize, int dimension, real_t learning_rate, int max_epoch) {
 	WordsToVecResult res;
 
-#ifdef OLD_CLASSES_ENABLED
-	res.word_list = removeNullByte(removeStopWords(createWordList(sentences)));
+	res.word_list = remove_empty(remove_stop_words_vec(create_word_list(sentences)));
 
-	std::vector<std::vector<std::string>> segmented_sentences;
+	Vector<Vector<String>> segmented_sentences;
 	segmented_sentences.resize(sentences.size());
 
-	for (uint32_t i = 0; i < sentences.size(); i++) {
-		segmented_sentences[i] = removeStopWords(sentences[i]);
+	for (int i = 0; i < sentences.size(); i++) {
+		segmented_sentences.write[i] = remove_stop_words(sentences[i]);
 	}
 
-	std::vector<std::string> inputStrings;
-	std::vector<std::string> outputStrings;
+	Vector<String> inputStrings;
+	Vector<String> outputStrings;
 
-	for (uint32_t i = 0; i < segmented_sentences.size(); i++) {
-		for (uint32_t j = 0; j < segmented_sentences[i].size(); j++) {
+	for (int i = 0; i < segmented_sentences.size(); i++) {
+		for (int j = 0; j < segmented_sentences[i].size(); j++) {
 			for (int k = windowSize; k > 0; k--) {
 				int jmk = (int)j - k;
 
@@ -1101,70 +1013,99 @@ MLPPData::WordsToVecResult MLPPData::word_to_vec(std::vector<std::string> senten
 		}
 	}
 
-	uint32_t inputSize = inputStrings.size();
+	int input_size = inputStrings.size();
 
-	inputStrings.insert(inputStrings.end(), outputStrings.begin(), outputStrings.end());
+	inputStrings.append_array(outputStrings);
 
-	std::vector<std::vector<real_t>> BOW = MLPPData::BOW(inputStrings, "Binary");
+	Ref<MLPPMatrix> bow = bag_of_words(inputStrings, BAG_OF_WORDS_TYPE_BINARY);
+	Size2i bow_size = bow->size();
 
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<std::vector<real_t>> outputSet;
+	Ref<MLPPMatrix> input_set;
+	Ref<MLPPMatrix> output_set;
 
-	for (uint32_t i = 0; i < inputSize; i++) {
-		inputSet.push_back(BOW[i]);
+	input_set.instance();
+	output_set.instance();
+
+	input_set->resize(Size2i(bow_size.x, input_size));
+
+	Ref<MLPPVector> row_tmp;
+	row_tmp.instance();
+	row_tmp->resize(bow_size.x);
+
+	for (int i = 0; i < input_size; i++) {
+		bow->row_get_into_mlpp_vector(i, row_tmp);
+		input_set->row_set_mlpp_vector(i, row_tmp);
 	}
 
-	for (uint32_t i = inputSize; i < BOW.size(); i++) {
-		outputSet.push_back(BOW[i]);
+	output_set->resize(Size2i(bow_size.x, bow_size.y - input_size));
+	Size2i output_set_size = output_set->size();
+
+	for (int i = 0; i < output_set_size.y; i++) {
+		bow->row_get_into_mlpp_vector(i + input_size, row_tmp);
+		input_set->row_set_mlpp_vector(i, row_tmp);
 	}
 
-	MLPPSoftmaxNetOld *model;
+	MLPPSoftmaxNet *model;
 
-	if (type == "Skipgram") {
-		model = new MLPPSoftmaxNetOld(outputSet, inputSet, dimension);
+	if (type == WORD_TO_VEC_TYPE_SKIPGRAM) {
+		model = memnew(MLPPSoftmaxNet(output_set, input_set, dimension));
 	} else { // else = CBOW. We maintain it is a default.
-		model = new MLPPSoftmaxNetOld(inputSet, outputSet, dimension);
+		model = memnew(MLPPSoftmaxNet(input_set, output_set, dimension));
 	}
 
-	model->gradientDescent(learning_rate, max_epoch, false);
+	model->train_gradient_descent(learning_rate, max_epoch);
 
-	res.word_embeddings = model->getEmbeddings();
-	delete model;
-#endif
+	res.word_embeddings = model->get_embeddings();
+	memdelete(model);
 
 	return res;
 }
 
-std::vector<std::vector<real_t>> MLPPData::LSA(std::vector<std::string> sentences, int dim) {
-#ifdef OLD_CLASSES_ENABLED
-	MLPPLinAlgOld alg;
-	std::vector<std::vector<real_t>> docWordData = BOW(sentences, "Binary");
+Ref<MLPPMatrix> MLPPData::lsa(Vector<String> sentences, int dim) {
+	MLPPLinAlg alg;
 
-	MLPPLinAlgOld::SVDResultOld svr_res = alg.SVD(docWordData);
-	std::vector<std::vector<real_t>> S_trunc = alg.zeromat(dim, dim);
-	std::vector<std::vector<real_t>> Vt_trunc;
+	Ref<MLPPMatrix> doc_word_data = bag_of_words(sentences, BAG_OF_WORDS_TYPE_BINARY);
+
+	MLPPLinAlg::SVDResult svr_res = alg.svd(doc_word_data);
+
+	Ref<MLPPMatrix> S_trunc = alg.zeromatnm(dim, dim);
+	Ref<MLPPMatrix> Vt_trunc;
+	Vt_trunc.instance();
+	Vt_trunc->resize(Size2i(svr_res.Vt->size().x, dim));
+
+	Ref<MLPPVector> row_rmp;
+	row_rmp.instance();
+	row_rmp->resize(svr_res.Vt->size().x);
+
 	for (int i = 0; i < dim; i++) {
-		S_trunc[i][i] = svr_res.S[i][i];
-		Vt_trunc.push_back(svr_res.Vt[i]);
+		S_trunc->element_set(i, i, svr_res.S->element_get(i, i));
+
+		svr_res.Vt->row_get_into_mlpp_vector(i, row_rmp);
+		Vt_trunc->row_set_mlpp_vector(i, row_rmp);
 	}
 
-	std::vector<std::vector<real_t>> embeddings = alg.matmult(S_trunc, Vt_trunc);
+	Ref<MLPPMatrix> embeddings = S_trunc->multn(Vt_trunc);
 	return embeddings;
-#else
-	return std::vector<std::vector<real_t>>();
-#endif
 }
 
-std::vector<std::string> MLPPData::createWordList(std::vector<std::string> sentences) {
-	std::string combinedText = "";
-	for (uint32_t i = 0; i < sentences.size(); i++) {
+struct SVDResult {
+	Ref<MLPPMatrix> U;
+	Ref<MLPPMatrix> S;
+	Ref<MLPPMatrix> Vt;
+};
+
+Vector<String> MLPPData::create_word_list(Vector<String> sentences) {
+	String combined_text = "";
+
+	for (int i = 0; i < sentences.size(); i++) {
 		if (i != 0) {
-			combinedText += " ";
+			combined_text += " ";
 		}
-		combinedText += sentences[i];
+
+		combined_text += sentences[i];
 	}
 
-	return removeSpaces(vecToSet(removeStopWords(combinedText)));
+	return remove_spaces(vec_to_set(remove_stop_words(combined_text)));
 }
 
 // EXTRA
@@ -1183,7 +1124,6 @@ void MLPPData::setInputNames(std::string fileName, std::vector<std::string> &inp
 }
 
 std::vector<std::vector<real_t>> MLPPData::featureScaling(std::vector<std::vector<real_t>> X) {
-#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	X = alg.transpose(X);
 	std::vector<real_t> max_elements, min_elements;
@@ -1201,13 +1141,9 @@ std::vector<std::vector<real_t>> MLPPData::featureScaling(std::vector<std::vecto
 		}
 	}
 	return alg.transpose(X);
-#else
-	return std::vector<std::vector<real_t>>();
-#endif
 }
 
 std::vector<std::vector<real_t>> MLPPData::meanNormalization(std::vector<std::vector<real_t>> X) {
-#ifdef OLD_CLASSES_ENABLED
 	MLPPLinAlgOld alg;
 	MLPPStatOld stat;
 	// (X_j - mu_j) / std_j, for every j
@@ -1217,13 +1153,9 @@ std::vector<std::vector<real_t>> MLPPData::meanNormalization(std::vector<std::ve
 		X[i] = alg.scalarMultiply(1 / stat.standardDeviation(X[i]), X[i]);
 	}
 	return X;
-#else
-	return std::vector<std::vector<real_t>>();
-#endif
 }
 
 std::vector<std::vector<real_t>> MLPPData::meanCentering(std::vector<std::vector<real_t>> X) {
-#ifdef OLD_CLASSES_ENABLED
 	MLPPStatOld stat;
 	for (uint32_t i = 0; i < X.size(); i++) {
 		real_t mean_i = stat.mean(X[i]);
@@ -1232,9 +1164,6 @@ std::vector<std::vector<real_t>> MLPPData::meanCentering(std::vector<std::vector
 		}
 	}
 	return X;
-#else
-	return std::vector<std::vector<real_t>>();
-#endif
 }
 
 std::vector<std::vector<real_t>> MLPPData::oneHotRep(std::vector<real_t> tempOutputSet, int n_class) {
@@ -1318,6 +1247,15 @@ Ref<MLPPMatrix> MLPPData::one_hot_rep(const Ref<MLPPVector> &temp_output_set, in
 	}
 
 	return output_set;
+}
+
+void MLPPData::load_default_suffixes() {
+	// Our list of suffixes which we use to compare against
+	suffixes = String("eer er ion ity ment ness or sion ship th able ible al ant ary ful ic ious ous ive less y ed en ing ize ise ly ward wise").split_spaces();
+}
+
+void MLPPData::load_default_stop_words() {
+	stop_words = String("i me my myself we our ours ourselves you your yours yourself yourselves he him his himself she her hers herself it its itself they them their theirs themselves what which who whom this that these those am is are was were be been being have has had having do does did doing a an the and but if or because as until while of at by for with about against between into through during before after above below to from up down in out on off over under again further then once here there when where why how all any both each few more most other some such no nor not only own same so than too very s t can will just don should now").split_spaces();
 }
 
 void MLPPData::_bind_methods() {
