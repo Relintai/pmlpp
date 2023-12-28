@@ -159,7 +159,7 @@ MLPPMultiOutputLayer::MLPPMultiOutputLayer(int n_output, int p_n_hidden, MLPPAct
 	_weights.instance();
 	_bias.instance();
 
-	_weights->resize(Size2i(_n_hidden, _n_output));
+	_weights->resize(Size2i(_n_output, _n_hidden));
 	_bias->resize(_n_output);
 
 	MLPPUtilities utils;
