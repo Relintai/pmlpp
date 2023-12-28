@@ -597,10 +597,12 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::string>> MLPPDataO
 	for (uint32_t i = 0; i < segmented_sentences.size(); i++) {
 		for (uint32_t j = 0; j < segmented_sentences[i].size(); j++) {
 			for (int k = windowSize; k > 0; k--) {
-				if (j - k >= 0) {
+				int jmk = (int)j - k;
+
+				if (jmk >= 0) {
 					inputStrings.push_back(segmented_sentences[i][j]);
 
-					outputStrings.push_back(segmented_sentences[i][j - k]);
+					outputStrings.push_back(segmented_sentences[i][jmk]);
 				}
 				if (j + k <= segmented_sentences[i].size() - 1) {
 					inputStrings.push_back(segmented_sentences[i][j]);
