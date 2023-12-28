@@ -1208,7 +1208,7 @@ real_t MLPPVector::min_element() const {
 	for (int i = 0; i < _size; i++) {
 		real_t current_element = aa[i];
 
-		if (current_element > min_element) {
+		if (current_element < min_element) {
 			min_element = current_element;
 		}
 	}
@@ -1224,7 +1224,7 @@ int MLPPVector::min_element_index() const {
 	for (int i = 0; i < _size; i++) {
 		real_t current_element = aa[i];
 
-		if (current_element > min_element) {
+		if (current_element < min_element) {
 			min_element = current_element;
 			index = i;
 		}
