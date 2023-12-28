@@ -85,7 +85,9 @@ MLPPBernoulliNB::MLPPBernoulliNB(const Ref<MLPPMatrix> &p_input_set, const Ref<M
 	_prior_1 = 0;
 	_prior_0 = 0;
 
+	_vocab.instance();
 	_y_hat.instance();
+
 	_y_hat->resize(_output_set->size());
 
 	evaluate();
@@ -157,7 +159,7 @@ void MLPPBernoulliNB::evaluate() {
 
 		Vector<int> found_indices;
 
-		for (int j = 0; j < _input_set->size().y; j++) {
+		for (int j = 0; j < _input_set->size().x; j++) {
 			for (int k = 0; k < _vocab->size(); k++) {
 				if (_input_set->element_get(i, j) == _vocab->element_get(k)) {
 					score_0 += Math::log(static_cast<real_t>(_theta[0][_vocab->element_get(k)]));

@@ -135,7 +135,10 @@ MLPPMultinomialNB::MLPPMultinomialNB(const Ref<MLPPMatrix> &p_input_set, const R
 	_output_set = p_output_set;
 	_class_num = pclass_num;
 
+	_priors.instance();
+	_vocab.instance();
 	_y_hat.instance();
+
 	_y_hat->resize(_output_set->size());
 
 	_initialized = true;
