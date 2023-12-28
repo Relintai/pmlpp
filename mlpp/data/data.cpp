@@ -15,6 +15,7 @@
 #include "../lin_alg/lin_alg_old.h"
 #include "../softmax_net/softmax_net.h"
 #include "../stat/stat_old.h"
+#include "data_old.h"
 
 #include <algorithm>
 #include <cmath>
@@ -430,9 +431,10 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 	const int ONE_HOT_NUM = 3;
 	std::vector<std::vector<real_t>> inputSet;
 	std::vector<real_t> tempOutputSet;
+	MLPPDataOld d;
 
 	setData(IRIS_SIZE, "/Users/marcmelikyan/Desktop/Data/Iris.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<real_t>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	std::vector<std::vector<real_t>> outputSet = d.oneHotRep(tempOutputSet, ONE_HOT_NUM);
 	return { inputSet, outputSet };
 }
 
@@ -441,9 +443,10 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 	const int ONE_HOT_NUM = 3;
 	std::vector<std::vector<real_t>> inputSet;
 	std::vector<real_t> tempOutputSet;
+	MLPPDataOld d;
 
 	setData(WINE_SIZE, "MLPP/Data/Datasets/Iris.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<real_t>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	std::vector<std::vector<real_t>> outputSet = d.oneHotRep(tempOutputSet, ONE_HOT_NUM);
 	return { inputSet, outputSet };
 }
 
@@ -452,9 +455,10 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 	const int ONE_HOT_NUM = 10;
 	std::vector<std::vector<real_t>> inputSet;
 	std::vector<real_t> tempOutputSet;
+	MLPPDataOld d;
 
 	setData(MNIST_SIZE, "MLPP/Data/Datasets/MnistTrain.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<real_t>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	std::vector<std::vector<real_t>> outputSet = d.oneHotRep(tempOutputSet, ONE_HOT_NUM);
 	return { inputSet, outputSet };
 }
 
@@ -463,9 +467,10 @@ std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> M
 	const int ONE_HOT_NUM = 10;
 	std::vector<std::vector<real_t>> inputSet;
 	std::vector<real_t> tempOutputSet;
+	MLPPDataOld d;
 
 	setData(MNIST_SIZE, "MLPP/Data/Datasets/MnistTest.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<real_t>> outputSet = oneHotRep(tempOutputSet, ONE_HOT_NUM);
+	std::vector<std::vector<real_t>> outputSet = d.oneHotRep(tempOutputSet, ONE_HOT_NUM);
 	return { inputSet, outputSet };
 }
 
@@ -1117,80 +1122,40 @@ void MLPPData::setInputNames(std::string fileName, std::vector<std::string> &inp
 	dataFile.close();
 }
 
-std::vector<std::vector<real_t>> MLPPData::featureScaling(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlgOld alg;
-	X = alg.transpose(X);
-	std::vector<real_t> max_elements, min_elements;
-	max_elements.resize(X.size());
-	min_elements.resize(X.size());
+Ref<MLPPMatrix> MLPPData::feature_scaling(const Ref<MLPPMatrix> &p_X) {
+	Ref<MLPPMatrix> X = p_X->transposen();
 
-	for (uint32_t i = 0; i < X.size(); i++) {
-		max_elements[i] = alg.max(X[i]);
-		min_elements[i] = alg.min(X[i]);
+	Size2i x_size = X->size();
+
+	LocalVector<real_t> max_elements;
+	LocalVector<real_t> min_elements;
+
+	max_elements.resize(x_size.y);
+	min_elements.resize(x_size.y);
+
+	Ref<MLPPVector> row_tmp;
+	row_tmp.instance();
+	row_tmp->resize(x_size.x);
+
+	for (int i = 0; i < x_size.y; ++i) {
+		X->row_get_into_mlpp_vector(i, row_tmp);
+
+		max_elements[i] = row_tmp->max_element();
+		min_elements[i] = row_tmp->min_element();
 	}
 
-	for (uint32_t i = 0; i < X.size(); i++) {
-		for (uint32_t j = 0; j < X[i].size(); j++) {
-			X[i][j] = (X[i][j] - min_elements[i]) / (max_elements[i] - min_elements[i]);
+	for (int i = 0; i < x_size.y; i++) {
+		real_t maxe = max_elements[i];
+		real_t mine = min_elements[i];
+
+		for (int j = 0; j < x_size.x; j++) {
+			real_t xij = X->element_get(i, j);
+
+			X->element_set(i, j, (xij - mine) / (maxe - mine));
 		}
 	}
-	return alg.transpose(X);
-}
 
-std::vector<std::vector<real_t>> MLPPData::meanNormalization(std::vector<std::vector<real_t>> X) {
-	MLPPLinAlgOld alg;
-	MLPPStatOld stat;
-	// (X_j - mu_j) / std_j, for every j
-
-	X = meanCentering(X);
-	for (uint32_t i = 0; i < X.size(); i++) {
-		X[i] = alg.scalarMultiply(1 / stat.standardDeviation(X[i]), X[i]);
-	}
-	return X;
-}
-
-std::vector<std::vector<real_t>> MLPPData::meanCentering(std::vector<std::vector<real_t>> X) {
-	MLPPStatOld stat;
-	for (uint32_t i = 0; i < X.size(); i++) {
-		real_t mean_i = stat.mean(X[i]);
-		for (uint32_t j = 0; j < X[i].size(); j++) {
-			X[i][j] -= mean_i;
-		}
-	}
-	return X;
-}
-
-std::vector<std::vector<real_t>> MLPPData::oneHotRep(std::vector<real_t> tempOutputSet, int n_class) {
-	std::vector<std::vector<real_t>> outputSet;
-	outputSet.resize(tempOutputSet.size());
-	for (uint32_t i = 0; i < tempOutputSet.size(); i++) {
-		for (int j = 0; j <= n_class - 1; j++) {
-			if (tempOutputSet[i] == j) {
-				outputSet[i].push_back(1);
-			} else {
-				outputSet[i].push_back(0);
-			}
-		}
-	}
-	return outputSet;
-}
-
-std::vector<real_t> MLPPData::reverseOneHot(std::vector<std::vector<real_t>> tempOutputSet) {
-	std::vector<real_t> outputSet;
-	//uint32_t n_class = tempOutputSet[0].size();
-	for (uint32_t i = 0; i < tempOutputSet.size(); i++) {
-		int current_class = 1;
-		for (uint32_t j = 0; j < tempOutputSet[i].size(); j++) {
-			if (tempOutputSet[i][j] == 1) {
-				break;
-			} else {
-				current_class++;
-			}
-		}
-		outputSet.push_back(current_class);
-	}
-
-	return outputSet;
+	return X->transposen();
 }
 
 Ref<MLPPMatrix> MLPPData::mean_centering(const Ref<MLPPMatrix> &p_X) {
@@ -1207,13 +1172,37 @@ Ref<MLPPMatrix> MLPPData::mean_centering(const Ref<MLPPMatrix> &p_X) {
 	x_row_tmp->resize(x_size.x);
 
 	for (int i = 0; i < x_size.y; ++i) {
-		X->row_get_into_mlpp_vector(i, x_row_tmp);
+		p_X->row_get_into_mlpp_vector(i, x_row_tmp);
 
 		real_t mean_i = stat.meanv(x_row_tmp);
 
 		for (int j = 0; j < x_size.x; ++j) {
 			X->element_set(i, j, p_X->element_get(i, j) - mean_i);
 		}
+	}
+
+	return X;
+}
+
+Ref<MLPPMatrix> MLPPData::mean_normalization(const Ref<MLPPMatrix> &p_X) {
+	MLPPLinAlg alg;
+	MLPPStat stat;
+
+	// (X_j - mu_j) / std_j, for every j
+
+	Ref<MLPPMatrix> X = mean_centering(p_X);
+	Size2i x_size = X->size();
+
+	Ref<MLPPVector> x_row_tmp;
+	x_row_tmp.instance();
+	x_row_tmp->resize(x_size.x);
+
+	for (int i = 0; i < x_size.y; i++) {
+		X->row_get_into_mlpp_vector(i, x_row_tmp);
+
+		x_row_tmp->scalar_multiply((real_t)1 / stat.standard_deviationv(x_row_tmp));
+
+		X->row_set_mlpp_vector(i, x_row_tmp);
 	}
 
 	return X;
@@ -1241,6 +1230,24 @@ Ref<MLPPMatrix> MLPPData::one_hot_rep(const Ref<MLPPVector> &temp_output_set, in
 	}
 
 	return output_set;
+}
+
+std::vector<real_t> MLPPData::reverseOneHot(std::vector<std::vector<real_t>> tempOutputSet) {
+	std::vector<real_t> outputSet;
+	//uint32_t n_class = tempOutputSet[0].size();
+	for (uint32_t i = 0; i < tempOutputSet.size(); i++) {
+		int current_class = 1;
+		for (uint32_t j = 0; j < tempOutputSet[i].size(); j++) {
+			if (tempOutputSet[i][j] == 1) {
+				break;
+			} else {
+				current_class++;
+			}
+		}
+		outputSet.push_back(current_class);
+	}
+
+	return outputSet;
 }
 
 void MLPPData::load_default_suffixes() {

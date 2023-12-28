@@ -400,7 +400,6 @@ void MLPPTestsOld::test_outlier_finder(bool ui) {
 	MLPPLinAlgOld alg;
 
 	// Outlier Finder
-	//std::vector<real_t> inputSet = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 23554332523523 };
 	std::vector<real_t> inputSet = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 23554332 };
 	MLPPOutlierFinderOld outlierFinderOld(2); // Any datapoint outside of 2 stds from the mean is marked as an outlier.
 	alg.printVector(outlierFinderOld.modelTest(inputSet));

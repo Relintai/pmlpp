@@ -176,14 +176,11 @@ public:
 
 	// Extra
 	void setInputNames(std::string fileName, std::vector<std::string> &inputNames);
-	std::vector<std::vector<real_t>> featureScaling(std::vector<std::vector<real_t>> X);
-	std::vector<std::vector<real_t>> meanNormalization(std::vector<std::vector<real_t>> X);
-	std::vector<std::vector<real_t>> meanCentering(std::vector<std::vector<real_t>> X);
-	std::vector<std::vector<real_t>> oneHotRep(std::vector<real_t> tempOutputSet, int n_class);
-	std::vector<real_t> reverseOneHot(std::vector<std::vector<real_t>> tempOutputSet);
-
+	Ref<MLPPMatrix> feature_scaling(const Ref<MLPPMatrix> &X);
 	Ref<MLPPMatrix> mean_centering(const Ref<MLPPMatrix> &X);
+	Ref<MLPPMatrix> mean_normalization(const Ref<MLPPMatrix> &X);
 	Ref<MLPPMatrix> one_hot_rep(const Ref<MLPPVector> &temp_output_set, int n_class);
+	std::vector<real_t> reverseOneHot(std::vector<std::vector<real_t>> tempOutputSet);
 
 	template <class T>
 	std::vector<T> vecToSet(std::vector<T> inputSet) {

@@ -978,20 +978,18 @@ void MLPPTests::test_nlp_and_data(bool ui) {
 	PLOG_MSG("LSA:");
 	PLOG_MSG(data.lsa(text_archive2, 2)->to_string());
 
-	/*
-	std::vector<std::vector<real_t>> inputSet = { { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 5 }, { 5, 6 } };
-	std::cout << "Feature Scaling Example:" << std::endl;
-	alg.printMatrix(data.featureScaling(inputSet));
-	std::cout << std::endl;
+	std::vector<std::vector<real_t>> input_set_vec = { { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 5 }, { 5, 6 } };
 
-	std::cout << "Mean Centering Example:" << std::endl;
-	alg.printMatrix(data.meanCentering(inputSet));
-	std::cout << std::endl;
+	Ref<MLPPMatrix> input_set = Ref<MLPPMatrix>(memnew(MLPPMatrix(input_set_vec)));
 
-	std::cout << "Mean Normalization Example:" << std::endl;
-	alg.printMatrix(data.meanNormalization(inputSet));
-	std::cout << std::endl;
-	*/
+	PLOG_MSG("Feature Scaling Example:");
+	PLOG_MSG(data.feature_scaling(input_set)->to_string());
+
+	PLOG_MSG("Mean Centering Example:");
+	PLOG_MSG(data.mean_centering(input_set)->to_string());
+
+	PLOG_MSG("Mean Normalization Example:");
+	PLOG_MSG(data.mean_normalization(input_set)->to_string());
 }
 void MLPPTests::test_outlier_finder(bool ui) {
 	MLPPLinAlg alg;

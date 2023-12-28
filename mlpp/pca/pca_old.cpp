@@ -5,7 +5,7 @@
 //
 
 #include "pca_old.h"
-#include "../data/data.h"
+#include "../data/data_old.h"
 #include "../lin_alg/lin_alg_old.h"
 
 #include <iostream>
@@ -19,7 +19,7 @@ MLPPPCAOld::MLPPPCAOld(std::vector<std::vector<real_t>> inputSet, int k) :
 
 std::vector<std::vector<real_t>> MLPPPCAOld::principalComponents() {
 	MLPPLinAlgOld alg;
-	MLPPData data;
+	MLPPDataOld data;
 
 	MLPPLinAlgOld::SVDResultOld svr_res = alg.SVD(alg.cov(inputSet));
 	X_normalized = data.meanCentering(inputSet);
