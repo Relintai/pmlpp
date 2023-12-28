@@ -894,7 +894,7 @@ Ref<MLPPMatrix> MLPPData::bag_of_words(Vector<String> sentences, BagOfWordsType 
 
 	Ref<MLPPMatrix> bow;
 	bow.instance();
-	bow->resize(Size2i(word_list.size(), sentences.size()));
+	bow->resize(Size2i(word_list.size(), segmented_sentences.size()));
 	bow->fill(0);
 
 	for (int i = 0; i < segmented_sentences.size(); i++) {
@@ -1087,12 +1087,6 @@ Ref<MLPPMatrix> MLPPData::lsa(Vector<String> sentences, int dim) {
 	Ref<MLPPMatrix> embeddings = S_trunc->multn(Vt_trunc);
 	return embeddings;
 }
-
-struct SVDResult {
-	Ref<MLPPMatrix> U;
-	Ref<MLPPMatrix> S;
-	Ref<MLPPMatrix> Vt;
-};
 
 Vector<String> MLPPData::create_word_list(Vector<String> sentences) {
 	String combined_text = "";
