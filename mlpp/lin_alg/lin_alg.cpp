@@ -869,45 +869,68 @@ MLPPLinAlg::SVDResult MLPPLinAlg::svd(const Ref<MLPPMatrix> &A) {
 	return res;
 }
 
-/*
-std::vector<real_t> MLPPLinAlg::vectorProjection(std::vector<real_t> a, std::vector<real_t> b) {
-	real_t product = dot(a, b) / dot(a, a);
-	return scalarMultiply(product, a); // Projection of vector a onto b. Denotated as proj_a(b).
+Ref<MLPPVector> MLPPLinAlg::vector_projection(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b) {
+	real_t product = a->dot(b) / a->dot(a);
+
+	return a->scalar_multiplyn(product); // Projection of vector a onto b. Denotated as proj_a(b).
 }
-*/
 
-/*
-std::vector<std::vector<real_t>> MLPPLinAlg::gramSchmidtProcess(std::vector<std::vector<real_t>> A) {
-	A = transpose(A); // C++ vectors lack a mechanism to directly index columns. So, we transpose *a copy* of A for this purpose for ease of use.
-	std::vector<std::vector<real_t>> B;
-	B.resize(A.size());
-	for (uint32_t i = 0; i < B.size(); i++) {
-		B[i].resize(A[0].size());
-	}
+Ref<MLPPMatrix> MLPPLinAlg::gram_schmidt_process(const Ref<MLPPMatrix> &p_A) {
+	Ref<MLPPMatrix> A = p_A->transposen();
+	Size2i a_size = A->size();
 
-	B[0] = A[0]; // We set a_1 = b_1 as an initial condition.
-	B[0] = scalarMultiply(1 / norm_2(B[0]), B[0]);
-	for (uint32_t i = 1; i < B.size(); i++) {
-		B[i] = A[i];
+	Ref<MLPPMatrix> B;
+	B.instance();
+	B->resize(a_size);
+	B->fill(0);
+
+	Ref<MLPPVector> b_i_row_tmp;
+	b_i_row_tmp.instance();
+	b_i_row_tmp->resize(a_size.x);
+
+	A->row_get_into_mlpp_vector(0, b_i_row_tmp);
+	b_i_row_tmp->scalar_multiply((real_t)1 / b_i_row_tmp->norm_2());
+	B->row_set_mlpp_vector(0, b_i_row_tmp);
+
+	Ref<MLPPVector> a_i_row_tmp;
+	a_i_row_tmp.instance();
+	a_i_row_tmp->resize(a_size.x);
+
+	Ref<MLPPVector> b_j_row_tmp;
+	b_j_row_tmp.instance();
+	b_j_row_tmp->resize(a_size.x);
+
+	for (int i = 1; i < a_size.y; ++i) {
+		A->row_get_into_mlpp_vector(i, b_i_row_tmp);
+		B->row_set_mlpp_vector(i, b_i_row_tmp);
+
 		for (int j = i - 1; j >= 0; j--) {
-			B[i] = subtraction(B[i], vectorProjection(B[j], A[i]));
-		}
-		B[i] = scalarMultiply(1 / norm_2(B[i]), B[i]); // Very simply multiply all elements of vec B[i] by 1/||B[i]||_2
-	}
-	return transpose(B); // We re-transpose the marix.
-}
-*/
+			A->row_get_into_mlpp_vector(i, a_i_row_tmp);
+			B->row_get_into_mlpp_vector(j, b_j_row_tmp);
+			B->row_get_into_mlpp_vector(i, b_i_row_tmp);
 
-/*
-MLPPLinAlg::QRDResult MLPPLinAlg::qrd(std::vector<std::vector<real_t>> A) {
+			b_i_row_tmp->sub(vector_projection(b_j_row_tmp, a_i_row_tmp));
+
+			B->row_set_mlpp_vector(i, b_i_row_tmp);
+		}
+
+		// Very simply multiply all elements of vec B[i] by 1/||B[i]||_2
+		B->row_get_into_mlpp_vector(i, b_i_row_tmp);
+		b_i_row_tmp->scalar_multiply((real_t)1 / b_i_row_tmp->norm_2());
+		B->row_set_mlpp_vector(i, b_i_row_tmp);
+	}
+
+	return B->transposen(); // We re-transpose the marix.
+}
+
+MLPPLinAlg::QRDResult MLPPLinAlg::qrd(const Ref<MLPPMatrix> &A) {
 	QRDResult res;
 
-	res.Q = gramSchmidtProcess(A);
-	res.R = matmult(transpose(res.Q), A);
+	res.Q = gram_schmidt_process(A);
+	res.R = res.Q->transposen()->multn(A);
 
 	return res;
 }
-*/
 
 /*
 MLPPLinAlg::CholeskyResult MLPPLinAlg::cholesky(std::vector<std::vector<real_t>> A) {

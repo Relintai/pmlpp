@@ -1006,51 +1006,170 @@ void MLPPTests::test_outlier_finder(bool ui) {
 	PLOG_MSG(Variant(outlier_finder.model_test(input_set)));
 }
 void MLPPTests::test_new_math_functions() {
-	/*
 	MLPPLinAlg alg;
-	MLPPActivationOld avn;
+	MLPPActivation avn;
 	MLPPData data;
+
+	PLOG_MSG("logit:");
 
 	// Testing new Functions
 	real_t z_s = 0.001;
-	std::cout << avn.logit(z_s) << std::endl;
-	std::cout << avn.logit(z_s, true) << std::endl;
 
-	std::vector<real_t> z_v = { 0.001 };
-	alg.printVector(avn.logit(z_v));
-	alg.printVector(avn.logit(z_v, true));
+	//-6.906755
+	PLOG_MSG(String::num(avn.logit_normr(z_s)));
+	//1001.000916
+	PLOG_MSG(String::num(avn.logit_derivr(z_s)));
 
-	std::vector<std::vector<real_t>> Z_m = { { 0.001 } };
-	alg.printMatrix(avn.logit(Z_m));
-	alg.printMatrix(avn.logit(Z_m, true));
+	std::vector<real_t> z_v_sv = { 0.001 };
 
-	std::cout << alg.trace({ { 1, 2 }, { 3, 4 } }) << std::endl;
-	alg.printMatrix(alg.pinverse({ { 1, 2 }, { 3, 4 } }));
-	alg.printMatrix(alg.diag({ 1, 2, 3, 4, 5 }));
-	alg.printMatrix(alg.kronecker_product({ { 1, 2, 3, 4, 5 } }, { { 6, 7, 8, 9, 10 } }));
-	alg.printMatrix(alg.matrixPower({ { 5, 5 }, { 5, 5 } }, 2));
-	alg.printVector(alg.solve({ { 1, 1 }, { 1.5, 4.0 } }, { 2200, 5050 }));
+	Ref<MLPPVector> z_v;
+	z_v.instance();
+	z_v->set_from_std_vector(z_v_sv);
+
+	//[MLPPVector: -6.906755 ]
+	PLOG_MSG(avn.logit_normv(z_v)->to_string());
+	//[MLPPVector: 1001.000916 ]
+	PLOG_MSG(avn.logit_derivv(z_v)->to_string());
+
+	std::vector<std::vector<real_t>> Z_m_sv = { { 0.001 } };
+
+	Ref<MLPPMatrix> Z_m;
+	Z_m.instance();
+	Z_m->set_from_std_vectors(Z_m_sv);
+
+	//[MLPPMatrix:
+	//[ -6.906755 ]
+	//]
+	PLOG_MSG(avn.logit_normm(Z_m)->to_string());
+	//[MLPPMatrix:
+	//[ 1001.000916 ]
+	//]
+	PLOG_MSG(avn.logit_derivm(Z_m)->to_string());
+
+	PLOG_MSG(avn.logit_derivm(Z_m)->to_string());
+	PLOG_MSG(avn.logit_derivm(Z_m)->to_string());
+	PLOG_MSG(avn.logit_derivm(Z_m)->to_string());
+	PLOG_MSG(avn.logit_derivm(Z_m)->to_string());
+	PLOG_MSG(avn.logit_derivm(Z_m)->to_string());
+	PLOG_MSG(avn.logit_derivm(Z_m)->to_string());
+	PLOG_MSG(avn.logit_derivm(Z_m)->to_string());
+
+	const real_t trace_arr[] = {
+		1, 2, //
+		3, 4 //
+	};
+
+	Ref<MLPPMatrix> trace_mat(memnew(MLPPMatrix(trace_arr, 2, 2)));
+	//5
+	PLOG_MSG(String::num(trace_mat->trace()));
+
+	const real_t pinverse_arr[] = {
+		1, 2, //
+		3, 4 //
+	};
+
+	Ref<MLPPMatrix> pinverse_mat(memnew(MLPPMatrix(pinverse_arr, 2, 2)));
+	//[MLPPMatrix:
+	//[ -2 1.5 ]
+	//[ 1 -0.5 ]
+	//]
+	PLOG_MSG(pinverse_mat->pinverse()->to_string());
+
+	const real_t diag_arr[] = {
+		1, 2, 3, 4, 5
+	};
+
+	Ref<MLPPVector> diag_vec(memnew(MLPPVector(diag_arr, 5)));
+	//[MLPPMatrix:
+	//  [ 1 0 0 0 0 ]
+	//  [ 0 2 0 0 0 ]
+	//  [ 0 0 3 0 0 ]
+	//  [ 0 0 0 4 0 ]
+	//  [ 0 0 0 0 5 ]
+	//]
+	PLOG_MSG(alg.diagnm(diag_vec)->to_string());
+
+	const real_t kronecker_product1_arr[] = {
+		1, 2, 3, 4, 5, //
+	};
+
+	const real_t kronecker_product2_arr[] = {
+		6, 7, 8, 9, 10 //
+	};
+
+	Ref<MLPPMatrix> kronecker_product1_mat(memnew(MLPPMatrix(kronecker_product1_arr, 1, 5)));
+	Ref<MLPPMatrix> kronecker_product2_mat(memnew(MLPPMatrix(kronecker_product2_arr, 1, 5)));
+	//[MLPPMatrix:
+	//  [ 6 7 8 9 10 12 14 16 18 20 18 21 24 27 30 24 28 32 36 40 30 35 40 45 50 ]
+	//]
+	PLOG_MSG(kronecker_product1_mat->kronecker_productn(kronecker_product2_mat)->to_string());
+
+	const real_t power_arr[] = {
+		5, 5, //
+		5, 5 //
+	};
+
+	Ref<MLPPMatrix> power_mat(memnew(MLPPMatrix(power_arr, 2, 2)));
+	//[MLPPMatrix:
+	//  [ 50 50 ]
+	//  [ 50 50 ]
+	//]
+	PLOG_MSG(power_mat->matrix_powern(2)->to_string());
+
+	const real_t solve1_arr[] = {
+		1, 1, //
+		1.5, 4.0 //
+	};
+
+	const real_t solve2_arr[] = {
+		2200, 5050
+	};
+
+	Ref<MLPPMatrix> solve_mat(memnew(MLPPMatrix(solve1_arr, 2, 2)));
+	Ref<MLPPVector> solve_vec(memnew(MLPPVector(solve2_arr, 2)));
+	//[MLPPVector: 1500 700 ]
+	PLOG_MSG(solve_mat->solve(solve_vec)->to_string());
 
 	std::vector<std::vector<real_t>> matrixOfCubes = { { 1, 2, 64, 27 } };
 	std::vector<real_t> vectorOfCubes = { 1, 2, 64, 27 };
-	alg.printMatrix(alg.cbrt(matrixOfCubes));
-	alg.printVector(alg.cbrt(vectorOfCubes));
-	std::cout << alg.max({ { 1, 2, 3, 4, 5 }, { 6, 5, 3, 4, 1 }, { 9, 9, 9, 9, 9 } }) << std::endl;
-	std::cout << alg.min({ { 1, 2, 3, 4, 5 }, { 6, 5, 3, 4, 1 }, { 9, 9, 9, 9, 9 } }) << std::endl;
+
+	Ref<MLPPMatrix> matrix_of_cubes(memnew(MLPPMatrix(matrixOfCubes)));
+	Ref<MLPPVector> vector_of_cubes(memnew(MLPPVector(vectorOfCubes)));
+	PLOG_MSG(matrix_of_cubes->cbrtn()->to_string());
+	PLOG_MSG(vector_of_cubes->cbrtn()->to_string());
+
+	//std::vector<std::vector<real_t>> min_max_svec = { { 1, 2, 3, 4, 5 }, { 6, 5, 3, 4, 1 }, { 9, 9, 9, 9, 9 } };
+	//Ref<MLPPMatrix> min_max(memnew(MLPPMatrix(min_max_svec)));
 
 	//std::vector<real_t> chicken;
 	//data.getImage("../../Data/apple.jpeg", chicken);
 	//alg.printVector(chicken);
 
-	std::vector<std::vector<real_t>> P = { { 12, -51, 4 }, { 6, 167, -68 }, { -4, 24, -41 } };
-	alg.printMatrix(P);
+	std::vector<std::vector<real_t>> Pvec = { { 12, -51, 4 }, { 6, 167, -68 }, { -4, 24, -41 } };
+	Ref<MLPPMatrix> P(memnew(MLPPMatrix(Pvec)));
 
-	alg.printMatrix(alg.gramSchmidtProcess(P));
+	PLOG_MSG(P->to_string());
+	//[MLPPMatrix:
+	//  [ 0.857143 -0.394286 -0.331429 ]
+	//  [ 0.428571 0.902857 0.034286 ]
+	//  [ -0.285714 0.171429 -0.942857 ]
+	//]
+	PLOG_MSG(alg.gram_schmidt_process(P)->to_string());
 
-	//MLPPLinAlg::QRDResult qrd_result = alg.qrd(P); // It works!
-	//alg.printMatrix(qrd_result.Q);
-	//alg.printMatrix(qrd_result.R);
-	*/
+	MLPPLinAlg::QRDResult qrd_result = alg.qrd(P); // It works!
+	
+	//[MLPPMatrix:
+	//  [ 0.857143 -0.394286 -0.331429 ]
+	//  [ 0.428571 0.902857 0.034286 ]
+	//  [ -0.285714 0.171429 -0.942857 ]
+	//]
+	PLOG_MSG(qrd_result.Q->to_string());
+	//[MLPPMatrix:
+	//  [ 14.000001 21 -14.000003 ]
+	//  [ -0 175 -70 ]
+	//  [ 0.000001 0.000029 34.999989 ]
+	//]
+	PLOG_MSG(qrd_result.R->to_string());
 }
 void MLPPTests::test_positive_definiteness_checker() {
 	/*

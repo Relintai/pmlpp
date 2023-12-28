@@ -1283,17 +1283,16 @@ real_t MLPPVector::euclidean_distance_squared(const Ref<MLPPVector> &b) const {
 	return dist;
 }
 
-/*
-real_t MLPPVector::norm_2(std::vector<std::vector<real_t>> A) {
-	real_t sum = 0;
-	for (uint32_t i = 0; i < A.size(); i++) {
-		for (uint32_t j = 0; j < A[i].size(); j++) {
-			sum += A[i][j] * A[i][j];
-		}
+real_t MLPPVector::norm_2() const {
+	const real_t *a_ptr = ptr();
+
+	real_t n_sq = 0;
+	for (int i = 0; i < _size; ++i) {
+		n_sq += a_ptr[i] * a_ptr[i];
 	}
-	return Math::sqrt(sum);
+
+	return Math::sqrt(n_sq);
 }
-*/
 
 real_t MLPPVector::norm_sq() const {
 	const real_t *a_ptr = ptr();

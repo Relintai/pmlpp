@@ -209,7 +209,7 @@ public:
 	Ref<MLPPMatrix> cbrtn() const;
 	void cbrtb(const Ref<MLPPMatrix> &A);
 
-	//std::vector<std::vector<real_t>> matrixPower(std::vector<std::vector<real_t>> A, int n);
+	Ref<MLPPMatrix> matrix_powern(const int n) const;
 
 	void abs();
 	Ref<MLPPMatrix> absn() const;
@@ -218,7 +218,7 @@ public:
 	real_t det(int d = -1) const;
 	real_t detb(const Ref<MLPPMatrix> &A, int d) const;
 
-	//real_t trace(std::vector<std::vector<real_t>> A);
+	real_t trace() const;
 
 	Ref<MLPPMatrix> cofactor(int n, int i, int j) const;
 	void cofactoro(int n, int i, int j, Ref<MLPPMatrix> out) const;
@@ -322,9 +322,10 @@ public:
 	Ref<MLPPVector> flatten() const;
 	void flatteno(Ref<MLPPVector> out) const;
 
-	/*
-	std::vector<real_t> solve(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
 
+	Ref<MLPPVector> solve(const Ref<MLPPVector>& b) const;
+
+	/*
 	bool positiveDefiniteChecker(std::vector<std::vector<real_t>> A);
 
 	bool negativeDefiniteChecker(std::vector<std::vector<real_t>> A);

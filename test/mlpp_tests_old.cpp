@@ -442,12 +442,11 @@ void MLPPTestsOld::test_new_math_functions() {
 
 	std::vector<std::vector<real_t>> P = { { 12, -51, 4 }, { 6, 167, -68 }, { -4, 24, -41 } };
 	alg.printMatrix(P);
-
 	alg.printMatrix(alg.gramSchmidtProcess(P));
 
-	//MLPPLinAlgOld::QRDResult qrd_result = alg.qrd(P); // It works!
-	//alg.printMatrix(qrd_result.Q);
-	//alg.printMatrix(qrd_result.R);
+	MLPPLinAlgOld::QRDResult qrd_result = alg.qrd(P); // It works!
+	alg.printMatrix(qrd_result.Q);
+	alg.printMatrix(qrd_result.R);
 }
 void MLPPTestsOld::test_positive_definiteness_checker() {
 	//MLPPStat stat;

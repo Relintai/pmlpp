@@ -16,7 +16,7 @@
 
 #include "core/object/reference.h"
 
-#else 
+#else
 
 #include "core/defs.h"
 #include "core/math_funcs.h"
@@ -110,18 +110,16 @@ public:
 
 	SVDResult svd(const Ref<MLPPMatrix> &A);
 
-	//std::vector<real_t> vectorProjection(std::vector<real_t> a, std::vector<real_t> b);
+	Ref<MLPPVector> vector_projection(const Ref<MLPPVector> &a, const Ref<MLPPVector> &b);
 
-	//std::vector<std::vector<real_t>> gramSchmidtProcess(std::vector<std::vector<real_t>> A);
+	Ref<MLPPMatrix> gram_schmidt_process(const Ref<MLPPMatrix> &A);
 
-	/*
 	struct QRDResult {
-		std::vector<std::vector<real_t>> Q;
-		std::vector<std::vector<real_t>> R;
+		Ref<MLPPMatrix> Q;
+		Ref<MLPPMatrix> R;
 	};
-	*/
 
-	//QRDResult qrd(std::vector<std::vector<real_t>> A);
+	QRDResult qrd(const Ref<MLPPMatrix> &A);
 
 	/*
 	struct CholeskyResult {

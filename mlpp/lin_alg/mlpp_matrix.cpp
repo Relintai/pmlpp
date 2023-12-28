@@ -1475,6 +1475,27 @@ void MLPPMatrix::cbrtb(const Ref<MLPPMatrix> &A) {
 	exponentiateb(A, real_t(1) / real_t(3));
 }
 
+Ref<MLPPMatrix> MLPPMatrix::matrix_powern(const int n) const {
+	if (n == 0) {
+		return identity_mat(_size.y);
+	}
+
+	Ref<MLPPMatrix> A = Ref<MLPPMatrix>(this);
+	Ref<MLPPMatrix> B = identity_mat(_size.y);
+
+	if (n < 0) {
+		A = inverse();
+	}
+
+	int absn = ABS(n);
+
+	for (int i = 0; i < absn; i++) {
+		B->mult(A);
+	}
+
+	return B;
+}
+
 /*
 std::vector<std::vector<real_t>> MLPPMatrix::matrixPower(std::vector<std::vector<real_t>> A, int n) {
 	std::vector<std::vector<real_t>> B = identity(A.size());
@@ -1580,15 +1601,17 @@ real_t MLPPMatrix::detb(const Ref<MLPPMatrix> &A, int d) const {
 	return deter;
 }
 
-/*
-real_t MLPPMatrix::trace(std::vector<std::vector<real_t>> A) {
+real_t MLPPMatrix::trace() const {
 	real_t trace = 0;
-	for (uint32_t i = 0; i < A.size(); i++) {
-		trace += A[i][i];
+
+	int sm = MIN(_size.x, _size.y);
+
+	for (int i = 0; i < sm; ++i) {
+		trace += element_get(i, i);
 	}
+
 	return trace;
 }
-*/
 
 Ref<MLPPMatrix> MLPPMatrix::cofactor(int n, int i, int j) const {
 	Ref<MLPPMatrix> cof;
@@ -2663,11 +2686,11 @@ void MLPPMatrix::flatteno(Ref<MLPPVector> out) const {
 	}
 }
 
-/*
-std::vector<real_t> MLPPMatrix::solve(std::vector<std::vector<real_t>> A, std::vector<real_t> b) {
-	return mat_vec_mult(inverse(A), b);
+Ref<MLPPVector> MLPPMatrix::solve(const Ref<MLPPVector> &b) const {
+	return inverse()->mult_vec(b);
 }
 
+/*
 bool MLPPMatrix::positiveDefiniteChecker(std::vector<std::vector<real_t>> A) {
 	auto eig_result = eig(A);
 	auto eigenvectors = std::get<0>(eig_result);

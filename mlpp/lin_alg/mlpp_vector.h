@@ -226,10 +226,7 @@ public:
 	real_t euclidean_distance(const Ref<MLPPVector> &b) const;
 	real_t euclidean_distance_squared(const Ref<MLPPVector> &b) const;
 
-	/*
-	real_t norm_2(std::vector<real_t> a);
-	*/
-
+	real_t norm_2() const;
 	real_t norm_sq() const;
 
 	real_t sum_elements() const;
