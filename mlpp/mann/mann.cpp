@@ -101,20 +101,22 @@ void MLPPMANN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 		if (_output_layer->get_activation() == MLPPActivation::ACTIVATION_FUNCTION_SOFTMAX) {
 			_output_layer->set_delta(_y_hat->subn(_output_set));
 		} else {
-			_output_layer->set_delta(
-					mlpp_cost.run_cost_deriv_matrix(_output_layer->get_cost(), _y_hat, _output_set)->hadamard_productn(avn.run_activation_deriv_matrix(_output_layer->get_activation(), _output_layer->get_z())));
+			Ref<MLPPMatrix> r1 = mlpp_cost.run_cost_deriv_matrix(_output_layer->get_cost(), _y_hat, _output_set);
+			Ref<MLPPMatrix> r2 = avn.run_activation_deriv_matrix(_output_layer->get_activation(), _output_layer->get_z());
+
+			_output_layer->set_delta(r1->hadamard_productn(r2));
 		}
 
 		Ref<MLPPMatrix> output_w_grad = _output_layer->get_input()->transposen()->multn(_output_layer->get_delta());
 
 		_output_layer->set_weights(_output_layer->get_weights()->subn(output_w_grad->scalar_multiplyn(learning_rate / _n)));
-		_output_layer->set_weights(regularization.reg_weightsm(_output_layer->get_weights(), _output_layer->get_lambda(), _output_layer->get_alpha(), _output_layer->get_reg()));
+		_output_layer->set_weights(regularization.reg_weightsm(_output_layer->get_weights(), _output_layer->get_lambda(), _output_layer->get_alpha(),
+				_output_layer->get_reg()));
+
 		_output_layer->set_bias(_output_layer->get_bias()->subtract_matrix_rowsn(_output_layer->get_delta()->scalar_multiplyn(learning_rate / _n)));
 
 		if (!_network.empty()) {
 			Ref<MLPPHiddenLayer> layer = _network[_network.size() - 1];
-
-			//auto hiddenLayerAvn = layer.activation_map[layer.activation];
 
 			layer->set_delta(_output_layer->get_delta()->multn(_output_layer->get_weights()->transposen())->hadamard_productn(avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
 
@@ -128,8 +130,6 @@ void MLPPMANN::gradient_descent(real_t learning_rate, int max_epoch, bool ui) {
 			for (int i = _network.size() - 2; i >= 0; i--) {
 				layer = _network[i];
 				Ref<MLPPHiddenLayer> next_layer = _network[i + 1];
-
-				//hiddenLayerAvn = layer.activation_map[layer.activation];
 
 				layer->set_delta(next_layer->get_delta()->multn(next_layer->get_weights())->hadamard_productn(avn.run_activation_deriv_matrix(layer->get_activation(), layer->get_z())));
 
