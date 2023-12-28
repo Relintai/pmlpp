@@ -4,376 +4,548 @@
 //  Created by Marc Melikyan on 4/6/21.
 //
 
-#include "../convolutions/convolutions.h"
+#include "convolutions.h"
 #include "../lin_alg/lin_alg.h"
 #include "../stat/stat.h"
-#include <cmath>
-#include <iostream>
+#include "core/math/math_funcs.h"
 
-/*
-std::vector<std::vector<real_t>> MLPPConvolutions::convolve_2d(std::vector<std::vector<real_t>> input, std::vector<std::vector<real_t>> filter, int S, int P) {
+#include <cmath>
+
+Ref<MLPPMatrix> MLPPConvolutions::convolve_2d(const Ref<MLPPMatrix> &p_input, const Ref<MLPPMatrix> &filter, const int S, const int P) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<real_t>> feature_map;
-	uint32_t N = input.size();
-	uint32_t F = filter.size();
-	uint32_t map_size = (N - F + 2 * P) / S + 1; // This is computed as ⌊map_size⌋ by def- thanks C++!
+
+	Ref<MLPPMatrix> input = p_input;
+
+	Size2i input_size = input->size();
+	int N = input_size.y;
+	int F = filter->size().y;
+	int map_size = (N - F + 2 * P) / S + 1; // This is computed as ⌊map_size⌋ by def- thanks C++!
 
 	if (P != 0) {
-		std::vector<std::vector<real_t>> padded_input;
-		padded_input.resize(N + 2 * P);
-		for (uint32_t i = 0; i < padded_input.size(); i++) {
-			padded_input[i].resize(N + 2 * P);
-		}
-		for (uint32_t i = 0; i < padded_input.size(); i++) {
-			for (uint32_t j = 0; j < padded_input[i].size(); j++) {
-				if (i - P < 0 || j - P < 0 || i - P > input.size() - 1 || j - P > input[0].size() - 1) {
-					padded_input[i][j] = 0;
+		Ref<MLPPMatrix> padded_input;
+		padded_input.instance();
+
+		Size2i pis = Size2i(N + 2 * P, N + 2 * P);
+
+		padded_input->resize(pis);
+
+		for (int i = 0; i < pis.y; i++) {
+			for (int j = 0; j < pis.x; j++) {
+				if (i - P < 0 || j - P < 0 || i - P > input_size.y - 1 || j - P > input_size.x - 1) {
+					padded_input->element_set(i, j, 0);
 				} else {
-					padded_input[i][j] = input[i - P][j - P];
+					padded_input->element_set(i, j, input->element_get(i - P, j - P));
 				}
 			}
 		}
-		input.resize(padded_input.size());
-		for (uint32_t i = 0; i < padded_input.size(); i++) {
-			input[i].resize(padded_input[i].size());
-		}
+
 		input = padded_input;
 	}
 
-	feature_map.resize(map_size);
-	for (uint32_t i = 0; i < map_size; i++) {
-		feature_map[i].resize(map_size);
-	}
+	Ref<MLPPMatrix> feature_map;
+	feature_map.instance();
 
-	for (uint32_t i = 0; i < map_size; i++) {
-		for (uint32_t j = 0; j < map_size; j++) {
-			std::vector<real_t> convolving_input;
-			for (uint32_t k = 0; k < F; k++) {
-				for (uint32_t p = 0; p < F; p++) {
+	feature_map->resize(Size2i(map_size, map_size));
+
+	Ref<MLPPVector> filter_flattened = filter->flatten();
+
+	Ref<MLPPVector> convolving_input;
+	convolving_input.instance();
+	convolving_input->resize(F * F);
+
+	for (int i = 0; i < map_size; i++) {
+		for (int j = 0; j < map_size; j++) {
+			int current_index = 0;
+
+			for (int k = 0; k < F; k++) {
+				for (int p = 0; p < F; p++) {
+					real_t val;
+
 					if (i == 0 && j == 0) {
-						convolving_input.push_back(input[i + k][j + p]);
+						val = input->element_get(i + k, j + p);
 					} else if (i == 0) {
-						convolving_input.push_back(input[i + k][j + (S - 1) + p]);
+						val = input->element_get(i + k, j + (S - 1) + p);
 					} else if (j == 0) {
-						convolving_input.push_back(input[i + (S - 1) + k][j + p]);
+						val = input->element_get(i + (S - 1) + k, j + p);
 					} else {
-						convolving_input.push_back(input[i + (S - 1) + k][j + (S - 1) + p]);
+						val = input->element_get(i + (S - 1) + k, j + (S - 1) + p);
 					}
+
+					convolving_input->element_set(current_index, val);
+					++current_index;
 				}
 			}
-			feature_map[i][j] = alg.dot(convolving_input, alg.flatten(filter));
+
+			feature_map->element_set(i, j, convolving_input->dot(filter_flattened));
 		}
 	}
+
 	return feature_map;
 }
 
-std::vector<std::vector<std::vector<real_t>>> MLPPConvolutions::convolve_3d(std::vector<std::vector<std::vector<real_t>>> input, std::vector<std::vector<std::vector<real_t>>> filter, int S, int P) {
+Ref<MLPPTensor3> MLPPConvolutions::convolve_3d(const Ref<MLPPTensor3> &p_input, const Ref<MLPPTensor3> &filter, const int S, const int P) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<std::vector<real_t>>> feature_map;
-	uint32_t N = input[0].size();
-	uint32_t F = filter[0].size();
-	uint32_t C = filter.size() / input.size();
-	uint32_t map_size = (N - F + 2 * P) / S + 1; // This is computed as ⌊map_size⌋ by def.
+
+	Ref<MLPPTensor3> input = p_input;
+
+	Size3i input_size = input->size();
+	Size3i filter_size = filter->size();
+
+	int N = input_size.y;
+	int F = filter_size.y;
+	int C = filter_size.z / input_size.z;
+	int map_size = (N - F + 2 * P) / S + 1; // This is computed as ⌊map_size⌋ by def.
 
 	if (P != 0) {
-		for (uint32_t c = 0; c < input.size(); c++) {
-			std::vector<std::vector<real_t>> padded_input;
-			padded_input.resize(N + 2 * P);
-			for (uint32_t i = 0; i < padded_input.size(); i++) {
-				padded_input[i].resize(N + 2 * P);
-			}
-			for (uint32_t i = 0; i < padded_input.size(); i++) {
-				for (uint32_t j = 0; j < padded_input[i].size(); j++) {
-					if (i - P < 0 || j - P < 0 || i - P > input[c].size() - 1 || j - P > input[c][0].size() - 1) {
-						padded_input[i][j] = 0;
+		Ref<MLPPTensor3> padded_input;
+		padded_input.instance();
+
+		Ref<MLPPMatrix> padded_input_slice;
+		padded_input_slice.instance();
+
+		Size2i padded_input_slice_size = Size2i(N + 2 * P, N + 2 * P);
+		padded_input_slice->resize(padded_input_slice_size);
+
+		padded_input->resize(Size3i(padded_input_slice_size.x, padded_input_slice_size.y, input_size.z));
+
+		for (int c = 0; c < input_size.z; c++) {
+			for (int i = 0; i < padded_input_slice_size.y; i++) {
+				for (int j = 0; j < padded_input_slice_size.x; j++) {
+					if (i - P < 0 || j - P < 0 || i - P > input_size.y - 1 || j - P > input_size.x - 1) {
+						padded_input_slice->element_set(i, j, 0);
 					} else {
-						padded_input[i][j] = input[c][i - P][j - P];
+						padded_input_slice->element_set(i, j, input->element_get(i - P, j - P, c));
 					}
 				}
 			}
-			input[c].resize(padded_input.size());
-			for (uint32_t i = 0; i < padded_input.size(); i++) {
-				input[c][i].resize(padded_input[i].size());
-			}
-			input[c] = padded_input;
+
+			padded_input->z_slice_set_mlpp_matrix(c, padded_input_slice);
 		}
+
+		input = padded_input;
 	}
 
-	feature_map.resize(C);
-	for (uint32_t i = 0; i < feature_map.size(); i++) {
-		feature_map[i].resize(map_size);
-		for (uint32_t j = 0; j < feature_map[i].size(); j++) {
-			feature_map[i][j].resize(map_size);
-		}
-	}
+	Ref<MLPPTensor3> feature_map;
+	feature_map.instance();
+	feature_map->resize(Size3i(map_size, map_size, C));
 
-	for (uint32_t c = 0; c < C; c++) {
-		for (uint32_t i = 0; i < map_size; i++) {
-			for (uint32_t j = 0; j < map_size; j++) {
-				std::vector<real_t> convolving_input;
-				for (uint32_t t = 0; t < input.size(); t++) {
-					for (uint32_t k = 0; k < F; k++) {
-						for (uint32_t p = 0; p < F; p++) {
+	Ref<MLPPVector> filter_flattened = filter->flatten();
+
+	Ref<MLPPVector> convolving_input;
+	convolving_input.instance();
+	convolving_input->resize(input_size.z * F * F);
+
+	for (int c = 0; c < C; c++) {
+		for (int i = 0; i < map_size; i++) {
+			for (int j = 0; j < map_size; j++) {
+				int current_index = 0;
+
+				for (int t = 0; t < input_size.z; t++) {
+					for (int k = 0; k < F; k++) {
+						for (int p = 0; p < F; p++) {
+							real_t val;
+
 							if (i == 0 && j == 0) {
-								convolving_input.push_back(input[t][i + k][j + p]);
+								val = input->element_get(i + k, j + p, t);
 							} else if (i == 0) {
-								convolving_input.push_back(input[t][i + k][j + (S - 1) + p]);
+								val = input->element_get(i + k, j + (S - 1) + p, t);
 							} else if (j == 0) {
-								convolving_input.push_back(input[t][i + (S - 1) + k][j + p]);
+								val = input->element_get(i + (S - 1) + k, j + p, t);
 							} else {
-								convolving_input.push_back(input[t][i + (S - 1) + k][j + (S - 1) + p]);
+								val = input->element_get(i + (S - 1) + k, j + (S - 1) + p, t);
 							}
+
+							convolving_input->element_set(current_index, val);
+							++current_index;
 						}
 					}
 				}
-				feature_map[c][i][j] = alg.dot(convolving_input, alg.flatten(filter));
+
+				feature_map->element_set(i, j, c, convolving_input->dot(filter_flattened));
 			}
 		}
 	}
 	return feature_map;
 }
 
-std::vector<std::vector<real_t>> MLPPConvolutions::pool_2d(std::vector<std::vector<real_t>> input, int F, int S, std::string type) {
+Ref<MLPPMatrix> MLPPConvolutions::pool_2d(const Ref<MLPPMatrix> &input, const int F, const int S, const PoolType type) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<real_t>> pooled_map;
-	uint32_t N = input.size();
-	uint32_t map_size = floor((N - F) / S + 1);
 
-	pooled_map.resize(map_size);
-	for (uint32_t i = 0; i < map_size; i++) {
-		pooled_map[i].resize(map_size);
-	}
+	Size2i input_size = input->size();
 
-	for (uint32_t i = 0; i < map_size; i++) {
-		for (uint32_t j = 0; j < map_size; j++) {
-			std::vector<real_t> pooling_input;
+	int N = input_size.y;
+	int map_size = (N - F) / S + 1;
+
+	Ref<MLPPMatrix> pooled_map;
+	pooled_map.instance();
+	pooled_map->resize(Size2i(map_size, map_size));
+
+	Ref<MLPPVector> pooling_input;
+	pooling_input.instance();
+	pooling_input->resize(F * F);
+
+	for (int i = 0; i < map_size; i++) {
+		for (int j = 0; j < map_size; j++) {
+			int current_index = 0;
+
 			for (int k = 0; k < F; k++) {
 				for (int p = 0; p < F; p++) {
+					real_t val;
+
 					if (i == 0 && j == 0) {
-						pooling_input.push_back(input[i + k][j + p]);
+						val = input->element_get(i + k, j + p);
 					} else if (i == 0) {
-						pooling_input.push_back(input[i + k][j + (S - 1) + p]);
+						val = input->element_get(i + k, j + (S - 1) + p);
 					} else if (j == 0) {
-						pooling_input.push_back(input[i + (S - 1) + k][j + p]);
+						val = input->element_get(i + (S - 1) + k, j + p);
 					} else {
-						pooling_input.push_back(input[i + (S - 1) + k][j + (S - 1) + p]);
+						val = input->element_get(i + (S - 1) + k, j + (S - 1) + p);
 					}
+
+					pooling_input->element_set(current_index, val);
+					++current_index;
 				}
 			}
-			if (type == "Average") {
+
+			if (type == POOL_TYPE_AVERAGE) {
 				MLPPStat stat;
-				pooled_map[i][j] = stat.mean(pooling_input);
-			} else if (type == "Min") {
-				pooled_map[i][j] = alg.min(pooling_input);
+				pooled_map->element_set(i, j, stat.meanv(pooling_input));
+			} else if (type == POOL_TYPE_MIN) {
+				pooled_map->element_set(i, j, alg.minvr(pooling_input));
 			} else {
-				pooled_map[i][j] = alg.max(pooling_input);
+				pooled_map->element_set(i, j, alg.maxvr(pooling_input));
 			}
 		}
 	}
+
 	return pooled_map;
 }
 
-std::vector<std::vector<std::vector<real_t>>> MLPPConvolutions::pool_3d(std::vector<std::vector<std::vector<real_t>>> input, int F, int S, std::string type) {
-	std::vector<std::vector<std::vector<real_t>>> pooled_map;
-	for (uint32_t i = 0; i < input.size(); i++) {
-		pooled_map.push_back(pool_2d(input[i], F, S, type));
+Ref<MLPPTensor3> MLPPConvolutions::pool_3d(const Ref<MLPPTensor3> &input, const int F, const int S, const PoolType type) {
+	Size3i input_size = input->size();
+
+	Ref<MLPPMatrix> z_slice;
+	z_slice.instance();
+	z_slice->resize(Size2i(input_size.x, input_size.y));
+
+	int N = input_size.y;
+	int map_size = (N - F) / S + 1;
+
+	Ref<MLPPTensor3> pooled_map;
+	pooled_map.instance();
+	pooled_map->resize(Size3i(map_size, map_size, input_size.z));
+
+	for (int i = 0; i < input_size.z; i++) {
+		input->z_slice_get_into_mlpp_matrix(i, z_slice);
+
+		Ref<MLPPMatrix> p = pool_2d(z_slice, F, S, type);
+
+		pooled_map->z_slice_set_mlpp_matrix(i, p);
 	}
+
 	return pooled_map;
 }
 
-real_t MLPPConvolutions::global_pool_2d(std::vector<std::vector<real_t>> input, std::string type) {
+real_t MLPPConvolutions::global_pool_2d(const Ref<MLPPMatrix> &input, const PoolType type) {
 	MLPPLinAlg alg;
-	if (type == "Average") {
+
+	Ref<MLPPVector> f = input->flatten();
+
+	if (type == POOL_TYPE_AVERAGE) {
 		MLPPStat stat;
-		return stat.mean(alg.flatten(input));
-	} else if (type == "Min") {
-		return alg.min(alg.flatten(input));
+		return stat.meanv(f);
+	} else if (type == POOL_TYPE_MIN) {
+		return alg.minvr(f);
 	} else {
-		return alg.max(alg.flatten(input));
+		return alg.maxvr(f);
 	}
 }
 
-std::vector<real_t> MLPPConvolutions::global_pool_3d(std::vector<std::vector<std::vector<real_t>>> input, std::string type) {
-	std::vector<real_t> pooled_map;
-	for (uint32_t i = 0; i < input.size(); i++) {
-		pooled_map.push_back(global_pool_2d(input[i], type));
+Ref<MLPPVector> MLPPConvolutions::global_pool_3d(const Ref<MLPPTensor3> &input, const PoolType type) {
+	Size3i input_size = input->size();
+
+	Ref<MLPPVector> pooled_map;
+	pooled_map.instance();
+	pooled_map->resize(input_size.z);
+
+	Ref<MLPPMatrix> z_slice;
+	z_slice.instance();
+	z_slice->resize(Size2i(input_size.x, input_size.y));
+
+	for (int i = 0; i < input_size.z; i++) {
+		input->z_slice_get_into_mlpp_matrix(i, z_slice);
+
+		pooled_map->element_set(i, global_pool_2d(z_slice, type));
 	}
+
 	return pooled_map;
 }
 
-real_t MLPPConvolutions::gaussian_2d(real_t x, real_t y, real_t std) {
+real_t MLPPConvolutions::gaussian_2d(const real_t x, const real_t y, const real_t std) {
 	real_t std_sq = std * std;
-	return 1 / (2 * Math_PI * std_sq) * std::exp(-(x * x + y * y) / 2 * std_sq);
+	return 1 / (2 * Math_PI * std_sq) * Math::exp(-(x * x + y * y) / 2 * std_sq);
 }
 
-std::vector<std::vector<real_t>> MLPPConvolutions::gaussian_filter_2d(int size, real_t std) {
-	std::vector<std::vector<real_t>> filter;
-	filter.resize(size);
-	for (uint32_t i = 0; i < filter.size(); i++) {
-		filter[i].resize(size);
-	}
+Ref<MLPPMatrix> MLPPConvolutions::gaussian_filter_2d(const int size, const real_t std) {
+	Ref<MLPPMatrix> filter;
+	filter.instance();
+	filter->resize(Size2i(size, size));
+
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
-			filter[i][j] = gaussian_2d(i - (size - 1) / 2, (size - 1) / 2 - j, std);
+			real_t val = gaussian_2d(i - (size - 1) / 2, (size - 1) / 2 - j, std);
+
+			filter->element_set(i, j, val);
 		}
 	}
+
 	return filter;
 }
-
 
 // Indeed a filter could have been used for this purpose, but I decided that it would've just
 // been easier to carry out the calculation explicitly, mainly because it is more informative,
 // and also because my convolution algorithm is only built for filters with equally sized
 // heights and widths.
 
-std::vector<std::vector<real_t>> MLPPConvolutions::dx(std::vector<std::vector<real_t>> input) {
-	std::vector<std::vector<real_t>> deriv; // We assume a gray scale image.
-	deriv.resize(input.size());
-	for (uint32_t i = 0; i < deriv.size(); i++) {
-		deriv[i].resize(input[i].size());
-	}
+Ref<MLPPMatrix> MLPPConvolutions::dx(const Ref<MLPPMatrix> &input) {
+	Size2i input_size = input->size();
 
-	for (uint32_t i = 0; i < input.size(); i++) {
-		for (uint32_t j = 0; j < input[i].size(); j++) {
-			if (j != 0 && j != input.size() - 1) {
-				deriv[i][j] = input[i][j + 1] - input[i][j - 1];
+	Ref<MLPPMatrix> deriv; // We assume a gray scale image.
+	deriv.instance();
+	deriv->resize(input_size);
+
+	for (int i = 0; i < input_size.y; i++) {
+		for (int j = 0; j < input_size.x; j++) {
+			if (j != 0 && j != input_size.y - 1) {
+				deriv->element_set(i, j, input->element_get(i, j + 1) - input->element_get(i, j - 1));
 			} else if (j == 0) {
-				deriv[i][j] = input[i][j + 1] - 0; // Implicit zero-padding
+				deriv->element_set(i, j, input->element_get(i, j + 1)); // E0 - 0 = Implicit zero-padding
 			} else {
-				deriv[i][j] = 0 - input[i][j - 1]; // Implicit zero-padding
+				deriv->element_set(i, j, -input->element_get(i, j - 1)); // 0 - E1 = Implicit zero-padding
 			}
 		}
 	}
+
 	return deriv;
 }
 
-std::vector<std::vector<real_t>> MLPPConvolutions::dy(std::vector<std::vector<real_t>> input) {
-	std::vector<std::vector<real_t>> deriv;
-	deriv.resize(input.size());
-	for (uint32_t i = 0; i < deriv.size(); i++) {
-		deriv[i].resize(input[i].size());
-	}
+Ref<MLPPMatrix> MLPPConvolutions::dy(const Ref<MLPPMatrix> &input) {
+	Size2i input_size = input->size();
 
-	for (uint32_t i = 0; i < input.size(); i++) {
-		for (uint32_t j = 0; j < input[i].size(); j++) {
-			if (i != 0 && i != input.size() - 1) {
-				deriv[i][j] = input[i - 1][j] - input[i + 1][j];
-			} else if (i == 0) {
-				deriv[i][j] = 0 - input[i + 1][j]; // Implicit zero-padding
+	Ref<MLPPMatrix> deriv; // We assume a gray scale image.
+	deriv.instance();
+	deriv->resize(input_size);
+
+	for (int i = 0; i < input_size.y; i++) {
+		for (int j = 0; j < input_size.x; j++) {
+			if (j != 0 && j != input_size.y - 1) {
+				deriv->element_set(i, j, input->element_get(i - 1, j) - input->element_get(i + 1, j));
+			} else if (j == 0) {
+				deriv->element_set(i, j, -input->element_get(i + 1, j)); // 0 - E1 = Implicit zero-padding
 			} else {
-				deriv[i][j] = input[i - 1][j] - 0; // Implicit zero-padding
+				deriv->element_set(i, j, input->element_get(i - 1, j)); // E0 - 0 =Implicit zero-padding
 			}
 		}
 	}
+
 	return deriv;
 }
 
-std::vector<std::vector<real_t>> MLPPConvolutions::grad_magnitude(std::vector<std::vector<real_t>> input) {
+Ref<MLPPMatrix> MLPPConvolutions::grad_magnitude(const Ref<MLPPMatrix> &input) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<real_t>> x_deriv_2 = alg.hadamard_product(dx(input), dx(input));
-	std::vector<std::vector<real_t>> y_deriv_2 = alg.hadamard_product(dy(input), dy(input));
-	return alg.sqrt(alg.addition(x_deriv_2, y_deriv_2));
+
+	Ref<MLPPMatrix> x_deriv_2 = dx(input)->hadamard_productn(dx(input));
+	Ref<MLPPMatrix> y_deriv_2 = dy(input)->hadamard_productn(dy(input));
+
+	return x_deriv_2->addn(y_deriv_2)->sqrtn();
 }
 
-std::vector<std::vector<real_t>> MLPPConvolutions::grad_orientation(std::vector<std::vector<real_t>> input) {
-	std::vector<std::vector<real_t>> deriv;
-	deriv.resize(input.size());
-	for (uint32_t i = 0; i < deriv.size(); i++) {
-		deriv[i].resize(input[i].size());
-	}
+Ref<MLPPMatrix> MLPPConvolutions::grad_orientation(const Ref<MLPPMatrix> &input) {
+	Ref<MLPPMatrix> deriv; // We assume a gray scale image.
+	deriv.instance();
+	deriv->resize(input->size());
 
-	std::vector<std::vector<real_t>> x_deriv = dx(input);
-	std::vector<std::vector<real_t>> y_deriv = dy(input);
-	for (uint32_t i = 0; i < deriv.size(); i++) {
-		for (uint32_t j = 0; j < deriv[i].size(); j++) {
-			deriv[i][j] = std::atan2(y_deriv[i][j], x_deriv[i][j]);
+	Size2i deriv_size = deriv->size();
+
+	Ref<MLPPMatrix> x_deriv = dx(input);
+	Ref<MLPPMatrix> y_deriv = dy(input);
+
+	for (int i = 0; i < deriv_size.y; i++) {
+		for (int j = 0; j < deriv_size.x; j++) {
+			deriv->element_set(i, j, Math::atan2(y_deriv->element_get(i, j), x_deriv->element_get(i, j)));
 		}
 	}
+
 	return deriv;
 }
 
-std::vector<std::vector<std::vector<real_t>>> MLPPConvolutions::compute_m(std::vector<std::vector<real_t>> input) {
+Ref<MLPPTensor3> MLPPConvolutions::compute_m(const Ref<MLPPMatrix> &input) {
+	Size2i input_size = input->size();
+
 	real_t const SIGMA = 1;
 	real_t const GAUSSIAN_SIZE = 3;
 
-	real_t const GAUSSIAN_PADDING = ((input.size() - 1) + GAUSSIAN_SIZE - input.size()) / 2; // Convs must be same.
-	std::cout << GAUSSIAN_PADDING << std::endl;
-	MLPPLinAlg alg;
-	std::vector<std::vector<real_t>> x_deriv = dx(input);
-	std::vector<std::vector<real_t>> y_deriv = dy(input);
+	real_t const GAUSSIAN_PADDING = ((input_size.y - 1) + GAUSSIAN_SIZE - input_size.y) / 2; // Convs must be same.
 
-	std::vector<std::vector<real_t>> gaussian_filter = gaussian_filter_2d(GAUSSIAN_SIZE, SIGMA); // Sigma of 1, size of 3.
-	std::vector<std::vector<real_t>> xx_deriv = convolve_2d(alg.hadamard_product(x_deriv, x_deriv), gaussian_filter, 1, GAUSSIAN_PADDING);
-	std::vector<std::vector<real_t>> yy_deriv = convolve_2d(alg.hadamard_product(y_deriv, y_deriv), gaussian_filter, 1, GAUSSIAN_PADDING);
-	std::vector<std::vector<real_t>> xy_deriv = convolve_2d(alg.hadamard_product(x_deriv, y_deriv), gaussian_filter, 1, GAUSSIAN_PADDING);
+	Ref<MLPPMatrix> x_deriv = dx(input);
+	Ref<MLPPMatrix> y_deriv = dy(input);
 
-	std::vector<std::vector<std::vector<real_t>>> M = { xx_deriv, yy_deriv, xy_deriv };
+	Ref<MLPPMatrix> gaussian_filter = gaussian_filter_2d(GAUSSIAN_SIZE, SIGMA); // Sigma of 1, size of 3.
+	Ref<MLPPMatrix> xx_deriv = convolve_2d(x_deriv->hadamard_productn(x_deriv), gaussian_filter, 1, GAUSSIAN_PADDING);
+	Ref<MLPPMatrix> yy_deriv = convolve_2d(y_deriv->hadamard_productn(y_deriv), gaussian_filter, 1, GAUSSIAN_PADDING);
+	Ref<MLPPMatrix> xy_deriv = convolve_2d(x_deriv->hadamard_productn(y_deriv), gaussian_filter, 1, GAUSSIAN_PADDING);
+
+	Size2i ds = xx_deriv->size();
+
+	Ref<MLPPTensor3> M;
+	M.instance();
+	M->resize(Size3i(ds.x, ds.y, 3));
+
+	M->z_slice_set_mlpp_matrix(0, xx_deriv);
+	M->z_slice_set_mlpp_matrix(1, yy_deriv);
+	M->z_slice_set_mlpp_matrix(2, xy_deriv);
+
 	return M;
 }
-std::vector<std::vector<std::string>> MLPPConvolutions::harris_corner_detection(std::vector<std::vector<real_t>> input) {
+
+Vector<Ref<MLPPMatrix>> MLPPConvolutions::compute_mv(const Ref<MLPPMatrix> &input) {
+	Size2i input_size = input->size();
+
+	real_t const SIGMA = 1;
+	real_t const GAUSSIAN_SIZE = 3;
+
+	real_t const GAUSSIAN_PADDING = ((input_size.y - 1) + GAUSSIAN_SIZE - input_size.y) / 2; // Convs must be same.
+
+	Ref<MLPPMatrix> x_deriv = dx(input);
+	Ref<MLPPMatrix> y_deriv = dy(input);
+
+	Ref<MLPPMatrix> gaussian_filter = gaussian_filter_2d(GAUSSIAN_SIZE, SIGMA); // Sigma of 1, size of 3.
+	Ref<MLPPMatrix> xx_deriv = convolve_2d(x_deriv->hadamard_productn(x_deriv), gaussian_filter, 1, GAUSSIAN_PADDING);
+	Ref<MLPPMatrix> yy_deriv = convolve_2d(y_deriv->hadamard_productn(y_deriv), gaussian_filter, 1, GAUSSIAN_PADDING);
+	Ref<MLPPMatrix> xy_deriv = convolve_2d(x_deriv->hadamard_productn(y_deriv), gaussian_filter, 1, GAUSSIAN_PADDING);
+
+	Vector<Ref<MLPPMatrix>> M;
+	M.resize(3);
+
+	M.set(0, xx_deriv);
+	M.set(1, yy_deriv);
+	M.set(2, xy_deriv);
+
+	return M;
+}
+
+Vector<Vector<CharType>> MLPPConvolutions::harris_corner_detection(const Ref<MLPPMatrix> &input) {
 	real_t const k = 0.05; // Empirically determined wherein k -> [0.04, 0.06], though conventionally 0.05 is typically used as well.
-	MLPPLinAlg alg;
-	std::vector<std::vector<std::vector<real_t>>> M = compute_m(input);
-	std::vector<std::vector<real_t>> det = alg.subtraction(alg.hadamard_product(M[0], M[1]), alg.hadamard_product(M[2], M[2]));
-	std::vector<std::vector<real_t>> trace = alg.addition(M[0], M[1]);
+
+	Vector<Ref<MLPPMatrix>> M = compute_mv(input);
+
+	Ref<MLPPMatrix> M0 = M[0];
+	Ref<MLPPMatrix> M1 = M[1];
+	Ref<MLPPMatrix> M2 = M[2];
+
+	Ref<MLPPMatrix> det = M0->hadamard_productn(M1)->subn(M2->hadamard_productn(M2));
+	Ref<MLPPMatrix> trace = M0->addn(M1);
 
 	// The reason this is not a scalar is because xx_deriv, xy_deriv, yx_deriv, and yy_deriv are not scalars.
-	std::vector<std::vector<real_t>> r = alg.subtraction(det, alg.scalarMultiply(k, alg.hadamard_product(trace, trace)));
-	std::vector<std::vector<std::string>> imageTypes;
-	imageTypes.resize(r.size());
-	alg.printMatrix(r);
-	for (uint32_t i = 0; i < r.size(); i++) {
-		imageTypes[i].resize(r[i].size());
-		for (uint32_t j = 0; j < r[i].size(); j++) {
-			if (r[i][j] > 0) {
-				imageTypes[i][j] = "C";
-			} else if (r[i][j] < 0) {
-				imageTypes[i][j] = "E";
+	Ref<MLPPMatrix> r = det->subn(trace->hadamard_productn(trace)->scalar_multiplyn(k));
+	Size2i r_size = r->size();
+
+	Vector<Vector<CharType>> image_types;
+	image_types.resize(r_size.y);
+	//alg.printMatrix(r);
+
+	for (int i = 0; i < r_size.y; i++) {
+		image_types.write[i].resize(r_size.x);
+
+		for (int j = 0; j < r_size.x; j++) {
+			real_t e = r->element_get(i, j);
+
+			if (e > 0) {
+				image_types.write[i].write[j] = 'C';
+			} else if (e < 0) {
+				image_types.write[i].write[j] = 'E';
 			} else {
-				imageTypes[i][j] = "N";
+				image_types.write[i].write[j] = 'N';
 			}
 		}
 	}
-	return imageTypes;
+
+	return image_types;
 }
 
-std::vector<std::vector<real_t>> MLPPConvolutions::get_prewitt_horizontal() {
+Ref<MLPPMatrix> MLPPConvolutions::get_prewitt_horizontal() const {
 	return _prewitt_horizontal;
 }
-std::vector<std::vector<real_t>> MLPPConvolutions::get_prewitt_vertical() {
+Ref<MLPPMatrix> MLPPConvolutions::get_prewitt_vertical() const {
 	return _prewitt_vertical;
 }
-std::vector<std::vector<real_t>> MLPPConvolutions::get_sobel_horizontal() {
+Ref<MLPPMatrix> MLPPConvolutions::get_sobel_horizontal() const {
 	return _sobel_horizontal;
 }
-std::vector<std::vector<real_t>> MLPPConvolutions::get_sobel_vertical() {
+Ref<MLPPMatrix> MLPPConvolutions::get_sobel_vertical() const {
 	return _sobel_vertical;
 }
-std::vector<std::vector<real_t>> MLPPConvolutions::get_scharr_horizontal() {
+Ref<MLPPMatrix> MLPPConvolutions::get_scharr_horizontal() const {
 	return _scharr_horizontal;
 }
-std::vector<std::vector<real_t>> MLPPConvolutions::get_scharr_vertical() {
+Ref<MLPPMatrix> MLPPConvolutions::get_scharr_vertical() const {
 	return _scharr_vertical;
 }
-std::vector<std::vector<real_t>> MLPPConvolutions::get_roberts_horizontal() {
+Ref<MLPPMatrix> MLPPConvolutions::get_roberts_horizontal() const {
 	return _roberts_horizontal;
 }
-std::vector<std::vector<real_t>> MLPPConvolutions::get_roberts_vertical() {
+Ref<MLPPMatrix> MLPPConvolutions::get_roberts_vertical() const {
 	return _roberts_vertical;
 }
-*/
 
 MLPPConvolutions::MLPPConvolutions() {
-	/*
-	_prewitt_horizontal = { { 1, 1, 1 }, { 0, 0, 0 }, { -1, -1, -1 } };
-	_prewitt_vertical = { { 1, 0, -1 }, { 1, 0, -1 }, { 1, 0, -1 } };
-	_sobel_horizontal = { { 1, 2, 1 }, { 0, 0, 0 }, { -1, -2, -1 } };
-	_sobel_vertical = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
-	_scharr_horizontal = { { 3, 10, 3 }, { 0, 0, 0 }, { -3, -10, -3 } };
-	_scharr_vertical = { { 3, 0, -3 }, { 10, 0, -10 }, { 3, 0, -3 } };
-	_roberts_horizontal = { { 0, 1 }, { -1, 0 } };
-	_roberts_vertical = { { 1, 0 }, { 0, -1 } };
-	*/
+	const real_t prewitt_horizontal_arr[]{
+		1, 1, 1, //
+		0, 0, 0, //
+		-1, -1, -1, //
+	};
+	const real_t prewitt_vertical_arr[] = {
+		1, 0, -1, //
+		1, 0, -1, //
+		1, 0, -1 //
+	};
+	const real_t sobel_horizontal_arr[] = {
+		1, 2, 1, //
+		0, 0, 0, //
+		-1, -2, -1 //
+	};
+	const real_t sobel_vertical_arr[] = {
+		-1, 0, 1, //
+		-2, 0, 2, //
+		-1, 0, 1 //
+	};
+	const real_t scharr_horizontal_arr[] = {
+		3, 10, 3, //
+		0, 0, 0, //
+		-3, -10, -3 //
+	};
+	const real_t scharr_vertical_arr[] = {
+		3, 0, -3, //
+		10, 0, -10, //
+		3, 0, -3 //
+	};
+	const real_t roberts_horizontal_arr[] = {
+		0, 1, //
+		-1, 0 //
+	};
+	const real_t roberts_vertical_arr[] = {
+		1, 0, //
+		0, -1 //
+	};
+
+	_prewitt_horizontal = Ref<MLPPMatrix>(memnew(MLPPMatrix(prewitt_horizontal_arr, 3, 3)));
+	_prewitt_vertical = Ref<MLPPMatrix>(memnew(MLPPMatrix(prewitt_vertical_arr, 3, 3)));
+	_sobel_horizontal = Ref<MLPPMatrix>(memnew(MLPPMatrix(sobel_horizontal_arr, 3, 3)));
+	_sobel_vertical = Ref<MLPPMatrix>(memnew(MLPPMatrix(sobel_vertical_arr, 3, 3)));
+	_scharr_horizontal = Ref<MLPPMatrix>(memnew(MLPPMatrix(scharr_horizontal_arr, 3, 3)));
+	_scharr_vertical = Ref<MLPPMatrix>(memnew(MLPPMatrix(scharr_vertical_arr, 3, 3)));
+	_roberts_horizontal = Ref<MLPPMatrix>(memnew(MLPPMatrix(roberts_horizontal_arr, 2, 2)));
+	_roberts_vertical = Ref<MLPPMatrix>(memnew(MLPPMatrix(roberts_vertical_arr, 2, 2)));
 }
 
 void MLPPConvolutions::_bind_methods() {

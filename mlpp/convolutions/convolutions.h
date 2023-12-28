@@ -2,10 +2,14 @@
 #ifndef MLPP_CONVOLUTIONS_H
 #define MLPP_CONVOLUTIONS_H
 
-#include <string>
-#include <vector>
+#include "core/containers/vector.h"
+#include "core/string/ustring.h"
 
 #include "core/math/math_defs.h"
+
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_tensor3.h"
+#include "../lin_alg/mlpp_vector.h"
 
 #include "core/object/reference.h"
 
@@ -13,53 +17,58 @@ class MLPPConvolutions : public Reference {
 	GDCLASS(MLPPConvolutions, Reference);
 
 public:
-	/*
-	std::vector<std::vector<real_t>> convolve_2d(std::vector<std::vector<real_t>> input, std::vector<std::vector<real_t>> filter, int S, int P = 0);
-	std::vector<std::vector<std::vector<real_t>>> convolve_3d(std::vector<std::vector<std::vector<real_t>>> input, std::vector<std::vector<std::vector<real_t>>> filter, int S, int P = 0);
+	enum PoolType {
+		POOL_TYPE_AVERAGE = 0,
+		POOL_TYPE_MIN,
+		POOL_TYPE_MAX,
+	};
 
-	std::vector<std::vector<real_t>> pool_2d(std::vector<std::vector<real_t>> input, int F, int S, std::string type);
-	std::vector<std::vector<std::vector<real_t>>> pool_3d(std::vector<std::vector<std::vector<real_t>>> input, int F, int S, std::string type);
+	Ref<MLPPMatrix> convolve_2d(const Ref<MLPPMatrix> &input, const Ref<MLPPMatrix> &filter, const int S, const int P = 0);
+	Ref<MLPPTensor3> convolve_3d(const Ref<MLPPTensor3> &input, const Ref<MLPPTensor3> &filter, const int S, const int P = 0);
 
-	real_t global_pool_2d(std::vector<std::vector<real_t>> input, std::string type);
-	std::vector<real_t> global_pool_3d(std::vector<std::vector<std::vector<real_t>>> input, std::string type);
+	Ref<MLPPMatrix> pool_2d(const Ref<MLPPMatrix> &input, const int F, const int S, const PoolType type);
+	Ref<MLPPTensor3> pool_3d(const Ref<MLPPTensor3> &input, const int F, const int S, const PoolType type);
 
-	real_t gaussian_2d(real_t x, real_t y, real_t std);
-	std::vector<std::vector<real_t>> gaussian_filter_2d(int size, real_t std);
+	real_t global_pool_2d(const Ref<MLPPMatrix> &input, const PoolType type);
+	Ref<MLPPVector> global_pool_3d(const Ref<MLPPTensor3> &input, const PoolType type);
 
-	std::vector<std::vector<real_t>> dx(std::vector<std::vector<real_t>> input);
-	std::vector<std::vector<real_t>> dy(std::vector<std::vector<real_t>> input);
+	real_t gaussian_2d(const real_t x, const real_t y, const real_t std);
+	Ref<MLPPMatrix> gaussian_filter_2d(const int size, const real_t std);
 
-	std::vector<std::vector<real_t>> grad_magnitude(std::vector<std::vector<real_t>> input);
-	std::vector<std::vector<real_t>> grad_orientation(std::vector<std::vector<real_t>> input);
+	Ref<MLPPMatrix> dx(const Ref<MLPPMatrix> &input);
+	Ref<MLPPMatrix> dy(const Ref<MLPPMatrix> &input);
 
-	std::vector<std::vector<std::vector<real_t>>> compute_m(std::vector<std::vector<real_t>> input);
-	std::vector<std::vector<std::string>> harris_corner_detection(std::vector<std::vector<real_t>> input);
+	Ref<MLPPMatrix> grad_magnitude(const Ref<MLPPMatrix> &input);
+	Ref<MLPPMatrix> grad_orientation(const Ref<MLPPMatrix> &input);
 
-	std::vector<std::vector<real_t>> get_prewitt_horizontal();
-	std::vector<std::vector<real_t>> get_prewitt_vertical();
-	std::vector<std::vector<real_t>> get_sobel_horizontal();
-	std::vector<std::vector<real_t>> get_sobel_vertical();
-	std::vector<std::vector<real_t>> get_scharr_horizontal();
-	std::vector<std::vector<real_t>> get_scharr_vertical();
-	std::vector<std::vector<real_t>> get_roberts_horizontal();
-	std::vector<std::vector<real_t>> get_roberts_vertical();
-	*/
+	Ref<MLPPTensor3> compute_m(const Ref<MLPPMatrix> &input);
+	Vector<Ref<MLPPMatrix>> compute_mv(const Ref<MLPPMatrix> &input);
+
+	//TODO better data srtucture for this. Maybe IntMatrix?
+	Vector<Vector<CharType>> harris_corner_detection(const Ref<MLPPMatrix> &input);
+
+	Ref<MLPPMatrix> get_prewitt_horizontal() const;
+	Ref<MLPPMatrix> get_prewitt_vertical() const;
+	Ref<MLPPMatrix> get_sobel_horizontal() const;
+	Ref<MLPPMatrix> get_sobel_vertical() const;
+	Ref<MLPPMatrix> get_scharr_horizontal() const;
+	Ref<MLPPMatrix> get_scharr_vertical() const;
+	Ref<MLPPMatrix> get_roberts_horizontal() const;
+	Ref<MLPPMatrix> get_roberts_vertical() const;
 
 	MLPPConvolutions();
 
 protected:
 	static void _bind_methods();
 
-	/*
-	std::vector<std::vector<real_t>> _prewitt_horizontal;
-	std::vector<std::vector<real_t>> _prewitt_vertical;
-	std::vector<std::vector<real_t>> _sobel_horizontal;
-	std::vector<std::vector<real_t>> _sobel_vertical;
-	std::vector<std::vector<real_t>> _scharr_horizontal;
-	std::vector<std::vector<real_t>> _scharr_vertical;
-	std::vector<std::vector<real_t>> _roberts_horizontal;
-	std::vector<std::vector<real_t>> _roberts_vertical;
-	*/
+	Ref<MLPPMatrix> _prewitt_horizontal;
+	Ref<MLPPMatrix> _prewitt_vertical;
+	Ref<MLPPMatrix> _sobel_horizontal;
+	Ref<MLPPMatrix> _sobel_vertical;
+	Ref<MLPPMatrix> _scharr_horizontal;
+	Ref<MLPPMatrix> _scharr_vertical;
+	Ref<MLPPMatrix> _roberts_horizontal;
+	Ref<MLPPMatrix> _roberts_vertical;
 };
 
 #endif // Convolutions_hpp

@@ -747,14 +747,20 @@ void MLPPTests::test_naive_bayes() {
 	output_set.instance();
 	output_set->set_from_std_vector(outputSet);
 
+	ERR_PRINT("MLPPMultinomialNB");
+
 	MLPPMultinomialNB MNB(input_set, output_set, 2);
 	PLOG_MSG(MNB.model_set_test(input_set)->to_string());
 
-	MLPPBernoulliNB BNB(algn.transposenm(input_set), output_set);
-	PLOG_MSG(BNB.model_set_test(algn.transposenm(input_set))->to_string());
+	ERR_PRINT("MLPPBernoulliNB");
 
-	MLPPGaussianNB GNB(algn.transposenm(input_set), output_set, 2);
-	PLOG_MSG(GNB.model_set_test(algn.transposenm(input_set))->to_string());
+	MLPPBernoulliNB BNB(input_set, output_set);
+	PLOG_MSG(BNB.model_set_test(input_set)->to_string());
+
+	ERR_PRINT("MLPPGaussianNB");
+
+	MLPPGaussianNB GNB(input_set, output_set, 2);
+	PLOG_MSG(GNB.model_set_test(input_set)->to_string());
 }
 void MLPPTests::test_k_means(bool ui) {
 	// KMeans
@@ -816,50 +822,64 @@ void MLPPTests::test_knn(bool ui) {
 }
 
 void MLPPTests::test_convolution_tensors_etc() {
-	/*
 	MLPPLinAlg alg;
 	MLPPLinAlg algn;
 	MLPPData data;
-	MLPPConvolutionsOld conv;
+	MLPPConvolutions conv;
+	MLPPTransforms trans;
 
 	// CONVOLUTION, POOLING, ETC..
-	std::vector<std::vector<real_t>> input = {
-		{ 1 },
+	const real_t input_arr[] = {
+		1,
 	};
 
-	std::vector<std::vector<std::vector<real_t>>> tensorSet;
-	tensorSet.push_back(input);
-	tensorSet.push_back(input);
-	tensorSet.push_back(input);
+	Ref<MLPPMatrix> input = Ref<MLPPMatrix>(memnew(MLPPMatrix(input_arr, 1, 1)));
 
-	alg.printTensor(data.rgb2xyz(tensorSet));
+	Ref<MLPPTensor3> tensor_set;
+	tensor_set.instance();
+	tensor_set->resize(Size3i(1, 1, 0));
+	tensor_set->z_slice_add_mlpp_matrix(input);
+	tensor_set->z_slice_add_mlpp_matrix(input);
+	tensor_set->z_slice_add_mlpp_matrix(input);
 
-	std::vector<std::vector<real_t>> input2 = {
-		{ 62, 55, 55, 54, 49, 48, 47, 55 },
-		{ 62, 57, 54, 52, 48, 47, 48, 53 },
-		{ 61, 60, 52, 49, 48, 47, 49, 54 },
-		{ 63, 61, 60, 60, 63, 65, 68, 65 },
-		{ 67, 67, 70, 74, 79, 85, 91, 92 },
-		{ 82, 95, 101, 106, 114, 115, 112, 117 },
-		{ 96, 111, 115, 119, 128, 128, 130, 127 },
-		{ 109, 121, 127, 133, 139, 141, 140, 133 },
+	ERR_PRINT("TODO data.rgb2xyz(tensor_set)");
+	//ERR_PRINT(data.rgb2xyz(tensor_set)->to_string());
+
+	const real_t input2_arr[] = {
+		62, 55, 55, 54, 49, 48, 47, 55, //
+		62, 57, 54, 52, 48, 47, 48, 53, //
+		61, 60, 52, 49, 48, 47, 49, 54, //
+		63, 61, 60, 60, 63, 65, 68, 65, //
+		67, 67, 70, 74, 79, 85, 91, 92, //
+		82, 95, 101, 106, 114, 115, 112, 117, //
+		96, 111, 115, 119, 128, 128, 130, 127, //
+		109, 121, 127, 133, 139, 141, 140, 133, //
 	};
 
-	MLPPTransformsOld trans;
+	Ref<MLPPMatrix> input2 = Ref<MLPPMatrix>(memnew(MLPPMatrix(input2_arr, 8, 8)));
 
-	alg.printMatrix(trans.discreteCosineTransform(input2));
+	ERR_PRINT(trans.discrete_cosine_transform(input2)->to_string());
 
-	alg.printMatrix(conv.convolve_2d(input2, conv.get_prewitt_vertical(), 1)); // Can use padding
-	alg.printMatrix(conv.pool_2d(input2, 4, 4, "Max")); // Can use Max, Min, or Average pooling.
+	ERR_PRINT(conv.convolve_2d(input2, conv.get_prewitt_vertical(), 1)->to_string()); // Can use padding
+	ERR_PRINT(conv.pool_2d(input2, 4, 4, MLPPConvolutions::POOL_TYPE_MAX)->to_string()); // Can use Max, Min, or Average pooling.
 
-	std::vector<std::vector<std::vector<real_t>>> tensorSet2;
-	tensorSet2.push_back(input2);
-	tensorSet2.push_back(input2);
-	alg.printVector(conv.global_pool_3d(tensorSet2, "Average")); // Can use Max, Min, or Average global pooling.
+	Ref<MLPPTensor3> tensor_set2;
+	tensor_set2.instance();
+	tensor_set2->resize(Size3i(8, 8, 0));
+	tensor_set2->z_slice_add_mlpp_matrix(input2);
+	tensor_set2->z_slice_add_mlpp_matrix(input2);
 
-	std::vector<std::vector<real_t>> laplacian = { { 1, 1, 1 }, { 1, -4, 1 }, { 1, 1, 1 } };
-	alg.printMatrix(conv.convolve_2d(conv.gaussian_filter_2d(5, 1), laplacian, 1));
-	*/
+	ERR_PRINT(conv.global_pool_3d(tensor_set2, MLPPConvolutions::POOL_TYPE_AVERAGE)->to_string()); // Can use Max, Min, or Average global pooling.
+
+	const real_t laplacian_arr[] = {
+		1, 1, 1, //
+		1, -4, 1, //
+		1, 1, 1 //
+	};
+
+	Ref<MLPPMatrix> laplacian = Ref<MLPPMatrix>(memnew(MLPPMatrix(laplacian_arr, 3, 3)));
+
+	ERR_PRINT(conv.convolve_2d(conv.gaussian_filter_2d(5, 1), laplacian, 1)->to_string());
 }
 void MLPPTests::test_pca_svd_eigenvalues_eigenvectors(bool ui) {
 	/*

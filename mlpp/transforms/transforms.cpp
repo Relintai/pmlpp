@@ -6,53 +6,53 @@
 
 #include "transforms.h"
 #include "../lin_alg/lin_alg.h"
-#include <cmath>
-#include <iostream>
-#include <string>
 
-/*
+#include "core/math/math_funcs.h"
+
 // DCT ii.
 // https://www.mathworks.com/help/images/discrete-cosine-transform.html
-std::vector<std::vector<real_t>> MLPPTransforms::discreteCosineTransform(std::vector<std::vector<real_t>> A) {
-	MLPPLinAlg alg;
-	A = alg.scalarAdd(-128, A); // Center around 0.
+Ref<MLPPMatrix> MLPPTransforms::discrete_cosine_transform(const Ref<MLPPMatrix> &p_A) {
+	Ref<MLPPMatrix> A = p_A->scalar_addn(-128); // Center around 0.
 
-	std::vector<std::vector<real_t>> B;
-	B.resize(A.size());
-	for (uint32_t i = 0; i < B.size(); i++) {
-		B[i].resize(A[i].size());
-	}
+	Size2i size = A->size();
 
-	int M = A.size();
+	Ref<MLPPMatrix> B;
+	B.instance();
+	B->resize(size);
 
-	for (uint32_t i = 0; i < B.size(); i++) {
-		for (uint32_t j = 0; j < B[i].size(); j++) {
+	real_t M = size.y;
+	real_t inv_sqrt_M = 1 / Math::sqrt(M);
+	real_t s2M = Math::sqrt(real_t(2) / real_t(M));
+
+	for (int i = 0; i < size.y; i++) {
+		for (int j = 0; j < size.x; j++) {
 			real_t sum = 0;
+
 			real_t alphaI;
 			if (i == 0) {
-				alphaI = 1 / std::sqrt(M);
+				alphaI = inv_sqrt_M;
 			} else {
-				alphaI = std::sqrt(real_t(2) / real_t(M));
-			}
-			real_t alphaJ;
-			if (j == 0) {
-				alphaJ = 1 / std::sqrt(M);
-			} else {
-				alphaJ = std::sqrt(real_t(2) / real_t(M));
+				alphaI = s2M;
 			}
 
-			for (uint32_t k = 0; k < B.size(); k++) {
-				for (uint32_t f = 0; f < B[k].size(); f++) {
-					sum += A[k][f] * std::cos((Math_PI * i * (2 * k + 1)) / (2 * M)) * std::cos((Math_PI * j * (2 * f + 1)) / (2 * M));
+			real_t alphaJ;
+			if (j == 0) {
+				alphaJ = inv_sqrt_M;
+			} else {
+				alphaJ = s2M;
+			}
+
+			for (int k = 0; k < size.y; k++) {
+				for (int f = 0; f < size.x; f++) {
+					sum += A->element_get(k, f) * Math::cos((Math_PI * i * (2 * k + 1)) / (2 * M)) * Math::cos((Math_PI * j * (2 * f + 1)) / (2 * M));
 				}
 			}
-			B[i][j] = sum;
-			B[i][j] *= alphaI * alphaJ;
+
+			B->element_set(i, j, sum * alphaI * alphaJ);
 		}
 	}
 	return B;
 }
-*/
 
 void MLPPTransforms::_bind_methods() {
 }

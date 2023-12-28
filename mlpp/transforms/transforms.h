@@ -11,14 +11,13 @@
 
 #include "core/object/reference.h"
 
-#include <string>
-#include <vector>
+#include "../lin_alg/mlpp_matrix.h"
 
 class MLPPTransforms : public Reference {
 	GDCLASS(MLPPTransforms, Reference);
 
 public:
-	//std::vector<std::vector<real_t>> discreteCosineTransform(std::vector<std::vector<real_t>> A);
+	Ref<MLPPMatrix> discrete_cosine_transform(const Ref<MLPPMatrix> &p_A);
 
 protected:
 	static void _bind_methods();
