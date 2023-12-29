@@ -161,7 +161,7 @@ Ref<MLPPTensor3> MLPPConvolutions::convolve_3d(const Ref<MLPPTensor3> &p_input, 
 					}
 				}
 
-				feature_map->element_set(i, j, c, convolving_input->dot(filter_flattened));
+				feature_map->element_set(c,i, j,  convolving_input->dot(filter_flattened));
 			}
 		}
 	}

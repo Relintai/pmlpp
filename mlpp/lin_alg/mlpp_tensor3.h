@@ -76,7 +76,7 @@ public:
 	void resize(const Size3i &p_size);
 	void shape_set(const Size3i &p_size);
 
-	_FORCE_INLINE_ int calculate_index(int p_index_y, int p_index_x, int p_index_z) const {
+	_FORCE_INLINE_ int calculate_index(int p_index_z, int p_index_y, int p_index_x) const {
 		return p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z;
 	}
 
@@ -105,7 +105,7 @@ public:
 		_data[p_index] = p_val;
 	}
 
-	_FORCE_INLINE_ real_t element_get(int p_index_y, int p_index_x, int p_index_z) const {
+	_FORCE_INLINE_ real_t element_get(int p_index_z, int p_index_y, int p_index_x) const {
 		ERR_FAIL_INDEX_V(p_index_x, _size.x, 0);
 		ERR_FAIL_INDEX_V(p_index_y, _size.y, 0);
 		ERR_FAIL_INDEX_V(p_index_z, _size.z, 0);
@@ -113,7 +113,7 @@ public:
 		return _data[p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z];
 	}
 
-	_FORCE_INLINE_ void element_set(int p_index_y, int p_index_x, int p_index_z, real_t p_val) {
+	_FORCE_INLINE_ void element_set(int p_index_z, int p_index_y, int p_index_x, real_t p_val) {
 		ERR_FAIL_INDEX(p_index_x, _size.x);
 		ERR_FAIL_INDEX(p_index_y, _size.y);
 		ERR_FAIL_INDEX(p_index_z, _size.z);
@@ -126,9 +126,9 @@ public:
 	Ref<MLPPVector> row_get_mlpp_vector(int p_index_z, int p_index_y) const;
 	void row_get_into_mlpp_vector(int p_index_z, int p_index_y, Ref<MLPPVector> target) const;
 
-	void row_set_vector(int p_index_y, int p_index_z, const Vector<real_t> &p_row);
-	void row_set_pool_vector(int p_index_y, int p_index_z, const PoolRealArray &p_row);
-	void row_set_mlpp_vector(int p_index_y, int p_index_z, const Ref<MLPPVector> &p_row);
+	void row_set_vector(int p_index_z, int p_index_y, const Vector<real_t> &p_row);
+	void row_set_pool_vector(int p_index_z, int p_index_y, const PoolRealArray &p_row);
+	void row_set_mlpp_vector(int p_index_z, int p_index_y, const Ref<MLPPVector> &p_row);
 
 	Vector<real_t> z_slice_get_vector(int p_index_z) const;
 	PoolRealArray z_slice_get_pool_vector(int p_index_z) const;
