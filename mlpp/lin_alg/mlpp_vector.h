@@ -49,7 +49,7 @@ public:
 	void push_back(real_t p_elem);
 	void append_mlpp_vector(const Ref<MLPPVector> &p_other);
 
-	void remove(real_t p_index);
+	void remove(int p_index);
 
 	// Removes the item copying the last value into the position of the one to
 	// remove. It's generally faster than `remove`.

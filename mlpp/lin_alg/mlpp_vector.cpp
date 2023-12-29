@@ -59,7 +59,7 @@ void MLPPVector::append_mlpp_vector(const Ref<MLPPVector> &p_other) {
 	}
 }
 
-void MLPPVector::remove(real_t p_index) {
+void MLPPVector::remove(int p_index) {
 	ERR_FAIL_INDEX(p_index, _size);
 
 	--_size;
