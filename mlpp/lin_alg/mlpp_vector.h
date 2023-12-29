@@ -14,13 +14,13 @@
 
 #include "core/object/resource.h"
 
-#else 
+#else
 
+#include "core/containers/vector.h"
 #include "core/defs.h"
 #include "core/math_funcs.h"
-#include "core/pool_arrays.h"
-#include "core/containers/vector.h"
 #include "core/os/memory.h"
+#include "core/pool_arrays.h"
 
 #include "gen/resource.h"
 
@@ -91,6 +91,16 @@ public:
 	_FORCE_INLINE_ void element_set(int p_index, real_t p_val) {
 		ERR_FAIL_INDEX(p_index, _size);
 		_data[p_index] = p_val;
+	}
+
+	_FORCE_INLINE_ const real_t &element_get_ref(int p_index) const {
+		CRASH_BAD_INDEX(p_index, _size);
+		return _data[p_index];
+	}
+
+	_FORCE_INLINE_ real_t &element_get_ref(int p_index) {
+		CRASH_BAD_INDEX(p_index, _size);
+		return _data[p_index];
 	}
 
 	void fill(real_t p_val);
