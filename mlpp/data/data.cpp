@@ -12,9 +12,7 @@
 #include "../lin_alg/lin_alg.h"
 #include "../stat/stat.h"
 
-#include "../lin_alg/lin_alg_old.h"
 #include "../softmax_net/softmax_net.h"
-#include "../stat/stat_old.h"
 #include "data_old.h"
 
 #include <algorithm>
@@ -407,241 +405,9 @@ Array MLPPData::train_test_split_bind(const Ref<MLPPDataComplex> &data, real_t t
 	return arr;
 }
 
-// Loading Datasets
-std::tuple<std::vector<std::vector<real_t>>, std::vector<real_t>> MLPPData::loadBreastCancer() {
-	const int BREAST_CANCER_SIZE = 30; // k = 30
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> outputSet;
-
-	setData(BREAST_CANCER_SIZE, "MLPP/Data/Datasets/BreastCancer.csv", inputSet, outputSet);
-	return { inputSet, outputSet };
-}
-
-std::tuple<std::vector<std::vector<real_t>>, std::vector<real_t>> MLPPData::loadBreastCancerSVC() {
-	const int BREAST_CANCER_SIZE = 30; // k = 30
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> outputSet;
-
-	setData(BREAST_CANCER_SIZE, "MLPP/Data/Datasets/BreastCancerSVM.csv", inputSet, outputSet);
-	return { inputSet, outputSet };
-}
-
-std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPData::loadIris() {
-	const int IRIS_SIZE = 4;
-	const int ONE_HOT_NUM = 3;
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> tempOutputSet;
-	MLPPDataOld d;
-
-	setData(IRIS_SIZE, "/Users/marcmelikyan/Desktop/Data/Iris.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<real_t>> outputSet = d.oneHotRep(tempOutputSet, ONE_HOT_NUM);
-	return { inputSet, outputSet };
-}
-
-std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPData::loadWine() {
-	const int WINE_SIZE = 4;
-	const int ONE_HOT_NUM = 3;
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> tempOutputSet;
-	MLPPDataOld d;
-
-	setData(WINE_SIZE, "MLPP/Data/Datasets/Iris.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<real_t>> outputSet = d.oneHotRep(tempOutputSet, ONE_HOT_NUM);
-	return { inputSet, outputSet };
-}
-
-std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPData::loadMnistTrain() {
-	const int MNIST_SIZE = 784;
-	const int ONE_HOT_NUM = 10;
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> tempOutputSet;
-	MLPPDataOld d;
-
-	setData(MNIST_SIZE, "MLPP/Data/Datasets/MnistTrain.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<real_t>> outputSet = d.oneHotRep(tempOutputSet, ONE_HOT_NUM);
-	return { inputSet, outputSet };
-}
-
-std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPData::loadMnistTest() {
-	const int MNIST_SIZE = 784;
-	const int ONE_HOT_NUM = 10;
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> tempOutputSet;
-	MLPPDataOld d;
-
-	setData(MNIST_SIZE, "MLPP/Data/Datasets/MnistTest.csv", inputSet, tempOutputSet);
-	std::vector<std::vector<real_t>> outputSet = d.oneHotRep(tempOutputSet, ONE_HOT_NUM);
-	return { inputSet, outputSet };
-}
-
-std::tuple<std::vector<std::vector<real_t>>, std::vector<real_t>> MLPPData::loadCaliforniaHousing() {
-	const int CALIFORNIA_HOUSING_SIZE = 13; // k = 30
-	std::vector<std::vector<real_t>> inputSet;
-	std::vector<real_t> outputSet;
-
-	setData(CALIFORNIA_HOUSING_SIZE, "MLPP/Data/Datasets/CaliforniaHousing.csv", inputSet, outputSet);
-	return { inputSet, outputSet };
-}
-
-std::tuple<std::vector<real_t>, std::vector<real_t>> MLPPData::loadFiresAndCrime() {
-	std::vector<real_t> inputSet; // k is implicitly 1.
-	std::vector<real_t> outputSet;
-
-	setData("MLPP/Data/Datasets/FiresAndCrime.csv", inputSet, outputSet);
-	return { inputSet, outputSet };
-}
-
-// Note that inputs and outputs should be pairs (technically), but this
-// implementation will separate them. (My implementation keeps them tied together.)
-// Not yet sure whether this is intentional or not (or it's something like a compiler specific difference)
-std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> MLPPData::trainTestSplit(std::vector<std::vector<real_t>> inputSet, std::vector<std::vector<real_t>> outputSet, real_t testSize) {
-	std::random_device rd;
-	std::default_random_engine generator(rd());
-
-	std::shuffle(inputSet.begin(), inputSet.end(), generator); // inputSet random shuffle
-	std::shuffle(outputSet.begin(), outputSet.end(), generator); // outputSet random shuffle)
-
-	std::vector<std::vector<real_t>> inputTestSet;
-	std::vector<std::vector<real_t>> outputTestSet;
-
-	int testInputNumber = testSize * inputSet.size(); // implicit usage of floor
-	int testOutputNumber = testSize * outputSet.size(); // implicit usage of floor
-
-	for (int i = 0; i < testInputNumber; i++) {
-		inputTestSet.push_back(inputSet[i]);
-		inputSet.erase(inputSet.begin());
-	}
-
-	for (int i = 0; i < testOutputNumber; i++) {
-		outputTestSet.push_back(outputSet[i]);
-		outputSet.erase(outputSet.begin());
-	}
-
-	return { inputSet, outputSet, inputTestSet, outputTestSet };
-}
-
-// MULTIVARIATE SUPERVISED
-
-void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real_t>> &inputSet, std::vector<real_t> &outputSet) {
-	MLPPLinAlgOld alg;
-	std::string inputTemp;
-	std::string outputTemp;
-
-	inputSet.resize(k);
-
-	std::ifstream dataFile(fileName);
-	if (!dataFile.is_open()) {
-		std::cout << fileName << " failed to open." << std::endl;
-	}
-
-	std::string line;
-	while (std::getline(dataFile, line)) {
-		std::stringstream ss(line);
-
-		for (int i = 0; i < k; i++) {
-			std::getline(ss, inputTemp, ',');
-			inputSet[i].push_back(std::stod(inputTemp));
-		}
-
-		std::getline(ss, outputTemp, ',');
-		outputSet.push_back(std::stod(outputTemp));
-	}
-	inputSet = alg.transpose(inputSet);
-	dataFile.close();
-}
-
-void MLPPData::printData(std::vector<std::string> inputName, std::string outputName, std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet) {
-	MLPPLinAlgOld alg;
-	inputSet = alg.transpose(inputSet);
-	for (uint32_t i = 0; i < inputSet.size(); i++) {
-		std::cout << inputName[i] << std::endl;
-		for (uint32_t j = 0; j < inputSet[i].size(); j++) {
-			std::cout << inputSet[i][j] << std::endl;
-		}
-	}
-
-	std::cout << outputName << std::endl;
-	for (uint32_t i = 0; i < outputSet.size(); i++) {
-		std::cout << outputSet[i] << std::endl;
-	}
-}
-
-// UNSUPERVISED
-
-void MLPPData::setData(int k, std::string fileName, std::vector<std::vector<real_t>> &inputSet) {
-	MLPPLinAlgOld alg;
-	std::string inputTemp;
-
-	inputSet.resize(k);
-
-	std::ifstream dataFile(fileName);
-	if (!dataFile.is_open()) {
-		std::cout << fileName << " failed to open." << std::endl;
-	}
-
-	std::string line;
-	while (std::getline(dataFile, line)) {
-		std::stringstream ss(line);
-
-		for (int i = 0; i < k; i++) {
-			std::getline(ss, inputTemp, ',');
-			inputSet[i].push_back(std::stod(inputTemp));
-		}
-	}
-	inputSet = alg.transpose(inputSet);
-	dataFile.close();
-}
-
-void MLPPData::printData(std::vector<std::string> inputName, std::vector<std::vector<real_t>> inputSet) {
-	MLPPLinAlgOld alg;
-	inputSet = alg.transpose(inputSet);
-	for (uint32_t i = 0; i < inputSet.size(); i++) {
-		std::cout << inputName[i] << std::endl;
-		for (uint32_t j = 0; j < inputSet[i].size(); j++) {
-			std::cout << inputSet[i][j] << std::endl;
-		}
-	}
-}
-
-// SIMPLE
-
-void MLPPData::setData(std::string fileName, std::vector<real_t> &inputSet, std::vector<real_t> &outputSet) {
-	std::string inputTemp, outputTemp;
-
-	std::ifstream dataFile(fileName);
-	if (!dataFile.is_open()) {
-		std::cout << "The file failed to open." << std::endl;
-	}
-
-	std::string line;
-
-	while (std::getline(dataFile, line)) {
-		std::stringstream ss(line);
-
-		std::getline(ss, inputTemp, ',');
-		std::getline(ss, outputTemp, ',');
-
-		inputSet.push_back(std::stod(inputTemp));
-		outputSet.push_back(std::stod(outputTemp));
-	}
-
-	dataFile.close();
-}
-
-void MLPPData::printData(std::string &inputName, std::string &outputName, std::vector<real_t> &inputSet, std::vector<real_t> &outputSet) {
-	std::cout << inputName << std::endl;
-	for (uint32_t i = 0; i < inputSet.size(); i++) {
-		std::cout << inputSet[i] << std::endl;
-	}
-
-	std::cout << outputName << std::endl;
-	for (uint32_t i = 0; i < inputSet.size(); i++) {
-		std::cout << outputSet[i] << std::endl;
-	}
-}
-
 // Images
 std::vector<std::vector<real_t>> MLPPData::rgb2gray(std::vector<std::vector<std::vector<real_t>>> input) {
+	/*
 	std::vector<std::vector<real_t>> grayScale;
 	grayScale.resize(input[0].size());
 	for (uint32_t i = 0; i < grayScale.size(); i++) {
@@ -653,9 +419,13 @@ std::vector<std::vector<real_t>> MLPPData::rgb2gray(std::vector<std::vector<std:
 		}
 	}
 	return grayScale;
+	*/
+
+	return std::vector<std::vector<real_t>>();
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2ycbcr(std::vector<std::vector<std::vector<real_t>>> input) {
+	/*
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> YCbCr;
 	YCbCr = alg.resize(YCbCr, input);
@@ -667,11 +437,15 @@ std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2ycbcr(std::vector<st
 		}
 	}
 	return YCbCr;
+	*/
+
+	return std::vector<std::vector<std::vector<real_t>>>();
 }
 
 // Conversion formulas available here:
 // https://www.rapidtables.com/convert/color/rgb-to-hsv.html
 std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2hsv(std::vector<std::vector<std::vector<real_t>>> input) {
+	/*
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> HSV;
 	HSV = alg.resize(HSV, input);
@@ -710,23 +484,34 @@ std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2hsv(std::vector<std:
 		}
 	}
 	return HSV;
+	*/
+
+	return std::vector<std::vector<std::vector<real_t>>>();
 }
 
 // http://machinethatsees.blogspot.com/2013/07/how-to-convert-rgb-to-xyz-or-vice-versa.html
 std::vector<std::vector<std::vector<real_t>>> MLPPData::rgb2xyz(std::vector<std::vector<std::vector<real_t>>> input) {
+	/*
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> XYZ;
 	XYZ = alg.resize(XYZ, input);
 	std::vector<std::vector<real_t>> RGB2XYZ = { { 0.4124564, 0.3575761, 0.1804375 }, { 0.2126726, 0.7151522, 0.0721750 }, { 0.0193339, 0.1191920, 0.9503041 } };
 	return alg.vector_wise_tensor_product(input, RGB2XYZ);
+	*/
+
+	return std::vector<std::vector<std::vector<real_t>>>();
 }
 
 std::vector<std::vector<std::vector<real_t>>> MLPPData::xyz2rgb(std::vector<std::vector<std::vector<real_t>>> input) {
+	/*
 	MLPPLinAlgOld alg;
 	std::vector<std::vector<std::vector<real_t>>> XYZ;
 	XYZ = alg.resize(XYZ, input);
 	std::vector<std::vector<real_t>> RGB2XYZ = alg.inverse({ { 0.4124564, 0.3575761, 0.1804375 }, { 0.2126726, 0.7151522, 0.0721750 }, { 0.0193339, 0.1191920, 0.9503041 } });
 	return alg.vector_wise_tensor_product(input, RGB2XYZ);
+	*/
+
+	return std::vector<std::vector<std::vector<real_t>>>();
 }
 
 // TEXT-BASED & NLP

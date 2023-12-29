@@ -106,30 +106,6 @@ public:
 	SplitComplexData train_test_split(Ref<MLPPDataComplex> data, real_t test_size);
 	Array train_test_split_bind(const Ref<MLPPDataComplex> &data, real_t test_size);
 
-	// Load Datasets
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<real_t>> loadBreastCancer();
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<real_t>> loadBreastCancerSVC();
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> loadIris();
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> loadWine();
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> loadMnistTrain();
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> loadMnistTest();
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<real_t>> loadCaliforniaHousing();
-	std::tuple<std::vector<real_t>, std::vector<real_t>> loadFiresAndCrime();
-
-	std::tuple<std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>, std::vector<std::vector<real_t>>> trainTestSplit(std::vector<std::vector<real_t>> inputSet, std::vector<std::vector<real_t>> outputSet, real_t testSize);
-
-	// Supervised
-	void setData(int k, std::string fileName, std::vector<std::vector<real_t>> &inputSet, std::vector<real_t> &outputSet);
-	void printData(std::vector<std::string> inputName, std::string outputName, std::vector<std::vector<real_t>> inputSet, std::vector<real_t> outputSet);
-
-	// Unsupervised
-	void setData(int k, std::string fileName, std::vector<std::vector<real_t>> &inputSet);
-	void printData(std::vector<std::string> inputName, std::vector<std::vector<real_t>> inputSet);
-
-	// Simple
-	void setData(std::string fileName, std::vector<real_t> &inputSet, std::vector<real_t> &outputSet);
-	void printData(std::string &inputName, std::string &outputName, std::vector<real_t> &inputSet, std::vector<real_t> &outputSet);
-
 	// Images
 	std::vector<std::vector<real_t>> rgb2gray(std::vector<std::vector<std::vector<real_t>>> input);
 	std::vector<std::vector<std::vector<real_t>>> rgb2ycbcr(std::vector<std::vector<std::vector<real_t>>> input);
