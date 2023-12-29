@@ -1477,19 +1477,23 @@ void MLPPTests::test_numerical_analysis() {
 	PLOG_MSG(conv.dx(A)->to_string());
 
 	/*
-	0 0 0 0
-	1 0 0 0
-	0 0 0 -1
-	0 0 0 0
+	[MLPPMatrix:
+	  [ -0 -0 -0 -0 ]
+	  [ 1 0 0 0 ]
+	  [ 0 0 0 -1 ]
+	  [ 0 0 0 0 ]
+	]
 	*/
 	PLOG_MSG("conv.dy(A)");
 	PLOG_MSG(conv.dy(A)->to_string());
 
 	/*
-	0 3.14159 0 0
-	1.5708 0 0 0
-	0 0 0 -1.5708
-	0 0 0 0
+	[MLPPMatrix:
+	  [ -0 -3.141593 -0 -3.141593 ]
+	  [ 1.570796 0 0 3.141593 ]
+	  [ 0 0 0 -1.570796 ]
+	  [ 0 0 0 3.141593 ]
+	]
 	*/
 	PLOG_MSG("conv.grad_orientation(A)");
 	PLOG_MSG(conv.grad_orientation(A)->to_string());

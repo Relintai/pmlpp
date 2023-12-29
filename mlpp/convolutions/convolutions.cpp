@@ -161,7 +161,7 @@ Ref<MLPPTensor3> MLPPConvolutions::convolve_3d(const Ref<MLPPTensor3> &p_input, 
 					}
 				}
 
-				feature_map->element_set(c,i, j,  convolving_input->dot(filter_flattened));
+				feature_map->element_set(c, i, j, convolving_input->dot(filter_flattened));
 			}
 		}
 	}
@@ -338,9 +338,9 @@ Ref<MLPPMatrix> MLPPConvolutions::dy(const Ref<MLPPMatrix> &input) {
 
 	for (int i = 0; i < input_size.y; i++) {
 		for (int j = 0; j < input_size.x; j++) {
-			if (j != 0 && j != input_size.y - 1) {
+			if (i != 0 && i != input_size.y - 1) {
 				deriv->element_set(i, j, input->element_get(i - 1, j) - input->element_get(i + 1, j));
-			} else if (j == 0) {
+			} else if (i == 0) {
 				deriv->element_set(i, j, -input->element_get(i + 1, j)); // 0 - E1 = Implicit zero-padding
 			} else {
 				deriv->element_set(i, j, input->element_get(i - 1, j)); // E0 - 0 =Implicit zero-padding
