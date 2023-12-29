@@ -1,8 +1,3 @@
-//
-//  GaussianNB.cpp
-//
-//  Created by Marc Melikyan on 1/17/21.
-//
 
 #include "gaussian_nb.h"
 

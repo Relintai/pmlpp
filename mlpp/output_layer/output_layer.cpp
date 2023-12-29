@@ -1,8 +1,3 @@
-//
-//  OutputLayer.cpp
-//
-//  Created by Marc Melikyan on 11/4/20.
-//
 
 #include "output_layer.h"
 #include "../utilities/utilities.h"

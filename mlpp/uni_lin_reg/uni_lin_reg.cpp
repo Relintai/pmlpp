@@ -1,8 +1,3 @@
-//
-//  UniLinReg.cpp
-//
-//  Created by Marc Melikyan on 9/29/20.
-//
 
 #include "uni_lin_reg.h"
 #include "../stat/stat.h"

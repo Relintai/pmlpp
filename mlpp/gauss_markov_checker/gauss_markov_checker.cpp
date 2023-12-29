@@ -1,8 +1,4 @@
-//
-//  GaussMarkovChecker.cpp
-//
-//  Created by Marc Melikyan on 11/13/20.
-//
+
 
 #include "gauss_markov_checker.h"
 #include "../stat/stat.h"

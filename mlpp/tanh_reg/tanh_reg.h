@@ -2,11 +2,6 @@
 #ifndef MLPP_TANH_REG_H
 #define MLPP_TANH_REG_H
 
-//
-//  TanhReg.hpp
-//
-//  Created by Marc Melikyan on 10/2/20.
-//
 
 #include "core/math/math_defs.h"
 

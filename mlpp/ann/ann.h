@@ -1,11 +1,7 @@
 #ifndef MLPP_ANN_H
 #define MLPP_ANN_H
 
-//
-//  ANN.hpp
-//
-//  Created by Marc Melikyan on 11/4/20.
-//
+
 
 #include "core/math/math_defs.h"
 

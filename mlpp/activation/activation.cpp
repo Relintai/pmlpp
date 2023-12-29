@@ -1,8 +1,4 @@
-//
-//  Activation.cpp
-//
-//  Created by Marc Melikyan on 1/16/21.
-//
+
 
 #include "activation.h"
 #include "../lin_alg/lin_alg.h"

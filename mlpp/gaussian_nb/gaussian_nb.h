@@ -2,11 +2,7 @@
 #ifndef MLPP_GAUSSIAN_NB_H
 #define MLPP_GAUSSIAN_NB_H
 
-//
-//  GaussianNB.hpp
-//
-//  Created by Marc Melikyan on 1/17/21.
-//
+
 
 #include "core/math/math_defs.h"
 

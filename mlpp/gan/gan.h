@@ -2,11 +2,6 @@
 #ifndef MLPP_GAN_H
 #define MLPP_GAN_H
 
-//
-//  GAN.hpp
-//
-//  Created by Marc Melikyan on 11/4/20.
-//
 
 #include "core/math/math_defs.h"
 

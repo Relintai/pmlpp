@@ -3,11 +3,7 @@
 #ifndef MLPP_REG_H
 #define MLPP_REG_H
 
-//
-//  Reg.hpp
-//
-//  Created by Marc Melikyan on 1/16/21.
-//
+
 
 #include "core/math/math_defs.h"
 

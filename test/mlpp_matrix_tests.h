@@ -1,9 +1,6 @@
 #ifndef MLPP_MATRIX_TESTS_H
 #define MLPP_MATRIX_TESTS_H
 
-// TODO port this class to use the test module once it's working
-// Also don't forget to remove it's bindings
-
 #include "core/math/math_defs.h"
 
 #include "core/containers/vector.h"
@@ -13,6 +10,9 @@
 #include "core/string/ustring.h"
 
 #include "mlpp_tests.h"
+
+// TODO port this class to use the test module once it's working
+// Also don't forget to remove it's bindings
 
 class MLPPMatrix;
 class MLPPVector;
@@ -32,7 +32,6 @@ public:
 
 	void test_row_remove();
 	void test_row_remove_unordered();
-
 
 	void test_mlpp_matrix_mul();
 

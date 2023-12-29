@@ -2,12 +2,6 @@
 #ifndef MLPP_OUTLIER_FINDER_H
 #define MLPP_OUTLIER_FINDER_H
 
-//
-//  OutlierFinder.hpp
-//
-//  Created by Marc Melikyan on 11/13/20.
-//
-
 #include "core/math/math_defs.h"
 
 #include "core/object/reference.h"

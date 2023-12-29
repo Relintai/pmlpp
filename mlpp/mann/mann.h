@@ -2,11 +2,6 @@
 #ifndef MLPP_MANN_H
 #define MLPP_MANN_H
 
-//
-//  MANN.hpp
-//
-//  Created by Marc Melikyan on 11/4/20.
-//
 
 #include "core/math/math_defs.h"
 

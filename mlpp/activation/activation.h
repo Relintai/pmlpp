@@ -2,11 +2,7 @@
 #ifndef MLPP_ACTIVATION_H
 #define MLPP_ACTIVATION_H
 
-//
-//  Activation.hpp
-//
-//  Created by Marc Melikyan on 1/16/21.
-//
+
 
 #include "core/math/math_defs.h"
 

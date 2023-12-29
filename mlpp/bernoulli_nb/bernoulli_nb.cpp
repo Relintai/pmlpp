@@ -1,8 +1,4 @@
-//
-//  BernoulliNB.cpp
-//
-//  Created by Marc Melikyan on 1/17/21.
-//
+
 
 #include "bernoulli_nb.h"
 #include "../data/data.h"

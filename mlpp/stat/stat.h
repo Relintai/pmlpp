@@ -2,11 +2,6 @@
 #ifndef MLPP_STAT_H
 #define MLPP_STAT_H
 
-//
-//  Stat.hpp
-//
-//  Created by Marc Melikyan on 9/29/20.
-//
 
 #include "core/math/math_defs.h"
 

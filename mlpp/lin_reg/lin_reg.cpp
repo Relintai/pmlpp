@@ -1,8 +1,3 @@
-//
-//  LinReg.cpp
-//
-//  Created by Marc Melikyan on 10/2/20.
-//
 
 #include "lin_reg.h"
 

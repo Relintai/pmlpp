@@ -1,8 +1,3 @@
-//
-//  Stat.cpp
-//
-//  Created by Marc Melikyan on 9/29/20.
-//
 
 #include "stat.h"
 #include "../activation/activation.h"

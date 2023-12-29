@@ -2,12 +2,6 @@
 #ifndef MLPP_MULTINOMIAL_NB_H
 #define MLPP_MULTINOMIAL_NB_H
 
-//
-//  MultinomialNB.hpp
-//
-//  Created by Marc Melikyan on 1/17/21.
-//
-
 #include "core/containers/hash_map.h"
 #include "core/containers/vector.h"
 #include "core/math/math_defs.h"

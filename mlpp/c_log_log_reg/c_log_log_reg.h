@@ -2,11 +2,7 @@
 #ifndef MLPP_C_LOG_LOG_REG_H
 #define MLPP_C_LOG_LOG_REG_H
 
-//
-//  CLogLogReg.hpp
-//
-//  Created by Marc Melikyan on 10/2/20.
-//
+
 
 #include "core/math/math_defs.h"
 

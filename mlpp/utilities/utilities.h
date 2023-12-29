@@ -2,11 +2,6 @@
 #ifndef MLPP_UTILITIES_H
 #define MLPP_UTILITIES_H
 
-//
-//  Utilities.hpp
-//
-//  Created by Marc Melikyan on 1/16/21.
-//
 
 #include "core/containers/vector.h"
 #include "core/math/math_defs.h"

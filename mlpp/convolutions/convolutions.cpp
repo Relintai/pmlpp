@@ -1,8 +1,4 @@
-//
-//  Convolutions.cpp
-//
-//  Created by Marc Melikyan on 4/6/21.
-//
+
 
 #include "convolutions.h"
 #include "../lin_alg/lin_alg.h"

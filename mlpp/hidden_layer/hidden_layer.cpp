@@ -1,8 +1,3 @@
-//
-//  HiddenLayer.cpp
-//
-//  Created by Marc Melikyan on 11/4/20.
-//
 
 #include "hidden_layer.h"
 #include "../activation/activation.h"

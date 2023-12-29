@@ -1,12 +1,6 @@
 #ifndef MLPP_SOFTMAX_NET_H
 #define MLPP_SOFTMAX_NET_H
 
-//
-//  SoftmaxNet.hpp
-//
-//  Created by Marc Melikyan on 10/2/20.
-//
-
 #include "core/math/math_defs.h"
 
 #include "core/object/resource.h"

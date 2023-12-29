@@ -1,8 +1,3 @@
-//
-//  Transforms.cpp
-//
-//  Created by Marc Melikyan on 11/13/20.
-//
 
 #include "transforms.h"
 #include "../lin_alg/lin_alg.h"

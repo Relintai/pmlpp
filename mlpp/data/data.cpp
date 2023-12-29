@@ -1,9 +1,4 @@
-//
-//  Data.cpp
-//  MLP
-//
-//  Created by Marc Melikyan on 11/4/20.
-//
+
 
 #include "data.h"
 

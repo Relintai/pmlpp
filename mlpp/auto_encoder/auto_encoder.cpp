@@ -1,8 +1,3 @@
-//
-//  AutoEncoder.cpp
-//
-//  Created by Marc Melikyan on 11/4/20.
-//
 
 #include "auto_encoder.h"
 

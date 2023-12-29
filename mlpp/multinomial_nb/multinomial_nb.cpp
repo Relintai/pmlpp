@@ -1,8 +1,3 @@
-//
-//  MultinomialNB.cpp
-//
-//  Created by Marc Melikyan on 1/17/21.
-//
 
 #include "multinomial_nb.h"
 

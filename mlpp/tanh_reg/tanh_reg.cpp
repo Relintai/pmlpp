@@ -1,8 +1,3 @@
-//
-//  TanhReg.cpp
-//
-//  Created by Marc Melikyan on 10/2/20.
-//
 
 #include "tanh_reg.h"
 

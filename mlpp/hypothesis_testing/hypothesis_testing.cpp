@@ -1,8 +1,3 @@
-//
-//  HypothesisTesting.cpp
-//
-//  Created by Marc Melikyan on 3/10/21.
-//
 
 #include "hypothesis_testing.h"
 

@@ -1,8 +1,4 @@
-//
-//  OutlierFinder.cpp
-//
-//  Created by Marc Melikyan on 11/13/20.
-//
+
 
 #include "outlier_finder.h"
 

@@ -1,8 +1,3 @@
-//
-//  kNN.cpp
-//
-//  Created by Marc Melikyan on 10/2/20.
-//
 
 #include "knn.h"
 #include "../utilities/utilities.h"

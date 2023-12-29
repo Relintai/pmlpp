@@ -2,12 +2,6 @@
 #ifndef MLPP_UNI_LIN_REG_H
 #define MLPP_UNI_LIN_REG_H
 
-//
-//  UniLinReg.hpp
-//
-//  Created by Marc Melikyan on 9/29/20.
-//
-
 #include "core/math/math_defs.h"
 
 #include "core/object/resource.h"

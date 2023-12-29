@@ -1,8 +1,3 @@
-//
-//  LinAlg.cpp
-//
-//  Created by Marc Melikyan on 1/8/21.
-//
 
 #include "lin_alg.h"
 

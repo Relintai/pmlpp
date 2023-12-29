@@ -1,8 +1,3 @@
-//
-//  GAN.cpp
-//
-//  Created by Marc Melikyan on 11/4/20.
-//
 
 #include "gan.h"
 #include "../activation/activation.h"

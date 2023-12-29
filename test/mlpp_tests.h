@@ -1,8 +1,7 @@
 #ifndef MLPP_TESTS_H
 #define MLPP_TESTS_H
 
-// TODO port this class to use the test module once it's working
-// Also don't forget to remove it's bindings
+
 
 #include "core/math/math_defs.h"
 
@@ -11,6 +10,9 @@
 #include "core/object/reference.h"
 
 #include "core/string/ustring.h"
+
+// TODO port this class to use the test module once it's working
+// Also don't forget to remove it's bindings
 
 class MLPPMatrix;
 class MLPPVector;

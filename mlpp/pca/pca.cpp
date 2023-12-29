@@ -1,8 +1,4 @@
-//
-//  PCA.cpp
-//
-//  Created by Marc Melikyan on 10/2/20.
-//
+
 
 #include "pca.h"
 #include "../data/data.h"

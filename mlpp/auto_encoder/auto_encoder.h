@@ -2,11 +2,6 @@
 #ifndef MLPP_AUTO_ENCODER_H
 #define MLPP_AUTO_ENCODER_H
 
-//
-//  AutoEncoder.hpp
-//
-//  Created by Marc Melikyan on 11/4/20.
-//
 
 #include "core/math/math_defs.h"
 

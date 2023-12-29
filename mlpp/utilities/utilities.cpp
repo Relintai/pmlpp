@@ -1,8 +1,3 @@
-//
-//  Reg.cpp
-//
-//  Created by Marc Melikyan on 1/16/21.
-//
 
 #include "utilities.h"
 
