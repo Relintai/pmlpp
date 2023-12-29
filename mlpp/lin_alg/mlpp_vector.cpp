@@ -851,18 +851,24 @@ real_t MLPPVector::dot(const Ref<MLPPVector> &b) const {
 	return c;
 }
 
-/*
-std::vector<real_t> MLPPVector::cross(std::vector<real_t> a, std::vector<real_t> b) {
+Ref<MLPPVector> MLPPVector::cross(const Ref<MLPPVector> &b) {
 	// Cross products exist in R^7 also. Though, I will limit it to R^3 as Wolfram does this.
-	std::vector<std::vector<real_t>> mat = { onevec(3), a, b };
+	//std::vector<std::vector<real_t>> mat = { onevec(3), a, b };
 
-	real_t det1 = det({ { a[1], a[2] }, { b[1], b[2] } }, 2);
-	real_t det2 = -det({ { a[0], a[2] }, { b[0], b[2] } }, 2);
-	real_t det3 = det({ { a[0], a[1] }, { b[0], b[1] } }, 2);
+	real_t det1 = element_get(1) * b->element_get(2) - element_get(2) * b->element_get(1);
+	real_t det2 = -(element_get(0) * b->element_get(2) - element_get(2) * b->element_get(0));
+	real_t det3 = element_get(0) * b->element_get(1) - element_get(1) * b->element_get(0);
 
-	return { det1, det2, det3 };
+	Ref<MLPPVector> ret;
+	ret.instance();
+	ret->resize(3);
+
+	ret->element_set(0, det1);
+	ret->element_set(1, det2);
+	ret->element_set(2, det3);
+
+	return ret;
 }
-*/
 
 void MLPPVector::abs() {
 	real_t *out_ptr = ptrw();

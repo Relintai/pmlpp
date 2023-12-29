@@ -195,7 +195,7 @@ public:
 
 	real_t dot(const Ref<MLPPVector> &b) const;
 
-	//std::vector<real_t> cross(std::vector<real_t> a, std::vector<real_t> b);
+	Ref<MLPPVector> cross(const Ref<MLPPVector> &b);
 
 	void abs();
 	Ref<MLPPVector> absn() const;
