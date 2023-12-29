@@ -166,7 +166,7 @@ void MLPPDualSVC::save(const String &file_name) {
 	//util.saveParameters(file_name, _alpha, _bias);
 }
 
-MLPPDualSVC::MLPPDualSVC(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, real_t p_C, KernelMethod p_kernel) {
+MLPPDualSVC::MLPPDualSVC(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, real_t p_C, KernelMethod p_kernel) {
 	_input_set = p_input_set;
 	_output_set = p_output_set;
 	_n = p_input_set->size().y;
@@ -174,14 +174,16 @@ MLPPDualSVC::MLPPDualSVC(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatri
 	_C = p_C;
 	_kernel = p_kernel;
 
+	_z.instance();
 	_y_hat.instance();
+	_alpha.instance();
+
 	_y_hat->resize(_n);
 
 	MLPPUtilities utils;
 
 	_bias = utils.bias_initializationr();
 
-	_alpha.instance();
 	_alpha->resize(_n);
 
 	utils.weight_initializationv(_alpha); // One alpha for all training examples, as per the lagrangian multipliers.

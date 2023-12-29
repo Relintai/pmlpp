@@ -580,7 +580,7 @@ Ref<MLPPVector> MLPPCost::dual_form_svm_deriv(const Ref<MLPPVector> &alpha, cons
 	Ref<MLPPVector> alphaQDeriv = alg.mat_vec_multnv(Q, alpha);
 	Ref<MLPPVector> one = alg.onevecnv(alpha->size());
 
-	return alg.subtractionnm(alphaQDeriv, one);
+	return alg.subtractionnv(alphaQDeriv, one);
 }
 
 MLPPCost::VectorCostFunctionPointer MLPPCost::get_cost_function_ptr_normal_vector(const MLPPCost::CostTypes cost) {

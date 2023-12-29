@@ -37,7 +37,7 @@ public:
 	real_t score();
 	void save(const String &file_name);
 
-	MLPPDualSVC(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPMatrix> &p_output_set, real_t p_C, KernelMethod p_kernel = KERNEL_METHOD_LINEAR);
+	MLPPDualSVC(const Ref<MLPPMatrix> &p_input_set, const Ref<MLPPVector> &p_output_set, real_t p_C, KernelMethod p_kernel = KERNEL_METHOD_LINEAR);
 
 	MLPPDualSVC();
 	~MLPPDualSVC();
