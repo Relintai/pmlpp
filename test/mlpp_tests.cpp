@@ -1206,7 +1206,9 @@ real_t f_prime(real_t x) {
 	return 2 * x;
 }
 
-real_t f_prime_2var(std::vector<real_t> x) {
+real_t f_prime_2var(const Ref<MLPPVector> &p_x) {
+	const real_t *x = p_x->ptr();
+
 	return 2 * x[0] + x[1];
 }
 /*
@@ -1227,7 +1229,9 @@ real_t f_prime_2var(std::vector<real_t> x) {
 	∂^2f/∂x∂y = 2
 */
 
-real_t f_mv(std::vector<real_t> x) {
+real_t f_mv(const Ref<MLPPVector> &p_x) {
+	const real_t *x = p_x->ptr();
+
 	return x[0] * x[0] * x[0] + x[0] + x[1] * x[1] * x[1] * x[0] + x[2] * x[2] * x[1];
 }
 
@@ -1259,79 +1263,266 @@ real_t f_mv(std::vector<real_t> x) {
 */
 
 void MLPPTests::test_numerical_analysis() {
-	/*
 	MLPPLinAlg alg;
-	MLPPConvolutionsOld conv;
+	MLPPConvolutions conv;
 
 	// Checks for numerical analysis class.
-	MLPPNumericalAnalysisOld numAn;
+	MLPPNumericalAnalysis num_an;
 
-	std::cout << numAn.quadraticApproximation(f, 0, 1) << std::endl;
+	/*
+	//1
+	PLOG_MSG("num_an.quadratic_approximationr(f, 0, 1)");
+	PLOG_MSG(String::num(num_an.quadratic_approximationr(f, 0, 1)));
 
-	std::cout << numAn.cubicApproximation(f, 0, 1.001) << std::endl;
+	//1.001
+	PLOG_MSG("num_an.cubic_approximationr(f, 0, 1.001)");
+	PLOG_MSG(String::num(num_an.cubic_approximationr(f, 0, 1.001)));
 
-	std::cout << f(1.001) << std::endl;
+	//0.842011
+	PLOG_MSG("f(1.001)");
+	PLOG_MSG(String::num(f(1.001)));
 
-	std::cout << numAn.quadraticApproximation(f_mv, { 0, 0, 0 }, { 1, 1, 1 }) << std::endl;
 
-	std::cout << numAn.numDiff(&f, 1) << std::endl;
-	std::cout << numAn.newtonRaphsonMethod(&f, 1, 1000) << std::endl;
-	std::cout << numAn.invQuadraticInterpolation(&f, { 100, 2, 1.5 }, 10) << std::endl;
+	Ref<MLPPVector> v30;
+	v30.instance();
+	v30->resize(3);
+	v30->fill(0);
 
-	std::cout << numAn.numDiff(&f_mv, { 1, 1 }, 1) << std::endl; // Derivative w.r.t. x.
 
-	alg.printVector(numAn.jacobian(&f_mv, { 1, 1 }));
+	Ref<MLPPVector> v31;
+	v31.instance();
+	v31->resize(3);
+	v31->fill(1);
 
-	std::cout << numAn.numDiff_2(&f, 2) << std::endl;
+	//1.00001
+	PLOG_MSG("num_an.quadratic_approximationv(f_mv, v30, v31)");
+	PLOG_MSG(String::num(num_an.quadratic_approximationv(f_mv, v30, v31)));
 
-	std::cout << numAn.numDiff_3(&f, 2) << std::endl;
 
-	std::cout << numAn.numDiff_2(&f_mv, { 2, 2, 500 }, 2, 2) << std::endl;
-	std::cout << numAn.numDiff_3(&f_mv, { 2, 1000, 130 }, 0, 0, 0) << std::endl;
+	const real_t iqi_arr[] = { 100, 2, 1.5 };
+	Ref<MLPPVector> iqi(memnew(MLPPVector(iqi_arr, 3)));
 
-	alg.printTensor(numAn.thirdOrderTensor(&f_mv, { 1, 1, 1 }));
-	std::cout << "Our Hessian." << std::endl;
-	alg.printMatrix(numAn.hessian(&f_mv, { 2, 2, 500 }));
+	//0
+	PLOG_MSG("num_an.num_diffr(&f, 1)");
+	PLOG_MSG(String::num(num_an.num_diffr(&f, 1)));
 
-	std::cout << numAn.laplacian(f_mv, { 1, 1, 1 }) << std::endl;
+	//-nan
+	//nan
+	PLOG_MSG("num_an.newton_raphson_method(&f, 1, 1000)");
+	PLOG_MSG(String::num(num_an.newton_raphson_method(&f, 1, 1000)));
 
-	std::vector<std::vector<std::vector<real_t>>> tensor;
-	tensor.push_back({ { 1, 2 }, { 1, 2 }, { 1, 2 } });
-	tensor.push_back({ { 1, 2 }, { 1, 2 }, { 1, 2 } });
+	//2.17152e+07
+	//21715200
+	PLOG_MSG("num_an.inv_quadratic_interpolation(&f, iqi, 10)");
+	PLOG_MSG(String::num(num_an.inv_quadratic_interpolation(&f, iqi, 10)));
 
-	alg.printTensor(tensor);
 
-	alg.printMatrix(alg.tensor_vec_mult(tensor, { 1, 2 }));
+	Ref<MLPPVector> v21;
+	v21.instance();
+	v21->resize(2);
+	v21->fill(1);
 
-	std::cout << numAn.cubicApproximation(f_mv, { 0, 0, 0 }, { 1, 1, 1 }) << std::endl;
-	std::cout << numAn.eulerianMethod(f_prime, { 1, 1 }, 1.5, 0.000001) << std::endl;
-	std::cout << numAn.eulerianMethod(f_prime_2var, { 2, 3 }, 2.5, 0.00000001) << std::endl;
+	//0
+	PLOG_MSG("num_an.num_diffv(&f_mv, v21, 1)");
+	PLOG_MSG(String::num(num_an.num_diffv(&f_mv, v21, 1))); // Derivative w.r.t. x.
 
-	std::vector<std::vector<real_t>> A = {
+	//[MLPPVector: 0 0 ]
+	PLOG_MSG("num_an.jacobian(&f_mv, v21)");
+	PLOG_MSG(num_an.jacobian(&f_mv, v21)->to_string());
+
+	//596.046509
+	PLOG_MSG("num_an.num_diff_2r(&f, 2)");
+	PLOG_MSG(String::num(num_an.num_diff_2r(&f, 2)));
+
+	//-119209304
+	PLOG_MSG("num_an.num_diff_3r(&f, 2)");
+	PLOG_MSG(String::num(num_an.num_diff_3r(&f, 2)));
+
+	const real_t nd2v_arr[] = { 100, 2, 1.5 };
+	Ref<MLPPVector> nd2v(memnew(MLPPVector(nd2v_arr, 3)));
+
+	//0
+	PLOG_MSG("num_an.num_diff_2v(&f_mv, nd2v, 2, 2)");
+	PLOG_MSG(String::num(num_an.num_diff_2v(&f_mv, nd2v, 2, 2)));
+
+	const real_t nd3v_arr[] = { 2, 1000, 130 };
+	Ref<MLPPVector> nd3v(memnew(MLPPVector(nd3v_arr, 3)));
+
+	//128000015514730496
+	PLOG_MSG("num_an.num_diff_3v(&f_mv, nd3v, 0, 0, 0)");
+	PLOG_MSG(String::num(num_an.num_diff_3v(&f_mv, nd3v, 0, 0, 0)));
+	*/
+
+	Ref<MLPPVector> v31t;
+	v31t.instance();
+	v31t->resize(3);
+	v31t->fill(1);
+
+	/*
+	[MLPPTensor3:
+	  [     [ 0 0 0   ]
+		[ 0 0 0   ]
+		[ 0 0 0   ]
+	],
+	  [     [ 0 0 0   ]
+		[ 0 0 0   ]
+		[ 0 0 0   ]
+	],
+	  [     [ 0 0 0   ]
+		[ 0 0 0   ]
+		[ 0 0 0   ]
+	],
+	]
+	*/
+	PLOG_MSG("num_an.third_order_tensor(&f_mv, v31t)");
+	PLOG_MSG(num_an.third_order_tensor(&f_mv, v31t)->to_string());
+
+	const real_t hess_arr[] = { 2, 2, 500 };
+	Ref<MLPPVector> hess(memnew(MLPPVector(hess_arr, 3)));
+
+	/*
+	[MLPPMatrix:
+	  [ 0 0 0 ]
+	  [ 0 0 0 ]
+	  [ 0 0 0 ]
+	]
+	*/
+	PLOG_MSG("Our Hessian.");
+	PLOG_MSG(num_an.hessian(&f_mv, hess)->to_string());
+
+	Ref<MLPPVector> v31l;
+	v31l.instance();
+	v31l->resize(3);
+	v31l->fill(1);
+
+	//0
+	PLOG_MSG("num_an.laplacian(f_mv, v31l)");
+	PLOG_MSG(String::num(num_an.laplacian(f_mv, v31l)));
+
+	std::vector<std::vector<std::vector<real_t>>> tensor_arr;
+	tensor_arr.push_back({ { 1, 2 }, { 1, 2 }, { 1, 2 } });
+	tensor_arr.push_back({ { 1, 2 }, { 1, 2 }, { 1, 2 } });
+
+	Ref<MLPPTensor3> tensor;
+	tensor.instance();
+	tensor->set_from_std_vectors(tensor_arr);
+
+	/*
+	[MLPPTensor3:
+	  [     [ 1 2   ]
+		[ 1 2   ]
+		[ 1 2   ]
+	],
+	  [     [ 1 2   ]
+		[ 1 2   ]
+		[ 1 2   ]
+	],
+	]
+	*/
+	PLOG_MSG("tensor->to_string()");
+	PLOG_MSG(tensor->to_string());
+
+	const real_t tvm_arr[] = { 1, 2 };
+	Ref<MLPPVector> tvm(memnew(MLPPVector(tvm_arr, 2)));
+
+	/*
+	[MLPPMatrix:
+	  [ 5 5 5 ]
+	  [ 5 5 5 ]
+	]
+	*/
+	PLOG_MSG("tensor->tensor_vec_mult(tvm)");
+	PLOG_MSG(tensor->tensor_vec_mult(tvm)->to_string());
+
+	Ref<MLPPVector> v30;
+	v30.instance();
+	v30->resize(3);
+	v30->fill(0);
+
+	Ref<MLPPVector> v31;
+	v31.instance();
+	v31->resize(3);
+	v31->fill(1);
+
+	//1.00001
+	PLOG_MSG("num_an.cubic_approximationv(f_mv, v30, v31)");
+	PLOG_MSG(String::num(num_an.cubic_approximationv(f_mv, v30, v31)));
+
+	//2.236699
+	PLOG_MSG("num_an.eulerian_methodv(f_prime, 1, 1, 1.5, 0.000001)");
+	PLOG_MSG(String::num(num_an.eulerian_methodr(f_prime, 1, 1, 1.5, 0.000001)));
+
+	//3
+	PLOG_MSG("num_an.eulerian_methodv(f_prime_2var, 2, 3, 2.5, 0.00000001)");
+	PLOG_MSG(String::num(num_an.eulerian_methodv(f_prime_2var, 2, 3, 2.5, 0.00000001)));
+
+	std::vector<std::vector<real_t>> A_arr = {
 		{ 1, 0, 0, 0 },
 		{ 0, 0, 0, 0 },
 		{ 0, 0, 0, 0 },
 		{ 0, 0, 0, 1 }
 	};
 
-	alg.printMatrix(conv.dx(A));
-	alg.printMatrix(conv.dy(A));
+	Ref<MLPPMatrix> A(memnew(MLPPMatrix(A_arr)));
 
-	alg.printMatrix(conv.grad_orientation(A));
+	/*
+	[MLPPMatrix:
+	  [ 0 -1 0 -0 ]
+	  [ 0 0 0 -0 ]
+	  [ 0 0 0 -0 ]
+	  [ 0 0 1 -0 ]
+	]
+	*/
+	PLOG_MSG("conv.dx(A)");
+	PLOG_MSG(conv.dx(A)->to_string());
 
-	std::vector<std::vector<std::string>> h = conv.harris_corner_detection(A);
+	/*
+	0 0 0 0
+	1 0 0 0
+	0 0 0 -1
+	0 0 0 0
+	*/
+	PLOG_MSG("conv.dy(A)");
+	PLOG_MSG(conv.dy(A)->to_string());
 
-	for (uint32_t i = 0; i < h.size(); i++) {
-		for (uint32_t j = 0; j < h[i].size(); j++) {
-			std::cout << h[i][j] << " ";
+	/*
+	0 3.14159 0 0
+	1.5708 0 0 0
+	0 0 0 -1.5708
+	0 0 0 0
+	*/
+	PLOG_MSG("conv.grad_orientation(A)");
+	PLOG_MSG(conv.grad_orientation(A)->to_string());
+
+	/*
+	C C E N
+	C C C E
+	E C C C
+	N E C C
+	*/
+	PLOG_MSG("conv.harris_corner_detection(A)");
+	Vector<Vector<CharType>> h = conv.harris_corner_detection(A);
+
+	String h_res;
+
+	for (int i = 0; i < h.size(); i++) {
+		for (int j = 0; j < h[i].size(); j++) {
+			h_res += h[i][j];
+			h_res += " ";
 		}
-		std::cout << std::endl;
+		h_res += "\n";
 	} // Harris detector works. Life is good!
 
-	std::vector<real_t> a = { 3, 4, 4 };
-	std::vector<real_t> b = { 4, 4, 4 };
-	alg.printVector(alg.cross(a, b));
-	*/
+	PLOG_MSG(h_res);
+
+	std::vector<real_t> a_arr = { 3, 4, 4 };
+	Ref<MLPPVector> a(memnew(MLPPVector(a_arr)));
+	std::vector<real_t> b_arr = { 4, 4, 4 };
+	Ref<MLPPVector> b(memnew(MLPPVector(b_arr)));
+
+	//[MLPPVector: 0 4 -4 ]
+	PLOG_MSG("a->cross(b)");
+	PLOG_MSG(a->cross(b)->to_string());
 }
 void MLPPTests::test_support_vector_classification_kernel(bool ui) {
 	MLPPLinAlg alg;

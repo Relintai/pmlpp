@@ -541,6 +541,7 @@ void MLPPTestsOld::test_numerical_analysis() {
 	// Checks for numerical analysis class.
 	MLPPNumericalAnalysisOld numAn;
 
+	/*
 	std::cout << numAn.quadraticApproximation(f_old, 0, 1) << std::endl;
 
 	std::cout << numAn.cubicApproximation(f_old, 0, 1.001) << std::endl;
@@ -549,9 +550,11 @@ void MLPPTestsOld::test_numerical_analysis() {
 
 	std::cout << numAn.quadraticApproximation(f_mv_old, { 0, 0, 0 }, { 1, 1, 1 }) << std::endl;
 
+
 	std::cout << numAn.numDiff(&f_old, 1) << std::endl;
 	std::cout << numAn.newtonRaphsonMethod(&f_old, 1, 1000) << std::endl;
 	std::cout << numAn.invQuadraticInterpolation(&f_old, { 100, 2, 1.5 }, 10) << std::endl;
+
 
 	std::cout << numAn.numDiff(&f_mv_old, { 1, 1 }, 1) << std::endl; // Derivative w.r.t. x.
 
@@ -563,6 +566,8 @@ void MLPPTestsOld::test_numerical_analysis() {
 
 	std::cout << numAn.numDiff_2(&f_mv_old, { 2, 2, 500 }, 2, 2) << std::endl;
 	std::cout << numAn.numDiff_3(&f_mv_old, { 2, 1000, 130 }, 0, 0, 0) << std::endl;
+
+
 
 	alg.printTensor(numAn.thirdOrderTensor(&f_mv_old, { 1, 1, 1 }));
 	std::cout << "Our Hessian." << std::endl;
@@ -577,11 +582,12 @@ void MLPPTestsOld::test_numerical_analysis() {
 	alg.printTensor(tensor);
 
 	alg.printMatrix(alg.tensor_vec_mult(tensor, { 1, 2 }));
+	
 
 	std::cout << numAn.cubicApproximation(f_mv_old, { 0, 0, 0 }, { 1, 1, 1 }) << std::endl;
 	std::cout << numAn.eulerianMethod(f_prime_old, { 1, 1 }, 1.5, 0.000001) << std::endl;
 	std::cout << numAn.eulerianMethod(f_prime_2var_old, { 2, 3 }, 2.5, 0.00000001) << std::endl;
-
+	*/
 	std::vector<std::vector<real_t>> A = {
 		{ 1, 0, 0, 0 },
 		{ 0, 0, 0, 0 },
@@ -589,8 +595,9 @@ void MLPPTestsOld::test_numerical_analysis() {
 		{ 0, 0, 0, 1 }
 	};
 
-	alg.printMatrix(conv.dx(A));
-	alg.printMatrix(conv.dy(A));
+	//alg.printMatrix(conv.dx(A));
+	//alg.printMatrix(conv.dy(A));
+
 
 	alg.printMatrix(conv.grad_orientation(A));
 

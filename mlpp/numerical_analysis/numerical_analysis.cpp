@@ -7,145 +7,145 @@
 #include "numerical_analysis.h"
 #include "../lin_alg/lin_alg.h"
 
-#include <climits>
-#include <cmath>
-#include <iostream>
-#include <string>
+#include "../lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_tensor3.h"
+#include "../lin_alg/mlpp_vector.h"
 
-/*
-real_t MLPPNumericalAnalysis::numDiff(real_t (*function)(real_t), real_t x) {
+real_t MLPPNumericalAnalysis::num_diffr(real_t (*function)(real_t), real_t x) {
 	real_t eps = 1e-10;
 	return (function(x + eps) - function(x)) / eps; // This is just the formal def. of the derivative.
 }
 
-real_t MLPPNumericalAnalysis::numDiff_2(real_t (*function)(real_t), real_t x) {
+real_t MLPPNumericalAnalysis::num_diff_2r(real_t (*function)(real_t), real_t x) {
 	real_t eps = 1e-5;
 	return (function(x + 2 * eps) - 2 * function(x + eps) + function(x)) / (eps * eps);
 }
 
-real_t MLPPNumericalAnalysis::numDiff_3(real_t (*function)(real_t), real_t x) {
+real_t MLPPNumericalAnalysis::num_diff_3r(real_t (*function)(real_t), real_t x) {
 	real_t eps = 1e-5;
 	real_t t1 = function(x + 3 * eps) - 2 * function(x + 2 * eps) + function(x + eps);
 	real_t t2 = function(x + 2 * eps) - 2 * function(x + eps) + function(x);
 	return (t1 - t2) / (eps * eps * eps);
 }
 
-real_t MLPPNumericalAnalysis::constantApproximation(real_t (*function)(real_t), real_t c) {
+real_t MLPPNumericalAnalysis::constant_approximationr(real_t (*function)(real_t), real_t c) {
 	return function(c);
 }
 
-real_t MLPPNumericalAnalysis::linearApproximation(real_t (*function)(real_t), real_t c, real_t x) {
-	return constantApproximation(function, c) + numDiff(function, c) * (x - c);
+real_t MLPPNumericalAnalysis::linear_approximationr(real_t (*function)(real_t), real_t c, real_t x) {
+	return constant_approximationr(function, c) + num_diffr(function, c) * (x - c);
 }
 
-real_t MLPPNumericalAnalysis::quadraticApproximation(real_t (*function)(real_t), real_t c, real_t x) {
-	return linearApproximation(function, c, x) + 0.5 * numDiff_2(function, c) * (x - c) * (x - c);
+real_t MLPPNumericalAnalysis::quadratic_approximationr(real_t (*function)(real_t), real_t c, real_t x) {
+	return linear_approximationr(function, c, x) + 0.5 * num_diff_2r(function, c) * (x - c) * (x - c);
 }
 
-real_t MLPPNumericalAnalysis::cubicApproximation(real_t (*function)(real_t), real_t c, real_t x) {
-	return quadraticApproximation(function, c, x) + (1 / 6) * numDiff_3(function, c) * (x - c) * (x - c) * (x - c);
+real_t MLPPNumericalAnalysis::cubic_approximationr(real_t (*function)(real_t), real_t c, real_t x) {
+	return quadratic_approximationr(function, c, x) + (1 / 6) * num_diff_3r(function, c) * (x - c) * (x - c) * (x - c);
 }
 
-real_t MLPPNumericalAnalysis::numDiff(real_t (*function)(std::vector<real_t>), std::vector<real_t> x, int axis) {
+real_t MLPPNumericalAnalysis::num_diffv(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &x, int axis) {
 	// For multivariable function analysis.
 	// This will be used for calculating Jacobian vectors.
 	// Diffrentiate with respect to indicated axis. (0, 1, 2 ...)
 	real_t eps = 1e-10;
-	std::vector<real_t> x_eps = x;
-	x_eps[axis] += eps;
+	Ref<MLPPVector> x_eps = x->duplicate_fast();
+	x_eps->element_get_ref(axis) += eps;
 
 	return (function(x_eps) - function(x)) / eps;
 }
 
-real_t MLPPNumericalAnalysis::numDiff_2(real_t (*function)(std::vector<real_t>), std::vector<real_t> x, int axis1, int axis2) {
+real_t MLPPNumericalAnalysis::num_diff_2v(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &x, int axis1, int axis2) {
 	//For Hessians.
 	real_t eps = 1e-5;
 
-	std::vector<real_t> x_pp = x;
-	x_pp[axis1] += eps;
-	x_pp[axis2] += eps;
+	Ref<MLPPVector> x_pp = x->duplicate_fast();
+	x_pp->element_get_ref(axis1) += eps;
+	x_pp->element_get_ref(axis2) += eps;
 
-	std::vector<real_t> x_np = x;
-	x_np[axis2] += eps;
+	Ref<MLPPVector> x_np = x->duplicate_fast();
+	x_np->element_get_ref(axis2) += eps;
 
-	std::vector<real_t> x_pn = x;
-	x_pn[axis1] += eps;
+	Ref<MLPPVector> x_pn = x->duplicate_fast();
+	x_pn->element_get_ref(axis1) += eps;
 
 	return (function(x_pp) - function(x_np) - function(x_pn) + function(x)) / (eps * eps);
 }
 
-real_t MLPPNumericalAnalysis::numDiff_3(real_t (*function)(std::vector<real_t>), std::vector<real_t> x, int axis1, int axis2, int axis3) {
+real_t MLPPNumericalAnalysis::num_diff_3v(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &x, int axis1, int axis2, int axis3) {
 	// For third order derivative tensors.
 	// NOTE: Approximations do not appear to be accurate for sinusodial functions...
 	// Should revisit this later.
 	real_t eps = 1e-5;
 
-	std::vector<real_t> x_ppp = x;
-	x_ppp[axis1] += eps;
-	x_ppp[axis2] += eps;
-	x_ppp[axis3] += eps;
+	Ref<MLPPVector> x_ppp = x->duplicate_fast();
+	x_ppp->element_get_ref(axis1) += eps;
+	x_ppp->element_get_ref(axis2) += eps;
+	x_ppp->element_get_ref(axis3) += eps;
 
-	std::vector<real_t> x_npp = x;
-	x_npp[axis2] += eps;
-	x_npp[axis3] += eps;
+	Ref<MLPPVector> x_npp = x->duplicate_fast();
+	x_npp->element_get_ref(axis2) += eps;
+	x_npp->element_get_ref(axis3) += eps;
 
-	std::vector<real_t> x_pnp = x;
-	x_pnp[axis1] += eps;
-	x_pnp[axis3] += eps;
+	Ref<MLPPVector> x_pnp = x->duplicate_fast();
+	x_pnp->element_get_ref(axis1) += eps;
+	x_pnp->element_get_ref(axis3) += eps;
 
-	std::vector<real_t> x_nnp = x;
-	x_nnp[axis3] += eps;
+	Ref<MLPPVector> x_nnp = x->duplicate_fast();
+	x_nnp->element_get_ref(axis3) += eps;
 
-	std::vector<real_t> x_ppn = x;
-	x_ppn[axis1] += eps;
-	x_ppn[axis2] += eps;
+	Ref<MLPPVector> x_ppn = x->duplicate_fast();
+	x_ppn->element_get_ref(axis1) += eps;
+	x_ppn->element_get_ref(axis2) += eps;
 
-	std::vector<real_t> x_npn = x;
-	x_npn[axis2] += eps;
+	Ref<MLPPVector> x_npn = x->duplicate_fast();
+	x_npn->element_get_ref(axis2) += eps;
 
-	std::vector<real_t> x_pnn = x;
-	x_pnn[axis1] += eps;
+	Ref<MLPPVector> x_pnn = x->duplicate_fast();
+	x_pnn->element_get_ref(axis1) += eps;
 
 	real_t thirdAxis = function(x_ppp) - function(x_npp) - function(x_pnp) + function(x_nnp);
 	real_t noThirdAxis = function(x_ppn) - function(x_npn) - function(x_pnn) + function(x);
 	return (thirdAxis - noThirdAxis) / (eps * eps * eps);
 }
 
-real_t MLPPNumericalAnalysis::newtonRaphsonMethod(real_t (*function)(real_t), real_t x_0, real_t epoch_num) {
+real_t MLPPNumericalAnalysis::newton_raphson_method(real_t (*function)(real_t), real_t x_0, real_t epoch_num) {
 	real_t x = x_0;
 	for (int i = 0; i < epoch_num; i++) {
-		x -= function(x) / numDiff(function, x);
+		x -= function(x) / num_diffr(function, x);
 	}
 	return x;
 }
 
-real_t MLPPNumericalAnalysis::halleyMethod(real_t (*function)(real_t), real_t x_0, real_t epoch_num) {
+real_t MLPPNumericalAnalysis::halley_method(real_t (*function)(real_t), real_t x_0, real_t epoch_num) {
 	real_t x = x_0;
 	for (int i = 0; i < epoch_num; i++) {
-		x -= ((2 * function(x) * numDiff(function, x)) / (2 * numDiff(function, x) * numDiff(function, x) - function(x) * numDiff_2(function, x)));
+		x -= ((2 * function(x) * num_diffr(function, x)) / (2 * num_diffr(function, x) * num_diffr(function, x) - function(x) * num_diff_2r(function, x)));
 	}
 	return x;
 }
 
-real_t MLPPNumericalAnalysis::invQuadraticInterpolation(real_t (*function)(real_t), std::vector<real_t> x_0, int epoch_num) {
+real_t MLPPNumericalAnalysis::inv_quadratic_interpolation(real_t (*function)(real_t), const Ref<MLPPVector> &x_0, int epoch_num) {
 	real_t x = 0;
-	std::vector<real_t> currentThree = x_0;
+	Ref<MLPPVector> ct = x_0->duplicate_fast();
+	MLPPVector &current_three = *(ct.ptr());
+
 	for (int i = 0; i < epoch_num; i++) {
-		real_t t1 = ((function(currentThree[1]) * function(currentThree[2])) / ((function(currentThree[0]) - function(currentThree[1])) * (function(currentThree[0]) - function(currentThree[2])))) * currentThree[0];
-		real_t t2 = ((function(currentThree[0]) * function(currentThree[2])) / ((function(currentThree[1]) - function(currentThree[0])) * (function(currentThree[1]) - function(currentThree[2])))) * currentThree[1];
-		real_t t3 = ((function(currentThree[0]) * function(currentThree[1])) / ((function(currentThree[2]) - function(currentThree[0])) * (function(currentThree[2]) - function(currentThree[1])))) * currentThree[2];
+		real_t t1 = ((function(current_three[1]) * function(current_three[2])) / ((function(current_three[0]) - function(current_three[1])) * (function(current_three[0]) - function(current_three[2])))) * current_three[0];
+		real_t t2 = ((function(current_three[0]) * function(current_three[2])) / ((function(current_three[1]) - function(current_three[0])) * (function(current_three[1]) - function(current_three[2])))) * current_three[1];
+		real_t t3 = ((function(current_three[0]) * function(current_three[1])) / ((function(current_three[2]) - function(current_three[0])) * (function(current_three[2]) - function(current_three[1])))) * current_three[2];
 		x = t1 + t2 + t3;
 
-		currentThree.erase(currentThree.begin());
-		currentThree.push_back(x);
+		current_three.remove(0);
+		current_three.push_back(x);
 	}
 	return x;
 }
 
-real_t MLPPNumericalAnalysis::eulerianMethod(real_t (*derivative)(real_t), std::vector<real_t> q_0, real_t p, real_t h) {
-	int max_epoch = static_cast<int>((p - q_0[0]) / h);
-	real_t x = q_0[0];
-	real_t y = q_0[1];
+real_t MLPPNumericalAnalysis::eulerian_methodr(real_t (*derivative)(real_t), real_t q_0, real_t q_1, real_t p, real_t h) {
+	int max_epoch = static_cast<int>((p - q_0) / h);
+	real_t x = q_0;
+	real_t y = q_1;
 	for (int i = 0; i < max_epoch; i++) {
 		y = y + h * derivative(x);
 		x += h;
@@ -153,18 +153,25 @@ real_t MLPPNumericalAnalysis::eulerianMethod(real_t (*derivative)(real_t), std::
 	return y;
 }
 
-real_t MLPPNumericalAnalysis::eulerianMethod(real_t (*derivative)(std::vector<real_t>), std::vector<real_t> q_0, real_t p, real_t h) {
-	int max_epoch = static_cast<int>((p - q_0[0]) / h);
-	real_t x = q_0[0];
-	real_t y = q_0[1];
+real_t MLPPNumericalAnalysis::eulerian_methodv(real_t (*derivative)(const Ref<MLPPVector> &), real_t q_0, real_t q_1, real_t p, real_t h) {
+	int max_epoch = static_cast<int>((p - q_0) / h);
+
+	Ref<MLPPVector> v;
+	v.instance();
+	v->resize(2);
+
+	real_t x = q_0;
+	real_t y = q_1;
 	for (int i = 0; i < max_epoch; i++) {
-		y = y + h * derivative({ x, y });
+		v->element_set(0, x);
+		v->element_set(1, y);
+		y = y + h * derivative(v);
 		x += h;
 	}
 	return y;
 }
 
-real_t MLPPNumericalAnalysis::growthMethod(real_t C, real_t k, real_t t) {
+real_t MLPPNumericalAnalysis::growth_method(real_t C, real_t k, real_t t) {
 	//dP/dt = kP
 	//dP/P = kdt
 	//integral(1/P)dP = integral(k) dt
@@ -173,73 +180,123 @@ real_t MLPPNumericalAnalysis::growthMethod(real_t C, real_t k, real_t t) {
 	//|P| = e^(C_initial) * e^(kt)
 	//P = +/- e^(C_initial) * e^(kt)
 	//P = C * e^(kt)
-	
 
 	// auto growthFunction = [&C, &k](real_t t) { return C * exp(k * t); };
-	return C * std::exp(k * t);
+	return C * Math::exp(k * t);
 }
 
-std::vector<real_t> MLPPNumericalAnalysis::jacobian(real_t (*function)(std::vector<real_t>), std::vector<real_t> x) {
-	std::vector<real_t> jacobian;
-	jacobian.resize(x.size());
-	for (uint32_t i = 0; i < jacobian.size(); i++) {
-		jacobian[i] = numDiff(function, x, i); // Derivative w.r.t axis i evaluated at x. For all x_i.
+Ref<MLPPVector> MLPPNumericalAnalysis::jacobian(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &x) {
+	Ref<MLPPVector> jacobian;
+	jacobian.instance();
+	jacobian->resize(x->size());
+
+	int jacobian_size = jacobian->size();
+
+	for (int i = 0; i < jacobian_size; ++i) {
+		jacobian->element_set(i, num_diffv(function, x, i)); // Derivative w.r.t axis i evaluated at x. For all x_i.
 	}
+
 	return jacobian;
 }
-std::vector<std::vector<real_t>> MLPPNumericalAnalysis::hessian(real_t (*function)(std::vector<real_t>), std::vector<real_t> x) {
-	std::vector<std::vector<real_t>> hessian;
-	hessian.resize(x.size());
 
-	for (uint32_t i = 0; i < hessian.size(); i++) {
-		hessian[i].resize(x.size());
-	}
+Ref<MLPPMatrix> MLPPNumericalAnalysis::hessian(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &x) {
+	Ref<MLPPMatrix> hessian;
+	hessian.instance();
+	hessian->resize(Size2i(x->size(), x->size()));
 
-	for (uint32_t i = 0; i < hessian.size(); i++) {
-		for (uint32_t j = 0; j < hessian[i].size(); j++) {
-			hessian[i][j] = numDiff_2(function, x, i, j);
+	Size2i hessian_size = hessian->size();
+
+	for (int i = 0; i < hessian_size.y; i++) {
+		for (int j = 0; j < hessian_size.x; j++) {
+			hessian->element_set(i, j, num_diff_2v(function, x, i, j));
 		}
 	}
 
 	return hessian;
 }
 
-std::vector<std::vector<std::vector<real_t>>> MLPPNumericalAnalysis::thirdOrderTensor(real_t (*function)(std::vector<real_t>), std::vector<real_t> x) {
-	std::vector<std::vector<std::vector<real_t>>> tensor;
-	tensor.resize(x.size());
+Ref<MLPPTensor3> MLPPNumericalAnalysis::third_order_tensor(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &x) {
+	Ref<MLPPTensor3> tensor;
+	tensor.instance();
+	tensor->resize(Size3i(x->size(), x->size(), x->size()));
 
-	for (uint32_t i = 0; i < tensor.size(); i++) {
-		tensor[i].resize(x.size());
-		for (uint32_t j = 0; j < tensor[i].size(); j++) {
-			tensor[i][j].resize(x.size());
-		}
-	}
+	Size3i tensor_size = tensor->size();
 
-	for (uint32_t i = 0; i < tensor.size(); i++) { // O(n^3) time complexity :(
-		for (uint32_t j = 0; j < tensor[i].size(); j++) {
-			for (uint32_t k = 0; k < tensor[i][j].size(); k++)
-				tensor[i][j][k] = numDiff_3(function, x, i, j, k);
+	for (int i = 0; i < tensor_size.z; i++) { // O(n^3) time complexity :(
+		for (int j = 0; j < tensor_size.y; j++) {
+			for (int k = 0; k < tensor_size.x; k++)
+				tensor->element_set(i, j, k, num_diff_3v(function, x, i, j, k));
 		}
 	}
 
 	return tensor;
 }
 
-real_t MLPPNumericalAnalysis::constantApproximation(real_t (*function)(std::vector<real_t>), std::vector<real_t> c) {
+Vector<Ref<MLPPMatrix>> MLPPNumericalAnalysis::third_order_tensorvt(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &x) {
+	int x_size = x->size();
+
+	Vector<Ref<MLPPMatrix>> tensor;
+	tensor.resize(x_size);
+
+	for (int i = 0; i < tensor.size(); i++) {
+		Ref<MLPPMatrix> m;
+		m.instance();
+		m->resize(Size2i(x_size, x_size));
+
+		tensor.write[i] = m;
+	}
+
+	for (int i = 0; i < tensor.size(); i++) { // O(n^3) time complexity :(
+		Ref<MLPPMatrix> m = tensor[i];
+
+		for (int j = 0; j < x_size; j++) {
+			for (int k = 0; k < x_size; k++) {
+				m->element_set(j, k, num_diff_3v(function, x, i, j, k));
+			}
+		}
+	}
+
+	return tensor;
+}
+
+real_t MLPPNumericalAnalysis::constant_approximationv(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &c) {
 	return function(c);
 }
 
-real_t MLPPNumericalAnalysis::linearApproximation(real_t (*function)(std::vector<real_t>), std::vector<real_t> c, std::vector<real_t> x) {
+real_t MLPPNumericalAnalysis::linear_approximationv(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &c, const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
-	return constantApproximation(function, c) + alg.matmult(alg.transpose({ jacobian(function, c) }), { alg.subtraction(x, c) })[0][0];
+
+	Ref<MLPPVector> j = jacobian(function, c);
+	Ref<MLPPMatrix> mj;
+	mj.instance();
+	mj->row_add_mlpp_vector(j);
+
+	Ref<MLPPVector> xsc = x->subn(c);
+	Ref<MLPPMatrix> mxsc;
+	mxsc.instance();
+	mxsc->row_add_mlpp_vector(xsc);
+
+	Ref<MLPPMatrix> m = mj->transposen()->multn(mxsc);
+
+	return constant_approximationv(function, c) + m->element_get(0, 0);
 }
 
-real_t MLPPNumericalAnalysis::quadraticApproximation(real_t (*function)(std::vector<real_t>), std::vector<real_t> c, std::vector<real_t> x) {
+real_t MLPPNumericalAnalysis::quadratic_approximationv(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &c, const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
-	return linearApproximation(function, c, x) + 0.5 * alg.matmult({ (alg.subtraction(x, c)) }, alg.matmult(hessian(function, c), alg.transpose({ alg.subtraction(x, c) })))[0][0];
+
+	Ref<MLPPMatrix> h = hessian(function, c);
+
+	Ref<MLPPVector> xsc = x->subn(c);
+	Ref<MLPPMatrix> mxsc;
+	mxsc.instance();
+	mxsc->row_add_mlpp_vector(xsc);
+
+	Ref<MLPPMatrix> r = mxsc->multn(h->multn(mxsc->transposen()));
+
+	return linear_approximationv(function, c, x) + 0.5 * r->element_get(0, 0);
 }
 
-real_t MLPPNumericalAnalysis::cubicApproximation(real_t (*function)(std::vector<real_t>), std::vector<real_t> c, std::vector<real_t> x) {
+real_t MLPPNumericalAnalysis::cubic_approximationv(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &c, const Ref<MLPPVector> &x) {
 	//Not completely sure as the literature seldom discusses the third order taylor approximation,
 	//in particular for multivariate cases, but ostensibly, the matrix/tensor/vector multiplies
 	//should look something like this:
@@ -247,35 +304,45 @@ real_t MLPPNumericalAnalysis::cubicApproximation(real_t (*function)(std::vector<
 	//(N x N x N) (N x 1) [tensor vector mult] => (N x N x 1) => (N x N)
 	//Perform remaining multiplies as done for the 2nd order approximation.
 	//Result is a scalar.
-	
-	MLPPLinAlg alg;
-	std::vector<std::vector<real_t>> resultMat = alg.tensor_vec_mult(thirdOrderTensor(function, c), alg.subtraction(x, c));
-	real_t resultScalar = alg.matmult({ (alg.subtraction(x, c)) }, alg.matmult(resultMat, alg.transpose({ alg.subtraction(x, c) })))[0][0];
 
-	return quadraticApproximation(function, c, x) + (1 / 6) * resultScalar;
+	MLPPLinAlg alg;
+
+	Ref<MLPPVector> xsc = x->subn(c);
+	Ref<MLPPMatrix> mxsc;
+	mxsc.instance();
+	mxsc->row_add_mlpp_vector(xsc);
+
+	Ref<MLPPMatrix> result_mat = third_order_tensor(function, c)->tensor_vec_mult(xsc);
+	real_t result_scalar = mxsc->multn(result_mat->multn(mxsc->transposen()))->element_get(0, 0);
+
+	return quadratic_approximationv(function, c, x) + (1 / 6) * result_scalar;
 }
 
-real_t MLPPNumericalAnalysis::laplacian(real_t (*function)(std::vector<real_t>), std::vector<real_t> x) {
-	std::vector<std::vector<real_t>> hessian_matrix = hessian(function, x);
+real_t MLPPNumericalAnalysis::laplacian(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &x) {
+	Ref<MLPPMatrix> hessian_matrix = hessian(function, x);
 	real_t laplacian = 0;
 
-	for (uint32_t i = 0; i < hessian_matrix.size(); i++) {
-		laplacian += hessian_matrix[i][i]; // homogenous 2nd derivs w.r.t i, then i
+	Size2i hessian_matrix_size = hessian_matrix->size();
+
+	for (int i = 0; i < hessian_matrix_size.y; i++) {
+		laplacian += hessian_matrix->element_get(i, i); // homogenous 2nd derivs w.r.t i, then i
 	}
 
 	return laplacian;
 }
 
-std::string MLPPNumericalAnalysis::secondPartialDerivativeTest(real_t (*function)(std::vector<real_t>), std::vector<real_t> x) {
+String MLPPNumericalAnalysis::second_partial_derivative_test(real_t (*function)(const Ref<MLPPVector> &), const Ref<MLPPVector> &x) {
 	MLPPLinAlg alg;
-	std::vector<std::vector<real_t>> hessianMatrix = hessian(function, x);
-	
+	Ref<MLPPMatrix> hessian_matrix = hessian(function, x);
+
+	Size2i hessian_matrix_size = hessian_matrix->size();
+
 	// The reason we do this is because the 2nd partial derivative test is less conclusive for functions of variables greater than
 	// 2, and the calculations specific to the bivariate case are less computationally intensive.
-	
-	if (x.size() == 2) {
-		real_t det = alg.det(hessianMatrix, hessianMatrix.size());
-		real_t secondDerivative = numDiff_2(function, x, 0, 0);
+
+	if (hessian_matrix_size.y == 2) {
+		real_t det = hessian_matrix->det();
+		real_t secondDerivative = num_diff_2v(function, x, 0, 0);
 		if (secondDerivative > 0 && det > 0) {
 			return "min";
 		} else if (secondDerivative < 0 && det > 0) {
@@ -286,18 +353,17 @@ std::string MLPPNumericalAnalysis::secondPartialDerivativeTest(real_t (*function
 			return "test was inconclusive";
 		}
 	} else {
-		if (alg.positiveDefiniteChecker(hessianMatrix)) {
+		if (alg.positive_definite_checker(hessian_matrix)) {
 			return "min";
-		} else if (alg.negativeDefiniteChecker(hessianMatrix)) {
+		} else if (alg.negative_definite_checker(hessian_matrix)) {
 			return "max";
-		} else if (!alg.zeroEigenvalue(hessianMatrix)) {
+		} else if (!alg.zero_eigenvalue(hessian_matrix)) {
 			return "saddle";
 		} else {
 			return "test was inconclusive";
 		}
 	}
 }
-*/
 
 void MLPPNumericalAnalysis::_bind_methods() {
 }
