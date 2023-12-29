@@ -4,6 +4,10 @@ A Machine Learning module for the Pandemonium Engine. Based on: https://github.c
 
 
 ## Contents of the Library
+0. ***Math Classes***
+    1. Vector
+    2. Matrix
+    3. Tensor3
 1. ***Regression***
     1. Linear Regression 
     2. Logistic Regression
