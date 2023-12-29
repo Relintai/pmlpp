@@ -14,13 +14,13 @@
 
 #include "core/object/resource.h"
 
-#else 
+#else
 
+#include "core/containers/vector.h"
 #include "core/defs.h"
 #include "core/math_funcs.h"
-#include "core/pool_arrays.h"
-#include "core/containers/vector.h"
 #include "core/os/memory.h"
+#include "core/pool_arrays.h"
 
 #include "gen/resource.h"
 
@@ -121,10 +121,10 @@ public:
 		_data[p_index_y * _size.x + p_index_x + _size.x * _size.y * p_index_z] = p_val;
 	}
 
-	Vector<real_t> row_get_vector(int p_index_y, int p_index_z) const;
-	PoolRealArray row_get_pool_vector(int p_index_y, int p_index_z) const;
-	Ref<MLPPVector> row_get_mlpp_vector(int p_index_y, int p_index_z) const;
-	void row_get_into_mlpp_vector(int p_index_y, int p_index_z, Ref<MLPPVector> target) const;
+	Vector<real_t> row_get_vector(int p_index_z, int p_index_y) const;
+	PoolRealArray row_get_pool_vector(int p_index_z, int p_index_y) const;
+	Ref<MLPPVector> row_get_mlpp_vector(int p_index_z, int p_index_y) const;
+	void row_get_into_mlpp_vector(int p_index_z, int p_index_y, Ref<MLPPVector> target) const;
 
 	void row_set_vector(int p_index_y, int p_index_z, const Vector<real_t> &p_row);
 	void row_set_pool_vector(int p_index_y, int p_index_z, const PoolRealArray &p_row);
@@ -244,7 +244,7 @@ public:
 
 	//real_t norm_2(std::vector<std::vector<std::vector<real_t>>> A);
 
-	//std::vector<std::vector<real_t>> tensor_vec_mult(std::vector<std::vector<std::vector<real_t>>> A, std::vector<real_t> b);
+	Ref<MLPPMatrix> tensor_vec_mult(const Ref<MLPPVector> &b);
 	//std::vector<std::vector<std::vector<real_t>>> vector_wise_tensor_product(std::vector<std::vector<std::vector<real_t>>> A, std::vector<std::vector<real_t>> B);
 
 public:

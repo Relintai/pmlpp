@@ -240,7 +240,7 @@ void MLPPTensor3::shape_set(const Size3i &p_size) {
 	_size = p_size;
 }
 
-Vector<real_t> MLPPTensor3::row_get_vector(int p_index_y, int p_index_z) const {
+Vector<real_t> MLPPTensor3::row_get_vector(int p_index_z, int p_index_y) const {
 	ERR_FAIL_INDEX_V(p_index_y, _size.y, Vector<real_t>());
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, Vector<real_t>());
 
@@ -263,7 +263,7 @@ Vector<real_t> MLPPTensor3::row_get_vector(int p_index_y, int p_index_z) const {
 	return ret;
 }
 
-PoolRealArray MLPPTensor3::row_get_pool_vector(int p_index_y, int p_index_z) const {
+PoolRealArray MLPPTensor3::row_get_pool_vector(int p_index_z, int p_index_y) const {
 	ERR_FAIL_INDEX_V(p_index_y, _size.y, PoolRealArray());
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, PoolRealArray());
 
@@ -287,7 +287,7 @@ PoolRealArray MLPPTensor3::row_get_pool_vector(int p_index_y, int p_index_z) con
 	return ret;
 }
 
-Ref<MLPPVector> MLPPTensor3::row_get_mlpp_vector(int p_index_y, int p_index_z) const {
+Ref<MLPPVector> MLPPTensor3::row_get_mlpp_vector(int p_index_z, int p_index_y) const {
 	ERR_FAIL_INDEX_V(p_index_y, _size.y, Ref<MLPPVector>());
 	ERR_FAIL_INDEX_V(p_index_z, _size.z, Ref<MLPPVector>());
 
@@ -311,7 +311,7 @@ Ref<MLPPVector> MLPPTensor3::row_get_mlpp_vector(int p_index_y, int p_index_z) c
 	return ret;
 }
 
-void MLPPTensor3::row_get_into_mlpp_vector(int p_index_y, int p_index_z, Ref<MLPPVector> target) const {
+void MLPPTensor3::row_get_into_mlpp_vector(int p_index_z, int p_index_y, Ref<MLPPVector> target) const {
 	ERR_FAIL_COND(!target.is_valid());
 	ERR_FAIL_INDEX(p_index_y, _size.y);
 	ERR_FAIL_INDEX(p_index_z, _size.z);
@@ -1841,21 +1841,25 @@ real_t MLPPTensor3::norm_2(std::vector<std::vector<std::vector<real_t>>> A) {
 }
 */
 
-/*
-std::vector<std::vector<real_t>> MLPPTensor3::tensor_vec_mult(std::vector<std::vector<std::vector<real_t>>> A, std::vector<real_t> b) {
-	std::vector<std::vector<real_t>> C;
-	C.resize(A.size());
-	for (uint32_t i = 0; i < C.size(); i++) {
-		C[i].resize(A[0].size());
-	}
-	for (uint32_t i = 0; i < C.size(); i++) {
-		for (uint32_t j = 0; j < C[i].size(); j++) {
-			C[i][j] = dot(A[i][j], b);
+Ref<MLPPMatrix> MLPPTensor3::tensor_vec_mult(const Ref<MLPPVector> &b) {
+	Ref<MLPPMatrix> C;
+	C.instance();
+	C->resize(Size2i(_size.y, _size.z));
+
+	Ref<MLPPVector> row_tmp;
+	row_tmp.instance();
+	row_tmp->resize(_size.x);
+
+	for (int i = 0; i < _size.z; i++) {
+		for (int j = 0; j < _size.y; j++) {
+			row_get_into_mlpp_vector(i, j, row_tmp);
+
+			C->element_set(i, j, row_tmp->dot(b));
 		}
 	}
+
 	return C;
 }
-*/
 
 /*
 // Bad implementation. Change this later.
