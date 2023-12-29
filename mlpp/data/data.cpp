@@ -13,7 +13,6 @@
 #include "../stat/stat.h"
 
 #include "../softmax_net/softmax_net.h"
-#include "data_old.h"
 
 #include <algorithm>
 #include <cmath>

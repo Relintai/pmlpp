@@ -80,6 +80,21 @@ void MLPPTestsOld::test_univariate_linear_regression() {
 }
 
 void MLPPTestsOld::test_multivariate_linear_regression_gradient_descent(bool ui) {
+	MLPPData data;
+	MLPPLinAlgOld alg;
+
+	Ref<MLPPDataSimple> ds = data.load_california_housing(_california_housing_data_path);
+
+	MLPPLinRegOld model_old(ds->get_input()->to_std_vector(), ds->get_output()->to_std_vector()); // Can use Lasso, Ridge, ElasticNet Reg
+	model_old.SGD(0.00000001, 300000, ui);
+	alg.printVector(model_old.modelSetTest(ds->get_input()->to_std_vector()));
+
+	//void Momentum(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool UI = false);
+	//void NAG(real_t learning_rate, int max_epoch, int mini_batch_size, real_t gamma, bool UI = false);
+	//void Adagrad(real_t learning_rate, int max_epoch, int mini_batch_size, real_t e, bool UI = false);
+	//void Adadelta(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t e, bool UI = false);
+	//void Adamax(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI = false);
+	//void Nadam(real_t learning_rate, int max_epoch, int mini_batch_size, real_t b1, real_t b2, real_t e, bool UI = false);
 }
 
 void MLPPTestsOld::test_multivariate_linear_regression_sgd(bool ui) {
