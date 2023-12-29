@@ -5,7 +5,7 @@
 /*                    PMLPP Machine Learning Library                     */
 /*                   https://github.com/Relintai/pmlpp                   */
 /*************************************************************************/
-/* Copyright (c) 2022-present Péter Magyar.                              */
+/* Copyright (c) 2023-present Péter Magyar.                              */
 /* Copyright (c) 2022-2023 Marc Melikyan                                 */
 /*                                                                       */
 /* Permission is hereby granted, free of charge, to any person obtaining */
