@@ -2223,26 +2223,25 @@ void MLPPTensor3::set_from_std_vectors(const std::vector<std::vector<std::vector
 		return;
 	}
 
-	resize(Size3i(p_from[1].size(), p_from[0].size(), p_from.size()));
+	resize(Size3i(p_from[0][0].size(), p_from[0].size(), p_from.size()));
 
 	if (data_size() == 0) {
 		reset();
 		return;
 	}
 
-	for (uint32_t k = 0; k < p_from.size(); ++k) {
-		const std::vector<std::vector<real_t>> &fm = p_from[k];
+	for (uint32_t z = 0; z < p_from.size(); ++z) {
+		const std::vector<std::vector<real_t>> &vxy = p_from[z];
 
-		for (uint32_t i = 0; i < p_from.size(); ++i) {
-			const std::vector<real_t> &r = fm[i];
+		for (uint32_t y = 0; y < vxy.size(); ++y) {
+			ERR_CONTINUE(vxy.size() != static_cast<uint32_t>(_size.y));
 
-			ERR_CONTINUE(r.size() != static_cast<uint32_t>(_size.x));
+			const std::vector<real_t> &vx = vxy[y];
 
-			int start_index = i * _size.x;
+			ERR_CONTINUE(vx.size() != static_cast<uint32_t>(_size.x));
 
-			const real_t *from_ptr = &r[0];
-			for (int j = 0; j < _size.x; j++) {
-				_data[start_index + j] = from_ptr[j];
+			for (uint32_t x = 0; x < vx.size(); ++x) {
+				element_set(y, x, z, vx[x]);
 			}
 		}
 	}
