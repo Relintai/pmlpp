@@ -14,6 +14,8 @@ while IFS= read -rd '' f; do
     # Exclude some files.
     if [[ "$f" == *"-so_wrap."* ]]; then
         continue
+    elif [[ "$f" == "sfw"* ]]; then
+        continue
     fi
 
     for extension in ${CLANG_FORMAT_FILE_EXTS[@]}; do
