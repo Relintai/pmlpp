@@ -12,29 +12,7 @@ CLANG_FORMAT_FILE_EXTS=(".c" ".h" ".cpp" ".hpp" ".cc" ".hh" ".cxx" ".m" ".mm" ".
 git grep -zIl '' |
 while IFS= read -rd '' f; do
     # Exclude some files.
-    if [[ "$f" == "thirdparty"* ]]; then
-        continue
-    elif [[ "$f" == "modules/database_sqlite/sqlite"* ]]; then
-        continue
-    elif [[ "$f" == "modules/fastnoise/lib"* ]]; then
-        continue
-    elif [[ "$f" == "modules/http_server_simple/http_parser"* ]]; then
-        continue
-    elif [[ "$f" == "modules/http_server_simple/multipart_parser_c"* ]]; then
-        continue
-    elif [[ "$f" == "modules/lz4/thirdparty"* ]]; then
-        continue
-    elif [[ "$f" == "modules/mesh_utils/delaunay"* ]]; then
-        continue
-    elif [[ "$f" == "modules/mesh_utils/xatlas"* ]]; then
-        continue
-    elif [[ "$f" == "modules/texture_packer/rectpack2D"* ]]; then
-        continue
-    elif [[ "$f" == "modules/web/html/libs"* ]]; then
-        continue
-    elif [[ "$f" == "platform/android/java/lib/src/com/google"* ]]; then
-        continue
-    elif [[ "$f" == *"-so_wrap."* ]]; then
+    if [[ "$f" == *"-so_wrap."* ]]; then
         continue
     fi
 
@@ -43,15 +21,6 @@ while IFS= read -rd '' f; do
             # Run clang-format.
             clang-format --Wno-error=unknown -i "$f"
             # Fix copyright headers, but not all files get them.
-            if [[ "$f" == *"inc" ]]; then
-                continue 2
-            elif [[ "$f" == *"glsl" ]]; then
-                continue 2
-            elif [[ "$f" == *"theme_data.h" ]]; then
-                continue 2
-            elif [[ "$f" == "platform/android/java/lib/src/org/pandemoniumengine/pandemonium/utils/ProcessPhoenix"* ]]; then
-                continue 2
-            fi
             python misc/scripts/copyright_headers.py "$f"
             continue 2
         fi
