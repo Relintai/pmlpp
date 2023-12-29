@@ -121,28 +121,22 @@ public:
 
 	QRDResult qrd(const Ref<MLPPMatrix> &A);
 
-	/*
 	struct CholeskyResult {
-		std::vector<std::vector<real_t>> L;
-		std::vector<std::vector<real_t>> Lt;
+		Ref<MLPPMatrix> L;
+		Ref<MLPPMatrix> Lt;
 	};
 
-	CholeskyResult cholesky(std::vector<std::vector<real_t>> A);
-	*/
+	CholeskyResult cholesky(const Ref<MLPPMatrix> &A);
 
 	//real_t sum_elements(std::vector<std::vector<real_t>> A);
 
 	Ref<MLPPVector> flattenvvnv(const Ref<MLPPMatrix> &A);
+	Ref<MLPPVector> solve(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b);
 
-	/*
-	std::vector<real_t> solve(std::vector<std::vector<real_t>> A, std::vector<real_t> b);
+	bool positive_definite_checker(const Ref<MLPPMatrix> &A);
+	bool negative_definite_checker(const Ref<MLPPMatrix> &A);
 
-	bool positiveDefiniteChecker(std::vector<std::vector<real_t>> A);
-
-	bool negativeDefiniteChecker(std::vector<std::vector<real_t>> A);
-
-	bool zeroEigenvalue(std::vector<std::vector<real_t>> A);
-	*/
+	bool zero_eigenvalue(const Ref<MLPPMatrix> &A);
 
 	// VECTOR FUNCTIONS
 

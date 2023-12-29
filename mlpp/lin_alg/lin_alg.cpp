@@ -932,34 +932,44 @@ MLPPLinAlg::QRDResult MLPPLinAlg::qrd(const Ref<MLPPMatrix> &A) {
 	return res;
 }
 
-/*
-MLPPLinAlg::CholeskyResult MLPPLinAlg::cholesky(std::vector<std::vector<real_t>> A) {
-	std::vector<std::vector<real_t>> L = zeromat(A.size(), A[0].size());
-	for (uint32_t j = 0; j < L.size(); j++) { // Matrices entered must be square. No problem here.
-		for (uint32_t i = j; i < L.size(); i++) {
+MLPPLinAlg::CholeskyResult MLPPLinAlg::cholesky(const Ref<MLPPMatrix> &A) {
+	Size2i a_size = A->size();
+
+	CholeskyResult res;
+
+	ERR_FAIL_COND_V(a_size.x != a_size.y, res);
+
+	Ref<MLPPMatrix> L = zeromatnm(a_size.y, a_size.x);
+
+	for (int j = 0; j < a_size.y; ++j) { // Matrices entered must be square. No problem here.
+		for (int i = j; i < a_size.y; ++i) {
 			if (i == j) {
 				real_t sum = 0;
-				for (uint32_t k = 0; k < j; k++) {
-					sum += L[i][k] * L[i][k];
+
+				for (int k = 0; k < j; k++) {
+					real_t lik = L->element_get(i, k);
+
+					sum += lik * lik;
 				}
-				L[i][j] = Math::sqrt(A[i][j] - sum);
+
+				L->element_set(i, j, Math::sqrt(A->element_get(i, j) - sum));
 			} else { // That is, i!=j
 				real_t sum = 0;
-				for (uint32_t k = 0; k < j; k++) {
-					sum += L[i][k] * L[j][k];
+
+				for (int k = 0; k < j; k++) {
+					sum += L->element_get(i, k) * L->element_get(j, k);
 				}
-				L[i][j] = (A[i][j] - sum) / L[j][j];
+
+				L->element_set(i, j, (A->element_get(i, j) - sum) / L->element_get(j, j));
 			}
 		}
 	}
 
-	CholeskyResult res;
 	res.L = L;
-	res.Lt = transpose(L); // Indeed, L.T is our upper triangular matrix.
+	res.Lt = L->transposen(); // Indeed, L.T is our upper triangular matrix.
 
 	return res;
 }
-*/
 
 /*
 real_t MLPPLinAlg::sum_elements(std::vector<std::vector<real_t>> A) {
@@ -990,62 +1000,54 @@ Ref<MLPPVector> MLPPLinAlg::flattenvvnv(const Ref<MLPPMatrix> &A) {
 	return res;
 }
 
-/*
-std::vector<real_t> MLPPLinAlg::solve(std::vector<std::vector<real_t>> A, std::vector<real_t> b) {
-	return mat_vec_mult(inverse(A), b);
+Ref<MLPPVector> MLPPLinAlg::solve(const Ref<MLPPMatrix> &A, const Ref<MLPPVector> &b) {
+	return A->inverse()->mult_vec(b);
 }
 
-bool MLPPLinAlg::positiveDefiniteChecker(std::vector<std::vector<real_t>> A) {
-	auto eig_result = eig(A);
-	auto eigenvectors = std::get<0>(eig_result);
-	auto eigenvals = std::get<1>(eig_result);
+bool MLPPLinAlg::positive_definite_checker(const Ref<MLPPMatrix> &A) {
+	EigenResult eig_result = eigen(A);
 
-	std::vector<real_t> eigenvals_vec;
-	for (uint32_t i = 0; i < eigenvals.size(); i++) {
-		eigenvals_vec.push_back(eigenvals[i][i]);
-	}
-	for (uint32_t i = 0; i < eigenvals_vec.size(); i++) {
-		if (eigenvals_vec[i] <= 0) { // Simply check to ensure all eigenvalues are positive.
+	Ref<MLPPMatrix> eigenvals = eig_result.eigen_values;
+	Size2i eigenvals_size = eigenvals->size();
+
+	for (int i = 0; i < eigenvals_size.y; ++i) {
+		if (eigenvals->element_get(i, i) <= 0) { // Simply check to ensure all eigenvalues are positive.
 			return false;
 		}
 	}
+
 	return true;
 }
 
-bool MLPPLinAlg::negativeDefiniteChecker(std::vector<std::vector<real_t>> A) {
-	auto eig_result = eig(A);
-	auto eigenvectors = std::get<0>(eig_result);
-	auto eigenvals = std::get<1>(eig_result);
+bool MLPPLinAlg::negative_definite_checker(const Ref<MLPPMatrix> &A) {
+	EigenResult eig_result = eigen(A);
 
-	std::vector<real_t> eigenvals_vec;
-	for (uint32_t i = 0; i < eigenvals.size(); i++) {
-		eigenvals_vec.push_back(eigenvals[i][i]);
-	}
-	for (uint32_t i = 0; i < eigenvals_vec.size(); i++) {
-		if (eigenvals_vec[i] >= 0) { // Simply check to ensure all eigenvalues are negative.
+	Ref<MLPPMatrix> eigenvals = eig_result.eigen_values;
+	Size2i eigenvals_size = eigenvals->size();
+
+	for (int i = 0; i < eigenvals_size.y; ++i) {
+		if (eigenvals->element_get(i, i) >= 0) { // Simply check to ensure all eigenvalues are negative.
 			return false;
 		}
 	}
+
 	return true;
 }
 
-bool MLPPLinAlg::zeroEigenvalue(std::vector<std::vector<real_t>> A) {
-	auto eig_result = eig(A);
-	auto eigenvectors = std::get<0>(eig_result);
-	auto eigenvals = std::get<1>(eig_result);
+bool MLPPLinAlg::zero_eigenvalue(const Ref<MLPPMatrix> &A) {
+	EigenResult eig_result = eigen(A);
 
-	std::vector<real_t> eigenvals_vec;
-	for (uint32_t i = 0; i < eigenvals.size(); i++) {
-		eigenvals_vec.push_back(eigenvals[i][i]);
-	}
-	for (uint32_t i = 0; i < eigenvals_vec.size(); i++) {
-		if (eigenvals_vec[i] == 0) {
-			return true;
+	Ref<MLPPMatrix> eigenvals = eig_result.eigen_values;
+	Size2i eigenvals_size = eigenvals->size();
+
+	for (int i = 0; i < eigenvals_size.y; ++i) {
+		if (eigenvals->element_get(i, i) == 0) { // TODO should it use is_equal_approx?
+			return false;
 		}
 	}
-	return false;
+
+	return true;
 }
-*/
 
 Ref<MLPPVector> MLPPLinAlg::flattenmnv(const Vector<Ref<MLPPVector>> &A) {
 	Ref<MLPPVector> a;

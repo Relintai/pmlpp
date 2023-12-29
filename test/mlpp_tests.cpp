@@ -1157,7 +1157,7 @@ void MLPPTests::test_new_math_functions() {
 	PLOG_MSG(alg.gram_schmidt_process(P)->to_string());
 
 	MLPPLinAlg::QRDResult qrd_result = alg.qrd(P); // It works!
-	
+
 	//[MLPPMatrix:
 	//  [ 0.857143 -0.394286 -0.331429 ]
 	//  [ 0.428571 0.902857 0.034286 ]
@@ -1172,27 +1172,26 @@ void MLPPTests::test_new_math_functions() {
 	PLOG_MSG(qrd_result.R->to_string());
 }
 void MLPPTests::test_positive_definiteness_checker() {
-	/*
-	//MLPPStat stat;
 	MLPPLinAlg alg;
-	//MLPPActivation avn;
-	//MLPPCost cost;
-	//MLPPData data;
-	//MLPPConvolutions conv;
 
 	// Checking positive-definiteness checker. For Cholesky Decomp.
-	std::vector<std::vector<real_t>> A = {
+	std::vector<std::vector<real_t>> A_arr = {
 		{ 1, -1, -1, -1 },
 		{ -1, 2, 2, 2 },
 		{ -1, 2, 3, 1 },
 		{ -1, 2, 1, 4 }
 	};
 
-	std::cout << std::boolalpha << alg.positiveDefiniteChecker(A) << std::endl;
+	Ref<MLPPMatrix> A(memnew(MLPPMatrix(A_arr)));
+
+	PLOG_MSG("positive_definite_checker Example:");
+	PLOG_MSG(String::bool_str(alg.positive_definite_checker(A)));
+
+	PLOG_MSG("Cholesky Example:");
 	MLPPLinAlg::CholeskyResult chres = alg.cholesky(A); // works.
-	alg.printMatrix(chres.L);
-	alg.printMatrix(chres.Lt);
-	*/
+
+	PLOG_MSG(chres.L->to_string());
+	PLOG_MSG(chres.Lt->to_string());
 }
 
 // real_t f(real_t x){
