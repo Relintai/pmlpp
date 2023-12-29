@@ -224,8 +224,9 @@ Ref<MLPPTensor3> MLPPNumericalAnalysis::third_order_tensor(real_t (*function)(co
 
 	for (int i = 0; i < tensor_size.z; i++) { // O(n^3) time complexity :(
 		for (int j = 0; j < tensor_size.y; j++) {
-			for (int k = 0; k < tensor_size.x; k++)
+			for (int k = 0; k < tensor_size.x; k++) {
 				tensor->element_set(i, j, k, num_diff_3v(function, x, i, j, k));
+			}
 		}
 	}
 
