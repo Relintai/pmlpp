@@ -37,8 +37,8 @@ class MLPPLinAlg : public Reference {
 public:
 	// MATRIX FUNCTIONS
 
-	//std::vector<std::vector<real_t>> gramMatrix(std::vector<std::vector<real_t>> A);
-	//bool linearIndependenceChecker(std::vector<std::vector<real_t>> A);
+	Ref<MLPPMatrix> gram_matrix(const Ref<MLPPMatrix> &A);
+	bool linear_independence_checker(const Ref<MLPPMatrix> &A);
 
 	Ref<MLPPMatrix> gaussian_noise(int n, int m);
 

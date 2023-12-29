@@ -14,20 +14,17 @@
 #include <map>
 #include <random>
 
-/*
-std::vector<std::vector<real_t>> MLPPLinAlg::gramMatrix(std::vector<std::vector<real_t>> A) {
-	return matmult(transpose(A), A); // AtA
+Ref<MLPPMatrix> MLPPLinAlg::gram_matrix(const Ref<MLPPMatrix> &A) {
+	return A->transposen()->multn(A); // AtA
 }
-*/
 
-/*
-bool MLPPLinAlg::linearIndependenceChecker(std::vector<std::vector<real_t>> A) {
-	if (det(gramMatrix(A), A.size()) == 0) {
+bool MLPPLinAlg::linear_independence_checker(const Ref<MLPPMatrix> &A) {
+	if (gram_matrix(A)->det(A->size().y) == 0) {
 		return false;
 	}
+
 	return true;
 }
-*/
 
 Ref<MLPPMatrix> MLPPLinAlg::gaussian_noise(int n, int m) {
 	std::random_device rd;

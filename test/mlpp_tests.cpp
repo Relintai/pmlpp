@@ -1269,7 +1269,6 @@ void MLPPTests::test_numerical_analysis() {
 	// Checks for numerical analysis class.
 	MLPPNumericalAnalysis num_an;
 
-	/*
 	//1
 	PLOG_MSG("num_an.quadratic_approximationr(f, 0, 1)");
 	PLOG_MSG(String::num(num_an.quadratic_approximationr(f, 0, 1)));
@@ -1282,12 +1281,10 @@ void MLPPTests::test_numerical_analysis() {
 	PLOG_MSG("f(1.001)");
 	PLOG_MSG(String::num(f(1.001)));
 
-
 	Ref<MLPPVector> v30;
 	v30.instance();
 	v30->resize(3);
 	v30->fill(0);
-
 
 	Ref<MLPPVector> v31;
 	v31.instance();
@@ -1297,7 +1294,6 @@ void MLPPTests::test_numerical_analysis() {
 	//1.00001
 	PLOG_MSG("num_an.quadratic_approximationv(f_mv, v30, v31)");
 	PLOG_MSG(String::num(num_an.quadratic_approximationv(f_mv, v30, v31)));
-
 
 	const real_t iqi_arr[] = { 100, 2, 1.5 };
 	Ref<MLPPVector> iqi(memnew(MLPPVector(iqi_arr, 3)));
@@ -1315,7 +1311,6 @@ void MLPPTests::test_numerical_analysis() {
 	//21715200
 	PLOG_MSG("num_an.inv_quadratic_interpolation(&f, iqi, 10)");
 	PLOG_MSG(String::num(num_an.inv_quadratic_interpolation(&f, iqi, 10)));
-
 
 	Ref<MLPPVector> v21;
 	v21.instance();
@@ -1351,7 +1346,6 @@ void MLPPTests::test_numerical_analysis() {
 	//128000015514730496
 	PLOG_MSG("num_an.num_diff_3v(&f_mv, nd3v, 0, 0, 0)");
 	PLOG_MSG(String::num(num_an.num_diff_3v(&f_mv, nd3v, 0, 0, 0)));
-	*/
 
 	Ref<MLPPVector> v31t;
 	v31t.instance();
@@ -1433,16 +1427,6 @@ void MLPPTests::test_numerical_analysis() {
 	*/
 	PLOG_MSG("tensor->tensor_vec_mult(tvm)");
 	PLOG_MSG(tensor->tensor_vec_mult(tvm)->to_string());
-
-	Ref<MLPPVector> v30;
-	v30.instance();
-	v30->resize(3);
-	v30->fill(0);
-
-	Ref<MLPPVector> v31;
-	v31.instance();
-	v31->resize(3);
-	v31->fill(1);
 
 	//1.00001
 	PLOG_MSG("num_an.cubic_approximationv(f_mv, v30, v31)");
@@ -1537,16 +1521,19 @@ void MLPPTests::test_support_vector_classification_kernel(bool ui) {
 
 	MLPPDualSVC kernelSVM(dt->get_input(), dt->get_output(), 1000);
 	kernelSVM.gradient_descent(0.0001, 20, ui);
+
+	//SCORE: 0.372583
 	PLOG_MSG("SCORE: " + String::num(kernelSVM.score()));
 
-	/*
-	std::vector<std::vector<real_t>> linearlyIndependentMat = {
+	std::vector<std::vector<real_t>> linearly_independent_mat_arr = {
 		{ 1, 2, 3, 4 },
 		{ 2345384, 4444, 6111, 55 }
 	};
+	Ref<MLPPMatrix> linearly_independent_mat(memnew(MLPPMatrix(linearly_independent_mat_arr)));
 
-	std::cout << "True of false: linearly independent?: " << std::boolalpha << alg.linearIndependenceChecker(linearlyIndependentMat) << std::endl;
-	*/
+	//true
+	PLOG_MSG("alg.linear_independence_checker(linearly_independent_mat)");
+	PLOG_MSG(String::bool_str(alg.linear_independence_checker(linearly_independent_mat)));
 }
 
 void MLPPTests::test_mlpp_vector() {
