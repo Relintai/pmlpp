@@ -20,16 +20,13 @@ from os.path import normpath, basename
 base_folder_path = str(os.path.abspath(Path(__file__).parent)) + "/"
 base_folder_only = os.path.basename(os.path.normpath(base_folder_path))
 # Listing all the folders we have converted
-# for SCU in scu_builders.py
-_scu_folders = set()
-
 
 def set_scu_folders(scu_folders):
     global _scu_folders
     _scu_folders = scu_folders
 
 
-def add_source_files_orig(self, sources, files, allow_gen=False):
+def add_source_files(self, sources, files, allow_gen=False):
     # Convert string to list of absolute paths (including expanding wildcard)
     if isbasestring(files):
         # Keep SCons project-absolute path as they are (no wildcard support)
@@ -82,43 +79,6 @@ def _find_scu_section_name(subdir):
 
     return section_name
 
-
-def add_source_files_scu(self, sources, files, allow_gen=False):
-    if self["scu_build"] and isinstance(files, str):
-        if "*." not in files:
-            return False
-
-        # If the files are in a subdirectory, we want to create the scu gen
-        # files inside this subdirectory.
-        subdir = os.path.dirname(files)
-        if subdir != "":
-            subdir += "/"
-
-        section_name = _find_scu_section_name(subdir)
-        # if the section name is in the hash table?
-        # i.e. is it part of the SCU build?
-        global _scu_folders
-        if section_name not in (_scu_folders):
-            return False
-
-        if self["verbose"]:
-            print("SCU building " + section_name)
-
-        # Add all the gen.cpp files in the SCU directory
-        add_source_files_orig(self, sources, subdir + ".scu/scu_*.gen.cpp", True)
-        return True
-    return False
-
-
-# Either builds the folder using the SCU system,
-# or reverts to regular build.
-def add_source_files(self, sources, files, allow_gen=False):
-    if not add_source_files_scu(self, sources, files, allow_gen):
-        # Wraps the original function when scu build is not active.
-        add_source_files_orig(self, sources, files, allow_gen)
-        return False
-    return True
-    
 
 def disable_warnings(self):
     # 'self' is the environment

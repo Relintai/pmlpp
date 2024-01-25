@@ -226,42 +226,7 @@ opts.Add(
         False,
     )
 )
-opts.Add(BoolVariable("disable_3d", "Disable 3D nodes for a smaller executable", False))
-opts.Add(BoolVariable("disable_advanced_gui", "Disable advanced GUI nodes and behaviors", False))
-opts.Add(BoolVariable("no_editor_splash", "Don't use the custom splash screen for the editor", True))
-opts.Add("system_certs_path", "Use this path as SSL certificates default for editor (for package maintainers)", "")
 opts.Add(BoolVariable("use_precise_math_checks", "Math checks use very precise epsilon (debug option)", False))
-opts.Add(BoolVariable("scu_build", "Use single compilation unit build", False))
-opts.Add(
-    EnumVariable(
-        "rids",
-        "Server object management technique (debug option)",
-        "pointers",
-        ("pointers", "handles", "tracked_handles"),
-    )
-)
-opts.Add(BoolVariable("editor_docs", "Whether to add docs to an editor build or not. Disabling this can significantly reduce incremental compile times. Only relevant for editor builds!", True))
-
-# Thirdparty libraries
-opts.Add(BoolVariable("builtin_certs", "Use the built-in SSL certificates bundles", True))
-opts.Add(BoolVariable("builtin_enet", "Use the built-in ENet library", True))
-opts.Add(BoolVariable("builtin_freetype", "Use the built-in FreeType library", True))
-opts.Add(BoolVariable("builtin_libogg", "Use the built-in libogg library", True))
-opts.Add(BoolVariable("builtin_libpng", "Use the built-in libpng library", True))
-opts.Add(BoolVariable("builtin_libtheora", "Use the built-in libtheora library", True))
-opts.Add(BoolVariable("builtin_libvorbis", "Use the built-in libvorbis library", True))
-opts.Add(BoolVariable("builtin_wslay", "Use the built-in wslay library", True))
-opts.Add(BoolVariable("builtin_mbedtls", "Use the built-in mbedTLS library", True))
-opts.Add(BoolVariable("builtin_miniupnpc", "Use the built-in miniupnpc library", True))
-opts.Add(BoolVariable("builtin_opus", "Use the built-in Opus library", True))
-opts.Add(BoolVariable("builtin_pcre2", "Use the built-in PCRE2 library", True))
-opts.Add(BoolVariable("builtin_pcre2_with_jit", "Use JIT compiler for the built-in PCRE2 library", True))
-opts.Add(BoolVariable("builtin_recast", "Use the built-in Recast library", True))
-opts.Add(BoolVariable("builtin_rvo2_2d", "Use the built-in RVO2 2D library", True))
-opts.Add(BoolVariable("builtin_rvo2_3d", "Use the built-in RVO2 3D library", True))
-opts.Add(BoolVariable("builtin_squish", "Use the built-in squish library", True))
-opts.Add(BoolVariable("builtin_zlib", "Use the built-in zlib library", True))
-opts.Add(BoolVariable("builtin_zstd", "Use the built-in Zstd library", True))
 
 # Compilation environment setup
 opts.Add("CXX", "C++ compiler")
@@ -382,23 +347,8 @@ if methods.get_cmdline_bool("fast_unsafe", env_base["target"] == "debug"):
 if env_base["use_precise_math_checks"]:
     env_base.Append(CPPDEFINES=["PRECISE_MATH_CHECKS"])
 
-if not env_base.File("#main/splash_editor.png").exists():
-    # Force disabling editor splash if missing.
-    env_base["no_editor_splash"] = True
-if env_base["no_editor_splash"]:
-    env_base.Append(CPPDEFINES=["NO_EDITOR_SPLASH"])
-
 if not env_base["deprecated"]:
     env_base.Append(CPPDEFINES=["DISABLE_DEPRECATED"])
-
-if env_base["rids"] == "handles":
-    env_base.Append(CPPDEFINES=["RID_HANDLES_ENABLED"])
-    print("WARNING: Building with RIDs as handles.")
-
-if env_base["rids"] == "tracked_handles":
-    env_base.Append(CPPDEFINES=["RID_HANDLES_ENABLED"])
-    env_base.Append(CPPDEFINES=["RID_HANDLE_ALLOCATION_TRACKING_ENABLED"])
-    print("WARNING: Building with RIDs as tracked handles.")
 
 #env_base.Append(LIBS=["stdc++"])
 
@@ -451,10 +401,6 @@ if selected_platform in platform_list:
         env["debug_symbols"] = methods.get_cmdline_bool("debug_symbols", False)
         # LTO "auto" means we handle the preferred option in each platform detect.py.
         env["lto"] = ARGUMENTS.get("lto", "auto")
-
-    # Run SCU file generation script if in a SCU build.
-    if env["scu_build"]:
-        methods.set_scu_folders(scu_builders.generate_scu_files(env["verbose"], env_base["target"] != "debug"))
 
     # Must happen after the flags' definition, as configure is when most flags
     # are actually handled to change compile options, etc.
@@ -630,9 +576,6 @@ if selected_platform in platform_list:
 
     if env.use_ptrcall:
         env.Append(CPPDEFINES=["PTRCALL_ENABLED"])
-
-    if env["minizip"]:
-        env.Append(CPPDEFINES=["MINIZIP_ENABLED"])
 
     if not env["verbose"]:
         methods.no_verbose(sys, env)
