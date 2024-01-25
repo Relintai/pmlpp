@@ -19224,4 +19224,6 @@ public:
 
 #line 0
 
+#include "sfw_compat.h"
+
 #endif

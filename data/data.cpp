@@ -268,7 +268,11 @@ void MLPPData::set_data_supervised(int k, const String &file_name, Ref<MLPPMatri
 	Vector<Vector<real_t>> input_set_tmp;
 	Vector<real_t> output_set_tmp;
 
+#ifdef USING_SFW
+	FileAccess *file = FileAccess::create_and_open(file_name, FileAccess::READ);
+#else
 	FileAccess *file = FileAccess::open(file_name, FileAccess::READ);
+#endif
 
 	ERR_FAIL_COND(!file);
 
@@ -300,7 +304,11 @@ void MLPPData::set_data_unsupervised(int k, const String &file_name, Ref<MLPPMat
 	Vector<Vector<real_t>> input_set_tmp;
 	input_set_tmp.resize(k);
 
+#ifdef USING_SFW
+	FileAccess *file = FileAccess::create_and_open(file_name, FileAccess::READ);
+#else
 	FileAccess *file = FileAccess::open(file_name, FileAccess::READ);
+#endif
 
 	ERR_FAIL_COND(!file);
 
@@ -322,7 +330,11 @@ void MLPPData::set_data_unsupervised(int k, const String &file_name, Ref<MLPPMat
 void MLPPData::set_data_simple(const String &file_name, Ref<MLPPVector> input_set, Ref<MLPPVector> output_set) {
 	ERR_FAIL_COND(!input_set.is_valid() || !output_set.is_valid());
 
+#ifdef USING_SFW
+	FileAccess *file = FileAccess::create_and_open(file_name, FileAccess::READ);
+#else
 	FileAccess *file = FileAccess::open(file_name, FileAccess::READ);
+#endif
 
 	ERR_FAIL_COND(!file);
 
