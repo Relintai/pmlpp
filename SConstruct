@@ -13,8 +13,6 @@ from collections import OrderedDict
 
 # Local
 import methods
-import gles_builders
-import scu_builders
 from platform_methods import run_in_subprocess
 
 # scan possible build platforms
@@ -53,8 +51,6 @@ for x in sorted(glob.glob("platform/*")):
         platform_flags[x] = detect.get_flags()
     sys.path.remove(tmppath)
     sys.modules.pop("detect")
-
-methods.save_active_platforms(active_platforms, active_platform_ids)
 
 custom_tools = ["default"]
 
@@ -121,7 +117,6 @@ opts = Variables(customs, ARGUMENTS)
 # Target build options
 opts.Add("p", "Platform (alias for 'platform')", "")
 opts.Add("platform", "Target platform (%s)" % ("|".join(platform_list),), "")
-opts.Add(BoolVariable("tools", "Build the tools (a.k.a. the Pandemonium editor)", True))
 opts.Add(EnumVariable("target", "Compilation target", "debug", ("debug", "release_debug", "release")))
 opts.Add("arch", "Platform-dependent architecture (arm/arm64/x86/x64/mips/...)", "")
 opts.Add(EnumVariable("bits", "Target platform bits", "default", ("default", "32", "64")))
@@ -135,8 +130,6 @@ opts.Add(BoolVariable("deprecated", "Enable deprecated features", True))
 opts.Add(BoolVariable("minizip", "Enable ZIP archive support using minizip", True))
 opts.Add(BoolVariable("xaudio2", "Enable the XAudio2 audio driver", False))
 opts.Add(BoolVariable("disable_exceptions", "Force disabling exception handling code", True))
-opts.Add("custom_modules", "A list of comma-separated directory paths containing custom modules to build.", "")
-opts.Add(BoolVariable("custom_modules_recursive", "Detect custom modules recursively for each specified path.", True))
 
 # Advanced options
 opts.Add(BoolVariable("dev", "If yes, alias for verbose=yes warnings=extra werror=yes", False))
@@ -266,55 +259,6 @@ if selected_platform in platform_opts:
 opts.Update(env_base)
 env_base["platform"] = selected_platform  # Must always be re-set after calling opts.Update().
 
-# Detect modules.
-modules_detected = OrderedDict()
-module_search_paths = [ "modules", methods.convert_custom_modules_path("editor_modules") ]  # Built-in path.
-
-# maybe?
-#if env_base["tools"]:
-#    module_search_paths.append(methods.convert_custom_modules_path("editor_modules"))
-
-if env_base["custom_modules"]:
-    paths = env_base["custom_modules"].split(",")
-    for p in paths:
-        try:
-            module_search_paths.append(methods.convert_custom_modules_path(p))
-        except ValueError as e:
-            print(e)
-            sys.exit(255)
-
-for path in module_search_paths:
-    if path == "modules":
-        # Built-in modules don't have nested modules,
-        # so save the time it takes to parse directories.
-        modules = methods.detect_modules(path, recursive=False)
-    else:  # Custom.
-        modules = methods.detect_modules(path, env_base["custom_modules_recursive"])
-        # Provide default include path for both the custom module search `path`
-        # and the base directory containing custom modules, as it may be different
-        # from the built-in "modules" name (e.g. "custom_modules/summator/summator.h"),
-        # so it can be referenced simply as `#include "summator/summator.h"`
-        # independently of where a module is located on user's filesystem.
-        env_base.Prepend(CPPPATH=[path, os.path.dirname(path)])
-    # Note: custom modules can override built-in ones.
-    modules_detected.update(modules)
-
-# Add module options
-for name, path in modules_detected.items():
-    enabled = True
-    sys.path.insert(0, path)
-    import config
-
-    try:
-        enabled = config.is_enabled()
-    except AttributeError:
-        pass
-    sys.path.remove(path)
-    sys.modules.pop("config")
-    opts.Add(BoolVariable("module_" + name + "_enabled", "Enable module '%s'" % (name,), enabled))
-
-methods.write_modules(modules_detected)
-
 # Update the environment again after all the module options are added.
 opts.Update(env_base)
 env_base["platform"] = selected_platform  # Must always be re-set after calling opts.Update().
@@ -423,12 +367,6 @@ if selected_platform in platform_list:
         env["debug_symbols"] = methods.get_cmdline_bool("debug_symbols", False)
         # LTO "auto" means we handle the preferred option in each platform detect.py.
         env["lto"] = ARGUMENTS.get("lto", "auto")
-        if not env["tools"] and env["target"] == "debug":
-            print(
-                "WARNING: Requested `production` build with `tools=no target=debug`, "
-                "this will give you a full debug template (use `target=release_debug` "
-                "for an optimized template with debug features)."
-            )
 
     # Run SCU file generation script if in a SCU build.
     if env["scu_build"]:
@@ -561,27 +499,14 @@ if selected_platform in platform_list:
         suffix = "." + selected_platform
 
     if env["target"] == "release":
-        if env["tools"]:
-            print("ERROR: The editor can only be built with `target=debug` or `target=release_debug`.")
-            print("       Use `tools=no target=release` to build a release export template.")
-            Exit(255)
         suffix += ".opt"
     elif env["target"] == "release_debug":
-        if env["tools"]:
-            suffix += ".opt.tools"
-        else:
-            suffix += ".opt.debug"
+        suffix += ".opt.debug"
     else:
-        if env["tools"]:
-            print(
-                "Note: Building a debug binary (which will run slowly). Use `target=release_debug` to build an optimized release binary."
-            )
-            suffix += ".tools"
-        else:
-            print(
-                "Note: Building a debug binary (which will run slowly). Use `target=release` to build an optimized release binary."
-            )
-            suffix += ".debug"
+        print(
+            "Note: Building a debug binary (which will run slowly). Use `target=release` to build an optimized release binary."
+        )
+        suffix += ".debug"
 
     if env["arch"] != "":
         suffix += "." + env["arch"]
@@ -601,66 +526,8 @@ if selected_platform in platform_list:
     env.module_license_files = []
     env.doc_class_path = {}
 
-    for name, path in modules_detected.items():
-        if not env["module_" + name + "_enabled"]:
-            continue
-
-        sys.path.insert(0, path)
-        env.current_module = name
-        import config
-
-        if config.can_build(env, selected_platform):
-            # Disable it if a required dependency is missing.
-            if not env.module_check_dependencies(name):
-                continue
-
-            config.configure(env)
-
-            # Get doc classes paths (if present)
-            try:
-                doc_classes = config.get_doc_classes()
-                doc_path = config.get_doc_path()
-                for c in doc_classes:
-                    env.doc_class_path[c] = path + "/" + doc_path
-            except Exception:
-                pass
-
-            # Get icon paths (if present)
-            try:
-                icons_path = config.get_icons_path()
-                env.module_icons_paths.append(path + "/" + icons_path)
-            except Exception:
-                # Default path for module icons
-                env.module_icons_paths.append(path + "/" + "icons")
-
-            # Get license path (if present)
-            try:
-                license_file = config.get_license_file()
-
-                if not os.path.isabs(path):
-                    env.module_license_files.append("#" + path + "/" + license_file)
-                else:
-                     env.module_license_files.append(path + "/" + license_file)
-                     
-            except Exception:
-                pass
-
-            modules_enabled[name] = path
-        else:
-            env["module_" + name + "_enabled"] = False
-
-        sys.path.remove(path)
-        sys.modules.pop("config")
-
-    #TODO hack, the editor should be a module as well
-    if env["tools"] and not env["module_freetype_enabled"]:
-        print("The editor (tools=yes) can't be built if freetype is disabled! Stopping.")
-        sys.exit(255)
-
     env.module_list = modules_enabled
     methods.sort_module_list(env)
-
-    methods.generate_version_header(env.module_version_string)
 
     env["PROGSUFFIX"] = suffix + env.module_version_string + env["PROGSUFFIX"]
     env["OBJSUFFIX"] = suffix + env["OBJSUFFIX"]
@@ -679,42 +546,12 @@ if selected_platform in platform_list:
 
     if env.use_ptrcall:
         env.Append(CPPDEFINES=["PTRCALL_ENABLED"])
-    if env["tools"]:
-        env.Append(CPPDEFINES=["TOOLS_ENABLED"])
 
-    if env["disable_3d"]:
-        if env["tools"]:
-            print(
-                "Build option 'disable_3d=yes' cannot be used with 'tools=yes' (editor), "
-                "only with 'tools=no' (export template)."
-            )
-            sys.exit(255)
-        else:
-            env.Append(CPPDEFINES=["_3D_DISABLED"])
-
-    if env["disable_advanced_gui"]:
-        if env["tools"]:
-            print(
-                "Build option 'disable_advanced_gui=yes' cannot be used with 'tools=yes' (editor), "
-                "only with 'tools=no' (export template)."
-            )
-            sys.exit(255)
-        else:
-            env.Append(CPPDEFINES=["ADVANCED_GUI_DISABLED"])
     if env["minizip"]:
         env.Append(CPPDEFINES=["MINIZIP_ENABLED"])
 
     if not env["verbose"]:
         methods.no_verbose(sys, env)
-
-    if not env["platform"] == "server":
-        env.Append(
-            BUILDERS={
-                "GLES2_GLSL": env.Builder(
-                    action=run_in_subprocess(gles_builders.build_gles2_headers), suffix="glsl.gen.h", src_suffix=".glsl"
-                )
-            }
-        )
 
     scons_cache_path = os.environ.get("SCONS_CACHE")
     if scons_cache_path != None:
@@ -742,20 +579,7 @@ if selected_platform in platform_list:
 
     # build subdirs, the build order is dependent on link order.
 
-    SConscript("core/SCsub")
-    SConscript("servers/SCsub")
-    SConscript("scene/SCsub")
-
-    if env["tools"]:
-        SConscript("editor/SCsub")
-
-    SConscript("drivers/SCsub")
-
     SConscript("platform/SCsub")
-    SConscript("modules/SCsub")
-    SConscript("main/SCsub")
-
-    SConscript("platform/" + selected_platform + "/SCsub")  # build selected platform
 
     # Microsoft Visual Studio Project Generation
     if env["vsproj"]:
