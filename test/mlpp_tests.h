@@ -113,6 +113,7 @@ public:
 protected:
 	static void _bind_methods();
 
+public:
 	String _breast_cancer_data_path;
 	String _breast_cancer_svm_data_path;
 	String _california_housing_data_path;
