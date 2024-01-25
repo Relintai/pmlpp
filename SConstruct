@@ -103,6 +103,8 @@ def add_mlpp(env):
     else:
         # Static compilation
         module_env.add_source_files(env.modules_sources, sources)
+        lib = env.add_library("mlpp", env.modules_sources)
+        env.Prepend(LIBS=[lib])
 
 for x in sorted(glob.glob("platform/*")):
     if not os.path.isdir(x) or not os.path.exists(x + "/detect.py"):
@@ -660,11 +662,14 @@ if selected_platform in platform_list:
     Export("env")
 
     # build subdirs, the build order is dependent on link order.
-    add_mlpp(env)
-
+    
     SConscript("platform/SCsub")
 
     SConscript("platform/" + selected_platform + "/SCsub")  # build selected platform
+
+    add_mlpp(env)
+
+    SConscript("platform/main/SCsub")
 
     # Microsoft Visual Studio Project Generation
     if env["vsproj"]:

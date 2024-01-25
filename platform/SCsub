@@ -12,9 +12,3 @@ env.add_source_files(env.platform_sources, "image.cpp")
 lib = env.add_library("platform", env.platform_sources)
 env.Prepend(LIBS=[lib])
 
-# TODO Move this to somewhere else, so it can be easily overridden
-env.main_sources = []
-
-env.add_source_files(env.main_sources, "main.cpp")
-lib = env.add_library("main", env.main_sources)
-env.Prepend(LIBS=[lib])
