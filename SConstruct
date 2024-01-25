@@ -631,3 +631,81 @@ def print_elapsed_time():
 
 
 atexit.register(print_elapsed_time)
+
+env.modules_sources = []
+module_env = env.Clone()
+
+module_env.pmlpp_build_tests = True
+
+if ARGUMENTS.get('pmlpp_build_tests', 'yes') == 'no':
+    module_env.pmlpp_build_tests = False
+
+sources = [
+    "register_types.cpp",
+
+    "lin_alg/mlpp_vector.cpp",
+    "lin_alg/mlpp_matrix.cpp",
+    "lin_alg/mlpp_tensor3.cpp",
+
+    "activation/activation.cpp",
+    "ann/ann.cpp",
+    "auto_encoder/auto_encoder.cpp",
+    "bernoulli_nb/bernoulli_nb.cpp",
+    "c_log_log_reg/c_log_log_reg.cpp",
+    "convolutions/convolutions.cpp",
+    "cost/cost.cpp",
+    "data/data.cpp",
+    "dual_svc/dual_svc.cpp",
+    "exp_reg/exp_reg.cpp",
+    "gan/gan.cpp",
+    "gaussian_nb/gaussian_nb.cpp",
+    "gauss_markov_checker/gauss_markov_checker.cpp",
+    "hidden_layer/hidden_layer.cpp",
+    "hypothesis_testing/hypothesis_testing.cpp",
+    "kmeans/kmeans.cpp",
+    "knn/knn.cpp",
+    "lin_alg/lin_alg.cpp",
+    "lin_reg/lin_reg.cpp",
+    "log_reg/log_reg.cpp",
+    "mann/mann.cpp",
+    "mlp/mlp.cpp",
+    "multinomial_nb/multinomial_nb.cpp",
+    "multi_output_layer/multi_output_layer.cpp",
+    "numerical_analysis/numerical_analysis.cpp",
+    "outlier_finder/outlier_finder.cpp",
+    "output_layer/output_layer.cpp",
+    "pca/pca.cpp",
+    "probit_reg/probit_reg.cpp",
+    "regularization/reg.cpp",
+    "softmax_net/softmax_net.cpp",
+    "softmax_reg/softmax_reg.cpp",
+    "stat/stat.cpp",
+    "svc/svc.cpp",
+    "tanh_reg/tanh_reg.cpp",
+    "transforms/transforms.cpp",
+    "uni_lin_reg/uni_lin_reg.cpp",
+    "utilities/utilities.cpp",
+    "wgan/wgan.cpp",
+]
+
+if module_env.pmlpp_build_tests:
+    module_env.Prepend(CPPDEFINES=["TESTS_ENABLED"])
+
+    sources += [
+        "test/mlpp_tests.cpp",
+        "test/mlpp_matrix_tests.cpp",
+    ]
+
+
+if ARGUMENTS.get('pmlpp_shared', 'no') == 'yes':
+    # Shared lib compilation
+    module_env.Append(CCFLAGS=['-fPIC'])
+    module_env['LIBS'] = []
+    shared_lib = module_env.SharedLibrary(target='#bin/pmlpp', source=sources)
+    shared_lib_shim = shared_lib[0].name.rsplit('.', 1)[0]
+    env.Append(LIBS=[shared_lib_shim])
+    env.Append(LIBPATH=['#bin'])
+else:
+    # Static compilation
+    module_env.add_source_files(env.modules_sources, sources)
+
