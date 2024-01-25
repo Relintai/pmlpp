@@ -1,9 +1,9 @@
-#ifndef SFWL_H
-#define SFWL_H
+#ifndef SFW_H
+#define SFW_H
 
-#define SFWL_VERSION 1
+#define SFW_VERSION 1
 
-// SFW - Simple Framework - Lite Version - https://github.com/Relintai/sfw
+// SFW - Simple Framework - https://github.com/Relintai/sfw
 
 // Simple c++ app / game framework inspired by the single file c game engines
 // and libraries, especially [FWK](https://github.com/r-lyeh/FWK).
@@ -164,7 +164,7 @@ Any contribution to this repository is implicitly subjected to the same release 
 
 //===================  CORE SECTION  ===================
 
-#line 1 "sfwl/core/int_types.h"
+#line 1 "sfw/core/int_types.h"
 /*************************************************************************/
 /*  int_types.h                                                          */
 /*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
@@ -199,7 +199,7 @@ typedef unsigned long long uint64_t;
 #endif
 #line 0
 
-#line 1 "sfwl/core/math_defs.h"
+#line 1 "sfw/core/math_defs.h"
 
 /*************************************************************************/
 /*  math_defs.h                                                          */
@@ -297,7 +297,7 @@ typedef float real_t;
 
 #line 0
 
-#line 1 "sfwl/core/error_list.h"
+#line 1 "sfw/core/error_list.h"
 /*************************************************************************/
 /*  error_list.h                                                         */
 /*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
@@ -364,7 +364,7 @@ enum Error {
 
 #line 0
 
-#line 1 "sfwl/core/logger.h"
+#line 1 "sfw/core/logger.h"
 
 class String;
 
@@ -436,7 +436,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/typedefs.h"
+#line 1 "sfw/core/typedefs.h"
 
 /*************************************************************************/
 /*  typedefs.h                                                           */
@@ -832,7 +832,7 @@ struct _GlobalLock {
 
 #line 0
 
-#line 1 "sfwl/core/marshalls.h"
+#line 1 "sfw/core/marshalls.h"
 
 /*************************************************************************/
 /*  marshalls.h                                                          */
@@ -971,7 +971,7 @@ static inline double decode_double(const uint8_t *p_arr) {
 
 #line 0
 
-#line 1 "sfwl/core/sfw_time.h"
+#line 1 "sfw/core/sfw_time.h"
 
 // -----------------------------------------------------------------------------
 // time framework utils
@@ -996,7 +996,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/safe_refcount.h"
+#line 1 "sfw/core/safe_refcount.h"
 
 /*************************************************************************/
 /*  safe_refcount.h                                                      */
@@ -1302,7 +1302,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/thread.h"
+#line 1 "sfw/core/thread.h"
 
 /*************************************************************************/
 /*  thread.h                                                             */
@@ -1394,7 +1394,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/error_macros.h"
+#line 1 "sfw/core/error_macros.h"
 
 // Based on Godot Engine's error_macros.h
 // MIT License
@@ -1683,7 +1683,7 @@ _FORCE_INLINE_ void _RLOG_MACRO_TEMPLATE_FUNC(STR str, A p0, B p1, C p2, D p3, E
 
 #line 0
 
-#line 1 "sfwl/core/memory.h"
+#line 1 "sfw/core/memory.h"
 
 /*************************************************************************/
 /*  memory.h                                                             */
@@ -1858,7 +1858,7 @@ struct _GlobalNilClass {
 
 #line 0
 
-#line 1 "sfwl/core/mutex.h"
+#line 1 "sfw/core/mutex.h"
 
 /*************************************************************************/
 /*  mutex.h                                                              */
@@ -1950,7 +1950,7 @@ using BinaryMutex = MutexImpl<FakeMutex>; // Non-recursive, handle with care
 
 #line 0
 
-#line 1 "sfwl/core/rw_lock.h"
+#line 1 "sfw/core/rw_lock.h"
 
 /*************************************************************************/
 /*  rw_lock.h                                                            */
@@ -2039,7 +2039,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/spin_lock.h"
+#line 1 "sfw/core/spin_lock.h"
 
 /*************************************************************************/
 /*  spin_lock.h                                                          */
@@ -2062,7 +2062,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/thread_safe.h"
+#line 1 "sfw/core/thread_safe.h"
 
 /*************************************************************************/
 /*  thread_safe.h                                                        */
@@ -2076,7 +2076,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/pcg.h"
+#line 1 "sfw/core/pcg.h"
 // *Really* minimal PCG32 code / (c) 2014 M.E. O'Neill / pcg-random.org
 // Licensed under Apache License 2.0 (NO WARRANTY, etc. see website)
 
@@ -2092,7 +2092,7 @@ uint32_t pcg32_boundedrand_r(pcg32_random_t *rng, uint32_t bound);
 
 #line 0
 
-#line 1 "sfwl/core/random_pcg.h"
+#line 1 "sfw/core/random_pcg.h"
 
 /*************************************************************************/
 /*  random_pcg.h                                                         */
@@ -2202,7 +2202,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/math_funcs.h"
+#line 1 "sfw/core/math_funcs.h"
 
 /*************************************************************************/
 /*  math_funcs.h                                                         */
@@ -2834,7 +2834,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/cowdata.h"
+#line 1 "sfw/core/cowdata.h"
 
 /*************************************************************************/
 /*  cowdata.h                                                            */
@@ -3196,7 +3196,7 @@ CowData<T>::~CowData() {
 
 #line 0
 
-#line 1 "sfwl/core/sort_array.h"
+#line 1 "sfw/core/sort_array.h"
 
 /*************************************************************************/
 /*  sort_array.h                                                         */
@@ -3491,7 +3491,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/rb_map.h"
+#line 1 "sfw/core/rb_map.h"
 
 /*************************************************************************/
 /*  rb_map.h                                                             */
@@ -4141,7 +4141,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/rb_set.h"
+#line 1 "sfw/core/rb_set.h"
 
 /*************************************************************************/
 /*  rb_set.h                                                             */
@@ -4745,7 +4745,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/vmap.h"
+#line 1 "sfw/core/vmap.h"
 
 /*************************************************************************/
 /*  vmap.h                                                               */
@@ -4920,7 +4920,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/vector.h"
+#line 1 "sfw/core/vector.h"
 
 /*************************************************************************/
 /*  vector.h                                                             */
@@ -5087,7 +5087,7 @@ bool Vector<T>::push_back(T p_elem) {
 
 #line 0
 
-#line 1 "sfwl/core/vset.h"
+#line 1 "sfw/core/vset.h"
 
 /*************************************************************************/
 /*  vset.h                                                               */
@@ -5200,7 +5200,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/list.h"
+#line 1 "sfw/core/list.h"
 
 /*************************************************************************/
 /*  list.h                                                               */
@@ -5871,7 +5871,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/ring_buffer.h"
+#line 1 "sfw/core/ring_buffer.h"
 
 /*************************************************************************/
 /*  ring_buffer.h                                                        */
@@ -6066,7 +6066,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/paged_allocator.h"
+#line 1 "sfw/core/paged_allocator.h"
 
 /*************************************************************************/
 /*  paged_allocator.h                                                    */
@@ -6170,7 +6170,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/pool_allocator.h"
+#line 1 "sfw/core/pool_allocator.h"
 
 /*************************************************************************/
 /*  pool_allocator.h                                                     */
@@ -6293,7 +6293,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/char_range.inc"
+#line 1 "sfw/core/char_range.inc"
 /*************************************************************************/
 /*  char_range.inc                                                       */
 /*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
@@ -7721,7 +7721,7 @@ static CharRange xid_continue[] = {
 
 #line 0
 
-#line 1 "sfwl/core/char_utils.h"
+#line 1 "sfw/core/char_utils.h"
 /*************************************************************************/
 /*  char_utils.h                                                         */
 /*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
@@ -7803,7 +7803,7 @@ static _FORCE_INLINE_ bool is_underscore(char32_t p_char) {
 
 #line 0
 
-#line 1 "sfwl/core/ustring.h"
+#line 1 "sfw/core/ustring.h"
 
 /*************************************************************************/
 /*  ustring.h                                                            */
@@ -8403,7 +8403,7 @@ bool select_word(const String &p_s, int p_col, int &r_beg, int &r_end);
 
 #line 0
 
-#line 1 "sfwl/core/string_name.h"
+#line 1 "sfw/core/string_name.h"
 
 /*************************************************************************/
 /*  string_name.h                                                        */
@@ -8605,601 +8605,7 @@ StringName _scs_create(const char *p_chr, bool p_static = false);
 
 #line 0
 
-#line 1 "sfwl/core/color.h"
-
-/*************************************************************************/
-/*  color.h                                                              */
-/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
-/*************************************************************************/
-
-struct _NO_DISCARD_CLASS_ Color {
-	union {
-		struct {
-			float r;
-			float g;
-			float b;
-			float a;
-		};
-		float components[4];
-	};
-
-	bool operator==(const Color &p_color) const { return (r == p_color.r && g == p_color.g && b == p_color.b && a == p_color.a); }
-	bool operator!=(const Color &p_color) const { return (r != p_color.r || g != p_color.g || b != p_color.b || a != p_color.a); }
-
-	uint32_t to_rgba32() const;
-	uint32_t to_argb32() const;
-	uint32_t to_abgr32() const;
-	uint64_t to_rgba64() const;
-	uint64_t to_argb64() const;
-	uint64_t to_abgr64() const;
-	float get_h() const;
-	float get_s() const;
-	float get_v() const;
-	void set_hsv(float p_h, float p_s, float p_v, float p_alpha = 1.0);
-
-	_FORCE_INLINE_ float &operator[](int idx) {
-		return components[idx];
-	}
-	_FORCE_INLINE_ const float &operator[](int idx) const {
-		return components[idx];
-	}
-
-	Color operator+(const Color &p_color) const;
-	void operator+=(const Color &p_color);
-
-	Color operator-() const;
-	Color operator-(const Color &p_color) const;
-	void operator-=(const Color &p_color);
-
-	Color operator*(const Color &p_color) const;
-	Color operator*(const real_t &rvalue) const;
-	void operator*=(const Color &p_color);
-	void operator*=(const real_t &rvalue);
-
-	Color operator/(const Color &p_color) const;
-	Color operator/(const real_t &rvalue) const;
-	void operator/=(const Color &p_color);
-	void operator/=(const real_t &rvalue);
-
-	bool is_equal_approx(const Color &p_color) const;
-
-	Color clamp(const Color &p_min = Color(0, 0, 0, 0), const Color &p_max = Color(1, 1, 1, 1)) const;
-
-	void invert();
-	void contrast();
-	Color inverted() const;
-	Color contrasted() const;
-
-	_FORCE_INLINE_ float get_luminance() const {
-		return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-	}
-
-	_FORCE_INLINE_ Color linear_interpolate(const Color &p_to, float p_weight) const {
-		Color res = *this;
-
-		res.r += (p_weight * (p_to.r - r));
-		res.g += (p_weight * (p_to.g - g));
-		res.b += (p_weight * (p_to.b - b));
-		res.a += (p_weight * (p_to.a - a));
-
-		return res;
-	}
-
-	_FORCE_INLINE_ Color darkened(float p_amount) const {
-		Color res = *this;
-		res.r = res.r * (1.0f - p_amount);
-		res.g = res.g * (1.0f - p_amount);
-		res.b = res.b * (1.0f - p_amount);
-		return res;
-	}
-
-	_FORCE_INLINE_ Color lightened(float p_amount) const {
-		Color res = *this;
-		res.r = res.r + (1.0f - res.r) * p_amount;
-		res.g = res.g + (1.0f - res.g) * p_amount;
-		res.b = res.b + (1.0f - res.b) * p_amount;
-		return res;
-	}
-
-	_FORCE_INLINE_ uint32_t to_rgbe9995() const {
-		const float pow2to9 = 512.0f;
-		const float B = 15.0f;
-		//const float Emax = 31.0f;
-		const float N = 9.0f;
-
-		float sharedexp = 65408.000f; //(( pow2to9  - 1.0f)/ pow2to9)*powf( 2.0f, 31.0f - 15.0f);
-
-		float cRed = MAX(0.0f, MIN(sharedexp, r));
-		float cGreen = MAX(0.0f, MIN(sharedexp, g));
-		float cBlue = MAX(0.0f, MIN(sharedexp, b));
-
-		float cMax = MAX(cRed, MAX(cGreen, cBlue));
-
-		// expp = MAX(-B - 1, log2(maxc)) + 1 + B
-
-		float expp = MAX(-B - 1.0f, floor(Math::log(cMax) / Math_LN2)) + 1.0f + B;
-
-		float sMax = (float)floor((cMax / Math::pow(2.0f, expp - B - N)) + 0.5f);
-
-		float exps = expp + 1.0f;
-
-		if (0.0 <= sMax && sMax < pow2to9) {
-			exps = expp;
-		}
-
-		float sRed = Math::floor((cRed / pow(2.0f, exps - B - N)) + 0.5f);
-		float sGreen = Math::floor((cGreen / pow(2.0f, exps - B - N)) + 0.5f);
-		float sBlue = Math::floor((cBlue / pow(2.0f, exps - B - N)) + 0.5f);
-
-		return (uint32_t(Math::fast_ftoi(sRed)) & 0x1FF) | ((uint32_t(Math::fast_ftoi(sGreen)) & 0x1FF) << 9) | ((uint32_t(Math::fast_ftoi(sBlue)) & 0x1FF) << 18) | ((uint32_t(Math::fast_ftoi(exps)) & 0x1F) << 27);
-	}
-
-	_FORCE_INLINE_ Color blend(const Color &p_over) const {
-		Color res;
-		float sa = 1.0 - p_over.a;
-		res.a = a * sa + p_over.a;
-		if (res.a == 0) {
-			return Color(0, 0, 0, 0);
-		} else {
-			res.r = (r * a * sa + p_over.r * p_over.a) / res.a;
-			res.g = (g * a * sa + p_over.g * p_over.a) / res.a;
-			res.b = (b * a * sa + p_over.b * p_over.a) / res.a;
-		}
-		return res;
-	}
-
-	_FORCE_INLINE_ Color to_linear() const {
-		return Color(
-				r < 0.04045 ? r * (1.0 / 12.92) : Math::pow((r + 0.055) * (1.0 / (1 + 0.055)), 2.4),
-				g < 0.04045 ? g * (1.0 / 12.92) : Math::pow((g + 0.055) * (1.0 / (1 + 0.055)), 2.4),
-				b < 0.04045 ? b * (1.0 / 12.92) : Math::pow((b + 0.055) * (1.0 / (1 + 0.055)), 2.4),
-				a);
-	}
-	_FORCE_INLINE_ Color to_srgb() const {
-		return Color(
-				r < 0.0031308 ? 12.92 * r : (1.0 + 0.055) * Math::pow(r, 1.0f / 2.4f) - 0.055,
-				g < 0.0031308 ? 12.92 * g : (1.0 + 0.055) * Math::pow(g, 1.0f / 2.4f) - 0.055,
-				b < 0.0031308 ? 12.92 * b : (1.0 + 0.055) * Math::pow(b, 1.0f / 2.4f) - 0.055, a);
-	}
-
-	static Color hex(uint32_t p_hex);
-	static Color hex64(uint64_t p_hex);
-	static Color html(const String &p_color);
-	static bool html_is_valid(const String &p_color);
-	String to_html(bool p_alpha = true) const;
-	Color from_hsv(float p_h, float p_s, float p_v, float p_a) const;
-	static Color from_rgbe9995(uint32_t p_rgbe);
-
-	_FORCE_INLINE_ bool operator<(const Color &p_color) const; //used in set keys
-	operator String() const;
-
-	static _FORCE_INLINE_ Color color8(int r, int g, int b) {
-		return Color(static_cast<float>(r) / 255.0f, static_cast<float>(g) / 255.0f, static_cast<float>(b) / 255.0f);
-	}
-
-	static _FORCE_INLINE_ Color color8(int r, int g, int b, int a) {
-		return Color(static_cast<float>(r) / 255.0f, static_cast<float>(g) / 255.0f, static_cast<float>(b) / 255.0f, static_cast<float>(a) / 255.0f);
-	}
-
-	_FORCE_INLINE_ void set_r8(int32_t r8) { r = (CLAMP(r8, 0, 255) / 255.0f); }
-	_FORCE_INLINE_ int32_t get_r8() const { return int32_t(CLAMP(Math::round(r * 255.0f), 0.0f, 255.0f)); }
-	_FORCE_INLINE_ void set_g8(int32_t g8) { g = (CLAMP(g8, 0, 255) / 255.0f); }
-	_FORCE_INLINE_ int32_t get_g8() const { return int32_t(CLAMP(Math::round(g * 255.0f), 0.0f, 255.0f)); }
-	_FORCE_INLINE_ void set_b8(int32_t b8) { b = (CLAMP(b8, 0, 255) / 255.0f); }
-	_FORCE_INLINE_ int32_t get_b8() const { return int32_t(CLAMP(Math::round(b * 255.0f), 0.0f, 255.0f)); }
-	_FORCE_INLINE_ void set_a8(int32_t a8) { a = (CLAMP(a8, 0, 255) / 255.0f); }
-	_FORCE_INLINE_ int32_t get_a8() const { return int32_t(CLAMP(Math::round(a * 255.0f), 0.0f, 255.0f)); }
-
-	_FORCE_INLINE_ void set_h(float p_h) { set_hsv(p_h, get_s(), get_v(), a); }
-	_FORCE_INLINE_ void set_s(float p_s) { set_hsv(get_h(), p_s, get_v(), a); }
-	_FORCE_INLINE_ void set_v(float p_v) { set_hsv(get_h(), get_s(), p_v, a); }
-
-	/**
-	 * No construct parameters, r=0, g=0, b=0. a=255
-	 */
-	_FORCE_INLINE_ Color() {
-		r = 0;
-		g = 0;
-		b = 0;
-		a = 1.0;
-	}
-
-	/**
-	 * RGB / RGBA construct parameters. Alpha is optional, but defaults to 1.0
-	 */
-	_FORCE_INLINE_ Color(float p_r, float p_g, float p_b, float p_a = 1.0) {
-		r = p_r;
-		g = p_g;
-		b = p_b;
-		a = p_a;
-	}
-
-	/**
-	 * Construct a Color from another Color, but with the specified alpha value.
-	 */
-	_FORCE_INLINE_ Color(const Color &p_c, float p_a) {
-		r = p_c.r;
-		g = p_c.g;
-		b = p_c.b;
-		a = p_a;
-	}
-};
-
-bool Color::operator<(const Color &p_color) const {
-	if (r == p_color.r) {
-		if (g == p_color.g) {
-			if (b == p_color.b) {
-				return (a < p_color.a);
-			} else {
-				return (b < p_color.b);
-			}
-		} else {
-			return g < p_color.g;
-		}
-	} else {
-		return r < p_color.r;
-	}
-}
-
-#line 0
-
-#line 1 "sfwl/core/vector2i.h"
-
-/*************************************************************************/
-/*  vector2i.h                                                           */
-/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
-/*************************************************************************/
-
-class String;
-
-struct _NO_DISCARD_CLASS_ Vector2i {
-	enum Axis {
-		AXIS_X,
-		AXIS_Y,
-	};
-
-	union {
-		struct {
-			union {
-				int x;
-				int width;
-			};
-			union {
-				int y;
-				int height;
-			};
-		};
-
-		int coord[2];
-	};
-
-	_FORCE_INLINE_ int &operator[](int p_idx) {
-		DEV_ASSERT((unsigned int)p_idx < 2);
-		return coord[p_idx];
-	}
-	_FORCE_INLINE_ const int &operator[](int p_idx) const {
-		DEV_ASSERT((unsigned int)p_idx < 2);
-		return coord[p_idx];
-	}
-
-	_FORCE_INLINE_ void set_all(int p_value) {
-		x = y = p_value;
-	}
-
-	_FORCE_INLINE_ int min_axis() const {
-		return x < y ? 0 : 1;
-	}
-
-	_FORCE_INLINE_ int max_axis() const {
-		return x < y ? 1 : 0;
-	}
-
-	Vector2i min(const Vector2i &p_vector2i) const {
-		return Vector2i(MIN(x, p_vector2i.x), MIN(y, p_vector2i.y));
-	}
-
-	Vector2i max(const Vector2i &p_vector2i) const {
-		return Vector2i(MAX(x, p_vector2i.x), MAX(y, p_vector2i.y));
-	}
-
-	_FORCE_INLINE_ static Vector2i linear_interpolate(const Vector2i &p_a, const Vector2i &p_b, real_t p_weight);
-	_FORCE_INLINE_ Vector2i linear_interpolate(const Vector2i &p_to, real_t p_weight) const;
-
-	Vector2i operator+(const Vector2i &p_v) const;
-	void operator+=(const Vector2i &p_v);
-	Vector2i operator-(const Vector2i &p_v) const;
-	void operator-=(const Vector2i &p_v);
-	Vector2i operator*(const Vector2i &p_v1) const;
-
-	Vector2i operator*(const int &rvalue) const;
-	void operator*=(const int &rvalue);
-
-	Vector2i operator/(const Vector2i &p_v1) const;
-
-	Vector2i operator/(const int &rvalue) const;
-
-	void operator/=(const int &rvalue);
-
-	Vector2i operator-() const;
-	bool operator<(const Vector2i &p_vec2) const { return (x == p_vec2.x) ? (y < p_vec2.y) : (x < p_vec2.x); }
-	bool operator>(const Vector2i &p_vec2) const { return (x == p_vec2.x) ? (y > p_vec2.y) : (x > p_vec2.x); }
-	bool operator<=(const Vector2i &p_vec2) const { return x == p_vec2.x ? (y <= p_vec2.y) : (x < p_vec2.x); }
-	bool operator>=(const Vector2i &p_vec2) const { return x == p_vec2.x ? (y >= p_vec2.y) : (x > p_vec2.x); }
-
-	bool operator==(const Vector2i &p_vec2) const;
-	bool operator!=(const Vector2i &p_vec2) const;
-
-	int64_t length_squared() const;
-	double length() const;
-
-	real_t aspect() const { return width / (real_t)height; }
-	Vector2i sign() const { return Vector2i(SGN(x), SGN(y)); }
-	Vector2i abs() const { return Vector2i(ABS(x), ABS(y)); }
-	Vector2i clamp(const Vector2i &p_min, const Vector2i &p_max) const;
-
-	operator String() const;
-
-	inline Vector2i(const Vector2i &p_vec2) {
-		x = p_vec2.x;
-		y = p_vec2.y;
-	}
-	inline Vector2i(int p_x, int p_y) {
-		x = p_x;
-		y = p_y;
-	}
-	inline Vector2i() {
-		x = 0;
-		y = 0;
-	}
-};
-
-Vector2i Vector2i::linear_interpolate(const Vector2i &p_a, const Vector2i &p_b, real_t p_weight) {
-	Vector2i res = p_a;
-
-	res.x += (p_weight * (p_b.x - p_a.x));
-	res.y += (p_weight * (p_b.y - p_a.y));
-
-	return res;
-}
-
-Vector2i Vector2i::linear_interpolate(const Vector2i &p_to, real_t p_weight) const {
-	real_t res_x = x;
-	real_t res_y = y;
-
-	res_x += (p_weight * (p_to.x - x));
-	res_y += (p_weight * (p_to.y - y));
-
-	return Vector2i(res_x, res_y);
-}
-
-typedef Vector2i Size2i;
-typedef Vector2i Point2i;
-
-#line 0
-
-#line 1 "sfwl/core/rect2i.h"
-
-/*************************************************************************/
-/*  rect2i.h                                                             */
-/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
-/*************************************************************************/
-
-struct _NO_DISCARD_CLASS_ Rect2i {
-	Point2i position;
-	Size2i size;
-
-	const Point2i &get_position() const { return position; }
-	void set_position(const Point2i &p_position) { position = p_position; }
-	const Size2i &get_size() const { return size; }
-	void set_size(const Size2i &p_size) { size = p_size; }
-
-	int get_area() const { return size.width * size.height; }
-
-	_FORCE_INLINE_ Vector2i get_center() const { return position + (size / 2); }
-
-	inline bool intersects(const Rect2i &p_rect) const {
-		if (position.x > (p_rect.position.x + p_rect.size.width)) {
-			return false;
-		}
-		if ((position.x + size.width) < p_rect.position.x) {
-			return false;
-		}
-		if (position.y > (p_rect.position.y + p_rect.size.height)) {
-			return false;
-		}
-		if ((position.y + size.height) < p_rect.position.y) {
-			return false;
-		}
-
-		return true;
-	}
-
-	inline bool encloses(const Rect2i &p_rect) const {
-		return (p_rect.position.x >= position.x) && (p_rect.position.y >= position.y) &&
-				((p_rect.position.x + p_rect.size.x) < (position.x + size.x)) &&
-				((p_rect.position.y + p_rect.size.y) < (position.y + size.y));
-	}
-
-	_FORCE_INLINE_ bool has_no_area() const {
-		return (size.x <= 0 || size.y <= 0);
-	}
-
-	inline Rect2i clip(const Rect2i &p_rect) const { /// return a clipped rect
-
-		Rect2i new_rect = p_rect;
-
-		if (!intersects(new_rect)) {
-			return Rect2i();
-		}
-
-		new_rect.position.x = MAX(p_rect.position.x, position.x);
-		new_rect.position.y = MAX(p_rect.position.y, position.y);
-
-		Point2i p_rect_end = p_rect.position + p_rect.size;
-		Point2i end = position + size;
-
-		new_rect.size.x = (int)(MIN(p_rect_end.x, end.x) - new_rect.position.x);
-		new_rect.size.y = (int)(MIN(p_rect_end.y, end.y) - new_rect.position.y);
-
-		return new_rect;
-	}
-
-	// Returns the instersection between two Rect2is or an empty Rect2i if there is no intersection
-	inline Rect2i intersection(const Rect2i &p_rect) const {
-		Rect2i new_rect = p_rect;
-
-		if (!intersects(new_rect)) {
-			return Rect2i();
-		}
-
-		new_rect.position.x = MAX(p_rect.position.x, position.x);
-		new_rect.position.y = MAX(p_rect.position.y, position.y);
-
-		Point2i p_rect_end = p_rect.position + p_rect.size;
-		Point2i end = position + size;
-
-		new_rect.size.x = MIN(p_rect_end.x, end.x) - new_rect.position.x;
-		new_rect.size.y = MIN(p_rect_end.y, end.y) - new_rect.position.y;
-
-		return new_rect;
-	}
-
-	inline Rect2i merge(const Rect2i &p_rect) const { ///< return a merged rect
-
-		Rect2i new_rect;
-
-		new_rect.position.x = MIN(p_rect.position.x, position.x);
-		new_rect.position.y = MIN(p_rect.position.y, position.y);
-
-		new_rect.size.x = MAX(p_rect.position.x + p_rect.size.x, position.x + size.x);
-		new_rect.size.y = MAX(p_rect.position.y + p_rect.size.y, position.y + size.y);
-
-		new_rect.size = new_rect.size - new_rect.position; //make relative again
-
-		return new_rect;
-	}
-
-	bool has_point(const Point2i &p_point) const {
-		if (p_point.x < position.x) {
-			return false;
-		}
-		if (p_point.y < position.y) {
-			return false;
-		}
-
-		if (p_point.x >= (position.x + size.x)) {
-			return false;
-		}
-		if (p_point.y >= (position.y + size.y)) {
-			return false;
-		}
-
-		return true;
-	}
-
-	bool operator==(const Rect2i &p_rect) const { return position == p_rect.position && size == p_rect.size; }
-	bool operator!=(const Rect2i &p_rect) const { return position != p_rect.position || size != p_rect.size; }
-
-	Rect2i grow(int p_by) const {
-		Rect2i g = *this;
-		g.position.x -= p_by;
-		g.position.y -= p_by;
-		g.size.width += p_by * 2;
-		g.size.height += p_by * 2;
-		return g;
-	}
-
-	void grow_by(int p_by) {
-		position.x -= p_by;
-		position.y -= p_by;
-		size.width += p_by * 2;
-		size.height += p_by * 2;
-	}
-
-	inline Rect2i grow_margin(Margin p_margin, int p_amount) const {
-		Rect2i g = *this;
-		g = g.grow_individual((MARGIN_LEFT == p_margin) ? p_amount : 0,
-				(MARGIN_TOP == p_margin) ? p_amount : 0,
-				(MARGIN_RIGHT == p_margin) ? p_amount : 0,
-				(MARGIN_BOTTOM == p_margin) ? p_amount : 0);
-		return g;
-	}
-
-	inline Rect2i grow_side(Side p_side, int p_amount) const {
-		Rect2i g = *this;
-		g = g.grow_individual((SIDE_LEFT == p_side) ? p_amount : 0,
-				(SIDE_TOP == p_side) ? p_amount : 0,
-				(SIDE_RIGHT == p_side) ? p_amount : 0,
-				(SIDE_BOTTOM == p_side) ? p_amount : 0);
-		return g;
-	}
-
-	inline Rect2i grow_individual(int p_left, int p_top, int p_right, int p_bottom) const {
-		Rect2i g = *this;
-		g.position.x -= p_left;
-		g.position.y -= p_top;
-		g.size.width += p_left + p_right;
-		g.size.height += p_top + p_bottom;
-
-		return g;
-	}
-
-	_FORCE_INLINE_ Rect2i expand(const Vector2i &p_vector) const {
-		Rect2i r = *this;
-		r.expand_to(p_vector);
-		return r;
-	}
-
-	inline void expand_to(const Point2i &p_vector) {
-		Point2i begin = position;
-		Point2i end = position + size;
-
-		if (p_vector.x < begin.x) {
-			begin.x = p_vector.x;
-		}
-		if (p_vector.y < begin.y) {
-			begin.y = p_vector.y;
-		}
-
-		if (p_vector.x > end.x) {
-			end.x = p_vector.x;
-		}
-		if (p_vector.y > end.y) {
-			end.y = p_vector.y;
-		}
-
-		position = begin;
-		size = end - begin;
-	}
-
-	_FORCE_INLINE_ Rect2i abs() const {
-		return Rect2i(Point2i(position.x + MIN(size.x, 0), position.y + MIN(size.y, 0)), size.abs());
-	}
-
-	_FORCE_INLINE_ void set_end(const Vector2i &p_end) {
-		size = p_end - position;
-	}
-
-	_FORCE_INLINE_ Vector2i get_end() const {
-		return position + size;
-	}
-
-	operator String() const;
-
-	Rect2i() {}
-	Rect2i(int p_x, int p_y, int p_width, int p_height) :
-			position(Point2i(p_x, p_y)),
-			size(Size2i(p_width, p_height)) {
-	}
-	Rect2i(const Point2i &p_pos, const Size2i &p_size) :
-			position(p_pos),
-			size(p_size) {
-	}
-};
-
-#line 0
-
-#line 1 "sfwl/core/pool_vector.h"
+#line 1 "sfw/core/pool_vector.h"
 
 /*************************************************************************/
 /*  pool_vector.h                                                        */
@@ -9902,7 +9308,7 @@ void PoolVector<T>::sort() {
 
 #line 0
 
-#line 1 "sfwl/core/tight_local_vector.h"
+#line 1 "sfw/core/tight_local_vector.h"
 
 /*************************************************************************/
 /*  tight_local_vector.h                                                 */
@@ -10189,7 +9595,7 @@ class TightLocalVectori : public TightLocalVector<T, I, force_trivial> {
 
 #line 0
 
-#line 1 "sfwl/core/local_vector.h"
+#line 1 "sfw/core/local_vector.h"
 
 /*************************************************************************/
 /*  local_vector.h                                                       */
@@ -10480,7 +9886,4732 @@ class LocalVectori : public LocalVector<T, I, force_trivial> {
 
 #line 0
 
-#line 1 "sfwl/core/hashfuncs.h"
+#line 1 "sfw/core/color.h"
+
+/*************************************************************************/
+/*  color.h                                                              */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct _NO_DISCARD_CLASS_ Color {
+	union {
+		struct {
+			float r;
+			float g;
+			float b;
+			float a;
+		};
+		float components[4];
+	};
+
+	bool operator==(const Color &p_color) const { return (r == p_color.r && g == p_color.g && b == p_color.b && a == p_color.a); }
+	bool operator!=(const Color &p_color) const { return (r != p_color.r || g != p_color.g || b != p_color.b || a != p_color.a); }
+
+	uint32_t to_rgba32() const;
+	uint32_t to_argb32() const;
+	uint32_t to_abgr32() const;
+	uint64_t to_rgba64() const;
+	uint64_t to_argb64() const;
+	uint64_t to_abgr64() const;
+	float get_h() const;
+	float get_s() const;
+	float get_v() const;
+	void set_hsv(float p_h, float p_s, float p_v, float p_alpha = 1.0);
+
+	_FORCE_INLINE_ float &operator[](int idx) {
+		return components[idx];
+	}
+	_FORCE_INLINE_ const float &operator[](int idx) const {
+		return components[idx];
+	}
+
+	Color operator+(const Color &p_color) const;
+	void operator+=(const Color &p_color);
+
+	Color operator-() const;
+	Color operator-(const Color &p_color) const;
+	void operator-=(const Color &p_color);
+
+	Color operator*(const Color &p_color) const;
+	Color operator*(const real_t &rvalue) const;
+	void operator*=(const Color &p_color);
+	void operator*=(const real_t &rvalue);
+
+	Color operator/(const Color &p_color) const;
+	Color operator/(const real_t &rvalue) const;
+	void operator/=(const Color &p_color);
+	void operator/=(const real_t &rvalue);
+
+	bool is_equal_approx(const Color &p_color) const;
+
+	Color clamp(const Color &p_min = Color(0, 0, 0, 0), const Color &p_max = Color(1, 1, 1, 1)) const;
+
+	void invert();
+	void contrast();
+	Color inverted() const;
+	Color contrasted() const;
+
+	_FORCE_INLINE_ float get_luminance() const {
+		return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+	}
+
+	_FORCE_INLINE_ Color linear_interpolate(const Color &p_to, float p_weight) const {
+		Color res = *this;
+
+		res.r += (p_weight * (p_to.r - r));
+		res.g += (p_weight * (p_to.g - g));
+		res.b += (p_weight * (p_to.b - b));
+		res.a += (p_weight * (p_to.a - a));
+
+		return res;
+	}
+
+	_FORCE_INLINE_ Color darkened(float p_amount) const {
+		Color res = *this;
+		res.r = res.r * (1.0f - p_amount);
+		res.g = res.g * (1.0f - p_amount);
+		res.b = res.b * (1.0f - p_amount);
+		return res;
+	}
+
+	_FORCE_INLINE_ Color lightened(float p_amount) const {
+		Color res = *this;
+		res.r = res.r + (1.0f - res.r) * p_amount;
+		res.g = res.g + (1.0f - res.g) * p_amount;
+		res.b = res.b + (1.0f - res.b) * p_amount;
+		return res;
+	}
+
+	_FORCE_INLINE_ uint32_t to_rgbe9995() const {
+		const float pow2to9 = 512.0f;
+		const float B = 15.0f;
+		//const float Emax = 31.0f;
+		const float N = 9.0f;
+
+		float sharedexp = 65408.000f; //(( pow2to9  - 1.0f)/ pow2to9)*powf( 2.0f, 31.0f - 15.0f);
+
+		float cRed = MAX(0.0f, MIN(sharedexp, r));
+		float cGreen = MAX(0.0f, MIN(sharedexp, g));
+		float cBlue = MAX(0.0f, MIN(sharedexp, b));
+
+		float cMax = MAX(cRed, MAX(cGreen, cBlue));
+
+		// expp = MAX(-B - 1, log2(maxc)) + 1 + B
+
+		float expp = MAX(-B - 1.0f, floor(Math::log(cMax) / Math_LN2)) + 1.0f + B;
+
+		float sMax = (float)floor((cMax / Math::pow(2.0f, expp - B - N)) + 0.5f);
+
+		float exps = expp + 1.0f;
+
+		if (0.0 <= sMax && sMax < pow2to9) {
+			exps = expp;
+		}
+
+		float sRed = Math::floor((cRed / pow(2.0f, exps - B - N)) + 0.5f);
+		float sGreen = Math::floor((cGreen / pow(2.0f, exps - B - N)) + 0.5f);
+		float sBlue = Math::floor((cBlue / pow(2.0f, exps - B - N)) + 0.5f);
+
+		return (uint32_t(Math::fast_ftoi(sRed)) & 0x1FF) | ((uint32_t(Math::fast_ftoi(sGreen)) & 0x1FF) << 9) | ((uint32_t(Math::fast_ftoi(sBlue)) & 0x1FF) << 18) | ((uint32_t(Math::fast_ftoi(exps)) & 0x1F) << 27);
+	}
+
+	_FORCE_INLINE_ Color blend(const Color &p_over) const {
+		Color res;
+		float sa = 1.0 - p_over.a;
+		res.a = a * sa + p_over.a;
+		if (res.a == 0) {
+			return Color(0, 0, 0, 0);
+		} else {
+			res.r = (r * a * sa + p_over.r * p_over.a) / res.a;
+			res.g = (g * a * sa + p_over.g * p_over.a) / res.a;
+			res.b = (b * a * sa + p_over.b * p_over.a) / res.a;
+		}
+		return res;
+	}
+
+	_FORCE_INLINE_ Color to_linear() const {
+		return Color(
+				r < 0.04045 ? r * (1.0 / 12.92) : Math::pow((r + 0.055) * (1.0 / (1 + 0.055)), 2.4),
+				g < 0.04045 ? g * (1.0 / 12.92) : Math::pow((g + 0.055) * (1.0 / (1 + 0.055)), 2.4),
+				b < 0.04045 ? b * (1.0 / 12.92) : Math::pow((b + 0.055) * (1.0 / (1 + 0.055)), 2.4),
+				a);
+	}
+	_FORCE_INLINE_ Color to_srgb() const {
+		return Color(
+				r < 0.0031308 ? 12.92 * r : (1.0 + 0.055) * Math::pow(r, 1.0f / 2.4f) - 0.055,
+				g < 0.0031308 ? 12.92 * g : (1.0 + 0.055) * Math::pow(g, 1.0f / 2.4f) - 0.055,
+				b < 0.0031308 ? 12.92 * b : (1.0 + 0.055) * Math::pow(b, 1.0f / 2.4f) - 0.055, a);
+	}
+
+	static Color hex(uint32_t p_hex);
+	static Color hex64(uint64_t p_hex);
+	static Color html(const String &p_color);
+	static bool html_is_valid(const String &p_color);
+	String to_html(bool p_alpha = true) const;
+	Color from_hsv(float p_h, float p_s, float p_v, float p_a) const;
+	static Color from_rgbe9995(uint32_t p_rgbe);
+
+	_FORCE_INLINE_ bool operator<(const Color &p_color) const; //used in set keys
+	operator String() const;
+
+	static _FORCE_INLINE_ Color color8(int r, int g, int b) {
+		return Color(static_cast<float>(r) / 255.0f, static_cast<float>(g) / 255.0f, static_cast<float>(b) / 255.0f);
+	}
+
+	static _FORCE_INLINE_ Color color8(int r, int g, int b, int a) {
+		return Color(static_cast<float>(r) / 255.0f, static_cast<float>(g) / 255.0f, static_cast<float>(b) / 255.0f, static_cast<float>(a) / 255.0f);
+	}
+
+	_FORCE_INLINE_ void set_r8(int32_t r8) { r = (CLAMP(r8, 0, 255) / 255.0f); }
+	_FORCE_INLINE_ int32_t get_r8() const { return int32_t(CLAMP(Math::round(r * 255.0f), 0.0f, 255.0f)); }
+	_FORCE_INLINE_ void set_g8(int32_t g8) { g = (CLAMP(g8, 0, 255) / 255.0f); }
+	_FORCE_INLINE_ int32_t get_g8() const { return int32_t(CLAMP(Math::round(g * 255.0f), 0.0f, 255.0f)); }
+	_FORCE_INLINE_ void set_b8(int32_t b8) { b = (CLAMP(b8, 0, 255) / 255.0f); }
+	_FORCE_INLINE_ int32_t get_b8() const { return int32_t(CLAMP(Math::round(b * 255.0f), 0.0f, 255.0f)); }
+	_FORCE_INLINE_ void set_a8(int32_t a8) { a = (CLAMP(a8, 0, 255) / 255.0f); }
+	_FORCE_INLINE_ int32_t get_a8() const { return int32_t(CLAMP(Math::round(a * 255.0f), 0.0f, 255.0f)); }
+
+	_FORCE_INLINE_ void set_h(float p_h) { set_hsv(p_h, get_s(), get_v(), a); }
+	_FORCE_INLINE_ void set_s(float p_s) { set_hsv(get_h(), p_s, get_v(), a); }
+	_FORCE_INLINE_ void set_v(float p_v) { set_hsv(get_h(), get_s(), p_v, a); }
+
+	/**
+	 * No construct parameters, r=0, g=0, b=0. a=255
+	 */
+	_FORCE_INLINE_ Color() {
+		r = 0;
+		g = 0;
+		b = 0;
+		a = 1.0;
+	}
+
+	/**
+	 * RGB / RGBA construct parameters. Alpha is optional, but defaults to 1.0
+	 */
+	_FORCE_INLINE_ Color(float p_r, float p_g, float p_b, float p_a = 1.0) {
+		r = p_r;
+		g = p_g;
+		b = p_b;
+		a = p_a;
+	}
+
+	/**
+	 * Construct a Color from another Color, but with the specified alpha value.
+	 */
+	_FORCE_INLINE_ Color(const Color &p_c, float p_a) {
+		r = p_c.r;
+		g = p_c.g;
+		b = p_c.b;
+		a = p_a;
+	}
+};
+
+bool Color::operator<(const Color &p_color) const {
+	if (r == p_color.r) {
+		if (g == p_color.g) {
+			if (b == p_color.b) {
+				return (a < p_color.a);
+			} else {
+				return (b < p_color.b);
+			}
+		} else {
+			return g < p_color.g;
+		}
+	} else {
+		return r < p_color.r;
+	}
+}
+
+#line 0
+
+#line 1 "sfw/core/vector2.h"
+
+/*************************************************************************/
+/*  vector2.h                                                            */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+class String;
+
+struct _NO_DISCARD_CLASS_ Vector2 {
+	static const int AXIS_COUNT = 2;
+
+	enum Axis {
+		AXIS_X,
+		AXIS_Y,
+	};
+
+	union {
+		struct {
+			union {
+				real_t x;
+				real_t width;
+			};
+			union {
+				real_t y;
+				real_t height;
+			};
+		};
+
+		real_t coord[2];
+	};
+
+	_FORCE_INLINE_ real_t &operator[](int p_idx) {
+		DEV_ASSERT((unsigned int)p_idx < 2);
+		return coord[p_idx];
+	}
+	_FORCE_INLINE_ const real_t &operator[](int p_idx) const {
+		DEV_ASSERT((unsigned int)p_idx < 2);
+		return coord[p_idx];
+	}
+
+	_FORCE_INLINE_ void set_all(real_t p_value) {
+		x = y = p_value;
+	}
+
+	_FORCE_INLINE_ int min_axis() const {
+		return x < y ? 0 : 1;
+	}
+
+	_FORCE_INLINE_ int max_axis() const {
+		return x < y ? 1 : 0;
+	}
+
+	void normalize();
+	Vector2 normalized() const;
+	bool is_normalized() const;
+
+	real_t length() const;
+	real_t length_squared() const;
+	Vector2 limit_length(const real_t p_len = 1.0) const;
+
+	Vector2 min(const Vector2 &p_vector2) const {
+		return Vector2(MIN(x, p_vector2.x), MIN(y, p_vector2.y));
+	}
+
+	Vector2 max(const Vector2 &p_vector2) const {
+		return Vector2(MAX(x, p_vector2.x), MAX(y, p_vector2.y));
+	}
+
+	real_t distance_to(const Vector2 &p_vector2) const;
+	real_t distance_squared_to(const Vector2 &p_vector2) const;
+	real_t angle_to(const Vector2 &p_vector2) const;
+	real_t angle_to_point(const Vector2 &p_vector2) const;
+	_FORCE_INLINE_ Vector2 direction_to(const Vector2 &p_to) const;
+
+	real_t dot(const Vector2 &p_other) const;
+	real_t cross(const Vector2 &p_other) const;
+	Vector2 posmod(const real_t p_mod) const;
+	Vector2 posmodv(const Vector2 &p_modv) const;
+	Vector2 project(const Vector2 &p_to) const;
+
+	Vector2 plane_project(real_t p_d, const Vector2 &p_vec) const;
+
+	_FORCE_INLINE_ static Vector2 linear_interpolate(const Vector2 &p_a, const Vector2 &p_b, real_t p_weight);
+	_FORCE_INLINE_ Vector2 linear_interpolate(const Vector2 &p_to, real_t p_weight) const;
+	_FORCE_INLINE_ Vector2 slerp(const Vector2 &p_to, real_t p_weight) const;
+	_FORCE_INLINE_ Vector2 cubic_interpolate(const Vector2 &p_b, const Vector2 &p_pre_a, const Vector2 &p_post_b, real_t p_weight) const;
+	_FORCE_INLINE_ Vector2 bezier_interpolate(const Vector2 &p_control_1, const Vector2 &p_control_2, const Vector2 &p_end, const real_t p_t) const;
+
+	Vector2 move_toward(const Vector2 &p_to, const real_t p_delta) const;
+
+	Vector2 slide(const Vector2 &p_normal) const;
+	Vector2 bounce(const Vector2 &p_normal) const;
+	Vector2 reflect(const Vector2 &p_normal) const;
+
+	bool is_equal_approx(const Vector2 &p_v) const;
+
+	Vector2 operator+(const Vector2 &p_v) const;
+	void operator+=(const Vector2 &p_v);
+	Vector2 operator-(const Vector2 &p_v) const;
+	void operator-=(const Vector2 &p_v);
+	Vector2 operator*(const Vector2 &p_v1) const;
+
+	Vector2 operator*(const real_t &rvalue) const;
+	void operator*=(const real_t &rvalue);
+	void operator*=(const Vector2 &rvalue) { *this = *this * rvalue; }
+
+	Vector2 operator/(const Vector2 &p_v1) const;
+
+	Vector2 operator/(const real_t &rvalue) const;
+
+	void operator/=(const real_t &rvalue);
+	void operator/=(const Vector2 &rvalue) { *this = *this / rvalue; }
+
+	Vector2 operator-() const;
+
+	bool operator==(const Vector2 &p_vec2) const;
+	bool operator!=(const Vector2 &p_vec2) const;
+
+	bool operator<(const Vector2 &p_vec2) const { return x == p_vec2.x ? (y < p_vec2.y) : (x < p_vec2.x); }
+	bool operator>(const Vector2 &p_vec2) const { return x == p_vec2.x ? (y > p_vec2.y) : (x > p_vec2.x); }
+	bool operator<=(const Vector2 &p_vec2) const { return x == p_vec2.x ? (y <= p_vec2.y) : (x < p_vec2.x); }
+	bool operator>=(const Vector2 &p_vec2) const { return x == p_vec2.x ? (y >= p_vec2.y) : (x > p_vec2.x); }
+
+	real_t angle() const;
+
+	void set_rotation(real_t p_radians) {
+		x = Math::cos(p_radians);
+		y = Math::sin(p_radians);
+	}
+
+	_FORCE_INLINE_ Vector2 abs() const {
+		return Vector2(Math::abs(x), Math::abs(y));
+	}
+
+	Vector2 rotated(real_t p_by) const;
+	_FORCE_INLINE_ Vector2 tangent() const {
+		return Vector2(y, -x);
+	}
+	_FORCE_INLINE_ Vector2 orthogonal() const {
+		return Vector2(y, -x);
+	}
+
+	Vector2 sign() const;
+	Vector2 floor() const;
+	Vector2 ceil() const;
+	Vector2 round() const;
+	Vector2 snapped(const Vector2 &p_by) const;
+	real_t aspect() const { return width / height; }
+
+	operator String() const;
+
+	_FORCE_INLINE_ Vector2(real_t p_x, real_t p_y) {
+		x = p_x;
+		y = p_y;
+	}
+	_FORCE_INLINE_ Vector2() { x = y = 0; }
+};
+
+_FORCE_INLINE_ Vector2 Vector2::plane_project(real_t p_d, const Vector2 &p_vec) const {
+	return p_vec - *this * (dot(p_vec) - p_d);
+}
+
+_FORCE_INLINE_ Vector2 operator*(real_t p_scalar, const Vector2 &p_vec) {
+	return p_vec * p_scalar;
+}
+
+_FORCE_INLINE_ Vector2 Vector2::operator+(const Vector2 &p_v) const {
+	return Vector2(x + p_v.x, y + p_v.y);
+}
+_FORCE_INLINE_ void Vector2::operator+=(const Vector2 &p_v) {
+	x += p_v.x;
+	y += p_v.y;
+}
+_FORCE_INLINE_ Vector2 Vector2::operator-(const Vector2 &p_v) const {
+	return Vector2(x - p_v.x, y - p_v.y);
+}
+_FORCE_INLINE_ void Vector2::operator-=(const Vector2 &p_v) {
+	x -= p_v.x;
+	y -= p_v.y;
+}
+
+_FORCE_INLINE_ Vector2 Vector2::operator*(const Vector2 &p_v1) const {
+	return Vector2(x * p_v1.x, y * p_v1.y);
+};
+
+_FORCE_INLINE_ Vector2 Vector2::operator*(const real_t &rvalue) const {
+	return Vector2(x * rvalue, y * rvalue);
+};
+_FORCE_INLINE_ void Vector2::operator*=(const real_t &rvalue) {
+	x *= rvalue;
+	y *= rvalue;
+};
+
+_FORCE_INLINE_ Vector2 Vector2::operator/(const Vector2 &p_v1) const {
+	return Vector2(x / p_v1.x, y / p_v1.y);
+};
+
+_FORCE_INLINE_ Vector2 Vector2::operator/(const real_t &rvalue) const {
+	return Vector2(x / rvalue, y / rvalue);
+};
+
+_FORCE_INLINE_ void Vector2::operator/=(const real_t &rvalue) {
+	x /= rvalue;
+	y /= rvalue;
+};
+
+_FORCE_INLINE_ Vector2 Vector2::operator-() const {
+	return Vector2(-x, -y);
+}
+
+_FORCE_INLINE_ bool Vector2::operator==(const Vector2 &p_vec2) const {
+	return x == p_vec2.x && y == p_vec2.y;
+}
+_FORCE_INLINE_ bool Vector2::operator!=(const Vector2 &p_vec2) const {
+	return x != p_vec2.x || y != p_vec2.y;
+}
+
+Vector2 Vector2::linear_interpolate(const Vector2 &p_to, real_t p_weight) const {
+	Vector2 res = *this;
+
+	res.x += (p_weight * (p_to.x - x));
+	res.y += (p_weight * (p_to.y - y));
+
+	return res;
+}
+
+Vector2 Vector2::slerp(const Vector2 &p_to, real_t p_weight) const {
+#ifdef MATH_CHECKS
+	ERR_FAIL_COND_V_MSG(!is_normalized(), Vector2(), "The start Vector2 must be normalized.");
+#endif
+	real_t theta = angle_to(p_to);
+	return rotated(theta * p_weight);
+}
+
+Vector2 Vector2::bezier_interpolate(const Vector2 &p_control_1, const Vector2 &p_control_2, const Vector2 &p_end, const real_t p_t) const {
+	Vector2 res = *this;
+
+	/* Formula from Wikipedia article on Bezier curves. */
+	real_t omt = (1.0 - p_t);
+	real_t omt2 = omt * omt;
+	real_t omt3 = omt2 * omt;
+	real_t t2 = p_t * p_t;
+	real_t t3 = t2 * p_t;
+
+	return res * omt3 + p_control_1 * omt2 * p_t * 3.0 + p_control_2 * omt * t2 * 3.0 + p_end * t3;
+}
+
+Vector2 Vector2::cubic_interpolate(const Vector2 &p_b, const Vector2 &p_pre_a, const Vector2 &p_post_b, const real_t p_weight) const {
+	Vector2 res = *this;
+	res.x = Math::cubic_interpolate(res.x, p_b.x, p_pre_a.x, p_post_b.x, p_weight);
+	res.y = Math::cubic_interpolate(res.y, p_b.y, p_pre_a.y, p_post_b.y, p_weight);
+	return res;
+}
+
+Vector2 Vector2::direction_to(const Vector2 &p_to) const {
+	Vector2 ret(p_to.x - x, p_to.y - y);
+	ret.normalize();
+	return ret;
+}
+
+Vector2 Vector2::linear_interpolate(const Vector2 &p_a, const Vector2 &p_b, real_t p_weight) {
+	Vector2 res = p_a;
+
+	res.x += (p_weight * (p_b.x - p_a.x));
+	res.y += (p_weight * (p_b.y - p_a.y));
+
+	return res;
+}
+
+typedef Vector2 Size2;
+typedef Vector2 Point2;
+
+#line 0
+
+#line 1 "sfw/core/vector2i.h"
+
+/*************************************************************************/
+/*  vector2i.h                                                           */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+class String;
+
+struct _NO_DISCARD_CLASS_ Vector2i {
+	enum Axis {
+		AXIS_X,
+		AXIS_Y,
+	};
+
+	union {
+		struct {
+			union {
+				int x;
+				int width;
+			};
+			union {
+				int y;
+				int height;
+			};
+		};
+
+		int coord[2];
+	};
+
+	_FORCE_INLINE_ int &operator[](int p_idx) {
+		DEV_ASSERT((unsigned int)p_idx < 2);
+		return coord[p_idx];
+	}
+	_FORCE_INLINE_ const int &operator[](int p_idx) const {
+		DEV_ASSERT((unsigned int)p_idx < 2);
+		return coord[p_idx];
+	}
+
+	_FORCE_INLINE_ void set_all(int p_value) {
+		x = y = p_value;
+	}
+
+	_FORCE_INLINE_ int min_axis() const {
+		return x < y ? 0 : 1;
+	}
+
+	_FORCE_INLINE_ int max_axis() const {
+		return x < y ? 1 : 0;
+	}
+
+	Vector2i min(const Vector2i &p_vector2i) const {
+		return Vector2i(MIN(x, p_vector2i.x), MIN(y, p_vector2i.y));
+	}
+
+	Vector2i max(const Vector2i &p_vector2i) const {
+		return Vector2i(MAX(x, p_vector2i.x), MAX(y, p_vector2i.y));
+	}
+
+	_FORCE_INLINE_ static Vector2i linear_interpolate(const Vector2i &p_a, const Vector2i &p_b, real_t p_weight);
+	_FORCE_INLINE_ Vector2i linear_interpolate(const Vector2i &p_to, real_t p_weight) const;
+
+	Vector2i operator+(const Vector2i &p_v) const;
+	void operator+=(const Vector2i &p_v);
+	Vector2i operator-(const Vector2i &p_v) const;
+	void operator-=(const Vector2i &p_v);
+	Vector2i operator*(const Vector2i &p_v1) const;
+
+	Vector2i operator*(const int &rvalue) const;
+	void operator*=(const int &rvalue);
+
+	Vector2i operator/(const Vector2i &p_v1) const;
+
+	Vector2i operator/(const int &rvalue) const;
+
+	void operator/=(const int &rvalue);
+
+	Vector2i operator-() const;
+	bool operator<(const Vector2i &p_vec2) const { return (x == p_vec2.x) ? (y < p_vec2.y) : (x < p_vec2.x); }
+	bool operator>(const Vector2i &p_vec2) const { return (x == p_vec2.x) ? (y > p_vec2.y) : (x > p_vec2.x); }
+	bool operator<=(const Vector2 &p_vec2) const { return x == p_vec2.x ? (y <= p_vec2.y) : (x < p_vec2.x); }
+	bool operator>=(const Vector2 &p_vec2) const { return x == p_vec2.x ? (y >= p_vec2.y) : (x > p_vec2.x); }
+
+	bool operator==(const Vector2i &p_vec2) const;
+	bool operator!=(const Vector2i &p_vec2) const;
+
+	int64_t length_squared() const;
+	double length() const;
+
+	real_t aspect() const { return width / (real_t)height; }
+	Vector2i sign() const { return Vector2i(SGN(x), SGN(y)); }
+	Vector2i abs() const { return Vector2i(ABS(x), ABS(y)); }
+	Vector2i clamp(const Vector2i &p_min, const Vector2i &p_max) const;
+
+	Vector2 to_vector2() const { return Vector2(x, y); }
+
+	operator String() const;
+	operator Vector2() const { return Vector2(x, y); }
+
+	inline Vector2i(const Vector2 &p_vec2) {
+		x = (int)p_vec2.x;
+		y = (int)p_vec2.y;
+	}
+	inline Vector2i(int p_x, int p_y) {
+		x = p_x;
+		y = p_y;
+	}
+	inline Vector2i() {
+		x = 0;
+		y = 0;
+	}
+};
+
+Vector2i Vector2i::linear_interpolate(const Vector2i &p_a, const Vector2i &p_b, real_t p_weight) {
+	Vector2i res = p_a;
+
+	res.x += (p_weight * (p_b.x - p_a.x));
+	res.y += (p_weight * (p_b.y - p_a.y));
+
+	return res;
+}
+
+Vector2i Vector2i::linear_interpolate(const Vector2i &p_to, real_t p_weight) const {
+	Vector2 res = *this;
+
+	res.x += (p_weight * (p_to.x - x));
+	res.y += (p_weight * (p_to.y - y));
+
+	return res;
+}
+
+typedef Vector2i Size2i;
+typedef Vector2i Point2i;
+
+#line 0
+
+#line 1 "sfw/core/rect2.h"
+
+/*************************************************************************/
+/*  rect2.h                                                              */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct Transform2D;
+struct Rect2i;
+
+struct _NO_DISCARD_CLASS_ Rect2 {
+	Point2 position;
+	Size2 size;
+
+	const Vector2 &get_position() const { return position; }
+	void set_position(const Vector2 &p_pos) { position = p_pos; }
+	const Vector2 &get_size() const { return size; }
+	void set_size(const Vector2 &p_size) { size = p_size; }
+
+	real_t get_area() const { return size.width * size.height; }
+
+	_FORCE_INLINE_ Vector2 get_center() const { return position + (size * 0.5f); }
+
+	inline bool intersects(const Rect2 &p_rect, const bool p_include_borders = false) const {
+		if (p_include_borders) {
+			if (position.x > (p_rect.position.x + p_rect.size.width)) {
+				return false;
+			}
+			if ((position.x + size.width) < p_rect.position.x) {
+				return false;
+			}
+			if (position.y > (p_rect.position.y + p_rect.size.height)) {
+				return false;
+			}
+			if ((position.y + size.height) < p_rect.position.y) {
+				return false;
+			}
+		} else {
+			if (position.x >= (p_rect.position.x + p_rect.size.width)) {
+				return false;
+			}
+			if ((position.x + size.width) <= p_rect.position.x) {
+				return false;
+			}
+			if (position.y >= (p_rect.position.y + p_rect.size.height)) {
+				return false;
+			}
+			if ((position.y + size.height) <= p_rect.position.y) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	inline real_t distance_to(const Vector2 &p_point) const {
+		real_t dist = 0.0;
+		bool inside = true;
+
+		if (p_point.x < position.x) {
+			real_t d = position.x - p_point.x;
+			dist = d;
+			inside = false;
+		}
+		if (p_point.y < position.y) {
+			real_t d = position.y - p_point.y;
+			dist = inside ? d : MIN(dist, d);
+			inside = false;
+		}
+		if (p_point.x >= (position.x + size.x)) {
+			real_t d = p_point.x - (position.x + size.x);
+			dist = inside ? d : MIN(dist, d);
+			inside = false;
+		}
+		if (p_point.y >= (position.y + size.y)) {
+			real_t d = p_point.y - (position.y + size.y);
+			dist = inside ? d : MIN(dist, d);
+			inside = false;
+		}
+
+		if (inside) {
+			return 0;
+		} else {
+			return dist;
+		}
+	}
+
+	bool intersects_transformed(const Transform2D &p_xform, const Rect2 &p_rect) const;
+
+	bool intersects_segment(const Point2 &p_from, const Point2 &p_to, Point2 *r_pos = nullptr, Point2 *r_normal = nullptr) const;
+
+	inline bool encloses(const Rect2 &p_rect) const {
+		return (p_rect.position.x >= position.x) && (p_rect.position.y >= position.y) &&
+				((p_rect.position.x + p_rect.size.x) <= (position.x + size.x)) &&
+				((p_rect.position.y + p_rect.size.y) <= (position.y + size.y));
+	}
+
+	_FORCE_INLINE_ bool has_no_area() const {
+		return (size.x <= 0 || size.y <= 0);
+	}
+	inline Rect2 clip(const Rect2 &p_rect) const { /// return a clipped rect
+
+		Rect2 new_rect = p_rect;
+
+		if (!intersects(new_rect)) {
+			return Rect2();
+		}
+
+		new_rect.position.x = MAX(p_rect.position.x, position.x);
+		new_rect.position.y = MAX(p_rect.position.y, position.y);
+
+		Point2 p_rect_end = p_rect.position + p_rect.size;
+		Point2 end = position + size;
+
+		new_rect.size.x = MIN(p_rect_end.x, end.x) - new_rect.position.x;
+		new_rect.size.y = MIN(p_rect_end.y, end.y) - new_rect.position.y;
+
+		return new_rect;
+	}
+
+	inline Rect2 intersection(const Rect2 &p_rect) const {
+		Rect2 new_rect = p_rect;
+
+		if (!intersects(new_rect)) {
+			return Rect2();
+		}
+
+		new_rect.position.x = MAX(p_rect.position.x, position.x);
+		new_rect.position.y = MAX(p_rect.position.y, position.y);
+
+		Point2 p_rect_end = p_rect.position + p_rect.size;
+		Point2 end = position + size;
+
+		new_rect.size.x = MIN(p_rect_end.x, end.x) - new_rect.position.x;
+		new_rect.size.y = MIN(p_rect_end.y, end.y) - new_rect.position.y;
+
+		return new_rect;
+	}
+
+	inline Rect2 merge(const Rect2 &p_rect) const { ///< return a merged rect
+
+		Rect2 new_rect;
+
+		new_rect.position.x = MIN(p_rect.position.x, position.x);
+		new_rect.position.y = MIN(p_rect.position.y, position.y);
+
+		new_rect.size.x = MAX(p_rect.position.x + p_rect.size.x, position.x + size.x);
+		new_rect.size.y = MAX(p_rect.position.y + p_rect.size.y, position.y + size.y);
+
+		new_rect.size = new_rect.size - new_rect.position; //make relative again
+
+		return new_rect;
+	};
+	inline bool has_point(const Point2 &p_point) const {
+		if (p_point.x < position.x) {
+			return false;
+		}
+		if (p_point.y < position.y) {
+			return false;
+		}
+
+		if (p_point.x >= (position.x + size.x)) {
+			return false;
+		}
+		if (p_point.y >= (position.y + size.y)) {
+			return false;
+		}
+
+		return true;
+	}
+	bool is_equal_approx(const Rect2 &p_rect) const;
+
+	bool operator==(const Rect2 &p_rect) const { return position == p_rect.position && size == p_rect.size; }
+	bool operator!=(const Rect2 &p_rect) const { return position != p_rect.position || size != p_rect.size; }
+
+	inline Rect2 grow(real_t p_by) const {
+		Rect2 g = *this;
+		g.grow_by(p_by);
+		return g;
+	}
+
+	inline void grow_by(real_t p_by) {
+		position.x -= p_by;
+		position.y -= p_by;
+		size.width += p_by * 2;
+		size.height += p_by * 2;
+	}
+
+	inline Rect2 grow_margin(Margin p_margin, real_t p_amount) const {
+		Rect2 g = *this;
+		g = g.grow_individual((MARGIN_LEFT == p_margin) ? p_amount : 0,
+				(MARGIN_TOP == p_margin) ? p_amount : 0,
+				(MARGIN_RIGHT == p_margin) ? p_amount : 0,
+				(MARGIN_BOTTOM == p_margin) ? p_amount : 0);
+		return g;
+	}
+
+	inline Rect2 grow_side(Side p_side, real_t p_amount) const {
+		Rect2 g = *this;
+		g = g.grow_individual((SIDE_LEFT == p_side) ? p_amount : 0,
+				(SIDE_TOP == p_side) ? p_amount : 0,
+				(SIDE_RIGHT == p_side) ? p_amount : 0,
+				(SIDE_BOTTOM == p_side) ? p_amount : 0);
+		return g;
+	}
+
+	inline Rect2 grow_individual(real_t p_left, real_t p_top, real_t p_right, real_t p_bottom) const {
+		Rect2 g = *this;
+		g.position.x -= p_left;
+		g.position.y -= p_top;
+		g.size.width += p_left + p_right;
+		g.size.height += p_top + p_bottom;
+
+		return g;
+	}
+
+	_FORCE_INLINE_ Rect2 expand(const Vector2 &p_vector) const {
+		Rect2 r = *this;
+		r.expand_to(p_vector);
+		return r;
+	}
+
+	inline void expand_to(const Vector2 &p_vector) { //in place function for speed
+
+		Vector2 begin = position;
+		Vector2 end = position + size;
+
+		if (p_vector.x < begin.x) {
+			begin.x = p_vector.x;
+		}
+		if (p_vector.y < begin.y) {
+			begin.y = p_vector.y;
+		}
+
+		if (p_vector.x > end.x) {
+			end.x = p_vector.x;
+		}
+		if (p_vector.y > end.y) {
+			end.y = p_vector.y;
+		}
+
+		position = begin;
+		size = end - begin;
+	}
+
+	_FORCE_INLINE_ Rect2 abs() const {
+		return Rect2(Point2(position.x + MIN(size.x, 0), position.y + MIN(size.y, 0)), size.abs());
+	}
+
+	Vector2 get_support(const Vector2 &p_normal) const {
+		Vector2 half_extents = size * 0.5f;
+		Vector2 ofs = position + half_extents;
+		return Vector2(
+					   (p_normal.x > 0) ? -half_extents.x : half_extents.x,
+					   (p_normal.y > 0) ? -half_extents.y : half_extents.y) +
+				ofs;
+	}
+
+	_FORCE_INLINE_ bool intersects_filled_polygon(const Vector2 *p_points, int p_point_count) const {
+		Vector2 center = get_center();
+		int side_plus = 0;
+		int side_minus = 0;
+		Vector2 end = position + size;
+
+		int i_f = p_point_count - 1;
+		for (int i = 0; i < p_point_count; i++) {
+			const Vector2 &a = p_points[i_f];
+			const Vector2 &b = p_points[i];
+			i_f = i;
+
+			Vector2 r = (b - a);
+			float l = r.length();
+			if (l == 0.0f) {
+				continue;
+			}
+
+			//check inside
+			Vector2 tg = r.orthogonal();
+			float s = tg.dot(center) - tg.dot(a);
+			if (s < 0.0f) {
+				side_plus++;
+			} else {
+				side_minus++;
+			}
+
+			//check ray box
+			r /= l;
+			Vector2 ir(1.0f / r.x, 1.0f / r.y);
+
+			// lb is the corner of AABB with minimal coordinates - left bottom, rt is maximal corner
+			// r.org is origin of ray
+			Vector2 t13 = (position - a) * ir;
+			Vector2 t24 = (end - a) * ir;
+
+			float tmin = MAX(MIN(t13.x, t24.x), MIN(t13.y, t24.y));
+			float tmax = MIN(MAX(t13.x, t24.x), MAX(t13.y, t24.y));
+
+			// if tmax < 0, ray (line) is intersecting AABB, but the whole AABB is behind us
+			if (tmax < 0 || tmin > tmax || tmin >= l) {
+				continue;
+			}
+
+			return true;
+		}
+
+		if (side_plus * side_minus == 0) {
+			return true; //all inside
+		} else {
+			return false;
+		}
+	}
+
+	_FORCE_INLINE_ void set_end(const Vector2 &p_end) {
+		size = p_end - position;
+	}
+
+	_FORCE_INLINE_ Vector2 get_end() const {
+		return position + size;
+	}
+
+	operator String() const;
+
+	Rect2() {}
+	Rect2(real_t p_x, real_t p_y, real_t p_width, real_t p_height) :
+			position(Point2(p_x, p_y)),
+			size(Size2(p_width, p_height)) {
+	}
+	Rect2(const Point2 &p_pos, const Size2 &p_size) :
+			position(p_pos),
+			size(p_size) {
+	}
+};
+
+#line 0
+
+#line 1 "sfw/core/rect2i.h"
+
+/*************************************************************************/
+/*  rect2i.h                                                             */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct _NO_DISCARD_CLASS_ Rect2i {
+	Point2i position;
+	Size2i size;
+
+	const Point2i &get_position() const { return position; }
+	void set_position(const Point2i &p_position) { position = p_position; }
+	const Size2i &get_size() const { return size; }
+	void set_size(const Size2i &p_size) { size = p_size; }
+
+	int get_area() const { return size.width * size.height; }
+
+	_FORCE_INLINE_ Vector2i get_center() const { return position + (size / 2); }
+
+	inline bool intersects(const Rect2i &p_rect) const {
+		if (position.x > (p_rect.position.x + p_rect.size.width)) {
+			return false;
+		}
+		if ((position.x + size.width) < p_rect.position.x) {
+			return false;
+		}
+		if (position.y > (p_rect.position.y + p_rect.size.height)) {
+			return false;
+		}
+		if ((position.y + size.height) < p_rect.position.y) {
+			return false;
+		}
+
+		return true;
+	}
+
+	inline bool encloses(const Rect2i &p_rect) const {
+		return (p_rect.position.x >= position.x) && (p_rect.position.y >= position.y) &&
+				((p_rect.position.x + p_rect.size.x) < (position.x + size.x)) &&
+				((p_rect.position.y + p_rect.size.y) < (position.y + size.y));
+	}
+
+	_FORCE_INLINE_ bool has_no_area() const {
+		return (size.x <= 0 || size.y <= 0);
+	}
+
+	inline Rect2i clip(const Rect2i &p_rect) const { /// return a clipped rect
+
+		Rect2i new_rect = p_rect;
+
+		if (!intersects(new_rect)) {
+			return Rect2i();
+		}
+
+		new_rect.position.x = MAX(p_rect.position.x, position.x);
+		new_rect.position.y = MAX(p_rect.position.y, position.y);
+
+		Point2 p_rect_end = p_rect.position + p_rect.size;
+		Point2 end = position + size;
+
+		new_rect.size.x = (int)(MIN(p_rect_end.x, end.x) - new_rect.position.x);
+		new_rect.size.y = (int)(MIN(p_rect_end.y, end.y) - new_rect.position.y);
+
+		return new_rect;
+	}
+
+	// Returns the instersection between two Rect2is or an empty Rect2i if there is no intersection
+	inline Rect2i intersection(const Rect2i &p_rect) const {
+		Rect2i new_rect = p_rect;
+
+		if (!intersects(new_rect)) {
+			return Rect2i();
+		}
+
+		new_rect.position.x = MAX(p_rect.position.x, position.x);
+		new_rect.position.y = MAX(p_rect.position.y, position.y);
+
+		Point2i p_rect_end = p_rect.position + p_rect.size;
+		Point2i end = position + size;
+
+		new_rect.size.x = MIN(p_rect_end.x, end.x) - new_rect.position.x;
+		new_rect.size.y = MIN(p_rect_end.y, end.y) - new_rect.position.y;
+
+		return new_rect;
+	}
+
+	inline Rect2i merge(const Rect2i &p_rect) const { ///< return a merged rect
+
+		Rect2i new_rect;
+
+		new_rect.position.x = MIN(p_rect.position.x, position.x);
+		new_rect.position.y = MIN(p_rect.position.y, position.y);
+
+		new_rect.size.x = MAX(p_rect.position.x + p_rect.size.x, position.x + size.x);
+		new_rect.size.y = MAX(p_rect.position.y + p_rect.size.y, position.y + size.y);
+
+		new_rect.size = new_rect.size - new_rect.position; //make relative again
+
+		return new_rect;
+	}
+
+	bool has_point(const Point2i &p_point) const {
+		if (p_point.x < position.x) {
+			return false;
+		}
+		if (p_point.y < position.y) {
+			return false;
+		}
+
+		if (p_point.x >= (position.x + size.x)) {
+			return false;
+		}
+		if (p_point.y >= (position.y + size.y)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	bool operator==(const Rect2i &p_rect) const { return position == p_rect.position && size == p_rect.size; }
+	bool operator!=(const Rect2i &p_rect) const { return position != p_rect.position || size != p_rect.size; }
+
+	Rect2i grow(int p_by) const {
+		Rect2i g = *this;
+		g.position.x -= p_by;
+		g.position.y -= p_by;
+		g.size.width += p_by * 2;
+		g.size.height += p_by * 2;
+		return g;
+	}
+
+	void grow_by(int p_by) {
+		position.x -= p_by;
+		position.y -= p_by;
+		size.width += p_by * 2;
+		size.height += p_by * 2;
+	}
+
+	inline Rect2i grow_margin(Margin p_margin, int p_amount) const {
+		Rect2i g = *this;
+		g = g.grow_individual((MARGIN_LEFT == p_margin) ? p_amount : 0,
+				(MARGIN_TOP == p_margin) ? p_amount : 0,
+				(MARGIN_RIGHT == p_margin) ? p_amount : 0,
+				(MARGIN_BOTTOM == p_margin) ? p_amount : 0);
+		return g;
+	}
+
+	inline Rect2i grow_side(Side p_side, int p_amount) const {
+		Rect2i g = *this;
+		g = g.grow_individual((SIDE_LEFT == p_side) ? p_amount : 0,
+				(SIDE_TOP == p_side) ? p_amount : 0,
+				(SIDE_RIGHT == p_side) ? p_amount : 0,
+				(SIDE_BOTTOM == p_side) ? p_amount : 0);
+		return g;
+	}
+
+	inline Rect2i grow_individual(int p_left, int p_top, int p_right, int p_bottom) const {
+		Rect2i g = *this;
+		g.position.x -= p_left;
+		g.position.y -= p_top;
+		g.size.width += p_left + p_right;
+		g.size.height += p_top + p_bottom;
+
+		return g;
+	}
+
+	_FORCE_INLINE_ Rect2i expand(const Vector2i &p_vector) const {
+		Rect2i r = *this;
+		r.expand_to(p_vector);
+		return r;
+	}
+
+	inline void expand_to(const Point2i &p_vector) {
+		Point2i begin = position;
+		Point2i end = position + size;
+
+		if (p_vector.x < begin.x) {
+			begin.x = p_vector.x;
+		}
+		if (p_vector.y < begin.y) {
+			begin.y = p_vector.y;
+		}
+
+		if (p_vector.x > end.x) {
+			end.x = p_vector.x;
+		}
+		if (p_vector.y > end.y) {
+			end.y = p_vector.y;
+		}
+
+		position = begin;
+		size = end - begin;
+	}
+
+	_FORCE_INLINE_ Rect2i abs() const {
+		return Rect2i(Point2i(position.x + MIN(size.x, 0), position.y + MIN(size.y, 0)), size.abs());
+	}
+
+	_FORCE_INLINE_ void set_end(const Vector2i &p_end) {
+		size = p_end - position;
+	}
+
+	_FORCE_INLINE_ Vector2i get_end() const {
+		return position + size;
+	}
+
+	Rect2 to_rect2() const { return Rect2(position, size); }
+
+	operator String() const;
+	operator Rect2() const { return Rect2(position, size); }
+
+	Rect2i(const Rect2 &p_r2) :
+			position(p_r2.position),
+			size(p_r2.size) {
+	}
+	Rect2i() {}
+	Rect2i(int p_x, int p_y, int p_width, int p_height) :
+			position(Point2(p_x, p_y)),
+			size(Size2(p_width, p_height)) {
+	}
+	Rect2i(const Point2 &p_pos, const Size2 &p_size) :
+			position(p_pos),
+			size(p_size) {
+	}
+};
+
+#line 0
+
+#line 1 "sfw/core/vector3.h"
+
+/*************************************************************************/
+/*  vector3.h                                                            */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct Basis;
+
+struct _NO_DISCARD_CLASS_ Vector3 {
+	static const int AXIS_COUNT = 3;
+
+	enum Axis {
+		AXIS_X,
+		AXIS_Y,
+		AXIS_Z,
+	};
+
+	union {
+		struct {
+			real_t x;
+			real_t y;
+			real_t z;
+		};
+
+		real_t coord[3];
+	};
+
+	_FORCE_INLINE_ const real_t &operator[](int p_axis) const {
+		DEV_ASSERT((unsigned int)p_axis < 3);
+		return coord[p_axis];
+	}
+
+	_FORCE_INLINE_ real_t &operator[](int p_axis) {
+		DEV_ASSERT((unsigned int)p_axis < 3);
+		return coord[p_axis];
+	}
+
+	void set_axis(int p_axis, real_t p_value);
+	real_t get_axis(int p_axis) const;
+
+	_FORCE_INLINE_ void set_all(real_t p_value) {
+		x = y = z = p_value;
+	}
+
+	_FORCE_INLINE_ int min_axis() const {
+		return x < y ? (x < z ? 0 : 2) : (y < z ? 1 : 2);
+	}
+
+	_FORCE_INLINE_ int max_axis() const {
+		return x < y ? (y < z ? 2 : 1) : (x < z ? 2 : 0);
+	}
+
+	_FORCE_INLINE_ real_t length() const;
+	_FORCE_INLINE_ real_t length_squared() const;
+
+	_FORCE_INLINE_ void normalize();
+	_FORCE_INLINE_ Vector3 normalized() const;
+	_FORCE_INLINE_ bool is_normalized() const;
+	_FORCE_INLINE_ Vector3 inverse() const;
+	Vector3 limit_length(const real_t p_len = 1.0) const;
+
+	_FORCE_INLINE_ void zero();
+
+	void snap(const Vector3 &p_val);
+	Vector3 snapped(const Vector3 &p_val) const;
+
+	void rotate(const Vector3 &p_axis, real_t p_phi);
+	Vector3 rotated(const Vector3 &p_axis, real_t p_phi) const;
+
+	/* Static Methods between 2 vector3s */
+
+	_FORCE_INLINE_ Vector3 linear_interpolate(const Vector3 &p_to, real_t p_weight) const;
+	_FORCE_INLINE_ Vector3 slerp(const Vector3 &p_to, real_t p_weight) const;
+	_FORCE_INLINE_ Vector3 cubic_interpolate(const Vector3 &p_b, const Vector3 &p_pre_a, const Vector3 &p_post_b, real_t p_weight) const;
+	_FORCE_INLINE_ Vector3 bezier_interpolate(const Vector3 &p_control_1, const Vector3 &p_control_2, const Vector3 &p_end, const real_t p_t) const;
+
+	Vector3 move_toward(const Vector3 &p_to, const real_t p_delta) const;
+
+	_FORCE_INLINE_ Vector3 cross(const Vector3 &p_b) const;
+	_FORCE_INLINE_ real_t dot(const Vector3 &p_b) const;
+	Basis outer(const Vector3 &p_b) const;
+	Basis to_diagonal_matrix() const;
+
+	_FORCE_INLINE_ Vector3 abs() const;
+	_FORCE_INLINE_ Vector3 floor() const;
+	_FORCE_INLINE_ Vector3 sign() const;
+	_FORCE_INLINE_ Vector3 ceil() const;
+	_FORCE_INLINE_ Vector3 round() const;
+	Vector3 clamp(const Vector3 &p_min, const Vector3 &p_max) const;
+
+	_FORCE_INLINE_ real_t distance_to(const Vector3 &p_to) const;
+	_FORCE_INLINE_ real_t distance_squared_to(const Vector3 &p_to) const;
+
+	_FORCE_INLINE_ Vector3 posmod(const real_t p_mod) const;
+	_FORCE_INLINE_ Vector3 posmodv(const Vector3 &p_modv) const;
+	_FORCE_INLINE_ Vector3 project(const Vector3 &p_to) const;
+
+	_FORCE_INLINE_ real_t angle_to(const Vector3 &p_to) const;
+	_FORCE_INLINE_ real_t signed_angle_to(const Vector3 &p_to, const Vector3 &p_axis) const;
+	_FORCE_INLINE_ Vector3 direction_to(const Vector3 &p_to) const;
+
+	_FORCE_INLINE_ Vector3 slide(const Vector3 &p_normal) const;
+	_FORCE_INLINE_ Vector3 bounce(const Vector3 &p_normal) const;
+	_FORCE_INLINE_ Vector3 reflect(const Vector3 &p_normal) const;
+
+	bool is_equal_approx(const Vector3 &p_v) const;
+	inline bool is_equal_approx(const Vector3 &p_v, real_t p_tolerance) const;
+	inline bool is_equal_approxt(const Vector3 &p_v, real_t p_tolerance) const;
+
+	/* Operators */
+
+	_FORCE_INLINE_ Vector3 &operator+=(const Vector3 &p_v);
+	_FORCE_INLINE_ Vector3 operator+(const Vector3 &p_v) const;
+	_FORCE_INLINE_ Vector3 &operator-=(const Vector3 &p_v);
+	_FORCE_INLINE_ Vector3 operator-(const Vector3 &p_v) const;
+	_FORCE_INLINE_ Vector3 &operator*=(const Vector3 &p_v);
+	_FORCE_INLINE_ Vector3 operator*(const Vector3 &p_v) const;
+	_FORCE_INLINE_ Vector3 &operator/=(const Vector3 &p_v);
+	_FORCE_INLINE_ Vector3 operator/(const Vector3 &p_v) const;
+
+	_FORCE_INLINE_ Vector3 &operator*=(real_t p_scalar);
+	_FORCE_INLINE_ Vector3 operator*(real_t p_scalar) const;
+	_FORCE_INLINE_ Vector3 &operator/=(real_t p_scalar);
+	_FORCE_INLINE_ Vector3 operator/(real_t p_scalar) const;
+
+	_FORCE_INLINE_ Vector3 operator-() const;
+
+	_FORCE_INLINE_ bool operator==(const Vector3 &p_v) const;
+	_FORCE_INLINE_ bool operator!=(const Vector3 &p_v) const;
+	_FORCE_INLINE_ bool operator<(const Vector3 &p_v) const;
+	_FORCE_INLINE_ bool operator<=(const Vector3 &p_v) const;
+	_FORCE_INLINE_ bool operator>(const Vector3 &p_v) const;
+	_FORCE_INLINE_ bool operator>=(const Vector3 &p_v) const;
+
+	operator String() const;
+
+	_FORCE_INLINE_ Vector3(real_t p_x, real_t p_y, real_t p_z) {
+		x = p_x;
+		y = p_y;
+		z = p_z;
+	}
+	_FORCE_INLINE_ Vector3() { x = y = z = 0; }
+};
+
+Vector3 Vector3::cross(const Vector3 &p_b) const {
+	Vector3 ret(
+			(y * p_b.z) - (z * p_b.y),
+			(z * p_b.x) - (x * p_b.z),
+			(x * p_b.y) - (y * p_b.x));
+
+	return ret;
+}
+
+real_t Vector3::dot(const Vector3 &p_b) const {
+	return x * p_b.x + y * p_b.y + z * p_b.z;
+}
+
+Vector3 Vector3::abs() const {
+	return Vector3(Math::abs(x), Math::abs(y), Math::abs(z));
+}
+
+Vector3 Vector3::sign() const {
+	return Vector3(SGN(x), SGN(y), SGN(z));
+}
+
+Vector3 Vector3::floor() const {
+	return Vector3(Math::floor(x), Math::floor(y), Math::floor(z));
+}
+
+Vector3 Vector3::ceil() const {
+	return Vector3(Math::ceil(x), Math::ceil(y), Math::ceil(z));
+}
+
+Vector3 Vector3::round() const {
+	return Vector3(Math::round(x), Math::round(y), Math::round(z));
+}
+
+Vector3 Vector3::linear_interpolate(const Vector3 &p_to, real_t p_weight) const {
+	return Vector3(
+			x + (p_weight * (p_to.x - x)),
+			y + (p_weight * (p_to.y - y)),
+			z + (p_weight * (p_to.z - z)));
+}
+
+Vector3 Vector3::slerp(const Vector3 &p_to, const real_t p_weight) const {
+	// This method seems more complicated than it really is, since we write out
+	// the internals of some methods for efficiency (mainly, checking length).
+	real_t start_length_sq = length_squared();
+	real_t end_length_sq = p_to.length_squared();
+	if (unlikely(start_length_sq == 0.0f || end_length_sq == 0.0f)) {
+		// Zero length vectors have no angle, so the best we can do is either lerp or throw an error.
+		return linear_interpolate(p_to, p_weight);
+	}
+	Vector3 axis = cross(p_to);
+	real_t axis_length_sq = axis.length_squared();
+	if (unlikely(axis_length_sq == 0.0f)) {
+		// Colinear vectors have no rotation axis or angle between them, so the best we can do is lerp.
+		return linear_interpolate(p_to, p_weight);
+	}
+	axis /= Math::sqrt(axis_length_sq);
+	real_t start_length = Math::sqrt(start_length_sq);
+	real_t result_length = Math::lerp(start_length, Math::sqrt(end_length_sq), p_weight);
+	real_t angle = angle_to(p_to);
+	return rotated(axis, angle * p_weight) * (result_length / start_length);
+}
+
+Vector3 Vector3::cubic_interpolate(const Vector3 &p_b, const Vector3 &p_pre_a, const Vector3 &p_post_b, const real_t p_weight) const {
+	Vector3 res = *this;
+	res.x = Math::cubic_interpolate(res.x, p_b.x, p_pre_a.x, p_post_b.x, p_weight);
+	res.y = Math::cubic_interpolate(res.y, p_b.y, p_pre_a.y, p_post_b.y, p_weight);
+	res.z = Math::cubic_interpolate(res.z, p_b.z, p_pre_a.z, p_post_b.z, p_weight);
+	return res;
+}
+
+Vector3 Vector3::bezier_interpolate(const Vector3 &p_control_1, const Vector3 &p_control_2, const Vector3 &p_end, const real_t p_t) const {
+	Vector3 res = *this;
+
+	/* Formula from Wikipedia article on Bezier curves. */
+	real_t omt = (1.0 - p_t);
+	real_t omt2 = omt * omt;
+	real_t omt3 = omt2 * omt;
+	real_t t2 = p_t * p_t;
+	real_t t3 = t2 * p_t;
+
+	return res * omt3 + p_control_1 * omt2 * p_t * 3.0 + p_control_2 * omt * t2 * 3.0 + p_end * t3;
+}
+
+real_t Vector3::distance_to(const Vector3 &p_to) const {
+	return (p_to - *this).length();
+}
+
+real_t Vector3::distance_squared_to(const Vector3 &p_to) const {
+	return (p_to - *this).length_squared();
+}
+
+Vector3 Vector3::posmod(const real_t p_mod) const {
+	return Vector3(Math::fposmod(x, p_mod), Math::fposmod(y, p_mod), Math::fposmod(z, p_mod));
+}
+
+Vector3 Vector3::posmodv(const Vector3 &p_modv) const {
+	return Vector3(Math::fposmod(x, p_modv.x), Math::fposmod(y, p_modv.y), Math::fposmod(z, p_modv.z));
+}
+
+Vector3 Vector3::project(const Vector3 &p_to) const {
+	return p_to * (dot(p_to) / p_to.length_squared());
+}
+
+real_t Vector3::angle_to(const Vector3 &p_to) const {
+	return Math::atan2(cross(p_to).length(), dot(p_to));
+}
+
+real_t Vector3::signed_angle_to(const Vector3 &p_to, const Vector3 &p_axis) const {
+	Vector3 cross_to = cross(p_to);
+	real_t unsigned_angle = Math::atan2(cross_to.length(), dot(p_to));
+	real_t sign = cross_to.dot(p_axis);
+	return (sign < 0) ? -unsigned_angle : unsigned_angle;
+}
+
+Vector3 Vector3::direction_to(const Vector3 &p_to) const {
+	Vector3 ret(p_to.x - x, p_to.y - y, p_to.z - z);
+	ret.normalize();
+	return ret;
+}
+
+/* Operators */
+
+Vector3 &Vector3::operator+=(const Vector3 &p_v) {
+	x += p_v.x;
+	y += p_v.y;
+	z += p_v.z;
+	return *this;
+}
+
+Vector3 Vector3::operator+(const Vector3 &p_v) const {
+	return Vector3(x + p_v.x, y + p_v.y, z + p_v.z);
+}
+
+Vector3 &Vector3::operator-=(const Vector3 &p_v) {
+	x -= p_v.x;
+	y -= p_v.y;
+	z -= p_v.z;
+	return *this;
+}
+Vector3 Vector3::operator-(const Vector3 &p_v) const {
+	return Vector3(x - p_v.x, y - p_v.y, z - p_v.z);
+}
+
+Vector3 &Vector3::operator*=(const Vector3 &p_v) {
+	x *= p_v.x;
+	y *= p_v.y;
+	z *= p_v.z;
+	return *this;
+}
+Vector3 Vector3::operator*(const Vector3 &p_v) const {
+	return Vector3(x * p_v.x, y * p_v.y, z * p_v.z);
+}
+
+Vector3 &Vector3::operator/=(const Vector3 &p_v) {
+	x /= p_v.x;
+	y /= p_v.y;
+	z /= p_v.z;
+	return *this;
+}
+
+Vector3 Vector3::operator/(const Vector3 &p_v) const {
+	return Vector3(x / p_v.x, y / p_v.y, z / p_v.z);
+}
+
+Vector3 &Vector3::operator*=(real_t p_scalar) {
+	x *= p_scalar;
+	y *= p_scalar;
+	z *= p_scalar;
+	return *this;
+}
+
+_FORCE_INLINE_ Vector3 operator*(real_t p_scalar, const Vector3 &p_vec) {
+	return p_vec * p_scalar;
+}
+
+Vector3 Vector3::operator*(real_t p_scalar) const {
+	return Vector3(x * p_scalar, y * p_scalar, z * p_scalar);
+}
+
+Vector3 &Vector3::operator/=(real_t p_scalar) {
+	x /= p_scalar;
+	y /= p_scalar;
+	z /= p_scalar;
+	return *this;
+}
+
+Vector3 Vector3::operator/(real_t p_scalar) const {
+	return Vector3(x / p_scalar, y / p_scalar, z / p_scalar);
+}
+
+Vector3 Vector3::operator-() const {
+	return Vector3(-x, -y, -z);
+}
+
+bool Vector3::operator==(const Vector3 &p_v) const {
+	return x == p_v.x && y == p_v.y && z == p_v.z;
+}
+
+bool Vector3::operator!=(const Vector3 &p_v) const {
+	return x != p_v.x || y != p_v.y || z != p_v.z;
+}
+
+bool Vector3::operator<(const Vector3 &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			return z < p_v.z;
+		} else {
+			return y < p_v.y;
+		}
+	} else {
+		return x < p_v.x;
+	}
+}
+
+bool Vector3::operator>(const Vector3 &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			return z > p_v.z;
+		} else {
+			return y > p_v.y;
+		}
+	} else {
+		return x > p_v.x;
+	}
+}
+
+bool Vector3::operator<=(const Vector3 &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			return z <= p_v.z;
+		} else {
+			return y < p_v.y;
+		}
+	} else {
+		return x < p_v.x;
+	}
+}
+
+bool Vector3::operator>=(const Vector3 &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			return z >= p_v.z;
+		} else {
+			return y > p_v.y;
+		}
+	} else {
+		return x > p_v.x;
+	}
+}
+
+_FORCE_INLINE_ Vector3 vec3_cross(const Vector3 &p_a, const Vector3 &p_b) {
+	return p_a.cross(p_b);
+}
+
+_FORCE_INLINE_ real_t vec3_dot(const Vector3 &p_a, const Vector3 &p_b) {
+	return p_a.dot(p_b);
+}
+
+real_t Vector3::length() const {
+	real_t x2 = x * x;
+	real_t y2 = y * y;
+	real_t z2 = z * z;
+
+	return Math::sqrt(x2 + y2 + z2);
+}
+
+real_t Vector3::length_squared() const {
+	real_t x2 = x * x;
+	real_t y2 = y * y;
+	real_t z2 = z * z;
+
+	return x2 + y2 + z2;
+}
+
+void Vector3::normalize() {
+	real_t lengthsq = length_squared();
+	if (lengthsq == 0) {
+		x = y = z = 0;
+	} else {
+		real_t length = Math::sqrt(lengthsq);
+		x /= length;
+		y /= length;
+		z /= length;
+	}
+}
+
+Vector3 Vector3::normalized() const {
+	Vector3 v = *this;
+	v.normalize();
+	return v;
+}
+
+bool Vector3::is_normalized() const {
+	// use length_squared() instead of length() to avoid sqrt(), makes it more stringent.
+	return Math::is_equal_approx(length_squared(), 1, (real_t)UNIT_EPSILON);
+}
+
+Vector3 Vector3::inverse() const {
+	return Vector3(1 / x, 1 / y, 1 / z);
+}
+
+void Vector3::zero() {
+	x = y = z = 0;
+}
+
+// slide returns the component of the vector along the given plane, specified by its normal vector.
+Vector3 Vector3::slide(const Vector3 &p_normal) const {
+#ifdef MATH_CHECKS
+	ERR_FAIL_COND_V_MSG(!p_normal.is_normalized(), Vector3(), "The normal Vector3 must be normalized.");
+#endif
+	return *this - p_normal * this->dot(p_normal);
+}
+
+Vector3 Vector3::bounce(const Vector3 &p_normal) const {
+	return -reflect(p_normal);
+}
+
+Vector3 Vector3::reflect(const Vector3 &p_normal) const {
+#ifdef MATH_CHECKS
+	ERR_FAIL_COND_V_MSG(!p_normal.is_normalized(), Vector3(), "The normal Vector3 must be normalized.");
+#endif
+	return 2 * p_normal * this->dot(p_normal) - *this;
+}
+
+bool Vector3::is_equal_approx(const Vector3 &p_v, real_t p_tolerance) const {
+	return Math::is_equal_approx(x, p_v.x, p_tolerance) && Math::is_equal_approx(y, p_v.y, p_tolerance) && Math::is_equal_approx(z, p_v.z, p_tolerance);
+}
+
+bool Vector3::is_equal_approxt(const Vector3 &p_v, real_t p_tolerance) const {
+	return Math::is_equal_approx(x, p_v.x, p_tolerance) && Math::is_equal_approx(y, p_v.y, p_tolerance) && Math::is_equal_approx(z, p_v.z, p_tolerance);
+}
+
+#line 0
+
+#line 1 "sfw/core/vector3i.h"
+
+/*************************************************************************/
+/*  vector3i.h                                                           */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+class String;
+struct Vector3;
+
+struct _NO_DISCARD_CLASS_ Vector3i {
+	enum Axis {
+		AXIS_X,
+		AXIS_Y,
+		AXIS_Z,
+	};
+
+	union {
+		struct {
+			int32_t x;
+			int32_t y;
+			int32_t z;
+		};
+
+		int32_t coord[3];
+	};
+
+	_FORCE_INLINE_ const int32_t &operator[](const int p_axis) const {
+		DEV_ASSERT((unsigned int)p_axis < 3);
+		return coord[p_axis];
+	}
+
+	_FORCE_INLINE_ int32_t &operator[](const int p_axis) {
+		DEV_ASSERT((unsigned int)p_axis < 3);
+		return coord[p_axis];
+	}
+
+	void set_axis(const int p_axis, const int32_t p_value);
+	int32_t get_axis(const int p_axis) const;
+
+	_FORCE_INLINE_ void set_all(int32_t p_value) {
+		x = y = z = p_value;
+	}
+
+	Vector3i::Axis min_axis() const;
+	Vector3i::Axis max_axis() const;
+
+	_FORCE_INLINE_ int64_t length_squared() const;
+	_FORCE_INLINE_ double length() const;
+
+	_FORCE_INLINE_ void zero();
+
+	_FORCE_INLINE_ Vector3i abs() const;
+	_FORCE_INLINE_ Vector3i sign() const;
+	Vector3i clamp(const Vector3i &p_min, const Vector3i &p_max) const;
+
+	_FORCE_INLINE_ Vector3i linear_interpolate(const Vector3i &p_to, real_t p_weight) const;
+
+	/* Operators */
+
+	_FORCE_INLINE_ Vector3i &operator+=(const Vector3i &p_v);
+	_FORCE_INLINE_ Vector3i operator+(const Vector3i &p_v) const;
+	_FORCE_INLINE_ Vector3i &operator-=(const Vector3i &p_v);
+	_FORCE_INLINE_ Vector3i operator-(const Vector3i &p_v) const;
+	_FORCE_INLINE_ Vector3i &operator*=(const Vector3i &p_v);
+	_FORCE_INLINE_ Vector3i operator*(const Vector3i &p_v) const;
+	_FORCE_INLINE_ Vector3i &operator/=(const Vector3i &p_v);
+	_FORCE_INLINE_ Vector3i operator/(const Vector3i &p_v) const;
+	_FORCE_INLINE_ Vector3i &operator%=(const Vector3i &p_v);
+	_FORCE_INLINE_ Vector3i operator%(const Vector3i &p_v) const;
+
+	_FORCE_INLINE_ Vector3i &operator*=(const int32_t p_scalar);
+	_FORCE_INLINE_ Vector3i operator*(const int32_t p_scalar) const;
+	_FORCE_INLINE_ Vector3i &operator/=(const int32_t p_scalar);
+	_FORCE_INLINE_ Vector3i operator/(const int32_t p_scalar) const;
+	_FORCE_INLINE_ Vector3i &operator%=(const int32_t p_scalar);
+	_FORCE_INLINE_ Vector3i operator%(const int32_t p_scalar) const;
+
+	_FORCE_INLINE_ Vector3i operator-() const;
+
+	_FORCE_INLINE_ bool operator==(const Vector3i &p_v) const;
+	_FORCE_INLINE_ bool operator!=(const Vector3i &p_v) const;
+	_FORCE_INLINE_ bool operator<(const Vector3i &p_v) const;
+	_FORCE_INLINE_ bool operator<=(const Vector3i &p_v) const;
+	_FORCE_INLINE_ bool operator>(const Vector3i &p_v) const;
+	_FORCE_INLINE_ bool operator>=(const Vector3i &p_v) const;
+
+	Vector3 to_vector3() const;
+
+	operator String() const;
+	operator Vector3() const;
+
+	_FORCE_INLINE_ Vector3i() {
+		x = 0;
+		y = 0;
+		z = 0;
+	}
+	_FORCE_INLINE_ Vector3i(const int32_t p_x, const int32_t p_y, const int32_t p_z) {
+		x = p_x;
+		y = p_y;
+		z = p_z;
+	}
+};
+
+int64_t Vector3i::length_squared() const {
+	return x * (int64_t)x + y * (int64_t)y + z * (int64_t)z;
+}
+
+double Vector3i::length() const {
+	return Math::sqrt((double)length_squared());
+}
+
+Vector3i Vector3i::abs() const {
+	return Vector3i(ABS(x), ABS(y), ABS(z));
+}
+
+Vector3i Vector3i::sign() const {
+	return Vector3i(SGN(x), SGN(y), SGN(z));
+}
+
+Vector3i Vector3i::linear_interpolate(const Vector3i &p_to, real_t p_weight) const {
+	return Vector3i(
+			x + (p_weight * (p_to.x - x)),
+			y + (p_weight * (p_to.y - y)),
+			z + (p_weight * (p_to.z - z)));
+}
+
+/* Operators */
+
+Vector3i &Vector3i::operator+=(const Vector3i &p_v) {
+	x += p_v.x;
+	y += p_v.y;
+	z += p_v.z;
+	return *this;
+}
+
+Vector3i Vector3i::operator+(const Vector3i &p_v) const {
+	return Vector3i(x + p_v.x, y + p_v.y, z + p_v.z);
+}
+
+Vector3i &Vector3i::operator-=(const Vector3i &p_v) {
+	x -= p_v.x;
+	y -= p_v.y;
+	z -= p_v.z;
+	return *this;
+}
+
+Vector3i Vector3i::operator-(const Vector3i &p_v) const {
+	return Vector3i(x - p_v.x, y - p_v.y, z - p_v.z);
+}
+
+Vector3i &Vector3i::operator*=(const Vector3i &p_v) {
+	x *= p_v.x;
+	y *= p_v.y;
+	z *= p_v.z;
+	return *this;
+}
+
+Vector3i Vector3i::operator*(const Vector3i &p_v) const {
+	return Vector3i(x * p_v.x, y * p_v.y, z * p_v.z);
+}
+
+Vector3i &Vector3i::operator/=(const Vector3i &p_v) {
+	x /= p_v.x;
+	y /= p_v.y;
+	z /= p_v.z;
+	return *this;
+}
+
+Vector3i Vector3i::operator/(const Vector3i &p_v) const {
+	return Vector3i(x / p_v.x, y / p_v.y, z / p_v.z);
+}
+
+Vector3i &Vector3i::operator%=(const Vector3i &p_v) {
+	x %= p_v.x;
+	y %= p_v.y;
+	z %= p_v.z;
+	return *this;
+}
+
+Vector3i Vector3i::operator%(const Vector3i &p_v) const {
+	return Vector3i(x % p_v.x, y % p_v.y, z % p_v.z);
+}
+
+Vector3i &Vector3i::operator*=(const int32_t p_scalar) {
+	x *= p_scalar;
+	y *= p_scalar;
+	z *= p_scalar;
+	return *this;
+}
+
+Vector3i Vector3i::operator*(const int32_t p_scalar) const {
+	return Vector3i(x * p_scalar, y * p_scalar, z * p_scalar);
+}
+
+// Multiplication operators required to workaround issues with LLVM using implicit conversion.
+
+_FORCE_INLINE_ Vector3i operator*(const int32_t p_scalar, const Vector3i &p_vector) {
+	return p_vector * p_scalar;
+}
+
+_FORCE_INLINE_ Vector3i operator*(const int64_t p_scalar, const Vector3i &p_vector) {
+	return p_vector * p_scalar;
+}
+
+_FORCE_INLINE_ Vector3i operator*(const float p_scalar, const Vector3i &p_vector) {
+	return p_vector * p_scalar;
+}
+
+_FORCE_INLINE_ Vector3i operator*(const double p_scalar, const Vector3i &p_vector) {
+	return p_vector * p_scalar;
+}
+
+Vector3i &Vector3i::operator/=(const int32_t p_scalar) {
+	x /= p_scalar;
+	y /= p_scalar;
+	z /= p_scalar;
+	return *this;
+}
+
+Vector3i Vector3i::operator/(const int32_t p_scalar) const {
+	return Vector3i(x / p_scalar, y / p_scalar, z / p_scalar);
+}
+
+Vector3i &Vector3i::operator%=(const int32_t p_scalar) {
+	x %= p_scalar;
+	y %= p_scalar;
+	z %= p_scalar;
+	return *this;
+}
+
+Vector3i Vector3i::operator%(const int32_t p_scalar) const {
+	return Vector3i(x % p_scalar, y % p_scalar, z % p_scalar);
+}
+
+Vector3i Vector3i::operator-() const {
+	return Vector3i(-x, -y, -z);
+}
+
+bool Vector3i::operator==(const Vector3i &p_v) const {
+	return (x == p_v.x && y == p_v.y && z == p_v.z);
+}
+
+bool Vector3i::operator!=(const Vector3i &p_v) const {
+	return (x != p_v.x || y != p_v.y || z != p_v.z);
+}
+
+bool Vector3i::operator<(const Vector3i &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			return z < p_v.z;
+		} else {
+			return y < p_v.y;
+		}
+	} else {
+		return x < p_v.x;
+	}
+}
+
+bool Vector3i::operator>(const Vector3i &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			return z > p_v.z;
+		} else {
+			return y > p_v.y;
+		}
+	} else {
+		return x > p_v.x;
+	}
+}
+
+bool Vector3i::operator<=(const Vector3i &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			return z <= p_v.z;
+		} else {
+			return y < p_v.y;
+		}
+	} else {
+		return x < p_v.x;
+	}
+}
+
+bool Vector3i::operator>=(const Vector3i &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			return z >= p_v.z;
+		} else {
+			return y > p_v.y;
+		}
+	} else {
+		return x > p_v.x;
+	}
+}
+
+void Vector3i::zero() {
+	x = y = z = 0;
+}
+
+typedef Vector3i Size3i;
+typedef Vector3i Point3i;
+
+#line 0
+
+#line 1 "sfw/core/vector4.h"
+
+/*************************************************************************/
+/*  vector4.h                                                            */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct _NO_DISCARD_CLASS_ Vector4 {
+	enum Axis {
+		AXIS_X,
+		AXIS_Y,
+		AXIS_Z,
+		AXIS_W,
+	};
+
+	union {
+		struct {
+			real_t x;
+			real_t y;
+			real_t z;
+			real_t w;
+		};
+		real_t components[4];
+	};
+
+	_FORCE_INLINE_ real_t &operator[](const int p_axis) {
+		DEV_ASSERT((unsigned int)p_axis < 4);
+		return components[p_axis];
+	}
+	_FORCE_INLINE_ const real_t &operator[](const int p_axis) const {
+		DEV_ASSERT((unsigned int)p_axis < 4);
+		return components[p_axis];
+	}
+
+	_FORCE_INLINE_ void set_all(const real_t p_value);
+
+	void set_axis(const int p_axis, const real_t p_value);
+	real_t get_axis(const int p_axis) const;
+
+	Vector4::Axis min_axis() const;
+	Vector4::Axis max_axis() const;
+
+	_FORCE_INLINE_ real_t length_squared() const;
+	bool is_equal_approx(const Vector4 &p_vec4) const;
+	real_t length() const;
+	void normalize();
+	Vector4 normalized() const;
+	bool is_normalized() const;
+	Vector4 limit_length(const real_t p_len = 1.0) const;
+
+	_FORCE_INLINE_ void zero();
+
+	real_t distance_to(const Vector4 &p_to) const;
+	real_t distance_squared_to(const Vector4 &p_to) const;
+	Vector4 direction_to(const Vector4 &p_to) const;
+
+	Vector4 abs() const;
+	Vector4 sign() const;
+	Vector4 floor() const;
+	Vector4 ceil() const;
+	Vector4 round() const;
+
+	Vector4 linear_interpolate(const Vector4 &p_to, const real_t p_weight) const;
+	Vector4 cubic_interpolate(const Vector4 &p_b, const Vector4 &p_pre_a, const Vector4 &p_post_b, const real_t p_weight) const;
+
+	Vector4 posmod(const real_t p_mod) const;
+	Vector4 posmodv(const Vector4 &p_modv) const;
+	void snap(const Vector4 &p_step);
+	Vector4 snapped(const Vector4 &p_step) const;
+	Vector4 clamp(const Vector4 &p_min, const Vector4 &p_max) const;
+
+	Vector4 inverse() const;
+	_FORCE_INLINE_ real_t dot(const Vector4 &p_vec4) const;
+
+	_FORCE_INLINE_ void operator+=(const Vector4 &p_vec4);
+	_FORCE_INLINE_ void operator-=(const Vector4 &p_vec4);
+	_FORCE_INLINE_ void operator*=(const Vector4 &p_vec4);
+	_FORCE_INLINE_ void operator/=(const Vector4 &p_vec4);
+	_FORCE_INLINE_ void operator*=(const real_t &s);
+	_FORCE_INLINE_ void operator/=(const real_t &s);
+	_FORCE_INLINE_ Vector4 operator+(const Vector4 &p_vec4) const;
+	_FORCE_INLINE_ Vector4 operator-(const Vector4 &p_vec4) const;
+	_FORCE_INLINE_ Vector4 operator*(const Vector4 &p_vec4) const;
+	_FORCE_INLINE_ Vector4 operator/(const Vector4 &p_vec4) const;
+	_FORCE_INLINE_ Vector4 operator-() const;
+	_FORCE_INLINE_ Vector4 operator*(const real_t &s) const;
+	_FORCE_INLINE_ Vector4 operator/(const real_t &s) const;
+
+	_FORCE_INLINE_ bool operator==(const Vector4 &p_vec4) const;
+	_FORCE_INLINE_ bool operator!=(const Vector4 &p_vec4) const;
+	_FORCE_INLINE_ bool operator>(const Vector4 &p_vec4) const;
+	_FORCE_INLINE_ bool operator<(const Vector4 &p_vec4) const;
+	_FORCE_INLINE_ bool operator>=(const Vector4 &p_vec4) const;
+	_FORCE_INLINE_ bool operator<=(const Vector4 &p_vec4) const;
+
+	operator String() const;
+
+	_FORCE_INLINE_ Vector4() {
+		x = 0;
+		y = 0;
+		z = 0;
+		w = 0;
+	}
+
+	_FORCE_INLINE_ Vector4(real_t p_x, real_t p_y, real_t p_z, real_t p_w) :
+			x(p_x),
+			y(p_y),
+			z(p_z),
+			w(p_w) {
+	}
+
+	Vector4(const Vector4 &p_vec4) :
+			x(p_vec4.x),
+			y(p_vec4.y),
+			z(p_vec4.z),
+			w(p_vec4.w) {
+	}
+
+	void operator=(const Vector4 &p_vec4) {
+		x = p_vec4.x;
+		y = p_vec4.y;
+		z = p_vec4.z;
+		w = p_vec4.w;
+	}
+};
+
+void Vector4::set_all(const real_t p_value) {
+	x = y = z = p_value;
+}
+
+real_t Vector4::dot(const Vector4 &p_vec4) const {
+	return x * p_vec4.x + y * p_vec4.y + z * p_vec4.z + w * p_vec4.w;
+}
+
+real_t Vector4::length_squared() const {
+	return dot(*this);
+}
+
+void Vector4::zero() {
+	x = y = z = 0;
+}
+
+void Vector4::operator+=(const Vector4 &p_vec4) {
+	x += p_vec4.x;
+	y += p_vec4.y;
+	z += p_vec4.z;
+	w += p_vec4.w;
+}
+
+void Vector4::operator-=(const Vector4 &p_vec4) {
+	x -= p_vec4.x;
+	y -= p_vec4.y;
+	z -= p_vec4.z;
+	w -= p_vec4.w;
+}
+
+void Vector4::operator*=(const Vector4 &p_vec4) {
+	x *= p_vec4.x;
+	y *= p_vec4.y;
+	z *= p_vec4.z;
+	w *= p_vec4.w;
+}
+
+void Vector4::operator/=(const Vector4 &p_vec4) {
+	x /= p_vec4.x;
+	y /= p_vec4.y;
+	z /= p_vec4.z;
+	w /= p_vec4.w;
+}
+void Vector4::operator*=(const real_t &s) {
+	x *= s;
+	y *= s;
+	z *= s;
+	w *= s;
+}
+
+void Vector4::operator/=(const real_t &s) {
+	*this *= 1.0f / s;
+}
+
+Vector4 Vector4::operator+(const Vector4 &p_vec4) const {
+	return Vector4(x + p_vec4.x, y + p_vec4.y, z + p_vec4.z, w + p_vec4.w);
+}
+
+Vector4 Vector4::operator-(const Vector4 &p_vec4) const {
+	return Vector4(x - p_vec4.x, y - p_vec4.y, z - p_vec4.z, w - p_vec4.w);
+}
+
+Vector4 Vector4::operator*(const Vector4 &p_vec4) const {
+	return Vector4(x * p_vec4.x, y * p_vec4.y, z * p_vec4.z, w * p_vec4.w);
+}
+
+Vector4 Vector4::operator/(const Vector4 &p_vec4) const {
+	return Vector4(x / p_vec4.x, y / p_vec4.y, z / p_vec4.z, w / p_vec4.w);
+}
+
+Vector4 Vector4::operator-() const {
+	return Vector4(-x, -y, -z, -w);
+}
+
+Vector4 Vector4::operator*(const real_t &s) const {
+	return Vector4(x * s, y * s, z * s, w * s);
+}
+
+Vector4 Vector4::operator/(const real_t &s) const {
+	return *this * (1.0f / s);
+}
+
+bool Vector4::operator==(const Vector4 &p_vec4) const {
+	return x == p_vec4.x && y == p_vec4.y && z == p_vec4.z && w == p_vec4.w;
+}
+
+bool Vector4::operator!=(const Vector4 &p_vec4) const {
+	return x != p_vec4.x || y != p_vec4.y || z != p_vec4.z || w != p_vec4.w;
+}
+
+bool Vector4::operator<(const Vector4 &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			if (z == p_v.z) {
+				return w < p_v.w;
+			}
+			return z < p_v.z;
+		}
+		return y < p_v.y;
+	}
+	return x < p_v.x;
+}
+
+bool Vector4::operator>(const Vector4 &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			if (z == p_v.z) {
+				return w > p_v.w;
+			}
+			return z > p_v.z;
+		}
+		return y > p_v.y;
+	}
+	return x > p_v.x;
+}
+
+bool Vector4::operator<=(const Vector4 &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			if (z == p_v.z) {
+				return w <= p_v.w;
+			}
+			return z < p_v.z;
+		}
+		return y < p_v.y;
+	}
+	return x < p_v.x;
+}
+
+bool Vector4::operator>=(const Vector4 &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			if (z == p_v.z) {
+				return w >= p_v.w;
+			}
+			return z > p_v.z;
+		}
+		return y > p_v.y;
+	}
+	return x > p_v.x;
+}
+
+_FORCE_INLINE_ Vector4 operator*(const float p_scalar, const Vector4 &p_vec) {
+	return p_vec * p_scalar;
+}
+
+_FORCE_INLINE_ Vector4 operator*(const double p_scalar, const Vector4 &p_vec) {
+	return p_vec * p_scalar;
+}
+
+_FORCE_INLINE_ Vector4 operator*(const int32_t p_scalar, const Vector4 &p_vec) {
+	return p_vec * p_scalar;
+}
+
+_FORCE_INLINE_ Vector4 operator*(const int64_t p_scalar, const Vector4 &p_vec) {
+	return p_vec * p_scalar;
+}
+
+#line 0
+
+#line 1 "sfw/core/vector4i.h"
+
+/*************************************************************************/
+/*  vector4i.h                                                           */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+class String;
+struct Vector4;
+
+struct _NO_DISCARD_CLASS_ Vector4i {
+	enum Axis {
+		AXIS_X,
+		AXIS_Y,
+		AXIS_Z,
+		AXIS_W,
+	};
+
+	union {
+		struct {
+			int32_t x;
+			int32_t y;
+			int32_t z;
+			int32_t w;
+		};
+
+		int32_t coord[4];
+	};
+
+	_FORCE_INLINE_ const int32_t &operator[](const int p_axis) const {
+		DEV_ASSERT((unsigned int)p_axis < 4);
+		return coord[p_axis];
+	}
+
+	_FORCE_INLINE_ int32_t &operator[](const int p_axis) {
+		DEV_ASSERT((unsigned int)p_axis < 4);
+		return coord[p_axis];
+	}
+
+	_FORCE_INLINE_ void set_all(const int32_t p_value);
+
+	void set_axis(const int p_axis, const int32_t p_value);
+	int32_t get_axis(const int p_axis) const;
+
+	Vector4i::Axis min_axis() const;
+	Vector4i::Axis max_axis() const;
+
+	_FORCE_INLINE_ int64_t length_squared() const;
+	_FORCE_INLINE_ double length() const;
+
+	_FORCE_INLINE_ void zero();
+
+	_FORCE_INLINE_ Vector4i abs() const;
+	_FORCE_INLINE_ Vector4i sign() const;
+	Vector4i clamp(const Vector4i &p_min, const Vector4i &p_max) const;
+
+	Vector4i linear_interpolate(const Vector4i &p_to, const real_t p_weight) const;
+
+	/* Operators */
+
+	_FORCE_INLINE_ Vector4i &operator+=(const Vector4i &p_v);
+	_FORCE_INLINE_ Vector4i operator+(const Vector4i &p_v) const;
+	_FORCE_INLINE_ Vector4i &operator-=(const Vector4i &p_v);
+	_FORCE_INLINE_ Vector4i operator-(const Vector4i &p_v) const;
+	_FORCE_INLINE_ Vector4i &operator*=(const Vector4i &p_v);
+	_FORCE_INLINE_ Vector4i operator*(const Vector4i &p_v) const;
+	_FORCE_INLINE_ Vector4i &operator/=(const Vector4i &p_v);
+	_FORCE_INLINE_ Vector4i operator/(const Vector4i &p_v) const;
+	_FORCE_INLINE_ Vector4i &operator%=(const Vector4i &p_v);
+	_FORCE_INLINE_ Vector4i operator%(const Vector4i &p_v) const;
+
+	_FORCE_INLINE_ Vector4i &operator*=(const int32_t p_scalar);
+	_FORCE_INLINE_ Vector4i operator*(const int32_t p_scalar) const;
+	_FORCE_INLINE_ Vector4i &operator/=(const int32_t p_scalar);
+	_FORCE_INLINE_ Vector4i operator/(const int32_t p_scalar) const;
+	_FORCE_INLINE_ Vector4i &operator%=(const int32_t p_scalar);
+	_FORCE_INLINE_ Vector4i operator%(const int32_t p_scalar) const;
+
+	_FORCE_INLINE_ Vector4i operator-() const;
+
+	_FORCE_INLINE_ bool operator==(const Vector4i &p_v) const;
+	_FORCE_INLINE_ bool operator!=(const Vector4i &p_v) const;
+	_FORCE_INLINE_ bool operator<(const Vector4i &p_v) const;
+	_FORCE_INLINE_ bool operator<=(const Vector4i &p_v) const;
+	_FORCE_INLINE_ bool operator>(const Vector4i &p_v) const;
+	_FORCE_INLINE_ bool operator>=(const Vector4i &p_v) const;
+
+	Vector4 to_vector4() const;
+
+	operator String() const;
+	operator Vector4() const;
+
+	_FORCE_INLINE_ Vector4i() {
+		x = 0;
+		y = 0;
+		z = 0;
+		w = 0;
+	}
+
+	//Vector4i(const Vector4 &p_vec4);
+
+	_FORCE_INLINE_ Vector4i(const int32_t p_x, const int32_t p_y, const int32_t p_z, const int32_t p_w) {
+		x = p_x;
+		y = p_y;
+		z = p_z;
+		w = p_w;
+	}
+};
+
+void Vector4i::set_all(const int32_t p_value) {
+	x = y = z = p_value;
+}
+
+int64_t Vector4i::length_squared() const {
+	return x * (int64_t)x + y * (int64_t)y + z * (int64_t)z + w * (int64_t)w;
+}
+
+double Vector4i::length() const {
+	return Math::sqrt((double)length_squared());
+}
+
+Vector4i Vector4i::abs() const {
+	return Vector4i(ABS(x), ABS(y), ABS(z), ABS(w));
+}
+
+Vector4i Vector4i::sign() const {
+	return Vector4i(SGN(x), SGN(y), SGN(z), SGN(w));
+}
+
+/* Operators */
+
+Vector4i &Vector4i::operator+=(const Vector4i &p_v) {
+	x += p_v.x;
+	y += p_v.y;
+	z += p_v.z;
+	w += p_v.w;
+	return *this;
+}
+
+Vector4i Vector4i::operator+(const Vector4i &p_v) const {
+	return Vector4i(x + p_v.x, y + p_v.y, z + p_v.z, w + p_v.w);
+}
+
+Vector4i &Vector4i::operator-=(const Vector4i &p_v) {
+	x -= p_v.x;
+	y -= p_v.y;
+	z -= p_v.z;
+	w -= p_v.w;
+	return *this;
+}
+
+Vector4i Vector4i::operator-(const Vector4i &p_v) const {
+	return Vector4i(x - p_v.x, y - p_v.y, z - p_v.z, w - p_v.w);
+}
+
+Vector4i &Vector4i::operator*=(const Vector4i &p_v) {
+	x *= p_v.x;
+	y *= p_v.y;
+	z *= p_v.z;
+	w *= p_v.w;
+	return *this;
+}
+
+Vector4i Vector4i::operator*(const Vector4i &p_v) const {
+	return Vector4i(x * p_v.x, y * p_v.y, z * p_v.z, w * p_v.w);
+}
+
+Vector4i &Vector4i::operator/=(const Vector4i &p_v) {
+	x /= p_v.x;
+	y /= p_v.y;
+	z /= p_v.z;
+	w /= p_v.w;
+	return *this;
+}
+
+Vector4i Vector4i::operator/(const Vector4i &p_v) const {
+	return Vector4i(x / p_v.x, y / p_v.y, z / p_v.z, w / p_v.w);
+}
+
+Vector4i &Vector4i::operator%=(const Vector4i &p_v) {
+	x %= p_v.x;
+	y %= p_v.y;
+	z %= p_v.z;
+	w %= p_v.w;
+	return *this;
+}
+
+Vector4i Vector4i::operator%(const Vector4i &p_v) const {
+	return Vector4i(x % p_v.x, y % p_v.y, z % p_v.z, w % p_v.w);
+}
+
+Vector4i &Vector4i::operator*=(const int32_t p_scalar) {
+	x *= p_scalar;
+	y *= p_scalar;
+	z *= p_scalar;
+	w *= p_scalar;
+	return *this;
+}
+
+Vector4i Vector4i::operator*(const int32_t p_scalar) const {
+	return Vector4i(x * p_scalar, y * p_scalar, z * p_scalar, w * p_scalar);
+}
+
+// Multiplication operators required to workaround issues with LLVM using implicit conversion.
+
+_FORCE_INLINE_ Vector4i operator*(const int32_t p_scalar, const Vector4i &p_vector) {
+	return p_vector * p_scalar;
+}
+
+_FORCE_INLINE_ Vector4i operator*(const int64_t p_scalar, const Vector4i &p_vector) {
+	return p_vector * p_scalar;
+}
+
+_FORCE_INLINE_ Vector4i operator*(const float p_scalar, const Vector4i &p_vector) {
+	return p_vector * p_scalar;
+}
+
+_FORCE_INLINE_ Vector4i operator*(const double p_scalar, const Vector4i &p_vector) {
+	return p_vector * p_scalar;
+}
+
+Vector4i &Vector4i::operator/=(const int32_t p_scalar) {
+	x /= p_scalar;
+	y /= p_scalar;
+	z /= p_scalar;
+	w /= p_scalar;
+	return *this;
+}
+
+Vector4i Vector4i::operator/(const int32_t p_scalar) const {
+	return Vector4i(x / p_scalar, y / p_scalar, z / p_scalar, w / p_scalar);
+}
+
+Vector4i &Vector4i::operator%=(const int32_t p_scalar) {
+	x %= p_scalar;
+	y %= p_scalar;
+	z %= p_scalar;
+	w %= p_scalar;
+	return *this;
+}
+
+Vector4i Vector4i::operator%(const int32_t p_scalar) const {
+	return Vector4i(x % p_scalar, y % p_scalar, z % p_scalar, w % p_scalar);
+}
+
+Vector4i Vector4i::operator-() const {
+	return Vector4i(-x, -y, -z, -w);
+}
+
+bool Vector4i::operator==(const Vector4i &p_v) const {
+	return (x == p_v.x && y == p_v.y && z == p_v.z && w == p_v.w);
+}
+
+bool Vector4i::operator!=(const Vector4i &p_v) const {
+	return (x != p_v.x || y != p_v.y || z != p_v.z || w != p_v.w);
+}
+
+bool Vector4i::operator<(const Vector4i &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			if (z == p_v.z) {
+				return w < p_v.w;
+			} else {
+				return z < p_v.z;
+			}
+		} else {
+			return y < p_v.y;
+		}
+	} else {
+		return x < p_v.x;
+	}
+}
+
+bool Vector4i::operator>(const Vector4i &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			if (z == p_v.z) {
+				return w > p_v.w;
+			} else {
+				return z > p_v.z;
+			}
+		} else {
+			return y > p_v.y;
+		}
+	} else {
+		return x > p_v.x;
+	}
+}
+
+bool Vector4i::operator<=(const Vector4i &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			if (z == p_v.z) {
+				return w <= p_v.w;
+			} else {
+				return z < p_v.z;
+			}
+		} else {
+			return y < p_v.y;
+		}
+	} else {
+		return x < p_v.x;
+	}
+}
+
+bool Vector4i::operator>=(const Vector4i &p_v) const {
+	if (x == p_v.x) {
+		if (y == p_v.y) {
+			if (z == p_v.z) {
+				return w >= p_v.w;
+			} else {
+				return z > p_v.z;
+			}
+		} else {
+			return y > p_v.y;
+		}
+	} else {
+		return x > p_v.x;
+	}
+}
+
+void Vector4i::zero() {
+	x = y = z = w = 0;
+}
+
+typedef Vector4i Size4i;
+typedef Vector4i Point4i;
+
+#line 0
+
+#line 1 "sfw/core/plane.h"
+
+/*************************************************************************/
+/*  plane.h                                                              */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct _NO_DISCARD_CLASS_ Plane {
+	Vector3 normal;
+	real_t d;
+
+	void set_normal(const Vector3 &p_normal);
+	_FORCE_INLINE_ Vector3 get_normal() const { return normal; }; ///Point is coplanar, CMP_EPSILON for precision
+
+	void normalize();
+	Plane normalized() const;
+
+	/* Plane-Point operations */
+
+	_FORCE_INLINE_ Vector3 center() const { return normal * d; }
+	Vector3 get_any_point() const;
+	Vector3 get_any_perpendicular_normal() const;
+
+	_FORCE_INLINE_ bool is_point_over(const Vector3 &p_point) const; ///< Point is over plane
+	_FORCE_INLINE_ real_t distance_to(const Vector3 &p_point) const;
+	_FORCE_INLINE_ bool has_point(const Vector3 &p_point, real_t _epsilon = CMP_EPSILON) const;
+
+	/* intersections */
+
+	bool intersect_3(const Plane &p_plane1, const Plane &p_plane2, Vector3 *r_result = nullptr) const;
+	bool intersects_ray(const Vector3 &p_from, const Vector3 &p_dir, Vector3 *p_intersection) const;
+	bool intersects_segment(const Vector3 &p_begin, const Vector3 &p_end, Vector3 *p_intersection) const;
+
+	_FORCE_INLINE_ Vector3 project(const Vector3 &p_point) const {
+		return p_point - normal * distance_to(p_point);
+	}
+
+	/* misc */
+
+	Plane operator-() const { return Plane(-normal, -d); }
+	bool is_equal_approx(const Plane &p_plane) const;
+	bool is_equal_approx_any_side(const Plane &p_plane) const;
+
+	_FORCE_INLINE_ bool operator==(const Plane &p_plane) const;
+	_FORCE_INLINE_ bool operator!=(const Plane &p_plane) const;
+	operator String() const;
+
+	_FORCE_INLINE_ Plane() :
+			d(0) {}
+	_FORCE_INLINE_ Plane(real_t p_a, real_t p_b, real_t p_c, real_t p_d) :
+			normal(p_a, p_b, p_c),
+			d(p_d) {}
+
+	_FORCE_INLINE_ Plane(const Vector3 &p_normal, real_t p_d);
+	_FORCE_INLINE_ Plane(const Vector3 &p_point, const Vector3 &p_normal);
+	_FORCE_INLINE_ Plane(const Vector3 &p_point1, const Vector3 &p_point2, const Vector3 &p_point3, ClockDirection p_dir = CLOCKWISE);
+};
+
+bool Plane::is_point_over(const Vector3 &p_point) const {
+	return (normal.dot(p_point) > d);
+}
+
+real_t Plane::distance_to(const Vector3 &p_point) const {
+	return (normal.dot(p_point) - d);
+}
+
+bool Plane::has_point(const Vector3 &p_point, real_t _epsilon) const {
+	real_t dist = normal.dot(p_point) - d;
+	dist = ABS(dist);
+	return (dist <= _epsilon);
+}
+
+Plane::Plane(const Vector3 &p_normal, real_t p_d) :
+		normal(p_normal),
+		d(p_d) {
+}
+
+Plane::Plane(const Vector3 &p_point, const Vector3 &p_normal) :
+		normal(p_normal),
+		d(p_normal.dot(p_point)) {
+}
+
+Plane::Plane(const Vector3 &p_point1, const Vector3 &p_point2, const Vector3 &p_point3, ClockDirection p_dir) {
+	if (p_dir == CLOCKWISE) {
+		normal = (p_point1 - p_point3).cross(p_point1 - p_point2);
+	} else {
+		normal = (p_point1 - p_point2).cross(p_point1 - p_point3);
+	}
+
+	normal.normalize();
+	d = normal.dot(p_point1);
+}
+
+bool Plane::operator==(const Plane &p_plane) const {
+	return normal == p_plane.normal && d == p_plane.d;
+}
+
+bool Plane::operator!=(const Plane &p_plane) const {
+	return normal != p_plane.normal || d != p_plane.d;
+}
+
+#line 0
+
+#line 1 "sfw/core/aabb.h"
+
+/*************************************************************************/
+/*  aabb.h                                                               */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+/**
+ * AABB / AABB (Axis Aligned Bounding Box)
+ * This is implemented by a point (position) and the box size
+ */
+
+struct _NO_DISCARD_CLASS_ AABB {
+	Vector3 position;
+	Vector3 size;
+
+	real_t get_volume() const; /// get area
+	_FORCE_INLINE_ bool has_no_volume() const {
+		return (size.x <= 0 || size.y <= 0 || size.z <= 0);
+	}
+
+	_FORCE_INLINE_ bool has_no_surface() const {
+		return (size.x <= 0 && size.y <= 0 && size.z <= 0);
+	}
+
+	const Vector3 &get_position() const { return position; }
+	void set_position(const Vector3 &p_pos) { position = p_pos; }
+	const Vector3 &get_size() const { return size; }
+	void set_size(const Vector3 &p_size) { size = p_size; }
+
+	bool operator==(const AABB &p_rval) const;
+	bool operator!=(const AABB &p_rval) const;
+
+	bool is_equal_approx(const AABB &p_aabb) const;
+	_FORCE_INLINE_ bool intersects(const AABB &p_aabb) const; /// Both AABBs overlap
+	_FORCE_INLINE_ bool intersects_inclusive(const AABB &p_aabb) const; /// Both AABBs (or their faces) overlap
+	_FORCE_INLINE_ bool encloses(const AABB &p_aabb) const; /// p_aabb is completely inside this
+
+	AABB merge(const AABB &p_with) const;
+	void merge_with(const AABB &p_aabb); ///merge with another AABB
+	AABB intersection(const AABB &p_aabb) const; ///get box where two intersect, empty if no intersection occurs
+	bool intersects_segment(const Vector3 &p_from, const Vector3 &p_to, Vector3 *r_clip = nullptr, Vector3 *r_normal = nullptr) const;
+	bool intersects_ray(const Vector3 &p_from, const Vector3 &p_dir, Vector3 *r_clip = nullptr, Vector3 *r_normal = nullptr) const;
+	_FORCE_INLINE_ bool smits_intersect_ray(const Vector3 &p_from, const Vector3 &p_dir, real_t t0, real_t t1) const;
+
+	_FORCE_INLINE_ bool intersects_convex_shape(const Plane *p_planes, int p_plane_count, const Vector3 *p_points, int p_point_count) const;
+	_FORCE_INLINE_ bool inside_convex_shape(const Plane *p_planes, int p_plane_count) const;
+	bool intersects_plane(const Plane &p_plane) const;
+
+	_FORCE_INLINE_ bool has_point(const Vector3 &p_point) const;
+	_FORCE_INLINE_ Vector3 get_support(const Vector3 &p_normal) const;
+
+	Vector3 get_longest_axis() const;
+	int get_longest_axis_index() const;
+	_FORCE_INLINE_ real_t get_longest_axis_size() const;
+
+	Vector3 get_shortest_axis() const;
+	int get_shortest_axis_index() const;
+	_FORCE_INLINE_ real_t get_shortest_axis_size() const;
+
+	AABB grow(real_t p_by) const;
+	_FORCE_INLINE_ void grow_by(real_t p_amount);
+
+	void get_edge(int p_edge, Vector3 &r_from, Vector3 &r_to) const;
+	_FORCE_INLINE_ Vector3 get_endpoint(int p_point) const;
+
+	AABB expand(const Vector3 &p_vector) const;
+	_FORCE_INLINE_ void project_range_in_plane(const Plane &p_plane, real_t &r_min, real_t &r_max) const;
+	_FORCE_INLINE_ void expand_to(const Vector3 &p_vector); /** expand to contain a point if necessary */
+	bool create_from_points(const Vector<Vector3> &p_points);
+
+	_FORCE_INLINE_ AABB abs() const {
+		return AABB(Vector3(position.x + MIN(size.x, 0), position.y + MIN(size.y, 0), position.z + MIN(size.z, 0)), size.abs());
+	}
+
+	//Variant intersects_segmentv(const Vector3 &p_from, const Vector3 &p_to) const;
+	//Variant intersects_rayv(const Vector3 &p_from, const Vector3 &p_dir) const;
+
+	_FORCE_INLINE_ void quantize(real_t p_unit);
+	_FORCE_INLINE_ AABB quantized(real_t p_unit) const;
+
+	_FORCE_INLINE_ void set_end(const Vector3 &p_end) {
+		size = p_end - position;
+	}
+
+	_FORCE_INLINE_ Vector3 get_end() const {
+		return position + size;
+	}
+
+	_FORCE_INLINE_ Vector3 get_center() const {
+		return position + (size * 0.5f);
+	}
+
+	operator String() const;
+
+	_FORCE_INLINE_ AABB() {}
+	inline AABB(const Vector3 &p_pos, const Vector3 &p_size) :
+			position(p_pos),
+			size(p_size) {
+	}
+};
+
+inline bool AABB::intersects(const AABB &p_aabb) const {
+	if (position.x >= (p_aabb.position.x + p_aabb.size.x)) {
+		return false;
+	}
+	if ((position.x + size.x) <= p_aabb.position.x) {
+		return false;
+	}
+	if (position.y >= (p_aabb.position.y + p_aabb.size.y)) {
+		return false;
+	}
+	if ((position.y + size.y) <= p_aabb.position.y) {
+		return false;
+	}
+	if (position.z >= (p_aabb.position.z + p_aabb.size.z)) {
+		return false;
+	}
+	if ((position.z + size.z) <= p_aabb.position.z) {
+		return false;
+	}
+
+	return true;
+}
+
+inline bool AABB::intersects_inclusive(const AABB &p_aabb) const {
+	if (position.x > (p_aabb.position.x + p_aabb.size.x)) {
+		return false;
+	}
+	if ((position.x + size.x) < p_aabb.position.x) {
+		return false;
+	}
+	if (position.y > (p_aabb.position.y + p_aabb.size.y)) {
+		return false;
+	}
+	if ((position.y + size.y) < p_aabb.position.y) {
+		return false;
+	}
+	if (position.z > (p_aabb.position.z + p_aabb.size.z)) {
+		return false;
+	}
+	if ((position.z + size.z) < p_aabb.position.z) {
+		return false;
+	}
+
+	return true;
+}
+
+inline bool AABB::encloses(const AABB &p_aabb) const {
+	Vector3 src_min = position;
+	Vector3 src_max = position + size;
+	Vector3 dst_min = p_aabb.position;
+	Vector3 dst_max = p_aabb.position + p_aabb.size;
+
+	return (
+			(src_min.x <= dst_min.x) &&
+			(src_max.x > dst_max.x) &&
+			(src_min.y <= dst_min.y) &&
+			(src_max.y > dst_max.y) &&
+			(src_min.z <= dst_min.z) &&
+			(src_max.z > dst_max.z));
+}
+
+Vector3 AABB::get_support(const Vector3 &p_normal) const {
+	Vector3 half_extents = size * 0.5f;
+	Vector3 ofs = position + half_extents;
+
+	return Vector3(
+				   (p_normal.x > 0) ? -half_extents.x : half_extents.x,
+				   (p_normal.y > 0) ? -half_extents.y : half_extents.y,
+				   (p_normal.z > 0) ? -half_extents.z : half_extents.z) +
+			ofs;
+}
+
+Vector3 AABB::get_endpoint(int p_point) const {
+	switch (p_point) {
+		case 0:
+			return Vector3(position.x, position.y, position.z);
+		case 1:
+			return Vector3(position.x, position.y, position.z + size.z);
+		case 2:
+			return Vector3(position.x, position.y + size.y, position.z);
+		case 3:
+			return Vector3(position.x, position.y + size.y, position.z + size.z);
+		case 4:
+			return Vector3(position.x + size.x, position.y, position.z);
+		case 5:
+			return Vector3(position.x + size.x, position.y, position.z + size.z);
+		case 6:
+			return Vector3(position.x + size.x, position.y + size.y, position.z);
+		case 7:
+			return Vector3(position.x + size.x, position.y + size.y, position.z + size.z);
+	};
+
+	ERR_FAIL_V(Vector3());
+}
+
+bool AABB::intersects_convex_shape(const Plane *p_planes, int p_plane_count, const Vector3 *p_points, int p_point_count) const {
+	Vector3 half_extents = size * 0.5f;
+	Vector3 ofs = position + half_extents;
+
+	for (int i = 0; i < p_plane_count; i++) {
+		const Plane &p = p_planes[i];
+		Vector3 point(
+				(p.normal.x > 0) ? -half_extents.x : half_extents.x,
+				(p.normal.y > 0) ? -half_extents.y : half_extents.y,
+				(p.normal.z > 0) ? -half_extents.z : half_extents.z);
+		point += ofs;
+		if (p.is_point_over(point)) {
+			return false;
+		}
+	}
+
+	// Make sure all points in the shape aren't fully separated from the AABB on
+	// each axis.
+	int bad_point_counts_positive[3] = { 0 };
+	int bad_point_counts_negative[3] = { 0 };
+
+	for (int k = 0; k < 3; k++) {
+		for (int i = 0; i < p_point_count; i++) {
+			if (p_points[i].coord[k] > ofs.coord[k] + half_extents.coord[k]) {
+				bad_point_counts_positive[k]++;
+			}
+			if (p_points[i].coord[k] < ofs.coord[k] - half_extents.coord[k]) {
+				bad_point_counts_negative[k]++;
+			}
+		}
+
+		if (bad_point_counts_negative[k] == p_point_count) {
+			return false;
+		}
+		if (bad_point_counts_positive[k] == p_point_count) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool AABB::inside_convex_shape(const Plane *p_planes, int p_plane_count) const {
+	Vector3 half_extents = size * 0.5f;
+	Vector3 ofs = position + half_extents;
+
+	for (int i = 0; i < p_plane_count; i++) {
+		const Plane &p = p_planes[i];
+		Vector3 point(
+				(p.normal.x < 0) ? -half_extents.x : half_extents.x,
+				(p.normal.y < 0) ? -half_extents.y : half_extents.y,
+				(p.normal.z < 0) ? -half_extents.z : half_extents.z);
+		point += ofs;
+		if (p.is_point_over(point)) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool AABB::has_point(const Vector3 &p_point) const {
+	if (p_point.x < position.x) {
+		return false;
+	}
+	if (p_point.y < position.y) {
+		return false;
+	}
+	if (p_point.z < position.z) {
+		return false;
+	}
+	if (p_point.x > position.x + size.x) {
+		return false;
+	}
+	if (p_point.y > position.y + size.y) {
+		return false;
+	}
+	if (p_point.z > position.z + size.z) {
+		return false;
+	}
+
+	return true;
+}
+
+inline void AABB::expand_to(const Vector3 &p_vector) {
+	Vector3 begin = position;
+	Vector3 end = position + size;
+
+	if (p_vector.x < begin.x) {
+		begin.x = p_vector.x;
+	}
+	if (p_vector.y < begin.y) {
+		begin.y = p_vector.y;
+	}
+	if (p_vector.z < begin.z) {
+		begin.z = p_vector.z;
+	}
+
+	if (p_vector.x > end.x) {
+		end.x = p_vector.x;
+	}
+	if (p_vector.y > end.y) {
+		end.y = p_vector.y;
+	}
+	if (p_vector.z > end.z) {
+		end.z = p_vector.z;
+	}
+
+	position = begin;
+	size = end - begin;
+}
+
+void AABB::project_range_in_plane(const Plane &p_plane, real_t &r_min, real_t &r_max) const {
+	Vector3 half_extents = size * 0.5f;
+	Vector3 center(position.x + half_extents.x, position.y + half_extents.y, position.z + half_extents.z);
+
+	real_t length = p_plane.normal.abs().dot(half_extents);
+	real_t distance = p_plane.distance_to(center);
+	r_min = distance - length;
+	r_max = distance + length;
+}
+
+inline real_t AABB::get_longest_axis_size() const {
+	real_t max_size = size.x;
+
+	if (size.y > max_size) {
+		max_size = size.y;
+	}
+
+	if (size.z > max_size) {
+		max_size = size.z;
+	}
+
+	return max_size;
+}
+
+inline real_t AABB::get_shortest_axis_size() const {
+	real_t max_size = size.x;
+
+	if (size.y < max_size) {
+		max_size = size.y;
+	}
+
+	if (size.z < max_size) {
+		max_size = size.z;
+	}
+
+	return max_size;
+}
+
+bool AABB::smits_intersect_ray(const Vector3 &p_from, const Vector3 &p_dir, real_t t0, real_t t1) const {
+	real_t divx = 1 / p_dir.x;
+	real_t divy = 1 / p_dir.y;
+	real_t divz = 1 / p_dir.z;
+
+	Vector3 upbound = position + size;
+	real_t tmin, tmax, tymin, tymax, tzmin, tzmax;
+	if (p_dir.x >= 0) {
+		tmin = (position.x - p_from.x) * divx;
+		tmax = (upbound.x - p_from.x) * divx;
+	} else {
+		tmin = (upbound.x - p_from.x) * divx;
+		tmax = (position.x - p_from.x) * divx;
+	}
+	if (p_dir.y >= 0) {
+		tymin = (position.y - p_from.y) * divy;
+		tymax = (upbound.y - p_from.y) * divy;
+	} else {
+		tymin = (upbound.y - p_from.y) * divy;
+		tymax = (position.y - p_from.y) * divy;
+	}
+	if ((tmin > tymax) || (tymin > tmax)) {
+		return false;
+	}
+	if (tymin > tmin) {
+		tmin = tymin;
+	}
+	if (tymax < tmax) {
+		tmax = tymax;
+	}
+	if (p_dir.z >= 0) {
+		tzmin = (position.z - p_from.z) * divz;
+		tzmax = (upbound.z - p_from.z) * divz;
+	} else {
+		tzmin = (upbound.z - p_from.z) * divz;
+		tzmax = (position.z - p_from.z) * divz;
+	}
+	if ((tmin > tzmax) || (tzmin > tmax)) {
+		return false;
+	}
+	if (tzmin > tmin) {
+		tmin = tzmin;
+	}
+	if (tzmax < tmax) {
+		tmax = tzmax;
+	}
+	return ((tmin < t1) && (tmax > t0));
+}
+
+void AABB::grow_by(real_t p_amount) {
+	position.x -= p_amount;
+	position.y -= p_amount;
+	position.z -= p_amount;
+	size.x += 2 * p_amount;
+	size.y += 2 * p_amount;
+	size.z += 2 * p_amount;
+}
+
+void AABB::quantize(real_t p_unit) {
+	size += position;
+
+	position.x -= Math::fposmodp(position.x, p_unit);
+	position.y -= Math::fposmodp(position.y, p_unit);
+	position.z -= Math::fposmodp(position.z, p_unit);
+
+	size.x -= Math::fposmodp(size.x, p_unit);
+	size.y -= Math::fposmodp(size.y, p_unit);
+	size.z -= Math::fposmodp(size.z, p_unit);
+
+	size.x += p_unit;
+	size.y += p_unit;
+	size.z += p_unit;
+
+	size -= position;
+}
+
+AABB AABB::quantized(real_t p_unit) const {
+	AABB ret = *this;
+	ret.quantize(p_unit);
+	return ret;
+}
+
+#line 0
+
+#line 1 "sfw/core/quaternion.h"
+
+/*************************************************************************/
+/*  quaternion.h                                                         */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct _NO_DISCARD_CLASS_ Quaternion {
+	union {
+		struct {
+			real_t x;
+			real_t y;
+			real_t z;
+			real_t w;
+		};
+		real_t components[4];
+	};
+
+	_FORCE_INLINE_ real_t &operator[](int idx) {
+		return components[idx];
+	}
+	_FORCE_INLINE_ const real_t &operator[](int idx) const {
+		return components[idx];
+	}
+
+	_FORCE_INLINE_ real_t length_squared() const;
+	bool is_equal_approx(const Quaternion &p_quat) const;
+	real_t length() const;
+	void normalize();
+	Quaternion normalized() const;
+	bool is_normalized() const;
+	Quaternion inverse() const;
+	Quaternion log() const;
+	Quaternion exp() const;
+	_FORCE_INLINE_ real_t dot(const Quaternion &p_q) const;
+	real_t angle_to(const Quaternion &p_to) const;
+
+	void set_euler_xyz(const Vector3 &p_euler);
+	Vector3 get_euler_xyz() const;
+	void set_euler_yxz(const Vector3 &p_euler);
+	Vector3 get_euler_yxz() const;
+
+	void set_euler(const Vector3 &p_euler) { set_euler_yxz(p_euler); };
+	Vector3 get_euler() const { return get_euler_yxz(); };
+
+	Quaternion slerp(const Quaternion &p_to, const real_t &p_weight) const;
+	Quaternion slerpni(const Quaternion &p_to, const real_t &p_weight) const;
+	Quaternion cubic_slerp(const Quaternion &p_b, const Quaternion &p_pre_a, const Quaternion &p_post_b, const real_t &p_weight) const;
+	Quaternion spherical_cubic_interpolate(const Quaternion &p_b, const Quaternion &p_pre_a, const Quaternion &p_post_b, const real_t &p_weight) const;
+
+	Vector3 get_axis() const;
+	float get_angle() const;
+
+	void set_axis_angle(const Vector3 &axis, const real_t &angle);
+	_FORCE_INLINE_ void get_axis_angle(Vector3 &r_axis, real_t &r_angle) const {
+		r_angle = 2 * Math::acos(w);
+		real_t r = ((real_t)1) / Math::sqrt(1 - w * w);
+		r_axis.x = x * r;
+		r_axis.y = y * r;
+		r_axis.z = z * r;
+	}
+
+	void operator*=(const Quaternion &p_q);
+	Quaternion operator*(const Quaternion &p_q) const;
+
+	Quaternion operator*(const Vector3 &v) const {
+		return Quaternion(w * v.x + y * v.z - z * v.y,
+				w * v.y + z * v.x - x * v.z,
+				w * v.z + x * v.y - y * v.x,
+				-x * v.x - y * v.y - z * v.z);
+	}
+
+	_FORCE_INLINE_ Vector3 xform(const Vector3 &v) const {
+#ifdef MATH_CHECKS
+		ERR_FAIL_COND_V_MSG(!is_normalized(), v, "The quaternion must be normalized.");
+#endif
+		Vector3 u(x, y, z);
+		Vector3 uv = u.cross(v);
+		return v + ((uv * w) + u.cross(uv)) * ((real_t)2);
+	}
+
+	_FORCE_INLINE_ void operator+=(const Quaternion &p_q);
+	_FORCE_INLINE_ void operator-=(const Quaternion &p_q);
+	_FORCE_INLINE_ void operator*=(const real_t &s);
+	_FORCE_INLINE_ void operator/=(const real_t &s);
+	_FORCE_INLINE_ Quaternion operator+(const Quaternion &q2) const;
+	_FORCE_INLINE_ Quaternion operator-(const Quaternion &q2) const;
+	_FORCE_INLINE_ Quaternion operator-() const;
+	_FORCE_INLINE_ Quaternion operator*(const real_t &s) const;
+	_FORCE_INLINE_ Quaternion operator/(const real_t &s) const;
+
+	_FORCE_INLINE_ bool operator==(const Quaternion &p_quat) const;
+	_FORCE_INLINE_ bool operator!=(const Quaternion &p_quat) const;
+
+	operator String() const;
+
+	inline void set(real_t p_x, real_t p_y, real_t p_z, real_t p_w) {
+		x = p_x;
+		y = p_y;
+		z = p_z;
+		w = p_w;
+	}
+	inline Quaternion(real_t p_x, real_t p_y, real_t p_z, real_t p_w) :
+			x(p_x),
+			y(p_y),
+			z(p_z),
+			w(p_w) {
+	}
+	Quaternion(const Vector3 &axis, const real_t &angle) {
+		set_axis_angle(axis, angle);
+	}
+
+	Quaternion(const Vector3 &euler) {
+		set_euler(euler);
+	}
+	Quaternion(const Quaternion &p_q) :
+			x(p_q.x),
+			y(p_q.y),
+			z(p_q.z),
+			w(p_q.w) {
+	}
+
+	Quaternion &operator=(const Quaternion &p_q) {
+		x = p_q.x;
+		y = p_q.y;
+		z = p_q.z;
+		w = p_q.w;
+		return *this;
+	}
+
+	Quaternion(const Vector3 &v0, const Vector3 &v1) // shortest arc
+	{
+		Vector3 c = v0.cross(v1);
+		real_t d = v0.dot(v1);
+
+		if (d < -1 + (real_t)CMP_EPSILON) {
+			x = 0;
+			y = 1;
+			z = 0;
+			w = 0;
+		} else {
+			real_t s = Math::sqrt((1 + d) * 2);
+			real_t rs = 1 / s;
+
+			x = c.x * rs;
+			y = c.y * rs;
+			z = c.z * rs;
+			w = s * 0.5f;
+		}
+	}
+
+	inline Quaternion() :
+			x(0),
+			y(0),
+			z(0),
+			w(1) {
+	}
+};
+
+real_t Quaternion::dot(const Quaternion &p_q) const {
+	return x * p_q.x + y * p_q.y + z * p_q.z + w * p_q.w;
+}
+
+real_t Quaternion::length_squared() const {
+	return dot(*this);
+}
+
+void Quaternion::operator+=(const Quaternion &p_q) {
+	x += p_q.x;
+	y += p_q.y;
+	z += p_q.z;
+	w += p_q.w;
+}
+
+void Quaternion::operator-=(const Quaternion &p_q) {
+	x -= p_q.x;
+	y -= p_q.y;
+	z -= p_q.z;
+	w -= p_q.w;
+}
+
+void Quaternion::operator*=(const real_t &s) {
+	x *= s;
+	y *= s;
+	z *= s;
+	w *= s;
+}
+
+void Quaternion::operator/=(const real_t &s) {
+	*this *= 1 / s;
+}
+
+Quaternion Quaternion::operator+(const Quaternion &q2) const {
+	const Quaternion &q1 = *this;
+	return Quaternion(q1.x + q2.x, q1.y + q2.y, q1.z + q2.z, q1.w + q2.w);
+}
+
+Quaternion Quaternion::operator-(const Quaternion &q2) const {
+	const Quaternion &q1 = *this;
+	return Quaternion(q1.x - q2.x, q1.y - q2.y, q1.z - q2.z, q1.w - q2.w);
+}
+
+Quaternion Quaternion::operator-() const {
+	const Quaternion &q2 = *this;
+	return Quaternion(-q2.x, -q2.y, -q2.z, -q2.w);
+}
+
+Quaternion Quaternion::operator*(const real_t &s) const {
+	return Quaternion(x * s, y * s, z * s, w * s);
+}
+
+Quaternion Quaternion::operator/(const real_t &s) const {
+	return *this * (1 / s);
+}
+
+bool Quaternion::operator==(const Quaternion &p_quat) const {
+	return x == p_quat.x && y == p_quat.y && z == p_quat.z && w == p_quat.w;
+}
+
+bool Quaternion::operator!=(const Quaternion &p_quat) const {
+	return x != p_quat.x || y != p_quat.y || z != p_quat.z || w != p_quat.w;
+}
+
+#line 0
+
+#line 1 "sfw/core/projection.h"
+
+/*************************************************************************/
+/*  projection.h                                                         */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct AABB;
+struct Plane;
+struct Rect2;
+struct Transform;
+struct Vector2;
+
+struct _NO_DISCARD_CLASS_ Projection {
+	enum Planes {
+		PLANE_NEAR,
+		PLANE_FAR,
+		PLANE_LEFT,
+		PLANE_TOP,
+		PLANE_RIGHT,
+		PLANE_BOTTOM
+	};
+
+	Vector4 matrix[4];
+
+	_FORCE_INLINE_ const Vector4 &operator[](const int p_axis) const {
+		DEV_ASSERT((unsigned int)p_axis < 4);
+		return matrix[p_axis];
+	}
+
+	_FORCE_INLINE_ Vector4 &operator[](const int p_axis) {
+		DEV_ASSERT((unsigned int)p_axis < 4);
+		return matrix[p_axis];
+	}
+
+	float determinant() const;
+	void set_identity();
+	void set_zero();
+	void set_light_bias();
+	void set_depth_correction(bool p_flip_y = true);
+
+	void set_light_atlas_rect(const Rect2 &p_rect);
+	void set_perspective(real_t p_fovy_degrees, real_t p_aspect, real_t p_z_near, real_t p_z_far, bool p_flip_fov = false);
+	void set_perspective(real_t p_fovy_degrees, real_t p_aspect, real_t p_z_near, real_t p_z_far, bool p_flip_fov, int p_eye, real_t p_intraocular_dist, real_t p_convergence_dist);
+	void set_for_hmd(int p_eye, real_t p_aspect, real_t p_intraocular_dist, real_t p_display_width, real_t p_display_to_lens, real_t p_oversample, real_t p_z_near, real_t p_z_far);
+	void set_orthogonal(real_t p_left, real_t p_right, real_t p_bottom, real_t p_top, real_t p_znear, real_t p_zfar);
+	void set_orthogonal(real_t p_size, real_t p_aspect, real_t p_znear, real_t p_zfar, bool p_flip_fov = false);
+	void set_frustum(real_t p_left, real_t p_right, real_t p_bottom, real_t p_top, real_t p_near, real_t p_far);
+	void set_frustum(real_t p_size, real_t p_aspect, Vector2 p_offset, real_t p_near, real_t p_far, bool p_flip_fov = false);
+	void adjust_perspective_znear(real_t p_new_znear);
+
+	static Projection create_depth_correction(bool p_flip_y);
+	static Projection create_light_atlas_rect(const Rect2 &p_rect);
+	static Projection create_perspective(real_t p_fovy_degrees, real_t p_aspect, real_t p_z_near, real_t p_z_far, bool p_flip_fov = false);
+	static Projection create_perspective_hmd(real_t p_fovy_degrees, real_t p_aspect, real_t p_z_near, real_t p_z_far, bool p_flip_fov, int p_eye, real_t p_intraocular_dist, real_t p_convergence_dist);
+	static Projection create_for_hmd(int p_eye, real_t p_aspect, real_t p_intraocular_dist, real_t p_display_width, real_t p_display_to_lens, real_t p_oversample, real_t p_z_near, real_t p_z_far);
+	static Projection create_orthogonal(real_t p_left, real_t p_right, real_t p_bottom, real_t p_top, real_t p_znear, real_t p_zfar);
+	static Projection create_orthogonal_aspect(real_t p_size, real_t p_aspect, real_t p_znear, real_t p_zfar, bool p_flip_fov = false);
+	static Projection create_frustum(real_t p_left, real_t p_right, real_t p_bottom, real_t p_top, real_t p_near, real_t p_far);
+	static Projection create_frustum_aspect(real_t p_size, real_t p_aspect, Vector2 p_offset, real_t p_near, real_t p_far, bool p_flip_fov = false);
+	static Projection create_fit_aabb(const AABB &p_aabb);
+
+	Projection perspective_znear_adjusted(real_t p_new_znear) const;
+	Plane get_projection_plane(Planes p_plane) const;
+	Projection flipped_y() const;
+	Projection jitter_offseted(const Vector2 &p_offset) const;
+
+	static real_t get_fovy(real_t p_fovx, real_t p_aspect) {
+		return Math::rad2deg(Math::atan(p_aspect * Math::tan(Math::deg2rad(p_fovx) * 0.5)) * 2.0);
+	}
+
+	real_t calculate_fovy(real_t p_fovx, real_t p_aspect) {
+		return Math::rad2deg(Math::atan(p_aspect * Math::tan(Math::deg2rad(p_fovx) * 0.5)) * 2.0);
+	}
+
+	real_t get_z_far() const;
+	real_t get_z_near() const;
+	real_t get_aspect() const;
+	real_t get_fov() const;
+	bool is_orthogonal() const;
+
+	Vector<Plane> get_projection_planes(const Transform &p_transform) const;
+
+	bool get_endpoints(const Transform &p_transform, Vector3 *p_8points) const;
+	Vector2 get_viewport_half_extents() const;
+	Vector2 get_far_plane_half_extents() const;
+
+	void invert();
+	Projection inverse() const;
+
+	Projection operator*(const Projection &p_matrix) const;
+
+	Vector4 xform(const Vector4 &p_vec4) const;
+	Vector4 xform_inv(const Vector4 &p_vec4) const;
+
+	_FORCE_INLINE_ Vector3 xform(const Vector3 &p_vector) const;
+	Plane xform(const Plane &p_plane) const;
+
+	operator String() const;
+
+	void scale_translate_to_fit(const AABB &p_aabb);
+	void add_jitter_offset(const Vector2 &p_offset);
+	void make_scale(const Vector3 &p_scale);
+	int get_pixels_per_meter(int p_for_pixel_width) const;
+	operator Transform() const;
+
+	void flip_y();
+
+	bool operator==(const Projection &p_cam) const {
+		for (uint32_t i = 0; i < 4; i++) {
+			for (uint32_t j = 0; j < 4; j++) {
+				if (matrix[i][j] != p_cam.matrix[i][j]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	bool operator!=(const Projection &p_cam) const {
+		return !(*this == p_cam);
+	}
+
+	float get_lod_multiplier() const;
+
+	_FORCE_INLINE_ void set_perspective1(real_t p_fovy_degrees, real_t p_aspect, real_t p_z_near, real_t p_z_far, bool p_flip_fov = false) {
+		set_perspective(p_fovy_degrees, p_aspect, p_z_near, p_z_far, p_flip_fov);
+	}
+	_FORCE_INLINE_ void set_perspective2(real_t p_fovy_degrees, real_t p_aspect, real_t p_z_near, real_t p_z_far, bool p_flip_fov, int p_eye, real_t p_intraocular_dist, real_t p_convergence_dist) {
+		set_perspective(p_fovy_degrees, p_aspect, p_z_near, p_z_far, p_flip_fov, p_eye, p_intraocular_dist, p_convergence_dist);
+	}
+	_FORCE_INLINE_ void set_orthogonal1(real_t p_left, real_t p_right, real_t p_bottom, real_t p_top, real_t p_znear, real_t p_zfar) {
+		set_orthogonal(p_left, p_right, p_bottom, p_top, p_znear, p_zfar);
+	}
+	_FORCE_INLINE_ void set_orthogonal2(real_t p_size, real_t p_aspect, real_t p_znear, real_t p_zfar, bool p_flip_fov = false) {
+		set_orthogonal(p_size, p_aspect, p_znear, p_zfar, p_flip_fov);
+	}
+	_FORCE_INLINE_ void set_frustum1(real_t p_left, real_t p_right, real_t p_bottom, real_t p_top, real_t p_near, real_t p_far) {
+		set_frustum(p_left, p_right, p_bottom, p_top, p_near, p_far);
+	}
+	//Vector2 is incomplete here
+	void set_frustum2(real_t p_size, real_t p_aspect, Vector2 p_offset, real_t p_near, real_t p_far, bool p_flip_fov = false);
+
+	Projection();
+	Projection(const Vector4 &p_x, const Vector4 &p_y, const Vector4 &p_z, const Vector4 &p_w);
+	Projection(const Transform &p_transform);
+	~Projection();
+};
+
+Vector3 Projection::xform(const Vector3 &p_vec3) const {
+	Vector3 ret;
+	ret.x = matrix[0][0] * p_vec3.x + matrix[1][0] * p_vec3.y + matrix[2][0] * p_vec3.z + matrix[3][0];
+	ret.y = matrix[0][1] * p_vec3.x + matrix[1][1] * p_vec3.y + matrix[2][1] * p_vec3.z + matrix[3][1];
+	ret.z = matrix[0][2] * p_vec3.x + matrix[1][2] * p_vec3.y + matrix[2][2] * p_vec3.z + matrix[3][2];
+	real_t w = matrix[0][3] * p_vec3.x + matrix[1][3] * p_vec3.y + matrix[2][3] * p_vec3.z + matrix[3][3];
+	return ret / w;
+}
+
+#line 0
+
+#line 1 "sfw/core/basis.h"
+
+/*************************************************************************/
+/*  basis.h                                                              */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct _NO_DISCARD_CLASS_ Basis {
+	Vector3 rows[3] = {
+		Vector3(1, 0, 0),
+		Vector3(0, 1, 0),
+		Vector3(0, 0, 1)
+	};
+
+	_FORCE_INLINE_ const Vector3 &operator[](int p_row) const {
+		return rows[p_row];
+	}
+	_FORCE_INLINE_ Vector3 &operator[](int p_row) {
+		return rows[p_row];
+	}
+
+	void invert();
+	void transpose();
+
+	Basis inverse() const;
+	Basis transposed() const;
+
+	_FORCE_INLINE_ real_t determinant() const;
+
+	void from_z(const Vector3 &p_z);
+
+	void rotate(const Vector3 &p_axis, real_t p_phi);
+	Basis rotated(const Vector3 &p_axis, real_t p_phi) const;
+
+	void rotate_local(const Vector3 &p_axis, real_t p_phi);
+	Basis rotated_local(const Vector3 &p_axis, real_t p_phi) const;
+
+	void rotate(const Vector3 &p_euler);
+	Basis rotated(const Vector3 &p_euler) const;
+
+	void rotate(const Quaternion &p_quat);
+	Basis rotated(const Quaternion &p_quat) const;
+
+	_FORCE_INLINE_ void rotatev(const Vector3 &p_euler) { rotate(p_euler); }
+	_FORCE_INLINE_ Basis rotatedv(const Vector3 &p_euler) const { return rotated(p_euler); }
+	_FORCE_INLINE_ void rotateq(const Quaternion &p_quat) { rotate(p_quat); }
+	_FORCE_INLINE_ Basis rotatedq(const Quaternion &p_quat) const { return rotated(p_quat); }
+
+	Vector3 get_rotation_euler() const;
+	void get_rotation_axis_angle(Vector3 &p_axis, real_t &p_angle) const;
+	void get_rotation_axis_angle_local(Vector3 &p_axis, real_t &p_angle) const;
+	Quaternion get_rotation_quaternion() const;
+	Vector3 get_rotation() const { return get_rotation_euler(); };
+
+	void rotate_to_align(const Vector3 &p_start_direction, const Vector3 &p_end_direction);
+
+	Vector3 rotref_posscale_decomposition(Basis &rotref) const;
+
+	Vector3 get_euler_xyz() const;
+	void set_euler_xyz(const Vector3 &p_euler);
+
+	Vector3 get_euler_xzy() const;
+	void set_euler_xzy(const Vector3 &p_euler);
+
+	Vector3 get_euler_yzx() const;
+	void set_euler_yzx(const Vector3 &p_euler);
+
+	Vector3 get_euler_yxz() const;
+	void set_euler_yxz(const Vector3 &p_euler);
+
+	Vector3 get_euler_zxy() const;
+	void set_euler_zxy(const Vector3 &p_euler);
+
+	Vector3 get_euler_zyx() const;
+	void set_euler_zyx(const Vector3 &p_euler);
+
+	Vector3 get_euler() const { return get_euler_yxz(); }
+	void set_euler(const Vector3 &p_euler) { set_euler_yxz(p_euler); }
+
+	Quaternion get_quaternion() const;
+	void set_quaternion(const Quaternion &p_quat);
+
+	void get_axis_angle(Vector3 &r_axis, real_t &r_angle) const;
+	void set_axis_angle(const Vector3 &p_axis, real_t p_phi);
+
+	void scale(const Vector3 &p_scale);
+	Basis scaled(const Vector3 &p_scale) const;
+
+	void scale_local(const Vector3 &p_scale);
+	Basis scaled_local(const Vector3 &p_scale) const;
+
+	void scale_orthogonal(const Vector3 &p_scale);
+	Basis scaled_orthogonal(const Vector3 &p_scale) const;
+
+	void make_scale_uniform();
+	real_t get_uniform_scale() const;
+
+	Vector3 get_scale() const;
+	Vector3 get_scale_abs() const;
+	Vector3 get_scale_local() const;
+
+	void set_axis_angle_scale(const Vector3 &p_axis, real_t p_phi, const Vector3 &p_scale);
+	void set_euler_scale(const Vector3 &p_euler, const Vector3 &p_scale);
+	void set_quaternion_scale(const Quaternion &p_quat, const Vector3 &p_scale);
+
+	// transposed dot products
+	_FORCE_INLINE_ real_t tdotx(const Vector3 &v) const {
+		return rows[0][0] * v[0] + rows[1][0] * v[1] + rows[2][0] * v[2];
+	}
+	_FORCE_INLINE_ real_t tdoty(const Vector3 &v) const {
+		return rows[0][1] * v[0] + rows[1][1] * v[1] + rows[2][1] * v[2];
+	}
+	_FORCE_INLINE_ real_t tdotz(const Vector3 &v) const {
+		return rows[0][2] * v[0] + rows[1][2] * v[1] + rows[2][2] * v[2];
+	}
+
+	bool is_equal_approx(const Basis &p_basis) const;
+	bool is_equal_approx_ratio(const Basis &a, const Basis &b, real_t p_epsilon = UNIT_EPSILON) const;
+
+	bool operator==(const Basis &p_matrix) const;
+	bool operator!=(const Basis &p_matrix) const;
+
+	_FORCE_INLINE_ Vector3 xform(const Vector3 &p_vector) const;
+	_FORCE_INLINE_ Vector3 xform_inv(const Vector3 &p_vector) const;
+
+	_FORCE_INLINE_ Vector3i xform(const Vector3i &p_vector) const;
+	_FORCE_INLINE_ Vector3i xform_inv(const Vector3i &p_vector) const;
+
+	_FORCE_INLINE_ void operator*=(const Basis &p_matrix);
+	_FORCE_INLINE_ Basis operator*(const Basis &p_matrix) const;
+	_FORCE_INLINE_ void operator+=(const Basis &p_matrix);
+	_FORCE_INLINE_ Basis operator+(const Basis &p_matrix) const;
+	_FORCE_INLINE_ void operator-=(const Basis &p_matrix);
+	_FORCE_INLINE_ Basis operator-(const Basis &p_matrix) const;
+	_FORCE_INLINE_ void operator*=(real_t p_val);
+	_FORCE_INLINE_ Basis operator*(real_t p_val) const;
+
+	int get_orthogonal_index() const;
+	void set_orthogonal_index(int p_index);
+
+	void set_diagonal(const Vector3 &p_diag);
+
+	bool is_orthogonal() const;
+	bool is_diagonal() const;
+	bool is_rotation() const;
+
+	Basis slerp(const Basis &p_to, const real_t &p_weight) const;
+	_FORCE_INLINE_ Basis lerp(const Basis &p_to, const real_t &p_weight) const;
+	void rotate_sh(real_t *p_values);
+
+	operator String() const;
+
+	/* create / set */
+
+	_FORCE_INLINE_ void set(real_t xx, real_t xy, real_t xz, real_t yx, real_t yy, real_t yz, real_t zx, real_t zy, real_t zz) {
+		rows[0][0] = xx;
+		rows[0][1] = xy;
+		rows[0][2] = xz;
+		rows[1][0] = yx;
+		rows[1][1] = yy;
+		rows[1][2] = yz;
+		rows[2][0] = zx;
+		rows[2][1] = zy;
+		rows[2][2] = zz;
+	}
+	_FORCE_INLINE_ void set(const Vector3 &p_x, const Vector3 &p_y, const Vector3 &p_z) {
+		set_column(0, p_x);
+		set_column(1, p_y);
+		set_column(2, p_z);
+	}
+
+	_FORCE_INLINE_ Vector3 get_column(int i) const {
+		return Vector3(rows[0][i], rows[1][i], rows[2][i]);
+	}
+
+	_FORCE_INLINE_ void set_column(int p_index, const Vector3 &p_value) {
+		// Set actual basis axis column (we store transposed as rows for performance).
+		rows[0][p_index] = p_value.x;
+		rows[1][p_index] = p_value.y;
+		rows[2][p_index] = p_value.z;
+	}
+
+	_FORCE_INLINE_ void set_columns(const Vector3 &p_x, const Vector3 &p_y, const Vector3 &p_z) {
+		set_column(0, p_x);
+		set_column(1, p_y);
+		set_column(2, p_z);
+	}
+
+	_FORCE_INLINE_ Vector3 get_row(int i) const {
+		return Vector3(rows[i][0], rows[i][1], rows[i][2]);
+	}
+	_FORCE_INLINE_ void set_row(int i, const Vector3 &p_row) {
+		rows[i][0] = p_row.x;
+		rows[i][1] = p_row.y;
+		rows[i][2] = p_row.z;
+	}
+
+	_FORCE_INLINE_ Vector3 get_axis(int i) const {
+		return Vector3(rows[0][i], rows[1][i], rows[2][i]);
+	}
+
+	_FORCE_INLINE_ void set_axis(int p_index, const Vector3 &p_value) {
+		// Set actual basis axis column (we store transposed as rows for performance).
+		rows[0][p_index] = p_value.x;
+		rows[1][p_index] = p_value.y;
+		rows[2][p_index] = p_value.z;
+	}
+
+	_FORCE_INLINE_ Vector3 get_main_diagonal() const {
+		return Vector3(rows[0][0], rows[1][1], rows[2][2]);
+	}
+
+	_FORCE_INLINE_ void set_zero() {
+		rows[0].zero();
+		rows[1].zero();
+		rows[2].zero();
+	}
+
+	_FORCE_INLINE_ Basis transpose_xform(const Basis &m) const {
+		return Basis(
+				rows[0].x * m[0].x + rows[1].x * m[1].x + rows[2].x * m[2].x,
+				rows[0].x * m[0].y + rows[1].x * m[1].y + rows[2].x * m[2].y,
+				rows[0].x * m[0].z + rows[1].x * m[1].z + rows[2].x * m[2].z,
+				rows[0].y * m[0].x + rows[1].y * m[1].x + rows[2].y * m[2].x,
+				rows[0].y * m[0].y + rows[1].y * m[1].y + rows[2].y * m[2].y,
+				rows[0].y * m[0].z + rows[1].y * m[1].z + rows[2].y * m[2].z,
+				rows[0].z * m[0].x + rows[1].z * m[1].x + rows[2].z * m[2].x,
+				rows[0].z * m[0].y + rows[1].z * m[1].y + rows[2].z * m[2].y,
+				rows[0].z * m[0].z + rows[1].z * m[1].z + rows[2].z * m[2].z);
+	}
+	Basis(real_t xx, real_t xy, real_t xz, real_t yx, real_t yy, real_t yz, real_t zx, real_t zy, real_t zz) {
+		set(xx, xy, xz, yx, yy, yz, zx, zy, zz);
+	}
+
+	void orthonormalize();
+	Basis orthonormalized() const;
+
+	void orthogonalize();
+	Basis orthogonalized() const;
+
+	bool is_symmetric() const;
+	Basis diagonalize();
+
+	// The following normal xform functions are correct for non-uniform scales.
+	// Use these two functions in combination to xform a series of normals.
+	// First use get_normal_xform_basis() to precalculate the inverse transpose.
+	// Then apply xform_normal_fast() multiple times using the inverse transpose basis.
+	Basis get_normal_xform_basis() const { return inverse().transposed(); }
+
+	// N.B. This only does a normal transform if the basis used is the inverse transpose!
+	// Otherwise use xform_normal().
+	Vector3 xform_normal_fast(const Vector3 &p_vector) const { return xform(p_vector).normalized(); }
+
+	// This function does the above but for a single normal vector. It is considerably slower, so should usually
+	// only be used in cases of single normals, or when the basis changes each time.
+	Vector3 xform_normal(const Vector3 &p_vector) const { return get_normal_xform_basis().xform_normal_fast(p_vector); }
+
+	static Basis looking_at(const Vector3 &p_target, const Vector3 &p_up = Vector3(0, 1, 0));
+	static Basis from_scale(const Vector3 &p_scale);
+
+	operator Quaternion() const { return get_quaternion(); }
+
+	Basis(const Quaternion &p_quat) { set_quaternion(p_quat); }
+	Basis(const Quaternion &p_quat, const Vector3 &p_scale) { set_quaternion_scale(p_quat, p_scale); }
+
+	Basis(const Vector3 &p_euler) { set_euler(p_euler); }
+	Basis(const Vector3 &p_euler, const Vector3 &p_scale) { set_euler_scale(p_euler, p_scale); }
+
+	Basis(const Vector3 &p_axis, real_t p_phi) { set_axis_angle(p_axis, p_phi); }
+	Basis(const Vector3 &p_axis, real_t p_phi, const Vector3 &p_scale) { set_axis_angle_scale(p_axis, p_phi, p_scale); }
+
+	_FORCE_INLINE_ Basis(const Vector3 &row0, const Vector3 &row1, const Vector3 &row2) {
+		rows[0] = row0;
+		rows[1] = row1;
+		rows[2] = row2;
+	}
+
+	_FORCE_INLINE_ Basis() {}
+};
+
+_FORCE_INLINE_ void Basis::operator*=(const Basis &p_matrix) {
+	set(
+			p_matrix.tdotx(rows[0]), p_matrix.tdoty(rows[0]), p_matrix.tdotz(rows[0]),
+			p_matrix.tdotx(rows[1]), p_matrix.tdoty(rows[1]), p_matrix.tdotz(rows[1]),
+			p_matrix.tdotx(rows[2]), p_matrix.tdoty(rows[2]), p_matrix.tdotz(rows[2]));
+}
+
+_FORCE_INLINE_ Basis Basis::operator*(const Basis &p_matrix) const {
+	return Basis(
+			p_matrix.tdotx(rows[0]), p_matrix.tdoty(rows[0]), p_matrix.tdotz(rows[0]),
+			p_matrix.tdotx(rows[1]), p_matrix.tdoty(rows[1]), p_matrix.tdotz(rows[1]),
+			p_matrix.tdotx(rows[2]), p_matrix.tdoty(rows[2]), p_matrix.tdotz(rows[2]));
+}
+
+_FORCE_INLINE_ void Basis::operator+=(const Basis &p_matrix) {
+	rows[0] += p_matrix.rows[0];
+	rows[1] += p_matrix.rows[1];
+	rows[2] += p_matrix.rows[2];
+}
+
+_FORCE_INLINE_ Basis Basis::operator+(const Basis &p_matrix) const {
+	Basis ret(*this);
+	ret += p_matrix;
+	return ret;
+}
+
+_FORCE_INLINE_ void Basis::operator-=(const Basis &p_matrix) {
+	rows[0] -= p_matrix.rows[0];
+	rows[1] -= p_matrix.rows[1];
+	rows[2] -= p_matrix.rows[2];
+}
+
+_FORCE_INLINE_ Basis Basis::operator-(const Basis &p_matrix) const {
+	Basis ret(*this);
+	ret -= p_matrix;
+	return ret;
+}
+
+_FORCE_INLINE_ void Basis::operator*=(real_t p_val) {
+	rows[0] *= p_val;
+	rows[1] *= p_val;
+	rows[2] *= p_val;
+}
+
+_FORCE_INLINE_ Basis Basis::operator*(real_t p_val) const {
+	Basis ret(*this);
+	ret *= p_val;
+	return ret;
+}
+
+Vector3 Basis::xform(const Vector3 &p_vector) const {
+	return Vector3(
+			rows[0].dot(p_vector),
+			rows[1].dot(p_vector),
+			rows[2].dot(p_vector));
+}
+
+Vector3i Basis::xform_inv(const Vector3i &p_vector) const {
+	return Vector3i(
+			(rows[0][0] * p_vector.x) + (rows[1][0] * p_vector.y) + (rows[2][0] * p_vector.z),
+			(rows[0][1] * p_vector.x) + (rows[1][1] * p_vector.y) + (rows[2][1] * p_vector.z),
+			(rows[0][2] * p_vector.x) + (rows[1][2] * p_vector.y) + (rows[2][2] * p_vector.z));
+}
+
+Vector3i Basis::xform(const Vector3i &p_vector) const {
+	return Vector3i(
+			rows[0].dot(p_vector),
+			rows[1].dot(p_vector),
+			rows[2].dot(p_vector));
+}
+
+Vector3 Basis::xform_inv(const Vector3 &p_vector) const {
+	return Vector3(
+			(rows[0][0] * p_vector.x) + (rows[1][0] * p_vector.y) + (rows[2][0] * p_vector.z),
+			(rows[0][1] * p_vector.x) + (rows[1][1] * p_vector.y) + (rows[2][1] * p_vector.z),
+			(rows[0][2] * p_vector.x) + (rows[1][2] * p_vector.y) + (rows[2][2] * p_vector.z));
+}
+
+real_t Basis::determinant() const {
+	return rows[0][0] * (rows[1][1] * rows[2][2] - rows[2][1] * rows[1][2]) -
+			rows[1][0] * (rows[0][1] * rows[2][2] - rows[2][1] * rows[0][2]) +
+			rows[2][0] * (rows[0][1] * rows[1][2] - rows[1][1] * rows[0][2]);
+}
+
+Basis Basis::lerp(const Basis &p_to, const real_t &p_weight) const {
+	Basis b;
+	b.rows[0] = rows[0].linear_interpolate(p_to.rows[0], p_weight);
+	b.rows[1] = rows[1].linear_interpolate(p_to.rows[1], p_weight);
+	b.rows[2] = rows[2].linear_interpolate(p_to.rows[2], p_weight);
+
+	return b;
+}
+
+#line 0
+
+#line 1 "sfw/core/transform_2d.h"
+
+/*************************************************************************/
+/*  transform_2d.h                                                       */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct _NO_DISCARD_CLASS_ Transform2D {
+	// Warning #1: basis of Transform2D is stored differently from Basis. In terms of columns array, the basis matrix looks like "on paper":
+	// M = (columns[0][0] columns[1][0])
+	//     (columns[0][1] columns[1][1])
+	// This is such that the columns, which can be interpreted as basis vectors of the coordinate system "painted" on the object, can be accessed as columns[i].
+	// Note that this is the opposite of the indices in mathematical texts, meaning: $M_{12}$ in a math book corresponds to columns[1][0] here.
+	// This requires additional care when working with explicit indices.
+	// See https://en.wikipedia.org/wiki/Row-_and_column-major_order for further reading.
+
+	// Warning #2: 2D be aware that unlike 3D code, 2D code uses a left-handed coordinate system: Y-axis points down,
+	// and angle is measure from +X to +Y in a clockwise-fashion.
+
+	Vector2 columns[3];
+
+	_FORCE_INLINE_ real_t tdotx(const Vector2 &v) const { return columns[0][0] * v.x + columns[1][0] * v.y; }
+	_FORCE_INLINE_ real_t tdoty(const Vector2 &v) const { return columns[0][1] * v.x + columns[1][1] * v.y; }
+
+	const Vector2 &operator[](int p_idx) const { return columns[p_idx]; }
+	Vector2 &operator[](int p_idx) { return columns[p_idx]; }
+
+	_FORCE_INLINE_ Vector2 get_axis(int p_axis) const {
+		ERR_FAIL_INDEX_V(p_axis, 3, Vector2());
+		return columns[p_axis];
+	}
+	_FORCE_INLINE_ void set_axis(int p_axis, const Vector2 &p_vec) {
+		ERR_FAIL_INDEX(p_axis, 3);
+		columns[p_axis] = p_vec;
+	}
+
+	_FORCE_INLINE_ Vector2 get_column(int p_colum) const {
+		ERR_FAIL_INDEX_V(p_colum, 3, Vector2());
+		return columns[p_colum];
+	}
+	_FORCE_INLINE_ void set_column(int p_colum, const Vector2 &p_vec) {
+		ERR_FAIL_INDEX(p_colum, 3);
+		columns[p_colum] = p_vec;
+	}
+
+	void invert();
+	Transform2D inverse() const;
+
+	void affine_invert();
+	Transform2D affine_inverse() const;
+
+	void set_rotation(real_t p_rot);
+	real_t get_rotation() const;
+	real_t get_skew() const;
+	void set_skew(const real_t p_angle);
+	_FORCE_INLINE_ void set_rotation_and_scale(real_t p_rot, const Size2 &p_scale);
+	_FORCE_INLINE_ void set_rotation_scale_and_skew(const real_t p_rot, const Size2 &p_scale, const real_t p_skew);
+	void rotate(real_t p_phi);
+
+	void scale(const Size2 &p_scale);
+	void scale_basis(const Size2 &p_scale);
+	void translate(real_t p_tx, real_t p_ty);
+	void translate(const Vector2 &p_offset);
+	void translate_local(real_t p_tx, real_t p_ty);
+	void translate_local(const Vector2 &p_translation);
+
+	void translater(real_t p_tx, real_t p_ty);
+	void translatev(const Vector2 &p_offset);
+	void translate_localr(real_t p_tx, real_t p_ty);
+	void translate_localv(const Vector2 &p_translation);
+
+	real_t basis_determinant() const;
+
+	Size2 get_scale() const;
+	void set_scale(const Size2 &p_scale);
+
+	_FORCE_INLINE_ const Vector2 &get_origin() const { return columns[2]; }
+	_FORCE_INLINE_ void set_origin(const Vector2 &p_origin) { columns[2] = p_origin; }
+
+	Transform2D basis_scaled(const Size2 &p_scale) const;
+	Transform2D scaled(const Size2 &p_scale) const;
+	Transform2D scaled_local(const Size2 &p_scale) const;
+	Transform2D translated(const Vector2 &p_offset) const;
+	Transform2D translated_local(const Vector2 &p_offset) const;
+	Transform2D rotated(const real_t p_angle) const;
+	Transform2D rotated_local(const real_t p_angle) const;
+
+	Transform2D untranslated() const;
+
+	void orthonormalize();
+	Transform2D orthonormalized() const;
+	bool is_equal_approx(const Transform2D &p_transform) const;
+
+	Transform2D looking_at(const Vector2 &p_target) const;
+
+	bool operator==(const Transform2D &p_transform) const;
+	bool operator!=(const Transform2D &p_transform) const;
+
+	void operator*=(const Transform2D &p_transform);
+	Transform2D operator*(const Transform2D &p_transform) const;
+	void operator*=(const real_t p_val);
+	Transform2D operator*(const real_t p_val) const;
+
+	Transform2D interpolate_with(const Transform2D &p_transform, real_t p_c) const;
+
+	_FORCE_INLINE_ Vector2 basis_xform(const Vector2 &p_vec) const;
+	_FORCE_INLINE_ Vector2 basis_xform_inv(const Vector2 &p_vec) const;
+	_FORCE_INLINE_ Vector2 xform(const Vector2 &p_vec) const;
+	_FORCE_INLINE_ Vector2 xform_inv(const Vector2 &p_vec) const;
+
+	_FORCE_INLINE_ Rect2 xform(const Rect2 &p_rect) const;
+	_FORCE_INLINE_ Rect2 xform_inv(const Rect2 &p_rect) const;
+
+	_FORCE_INLINE_ Vector2i basis_xform(const Vector2i &p_vec) const;
+	_FORCE_INLINE_ Vector2i basis_xform_inv(const Vector2i &p_vec) const;
+	_FORCE_INLINE_ Vector2i xform(const Vector2i &p_vec) const;
+	_FORCE_INLINE_ Vector2i xform_inv(const Vector2i &p_vec) const;
+
+	_FORCE_INLINE_ PoolVector<Vector2> xform(const PoolVector<Vector2> &p_array) const;
+	_FORCE_INLINE_ PoolVector<Vector2> xform_inv(const PoolVector<Vector2> &p_array) const;
+	_FORCE_INLINE_ PoolVector<Vector2i> xform(const PoolVector<Vector2i> &p_array) const;
+	_FORCE_INLINE_ PoolVector<Vector2i> xform_inv(const PoolVector<Vector2i> &p_array) const;
+
+	operator String() const;
+
+	Transform2D(real_t xx, real_t xy, real_t yx, real_t yy, real_t ox, real_t oy) {
+		columns[0][0] = xx;
+		columns[0][1] = xy;
+		columns[1][0] = yx;
+		columns[1][1] = yy;
+		columns[2][0] = ox;
+		columns[2][1] = oy;
+	}
+
+	Transform2D(const Vector2 &p_x, const Vector2 &p_y, const Vector2 &p_origin) {
+		columns[0] = p_x;
+		columns[1] = p_y;
+		columns[2] = p_origin;
+	}
+
+	Transform2D(real_t p_rot, const Vector2 &p_pos);
+
+	Transform2D(const real_t p_rot, const Size2 &p_scale, const real_t p_skew, const Vector2 &p_pos);
+
+	Transform2D() {
+		columns[0][0] = 1.0;
+		columns[1][1] = 1.0;
+	}
+};
+
+Vector2 Transform2D::basis_xform(const Vector2 &p_vec) const {
+	return Vector2(
+			tdotx(p_vec),
+			tdoty(p_vec));
+}
+
+Vector2 Transform2D::basis_xform_inv(const Vector2 &p_vec) const {
+	return Vector2(
+			columns[0].dot(p_vec),
+			columns[1].dot(p_vec));
+}
+
+Vector2 Transform2D::xform(const Vector2 &p_vec) const {
+	return Vector2(
+				   tdotx(p_vec),
+				   tdoty(p_vec)) +
+			columns[2];
+}
+Vector2 Transform2D::xform_inv(const Vector2 &p_vec) const {
+	Vector2 v = p_vec - columns[2];
+
+	return Vector2(
+			columns[0].dot(v),
+			columns[1].dot(v));
+}
+Rect2 Transform2D::xform(const Rect2 &p_rect) const {
+	Vector2 x = columns[0] * p_rect.size.x;
+	Vector2 y = columns[1] * p_rect.size.y;
+	Vector2 pos = xform(p_rect.position);
+
+	Rect2 new_rect;
+	new_rect.position = pos;
+	new_rect.expand_to(pos + x);
+	new_rect.expand_to(pos + y);
+	new_rect.expand_to(pos + x + y);
+	return new_rect;
+}
+
+void Transform2D::set_rotation_and_scale(real_t p_rot, const Size2 &p_scale) {
+	columns[0][0] = Math::cos(p_rot) * p_scale.x;
+	columns[1][1] = Math::cos(p_rot) * p_scale.y;
+	columns[1][0] = -Math::sin(p_rot) * p_scale.y;
+	columns[0][1] = Math::sin(p_rot) * p_scale.x;
+}
+
+void Transform2D::set_rotation_scale_and_skew(const real_t p_rot, const Size2 &p_scale, const real_t p_skew) {
+	columns[0][0] = Math::cos(p_rot) * p_scale.x;
+	columns[1][1] = Math::cos(p_rot + p_skew) * p_scale.y;
+	columns[1][0] = -Math::sin(p_rot + p_skew) * p_scale.y;
+	columns[0][1] = Math::sin(p_rot) * p_scale.x;
+}
+
+Rect2 Transform2D::xform_inv(const Rect2 &p_rect) const {
+	Vector2 ends[4] = {
+		xform_inv(p_rect.position),
+		xform_inv(Vector2(p_rect.position.x, p_rect.position.y + p_rect.size.y)),
+		xform_inv(Vector2(p_rect.position.x + p_rect.size.x, p_rect.position.y + p_rect.size.y)),
+		xform_inv(Vector2(p_rect.position.x + p_rect.size.x, p_rect.position.y))
+	};
+
+	Rect2 new_rect;
+	new_rect.position = ends[0];
+	new_rect.expand_to(ends[1]);
+	new_rect.expand_to(ends[2]);
+	new_rect.expand_to(ends[3]);
+
+	return new_rect;
+}
+
+Vector2i Transform2D::basis_xform(const Vector2i &p_vec) const {
+	return Vector2i(
+			tdotx(p_vec),
+			tdoty(p_vec));
+}
+
+Vector2i Transform2D::basis_xform_inv(const Vector2i &p_vec) const {
+	return Vector2i(
+			columns[0].dot(p_vec),
+			columns[1].dot(p_vec));
+}
+
+Vector2i Transform2D::xform(const Vector2i &p_vec) const {
+	return Vector2i(
+				   tdotx(p_vec),
+				   tdoty(p_vec)) +
+			columns[2];
+}
+Vector2i Transform2D::xform_inv(const Vector2i &p_vec) const {
+	Vector2i v = p_vec - columns[2];
+
+	return Vector2i(
+			columns[0].dot(v),
+			columns[1].dot(v));
+}
+
+PoolVector<Vector2> Transform2D::xform(const PoolVector<Vector2> &p_array) const {
+	PoolVector<Vector2> array;
+	array.resize(p_array.size());
+
+	PoolVector<Vector2>::Read r = p_array.read();
+	PoolVector<Vector2>::Write w = array.write();
+
+	for (int i = 0; i < p_array.size(); ++i) {
+		w[i] = xform(r[i]);
+	}
+	return array;
+}
+
+PoolVector<Vector2> Transform2D::xform_inv(const PoolVector<Vector2> &p_array) const {
+	PoolVector<Vector2> array;
+	array.resize(p_array.size());
+
+	PoolVector<Vector2>::Read r = p_array.read();
+	PoolVector<Vector2>::Write w = array.write();
+
+	for (int i = 0; i < p_array.size(); ++i) {
+		w[i] = xform_inv(r[i]);
+	}
+	return array;
+}
+
+PoolVector<Vector2i> Transform2D::xform(const PoolVector<Vector2i> &p_array) const {
+	PoolVector<Vector2i> array;
+	array.resize(p_array.size());
+
+	PoolVector<Vector2i>::Read r = p_array.read();
+	PoolVector<Vector2i>::Write w = array.write();
+
+	for (int i = 0; i < p_array.size(); ++i) {
+		w[i] = xform(r[i]);
+	}
+	return array;
+}
+
+PoolVector<Vector2i> Transform2D::xform_inv(const PoolVector<Vector2i> &p_array) const {
+	PoolVector<Vector2i> array;
+	array.resize(p_array.size());
+
+	PoolVector<Vector2i>::Read r = p_array.read();
+	PoolVector<Vector2i>::Write w = array.write();
+
+	for (int i = 0; i < p_array.size(); ++i) {
+		w[i] = xform_inv(r[i]);
+	}
+	return array;
+}
+
+#line 0
+
+#line 1 "sfw/core/face3.h"
+
+/*************************************************************************/
+/*  face3.h                                                              */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct _NO_DISCARD_CLASS_ Face3 {
+	enum Side {
+		SIDE_OVER,
+		SIDE_UNDER,
+		SIDE_SPANNING,
+		SIDE_COPLANAR
+	};
+
+	Vector3 vertex[3];
+
+	/**
+	 *
+	 * @param p_plane plane used to split the face
+	 * @param p_res array of at least 3 faces, amount used in function return
+	 * @param p_is_point_over array of at least 3 booleans, determining which face is over the plane, amount used in function return
+	 * @param _epsilon constant used for numerical error rounding, to add "thickness" to the plane (so coplanar points can happen)
+	 * @return amount of faces generated by the split, either 0 (means no split possible), 2 or 3
+	 */
+
+	int split_by_plane(const Plane &p_plane, Face3 *p_res, bool *p_is_point_over) const;
+
+	Plane get_plane(ClockDirection p_dir = CLOCKWISE) const;
+	Vector3 get_random_point_inside() const;
+
+	Side get_side_of(const Face3 &p_face, ClockDirection p_clock_dir = CLOCKWISE) const;
+
+	bool is_degenerate() const;
+	real_t get_area() const;
+	real_t get_twice_area_squared() const;
+
+	Vector3 get_median_point() const;
+	Vector3 get_closest_point_to(const Vector3 &p_point) const;
+
+	bool intersects_ray(const Vector3 &p_from, const Vector3 &p_dir, Vector3 *p_intersection = nullptr) const;
+	bool intersects_segment(const Vector3 &p_from, const Vector3 &p_dir, Vector3 *p_intersection = nullptr) const;
+
+	ClockDirection get_clock_dir() const; ///< todo, test if this is returning the proper clockwisity
+
+	void get_support(const Vector3 &p_normal, const Transform &p_transform, Vector3 *p_vertices, int *p_count, int p_max) const;
+	void project_range(const Vector3 &p_normal, const Transform &p_transform, real_t &r_min, real_t &r_max) const;
+
+	AABB get_aabb() const {
+		AABB aabb(vertex[0], Vector3());
+		aabb.expand_to(vertex[1]);
+		aabb.expand_to(vertex[2]);
+		return aabb;
+	}
+
+	bool intersects_aabb(const AABB &p_aabb) const;
+	_FORCE_INLINE_ bool intersects_aabb2(const AABB &p_aabb) const;
+	operator String() const;
+
+	inline Face3() {}
+	inline Face3(const Vector3 &p_v1, const Vector3 &p_v2, const Vector3 &p_v3) {
+		vertex[0] = p_v1;
+		vertex[1] = p_v2;
+		vertex[2] = p_v3;
+	}
+};
+
+inline real_t Face3::get_twice_area_squared() const {
+	Vector3 edge1 = vertex[1] - vertex[0];
+	Vector3 edge2 = vertex[2] - vertex[0];
+	return edge1.cross(edge2).length_squared();
+}
+
+bool Face3::intersects_aabb2(const AABB &p_aabb) const {
+	Vector3 perp = (vertex[0] - vertex[2]).cross(vertex[0] - vertex[1]);
+
+	Vector3 half_extents = p_aabb.size * 0.5f;
+	Vector3 ofs = p_aabb.position + half_extents;
+
+	Vector3 sup = Vector3(
+			(perp.x > 0) ? -half_extents.x : half_extents.x,
+			(perp.y > 0) ? -half_extents.y : half_extents.y,
+			(perp.z > 0) ? -half_extents.z : half_extents.z);
+
+	real_t d = perp.dot(vertex[0]);
+	real_t dist_a = perp.dot(ofs + sup) - d;
+	real_t dist_b = perp.dot(ofs - sup) - d;
+
+	if (dist_a * dist_b > 0) {
+		return false; //does not intersect the plane
+	}
+
+#define TEST_AXIS(m_ax)                                            \
+	{                                                              \
+		real_t aabb_min = p_aabb.position.m_ax;                    \
+		real_t aabb_max = p_aabb.position.m_ax + p_aabb.size.m_ax; \
+		real_t tri_min, tri_max;                                   \
+		for (int i = 0; i < 3; i++) {                              \
+			if (i == 0 || vertex[i].m_ax > tri_max)                \
+				tri_max = vertex[i].m_ax;                          \
+			if (i == 0 || vertex[i].m_ax < tri_min)                \
+				tri_min = vertex[i].m_ax;                          \
+		}                                                          \
+                                                                   \
+		if (tri_max < aabb_min || aabb_max < tri_min)              \
+			return false;                                          \
+	}
+
+	TEST_AXIS(x);
+	TEST_AXIS(y);
+	TEST_AXIS(z);
+
+#undef TEST_AXIS
+
+	Vector3 edge_norms[3] = {
+		vertex[0] - vertex[1],
+		vertex[1] - vertex[2],
+		vertex[2] - vertex[0],
+	};
+
+	for (int i = 0; i < 12; i++) {
+		Vector3 from, to;
+		switch (i) {
+			case 0: {
+				from = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y, p_aabb.position.z);
+				to = Vector3(p_aabb.position.x, p_aabb.position.y, p_aabb.position.z);
+			} break;
+			case 1: {
+				from = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y, p_aabb.position.z + p_aabb.size.z);
+				to = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y, p_aabb.position.z);
+			} break;
+			case 2: {
+				from = Vector3(p_aabb.position.x, p_aabb.position.y, p_aabb.position.z + p_aabb.size.z);
+				to = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y, p_aabb.position.z + p_aabb.size.z);
+
+			} break;
+			case 3: {
+				from = Vector3(p_aabb.position.x, p_aabb.position.y, p_aabb.position.z);
+				to = Vector3(p_aabb.position.x, p_aabb.position.y, p_aabb.position.z + p_aabb.size.z);
+
+			} break;
+			case 4: {
+				from = Vector3(p_aabb.position.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z);
+				to = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z);
+			} break;
+			case 5: {
+				from = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z);
+				to = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z + p_aabb.size.z);
+			} break;
+			case 6: {
+				from = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z + p_aabb.size.z);
+				to = Vector3(p_aabb.position.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z + p_aabb.size.z);
+
+			} break;
+			case 7: {
+				from = Vector3(p_aabb.position.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z + p_aabb.size.z);
+				to = Vector3(p_aabb.position.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z);
+
+			} break;
+			case 8: {
+				from = Vector3(p_aabb.position.x, p_aabb.position.y, p_aabb.position.z + p_aabb.size.z);
+				to = Vector3(p_aabb.position.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z + p_aabb.size.z);
+
+			} break;
+			case 9: {
+				from = Vector3(p_aabb.position.x, p_aabb.position.y, p_aabb.position.z);
+				to = Vector3(p_aabb.position.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z);
+
+			} break;
+			case 10: {
+				from = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y, p_aabb.position.z);
+				to = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z);
+
+			} break;
+			case 11: {
+				from = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y, p_aabb.position.z + p_aabb.size.z);
+				to = Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z + p_aabb.size.z);
+
+			} break;
+		}
+
+		Vector3 e1 = from - to;
+		for (int j = 0; j < 3; j++) {
+			Vector3 e2 = edge_norms[j];
+
+			Vector3 axis = vec3_cross(e1, e2);
+
+			if (axis.length_squared() < 0.0001f) {
+				continue; // coplanar
+			}
+			//axis.normalize();
+
+			Vector3 sup2 = Vector3(
+					(axis.x > 0) ? -half_extents.x : half_extents.x,
+					(axis.y > 0) ? -half_extents.y : half_extents.y,
+					(axis.z > 0) ? -half_extents.z : half_extents.z);
+
+			real_t maxB = axis.dot(ofs + sup2);
+			real_t minB = axis.dot(ofs - sup2);
+			if (minB > maxB) {
+				SWAP(maxB, minB);
+			}
+
+			real_t minT = 1e20, maxT = -1e20;
+			for (int k = 0; k < 3; k++) {
+				real_t vert_d = axis.dot(vertex[k]);
+
+				if (vert_d > maxT) {
+					maxT = vert_d;
+				}
+
+				if (vert_d < minT) {
+					minT = vert_d;
+				}
+			}
+
+			if (maxB < minT || maxT < minB) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+#line 0
+
+#line 1 "sfw/core/transform.h"
+
+/*************************************************************************/
+/*  transform.h                                                          */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+struct _NO_DISCARD_CLASS_ Transform {
+	Basis basis;
+	Vector3 origin;
+
+	void invert();
+	Transform inverse() const;
+
+	void affine_invert();
+	Transform affine_inverse() const;
+
+	Transform rotated(const Vector3 &p_axis, real_t p_phi) const;
+	Transform rotated_local(const Vector3 &p_axis, real_t p_phi) const;
+
+	void rotate(const Vector3 &p_axis, real_t p_phi);
+	void rotate_local(const Vector3 &p_axis, real_t p_phi);
+	void rotate_basis(const Vector3 &p_axis, real_t p_phi);
+
+	void set_look_at(const Vector3 &p_eye, const Vector3 &p_target, const Vector3 &p_up);
+	Transform looking_at(const Vector3 &p_target, const Vector3 &p_up) const;
+
+	void scale(const Vector3 &p_scale);
+	Transform scaled(const Vector3 &p_scale) const;
+	Transform scaled_local(const Vector3 &p_scale) const;
+	void scale_basis(const Vector3 &p_scale);
+
+	void translate_local(real_t p_tx, real_t p_ty, real_t p_tz);
+	void translate_local(const Vector3 &p_translation);
+	void translate_localr(real_t p_tx, real_t p_ty, real_t p_tz);
+	void translate_localv(const Vector3 &p_translation);
+	Transform translated(const Vector3 &p_translation) const;
+	Transform translated_local(const Vector3 &p_translation) const;
+
+	const Basis &get_basis() const { return basis; }
+	void set_basis(const Basis &p_basis) { basis = p_basis; }
+
+	const Vector3 &get_origin() const { return origin; }
+	void set_origin(const Vector3 &p_origin) { origin = p_origin; }
+
+	void orthonormalize();
+	Transform orthonormalized() const;
+	void orthogonalize();
+	Transform orthogonalized() const;
+	bool is_equal_approx(const Transform &p_transform) const;
+
+	bool operator==(const Transform &p_transform) const;
+	bool operator!=(const Transform &p_transform) const;
+
+	_FORCE_INLINE_ Vector3 xform(const Vector3 &p_vector) const;
+	_FORCE_INLINE_ Vector3i xform(const Vector3i &p_vector) const;
+	_FORCE_INLINE_ AABB xform(const AABB &p_aabb) const;
+	_FORCE_INLINE_ PoolVector<Vector3> xform(const PoolVector<Vector3> &p_array) const;
+	_FORCE_INLINE_ PoolVector<Vector3i> xform(const PoolVector<Vector3i> &p_array) const;
+
+	// NOTE: These are UNSAFE with non-uniform scaling, and will produce incorrect results.
+	// They use the transpose.
+	// For safe inverse transforms, xform by the affine_inverse.
+	_FORCE_INLINE_ Vector3 xform_inv(const Vector3 &p_vector) const;
+	_FORCE_INLINE_ Vector3i xform_inv(const Vector3i &p_vector) const;
+	_FORCE_INLINE_ AABB xform_inv(const AABB &p_aabb) const;
+	_FORCE_INLINE_ PoolVector<Vector3> xform_inv(const PoolVector<Vector3> &p_array) const;
+	_FORCE_INLINE_ PoolVector<Vector3i> xform_inv(const PoolVector<Vector3i> &p_array) const;
+
+	// Safe with non-uniform scaling (uses affine_inverse).
+	_FORCE_INLINE_ Plane xform(const Plane &p_plane) const;
+	_FORCE_INLINE_ Plane xform_inv(const Plane &p_plane) const;
+
+	// These fast versions use precomputed affine inverse, and should be used in bottleneck areas where
+	// multiple planes are to be transformed.
+	_FORCE_INLINE_ Plane xform_fast(const Plane &p_plane, const Basis &p_basis_inverse_transpose) const;
+	static _FORCE_INLINE_ Plane xform_inv_fast(const Plane &p_plane, const Transform &p_inverse, const Basis &p_basis_transpose);
+
+	void operator*=(const Transform &p_transform);
+	Transform operator*(const Transform &p_transform) const;
+	void operator*=(const real_t p_val);
+	Transform operator*(const real_t p_val) const;
+
+	Transform spherical_interpolate_with(const Transform &p_transform, real_t p_c) const;
+	Transform interpolate_with(const Transform &p_transform, real_t p_c) const;
+
+	_FORCE_INLINE_ Transform inverse_xform(const Transform &t) const {
+		Vector3 v = t.origin - origin;
+		return Transform(basis.transpose_xform(t.basis),
+				basis.xform(v));
+	}
+
+	void set(real_t xx, real_t xy, real_t xz, real_t yx, real_t yy, real_t yz, real_t zx, real_t zy, real_t zz, real_t tx, real_t ty, real_t tz) {
+		basis.set(xx, xy, xz, yx, yy, yz, zx, zy, zz);
+		origin.x = tx;
+		origin.y = ty;
+		origin.z = tz;
+	}
+
+	operator String() const;
+
+	Transform(real_t xx, real_t xy, real_t xz, real_t yx, real_t yy, real_t yz, real_t zx, real_t zy, real_t zz, real_t ox, real_t oy, real_t oz);
+	Transform(const Basis &p_basis, const Vector3 &p_origin = Vector3());
+	Transform(const Vector3 &p_x, const Vector3 &p_y, const Vector3 &p_z, const Vector3 &p_origin);
+	Transform() {}
+};
+
+_FORCE_INLINE_ Vector3 Transform::xform(const Vector3 &p_vector) const {
+	return Vector3(
+			basis[0].dot(p_vector) + origin.x,
+			basis[1].dot(p_vector) + origin.y,
+			basis[2].dot(p_vector) + origin.z);
+}
+
+_FORCE_INLINE_ Vector3 Transform::xform_inv(const Vector3 &p_vector) const {
+	Vector3 v = p_vector - origin;
+
+	return Vector3(
+			(basis.rows[0][0] * v.x) + (basis.rows[1][0] * v.y) + (basis.rows[2][0] * v.z),
+			(basis.rows[0][1] * v.x) + (basis.rows[1][1] * v.y) + (basis.rows[2][1] * v.z),
+			(basis.rows[0][2] * v.x) + (basis.rows[1][2] * v.y) + (basis.rows[2][2] * v.z));
+}
+
+_FORCE_INLINE_ Vector3i Transform::xform(const Vector3i &p_vector) const {
+	return Vector3i(
+			basis[0].dot(p_vector) + origin.x,
+			basis[1].dot(p_vector) + origin.y,
+			basis[2].dot(p_vector) + origin.z);
+}
+
+_FORCE_INLINE_ Vector3i Transform::xform_inv(const Vector3i &p_vector) const {
+	Vector3i v = p_vector;
+	v.x -= origin.x;
+	v.y -= origin.y;
+	v.z -= origin.z;
+
+	return Vector3i(
+			(basis.rows[0][0] * v.x) + (basis.rows[1][0] * v.y) + (basis.rows[2][0] * v.z),
+			(basis.rows[0][1] * v.x) + (basis.rows[1][1] * v.y) + (basis.rows[2][1] * v.z),
+			(basis.rows[0][2] * v.x) + (basis.rows[1][2] * v.y) + (basis.rows[2][2] * v.z));
+}
+
+// Neither the plane regular xform or xform_inv are particularly efficient,
+// as they do a basis inverse. For xforming a large number
+// of planes it is better to pre-calculate the inverse transpose basis once
+// and reuse it for each plane, by using the 'fast' version of the functions.
+_FORCE_INLINE_ Plane Transform::xform(const Plane &p_plane) const {
+	Basis b = basis.inverse();
+	b.transpose();
+	return xform_fast(p_plane, b);
+}
+
+_FORCE_INLINE_ Plane Transform::xform_inv(const Plane &p_plane) const {
+	Transform inv = affine_inverse();
+	Basis basis_transpose = basis.transposed();
+	return xform_inv_fast(p_plane, inv, basis_transpose);
+}
+
+_FORCE_INLINE_ AABB Transform::xform(const AABB &p_aabb) const {
+	/* http://dev.theomader.com/transform-bounding-boxes/ */
+	Vector3 min = p_aabb.position;
+	Vector3 max = p_aabb.position + p_aabb.size;
+	Vector3 tmin, tmax;
+	for (int i = 0; i < 3; i++) {
+		tmin[i] = tmax[i] = origin[i];
+		for (int j = 0; j < 3; j++) {
+			real_t e = basis[i][j] * min[j];
+			real_t f = basis[i][j] * max[j];
+			if (e < f) {
+				tmin[i] += e;
+				tmax[i] += f;
+			} else {
+				tmin[i] += f;
+				tmax[i] += e;
+			}
+		}
+	}
+	AABB r_aabb;
+	r_aabb.position = tmin;
+	r_aabb.size = tmax - tmin;
+	return r_aabb;
+}
+
+_FORCE_INLINE_ AABB Transform::xform_inv(const AABB &p_aabb) const {
+	/* define vertices */
+	Vector3 vertices[8] = {
+		Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z + p_aabb.size.z),
+		Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z),
+		Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y, p_aabb.position.z + p_aabb.size.z),
+		Vector3(p_aabb.position.x + p_aabb.size.x, p_aabb.position.y, p_aabb.position.z),
+		Vector3(p_aabb.position.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z + p_aabb.size.z),
+		Vector3(p_aabb.position.x, p_aabb.position.y + p_aabb.size.y, p_aabb.position.z),
+		Vector3(p_aabb.position.x, p_aabb.position.y, p_aabb.position.z + p_aabb.size.z),
+		Vector3(p_aabb.position.x, p_aabb.position.y, p_aabb.position.z)
+	};
+
+	AABB ret;
+
+	ret.position = xform_inv(vertices[0]);
+
+	for (int i = 1; i < 8; i++) {
+		ret.expand_to(xform_inv(vertices[i]));
+	}
+
+	return ret;
+}
+
+PoolVector<Vector3> Transform::xform(const PoolVector<Vector3> &p_array) const {
+	PoolVector<Vector3> array;
+	array.resize(p_array.size());
+
+	PoolVector<Vector3>::Read r = p_array.read();
+	PoolVector<Vector3>::Write w = array.write();
+
+	for (int i = 0; i < p_array.size(); ++i) {
+		w[i] = xform(r[i]);
+	}
+	return array;
+}
+
+PoolVector<Vector3i> Transform::xform(const PoolVector<Vector3i> &p_array) const {
+	PoolVector<Vector3i> array;
+	array.resize(p_array.size());
+
+	PoolVector<Vector3i>::Read r = p_array.read();
+	PoolVector<Vector3i>::Write w = array.write();
+
+	for (int i = 0; i < p_array.size(); ++i) {
+		w[i] = xform(r[i]);
+	}
+	return array;
+}
+
+PoolVector<Vector3> Transform::xform_inv(const PoolVector<Vector3> &p_array) const {
+	PoolVector<Vector3> array;
+	array.resize(p_array.size());
+
+	PoolVector<Vector3>::Read r = p_array.read();
+	PoolVector<Vector3>::Write w = array.write();
+
+	for (int i = 0; i < p_array.size(); ++i) {
+		w[i] = xform_inv(r[i]);
+	}
+	return array;
+}
+
+PoolVector<Vector3i> Transform::xform_inv(const PoolVector<Vector3i> &p_array) const {
+	PoolVector<Vector3i> array;
+	array.resize(p_array.size());
+
+	PoolVector<Vector3i>::Read r = p_array.read();
+	PoolVector<Vector3i>::Write w = array.write();
+
+	for (int i = 0; i < p_array.size(); ++i) {
+		w[i] = xform_inv(r[i]);
+	}
+	return array;
+}
+
+_FORCE_INLINE_ Plane Transform::xform_fast(const Plane &p_plane, const Basis &p_basis_inverse_transpose) const {
+	// Transform a single point on the plane.
+	Vector3 point = p_plane.normal * p_plane.d;
+	point = xform(point);
+
+	// Use inverse transpose for correct normals with non-uniform scaling.
+	Vector3 normal = p_basis_inverse_transpose.xform(p_plane.normal);
+	normal.normalize();
+
+	real_t d = normal.dot(point);
+	return Plane(normal, d);
+}
+
+_FORCE_INLINE_ Plane Transform::xform_inv_fast(const Plane &p_plane, const Transform &p_inverse, const Basis &p_basis_transpose) {
+	// Transform a single point on the plane.
+	Vector3 point = p_plane.normal * p_plane.d;
+	point = p_inverse.xform(point);
+
+	// Note that instead of precalculating the transpose, an alternative
+	// would be to use the transpose for the basis transform.
+	// However that would be less SIMD friendly (requiring a swizzle).
+	// So the cost is one extra precalced value in the calling code.
+	// This is probably worth it, as this could be used in bottleneck areas. And
+	// where it is not a bottleneck, the non-fast method is fine.
+
+	// Use transpose for correct normals with non-uniform scaling.
+	Vector3 normal = p_basis_transpose.xform(p_plane.normal);
+	normal.normalize();
+
+	real_t d = normal.dot(point);
+	return Plane(normal, d);
+}
+
+#line 0
+
+#line 1 "sfw/core/hashfuncs.h"
 
 /*************************************************************************/
 /*  hashfuncs.h                                                          */
@@ -10776,11 +14907,58 @@ struct HashMapHasherDefault {
 		h = hash_murmur3_one_32(p_vec.y, h);
 		return hash_fmix32(h);
 	}
+	static _FORCE_INLINE_ uint32_t hash(const Vector3i &p_vec) {
+		uint32_t h = hash_murmur3_one_32(p_vec.x);
+		h = hash_murmur3_one_32(p_vec.y, h);
+		h = hash_murmur3_one_32(p_vec.z, h);
+		return hash_fmix32(h);
+	}
+	static _FORCE_INLINE_ uint32_t hash(const Vector4i &p_vec) {
+		uint32_t h = hash_murmur3_one_32(p_vec.x);
+		h = hash_murmur3_one_32(p_vec.y, h);
+		h = hash_murmur3_one_32(p_vec.z, h);
+		h = hash_murmur3_one_32(p_vec.w, h);
+		return hash_fmix32(h);
+	}
+	static _FORCE_INLINE_ uint32_t hash(const Vector2 &p_vec) {
+		uint32_t h = hash_murmur3_one_real(p_vec.x);
+		h = hash_murmur3_one_real(p_vec.y, h);
+		return hash_fmix32(h);
+	}
+	static _FORCE_INLINE_ uint32_t hash(const Vector3 &p_vec) {
+		uint32_t h = hash_murmur3_one_real(p_vec.x);
+		h = hash_murmur3_one_real(p_vec.y, h);
+		h = hash_murmur3_one_real(p_vec.z, h);
+		return hash_fmix32(h);
+	}
+	static _FORCE_INLINE_ uint32_t hash(const Vector4 &p_vec) {
+		uint32_t h = hash_murmur3_one_real(p_vec.x);
+		h = hash_murmur3_one_real(p_vec.y, h);
+		h = hash_murmur3_one_real(p_vec.z, h);
+		h = hash_murmur3_one_real(p_vec.w, h);
+		return hash_fmix32(h);
+	}
 	static _FORCE_INLINE_ uint32_t hash(const Rect2i &p_rect) {
 		uint32_t h = hash_murmur3_one_32(p_rect.position.x);
 		h = hash_murmur3_one_32(p_rect.position.y, h);
 		h = hash_murmur3_one_32(p_rect.size.x, h);
 		h = hash_murmur3_one_32(p_rect.size.y, h);
+		return hash_fmix32(h);
+	}
+	static _FORCE_INLINE_ uint32_t hash(const Rect2 &p_rect) {
+		uint32_t h = hash_murmur3_one_real(p_rect.position.x);
+		h = hash_murmur3_one_real(p_rect.position.y, h);
+		h = hash_murmur3_one_real(p_rect.size.x, h);
+		h = hash_murmur3_one_real(p_rect.size.y, h);
+		return hash_fmix32(h);
+	}
+	static _FORCE_INLINE_ uint32_t hash(const AABB &p_aabb) {
+		uint32_t h = hash_murmur3_one_real(p_aabb.position.x);
+		h = hash_murmur3_one_real(p_aabb.position.y, h);
+		h = hash_murmur3_one_real(p_aabb.position.z, h);
+		h = hash_murmur3_one_real(p_aabb.size.x, h);
+		h = hash_murmur3_one_real(p_aabb.size.y, h);
+		h = hash_murmur3_one_real(p_aabb.size.z, h);
 		return hash_fmix32(h);
 	}
 };
@@ -10803,6 +14981,20 @@ template <>
 struct HashMapComparatorDefault<double> {
 	static bool compare(const double &p_lhs, const double &p_rhs) {
 		return (p_lhs == p_rhs) || (Math::is_nan(p_lhs) && Math::is_nan(p_rhs));
+	}
+};
+
+template <>
+struct HashMapComparatorDefault<Vector2> {
+	static bool compare(const Vector2 &p_lhs, const Vector2 &p_rhs) {
+		return ((p_lhs.x == p_rhs.x) || (Math::is_nan(p_lhs.x) && Math::is_nan(p_rhs.x))) && ((p_lhs.y == p_rhs.y) || (Math::is_nan(p_lhs.y) && Math::is_nan(p_rhs.y)));
+	}
+};
+
+template <>
+struct HashMapComparatorDefault<Vector3> {
+	static bool compare(const Vector3 &p_lhs, const Vector3 &p_rhs) {
+		return ((p_lhs.x == p_rhs.x) || (Math::is_nan(p_lhs.x) && Math::is_nan(p_rhs.x))) && ((p_lhs.y == p_rhs.y) || (Math::is_nan(p_lhs.y) && Math::is_nan(p_rhs.y))) && ((p_lhs.z == p_rhs.z) || (Math::is_nan(p_lhs.z) && Math::is_nan(p_rhs.z)));
 	}
 };
 
@@ -10904,7 +15096,7 @@ static _FORCE_INLINE_ uint32_t fastmod(const uint32_t n, const uint64_t c, const
 
 #line 0
 
-#line 1 "sfwl/core/pair.h"
+#line 1 "sfw/core/pair.h"
 
 /*************************************************************************/
 /*  pair.h                                                               */
@@ -10991,7 +15183,7 @@ struct KeyValueSort {
 
 #line 0
 
-#line 1 "sfwl/core/og_hash_map.h"
+#line 1 "sfw/core/og_hash_map.h"
 
 /*************************************************************************/
 /*  og_hash_map.h                                                        */
@@ -11563,7 +15755,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/ordered_hash_map.h"
+#line 1 "sfw/core/ordered_hash_map.h"
 
 /*************************************************************************/
 /*  ordered_hash_map.h                                                   */
@@ -11844,7 +16036,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/hash_map.h"
+#line 1 "sfw/core/hash_map.h"
 
 /*************************************************************************/
 /*  hash_map.h                                                           */
@@ -12478,7 +16670,7 @@ private:
 
 #line 0
 
-#line 1 "sfwl/core/hash_set.h"
+#line 1 "sfw/core/hash_set.h"
 
 /*************************************************************************/
 /*  hash_set.h                                                           */
@@ -12953,7 +17145,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/file_access.h"
+#line 1 "sfw/core/file_access.h"
 
 /*************************************************************************/
 /*  file_access.h                                                        */
@@ -13149,7 +17341,7 @@ struct FileAccessRef {
 
 #line 0
 
-#line 1 "sfwl/core/dir_access.h"
+#line 1 "sfw/core/dir_access.h"
 
 /*************************************************************************/
 /*  dir_access.h                                                         */
@@ -13287,7 +17479,7 @@ struct DirAccessRef {
 
 #line 0
 
-#line 1 "sfwl/core/inet_address.h"
+#line 1 "sfw/core/inet_address.h"
 //Based on:
 
 // Copyright 2010, Shuo Chen.  All rights reserved.
@@ -13369,7 +17561,7 @@ private:
 
 #line 0
 
-#line 1 "sfwl/core/socket.h"
+#line 1 "sfw/core/socket.h"
 
 //Based on:
 
@@ -13430,7 +17622,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/core/sub_process.h"
+#line 1 "sfw/core/sub_process.h"
 
 /*************************************************************************/
 /*  sub_process.h                                                        */
@@ -13570,7 +17762,7 @@ struct SubProcessRef {
 
 #line 0
 
-#line 1 "sfwl/core/sfw_core.h"
+#line 1 "sfw/core/sfw_core.h"
 
 class SFWCore {
 public:
@@ -13585,7 +17777,7 @@ protected:
 
 //===================  OBJECT SECTION  ===================
 
-#line 1 "sfwl/object/ref_ptr.h"
+#line 1 "sfw/object/ref_ptr.h"
 
 /*************************************************************************/
 /*  ref_ptr.h                                                            */
@@ -13619,7 +17811,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/object/object_id.h"
+#line 1 "sfw/object/object_id.h"
 
 /*************************************************************************/
 /*  object_id.h                                                          */
@@ -13630,7 +17822,7 @@ typedef uint64_t ObjectID;
 
 #line 0
 
-#line 1 "sfwl/object/core_string_names.h"
+#line 1 "sfw/object/core_string_names.h"
 
 /*************************************************************************/
 /*  core_string_names.h                                                  */
@@ -13694,7 +17886,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/object/array.h"
+#line 1 "sfw/object/array.h"
 
 /*************************************************************************/
 /*  array.h                                                              */
@@ -13782,7 +17974,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/object/dictionary.h"
+#line 1 "sfw/object/dictionary.h"
 
 /*************************************************************************/
 /*  dictionary.h                                                         */
@@ -13848,7 +18040,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/object/variant.h"
+#line 1 "sfw/object/variant.h"
 
 /*************************************************************************/
 /*  variant.h                                                            */
@@ -13862,7 +18054,12 @@ typedef PoolVector<uint8_t> PoolByteArray;
 typedef PoolVector<int> PoolIntArray;
 typedef PoolVector<real_t> PoolRealArray;
 typedef PoolVector<String> PoolStringArray;
+typedef PoolVector<Vector2> PoolVector2Array;
 typedef PoolVector<Vector2i> PoolVector2iArray;
+typedef PoolVector<Vector3> PoolVector3Array;
+typedef PoolVector<Vector3i> PoolVector3iArray;
+typedef PoolVector<Vector4> PoolVector4Array;
+typedef PoolVector<Vector4i> PoolVector4iArray;
 typedef PoolVector<Color> PoolColorArray;
 
 // Temporary workaround until c++11 alignas()
@@ -13893,8 +18090,22 @@ public:
 		STRING,
 
 		// math types
+		RECT2,
 		RECT2I,
+		VECTOR2,
 		VECTOR2I,
+		VECTOR3,
+		VECTOR3I,
+		VECTOR4,
+		VECTOR4I,
+
+		PLANE,
+		QUATERNION,
+		AABB,
+		BASIS,
+		TRANSFORM,
+		TRANSFORM2D,
+		PROJECTION,
 
 		// misc types
 		COLOR,
@@ -13908,10 +18119,15 @@ public:
 		POOL_INT_ARRAY,
 		POOL_REAL_ARRAY,
 		POOL_STRING_ARRAY,
+		POOL_VECTOR2_ARRAY,
 		POOL_VECTOR2I_ARRAY,
+		POOL_VECTOR3_ARRAY,
+		POOL_VECTOR3I_ARRAY,
+		POOL_VECTOR4_ARRAY,
+		POOL_VECTOR4I_ARRAY,
 		POOL_COLOR_ARRAY,
 
-		VARIANT_MAX
+		VARIANT_MAX // 38
 
 	};
 
@@ -13942,6 +18158,11 @@ private:
 		bool _bool;
 		int64_t _int;
 		double _real;
+		Transform2D *_transform2d;
+		::AABB *_aabb;
+		Basis *_basis;
+		Transform *_transform;
+		Projection *_projection;
 		void *_ptr; //generic pointer
 		uint8_t _mem[sizeof(ObjData) > (sizeof(real_t) * 4) ? sizeof(ObjData) : (sizeof(real_t) * 4)];
 	} _data GCC_ALIGNED_8;
@@ -13986,8 +18207,21 @@ public:
 	operator double() const;
 	operator String() const;
 	operator StringName() const;
+	operator Rect2() const;
 	operator Rect2i() const;
+	operator Vector2() const;
 	operator Vector2i() const;
+	operator Vector3() const;
+	operator Vector3i() const;
+	operator Vector4() const;
+	operator Vector4i() const;
+	operator Plane() const;
+	operator ::AABB() const;
+	operator Quaternion() const;
+	operator Basis() const;
+	operator Transform() const;
+	operator Transform2D() const;
+	operator Projection() const;
 
 	operator Color() const;
 	operator RefPtr() const;
@@ -14001,8 +18235,15 @@ public:
 	operator PoolVector<int>() const;
 	operator PoolVector<real_t>() const;
 	operator PoolVector<String>() const;
+	operator PoolVector<Vector2>() const;
 	operator PoolVector<Vector2i>() const;
+	operator PoolVector<Vector3>() const;
+	operator PoolVector<Vector3i>() const;
+	operator PoolVector<Vector4>() const;
+	operator PoolVector<Vector4i>() const;
 	operator PoolVector<Color>() const;
+	operator PoolVector<Plane>() const;
+	operator PoolVector<Face3>() const;
 
 	operator Vector<Variant>() const;
 	operator Vector<uint8_t>() const;
@@ -14010,8 +18251,15 @@ public:
 	operator Vector<real_t>() const;
 	operator Vector<String>() const;
 	operator Vector<StringName>() const;
+	operator Vector<Vector3>() const;
+	operator Vector<Vector3i>() const;
+	operator Vector<Vector4>() const;
+	operator Vector<Vector4i>() const;
 	operator Vector<Color>() const;
+	operator Vector<Vector2>() const;
 	operator Vector<Vector2i>() const;
+
+	operator Vector<Plane>() const;
 
 	// some core type enums to convert to
 	operator Margin() const;
@@ -14038,20 +18286,40 @@ public:
 	Variant(const StringName &p_string);
 	Variant(const char *const p_cstring);
 	Variant(const CharType *p_wstring);
+	Variant(const Vector2 &p_vector2);
 	Variant(const Vector2i &p_vector2);
+	Variant(const Rect2 &p_rect2);
 	Variant(const Rect2i &p_rect2);
+	Variant(const Vector3 &p_vector3);
+	Variant(const Vector3i &p_vector3);
+	Variant(const Vector4 &p_vector4);
+	Variant(const Vector4i &p_vector4);
+	Variant(const Projection &p_projection);
+	Variant(const Plane &p_plane);
+	Variant(const ::AABB &p_aabb);
+	Variant(const Quaternion &p_quat);
+	Variant(const Basis &p_matrix);
+	Variant(const Transform2D &p_transform);
+	Variant(const Transform &p_transform);
 	Variant(const Color &p_color);
 	Variant(const RefPtr &p_resource);
 	Variant(const Object *p_object);
 	Variant(const Dictionary &p_dictionary);
 
 	Variant(const Array &p_array);
+	Variant(const PoolVector<Plane> &p_array);
 	Variant(const PoolVector<uint8_t> &p_raw_array);
 	Variant(const PoolVector<int> &p_int_array);
 	Variant(const PoolVector<real_t> &p_real_array);
 	Variant(const PoolVector<String> &p_string_array);
+	Variant(const PoolVector<Vector3> &p_vector3_array);
+	Variant(const PoolVector<Vector3i> &p_vector3_array);
 	Variant(const PoolVector<Color> &p_color_array);
+	Variant(const PoolVector<Face3> &p_face_array);
+	Variant(const PoolVector<Vector2> &p_vector2_array);
 	Variant(const PoolVector<Vector2i> &p_vector2_array);
+	Variant(const PoolVector<Vector4> &p_vector4_array);
+	Variant(const PoolVector<Vector4i> &p_vector4_array);
 
 	Variant(const Vector<Variant> &p_array);
 	Variant(const Vector<uint8_t> &p_array);
@@ -14059,8 +18327,14 @@ public:
 	Variant(const Vector<real_t> &p_array);
 	Variant(const Vector<String> &p_array);
 	Variant(const Vector<StringName> &p_array);
+	Variant(const Vector<Vector3> &p_array);
+	Variant(const Vector<Vector3i> &p_array);
 	Variant(const Vector<Color> &p_array);
+	Variant(const Vector<Plane> &p_array);
+	Variant(const Vector<Vector2> &p_array);
 	Variant(const Vector<Vector2i> &p_array);
+	Variant(const Vector<Vector4> &p_array);
+	Variant(const Vector<Vector4i> &p_array);
 
 	// If this changes the table in variant_op must be updated
 	enum Operator {
@@ -14185,7 +18459,7 @@ String vformat(const String &p_text, const Variant &p1 = Variant(), const Varian
 
 #line 0
 
-#line 1 "sfwl/object/psignal.h"
+#line 1 "sfw/object/psignal.h"
 
 class Signal {
 public:
@@ -14350,7 +18624,7 @@ bool Signal::is_connected(T *obj, void (*func)(T *, Signal *)) {
 
 #line 0
 
-#line 1 "sfwl/object/object.h"
+#line 1 "sfw/object/object.h"
 
 /*************************************************************************/
 /*  object.h                                                             */
@@ -14621,7 +18895,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/object/object_rc.h"
+#line 1 "sfw/object/object_rc.h"
 
 /*************************************************************************/
 /*  object_rc.h                                                          */
@@ -14668,7 +18942,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/object/reference.h"
+#line 1 "sfw/object/reference.h"
 
 /*************************************************************************/
 /*  reference.h                                                          */
@@ -14931,7 +19205,7 @@ public:
 
 #line 0
 
-#line 1 "sfwl/object/resource.h"
+#line 1 "sfw/object/resource.h"
 
 class Resource : public Reference {
 	SFW_OBJECT(Resource, Reference);
