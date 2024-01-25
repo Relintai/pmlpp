@@ -16,47 +16,6 @@ def can_build():
     if os.name != "posix" or sys.platform == "darwin":
         return False
 
-    # Check the minimal dependencies
-    x11_error = os.system("pkg-config --version > /dev/null")
-    if x11_error:
-        print("Error: pkg-config not found. Aborting.")
-        return False
-
-    x11_error = os.system("pkg-config x11 --modversion > /dev/null")
-    if x11_error:
-        print("Error: X11 libraries not found. Aborting.")
-        return False
-
-    x11_error = os.system("pkg-config xcursor --modversion > /dev/null")
-    if x11_error:
-        print("Error: Xcursor library not found. Aborting.")
-        return False
-
-    x11_error = os.system("pkg-config xinerama --modversion > /dev/null")
-    if x11_error:
-        print("Error: Xinerama library not found. Aborting.")
-        return False
-
-    x11_error = os.system("pkg-config xext --modversion > /dev/null")
-    if x11_error:
-        print("Error: Xext library not found. Aborting.")
-        return False
-
-    x11_error = os.system("pkg-config xrandr --modversion > /dev/null")
-    if x11_error:
-        print("Error: XrandR library not found. Aborting.")
-        return False
-
-    x11_error = os.system("pkg-config xrender --modversion > /dev/null")
-    if x11_error:
-        print("Error: XRender library not found. Aborting.")
-        return False
-
-    x11_error = os.system("pkg-config xi --modversion > /dev/null")
-    if x11_error:
-        print("Error: Xi library not found. Aborting.")
-        return False
-
     return True
 
 
@@ -73,11 +32,8 @@ def get_opts():
         BoolVariable("use_lsan", "Use LLVM/GCC compiler leak sanitizer (LSAN))", False),
         BoolVariable("use_tsan", "Use LLVM/GCC compiler thread sanitizer (TSAN))", False),
         BoolVariable("use_msan", "Use LLVM/GCC compiler memory sanitizer (MSAN))", False),
-        BoolVariable("pulseaudio", "Detect and use PulseAudio", True),
-        BoolVariable("udev", "Use udev for gamepad connection callbacks", True),
         BoolVariable("debug_symbols", "Add debugging symbols to release/release_debug builds", True),
         BoolVariable("separate_debug_symbols", "Create a separate file containing debugging symbols", False),
-        BoolVariable("touch", "Enable touch events", True),
         BoolVariable("execinfo", "Use libexecinfo on systems where glibc is not available", False),
     ]
 
@@ -251,8 +207,6 @@ def configure(env):
 
     env.Prepend(CPPPATH=["#platform/x11"])
     env.Append(CPPDEFINES=["X11_ENABLED", "UNIX_ENABLED", ("_FILE_OFFSET_BITS", 64)])
-
-    env.ParseConfig("pkg-config gl --cflags --libs")
 
     env.Append(LIBS=["pthread"])
 
