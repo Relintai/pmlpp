@@ -645,8 +645,6 @@ if ARGUMENTS.get('pmlpp_build_tests', 'yes') == 'no':
     module_env.pmlpp_build_tests = False
 
 sources = [
-    "register_types.cpp",
-
     "lin_alg/mlpp_vector.cpp",
     "lin_alg/mlpp_matrix.cpp",
     "lin_alg/mlpp_tensor3.cpp",

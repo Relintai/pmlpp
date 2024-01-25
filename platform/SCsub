@@ -7,6 +7,7 @@ Import("env")
 env.platform_sources = []
 
 env.add_source_files(env.platform_sources, "sfw.cpp")
+env.add_source_files(env.platform_sources, "image.cpp")
 
 lib = env.add_library("platform", env.platform_sources)
 env.Prepend(LIBS=[lib])

@@ -33,6 +33,7 @@
 
 #ifdef USING_SFW
 #include "sfw.h"
+#include "image.h"
 #else
 
 #include "core/math/math_defs.h"
