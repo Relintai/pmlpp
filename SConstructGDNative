@@ -90,10 +90,10 @@ env.Append(CCFLAGS = ['-DGDNATIVE'])
 sources = [
     "gdlibrary.cpp",
 
-    "mlpp/lin_alg/mlpp_vector.cpp",
-    "mlpp/lin_alg/mlpp_matrix.cpp",
-    "mlpp/lin_alg/mlpp_tensor3.cpp",
-    "mlpp/lin_alg/lin_alg.cpp",
+    "lin_alg/mlpp_vector.cpp",
+    "lin_alg/mlpp_matrix.cpp",
+    "lin_alg/mlpp_tensor3.cpp",
+    "lin_alg/lin_alg.cpp",
 
 ]
 

@@ -32,7 +32,7 @@
 
 #include "core/log/logger.h"
 
-#include "../mlpp/lin_alg/mlpp_matrix.h"
+#include "../lin_alg/mlpp_matrix.h"
 
 void MLPPMatrixTests::run_tests() {
 	PLOG_MSG("RUNNIG MLPPMatrixTests!");
