@@ -8,7 +8,7 @@ import platform_osx_builders
 files = [
 ]
 
-prog = env.add_program("#bin/pandemonium", files)
+prog = env.add_program("#bin/pmlpp", files)
 
 if env["debug_symbols"] and env["separate_debug_symbols"]:
     env.AddPostAction(prog, run_in_subprocess(platform_osx_builders.make_debug_osx))

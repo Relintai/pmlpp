@@ -8438,7 +8438,7 @@ String *RLogger::get_string_ptr(const char *p_prefix, const char *p_function, co
 	return s;
 }
 void RLogger::return_string_ptr(String *str) {
-	delete str;
+	memdelete(str);
 }
 
 String *RLogger::get_trace_string_ptr(const int p_default_size) {
@@ -19586,7 +19586,7 @@ Array::~Array() {
 #line 1 "sfw/object/psignal.cpp"
 
 void Signal::connect_static(void (*func)(Signal *)) {
-	StaticSignalEntry *se = new StaticSignalEntry();
+	StaticSignalEntry *se = memnew(StaticSignalEntry());
 	se->func = func;
 
 	entries.push_back(se);

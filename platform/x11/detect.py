@@ -372,6 +372,8 @@ def configure(env):
 
     env.Append(LIBS=["pthread"])
 
+    env.Append(LIBS=["m"])
+
     if platform.system() == "Linux":
         env.Append(LIBS=["dl"])
 
@@ -383,24 +385,6 @@ def configure(env):
 
     if env["execinfo"]:
         env.Append(LIBS=["execinfo"])
-
-    if True:#not env["tools"]:
-        import subprocess
-        import re
-
-        linker_version_str = subprocess.check_output(
-            [env.subst(env["LINK"]), "-Wl,--version"] + env.subst(env["LINKFLAGS"])
-        ).decode("utf-8")
-        gnu_ld_version = re.search("^GNU ld [^$]*(\d+\.\d+)$", linker_version_str, re.MULTILINE)
-        if not gnu_ld_version:
-            print(
-                "Warning: Creating export template binaries enabled for PCK embedding is currently only supported with GNU ld, not gold, LLD or mold."
-            )
-        else:
-            if float(gnu_ld_version.group(1)) >= 2.30:
-                env.Append(LINKFLAGS=["-T", "platform/x11/pck_embed.ld"])
-            else:
-                env.Append(LINKFLAGS=["-T", "platform/x11/pck_embed.legacy.ld"])
 
     ## Cross-compilation
 
@@ -421,3 +405,6 @@ def configure(env):
     else:
         if env["use_llvm"] and platform.system() != "FreeBSD":
             env.Append(LIBS=["atomic"])
+
+
+    env.Append(LIBS=["stdc++"])

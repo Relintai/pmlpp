@@ -9,7 +9,7 @@ import platform_windows_builders
 common_win = [
 ]
 
-prog = env.add_program("#bin/pandemonium", common_win + res_obj, PROGSUFFIX=env["PROGSUFFIX"])
+prog = env.add_program("#bin/pmlpp", common_win + res_obj, PROGSUFFIX=env["PROGSUFFIX"])
 
 # Microsoft Visual Studio Project Generation
 if env["vsproj"]:
