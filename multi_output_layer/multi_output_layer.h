@@ -31,10 +31,14 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/math/math_defs.h"
 #include "core/string/ustring.h"
 
 #include "core/object/reference.h"
+#endif
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"

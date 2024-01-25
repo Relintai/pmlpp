@@ -267,6 +267,10 @@ Help(opts.GenerateHelpText(env_base))
 # add default include paths
 
 env_base.Prepend(CPPPATH=["#"])
+env_base.Prepend(CPPPATH=["#platform"])
+
+# USE SFWL
+env_base.Prepend(CPPDEFINES=["USING_SFW"])
 
 # configure ENV for platform
 env_base.platform_exporters = platform_exporters

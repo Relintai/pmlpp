@@ -33,19 +33,12 @@
 
 //TODO Methods here should probably use error macros in a way where they get disabled in non-tools(?) (maybe release?) builds
 
-#ifndef GDNATIVE
-
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/math/math_defs.h"
 
 #include "core/object/reference.h"
-
-#else
-
-#include "core/defs.h"
-#include "core/math_funcs.h"
-
-#include "gen/resource.h"
-
 #endif
 
 #include "../lin_alg/mlpp_matrix.h"

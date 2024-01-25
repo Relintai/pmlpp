@@ -36,12 +36,16 @@
 //
 //
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/math/math_defs.h"
 
 #include "core/object/reference.h"
 
 #include "core/containers/vector.h"
 #include "core/string/ustring.h"
+#endif
 
 class MLPPVector;
 class MLPPMatrix;

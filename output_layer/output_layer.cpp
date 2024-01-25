@@ -29,6 +29,7 @@
 /*************************************************************************/
 
 #include "output_layer.h"
+
 #include "../utilities/utilities.h"
 
 int MLPPOutputLayer::get_n_hidden() {

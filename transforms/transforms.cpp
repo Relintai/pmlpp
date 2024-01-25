@@ -29,9 +29,14 @@
 /*************************************************************************/
 
 #include "transforms.h"
+
 #include "../lin_alg/lin_alg.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/math/math_funcs.h"
+#endif
 
 // DCT ii.
 // https://www.mathworks.com/help/images/discrete-cosine-transform.html

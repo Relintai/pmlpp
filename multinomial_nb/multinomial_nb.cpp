@@ -30,7 +30,11 @@
 
 #include "multinomial_nb.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/containers/local_vector.h"
+#endif
 
 #include "../utilities/utilities.h"
 

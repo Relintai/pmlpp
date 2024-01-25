@@ -30,7 +30,11 @@
 
 #include "data.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/os/file_access.h"
+#endif
 
 #include "../lin_alg/lin_alg.h"
 #include "../stat/stat.h"

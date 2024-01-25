@@ -31,8 +31,6 @@
 #include "activation.h"
 #include "../lin_alg/lin_alg.h"
 
-#include "core/math/math_defs.h"
-
 #include <algorithm>
 #include <cmath>
 #include <iostream>

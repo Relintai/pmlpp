@@ -30,9 +30,13 @@
 
 #include "utilities.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/log/logger.h"
 #include "core/math/math_funcs.h"
 #include "core/math/random_pcg.h"
+#endif
 
 #include <fstream>
 #include <iostream>

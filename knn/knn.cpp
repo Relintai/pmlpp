@@ -31,8 +31,12 @@
 #include "knn.h"
 #include "../utilities/utilities.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/containers/hash_map.h"
 #include "core/containers/vector.h"
+#endif
 
 Ref<MLPPMatrix> MLPPKNN::get_input_set() {
 	return _input_set;

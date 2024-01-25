@@ -36,7 +36,11 @@
 #include "../regularization/reg.h"
 #include "../utilities/utilities.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/log/logger.h"
+#endif
 
 #include <random>
 

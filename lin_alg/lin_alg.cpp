@@ -30,7 +30,11 @@
 
 #include "lin_alg.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/math/math_funcs.h"
+#endif
 
 #include "../stat/stat.h"
 #include <cmath>

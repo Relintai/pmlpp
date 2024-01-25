@@ -30,7 +30,11 @@
 
 #include "mlp.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/log/logger.h"
+#endif
 
 #include "../activation/activation.h"
 #include "../cost/cost.h"

@@ -34,9 +34,13 @@
 // https://towardsdatascience.com/svm-implementation-from-scratch-python-2db2fc52e5c2
 // Illustratd a practical definition of the Hinge Loss function and its gradient when optimizing with SGD.
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/math/math_defs.h"
 
 #include "core/object/resource.h"
+#endif
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"

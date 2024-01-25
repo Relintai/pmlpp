@@ -31,7 +31,11 @@
 #include "kmeans.h"
 #include "../utilities/utilities.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/math/random_pcg.h"
+#endif
 
 #include <climits>
 #include <iostream>

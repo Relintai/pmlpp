@@ -30,7 +30,11 @@
 
 #include "reg.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/math/math_defs.h"
+#endif
 
 #include "../activation/activation.h"
 #include "../lin_alg/lin_alg.h"

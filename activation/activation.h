@@ -31,10 +31,16 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
+
 #include "core/math/math_defs.h"
 
 #include "core/object/func_ref.h"
 #include "core/object/reference.h"
+
+#endif
 
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_vector.h"

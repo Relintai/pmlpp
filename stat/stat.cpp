@@ -29,10 +29,16 @@
 /*************************************************************************/
 
 #include "stat.h"
+
 #include "../activation/activation.h"
 #include "../data/data.h"
 #include "../lin_alg/lin_alg.h"
+
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/containers/hash_map.h"
+#endif
 
 #include <algorithm>
 #include <cmath>

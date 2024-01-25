@@ -31,16 +31,22 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/containers/vector.h"
 #include "core/string/ustring.h"
 
 #include "core/math/math_defs.h"
 
+#include "core/object/reference.h"
+#endif
+
 #include "../lin_alg/mlpp_matrix.h"
 #include "../lin_alg/mlpp_tensor3.h"
 #include "../lin_alg/mlpp_vector.h"
 
-#include "core/object/reference.h"
+
 
 class MLPPConvolutions : public Reference {
 	GDCLASS(MLPPConvolutions, Reference);

@@ -30,7 +30,11 @@
 
 #include "mlpp_matrix.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/io/image.h"
+#endif
 
 #include "../stat/stat.h"
 #include <random>

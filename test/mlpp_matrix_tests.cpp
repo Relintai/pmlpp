@@ -30,7 +30,11 @@
 
 #include "mlpp_matrix_tests.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/log/logger.h"
+#endif
 
 #include "../lin_alg/mlpp_matrix.h"
 

@@ -30,7 +30,11 @@
 
 #include "gaussian_nb.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/math/math_defs.h"
+#endif
 
 #include "../stat/stat.h"
 #include "../utilities/utilities.h"

@@ -31,9 +31,13 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/math/math_defs.h"
 
 #include "core/object/reference.h"
+#endif
 
 #include "../hidden_layer/hidden_layer.h"
 #include "../output_layer/output_layer.h"

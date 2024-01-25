@@ -30,9 +30,13 @@
 
 #include "mlpp_tests.h"
 
+#ifdef USING_SFW
+#include "sfw.h"
+#else
 #include "core/math/math_funcs.h"
 
 #include "core/log/logger.h"
+#endif
 
 //TODO remove
 #include <cmath>

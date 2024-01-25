@@ -29,6 +29,7 @@
 /*************************************************************************/
 
 #include "numerical_analysis.h"
+
 #include "../lin_alg/lin_alg.h"
 
 #include "../lin_alg/mlpp_matrix.h"
