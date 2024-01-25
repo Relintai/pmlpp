@@ -1597,7 +1597,7 @@ template class MutexImpl<std::mutex>;
 void check_lockless_atomics() {
 	// Doing the check for the types we actually care about
 	if (!std::atomic<uint32_t>{}.is_lock_free() || !std::atomic<uint64_t>{}.is_lock_free() || !std::atomic_bool{}.is_lock_free()) {
-		WARN_PRINT("Your compiler doesn't seem to support lockless atomics. Performance will be degraded. Please consider upgrading to a different or newer compiler.");
+		LOG_WARN("Your compiler doesn't seem to support lockless atomics. Performance will be degraded. Please consider upgrading to a different or newer compiler.");
 	}
 }
 
@@ -1662,7 +1662,7 @@ void Thread::callback(Thread *p_self, const Settings &p_settings, Callback p_cal
 void Thread::start(Thread::Callback p_callback, void *p_user, const Settings &p_settings) {
 	if (id != _thread_id_hash(std::thread::id())) {
 #ifdef DEBUG_ENABLED
-		WARN_PRINT("A Thread object has been re-started without wait_to_finish() having been called on it. Please do so to ensure correct cleanup of the thread.");
+		LOG_WARN("A Thread object has been re-started without wait_to_finish() having been called on it. Please do so to ensure correct cleanup of the thread.");
 #endif
 		thread.detach();
 		std::thread empty_thread;
@@ -7885,7 +7885,7 @@ static double built_in_strtod(
 
 	if (exp > maxExponent) {
 		exp = maxExponent;
-		//WARN_PRINT("Exponent too high");
+		//LOG_WARN("Exponent too high");
 	}
 	dblExp = 1.0;
 	for (d = powersOf10; exp != 0; exp >>= 1, ++d) {
@@ -8533,13 +8533,13 @@ void StringName::cleanup() {
 			}
 		}
 
-		print_line("\nStringName reference ranking (from most to least referenced):\n");
+		LOG_MSG("\nStringName reference ranking (from most to least referenced):\n");
 
 		data.sort_custom<DebugSortReferences>();
 		int unreferenced_stringnames = 0;
 		int rarely_referenced_stringnames = 0;
 		for (int i = 0; i < data.size(); i++) {
-			print_line(itos(i + 1) + ": " + data[i]->get_name() + " - " + itos(data[i]->debug_references));
+			LOG_MSG(itos(i + 1) + ": " + data[i]->get_name() + " - " + itos(data[i]->debug_references));
 			if (data[i]->debug_references == 0) {
 				unreferenced_stringnames += 1;
 			} else if (data[i]->debug_references < 5) {
@@ -8547,8 +8547,8 @@ void StringName::cleanup() {
 			}
 		}
 
-		print_line(vformat("\nOut of %d StringNames, %d StringNames were never referenced during this run (0 times) (%.2f%%).", data.size(), unreferenced_stringnames, unreferenced_stringnames / float(data.size()) * 100));
-		print_line(vformat("Out of %d StringNames, %d StringNames were rarely referenced during this run (1-4 times) (%.2f%%).", data.size(), rarely_referenced_stringnames, rarely_referenced_stringnames / float(data.size()) * 100));
+		LOG_MSG(vformat("\nOut of %d StringNames, %d StringNames were never referenced during this run (0 times) (%.2f%%).", data.size(), unreferenced_stringnames, unreferenced_stringnames / float(data.size()) * 100));
+		LOG_MSG(vformat("Out of %d StringNames, %d StringNames were rarely referenced during this run (1-4 times) (%.2f%%).", data.size(), rarely_referenced_stringnames, rarely_referenced_stringnames / float(data.size()) * 100));
 	}
 #endif
 
@@ -8562,9 +8562,9 @@ void StringName::cleanup() {
 				lost_strings++;
 				if (OS::get_singleton()->is_stdout_verbose()) {
 					if (d->cname) {
-						print_line("Orphan StringName: " + String(d->cname));
+						LOG_MSG("Orphan StringName: " + String(d->cname));
 					} else {
-						print_line("Orphan StringName: " + String(d->name));
+						LOG_MSG("Orphan StringName: " + String(d->name));
 					}
 				}
 			}
@@ -14394,7 +14394,7 @@ Error FileAccess::_open(const String &p_path, int p_mode_flags) {
 			if (fname != String()) {
 				String base_file = path.get_file();
 				if (base_file != fname && base_file.findn(fname) == 0) {
-					WARN_PRINT("Case mismatch opening requested file '" + base_file + "', stored as '" + fname + "' in the filesystem. This file will not open when exported to other case-sensitive platforms.");
+					LOG_WARN("Case mismatch opening requested file '" + base_file + "', stored as '" + fname + "' in the filesystem. This file will not open when exported to other case-sensitive platforms.");
 				}
 			}
 
