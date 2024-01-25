@@ -7,6 +7,11 @@
 *.bc
 *.os
 *.so
+*.a
+config.log
+
+
+.scons*
 
 .sconsign.dblite
 
