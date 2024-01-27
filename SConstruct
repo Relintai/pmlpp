@@ -114,10 +114,6 @@ for x in sorted(glob.glob("platform/*")):
     sys.path.insert(0, tmppath)
     import detect
 
-    if os.path.exists(x + "/export/export.cpp"):
-        platform_exporters.append(x[9:])
-    if os.path.exists(x + "/api/api.cpp"):
-        platform_apis.append(x[9:])
     if detect.is_active():
         active_platforms.append(detect.get_name())
         active_platform_ids.append(x)
@@ -227,6 +223,7 @@ opts.Add(
     )
 )
 opts.Add(BoolVariable("use_precise_math_checks", "Math checks use very precise epsilon (debug option)", False))
+opts.Add("main_scsub_path", "The SCSub's path that has the main method.", "platform/main/SCsub")
 
 # Compilation environment setup
 opts.Add("CXX", "C++ compiler")
@@ -612,7 +609,7 @@ if selected_platform in platform_list:
 
     add_mlpp(env)
 
-    SConscript("platform/main/SCsub")
+    SConscript(env["main_scsub_path"])
 
     # Microsoft Visual Studio Project Generation
     if env["vsproj"]:
