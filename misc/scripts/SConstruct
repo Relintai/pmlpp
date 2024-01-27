@@ -597,12 +597,6 @@ if env['a']:
 if env['t']:
     target = env['t']
 
-if not os.path.isdir('./modules'):
-    os.mkdir('./modules')
-
-if len(module_config.module_repositories) > 0 and not os.path.isdir(module_config.module_install_folder):
-    os.mkdir(module_config.module_install_folder)
-
 if 'm' in action:
     engine_branch = 'master'
 
