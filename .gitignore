@@ -16,6 +16,8 @@ config.log
 
 .sconsign.dblite
 
+compile_commands.json
+
 gdnative_cpp/
 
 bin/
