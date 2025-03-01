@@ -36,7 +36,7 @@
 #include "core/containers/local_vector.h"
 #endif
 
-#include "../utilities/utilities.h"
+#include "../core/utilities.h"
 
 #include <random>
 

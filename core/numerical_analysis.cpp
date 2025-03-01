@@ -30,11 +30,11 @@
 
 #include "numerical_analysis.h"
 
-#include "../lin_alg/lin_alg.h"
+#include "../core/lin_alg.h"
 
-#include "../lin_alg/mlpp_matrix.h"
-#include "../lin_alg/mlpp_tensor3.h"
-#include "../lin_alg/mlpp_vector.h"
+#include "../core/mlpp_matrix.h"
+#include "../core/mlpp_tensor3.h"
+#include "../core/mlpp_vector.h"
 
 real_t MLPPNumericalAnalysis::num_diffr(real_t (*function)(real_t), real_t x) {
 	real_t eps = 1e-10;

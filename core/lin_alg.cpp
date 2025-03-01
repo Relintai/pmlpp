@@ -36,7 +36,7 @@
 #include "core/math/math_funcs.h"
 #endif
 
-#include "../stat/stat.h"
+#include "../core/stat.h"
 #include <cmath>
 #include <iostream>
 #include <map>

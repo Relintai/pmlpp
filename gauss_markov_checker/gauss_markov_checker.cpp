@@ -29,7 +29,7 @@
 /*************************************************************************/
 
 #include "gauss_markov_checker.h"
-#include "../stat/stat.h"
+#include "../core/stat.h"
 #include <iostream>
 
 /*

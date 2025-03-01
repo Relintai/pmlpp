@@ -29,7 +29,7 @@
 /*************************************************************************/
 
 #include "hidden_layer.h"
-#include "../activation/activation.h"
+#include "../core/activation.h"
 
 #include <iostream>
 #include <random>

@@ -36,8 +36,8 @@
 #include "core/os/file_access.h"
 #endif
 
-#include "../lin_alg/lin_alg.h"
-#include "../stat/stat.h"
+#include "../core/lin_alg.h"
+#include "../core/stat.h"
 
 #include "../softmax_net/softmax_net.h"
 

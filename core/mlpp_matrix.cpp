@@ -36,7 +36,7 @@
 #include "core/io/image.h"
 #endif
 
-#include "../stat/stat.h"
+#include "../core/stat.h"
 #include <random>
 
 Array MLPPMatrix::get_data() {

@@ -30,7 +30,7 @@
 
 #include "multi_output_layer.h"
 
-#include "../utilities/utilities.h"
+#include "../core/utilities.h"
 
 int MLPPMultiOutputLayer::get_n_output() {
 	return _n_output;

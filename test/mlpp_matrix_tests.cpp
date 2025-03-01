@@ -36,7 +36,7 @@
 #include "core/log/logger.h"
 #endif
 
-#include "../lin_alg/mlpp_matrix.h"
+#include "../core/mlpp_matrix.h"
 
 void MLPPMatrixTests::run_tests() {
 	PLOG_MSG("RUNNIG MLPPMatrixTests!");

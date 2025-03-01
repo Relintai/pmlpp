@@ -42,8 +42,8 @@
 #include "core/object/reference.h"
 #endif
 
-#include "../lin_alg/mlpp_matrix.h"
-#include "../lin_alg/mlpp_vector.h"
+#include "../core/mlpp_matrix.h"
+#include "../core/mlpp_vector.h"
 
 #include <string>
 #include <tuple>

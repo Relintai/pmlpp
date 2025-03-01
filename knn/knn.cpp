@@ -29,7 +29,7 @@
 /*************************************************************************/
 
 #include "knn.h"
-#include "../utilities/utilities.h"
+#include "../core/utilities.h"
 
 #ifdef USING_SFW
 #include "sfw.h"

@@ -39,10 +39,10 @@
 #include "core/object/resource.h"
 #endif
 
-#include "../lin_alg/mlpp_matrix.h"
-#include "../lin_alg/mlpp_vector.h"
+#include "../core/mlpp_matrix.h"
+#include "../core/mlpp_vector.h"
 
-#include "../regularization/reg.h"
+#include "../core/reg.h"
 
 class MLPPTanhReg : public Resource {
 	GDCLASS(MLPPTanhReg, Resource);

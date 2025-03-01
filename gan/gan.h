@@ -42,10 +42,10 @@
 #include "../hidden_layer/hidden_layer.h"
 #include "../output_layer/output_layer.h"
 
-#include "../lin_alg/mlpp_tensor3.h"
+#include "../core/mlpp_tensor3.h"
 
-#include "../activation/activation.h"
-#include "../utilities/utilities.h"
+#include "../core/activation.h"
+#include "../core/utilities.h"
 
 class MLPPGAN : public Reference {
 	GDCLASS(MLPPGAN, Reference);

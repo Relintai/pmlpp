@@ -30,7 +30,7 @@
 
 #include "pca.h"
 
-#include "../data/data.h"
+#include "../core/data.h"
 
 Ref<MLPPMatrix> MLPPPCA::get_input_set() {
 	return _input_set;

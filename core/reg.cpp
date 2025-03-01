@@ -36,8 +36,8 @@
 #include "core/math/math_defs.h"
 #endif
 
-#include "../activation/activation.h"
-#include "../lin_alg/lin_alg.h"
+#include "../core/activation.h"
+#include "../core/lin_alg.h"
 
 #include <iostream>
 #include <random>

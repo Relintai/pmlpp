@@ -29,8 +29,8 @@
 /*************************************************************************/
 
 #include "bernoulli_nb.h"
-#include "../data/data.h"
-#include "../utilities/utilities.h"
+#include "../core/data.h"
+#include "../core/utilities.h"
 
 #include <iostream>
 #include <random>

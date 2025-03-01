@@ -40,12 +40,12 @@
 #include "core/object/reference.h"
 #endif
 
-#include "../activation/activation.h"
-#include "../regularization/reg.h"
-#include "../utilities/utilities.h"
+#include "../core/activation.h"
+#include "../core/reg.h"
+#include "../core/utilities.h"
 
-#include "../lin_alg/mlpp_matrix.h"
-#include "../lin_alg/mlpp_vector.h"
+#include "../core/mlpp_matrix.h"
+#include "../core/mlpp_vector.h"
 
 #include <map>
 #include <string>

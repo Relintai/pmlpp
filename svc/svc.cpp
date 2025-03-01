@@ -30,11 +30,11 @@
 
 #include "svc.h"
 
-#include "../activation/activation.h"
-#include "../cost/cost.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
-#include "../utilities/utilities.h"
+#include "../core/activation.h"
+#include "../core/cost.h"
+#include "../core/lin_alg.h"
+#include "../core/reg.h"
+#include "../core/utilities.h"
 
 #include <random>
 

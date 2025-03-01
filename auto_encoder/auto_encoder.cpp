@@ -30,9 +30,9 @@
 
 #include "auto_encoder.h"
 
-#include "../activation/activation.h"
-#include "../cost/cost.h"
-#include "../utilities/utilities.h"
+#include "../core/activation.h"
+#include "../core/cost.h"
+#include "../core/utilities.h"
 
 #ifdef USING_SFW
 #include "sfw.h"

@@ -40,10 +40,10 @@
 
 #endif
 
-#include "../regularization/reg.h"
+#include "../core/reg.h"
 
-#include "../lin_alg/mlpp_matrix.h"
-#include "../lin_alg/mlpp_vector.h"
+#include "../core/mlpp_matrix.h"
+#include "../core/mlpp_vector.h"
 
 class MLPPCLogLogReg : public Reference {
 	GDCLASS(MLPPCLogLogReg, Reference);

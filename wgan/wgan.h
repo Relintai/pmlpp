@@ -41,17 +41,17 @@
 #include "core/object/reference.h"
 #endif
 
-#include "../lin_alg/mlpp_matrix.h"
-#include "../lin_alg/mlpp_tensor3.h"
-#include "../lin_alg/mlpp_vector.h"
+#include "../core/mlpp_matrix.h"
+#include "../core/mlpp_tensor3.h"
+#include "../core/mlpp_vector.h"
 
 #include "../hidden_layer/hidden_layer.h"
 #include "../output_layer/output_layer.h"
 
-#include "../activation/activation.h"
-#include "../cost/cost.h"
-#include "../regularization/reg.h"
-#include "../utilities/utilities.h"
+#include "../core/activation.h"
+#include "../core/cost.h"
+#include "../core/reg.h"
+#include "../core/utilities.h"
 
 class MLPPWGAN : public Reference {
 	GDCLASS(MLPPWGAN, Reference);

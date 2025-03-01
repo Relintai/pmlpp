@@ -36,8 +36,8 @@
 #include "core/math/math_defs.h"
 #endif
 
-#include "../stat/stat.h"
-#include "../utilities/utilities.h"
+#include "../core/stat.h"
+#include "../core/utilities.h"
 
 /*
 Ref<MLPPMatrix> MLPPGaussianNB::get_input_set() {

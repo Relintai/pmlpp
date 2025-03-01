@@ -30,7 +30,7 @@
 
 #include "outlier_finder.h"
 
-#include "../stat/stat.h"
+#include "../core/stat.h"
 
 real_t MLPPOutlierFinder::get_threshold() {
 	return _threshold;

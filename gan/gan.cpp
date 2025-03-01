@@ -29,10 +29,10 @@
 /*************************************************************************/
 
 #include "gan.h"
-#include "../activation/activation.h"
-#include "../cost/cost.h"
-#include "../regularization/reg.h"
-#include "../utilities/utilities.h"
+#include "../core/activation.h"
+#include "../core/cost.h"
+#include "../core/reg.h"
+#include "../core/utilities.h"
 
 #ifdef USING_SFW
 #include "sfw.h"

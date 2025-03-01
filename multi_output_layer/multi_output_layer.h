@@ -40,13 +40,13 @@
 #include "core/object/reference.h"
 #endif
 
-#include "../activation/activation.h"
-#include "../cost/cost.h"
-#include "../regularization/reg.h"
-#include "../utilities/utilities.h"
+#include "../core/activation.h"
+#include "../core/cost.h"
+#include "../core/reg.h"
+#include "../core/utilities.h"
 
-#include "../lin_alg/mlpp_matrix.h"
-#include "../lin_alg/mlpp_vector.h"
+#include "../core/mlpp_matrix.h"
+#include "../core/mlpp_vector.h"
 
 class MLPPMultiOutputLayer : public Reference {
 	GDCLASS(MLPPMultiOutputLayer, Reference);

@@ -29,7 +29,7 @@
 /*************************************************************************/
 
 #include "uni_lin_reg.h"
-#include "../stat/stat.h"
+#include "../core/stat.h"
 
 // General Multivariate Linear Regression Model
 // ŷ = b0 + b1x1 + b2x2 + ... + bkxk

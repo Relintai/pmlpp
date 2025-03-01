@@ -1,8 +1,5 @@
-#ifndef MLPP_REG_H
-#define MLPP_REG_H
-
 /*************************************************************************/
-/*  reg.h                                                                */
+/*  transforms.cpp                                                       */
 /*************************************************************************/
 /*                         This file is part of:                         */
 /*                    PMLPP Machine Learning Library                     */
@@ -31,52 +28,60 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 
+#include "transforms.h"
+
+#include "../core/lin_alg.h"
+
 #ifdef USING_SFW
 #include "sfw.h"
 #else
-#include "core/math/math_defs.h"
-
-#include "core/object/reference.h"
+#include "core/math/math_funcs.h"
 #endif
 
-#include "../lin_alg/mlpp_matrix.h"
-#include "../lin_alg/mlpp_vector.h"
+// DCT ii.
+// https://www.mathworks.com/help/images/discrete-cosine-transform.html
+Ref<MLPPMatrix> MLPPTransforms::discrete_cosine_transform(const Ref<MLPPMatrix> &p_A) {
+	Ref<MLPPMatrix> A = p_A->scalar_addn(-128); // Center around 0.
 
-#include <string>
-#include <vector>
+	Size2i size = A->size();
 
-class MLPPReg : public Reference {
-	GDCLASS(MLPPReg, Reference);
+	Ref<MLPPMatrix> B;
+	B.instance();
+	B->resize(size);
 
-public:
-	enum RegularizationType {
-		REGULARIZATION_TYPE_NONE = 0,
-		REGULARIZATION_TYPE_RIDGE,
-		REGULARIZATION_TYPE_LASSO,
-		REGULARIZATION_TYPE_ELASTIC_NET,
-		REGULARIZATION_TYPE_WEIGHT_CLIPPING,
-	};
+	real_t M = size.y;
+	real_t inv_sqrt_M = 1 / Math::sqrt(M);
+	real_t s2M = Math::sqrt(real_t(2) / real_t(M));
 
-	real_t reg_termv(const Ref<MLPPVector> &weights, real_t lambda, real_t alpha, RegularizationType reg);
-	real_t reg_termm(const Ref<MLPPMatrix> &weights, real_t lambda, real_t alpha, RegularizationType reg);
+	for (int i = 0; i < size.y; i++) {
+		for (int j = 0; j < size.x; j++) {
+			real_t sum = 0;
 
-	Ref<MLPPVector> reg_weightsv(const Ref<MLPPVector> &weights, real_t lambda, real_t alpha, RegularizationType reg);
-	Ref<MLPPMatrix> reg_weightsm(const Ref<MLPPMatrix> &weights, real_t lambda, real_t alpha, RegularizationType reg);
+			real_t alphaI;
+			if (i == 0) {
+				alphaI = inv_sqrt_M;
+			} else {
+				alphaI = s2M;
+			}
 
-	Ref<MLPPVector> reg_deriv_termv(const Ref<MLPPVector> &weights, real_t lambda, real_t alpha, RegularizationType reg);
-	Ref<MLPPMatrix> reg_deriv_termm(const Ref<MLPPMatrix> &weights, real_t lambda, real_t alpha, RegularizationType reg);
+			real_t alphaJ;
+			if (j == 0) {
+				alphaJ = inv_sqrt_M;
+			} else {
+				alphaJ = s2M;
+			}
 
-	MLPPReg();
-	~MLPPReg();
+			for (int k = 0; k < size.y; k++) {
+				for (int f = 0; f < size.x; f++) {
+					sum += A->element_get(k, f) * Math::cos((Math_PI * i * (2 * k + 1)) / (2 * M)) * Math::cos((Math_PI * j * (2 * f + 1)) / (2 * M));
+				}
+			}
 
-protected:
-	static void _bind_methods();
+			B->element_set(i, j, sum * alphaI * alphaJ);
+		}
+	}
+	return B;
+}
 
-private:
-	real_t reg_deriv_termvr(const Ref<MLPPVector> &weights, real_t lambda, real_t alpha, RegularizationType reg, int j);
-	real_t reg_deriv_termmr(const Ref<MLPPMatrix> &weights, real_t lambda, real_t alpha, RegularizationType reg, int i, int j);
-};
-
-VARIANT_ENUM_CAST(MLPPReg::RegularizationType);
-
-#endif /* Reg_hpp */
+void MLPPTransforms::_bind_methods() {
+}

@@ -29,8 +29,8 @@
 /*************************************************************************/
 
 #include "cost.h"
-#include "../lin_alg/lin_alg.h"
-#include "../regularization/reg.h"
+#include "../core/lin_alg.h"
+#include "../core/reg.h"
 #include <cmath>
 #include <iostream>
 

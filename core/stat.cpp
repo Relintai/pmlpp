@@ -30,9 +30,9 @@
 
 #include "stat.h"
 
-#include "../activation/activation.h"
-#include "../data/data.h"
-#include "../lin_alg/lin_alg.h"
+#include "../core/activation.h"
+#include "../core/data.h"
+#include "../core/lin_alg.h"
 
 #ifdef USING_SFW
 #include "sfw.h"

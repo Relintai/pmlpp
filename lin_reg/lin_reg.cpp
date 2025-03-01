@@ -30,10 +30,10 @@
 
 #include "lin_reg.h"
 
-#include "../cost/cost.h"
-#include "../regularization/reg.h"
-#include "../stat/stat.h"
-#include "../utilities/utilities.h"
+#include "../core/cost.h"
+#include "../core/reg.h"
+#include "../core/stat.h"
+#include "../core/utilities.h"
 
 #include <cmath>
 #include <iostream>

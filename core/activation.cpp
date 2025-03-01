@@ -29,7 +29,7 @@
 /*************************************************************************/
 
 #include "activation.h"
-#include "../lin_alg/lin_alg.h"
+#include "../core/lin_alg.h"
 
 #include <algorithm>
 #include <cmath>

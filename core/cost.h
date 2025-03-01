@@ -41,8 +41,8 @@
 
 #include <vector>
 
-#include "../lin_alg/mlpp_matrix.h"
-#include "../lin_alg/mlpp_vector.h"
+#include "../core/mlpp_matrix.h"
+#include "../core/mlpp_vector.h"
 
 //void set_weights(const Ref<MLPPMatrix> &val);
 //void set_bias(const Ref<MLPPVector> &val);
