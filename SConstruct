@@ -53,6 +53,7 @@ def add_mlpp(env):
         "core/utilities.cpp",
         "core/hypothesis_testing.cpp",
         "core/reg.cpp",
+        "core/gauss_markov_checker.cpp",
 
         "ann/ann.cpp",
         "auto_encoder/auto_encoder.cpp",
@@ -62,7 +63,7 @@ def add_mlpp(env):
         "exp_reg/exp_reg.cpp",
         "gan/gan.cpp",
         "gaussian_nb/gaussian_nb.cpp",
-        "gauss_markov_checker/gauss_markov_checker.cpp",
+
         "hidden_layer/hidden_layer.cpp",
         "kmeans/kmeans.cpp",
         "knn/knn.cpp",
