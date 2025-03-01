@@ -2,6 +2,22 @@
 
 A Machine Learning module for the Pandemonium Engine. Based on: https://github.com/novak-99/MLPP
 
+It also support standalone compilation using the sfw library.
+
+Keep in mind that the compile scripts are in a need of some heavy simplifications, so compile is actually
+a lot simpler than it might at first appear. The simplest (non-gui) compile scripts that are available in the sfw repository
+should be able to compile this library with just listing the files and by adding `-Iplatform` to the commands (or copying out
+the source code from the platform folders).
+
+## Standalone Compile
+
+The standalone (sfw) compile is using the modified version of pandemonium engine's build script, so the same instructions and
+setup will work. 
+
+They are available here: https://github.com/Relintai/pandemonium_engine_docs/tree/master/05_engine_development/01_compiling
+
+The default main is available under `platform/main.cpp`. However it is overrideable using command line parameters. An example on
+how this is done is available in the `pmlpp_standalone_sample` repository.
 
 ## Contents of the Library
 0. ***Math Classes***
