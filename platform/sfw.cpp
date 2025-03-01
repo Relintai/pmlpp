@@ -2883,6 +2883,8 @@ int Math::random(int from, int to) {
 #define _CRT_SECURE_NO_WARNINGS // to disable build-time warning which suggested to use strcpy_s instead strcpy
 #endif
 
+#define PRINT_UNICODE_ERRORS 0
+
 #if defined(MINGW_ENABLED) || defined(_MSC_VER)
 #define snprintf _snprintf_s
 #endif
@@ -3093,7 +3095,9 @@ void String::copy_from(const char *p_cstr) {
 	for (size_t i = 0; i <= len; i++) {
 		uint8_t c = p_cstr[i] >= 0 ? p_cstr[i] : uint8_t(256 + p_cstr[i]);
 		if (c == 0 && i < len) {
+#if PRINT_UNICODE_ERRORS
 			print_unicode_error("NUL character", true);
+#endif
 			dst[i] = 0x20;
 		} else {
 			dst[i] = c;
@@ -3126,7 +3130,10 @@ void String::copy_from(const char *p_cstr, const int p_clip_to) {
 	for (int i = 0; i < len; i++) {
 		uint8_t c = p_cstr[i] >= 0 ? p_cstr[i] : uint8_t(256 + p_cstr[i]);
 		if (c == 0) {
+#if PRINT_UNICODE_ERRORS
 			print_unicode_error("NUL character", true);
+#endif
+
 			dst[i] = 0x20;
 		} else {
 			dst[i] = c;
@@ -3155,9 +3162,16 @@ void String::copy_from(const wchar_t *p_cstr, const int p_clip_to) {
 #endif
 }
 
+void String::copy_from(const Char16String &p_str) {
+	parse_utf16(p_str.ptr());
+}
+
 void String::copy_from(const CharType &p_char) {
 	if (p_char == 0) {
+#if PRINT_UNICODE_ERRORS
 		print_unicode_error("NUL character", true);
+#endif
+
 		return;
 	}
 	/*
@@ -3227,7 +3241,10 @@ void String::copy_from_unchecked(const CharType *p_char, const int p_length) {
 
 	for (int i = 0; i < p_length; i++) {
 		if (p_char[i] == 0) {
+#if PRINT_UNICODE_ERRORS
 			print_unicode_error("NUL character", true);
+#endif
+
 			dst[i] = 0x20;
 			continue;
 		}
@@ -3308,7 +3325,10 @@ String &String::operator+=(const String &p_str) {
 
 String &String::operator+=(CharType p_char) {
 	if (p_char == 0) {
+#if PRINT_UNICODE_ERRORS
 		print_unicode_error("NUL character", true);
+#endif
+
 		return *this;
 	}
 	/*
@@ -3343,7 +3363,10 @@ String &String::operator+=(const char *p_str) {
 	for (size_t i = 0; i <= rhs_len; i++) {
 		uint8_t c = p_str[i] >= 0 ? p_str[i] : uint8_t(256 + p_str[i]);
 		if (c == 0 && i < rhs_len) {
+#if PRINT_UNICODE_ERRORS
 			print_unicode_error("NUL character", true);
+#endif
+
 			dst[i] = 0x20;
 		} else {
 			dst[i] = c;
@@ -3748,7 +3771,7 @@ String String::substr_index(const int start_index, const int end_index) const {
 		return "";
 	}
 
-	if (end_index >= s) {
+	if (end_index > s) {
 		return substr(start_index, (s - 1) - start_index);
 	}
 
@@ -5244,13 +5267,16 @@ Vector<float> String::split_floats(const String &p_splitter, bool p_allow_empty)
 	int from = 0;
 	int len = length();
 
+	String buffer = *this;
 	while (true) {
 		int end = find(p_splitter, from);
 		if (end < 0) {
 			end = len;
 		}
 		if (p_allow_empty || (end > from)) {
-			ret.push_back(String::to_double(&get_data()[from]));
+			buffer[end] = 0;
+			ret.push_back(String::to_double(&buffer.get_data()[from]));
+			buffer[end] = _cowdata.get(end);
 		}
 
 		if (end == len) {
@@ -5268,6 +5294,7 @@ Vector<float> String::split_floats_mk(const Vector<String> &p_splitters, bool p_
 	int from = 0;
 	int len = length();
 
+	String buffer = *this;
 	while (true) {
 		int idx;
 		int end = findmk(p_splitters, from, &idx);
@@ -5279,7 +5306,9 @@ Vector<float> String::split_floats_mk(const Vector<String> &p_splitters, bool p_
 		}
 
 		if (p_allow_empty || (end > from)) {
-			ret.push_back(String::to_double(&get_data()[from]));
+			buffer[end] = 0;
+			ret.push_back(String::to_double(&buffer.get_data()[from]));
+			buffer[end] = _cowdata.get(end);
 		}
 
 		if (end == len) {
@@ -7552,6 +7581,10 @@ String::String(const wchar_t *p_str) {
 }
 
 String::String(const CharType *p_str) {
+	copy_from(p_str);
+}
+
+String::String(const Char16String &p_str) {
 	copy_from(p_str);
 }
 
@@ -10748,6 +10781,10 @@ bool Vector3::is_equal_approx(const Vector3 &p_v) const {
 	return Math::is_equal_approx(x, p_v.x) && Math::is_equal_approx(y, p_v.y) && Math::is_equal_approx(z, p_v.z);
 }
 
+bool Vector3::is_zero_approx() const {
+	return Math::is_zero_approx(x) && Math::is_zero_approx(y) && Math::is_zero_approx(z);
+}
+
 Vector3::operator String() const {
 	return "(" + String::num_real(x) + ", " + String::num_real(y) + ", " + String::num_real(z) + ")";
 }
@@ -10807,6 +10844,82 @@ uint32_t pcg32_boundedrand_r(pcg32_random_t *rng, uint32_t bound) {
 		if (r >= threshold)
 			return r % bound;
 	}
+}
+#line 0
+
+#line 1 "sfw/core/vector2i.cpp"
+/*************************************************************************/
+/*  vector2i.cpp                                                         */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+Vector2i Vector2i::clamp(const Vector2i &p_min, const Vector2i &p_max) const {
+	return Vector2i(
+			CLAMP(x, p_min.x, p_max.x),
+			CLAMP(y, p_min.y, p_max.y));
+}
+
+int64_t Vector2i::length_squared() const {
+	return x * (int64_t)x + y * (int64_t)y;
+}
+
+double Vector2i::length() const {
+	return Math::sqrt((double)length_squared());
+}
+
+Vector2i Vector2i::operator+(const Vector2i &p_v) const {
+	return Vector2i(x + p_v.x, y + p_v.y);
+}
+void Vector2i::operator+=(const Vector2i &p_v) {
+	x += p_v.x;
+	y += p_v.y;
+}
+Vector2i Vector2i::operator-(const Vector2i &p_v) const {
+	return Vector2i(x - p_v.x, y - p_v.y);
+}
+void Vector2i::operator-=(const Vector2i &p_v) {
+	x -= p_v.x;
+	y -= p_v.y;
+}
+
+Vector2i Vector2i::operator*(const Vector2i &p_v1) const {
+	return Vector2i(x * p_v1.x, y * p_v1.y);
+};
+
+Vector2i Vector2i::operator*(const int &rvalue) const {
+	return Vector2i(x * rvalue, y * rvalue);
+};
+void Vector2i::operator*=(const int &rvalue) {
+	x *= rvalue;
+	y *= rvalue;
+};
+
+Vector2i Vector2i::operator/(const Vector2i &p_v1) const {
+	return Vector2i(x / p_v1.x, y / p_v1.y);
+};
+
+Vector2i Vector2i::operator/(const int &rvalue) const {
+	return Vector2i(x / rvalue, y / rvalue);
+};
+
+void Vector2i::operator/=(const int &rvalue) {
+	x /= rvalue;
+	y /= rvalue;
+};
+
+Vector2i Vector2i::operator-() const {
+	return Vector2i(-x, -y);
+}
+
+bool Vector2i::operator==(const Vector2i &p_vec2) const {
+	return x == p_vec2.x && y == p_vec2.y;
+}
+bool Vector2i::operator!=(const Vector2i &p_vec2) const {
+	return x != p_vec2.x || y != p_vec2.y;
+}
+
+Vector2i::operator String() const {
+	return "(" + itos(x) + ", " + itos(y) + ")";
 }
 #line 0
 
@@ -10954,8 +11067,16 @@ bool Vector2::is_equal_approx(const Vector2 &p_v) const {
 	return Math::is_equal_approx(x, p_v.x) && Math::is_equal_approx(y, p_v.y);
 }
 
+bool Vector2::is_zero_approx() const {
+	return Math::is_zero_approx(x) && Math::is_zero_approx(y);
+}
+
 Vector2::operator String() const {
 	return "(" + String::num_real(x) + ", " + String::num_real(y) + ")";
+}
+
+Vector2::operator Vector2i() const {
+	return Vector2i(x, y);
 }
 #line 0
 
@@ -12116,12 +12237,16 @@ void Basis::rotate_sh(real_t *p_values) {
 	p_values[8] = d4 * s_scale_dst4;
 }
 
-Basis Basis::looking_at(const Vector3 &p_target, const Vector3 &p_up) {
+Basis Basis::looking_at(const Vector3 &p_target, const Vector3 &p_up, bool p_use_model_front) {
 #ifdef MATH_CHECKS
 	ERR_FAIL_COND_V_MSG(p_target.is_equal_approx(Vector3()), Basis(), "The target vector can't be zero.");
 	ERR_FAIL_COND_V_MSG(p_up.is_equal_approx(Vector3()), Basis(), "The up vector can't be zero.");
 #endif
-	Vector3 v_z = -p_target.normalized();
+	Vector3 v_z = p_target.normalized();
+
+	if (!p_use_model_front) {
+		v_z = -v_z;
+	}
 	Vector3 v_x = p_up.cross(v_z);
 #ifdef MATH_CHECKS
 	ERR_FAIL_COND_V_MSG(v_x.is_equal_approx(Vector3()), Basis(), "The target vector and up vector can't be parallel to each other.");
@@ -12637,34 +12762,7 @@ void Transform::rotate_basis(const Vector3 &p_axis, real_t p_phi) {
 }
 
 void Transform::set_look_at(const Vector3 &p_eye, const Vector3 &p_target, const Vector3 &p_up) {
-#ifdef MATH_CHECKS
-	ERR_FAIL_COND(p_eye == p_target);
-	ERR_FAIL_COND(p_up.length() == 0);
-#endif
-	// Reference: MESA source code
-	Vector3 v_x, v_y, v_z;
-
-	/* Make rotation matrix */
-
-	/* Z vector */
-	v_z = p_eye - p_target;
-
-	v_z.normalize();
-
-	v_y = p_up;
-
-	v_x = v_y.cross(v_z);
-#ifdef MATH_CHECKS
-	ERR_FAIL_COND(v_x.length() == 0);
-#endif
-
-	/* Recompute Y = Z cross X */
-	v_y = v_z.cross(v_x);
-
-	v_x.normalize();
-	v_y.normalize();
-
-	basis.set(v_x, v_y, v_z);
+	basis = Basis::looking_at(p_target - p_eye, p_up);
 
 	origin = p_eye;
 }
@@ -13795,82 +13893,6 @@ Plane::operator String() const {
 }
 #line 0
 
-#line 1 "sfw/core/vector2i.cpp"
-/*************************************************************************/
-/*  vector2i.cpp                                                         */
-/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
-/*************************************************************************/
-
-Vector2i Vector2i::clamp(const Vector2i &p_min, const Vector2i &p_max) const {
-	return Vector2i(
-			CLAMP(x, p_min.x, p_max.x),
-			CLAMP(y, p_min.y, p_max.y));
-}
-
-int64_t Vector2i::length_squared() const {
-	return x * (int64_t)x + y * (int64_t)y;
-}
-
-double Vector2i::length() const {
-	return Math::sqrt((double)length_squared());
-}
-
-Vector2i Vector2i::operator+(const Vector2i &p_v) const {
-	return Vector2i(x + p_v.x, y + p_v.y);
-}
-void Vector2i::operator+=(const Vector2i &p_v) {
-	x += p_v.x;
-	y += p_v.y;
-}
-Vector2i Vector2i::operator-(const Vector2i &p_v) const {
-	return Vector2i(x - p_v.x, y - p_v.y);
-}
-void Vector2i::operator-=(const Vector2i &p_v) {
-	x -= p_v.x;
-	y -= p_v.y;
-}
-
-Vector2i Vector2i::operator*(const Vector2i &p_v1) const {
-	return Vector2i(x * p_v1.x, y * p_v1.y);
-};
-
-Vector2i Vector2i::operator*(const int &rvalue) const {
-	return Vector2i(x * rvalue, y * rvalue);
-};
-void Vector2i::operator*=(const int &rvalue) {
-	x *= rvalue;
-	y *= rvalue;
-};
-
-Vector2i Vector2i::operator/(const Vector2i &p_v1) const {
-	return Vector2i(x / p_v1.x, y / p_v1.y);
-};
-
-Vector2i Vector2i::operator/(const int &rvalue) const {
-	return Vector2i(x / rvalue, y / rvalue);
-};
-
-void Vector2i::operator/=(const int &rvalue) {
-	x /= rvalue;
-	y /= rvalue;
-};
-
-Vector2i Vector2i::operator-() const {
-	return Vector2i(-x, -y);
-}
-
-bool Vector2i::operator==(const Vector2i &p_vec2) const {
-	return x == p_vec2.x && y == p_vec2.y;
-}
-bool Vector2i::operator!=(const Vector2i &p_vec2) const {
-	return x != p_vec2.x || y != p_vec2.y;
-}
-
-Vector2i::operator String() const {
-	return "(" + itos(x) + ", " + itos(y) + ")";
-}
-#line 0
-
 #line 1 "sfw/core/rect2.cpp"
 /*************************************************************************/
 /*  rect2.cpp                                                            */
@@ -14171,6 +14193,10 @@ bool Vector4::is_equal_approx(const Vector4 &p_vec4) const {
 	return Math::is_equal_approx(x, p_vec4.x) && Math::is_equal_approx(y, p_vec4.y) && Math::is_equal_approx(z, p_vec4.z) && Math::is_equal_approx(w, p_vec4.w);
 }
 
+bool Vector4::is_zero_approx() const {
+	return Math::is_zero_approx(x) && Math::is_zero_approx(y) && Math::is_zero_approx(z) && Math::is_zero_approx(w);
+}
+
 real_t Vector4::length() const {
 	return Math::sqrt(length_squared());
 }
@@ -14287,6 +14313,86 @@ Vector4::operator String() const {
 }
 #line 0
 
+#line 1 "sfw/core/string_builder.cpp"
+/*************************************************************************/
+/*  string_builder.cpp                                                   */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+StringBuilder &StringBuilder::append(const String &p_string) {
+	if (p_string == String()) {
+		return *this;
+	}
+
+	strings.push_back(p_string);
+	appended_strings.push_back(-1);
+
+	string_length += p_string.length();
+
+	return *this;
+}
+
+StringBuilder &StringBuilder::append(const char *p_cstring) {
+	int32_t len = strlen(p_cstring);
+
+	c_strings.push_back(p_cstring);
+	appended_strings.push_back(len);
+
+	string_length += len;
+
+	return *this;
+}
+
+void StringBuilder::clear() {
+	string_length = 0;
+	strings.clear();
+	c_strings.clear();
+	appended_strings.clear();
+}
+
+String StringBuilder::as_string() const {
+	if (string_length == 0) {
+		return "";
+	}
+
+	CharType *buffer = memnew_arr(CharType, string_length);
+
+	int current_position = 0;
+
+	int pandemonium_string_elem = 0;
+	int c_string_elem = 0;
+
+	for (int i = 0; i < appended_strings.size(); i++) {
+		if (appended_strings[i] == -1) {
+			// Pandemonium string
+			const String &s = strings[pandemonium_string_elem];
+
+			memcpy(buffer + current_position, s.ptr(), s.length() * sizeof(CharType));
+
+			current_position += s.length();
+
+			pandemonium_string_elem++;
+		} else {
+			const char *s = c_strings[c_string_elem];
+
+			for (int32_t j = 0; j < appended_strings[i]; j++) {
+				buffer[current_position + j] = s[j];
+			}
+
+			current_position += appended_strings[i];
+
+			c_string_elem++;
+		}
+	}
+
+	String final_string = String(buffer, string_length);
+
+	memdelete_arr(buffer);
+
+	return final_string;
+}
+#line 0
+
 #line 1 "sfw/core/file_access.cpp"
 
 /*************************************************************************/
@@ -14308,7 +14414,7 @@ Vector4::operator String() const {
 #include <wchar.h>
 
 #ifdef _MSC_VER
-#define S_ISREG(m) ((m)&_S_IFREG)
+#define S_ISREG(m) ((m) & _S_IFREG)
 #endif
 
 #else
@@ -14322,11 +14428,11 @@ Vector4::operator String() const {
 #include <unistd.h>
 
 #ifdef MSVC
-#define S_ISREG(m) ((m)&_S_IFREG)
+#define S_ISREG(m) ((m) & _S_IFREG)
 #include <io.h>
 #endif
 #ifndef S_ISREG
-#define S_ISREG(m) ((m)&S_IFREG)
+#define S_ISREG(m) ((m) & S_IFREG)
 #endif
 
 #ifndef NO_FCNTL
@@ -18616,6 +18722,18 @@ Variant Dictionary::get(const Variant &p_key, const Variant &p_default) const {
 	return *result;
 }
 
+Variant Dictionary::get_or_add(const Variant &p_key, const Variant &p_default) {
+	const Variant *result = getptr(p_key);
+
+	if (!result) {
+		operator[](p_key) = p_default;
+
+		return p_default;
+	}
+
+	return *result;
+}
+
 int Dictionary::size() const {
 	return _p->variant_map.size();
 }
@@ -19274,6 +19392,37 @@ Variant Array::max() const {
 		}
 	}
 	return maxval;
+}
+
+bool Array::operator<(const Array &p_array) const {
+	int a_len = size();
+
+	int b_len = p_array.size();
+
+	int min_cmp = MIN(a_len, b_len);
+
+	for (int i = 0; i < min_cmp; i++) {
+		if (operator[](i) < p_array[i]) {
+			return true;
+
+		} else if (p_array[i] < operator[](i)) {
+			return false;
+		}
+	}
+
+	return a_len < b_len;
+}
+
+bool Array::operator<=(const Array &p_array) const {
+	return !operator>(p_array);
+}
+
+bool Array::operator>(const Array &p_array) const {
+	return p_array < *this;
+}
+
+bool Array::operator>=(const Array &p_array) const {
+	return !operator<(p_array);
 }
 
 const void *Array::id() const {

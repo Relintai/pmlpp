@@ -1,7 +1,7 @@
 #ifndef SFW_H
 #define SFW_H
 
-#define SFW_VERSION 1
+#define SFW_VERSION 4
 
 // SFW - Simple Framework - https://github.com/Relintai/sfw
 
@@ -234,7 +234,7 @@ typedef unsigned long long uint64_t;
 #endif
 
 #define USEC_TO_SEC(m_usec) ((m_usec) / 1000000.0)
-#define SEC_TO_USEC(m_usec) ((m_usec)*1000000.0)
+#define SEC_TO_USEC(m_usec) ((m_usec) * 1000000.0)
 
 enum ClockDirection {
 	CLOCKWISE,
@@ -1101,7 +1101,7 @@ public:
 		}
 	}
 
-	_ALWAYS_INLINE_ explicit SafeNumeric<T>(T p_value = static_cast<T>(0)) {
+	_ALWAYS_INLINE_ explicit SafeNumeric(T p_value = static_cast<T>(0)) {
 		set(p_value);
 	}
 };
@@ -1227,7 +1227,7 @@ public:
 		}
 	}
 
-	_ALWAYS_INLINE_ explicit SafeNumeric<T>(T p_value = static_cast<T>(0)) :
+	_ALWAYS_INLINE_ explicit SafeNumeric(T p_value = static_cast<T>(0)) :
 			value(p_value) {
 	}
 };
@@ -2293,6 +2293,9 @@ public:
 
 	static _ALWAYS_INLINE_ double exp(double p_x) { return ::exp(p_x); }
 	static _ALWAYS_INLINE_ float exp(float p_x) { return ::expf(p_x); }
+
+	static _ALWAYS_INLINE_ double exp2(double p_x) { return ::exp2(p_x); }
+	static _ALWAYS_INLINE_ float exp2(float p_x) { return ::exp2f(p_x); }
 
 	static _ALWAYS_INLINE_ double erf(double p_x) { return ::erf(p_x); }
 	static _ALWAYS_INLINE_ float erf(float p_x) { return ::erff(p_x); }
@@ -4910,7 +4913,7 @@ public:
 		return _cowdata.get_m(pos).value;
 	}
 
-	_FORCE_INLINE_ VMap(){};
+	_FORCE_INLINE_ VMap() {};
 	_FORCE_INLINE_ VMap(const VMap &p_from) { _cowdata._ref(p_from._cowdata); }
 	inline VMap &operator=(const VMap &p_from) {
 		_cowdata._ref(p_from._cowdata);
@@ -6056,12 +6059,12 @@ public:
 		size_mask = mask;
 	};
 
-	RingBuffer<T>(int p_power = 0) {
+	RingBuffer(int p_power = 0) {
 		read_pos = 0;
 		write_pos = 0;
 		resize(p_power);
 	};
-	~RingBuffer<T>(){};
+	~RingBuffer() {};
 };
 
 #line 0
@@ -8144,6 +8147,13 @@ public:
 	int to_int() const;
 	bool to_bool() const;
 	uint32_t to_uint() const;
+	_FORCE_INLINE_ real_t to_real() const {
+#ifdef REAL_T_IS_DOUBLE
+		return to_double();
+#else
+		return to_float();
+#endif
+	}
 
 	int hex_to_int(bool p_with_prefix = true) const;
 	int64_t hex_to_int64(bool p_with_prefix = true) const;
@@ -8161,6 +8171,31 @@ public:
 	static double to_double(const char *p_str);
 	static double to_double(const wchar_t *p_str, const wchar_t **r_end = nullptr);
 	static double to_double(const CharType *p_str, const CharType **r_end = nullptr);
+
+	_FORCE_INLINE_ static real_t to_real(const char *p_str) {
+#ifdef REAL_T_IS_DOUBLE
+		return to_double(p_str);
+#else
+		return to_float(p_str);
+#endif
+	}
+
+	_FORCE_INLINE_ static real_t to_real(const wchar_t *p_str, const wchar_t **r_end = nullptr) {
+#ifdef REAL_T_IS_DOUBLE
+		return to_double(p_str, r_end);
+#else
+		return to_float(p_str, r_end);
+#endif
+	}
+
+	_FORCE_INLINE_ static real_t to_real(const CharType *p_str, const CharType **r_end = nullptr) {
+#ifdef REAL_T_IS_DOUBLE
+		return to_double(p_str, r_end);
+#else
+		return to_float(p_str, r_end);
+
+#endif
+	}
 
 	static uint32_t num_characters(int64_t p_int);
 
@@ -8303,6 +8338,7 @@ public:
 	String(const char *p_str);
 	String(const wchar_t *p_str);
 	String(const CharType *p_str);
+	String(const Char16String &p_str);
 	String(const char *p_str, int p_clip_to_len);
 	String(const wchar_t *p_str, int p_clip_to_len);
 	String(const CharType *p_str, int p_clip_to_len);
@@ -8316,6 +8352,7 @@ private:
 	void copy_from(const char *p_cstr, const int p_clip_to);
 	void copy_from(const wchar_t *p_cstr);
 	void copy_from(const wchar_t *p_cstr, const int p_clip_to);
+	void copy_from(const Char16String &p_str);
 	void copy_from(const CharType *p_cstr);
 	void copy_from(const CharType *p_cstr, const int p_clip_to);
 
@@ -10132,6 +10169,7 @@ bool Color::operator<(const Color &p_color) const {
 /*************************************************************************/
 
 class String;
+struct Vector2i;
 
 struct _NO_DISCARD_CLASS_ Vector2 {
 	static const int AXIS_COUNT = 2;
@@ -10220,6 +10258,7 @@ struct _NO_DISCARD_CLASS_ Vector2 {
 	Vector2 reflect(const Vector2 &p_normal) const;
 
 	bool is_equal_approx(const Vector2 &p_v) const;
+	bool is_zero_approx() const;
 
 	Vector2 operator+(const Vector2 &p_v) const;
 	void operator+=(const Vector2 &p_v);
@@ -10275,6 +10314,7 @@ struct _NO_DISCARD_CLASS_ Vector2 {
 	real_t aspect() const { return width / height; }
 
 	operator String() const;
+	operator Vector2i() const;
 
 	_FORCE_INLINE_ Vector2(real_t p_x, real_t p_y) {
 		x = p_x;
@@ -10498,10 +10538,6 @@ struct _NO_DISCARD_CLASS_ Vector2i {
 	operator String() const;
 	operator Vector2() const { return Vector2(x, y); }
 
-	inline Vector2i(const Vector2 &p_vec2) {
-		x = (int)p_vec2.x;
-		y = (int)p_vec2.y;
-	}
 	inline Vector2i(int p_x, int p_y) {
 		x = p_x;
 		y = p_y;
@@ -11208,6 +11244,7 @@ struct _NO_DISCARD_CLASS_ Vector3 {
 	bool is_equal_approx(const Vector3 &p_v) const;
 	inline bool is_equal_approx(const Vector3 &p_v, real_t p_tolerance) const;
 	inline bool is_equal_approxt(const Vector3 &p_v, real_t p_tolerance) const;
+	bool is_zero_approx() const;
 
 	/* Operators */
 
@@ -11926,6 +11963,7 @@ struct _NO_DISCARD_CLASS_ Vector4 {
 
 	_FORCE_INLINE_ real_t length_squared() const;
 	bool is_equal_approx(const Vector4 &p_vec4) const;
+	bool is_zero_approx() const;
 	real_t length() const;
 	void normalize();
 	Vector4 normalized() const;
@@ -12757,11 +12795,11 @@ inline bool AABB::encloses(const AABB &p_aabb) const {
 
 	return (
 			(src_min.x <= dst_min.x) &&
-			(src_max.x > dst_max.x) &&
+			(src_max.x >= dst_max.x) &&
 			(src_min.y <= dst_min.y) &&
-			(src_max.y > dst_max.y) &&
+			(src_max.y >= dst_max.y) &&
 			(src_min.z <= dst_min.z) &&
-			(src_max.z > dst_max.z));
+			(src_max.z >= dst_max.z));
 }
 
 Vector3 AABB::get_support(const Vector3 &p_normal) const {
@@ -13674,7 +13712,7 @@ struct _NO_DISCARD_CLASS_ Basis {
 	// only be used in cases of single normals, or when the basis changes each time.
 	Vector3 xform_normal(const Vector3 &p_vector) const { return get_normal_xform_basis().xform_normal_fast(p_vector); }
 
-	static Basis looking_at(const Vector3 &p_target, const Vector3 &p_up = Vector3(0, 1, 0));
+	static Basis looking_at(const Vector3 &p_target, const Vector3 &p_up = Vector3(0, 1, 0), bool p_use_model_front = false);
 	static Basis from_scale(const Vector3 &p_scale);
 
 	operator Quaternion() const { return get_quaternion(); }
@@ -17145,6 +17183,209 @@ public:
 
 #line 0
 
+#line 1 "sfw/core/string_buffer.h"
+
+/*************************************************************************/
+/*  string_buffer.h                                                      */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+template <int SHORT_BUFFER_SIZE = 64>
+class StringBuffer {
+	CharType short_buffer[SHORT_BUFFER_SIZE];
+	String buffer;
+	int string_length;
+
+	_FORCE_INLINE_ CharType *current_buffer_ptr() {
+		return static_cast<String &>(buffer).empty() ? short_buffer : buffer.ptrw();
+	}
+
+public:
+	StringBuffer &append(CharType p_char);
+	StringBuffer &append(const String &p_string);
+	StringBuffer &append(const char *p_str);
+	StringBuffer &append(const CharType *p_str, int p_clip_to_len = -1);
+
+	_FORCE_INLINE_ void operator+=(CharType p_char) {
+		append(p_char);
+	}
+
+	_FORCE_INLINE_ void operator+=(const String &p_string) {
+		append(p_string);
+	}
+
+	_FORCE_INLINE_ void operator+=(const char *p_str) {
+		append(p_str);
+	}
+
+	_FORCE_INLINE_ void operator+=(const CharType *p_str) {
+		append(p_str);
+	}
+
+	StringBuffer &reserve(int p_size);
+
+	int length() const;
+
+	String as_string();
+
+	double as_double();
+	int64_t as_int();
+
+	_FORCE_INLINE_ operator String() {
+		return as_string();
+	}
+
+	StringBuffer() {
+		string_length = 0;
+	}
+};
+
+template <int SHORT_BUFFER_SIZE>
+StringBuffer<SHORT_BUFFER_SIZE> &StringBuffer<SHORT_BUFFER_SIZE>::append(CharType p_char) {
+	reserve(string_length + 2);
+	current_buffer_ptr()[string_length++] = p_char;
+	return *this;
+}
+
+template <int SHORT_BUFFER_SIZE>
+StringBuffer<SHORT_BUFFER_SIZE> &StringBuffer<SHORT_BUFFER_SIZE>::append(const String &p_string) {
+	return append(p_string.get_data());
+}
+
+template <int SHORT_BUFFER_SIZE>
+StringBuffer<SHORT_BUFFER_SIZE> &StringBuffer<SHORT_BUFFER_SIZE>::append(const char *p_str) {
+	int len = strlen(p_str);
+	reserve(string_length + len + 1);
+
+	CharType *buf = current_buffer_ptr();
+	for (const char *c_ptr = p_str; *c_ptr; ++c_ptr) {
+		buf[string_length++] = *c_ptr;
+	}
+	return *this;
+}
+
+template <int SHORT_BUFFER_SIZE>
+StringBuffer<SHORT_BUFFER_SIZE> &StringBuffer<SHORT_BUFFER_SIZE>::append(const CharType *p_str, int p_clip_to_len) {
+	int len = 0;
+	while ((p_clip_to_len < 0 || len < p_clip_to_len) && p_str[len]) {
+		++len;
+	}
+	reserve(string_length + len + 1);
+	memcpy(&(current_buffer_ptr()[string_length]), p_str, len * sizeof(CharType));
+	string_length += len;
+
+	return *this;
+}
+
+template <int SHORT_BUFFER_SIZE>
+StringBuffer<SHORT_BUFFER_SIZE> &StringBuffer<SHORT_BUFFER_SIZE>::reserve(int p_size) {
+	if (p_size < SHORT_BUFFER_SIZE || p_size < buffer.size()) {
+		return *this;
+	}
+
+	bool need_copy = string_length > 0 && buffer.empty();
+	buffer.resize(next_power_of_2(p_size));
+	if (need_copy) {
+		memcpy(buffer.ptrw(), short_buffer, string_length * sizeof(CharType));
+	}
+
+	return *this;
+}
+
+template <int SHORT_BUFFER_SIZE>
+int StringBuffer<SHORT_BUFFER_SIZE>::length() const {
+	return string_length;
+}
+
+template <int SHORT_BUFFER_SIZE>
+String StringBuffer<SHORT_BUFFER_SIZE>::as_string() {
+	current_buffer_ptr()[string_length] = '\0';
+	if (buffer.empty()) {
+		return String(short_buffer);
+	} else {
+		buffer.resize(string_length + 1);
+		return buffer;
+	}
+}
+
+template <int SHORT_BUFFER_SIZE>
+double StringBuffer<SHORT_BUFFER_SIZE>::as_double() {
+	current_buffer_ptr()[string_length] = '\0';
+	return String::to_double(current_buffer_ptr());
+}
+
+template <int SHORT_BUFFER_SIZE>
+int64_t StringBuffer<SHORT_BUFFER_SIZE>::as_int() {
+	current_buffer_ptr()[string_length] = '\0';
+	return String::to_int(current_buffer_ptr());
+}
+
+#line 0
+
+#line 1 "sfw/core/string_builder.h"
+
+/*************************************************************************/
+/*  string_builder.h                                                     */
+/*  From https://github.com/Relintai/pandemonium_engine (MIT)            */
+/*************************************************************************/
+
+class StringBuilder {
+	uint32_t string_length;
+
+	Vector<String> strings;
+	Vector<const char *> c_strings;
+
+	// -1 means it's a Pandemonium String
+	// a natural number means C string.
+	Vector<int32_t> appended_strings;
+
+public:
+	StringBuilder &append(const String &p_string);
+	StringBuilder &append(const char *p_cstring);
+
+	void clear();
+
+	_FORCE_INLINE_ uint32_t length() {
+		return string_length;
+	}
+
+	_FORCE_INLINE_ StringBuilder &operator+(const String &p_string) {
+		return append(p_string);
+	}
+
+	_FORCE_INLINE_ StringBuilder &operator+(const char *p_cstring) {
+		return append(p_cstring);
+	}
+
+	_FORCE_INLINE_ void operator+=(const String &p_string) {
+		append(p_string);
+	}
+
+	_FORCE_INLINE_ void operator+=(const char *p_cstring) {
+		append(p_cstring);
+	}
+
+	_FORCE_INLINE_ int num_strings_appended() const {
+		return appended_strings.size();
+	}
+
+	_FORCE_INLINE_ uint32_t get_string_length() const {
+		return string_length;
+	}
+
+	String as_string() const;
+
+	_FORCE_INLINE_ operator String() const {
+		return as_string();
+	}
+
+	StringBuilder() {
+		string_length = 0;
+	}
+};
+
+#line 0
+
 #line 1 "sfw/core/file_access.h"
 
 /*************************************************************************/
@@ -17963,6 +18204,11 @@ public:
 	Variant min() const;
 	Variant max() const;
 
+	bool operator<(const Array &p_array) const;
+	bool operator<=(const Array &p_array) const;
+	bool operator>(const Array &p_array) const;
+	bool operator>=(const Array &p_array) const;
+
 	const void *id() const;
 
 	String sprintf(const String &p_format, bool *error) const;
@@ -18004,6 +18250,7 @@ public:
 
 	Variant get_valid(const Variant &p_key) const;
 	Variant get(const Variant &p_key, const Variant &p_default) const;
+	Variant get_or_add(const Variant &p_key, const Variant &p_default);
 
 	int size() const;
 	bool empty() const;
@@ -18568,7 +18815,7 @@ protected:
 
 template <typename T>
 void Signal::connect(T *obj, void (*func)(T *, Signal *)) {
-	ClassSignalEntrySpec<T> *ce = new ClassSignalEntrySpec<T>();
+	ClassSignalEntrySpec<T> *ce = memnew(ClassSignalEntrySpec<T>());
 	ce->obj = obj;
 	ce->func = func;
 
@@ -18827,8 +19074,8 @@ protected:
 		return &Object::_set;
 	}
 
-	virtual void _notificationv(int p_notification, bool p_reversed){};
-	void _notification(int p_notification){};
+	virtual void _notificationv(int p_notification, bool p_reversed) {};
+	void _notification(int p_notification) {};
 
 	friend bool predelete_handler(Object *);
 	friend void postinitialize_handler(Object *);
