@@ -39,7 +39,8 @@
 #include "../core/lin_alg.h"
 #include "../core/stat.h"
 
-#include "../softmax_net/softmax_net.h"
+// TODO move this to core?
+#include "../modules/softmax_net/softmax_net.h"
 
 #include <algorithm>
 #include <cmath>
